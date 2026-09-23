@@ -12,7 +12,7 @@ Marca `[x]` al terminar cada tarea. Una tarea por sesión de Claude Code (usa `/
 ## Fase 1: Base
 
 - [x] 1.1 Monorepo: `pnpm-workspace.yaml`, `package.json` raíz con scripts (`dev`, `build`, `test`), `tsconfig.base.json` con alias a `packages/ui-core`.
-- [ ] 1.2 `apps/docs` con Angular 22 (zoneless, Tailwind 4, prerender) y `packages/ui-core` vacío. Verificar que el showcase arranque con `pnpm dev`.
+- [x] 1.2 `apps/docs` con Angular 22 (zoneless, Tailwind 4) y `packages/ui-core` vacío. Verificar que el showcase arranque con `pnpm dev`.
 - [ ] 1.3 Tokens: `ui-core/src/lib/theme/theme-base.css` con las variables `--mimi-*` de `docs/design/`, claro y oscuro, y el bloque `@theme inline`. `@source` a `ui-core` en el `styles.css` del showcase.
 - [ ] 1.4 Utils: `cn.ts` y `control-styles.ts`.
 - [ ] 1.5 Tema: `types.ts` y `provideMimiTheme()` (inyecta un `<style>`, no estilos en línea). Probar cambiando el primario.
@@ -66,4 +66,4 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [x] Estilo del MVP: solo Vivid (por defecto).
 - [ ] Formularios: Reactive Forms, Signal Forms o ambos (revisar el estado de Signal Forms en Angular 22).
 - [ ] Idioma por defecto de los mensajes de error.
-- [ ] Versión exacta de Node.js y TypeScript según los requisitos de Angular 22.
+- [x] Versión exacta de Node.js y TypeScript según los requisitos de Angular 22 (ver spec, sección 2).
