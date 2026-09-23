@@ -8,19 +8,36 @@
     <h2 [id]="step.id" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
       {{ i + 1 }}. {{ step.title }}
     </h2>
+    @if (step.future) {
+      <p class="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+        <span
+          class="inline-flex h-[22px] items-center rounded-badge border px-2.5 text-xs font-semibold"
+        >
+          Versión futura
+        </span>
+        Este comando estará disponible en una versión futura de la CLI.
+      </p>
+    }
     <p class="text-pretty">{{ step.description }}</p>
-    <pre
-      class="overflow-x-auto rounded-card border bg-muted px-4 py-3 font-mono text-[13px]"
-    ><code>{{ step.command }}</code></pre>
+    @if (step.installName; as name) {
+      <app-install-command [name]="name" />
+    }
+    <app-code-block
+      [code]="step.snippet.code"
+      [lang]="step.snippet.lang"
+      [prompt]="step.snippet.prompt ?? null"
+    />
     @for (detail of step.details ?? []; track detail.id) {
       <h3 [id]="detail.id" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
         {{ detail.title }}
       </h3>
       <p class="text-pretty">{{ detail.description }}</p>
-      @if (detail.command) {
-        <pre
-          class="overflow-x-auto rounded-card border bg-muted px-4 py-3 font-mono text-[13px]"
-        ><code>{{ detail.command }}</code></pre>
+      @if (detail.snippet; as snippet) {
+        <app-code-block
+          [code]="snippet.code"
+          [lang]="snippet.lang"
+          [prompt]="snippet.prompt ?? null"
+        />
       }
     }
   }

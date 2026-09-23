@@ -1,0 +1,67 @@
+<div class="overflow-hidden rounded-card border bg-card shadow-card">
+  <div class="flex items-center justify-between gap-3 border-b py-1.5 pr-2 pl-3">
+    <div
+      role="tablist"
+      aria-label="Vista del ejemplo"
+      class="inline-flex gap-0.5 rounded-[calc(var(--mimi-radius)+2px)] bg-muted p-[3px]"
+      (keydown)="onKeydown($event)"
+    >
+      @for (tab of tabs; track tab.id) {
+        <button
+          #tab
+          type="button"
+          role="tab"
+          [id]="idPrefix + '-tab-' + tab.id"
+          [attr.aria-controls]="idPrefix + '-panel-' + tab.id"
+          [attr.aria-selected]="selected() === tab.id"
+          [attr.tabindex]="selected() === tab.id ? 0 : -1"
+          class="inline-flex h-7 items-center gap-1.5 rounded-lg px-3 text-[13px] font-medium text-muted-foreground mimi-transition hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale) aria-selected:bg-card aria-selected:font-semibold aria-selected:text-foreground aria-selected:shadow-neutral"
+          (click)="select(tab.id)"
+        >
+          @if (tab.id === 'preview') {
+            <svg lucideEye [size]="14" aria-hidden="true"></svg>
+          } @else {
+            <svg lucideCode [size]="14" aria-hidden="true"></svg>
+          }
+          {{ tab.label }}
+        </button>
+      }
+    </div>
+    <app-copy-button [text]="code()" [withLabel]="true" />
+  </div>
+
+  <div
+    role="tabpanel"
+    [id]="idPrefix + '-panel-preview'"
+    [attr.aria-labelledby]="idPrefix + '-tab-preview'"
+    [hidden]="selected() !== 'preview'"
+  >
+    <div
+      class="relative m-3 flex min-h-[260px] items-center justify-center rounded-lg border border-dashed bg-background p-10"
+    >
+      <div aria-hidden="true" class="absolute top-2.5 left-3 flex gap-1.5">
+        <span class="size-2 rounded-full border"></span>
+        <span class="size-2 rounded-full border"></span>
+        <span class="size-2 rounded-full border"></span>
+      </div>
+      <ng-content />
+    </div>
+  </div>
+
+  <div
+    role="tabpanel"
+    [id]="idPrefix + '-panel-code'"
+    [attr.aria-labelledby]="idPrefix + '-tab-code'"
+    [hidden]="selected() !== 'code'"
+  >
+    <app-code-block
+      class="max-h-[480px] overflow-y-auto"
+      [code]="code()"
+      [lang]="lang()"
+      [bordered]="false"
+      [copyable]="false"
+      [roomy]="true"
+      label="Código del ejemplo"
+    />
+  </div>
+</div>

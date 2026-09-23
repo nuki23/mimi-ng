@@ -18,7 +18,7 @@ Marca `[x]` al terminar cada tarea. Una tarea por sesión de Claude Code (usa `/
 - [x] 1.4b Workspace de Angular en la raíz: `angular.json` con los proyectos `docs` y `ui-core` (solo `test`), dependencias en el `package.json` raíz y pruebas de ui-core con `ng test` y TestBed.
 - [x] 1.5 Tema: `types.ts` y `provideMimiTheme()` (inyecta un `<style>`, no estilos en línea). Probar cambiando el primario.
 - [x] 1.6 Layout del showcase: header, sidebar, contenido, TOC, botón claro/oscuro.
-- [ ] 1.7 `CodePreview` (pestañas Preview/Código, botón copiar, resaltado con Shiki).
+- [x] 1.7 `CodePreview` (pestañas Preview/Código, botón copiar, resaltado con Shiki).
 
 ## Fase 2: Componentes básicos
 
@@ -47,6 +47,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [ ] 3.6 Registrar la colección en `schematicCollections` para permitir `ng g ui button`.
 - [ ] 3.7 Probar la CLI en un proyecto Angular 22 limpio, fuera del monorepo.
 - [ ] 3.8 Leer la versión del showcase desde @mimi-ng/cli.
+- [ ] 3.9 Revisar la página de Instalación contra la CLI real.
 
 ## Fase 4: Componentes con overlays
 
@@ -65,6 +66,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [ ] 5.8 Buscador ⌘K en el header del showcase.
 - [ ] 5.9 Selector ES/EN en el header (el idioma va como prefijo en la ruta).
 - [ ] 5.10 Navegación superior del header (Documentación · Componentes · Temas), como en el diseño.
+- [ ] 5.11 Cuando exista el componente Tabs (catálogo «Después»), reemplazar las pestañas hechas a mano de CodePreview e InstallCommand.
 
 ## Decisiones pendientes
 

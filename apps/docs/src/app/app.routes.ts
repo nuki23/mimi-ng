@@ -36,6 +36,10 @@ export const routes: Routes = [
     loadComponent: () => import('./dev/theme-page').then((m) => m.ThemePage),
   },
   {
+    path: 'dev/code',
+    loadComponent: () => import('./dev/code-page').then((m) => m.CodePage),
+  },
+  {
     path: '**',
     title: 'Página no encontrada · Mimi',
     loadComponent: () => import('./pages/not-found-page').then((m) => m.NotFoundPage),

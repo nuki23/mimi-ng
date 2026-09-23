@@ -1,0 +1,40 @@
+<div class="overflow-hidden rounded-card border bg-card">
+  <div
+    role="tablist"
+    aria-label="Forma de instalar"
+    class="flex gap-1 border-b px-3"
+    (keydown)="onKeydown($event)"
+  >
+    @for (tab of tabs(); track tab.id; let i = $index) {
+      <button
+        #tab
+        type="button"
+        role="tab"
+        [id]="idPrefix + '-tab-' + tab.id"
+        [attr.aria-controls]="idPrefix + '-panel-' + tab.id"
+        [attr.aria-selected]="selected() === i"
+        [attr.tabindex]="selected() === i ? 0 : -1"
+        class="h-[42px] px-2.5 text-[13px] font-medium text-muted-foreground mimi-transition hover:text-foreground focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring aria-selected:font-semibold aria-selected:text-foreground aria-selected:shadow-[inset_0_-2px_0_var(--mimi-primary)]"
+        (click)="select(i)"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+  @for (tab of tabs(); track tab.id; let i = $index) {
+    <div
+      role="tabpanel"
+      [id]="idPrefix + '-panel-' + tab.id"
+      [attr.aria-labelledby]="idPrefix + '-tab-' + tab.id"
+      [hidden]="selected() !== i"
+    >
+      <app-code-block
+        [code]="tab.command"
+        lang="bash"
+        prompt="$"
+        [bordered]="false"
+        label="Comando de instalación"
+      />
+    </div>
+  }
+</div>

@@ -7,3 +7,17 @@
 /* Sin esto Tailwind no genera las clases que usan los componentes de ui-core */
 @source '../../../packages/ui-core/src';
 @source not '../../../packages/ui-core/src/**/*.spec.ts';
+
+/* Shiki en modo dual: los colores del código vienen de los temas github-light / github-dark
+   (variables --shiki-*); el fondo es bg-muted. Cambiar a .dark no vuelve a resaltar. */
+.shiki-code span[style] {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+}
+
+.dark .shiki-code span[style] {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+}

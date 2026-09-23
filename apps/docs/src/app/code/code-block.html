@@ -1,0 +1,22 @@
+<div
+  class="relative flex items-start gap-3 bg-muted"
+  [class.rounded-card]="bordered()"
+  [class.border]="bordered()"
+>
+  @if (prompt(); as prompt) {
+    <span
+      aria-hidden="true"
+      class="py-4 pl-5 font-mono text-[13px] leading-[1.7] text-muted-foreground select-none"
+    >
+      {{ prompt }}
+    </span>
+  }
+  <pre
+    tabindex="0"
+    [attr.aria-label]="label()"
+    [class]="preClass()"
+  ><code class="shiki-code" [attr.data-highlighted]="highlighted() ? '' : null">@if (highlighted(); as html) {<span [innerHTML]="html"></span>} @else {<span>{{ trimmed() }}</span>}</code></pre>
+  @if (copyable()) {
+    <app-copy-button class="mt-2 mr-2" [text]="trimmed()" label="Copiar código" />
+  }
+</div>
