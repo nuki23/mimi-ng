@@ -6,7 +6,7 @@ Marca `[x]` al terminar cada tarea. Una tarea por sesión de Claude Code (usa `/
 
 - [ ] 0.1 Instalar Node.js (versión LTS compatible con Angular 22, ver angular.dev), pnpm y git.
 - [ ] 0.2 Generar los diseños en Claude Design y guardarlos en `docs/design/`.
-- [ ] 0.3 Elegir el estilo del MVP: Default, Vivid o ambos (ver "Decisiones pendientes").
+- [x] 0.3 Elegir el estilo del MVP: solo Vivid, como estilo por defecto.
 - [ ] 0.4 `git init` y primer commit con estos documentos.
 
 ## Fase 1: Base
@@ -63,7 +63,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 
 ## Decisiones pendientes
 
-- [ ] Estilo del MVP: Default, Vivid o ambos.
+- [x] Estilo del MVP: solo Vivid (por defecto).
 - [ ] Formularios: Reactive Forms, Signal Forms o ambos (revisar el estado de Signal Forms en Angular 22).
 - [ ] Idioma por defecto de los mensajes de error.
 - [ ] Versión exacta de Node.js y TypeScript según los requisitos de Angular 22.

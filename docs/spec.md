@@ -10,7 +10,7 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 2. **Un solo modelo mental.** Sin capas Brain/Helm: un prefijo y todo el código en tu proyecto.
 3. **Familiar para quien viene de PrimeNG o NG-ZORRO.** APIs como `showSearch` y `allowClear`, modales por servicio y presets tipados. Página de migración con equivalencias.
 4. **Formularios listos.** Errores en rojo y mensajes automáticos.
-5. **Dos estilos visuales** (por confirmar): Default (sobrio, tipo shadcn) y Vivid (colorido, inspirado en Vuesax).
+5. **Estilo Vivid:** paleta neutra con radio amplio, sombras en capas y micro-animaciones (inspirado en Vuesax).
 6. **Documentación en español e inglés.**
 
 Frase principal: *"Los componentes son tuyos. Las actualizaciones también."*
@@ -127,7 +127,7 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 
 ```json
 {
-  "style": "default",
+  "style": "vivid",
   "tailwind": { "css": "src/styles.css" },
   "aliases": {
     "components": "src/app/components/ui",
@@ -423,7 +423,7 @@ Además, cada componente expone `data-variant`, `data-size`, `data-state` y `dat
 
 ## 11. Estilos visuales
 
-- **Default:** sobrio, tipo shadcn, paleta neutra, radio 8px, sombras mínimas.
-- **Vivid:** primario vivo, sombras teñidas del color del componente, radio 12px, micro-animaciones (elevación al hover, respuesta al clic). Inspirado en Vuesax sin copiarlo.
-- Ambos usan los mismos nombres de variables. `mimi.json` guarda el estilo elegido en `"style"`.
-- Pendiente: si el MVP sale con uno o con los dos.
+- Mimi tiene un solo estilo: **Vivid**, que es el estilo por defecto. No hay estilo Default.
+- **Vivid:** paleta neutra (primario casi negro en claro, casi blanco en oscuro), radio 12px, sombras en capas (solo la de destructive va teñida de su color), fuente Outfit y micro-animaciones (escala al hacer clic, transiciones suaves de color y sombra). Inspirado en Vuesax sin copiarlo.
+- Los tokens están en `docs/design/tokens-vivid.css`. El primario se cambia con el preset (el personalizador del diseño trae violeta, esmeralda, azul y naranja).
+- `mimi.json` guarda `"style": "vivid"`; el campo queda para poder sumar estilos más adelante.
