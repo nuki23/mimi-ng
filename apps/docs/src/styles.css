@@ -1,3 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+@import '@mimi-ng/ui-core/theme.css';
+
+/* Sin esto Tailwind no genera las clases que usan los componentes de ui-core */
+@source '../../../packages/ui-core/src';

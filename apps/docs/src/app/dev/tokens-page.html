@@ -1,0 +1,76 @@
+<main class="mx-auto flex max-w-5xl flex-col gap-12 px-6 py-10">
+  <header class="flex flex-wrap items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      <h1 class="text-2xl font-bold tracking-tight">Tokens del tema</h1>
+      <p class="text-sm text-muted-foreground">
+        Página interna para revisar las variables <code class="font-mono">--mimi-*</code>.
+      </p>
+    </div>
+    <button
+      type="button"
+      class="h-(--mimi-control-height) rounded-lg border bg-card px-4 text-sm font-medium shadow-neutral mimi-transition hover:bg-accent hover:shadow-neutral-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+      [attr.aria-pressed]="isDark()"
+      (click)="toggleDark()"
+    >
+      {{ isDark() ? 'Modo claro' : 'Modo oscuro' }}
+    </button>
+  </header>
+
+  <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Colores</h2>
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+      @for (color of colors; track color.name) {
+        <div class="flex flex-col gap-2">
+          <div class="h-14 rounded-lg border" [class]="color.class"></div>
+          <span class="font-mono text-xs">{{ color.name }}</span>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Radios</h2>
+    <div class="flex flex-wrap gap-6">
+      @for (radius of radii; track radius.name) {
+        <div class="flex flex-col items-center gap-2">
+          <div class="size-20 border-2 border-foreground bg-muted" [class]="radius.class"></div>
+          <span class="font-mono text-xs">{{ radius.name }}</span>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Sombras</h2>
+    <div class="grid grid-cols-2 gap-6 md:grid-cols-4">
+      @for (shadow of shadows; track shadow.name) {
+        <div
+          class="flex h-24 items-center justify-center rounded-card bg-card"
+          [class]="shadow.class"
+        >
+          <span class="font-mono text-xs">{{ shadow.name }}</span>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Fuentes</h2>
+    <p class="font-sans text-lg">font-sans · Outfit con respaldo del sistema</p>
+    <p class="font-mono text-sm">font-mono · Geist Mono con respaldo del sistema</p>
+  </section>
+
+  <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+      Botón de prueba
+    </h2>
+    <div>
+      <button
+        type="button"
+        class="inline-flex h-(--mimi-control-height) items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow-primary mimi-transition hover:bg-primary-hover hover:shadow-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+      >
+        Guardar
+      </button>
+    </div>
+  </section>
+</main>

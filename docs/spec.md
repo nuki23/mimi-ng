@@ -202,89 +202,49 @@ import { MimiFormFieldComponent, MimiFormErrorComponent } from '@/components/ui/
 
 ### 6.1 Variables base (Tailwind 4)
 
-Los valores definitivos saldrán de `docs/design/`. Mientras tanto, esta es la base neutra:
+El tema vive en `packages/ui-core/src/lib/theme/theme-base.css` (valores de `docs/design/tokens-vivid.css`). Contiene, en este orden: `@custom-variant dark`, `:root` (claro), `.dark` (oscuro), el bloque `prefers-reduced-motion` (6.6), `@theme inline`, `@utility mimi-transition`, `@layer base` y los `@keyframes` `mimi-spin` y `mimi-pulse`. No importa Tailwind ni carga fuentes.
+
+`ui-core` lo publica en `exports` como `./theme.css`. El showcase depende de `@mimi-ng/ui-core` (`workspace:*`) y su `styles.css` queda así:
 
 ```css
 @import 'tailwindcss';
-@source "../../../packages/ui-core/src"; /* ruta relativa al styles.css del showcase */
-@custom-variant dark (&:where(.dark, .dark *));
-
-:root {
-  --mimi-background: oklch(1 0 0);
-  --mimi-foreground: oklch(0.145 0 0);
-  --mimi-card: oklch(1 0 0);
-  --mimi-card-foreground: oklch(0.145 0 0);
-  --mimi-popover: oklch(1 0 0);
-  --mimi-popover-foreground: oklch(0.145 0 0);
-  --mimi-primary: oklch(0.205 0 0);
-  --mimi-primary-foreground: oklch(0.985 0 0);
-  --mimi-secondary: oklch(0.97 0 0);
-  --mimi-secondary-foreground: oklch(0.205 0 0);
-  --mimi-muted: oklch(0.97 0 0);
-  --mimi-muted-foreground: oklch(0.556 0 0);
-  --mimi-accent: oklch(0.97 0 0);
-  --mimi-accent-foreground: oklch(0.205 0 0);
-  --mimi-destructive: oklch(0.577 0.245 27.325);
-  --mimi-destructive-foreground: oklch(0.985 0 0);
-  --mimi-border: oklch(0.922 0 0);
-  --mimi-input: oklch(0.922 0 0);
-  --mimi-ring: oklch(0.708 0 0);
-  --mimi-radius: 0.5rem;
-  --mimi-control-height: 2.5rem;
-  --mimi-control-height-sm: 2rem;
-  --mimi-control-height-lg: 2.75rem;
-}
-
-.dark {
-  --mimi-background: oklch(0.145 0 0);
-  --mimi-foreground: oklch(0.985 0 0);
-  --mimi-card: oklch(0.205 0 0);
-  --mimi-card-foreground: oklch(0.985 0 0);
-  --mimi-popover: oklch(0.205 0 0);
-  --mimi-popover-foreground: oklch(0.985 0 0);
-  --mimi-primary: oklch(0.922 0 0);
-  --mimi-primary-foreground: oklch(0.205 0 0);
-  --mimi-secondary: oklch(0.269 0 0);
-  --mimi-secondary-foreground: oklch(0.985 0 0);
-  --mimi-muted: oklch(0.269 0 0);
-  --mimi-muted-foreground: oklch(0.708 0 0);
-  --mimi-accent: oklch(0.269 0 0);
-  --mimi-accent-foreground: oklch(0.985 0 0);
-  --mimi-destructive: oklch(0.704 0.191 22.216);
-  --mimi-destructive-foreground: oklch(0.985 0 0);
-  --mimi-border: oklch(1 0 0 / 10%);
-  --mimi-input: oklch(1 0 0 / 15%);
-  --mimi-ring: oklch(0.556 0 0);
-}
-
-@theme inline {
-  --color-background: var(--mimi-background);
-  --color-foreground: var(--mimi-foreground);
-  --color-card: var(--mimi-card);
-  --color-card-foreground: var(--mimi-card-foreground);
-  --color-popover: var(--mimi-popover);
-  --color-popover-foreground: var(--mimi-popover-foreground);
-  --color-primary: var(--mimi-primary);
-  --color-primary-foreground: var(--mimi-primary-foreground);
-  --color-secondary: var(--mimi-secondary);
-  --color-secondary-foreground: var(--mimi-secondary-foreground);
-  --color-muted: var(--mimi-muted);
-  --color-muted-foreground: var(--mimi-muted-foreground);
-  --color-accent: var(--mimi-accent);
-  --color-accent-foreground: var(--mimi-accent-foreground);
-  --color-destructive: var(--mimi-destructive);
-  --color-destructive-foreground: var(--mimi-destructive-foreground);
-  --color-border: var(--mimi-border);
-  --color-input: var(--mimi-input);
-  --color-ring: var(--mimi-ring);
-  --radius-sm: calc(var(--mimi-radius) - 4px);
-  --radius-md: calc(var(--mimi-radius) - 2px);
-  --radius-lg: var(--mimi-radius);
-  --radius-xl: calc(var(--mimi-radius) + 4px);
-}
+@import '@mimi-ng/ui-core/theme.css';
+@source '../../../packages/ui-core/src';
 ```
 
-Así funcionan clases como `bg-primary`, `text-muted-foreground`, `border-border`, `rounded-lg`.
+**Variables `--mimi-*`** (todas en `:root`; las marcadas con ◐ se redefinen en `.dark`):
+
+| Grupo                     | Variables                                                                                                                                                                                                                                                                                                        |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Colores ◐                 | `background`, `foreground`, `card`, `card-foreground`, `popover`, `popover-foreground`, `primary`, `primary-foreground`, `secondary`, `secondary-foreground`, `muted`, `muted-foreground`, `accent`, `accent-foreground`, `destructive`, `destructive-foreground`, `border`, `input`, `input-background`, `ring` |
+| Derivados ◐ (`color-mix`) | `primary-hover`, `secondary-hover`, `destructive-hover`, `ring-soft`, `destructive-soft`, `switch-off`                                                                                                                                                                                                           |
+| Sombras ◐                 | `shadow-card`, `shadow-primary`, `shadow-primary-hover`, `shadow-destructive`, `shadow-destructive-hover`, `shadow-neutral`, `shadow-neutral-hover`                                                                                                                                                              |
+| Fuentes                   | `font-sans` (`'Outfit', ui-sans-serif, system-ui, sans-serif`), `font-mono` (`'Geist Mono', ui-monospace, monospace`)                                                                                                                                                                                            |
+| Forma                     | `radius` (0.75rem), `radius-sm` (`min(radius / 2, 6px)`), `radius-card` (`min(radius + 4px, 24px)`), `badge-radius` (999px)                                                                                                                                                                                      |
+| Alturas                   | `control-height` (2.5rem), `control-height-sm` (2rem), `control-height-lg` (3rem)                                                                                                                                                                                                                                |
+| Movimiento                | `transition`, `press-scale`, `lift` (0px, sin uso por ahora). Ver 6.6                                                                                                                                                                                                                                            |
+
+**`@theme inline`** (siempre `inline`: los valores son `var()` y deben resolverse donde se usan, o el modo oscuro falla):
+
+| Tailwind                     | Origen                          | Clases                                                                                                                                              |
+| ---------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--color-*`                  | cada color y derivado de arriba | `bg-*`, `text-*`, `border-*`, `ring-*`, `outline-*`, `fill-*`…                                                                                      |
+| `--radius-sm`                | `--mimi-radius-sm`              | `rounded-sm`                                                                                                                                        |
+| `--radius-md`                | `calc(radius - 2px)`            | `rounded-md`                                                                                                                                        |
+| `--radius-lg`                | `--mimi-radius`                 | `rounded-lg`                                                                                                                                        |
+| `--radius-xl`                | `calc(radius + 4px)`            | `rounded-xl`                                                                                                                                        |
+| `--radius-card`              | `--mimi-radius-card`            | `rounded-card`                                                                                                                                      |
+| `--radius-badge`             | `--mimi-badge-radius`           | `rounded-badge`                                                                                                                                     |
+| `--shadow-*`                 | cada sombra                     | `shadow-card`, `shadow-primary`, `shadow-primary-hover`, `shadow-destructive`, `shadow-destructive-hover`, `shadow-neutral`, `shadow-neutral-hover` |
+| `--font-sans`, `--font-mono` | fuentes                         | `font-sans` (también la fuente por defecto de la página), `font-mono`                                                                               |
+
+Las alturas no se exponen: los componentes usan la cascada de 6.2 (`h-(--mimi-control-height)` o `h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))]`).
+
+**`@layer base`:** `*, ::before, ::after { border-color: var(--mimi-border) }` (en Tailwind 4 el borde por defecto es `currentColor`) y `body` con `background-color: var(--mimi-background)` y `color: var(--mimi-foreground)`. La fuente no se pone en `body`: Tailwind la toma de `--font-sans`.
+
+**Fuentes:** `ui-core` no carga ninguna. El showcase carga Outfit desde Google Fonts en `index.html`.
+
+**Navegadores sin `color-mix`:** Tailwind (Lightning CSS) agrega un respaldo: deja `var(--mimi-primary)` y pone el valor con `color-mix` dentro de `@supports (color: color-mix(in lab, red, red))`. Es normal ver las dos versiones en el CSS compilado.
 
 ### 6.2 Cascada de tokens
 
@@ -414,12 +374,14 @@ export const controlInvalidStyles =
 
 Dos variables controlan las micro-animaciones del estilo Vivid:
 
-| Variable             | Valor                                                                                                                             | Uso                                                             |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `--mimi-transition`  | `background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease, transform .15s cubic-bezier(.2,.8,.2,1)` | Lista completa de transiciones de los componentes interactivos. |
-| `--mimi-press-scale` | `0.975`                                                                                                                           | Escala al hacer clic (`:active`).                               |
+| Variable             | Valor                                                                                                                         | Uso                                                             |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `--mimi-transition`  | `background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease, scale .15s cubic-bezier(.2,.8,.2,1)` | Lista completa de transiciones de los componentes interactivos. |
+| `--mimi-press-scale` | `0.975`                                                                                                                       | Escala al hacer clic (`:active`).                               |
 
-Con `prefers-reduced-motion: reduce`, `--mimi-press-scale` pasa a `1` y `--mimi-transition` pierde `transform`:
+La transición anima la propiedad `scale`, no `transform`: en Tailwind 4, `scale-*` escribe `scale`. Así funciona `active:scale-(--mimi-press-scale)`. Si en el futuro se usa `--mimi-lift` (hoy `0px`) con `translate-y-*`, hay que agregar `translate` a `--mimi-transition` de la misma forma, y quitarlo en la versión de movimiento reducido.
+
+Con `prefers-reduced-motion: reduce`, `--mimi-press-scale` pasa a `1` y `--mimi-transition` pierde `scale`:
 
 ```css
 @media (prefers-reduced-motion: reduce) {
@@ -431,7 +393,7 @@ Con `prefers-reduced-motion: reduce`, `--mimi-press-scale` pasa a `1` y `--mimi-
 }
 ```
 
-La transición se aplica con una utilidad de Tailwind 4, definida junto a los tokens (`theme-base.css`):
+La transición se aplica con una utilidad de Tailwind 4, definida en `theme-base.css`:
 
 ```css
 @utility mimi-transition {
@@ -439,7 +401,7 @@ La transición se aplica con una utilidad de Tailwind 4, definida junto a los to
 }
 ```
 
-Uso en un componente: `mimi-transition active:[transform:scale(var(--mimi-press-scale))]`. No usar `active:scale-*`: en Tailwind 4 esa utilidad escribe la propiedad `scale`, no `transform`, y `--mimi-transition` no la anima. Nunca escribir la lista de transiciones a mano en las clases.
+Uso en un componente: `mimi-transition active:scale-(--mimi-press-scale)`. No usar `active:[transform:scale(...)]`: `--mimi-transition` no anima `transform`. Nunca escribir la lista de transiciones a mano en las clases.
 
 ## 7. Personalización (cuatro niveles)
 

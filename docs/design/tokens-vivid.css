@@ -3,7 +3,8 @@
    Selectores: :root (claro) y .dark (oscuro), como en la spec; el diseño usaba [data-mimi-style="vivid"].
    Unidades: px del diseño convertidos a rem (16px = 1rem).
    Cambios respecto al diseño: las sombras de primary se tiñen con var(--mimi-primary) (como las de
-   destructive) y se agrega el bloque prefers-reduced-motion al final. */
+   destructive), la transición anima `scale` en vez de `transform` y se agrega el bloque
+   prefers-reduced-motion al final. */
 
 :root {
   /* ── Colores (spec 6.1) ── */
@@ -44,7 +45,7 @@
   /* ── Movimiento ── */
   --mimi-lift: 0px;                              /* desplazamiento vertical al hover (el diseño lo deja en 0) */
   --mimi-press-scale: 0.975;                     /* escala al hacer clic */
-  --mimi-transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease, transform .15s cubic-bezier(.2,.8,.2,1);
+  --mimi-transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease, scale .15s cubic-bezier(.2,.8,.2,1);  /* scale, no transform: Tailwind 4 escala con la propiedad `scale` */
 
   /* ── Sombras ── */
   --mimi-shadow-card: 0 0 0 1px oklch(0 0 0 / 0.02), 0 1px 2px oklch(0 0 0 / 0.04), 0 6px 12px -4px oklch(0 0 0 / 0.05), 0 20px 40px -16px oklch(0 0 0 / 0.12);
@@ -107,7 +108,7 @@
   color-scheme: dark;
 }
 
-/* Movimiento reducido: sin escala al hacer clic y sin transición de transform */
+/* Movimiento reducido: sin escala al hacer clic y sin transición de scale */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --mimi-press-scale: 1;

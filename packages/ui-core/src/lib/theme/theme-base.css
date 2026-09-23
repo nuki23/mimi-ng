@@ -1,0 +1,230 @@
+/* Mimi · tema base (estilo Vivid).
+   Valores tomados de docs/design/tokens-vivid.css. Nombres según docs/spec.md, sección 6.
+   Este archivo no importa Tailwind ni carga fuentes: lo hace la app que lo usa. */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Claro ─────────────────────────────────────── */
+:root {
+  /* Colores */
+  --mimi-background: oklch(1 0 0);
+  --mimi-foreground: oklch(0.145 0 0);
+  --mimi-card: oklch(1 0 0);
+  --mimi-card-foreground: oklch(0.145 0 0);
+  --mimi-popover: oklch(1 0 0);
+  --mimi-popover-foreground: oklch(0.145 0 0);
+  --mimi-primary: oklch(0.205 0 0);
+  --mimi-primary-foreground: oklch(0.985 0 0);
+  --mimi-secondary: oklch(0.97 0 0);
+  --mimi-secondary-foreground: oklch(0.205 0 0);
+  --mimi-muted: oklch(0.97 0 0);
+  --mimi-muted-foreground: oklch(0.54 0 0);
+  --mimi-accent: oklch(0.97 0 0);
+  --mimi-accent-foreground: oklch(0.205 0 0);
+  --mimi-destructive: oklch(0.577 0.245 27.325);
+  --mimi-destructive-foreground: oklch(0.985 0 0);
+  --mimi-border: oklch(0.922 0 0);
+  --mimi-input: oklch(0.88 0 0);
+  --mimi-input-background: oklch(1 0 0);
+  --mimi-ring: oklch(0.708 0 0);
+
+  /* Fuentes (sin cargar: la app decide si trae Outfit) */
+  --mimi-font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --mimi-font-mono: 'Geist Mono', ui-monospace, monospace;
+
+  /* Forma y tamaños */
+  --mimi-radius: 0.75rem;
+  --mimi-radius-sm: min(calc(var(--mimi-radius) / 2), 6px);
+  --mimi-radius-card: min(calc(var(--mimi-radius) + 4px), 24px);
+  --mimi-badge-radius: 999px;
+  --mimi-control-height: 2.5rem;
+  --mimi-control-height-sm: 2rem;
+  --mimi-control-height-lg: 3rem;
+
+  /* Movimiento. Si se usa --mimi-lift, agregar `translate` a la transición. */
+  --mimi-lift: 0px;
+  --mimi-press-scale: 0.975;
+  --mimi-transition:
+    background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.25s ease,
+    scale 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Sombras */
+  --mimi-shadow-card:
+    0 0 0 1px oklch(0 0 0 / 0.02), 0 1px 2px oklch(0 0 0 / 0.04),
+    0 6px 12px -4px oklch(0 0 0 / 0.05), 0 20px 40px -16px oklch(0 0 0 / 0.12);
+  --mimi-shadow-primary:
+    0 1px 2px color-mix(in oklch, var(--mimi-primary) 25%, transparent),
+    0 4px 12px -4px color-mix(in oklch, var(--mimi-primary) 35%, transparent);
+  --mimi-shadow-primary-hover:
+    0 1px 2px color-mix(in oklch, var(--mimi-primary) 30%, transparent),
+    0 8px 18px -6px color-mix(in oklch, var(--mimi-primary) 42%, transparent);
+  --mimi-shadow-destructive:
+    0 1px 2px color-mix(in oklch, var(--mimi-destructive) 25%, transparent),
+    0 4px 12px -4px color-mix(in oklch, var(--mimi-destructive) 35%, transparent);
+  --mimi-shadow-destructive-hover:
+    0 1px 2px color-mix(in oklch, var(--mimi-destructive) 30%, transparent),
+    0 8px 18px -6px color-mix(in oklch, var(--mimi-destructive) 42%, transparent);
+  --mimi-shadow-neutral: 0 1px 2px oklch(0 0 0 / 0.06), 0 4px 10px -4px oklch(0 0 0 / 0.08);
+  --mimi-shadow-neutral-hover: 0 2px 4px oklch(0 0 0 / 0.06), 0 10px 20px -8px oklch(0 0 0 / 0.14);
+
+  /* Derivados */
+  --mimi-primary-hover: color-mix(in oklch, var(--mimi-primary) 88%, var(--mimi-background));
+  --mimi-secondary-hover: color-mix(in oklch, var(--mimi-secondary) 80%, var(--mimi-foreground) 6%);
+  --mimi-destructive-hover: color-mix(
+    in oklch,
+    var(--mimi-destructive) 88%,
+    var(--mimi-background)
+  );
+  --mimi-ring-soft: color-mix(in oklch, var(--mimi-ring) 32%, transparent);
+  --mimi-destructive-soft: color-mix(in oklch, var(--mimi-destructive) 24%, transparent);
+  --mimi-switch-off: color-mix(in oklch, var(--mimi-foreground) 20%, transparent);
+
+  color-scheme: light;
+}
+
+/* ── Oscuro ────────────────────────────────────── */
+.dark {
+  --mimi-background: oklch(0.145 0 0);
+  --mimi-foreground: oklch(0.985 0 0);
+  --mimi-card: oklch(0.175 0 0);
+  --mimi-card-foreground: oklch(0.985 0 0);
+  --mimi-popover: oklch(0.175 0 0);
+  --mimi-popover-foreground: oklch(0.985 0 0);
+  --mimi-primary: oklch(0.922 0 0);
+  --mimi-primary-foreground: oklch(0.205 0 0);
+  --mimi-secondary: oklch(0.269 0 0);
+  --mimi-secondary-foreground: oklch(0.985 0 0);
+  --mimi-muted: oklch(0.225 0 0);
+  --mimi-muted-foreground: oklch(0.708 0 0);
+  --mimi-accent: oklch(0.269 0 0);
+  --mimi-accent-foreground: oklch(0.985 0 0);
+  --mimi-destructive: oklch(0.704 0.191 22.216);
+  --mimi-destructive-foreground: oklch(0.2 0.04 25);
+  --mimi-border: oklch(1 0 0 / 10%);
+  --mimi-input: oklch(1 0 0 / 15%);
+  --mimi-input-background: oklch(1 0 0 / 4.5%);
+  --mimi-ring: oklch(0.556 0 0);
+
+  --mimi-shadow-card:
+    inset 0 1px 0 oklch(1 0 0 / 0.04), 0 1px 2px oklch(0 0 0 / 0.5),
+    0 20px 40px -16px oklch(0 0 0 / 0.7);
+  --mimi-shadow-primary:
+    0 1px 2px oklch(0 0 0 / 0.5),
+    0 4px 12px -4px color-mix(in oklch, var(--mimi-primary) 30%, transparent);
+  --mimi-shadow-primary-hover:
+    0 1px 2px oklch(0 0 0 / 0.5),
+    0 8px 18px -6px color-mix(in oklch, var(--mimi-primary) 40%, transparent);
+  --mimi-shadow-destructive:
+    0 1px 2px oklch(0 0 0 / 0.5),
+    0 4px 12px -4px color-mix(in oklch, var(--mimi-destructive) 30%, transparent);
+  --mimi-shadow-destructive-hover:
+    0 1px 2px oklch(0 0 0 / 0.5),
+    0 8px 18px -6px color-mix(in oklch, var(--mimi-destructive) 40%, transparent);
+  --mimi-shadow-neutral:
+    inset 0 1px 0 oklch(1 0 0 / 0.05), 0 1px 2px oklch(0 0 0 / 0.5),
+    0 4px 10px -4px oklch(0 0 0 / 0.6);
+  --mimi-shadow-neutral-hover:
+    inset 0 1px 0 oklch(1 0 0 / 0.06), 0 2px 4px oklch(0 0 0 / 0.5),
+    0 10px 20px -8px oklch(0 0 0 / 0.75);
+
+  /* Los derivados se redeclaran para que tomen la paleta oscura */
+  --mimi-primary-hover: color-mix(in oklch, var(--mimi-primary) 88%, var(--mimi-background));
+  --mimi-secondary-hover: color-mix(in oklch, var(--mimi-secondary) 80%, var(--mimi-foreground) 6%);
+  --mimi-destructive-hover: color-mix(
+    in oklch,
+    var(--mimi-destructive) 88%,
+    var(--mimi-background)
+  );
+  --mimi-ring-soft: color-mix(in oklch, var(--mimi-ring) 32%, transparent);
+  --mimi-destructive-soft: color-mix(in oklch, var(--mimi-destructive) 24%, transparent);
+  --mimi-switch-off: color-mix(in oklch, var(--mimi-foreground) 20%, transparent);
+
+  color-scheme: dark;
+}
+
+/* ── Movimiento reducido: sin escala al hacer clic ni transición de scale ── */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mimi-press-scale: 1;
+    --mimi-transition:
+      background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.25s ease;
+  }
+}
+
+/* ── Tokens expuestos a Tailwind (inline: los valores son var() y deben resolverse en uso) ── */
+@theme inline {
+  --color-background: var(--mimi-background);
+  --color-foreground: var(--mimi-foreground);
+  --color-card: var(--mimi-card);
+  --color-card-foreground: var(--mimi-card-foreground);
+  --color-popover: var(--mimi-popover);
+  --color-popover-foreground: var(--mimi-popover-foreground);
+  --color-primary: var(--mimi-primary);
+  --color-primary-foreground: var(--mimi-primary-foreground);
+  --color-primary-hover: var(--mimi-primary-hover);
+  --color-secondary: var(--mimi-secondary);
+  --color-secondary-foreground: var(--mimi-secondary-foreground);
+  --color-secondary-hover: var(--mimi-secondary-hover);
+  --color-muted: var(--mimi-muted);
+  --color-muted-foreground: var(--mimi-muted-foreground);
+  --color-accent: var(--mimi-accent);
+  --color-accent-foreground: var(--mimi-accent-foreground);
+  --color-destructive: var(--mimi-destructive);
+  --color-destructive-foreground: var(--mimi-destructive-foreground);
+  --color-destructive-hover: var(--mimi-destructive-hover);
+  --color-destructive-soft: var(--mimi-destructive-soft);
+  --color-border: var(--mimi-border);
+  --color-input: var(--mimi-input);
+  --color-input-background: var(--mimi-input-background);
+  --color-ring: var(--mimi-ring);
+  --color-ring-soft: var(--mimi-ring-soft);
+  --color-switch-off: var(--mimi-switch-off);
+
+  --radius-sm: var(--mimi-radius-sm);
+  --radius-md: calc(var(--mimi-radius) - 2px);
+  --radius-lg: var(--mimi-radius);
+  --radius-xl: calc(var(--mimi-radius) + 4px);
+  --radius-card: var(--mimi-radius-card);
+  --radius-badge: var(--mimi-badge-radius);
+
+  --shadow-card: var(--mimi-shadow-card);
+  --shadow-primary: var(--mimi-shadow-primary);
+  --shadow-primary-hover: var(--mimi-shadow-primary-hover);
+  --shadow-destructive: var(--mimi-shadow-destructive);
+  --shadow-destructive-hover: var(--mimi-shadow-destructive-hover);
+  --shadow-neutral: var(--mimi-shadow-neutral);
+  --shadow-neutral-hover: var(--mimi-shadow-neutral-hover);
+
+  --font-sans: var(--mimi-font-sans);
+  --font-mono: var(--mimi-font-mono);
+}
+
+@utility mimi-transition {
+  transition: var(--mimi-transition);
+}
+
+@layer base {
+  /* Tailwind 4 usa currentColor como color de borde por defecto */
+  *,
+  ::before,
+  ::after {
+    border-color: var(--mimi-border);
+  }
+
+  body {
+    background-color: var(--mimi-background);
+    color: var(--mimi-foreground);
+  }
+}
+
+@keyframes mimi-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mimi-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
