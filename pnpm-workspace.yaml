@@ -5,7 +5,7 @@ packages:
 # pnpm 11+ bloquea los scripts de instalación salvo los autorizados aquí.
 # Los cuatro son dependencias nativas de @angular/build.
 allowBuilds:
-  '@parcel/watcher': true   # vigilancia de archivos de ng serve
-  esbuild: true             # compilador que usa @angular/build
-  lmdb: true                # caché persistente de compilación (.angular/cache)
-  msgpackr-extract: true    # serialización rápida para la caché de lmdb
+  '@parcel/watcher': true # vigilancia de archivos de ng serve
+  esbuild: true # compilador que usa @angular/build
+  lmdb: true # caché persistente de compilación (.angular/cache)
+  msgpackr-extract: true # serialización rápida para la caché de lmdb

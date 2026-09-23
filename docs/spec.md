@@ -13,35 +13,35 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 5. **Estilo Vivid:** paleta neutra con radio amplio, sombras en capas y micro-animaciones (inspirado en Vuesax).
 6. **Documentación en español e inglés.**
 
-Frase principal: *"Los componentes son tuyos. Las actualizaciones también."*
+Frase principal: _"Los componentes son tuyos. Las actualizaciones también."_
 
 ## 2. Stack
 
-| Capa | Tecnología |
-|---|---|
-| Framework | Angular 22 (standalone, OnPush, zoneless, signals) |
-| Estilos | Tailwind CSS 4 (configuración en CSS, sin `tailwind.config.js`) |
-| Colores | OKLCH en variables CSS `--mimi-*` |
-| Clases | `clsx` + `tailwind-merge` → `cn()` |
-| Variantes | `class-variance-authority` (`cva`) |
-| Overlays (Fase 4) | `@angular/cdk` (`overlay`, `dialog`, `a11y`) |
-| Íconos | Lucide: SVG en línea dentro de los componentes; `@lucide/angular` en el showcase y como recomendación |
-| CLI | Angular Schematics + comando `mimi` |
-| Monorepo | pnpm workspaces |
-| Formato | Prettier en la raíz (`.prettierrc`, `.prettierignore`); `pnpm format` escribe y `pnpm format:check` solo revisa |
-| Showcase | Angular 22 puro (no AnalogJS), con prerender |
+| Capa              | Tecnología                                                                                                      |
+| ----------------- | --------------------------------------------------------------------------------------------------------------- |
+| Framework         | Angular 22 (standalone, OnPush, zoneless, signals)                                                              |
+| Estilos           | Tailwind CSS 4 (configuración en CSS, sin `tailwind.config.js`)                                                 |
+| Colores           | OKLCH en variables CSS `--mimi-*`                                                                               |
+| Clases            | `clsx` + `tailwind-merge` → `cn()`                                                                              |
+| Variantes         | `class-variance-authority` (`cva`)                                                                              |
+| Overlays (Fase 4) | `@angular/cdk` (`overlay`, `dialog`, `a11y`)                                                                    |
+| Íconos            | Lucide: SVG en línea dentro de los componentes; `@lucide/angular` en el showcase y como recomendación           |
+| CLI               | Angular Schematics + comando `mimi`                                                                             |
+| Monorepo          | pnpm workspaces                                                                                                 |
+| Formato           | Prettier en la raíz (`.prettierrc`, `.prettierignore`); `pnpm format` escribe y `pnpm format:check` solo revisa |
+| Showcase          | Angular 22 puro (no AnalogJS), con prerender                                                                    |
 
 ### Versiones
 
-| Herramienta | Versión instalada | Requisito |
-|---|---|---|
-| Node.js | 24.15.0 | Angular 22 exige `^22.22.3 \|\| ^24.15.0 \|\| ^26.0.0` |
-| pnpm | 12.5.1 | Fijada en `packageManager` del `package.json` raíz |
-| Angular (framework) | 22.1.7 | `@angular/core`, `common`, `compiler`, `compiler-cli`, `forms`, `platform-browser`, `router` |
-| Angular (herramientas) | 22.1.8 | `@angular/cli`, `@angular/build` (se versionan aparte del framework) |
-| TypeScript | 6.0.3 | Angular 22 exige `>=6.0.0 <6.1.0` |
-| Tailwind CSS | 4.3.3 | Con `@tailwindcss/postcss` |
-| Vitest | 4.1.11 | Runner de pruebas del showcase (con jsdom) |
+| Herramienta            | Versión instalada | Requisito                                                                                    |
+| ---------------------- | ----------------- | -------------------------------------------------------------------------------------------- |
+| Node.js                | 24.15.0           | Angular 22 exige `^22.22.3 \|\| ^24.15.0 \|\| ^26.0.0`                                       |
+| pnpm                   | 12.5.1            | Fijada en `packageManager` del `package.json` raíz                                           |
+| Angular (framework)    | 22.1.7            | `@angular/core`, `common`, `compiler`, `compiler-cli`, `forms`, `platform-browser`, `router` |
+| Angular (herramientas) | 22.1.8            | `@angular/cli`, `@angular/build` (se versionan aparte del framework)                         |
+| TypeScript             | 6.0.3             | Angular 22 exige `>=6.0.0 <6.1.0`                                                            |
+| Tailwind CSS           | 4.3.3             | Con `@tailwindcss/postcss`                                                                   |
+| Vitest                 | 4.1.11            | Runner de pruebas del showcase (con jsdom)                                                   |
 
 pnpm 11+ bloquea los scripts de instalación: los autorizados están en `allowBuilds` de `pnpm-workspace.yaml` (`@parcel/watcher`, `esbuild`, `lmdb`, `msgpackr-extract`).
 
@@ -72,25 +72,29 @@ El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve e
 
 ### Fase 2 del plan: componentes básicos (MVP)
 
-| Componente | Selector | Notas |
-|---|---|---|
-| Button | `button[mimiBtn]`, `a[mimiBtn]` | Variantes: default, secondary, destructive, outline, ghost, link. Tamaños: sm, default, lg, icon. Input `loading` con spinner |
-| Input | `input[mimiInput]` | Error automático |
-| Textarea | `textarea[mimiTextarea]` | Error automático |
-| Badge | `span[mimiBadge]` | default, secondary, outline, destructive |
-| Card | `mimi-card`, `mimi-card-header`, `mimi-card-title`, `mimi-card-description`, `mimi-card-content`, `mimi-card-footer` | Exporta `MimiCardImports` |
-| Separator | `mimi-separator` | `orientation`: horizontal / vertical |
-| Skeleton | `mimi-skeleton` | `animate-pulse` |
-| Avatar | `mimi-avatar`, `mimi-avatar-image`, `mimi-avatar-fallback` | Si la imagen falla, muestra el fallback |
-| Switch | `mimi-switch` | `checked = model(false)`, `role="switch"`, ControlValueAccessor |
-| Checkbox | `mimi-checkbox` | `role="checkbox"`, Espacio, estado indeterminado, ControlValueAccessor |
-| FormField | `mimi-form-field`, `mimi-form-error` | Etiqueta + control + mensaje |
+| Componente | Selector                                                                                                             | Notas                                                                                                                         |
+| ---------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Button     | `button[mimiBtn]`, `a[mimiBtn]`                                                                                      | Variantes: default, secondary, destructive, outline, ghost, link. Tamaños: sm, default, lg, icon. Input `loading` con spinner |
+| Input      | `input[mimiInput]`                                                                                                   | Error automático                                                                                                              |
+| Textarea   | `textarea[mimiTextarea]`                                                                                             | Error automático                                                                                                              |
+| Badge      | `span[mimiBadge]`                                                                                                    | default, secondary, outline, destructive                                                                                      |
+| Card       | `mimi-card`, `mimi-card-header`, `mimi-card-title`, `mimi-card-description`, `mimi-card-content`, `mimi-card-footer` | Exporta `MimiCardImports`                                                                                                     |
+| Separator  | `mimi-separator`                                                                                                     | `orientation`: horizontal / vertical                                                                                          |
+| Skeleton   | `mimi-skeleton`                                                                                                      | `animate-pulse`                                                                                                               |
+| Avatar     | `mimi-avatar`, `mimi-avatar-image`, `mimi-avatar-fallback`                                                           | Si la imagen falla, muestra el fallback                                                                                       |
+| Switch     | `mimi-switch`                                                                                                        | `checked = model(false)`, `role="switch"`, ControlValueAccessor                                                               |
+| Checkbox   | `mimi-checkbox`                                                                                                      | `role="checkbox"`, Espacio, estado indeterminado, ControlValueAccessor                                                        |
+| FormField  | `mimi-form-field`, `mimi-form-error`                                                                                 | Etiqueta + control + mensaje                                                                                                  |
 
 ### Fase 4 del plan: overlays
 
 - **Select** (`mimi-select`), estilo NG-ZORRO: buscador interno, limpiar, cargando, sin resultados, opciones deshabilitadas, check en la activa, teclado (flechas, Enter, Escape, Home/End), ControlValueAccessor.
   ```ts
-  export interface MimiOption<T = unknown> { label: string; value: T; disabled?: boolean; }
+  export interface MimiOption<T = unknown> {
+    label: string;
+    value: T;
+    disabled?: boolean;
+  }
   ```
 - **Dialog** (`MimiDialogService`): `dialog.open(MiComponente, { data, width, maxWidth, disableClose, injector })`. Sin header/body/footer obligatorios, **siempre** con una X arriba a la derecha. Cierra con X, Escape y clic en el fondo (salvo `disableClose`). Datos con `inject(MIMI_DIALOG_DATA)`.
 
@@ -129,7 +133,7 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 5. Agrega el alias `@/components/ui/*` al `tsconfig.json`.
 6. Registra `@mimi-ng/cli` en `schematicCollections` de `angular.json`.
 7. Crea `mimi.json`.
-8. Pregunta: *"¿Quieres instalar @lucide/angular para tus íconos? (recomendado)"*.
+8. Pregunta: _"¿Quieres instalar @lucide/angular para tus íconos? (recomendado)"_.
 
 ### Qué hace `ui`
 
@@ -201,8 +205,8 @@ import { MimiFormFieldComponent, MimiFormErrorComponent } from '@/components/ui/
 Los valores definitivos saldrán de `docs/design/`. Mientras tanto, esta es la base neutra:
 
 ```css
-@import "tailwindcss";
-@source "../../../packages/ui-core/src";          /* ruta relativa al styles.css del showcase */
+@import 'tailwindcss';
+@source "../../../packages/ui-core/src"; /* ruta relativa al styles.css del showcase */
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
@@ -291,42 +295,64 @@ height: var(--mimi-btn-height, var(--mimi-control-height, 2.5rem));
 border-radius: var(--mimi-btn-radius, var(--mimi-radius, 0.5rem));
 ```
 
-| Si defines… | Afecta a… |
-|---|---|
+| Si defines…             | Afecta a…                                    |
+| ----------------------- | -------------------------------------------- |
 | `--mimi-control-height` | Button, Input, Textarea (y Select en Fase 4) |
-| `--mimi-btn-height` | Solo Button |
-| nada | Todos usan 2.5rem |
+| `--mimi-btn-height`     | Solo Button                                  |
+| nada                    | Todos usan 2.5rem                            |
 
 ### 6.3 Preset tipado (`theme/types.ts`)
 
 ```ts
 export interface MimiColorTokens {
-  background?: string; foreground?: string;
-  card?: string; cardForeground?: string;
-  popover?: string; popoverForeground?: string;
-  primary?: string; primaryForeground?: string;
-  secondary?: string; secondaryForeground?: string;
-  muted?: string; mutedForeground?: string;
-  accent?: string; accentForeground?: string;
-  destructive?: string; destructiveForeground?: string;
-  border?: string; input?: string; ring?: string;
+  background?: string;
+  foreground?: string;
+  card?: string;
+  cardForeground?: string;
+  popover?: string;
+  popoverForeground?: string;
+  primary?: string;
+  primaryForeground?: string;
+  secondary?: string;
+  secondaryForeground?: string;
+  muted?: string;
+  mutedForeground?: string;
+  accent?: string;
+  accentForeground?: string;
+  destructive?: string;
+  destructiveForeground?: string;
+  border?: string;
+  input?: string;
+  ring?: string;
 }
 
 export interface MimiSharedControlTokens {
-  height?: string; heightSm?: string; heightLg?: string;
-  radius?: string; paddingX?: string; fontSize?: string;
-  borderWidth?: string; focusRingWidth?: string;
+  height?: string;
+  heightSm?: string;
+  heightLg?: string;
+  radius?: string;
+  paddingX?: string;
+  fontSize?: string;
+  borderWidth?: string;
+  focusRingWidth?: string;
 }
 
 export interface MimiButtonTokens extends MimiSharedControlTokens {
-  fontWeight?: string | number; letterSpacing?: string; transitionDuration?: string;
+  fontWeight?: string | number;
+  letterSpacing?: string;
+  transitionDuration?: string;
 }
 export interface MimiInputTokens extends MimiSharedControlTokens {
-  placeholderColor?: string; disabledOpacity?: string | number;
+  placeholderColor?: string;
+  disabledOpacity?: string | number;
 }
 export interface MimiCardTokens {
-  radius?: string; borderWidth?: string; shadow?: string;
-  paddingHeader?: string; paddingContent?: string; paddingFooter?: string;
+  radius?: string;
+  borderWidth?: string;
+  shadow?: string;
+  paddingHeader?: string;
+  paddingContent?: string;
+  paddingFooter?: string;
 }
 
 export interface MimiComponentTokens {
@@ -339,8 +365,8 @@ export interface MimiComponentTokens {
 export interface MimiThemePreset {
   name?: string;
   radius?: string;
-  colors?: MimiColorTokens;       // modo claro
-  darkColors?: MimiColorTokens;   // modo oscuro
+  colors?: MimiColorTokens; // modo claro
+  darkColors?: MimiColorTokens; // modo oscuro
   controls?: MimiSharedControlTokens;
   components?: MimiComponentTokens;
 }
@@ -358,7 +384,7 @@ export const mimiTheme: MimiThemePreset = {
 };
 
 // app.config.ts
-providers: [provideMimiTheme(mimiTheme)]   // opcional
+providers: [provideMimiTheme(mimiTheme)]; // opcional
 ```
 
 ### 6.4 `provideMimiTheme()`
@@ -369,9 +395,9 @@ Debe generar una hoja de estilos e insertarla en el `<head>` con `:root { … }`
 
 ```ts
 export const controlSizes = {
-  sm:      'h-[var(--mimi-control-height-sm,2rem)] px-2.5 text-xs',
+  sm: 'h-[var(--mimi-control-height-sm,2rem)] px-2.5 text-xs',
   default: 'h-[var(--mimi-control-height,2.5rem)] px-3 py-2 text-sm',
-  lg:      'h-[var(--mimi-control-height-lg,2.75rem)] px-4 text-base',
+  lg: 'h-[var(--mimi-control-height-lg,2.75rem)] px-4 text-base',
 } as const;
 
 export const controlFocusStyles =
@@ -388,10 +414,10 @@ export const controlInvalidStyles =
 
 Dos variables controlan las micro-animaciones del estilo Vivid:
 
-| Variable | Valor | Uso |
-|---|---|---|
-| `--mimi-transition` | `background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease, transform .15s cubic-bezier(.2,.8,.2,1)` | Lista completa de transiciones de los componentes interactivos. |
-| `--mimi-press-scale` | `0.975` | Escala al hacer clic (`:active`). |
+| Variable             | Valor                                                                                                                             | Uso                                                             |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `--mimi-transition`  | `background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease, transform .15s cubic-bezier(.2,.8,.2,1)` | Lista completa de transiciones de los componentes interactivos. |
+| `--mimi-press-scale` | `0.975`                                                                                                                           | Escala al hacer clic (`:active`).                               |
 
 Con `prefers-reduced-motion: reduce`, `--mimi-press-scale` pasa a `1` y `--mimi-transition` pierde `transform`:
 
@@ -399,7 +425,8 @@ Con `prefers-reduced-motion: reduce`, `--mimi-press-scale` pasa a `1` y `--mimi-
 @media (prefers-reduced-motion: reduce) {
   :root {
     --mimi-press-scale: 1;
-    --mimi-transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease;
+    --mimi-transition:
+      background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.25s ease;
   }
 }
 ```
@@ -434,7 +461,7 @@ Además, cada componente expone `data-variant`, `data-size`, `data-state` y `dat
     required: 'Este campo es obligatorio.',
     email: 'Correo inválido.',
     minlength: (e) => `Mínimo ${e.requiredLength} caracteres.`,
-  })
+  });
   ```
 - Pendiente: soporte de Signal Forms.
 
