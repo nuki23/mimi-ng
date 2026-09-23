@@ -286,6 +286,8 @@ Valores de respaldo por tamaño (los mismos que los tokens de `theme-base.css`):
 
 ### 6.3 Preset tipado (`theme/types.ts`)
 
+Los tipos siguen a `theme-base.css`, que es la fuente de verdad. Los derivados con `color-mix` (`primary-hover`, `secondary-hover`, `destructive-hover`, `ring-soft`, `destructive-soft`, `switch-off`) **no** están en el preset: se recalculan solos a partir de los colores.
+
 ```ts
 export interface MimiColorTokens {
   background?: string;
@@ -306,26 +308,57 @@ export interface MimiColorTokens {
   destructiveForeground?: string;
   border?: string;
   input?: string;
+  inputBackground?: string;
   ring?: string;
 }
 
-export interface MimiSharedControlTokens {
+export interface MimiShadowTokens {
+  card?: string;
+  primary?: string;
+  primaryHover?: string;
+  destructive?: string;
+  destructiveHover?: string;
+  neutral?: string;
+  neutralHover?: string;
+}
+
+export interface MimiRadiusTokens {
+  sm?: string;
+  card?: string;
+  badge?: string;
+}
+
+export interface MimiFontTokens {
+  sans?: string;
+  mono?: string;
+}
+
+export interface MimiMotionTokens {
+  transition?: string; // debe animar `scale` (y `translate` si se usa `lift`)
+  pressScale?: string | number;
+  lift?: string;
+}
+
+export interface MimiControlSizeTokens {
   height?: string;
   heightSm?: string;
   heightLg?: string;
+}
+
+// Tokens por componente: contrato para la Fase 2 (cada componente los lee con la cascada de 6.2)
+export interface MimiControlTokens extends MimiControlSizeTokens {
   radius?: string;
   paddingX?: string;
   fontSize?: string;
   borderWidth?: string;
   focusRingWidth?: string;
 }
-
-export interface MimiButtonTokens extends MimiSharedControlTokens {
+export interface MimiButtonTokens extends MimiControlTokens {
   fontWeight?: string | number;
   letterSpacing?: string;
   transitionDuration?: string;
 }
-export interface MimiInputTokens extends MimiSharedControlTokens {
+export interface MimiInputTokens extends MimiControlTokens {
   placeholderColor?: string;
   disabledOpacity?: string | number;
 }
@@ -337,7 +370,6 @@ export interface MimiCardTokens {
   paddingContent?: string;
   paddingFooter?: string;
 }
-
 export interface MimiComponentTokens {
   button?: MimiButtonTokens;
   input?: MimiInputTokens;
@@ -346,14 +378,21 @@ export interface MimiComponentTokens {
 }
 
 export interface MimiThemePreset {
-  name?: string;
-  radius?: string;
+  name?: string; // informativo, no genera CSS
+  radius?: string; // --mimi-radius
+  radii?: MimiRadiusTokens;
   colors?: MimiColorTokens; // modo claro
   darkColors?: MimiColorTokens; // modo oscuro
-  controls?: MimiSharedControlTokens;
+  shadows?: MimiShadowTokens;
+  darkShadows?: MimiShadowTokens;
+  fonts?: MimiFontTokens;
+  motion?: MimiMotionTokens;
+  controls?: MimiControlSizeTokens;
   components?: MimiComponentTokens;
 }
 ```
+
+`controls` solo tiene alturas: no existen variables `--mimi-control-*` para radio, padding o tamaño de letra. Esos tokens son por componente (`--mimi-btn-radius`, etc.).
 
 Ejemplo:
 
@@ -370,9 +409,44 @@ export const mimiTheme: MimiThemePreset = {
 providers: [provideMimiTheme(mimiTheme)]; // opcional
 ```
 
-### 6.4 `provideMimiTheme()`
+### 6.4 `provideMimiTheme()` (`theme/provider.ts`)
 
-Debe generar una hoja de estilos e insertarla en el `<head>` con `:root { … }` y `.dark { … }`. **No** usar `document.documentElement.style.setProperty`: los estilos en línea le ganan a `.dark` y rompen el modo oscuro. Un mapa de nombres convierte el preset en variables (`primary` → `--mimi-primary`, `controls.height` → `--mimi-control-height`, `components.button.fontWeight` → `--mimi-btn-font-weight`). Debe funcionar con SSR/prerender (usar `inject(DOCUMENT)`).
+| Pieza                              | Qué hace                                                                                                                                                                                         |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `mimiThemeToCss(preset)`           | Función pura: convierte el preset en texto CSS. Devuelve `''` si no hay nada que aplicar.                                                                                                        |
+| `applyMimiTheme(document, preset)` | Crea o reutiliza `<style id="mimi-theme">`, reemplaza su contenido y lo mueve al final del `<head>`. Con un preset vacío o `null` lo elimina. La usa también el personalizador de la Fase 5.     |
+| `MIMI_THEME`                       | `InjectionToken<MimiThemePreset>` con el preset registrado.                                                                                                                                      |
+| `provideMimiTheme(preset)`         | `makeEnvironmentProviders` con `MIMI_THEME` y un `provideAppInitializer` que llama a `applyMimiTheme(inject(DOCUMENT), inject(MIMI_THEME))`. Opcional: sin él, se usa `theme-base.css` tal cual. |
+
+**Mapa de nombres.** No hay un `if` por token: la clave pasa a kebab-case y cada grupo le pone su prefijo.
+
+| Grupo                     | Selector                     | Variable                                                                                                                                        |
+| ------------------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `radius`                  | `:root`                      | `--mimi-radius`                                                                                                                                 |
+| `radii`                   | `:root`                      | `sm` → `--mimi-radius-sm`, `card` → `--mimi-radius-card`, `badge` → `--mimi-badge-radius`                                                       |
+| `colors`                  | `:root:not(.dark)`           | `--mimi-` + kebab (`primaryForeground` → `--mimi-primary-foreground`)                                                                           |
+| `darkColors`              | `.dark`                      | igual que `colors`                                                                                                                              |
+| `shadows` / `darkShadows` | `:root:not(.dark)` / `.dark` | `--mimi-shadow-` + kebab                                                                                                                        |
+| `fonts`                   | `:root`                      | `--mimi-font-` + kebab                                                                                                                          |
+| `motion`                  | `:root`                      | `--mimi-` + kebab (`pressScale` → `--mimi-press-scale`)                                                                                         |
+| `controls`                | `:root`                      | `--mimi-control-` + kebab (`heightSm` → `--mimi-control-height-sm`)                                                                             |
+| `components.<c>`          | `:root`                      | `--mimi-<prefijo>-` + kebab, con prefijos `button` → `btn`, `input` → `input`, `card` → `card` (`button.fontWeight` → `--mimi-btn-font-weight`) |
+
+Las propiedades `undefined` o vacías se omiten. Los números se pasan a texto.
+
+**Reglas:**
+
+- **Nada de estilos en línea** (`style.setProperty`): le ganan a `.dark` y rompen el modo oscuro.
+- **Orden:** el `<style>` va al final del `<head>`, después del CSS global, para ganarle a `theme-base.css` con la misma especificidad. En producción Angular carga la hoja global con `<link media="print" onload>`, pero la cascada respeta el orden de los elementos en el documento, no el momento en que carga cada uno.
+- **`colors` va en `:root:not(.dark)`**, no en `:root`. `:root` y `.dark` tienen la misma especificidad y los dos se aplican a `<html>` en modo oscuro, así que un `:root` posterior le ganaría al `.dark` de la base. Con `:root:not(.dark)`:
+  - Si el preset define `colors.primary` pero no `darkColors.primary`, **el modo oscuro conserva el primario oscuro de la base**. Para cambiar los dos modos hay que definir ambos.
+  - `:root:not(.dark)` tiene **más especificidad** que un `:root` normal, así que los colores del preset también le ganan a variables redefinidas con `:root { … }` en el `styles.css` del usuario. Para ganarle al preset hay que usar un selector igual o más específico, o cambiar el preset.
+- **Derivados:** nunca se emiten. Como `theme-base.css` los define con `var()`, siguen al color nuevo solos (`primary-hover` se recalcula con el `--mimi-primary` del preset).
+- **Movimiento reducido:** si el preset define `motion`, su `:root` le ganaría al `@media (prefers-reduced-motion)` de la base, así que el CSS generado agrega su propio bloque con `--mimi-press-scale: 1` y `--mimi-lift: 0`.
+- **Valores inseguros:** se ignora cualquier valor con `;`, `{`, `}` o `<`, porque rompería el CSS o cerraría la etiqueta `<style>`. En modo desarrollo (`isDevMode()`) se avisa en consola.
+- **SSR/prerender:** usa `inject(DOCUMENT)`, nunca `window` ni `document` globales.
+
+**Pruebas:** jsdom tiene un fallo en la cascada de variables CSS: una regla posterior que no aplica al elemento puede cambiar el valor calculado. Por eso las pruebas comprueban el texto CSS generado y, con `getComputedStyle`, solo el modo claro. El modo oscuro se revisa en el navegador, en `/dev/theme`.
 
 ### 6.5 Utilidades (`utils/`)
 

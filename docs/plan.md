@@ -16,7 +16,7 @@ Marca `[x]` al terminar cada tarea. Una tarea por sesión de Claude Code (usa `/
 - [x] 1.3 Tokens: `ui-core/src/lib/theme/theme-base.css` con las variables `--mimi-*` de `docs/design/`, claro y oscuro, y el bloque `@theme inline`. `@source` a `ui-core` en el `styles.css` del showcase.
 - [x] 1.4 Utils: `cn.ts` y `control-styles.ts`.
 - [x] 1.4b Workspace de Angular en la raíz: `angular.json` con los proyectos `docs` y `ui-core` (solo `test`), dependencias en el `package.json` raíz y pruebas de ui-core con `ng test` y TestBed.
-- [ ] 1.5 Tema: `types.ts` y `provideMimiTheme()` (inyecta un `<style>`, no estilos en línea). Probar cambiando el primario.
+- [x] 1.5 Tema: `types.ts` y `provideMimiTheme()` (inyecta un `<style>`, no estilos en línea). Probar cambiando el primario.
 - [ ] 1.6 Layout del showcase: header, sidebar, contenido, TOC, botón claro/oscuro.
 - [ ] 1.7 `CodePreview` (pestañas Preview/Código, botón copiar, resaltado con Shiki).
 

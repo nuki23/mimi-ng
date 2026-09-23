@@ -6,4 +6,8 @@ export const routes: Routes = [
     path: 'dev/tokens',
     loadComponent: () => import('./dev/tokens-page').then((m) => m.TokensPage),
   },
+  {
+    path: 'dev/theme',
+    loadComponent: () => import('./dev/theme-page').then((m) => m.ThemePage),
+  },
 ];

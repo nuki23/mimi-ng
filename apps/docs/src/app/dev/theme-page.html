@@ -1,0 +1,92 @@
+<main class="mx-auto flex max-w-5xl flex-col gap-10 px-6 py-10">
+  <header class="flex flex-wrap items-center justify-between gap-4">
+    <div class="flex flex-col gap-1">
+      <h1 class="text-2xl font-bold tracking-tight">Presets del tema</h1>
+      <p class="text-sm text-muted-foreground">
+        Página interna para probar <code class="font-mono">applyMimiTheme()</code>.
+      </p>
+    </div>
+    <button
+      type="button"
+      class="h-(--mimi-control-height) rounded-lg border bg-card px-4 text-sm font-medium shadow-neutral mimi-transition hover:bg-accent hover:shadow-neutral-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+      [attr.aria-pressed]="isDark()"
+      (click)="toggleDark()"
+    >
+      {{ isDark() ? 'Modo claro' : 'Modo oscuro' }}
+    </button>
+  </header>
+
+  <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Preset</h2>
+    <div class="flex flex-wrap gap-3" role="group" aria-label="Preset">
+      @for (demo of presets; track demo.id) {
+        <button
+          type="button"
+          class="h-(--mimi-control-height) rounded-lg border px-4 text-sm font-medium mimi-transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+          [class]="activeId() === demo.id ? 'border-primary bg-accent' : 'bg-card hover:bg-accent'"
+          [attr.aria-pressed]="activeId() === demo.id"
+          [attr.data-preset]="demo.id"
+          (click)="apply(demo)"
+        >
+          {{ demo.label }}
+        </button>
+      }
+    </div>
+    @for (demo of presets; track demo.id) {
+      @if (activeId() === demo.id) {
+        <p class="text-sm text-muted-foreground">{{ demo.description }}</p>
+      }
+    }
+  </section>
+
+  <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Colores</h2>
+    <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      @for (swatch of swatches; track swatch.name) {
+        <div class="flex flex-col gap-2">
+          <div
+            class="h-14 rounded-lg border"
+            [class]="swatch.class"
+            [attr.data-swatch]="swatch.name"
+          ></div>
+          <span class="font-mono text-xs">{{ swatch.name }}</span>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Controles</h2>
+    <div class="flex flex-wrap items-start gap-3">
+      <button
+        type="button"
+        data-test="button"
+        class="inline-flex h-(--mimi-control-height) items-center justify-center rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground shadow-primary mimi-transition hover:bg-primary-hover hover:shadow-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+      >
+        Guardar
+      </button>
+      <input
+        class="max-w-xs"
+        [class]="inputClasses"
+        placeholder="tu@correo.com"
+        aria-label="Correo"
+      />
+      <input
+        class="max-w-xs"
+        [class]="inputClasses"
+        value="ana@"
+        aria-invalid="true"
+        aria-label="Correo con error"
+      />
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+      CSS generado
+    </h2>
+    <pre
+      class="overflow-x-auto rounded-lg border bg-muted p-4 font-mono text-xs"
+    ><code>{{ css() || 'Sin preset: no hay estilo mimi-theme.' }}</code></pre>
+  </section>
+</main>
