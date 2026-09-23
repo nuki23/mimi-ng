@@ -1,0 +1,33 @@
+import { clsx, type ClassValue } from 'clsx';
+import { extendTailwindMerge } from 'tailwind-merge';
+
+/**
+ * tailwind-merge solo reconoce tallas (sm, md, lg…) en las escalas de sombra y radio.
+ * Sin registrar los tokens de Mimi, `shadow-card` se tomaría como color de sombra y
+ * `rounded-card` no se fusionaría con otros `rounded-*`. Los colores no hace falta
+ * registrarlos: la escala de color acepta cualquier nombre.
+ */
+const twMerge = extendTailwindMerge({
+  extend: {
+    theme: {
+      shadow: [
+        'card',
+        'primary',
+        'primary-hover',
+        'destructive',
+        'destructive-hover',
+        'neutral',
+        'neutral-hover',
+      ],
+      radius: ['card', 'badge'],
+    },
+    classGroups: {
+      transition: ['mimi-transition'],
+    },
+  },
+});
+
+/** Une clases con clsx y resuelve los conflictos de Tailwind (gana la última). */
+export function cn(...inputs: ClassValue[]): string {
+  return twMerge(clsx(inputs));
+}

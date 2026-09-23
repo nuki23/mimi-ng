@@ -41,7 +41,7 @@ Frase principal: _"Los componentes son tuyos. Las actualizaciones también."_
 | Angular (herramientas) | 22.1.8            | `@angular/cli`, `@angular/build` (se versionan aparte del framework)                         |
 | TypeScript             | 6.0.3             | Angular 22 exige `>=6.0.0 <6.1.0`                                                            |
 | Tailwind CSS           | 4.3.3             | Con `@tailwindcss/postcss`                                                                   |
-| Vitest                 | 4.1.11            | Runner de pruebas del showcase (con jsdom)                                                   |
+| Vitest                 | 4.1.11            | Pruebas del showcase (con jsdom, vía `ng test`) y de ui-core (directo)                       |
 
 pnpm 11+ bloquea los scripts de instalación: los autorizados están en `allowBuilds` de `pnpm-workspace.yaml` (`@parcel/watcher`, `esbuild`, `lmdb`, `msgpackr-extract`).
 
@@ -252,7 +252,7 @@ Cada propiedad busca primero la variable del componente, luego la compartida y p
 
 ```css
 height: var(--mimi-btn-height, var(--mimi-control-height, 2.5rem));
-border-radius: var(--mimi-btn-radius, var(--mimi-radius, 0.5rem));
+border-radius: var(--mimi-btn-radius, var(--mimi-radius, 0.75rem));
 ```
 
 | Si defines…             | Afecta a…                                    |
@@ -260,6 +260,14 @@ border-radius: var(--mimi-btn-radius, var(--mimi-radius, 0.5rem));
 | `--mimi-control-height` | Button, Input, Textarea (y Select en Fase 4) |
 | `--mimi-btn-height`     | Solo Button                                  |
 | nada                    | Todos usan 2.5rem                            |
+
+Valores de respaldo por tamaño (los mismos que los tokens de `theme-base.css`):
+
+| Tamaño  | Variable compartida        | Respaldo |
+| ------- | -------------------------- | -------- |
+| sm      | `--mimi-control-height-sm` | 2rem     |
+| default | `--mimi-control-height`    | 2.5rem   |
+| lg      | `--mimi-control-height-lg` | 3rem     |
 
 ### 6.3 Preset tipado (`theme/types.ts`)
 
@@ -351,24 +359,64 @@ providers: [provideMimiTheme(mimiTheme)]; // opcional
 
 Debe generar una hoja de estilos e insertarla en el `<head>` con `:root { … }` y `.dark { … }`. **No** usar `document.documentElement.style.setProperty`: los estilos en línea le ganan a `.dark` y rompen el modo oscuro. Un mapa de nombres convierte el preset en variables (`primary` → `--mimi-primary`, `controls.height` → `--mimi-control-height`, `components.button.fontWeight` → `--mimi-btn-font-weight`). Debe funcionar con SSR/prerender (usar `inject(DOCUMENT)`).
 
-### 6.5 Utilidades (`utils/control-styles.ts`)
+### 6.5 Utilidades (`utils/`)
+
+**`cn.ts`**: `cn(...inputs)` = `twMerge(clsx(inputs))`, con `extendTailwindMerge`. tailwind-merge solo reconoce tallas (`sm`, `md`…) en las escalas `shadow` y `radius`, así que se registran los tokens de Mimi; si no, `shadow-card` se toma como color de sombra y `rounded-card` no se fusiona. Los colores no hace falta registrarlos (la escala de color acepta cualquier nombre).
+
+```ts
+const twMerge = extendTailwindMerge({
+  extend: {
+    theme: {
+      shadow: [
+        'card',
+        'primary',
+        'primary-hover',
+        'destructive',
+        'destructive-hover',
+        'neutral',
+        'neutral-hover',
+      ],
+      radius: ['card', 'badge'],
+    },
+    classGroups: { transition: ['mimi-transition'] },
+  },
+});
+```
+
+Si se agrega una sombra, un radio o una utilidad propia a `theme-base.css`, hay que registrarla aquí y agregar una prueba en `cn.spec.ts`.
+
+**`control-styles.ts`**: estilos compartidos de Button, Input y Textarea, tomados de la hoja de componentes. El padding no va aquí: lo pone cada componente (16px en botones, 12px en campos).
 
 ```ts
 export const controlSizes = {
-  sm: 'h-[var(--mimi-control-height-sm,2rem)] px-2.5 text-xs',
-  default: 'h-[var(--mimi-control-height,2.5rem)] px-3 py-2 text-sm',
-  lg: 'h-[var(--mimi-control-height-lg,2.75rem)] px-4 text-base',
+  sm: 'h-[var(--mimi-control-height-sm,2rem)] text-[13px]',
+  default: 'h-[var(--mimi-control-height,2.5rem)] text-sm',
+  lg: 'h-[var(--mimi-control-height-lg,3rem)] text-[15px]',
 } as const;
 
-export const controlFocusStyles =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background';
+export type ControlSize = keyof typeof controlSizes;
 
+// Botones: contorno del color de anillo
+export const buttonFocusStyles =
+  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+
+// Input y Textarea: borde de anillo y halo ring-soft
+export const fieldFocusStyles =
+  'outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring-soft';
+
+// Sin pointer-events-none en disabled: anularía cursor-not-allowed. a[mimiBtn] sí lo necesita.
 export const controlDisabledStyles =
-  'disabled:cursor-not-allowed disabled:pointer-events-none disabled:opacity-50';
+  'disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50';
 
+// Borde rojo fijo; halo destructive-soft solo al enfocar
 export const controlInvalidStyles =
-  'aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive';
+  'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive-soft';
+
+// Solo botones. Switch y Checkbox tienen su propia escala.
+export const controlPressStyles = 'mimi-transition active:scale-(--mimi-press-scale)';
 ```
+
+**Pruebas de ui-core:** corren con Vitest directo en el paquete (`pnpm --filter @mimi-ng/ui-core test`, incluido en `pnpm test`). El builder de Angular del showcase no puede ejecutarlas porque están fuera de su workspace (`apps/docs`).
 
 ### 6.6 Movimiento
 
