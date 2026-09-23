@@ -1,5 +1,9 @@
-@import 'tailwindcss';
+/* source(none): Angular corre desde la raíz del monorepo y Tailwind escanearía todo el repo
+   (docs/, CLAUDE.md…). Solo se escanea el código del showcase y de ui-core. */
+@import 'tailwindcss' source(none);
 @import '@mimi-ng/ui-core/theme.css';
 
+@source '.';
 /* Sin esto Tailwind no genera las clases que usan los componentes de ui-core */
 @source '../../../packages/ui-core/src';
+@source not '../../../packages/ui-core/src/**/*.spec.ts';

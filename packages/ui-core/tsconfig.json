@@ -1,0 +1,15 @@
+/* Las compilerOptions y el alias @mimi-ng/ui-core viven en tsconfig.base.json. No definir "paths" aquí: reemplazaría el de la base. */
+{
+  "extends": "../../tsconfig.base.json",
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}

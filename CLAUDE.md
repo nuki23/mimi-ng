@@ -21,7 +21,10 @@ packages/cli/       # @mimi-ng/cli (Angular Schematics)
 - `pnpm install`: instalar dependencias (usar siempre pnpm, nunca npm ni yarn).
 - `pnpm dev`: levantar el showcase.
 - `pnpm build`: compilar todo.
-- `pnpm test`: pruebas.
+- `pnpm test`: pruebas de docs y ui-core (`ng test`, sin watch).
+- `pnpm test:ui-core`: solo las pruebas de ui-core.
+- `pnpm format`: formatear con Prettier (`pnpm format:check` solo revisa).
+- Angular CLI se ejecuta desde la raíz: `pnpm ng <comando> <proyecto>` (proyectos `docs` y `ui-core`).
 
 ## Reglas de Angular (obligatorias)
 

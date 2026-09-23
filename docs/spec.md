@@ -41,7 +41,7 @@ Frase principal: _"Los componentes son tuyos. Las actualizaciones también."_
 | Angular (herramientas) | 22.1.8            | `@angular/cli`, `@angular/build` (se versionan aparte del framework)                         |
 | TypeScript             | 6.0.3             | Angular 22 exige `>=6.0.0 <6.1.0`                                                            |
 | Tailwind CSS           | 4.3.3             | Con `@tailwindcss/postcss`                                                                   |
-| Vitest                 | 4.1.11            | Pruebas del showcase (con jsdom, vía `ng test`) y de ui-core (directo)                       |
+| Vitest                 | 4.1.11            | Pruebas de docs y ui-core con `ng test` (con jsdom)                                          |
 
 pnpm 11+ bloquea los scripts de instalación: los autorizados están en `allowBuilds` de `pnpm-workspace.yaml` (`@parcel/watcher`, `esbuild`, `lmdb`, `msgpackr-extract`).
 
@@ -49,22 +49,35 @@ pnpm 11+ bloquea los scripts de instalación: los autorizados están en `allowBu
 
 ```
 mimi-ng/
+├── angular.json               # Workspace de Angular: proyectos "docs" y "ui-core"
+├── package.json               # Dependencias de Angular, Tailwind, Vitest y scripts
+├── pnpm-workspace.yaml        # apps/* y packages/*; allowBuilds
+├── tsconfig.base.json         # compilerOptions comunes y alias @mimi-ng/ui-core
 ├── apps/docs/                 # Showcase = documentación + entorno de pruebas
+│   ├── src/
+│   ├── public/
+│   ├── .postcssrc.json        # @tailwindcss/postcss
+│   └── tsconfig.json, tsconfig.app.json, tsconfig.spec.json
 ├── packages/
-│   ├── ui-core/src/lib/
-│   │   ├── theme/             # theme-base.css, types.ts, provider.ts
-│   │   ├── utils/             # cn.ts, control-styles.ts
-│   │   └── components/        # button/, input/, card/…
+│   ├── ui-core/               # Proyecto "ui-core" (library): solo target test
+│   │   ├── tsconfig.json, tsconfig.spec.json
+│   │   └── src/lib/
+│   │       ├── theme/         # theme-base.css, types.ts, provider.ts
+│   │       ├── utils/         # cn.ts, control-styles.ts
+│   │       └── components/    # button/, input/, card/…
 │   └── cli/src/
 │       ├── collection.json
 │       ├── registry.json
 │       ├── ng-add/  init/  ui/  theme/
 │       └── bin/mimi.js
 ├── docs/                      # spec.md, plan.md, design/
-├── CLAUDE.md
-├── pnpm-workspace.yaml
-└── tsconfig.base.json
+├── README.md
+└── CLAUDE.md
 ```
+
+Angular CLI se ejecuta siempre desde la raíz. `ui-core` no tiene build propio: su target `test` compila con la configuración de `docs:build:development`. Hay un solo lockfile. Las dependencias de ui-core (`clsx`, `tailwind-merge`, `class-variance-authority`) están en su `package.json` y también en el de la raíz, porque las pruebas las resuelven desde la raíz del workspace (igual que en un proyecto real, donde las instala la app).
+
+Como Angular corre desde la raíz, el `styles.css` del showcase usa `@import 'tailwindcss' source(none)` y declara sus fuentes a mano (`apps/docs/src` y `packages/ui-core/src`, sin los `.spec.ts`); si no, Tailwind escanearía todo el repositorio (`docs/`, `CLAUDE.md`…) y generaría clases de más.
 
 El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve en la documentación es exactamente lo que entrega la CLI. Al compilar la CLI, un script copia `ui-core/src/lib/**` a sus plantillas.
 
@@ -207,9 +220,11 @@ El tema vive en `packages/ui-core/src/lib/theme/theme-base.css` (valores de `doc
 `ui-core` lo publica en `exports` como `./theme.css`. El showcase depende de `@mimi-ng/ui-core` (`workspace:*`) y su `styles.css` queda así:
 
 ```css
-@import 'tailwindcss';
+@import 'tailwindcss' source(none);
 @import '@mimi-ng/ui-core/theme.css';
+@source '.';
 @source '../../../packages/ui-core/src';
+@source not '../../../packages/ui-core/src/**/*.spec.ts';
 ```
 
 **Variables `--mimi-*`** (todas en `:root`; las marcadas con ◐ se redefinen en `.dark`):
@@ -416,7 +431,7 @@ export const controlInvalidStyles =
 export const controlPressStyles = 'mimi-transition active:scale-(--mimi-press-scale)';
 ```
 
-**Pruebas de ui-core:** corren con Vitest directo en el paquete (`pnpm --filter @mimi-ng/ui-core test`, incluido en `pnpm test`). El builder de Angular del showcase no puede ejecutarlas porque están fuera de su workspace (`apps/docs`).
+**Pruebas de ui-core:** corren con `ng test ui-core` (`pnpm test:ui-core`, incluido en `pnpm test`), con TestBed disponible.
 
 ### 6.6 Movimiento
 

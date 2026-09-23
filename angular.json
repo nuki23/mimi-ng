@@ -4,27 +4,28 @@
   "cli": {
     "packageManager": "pnpm"
   },
-  "newProjectRoot": "projects",
+  "newProjectRoot": "packages",
   "projects": {
     "docs": {
       "projectType": "application",
       "schematics": {},
-      "root": "",
-      "sourceRoot": "src",
+      "root": "apps/docs",
+      "sourceRoot": "apps/docs/src",
       "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "browser": "src/main.ts",
-            "tsConfig": "tsconfig.app.json",
+            "outputPath": "dist/docs",
+            "browser": "apps/docs/src/main.ts",
+            "tsConfig": "apps/docs/tsconfig.app.json",
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "apps/docs/public"
               }
             ],
-            "styles": ["src/styles.css"]
+            "styles": ["apps/docs/src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -63,7 +64,25 @@
           "defaultConfiguration": "development"
         },
         "test": {
-          "builder": "@angular/build:unit-test"
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "apps/docs/tsconfig.spec.json"
+          }
+        }
+      }
+    },
+    "ui-core": {
+      "projectType": "library",
+      "root": "packages/ui-core",
+      "sourceRoot": "packages/ui-core/src",
+      "prefix": "mimi",
+      "architect": {
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "buildTarget": "docs:build:development",
+            "tsConfig": "packages/ui-core/tsconfig.spec.json"
+          }
         }
       }
     }
