@@ -1,4 +1,35 @@
+# Dependencias
 node_modules/
+.pnpm-store/
+
+# Salida de compilación
 dist/
+tmp/
+out-tsc/
+
+# Angular
 .angular/
+
+# Pruebas
+coverage/
+__screenshots__/
+
+# Logs
+*.log
+
+# Editores y sistema
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# Entorno
+.env
+.env.*
+
+# Configuración local de Claude Code
 .claude/settings.local.json

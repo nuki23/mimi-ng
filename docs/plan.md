@@ -11,7 +11,7 @@ Marca `[x]` al terminar cada tarea. Una tarea por sesión de Claude Code (usa `/
 
 ## Fase 1: Base
 
-- [ ] 1.1 Monorepo: `pnpm-workspace.yaml`, `package.json` raíz con scripts (`dev`, `build`, `test`), `tsconfig.base.json` con alias a `packages/ui-core`.
+- [x] 1.1 Monorepo: `pnpm-workspace.yaml`, `package.json` raíz con scripts (`dev`, `build`, `test`), `tsconfig.base.json` con alias a `packages/ui-core`.
 - [ ] 1.2 `apps/docs` con Angular 22 (zoneless, Tailwind 4, prerender) y `packages/ui-core` vacío. Verificar que el showcase arranque con `pnpm dev`.
 - [ ] 1.3 Tokens: `ui-core/src/lib/theme/theme-base.css` con las variables `--mimi-*` de `docs/design/`, claro y oscuro, y el bloque `@theme inline`. `@source` a `ui-core` en el `styles.css` del showcase.
 - [ ] 1.4 Utils: `cn.ts` y `control-styles.ts`.
