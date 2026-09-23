@@ -28,6 +28,7 @@ Frase principal: *"Los componentes son tuyos. Las actualizaciones también."*
 | Íconos | Lucide: SVG en línea dentro de los componentes; `@lucide/angular` en el showcase y como recomendación |
 | CLI | Angular Schematics + comando `mimi` |
 | Monorepo | pnpm workspaces |
+| Formato | Prettier en la raíz (`.prettierrc`, `.prettierignore`); `pnpm format` escribe y `pnpm format:check` solo revisa |
 | Showcase | Angular 22 puro (no AnalogJS), con prerender |
 
 ### Versiones

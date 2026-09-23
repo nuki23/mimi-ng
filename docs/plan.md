@@ -4,10 +4,10 @@ Marca `[x]` al terminar cada tarea. Una tarea por sesión de Claude Code (usa `/
 
 ## Fase 0: Preparación (la haces tú, fuera de Claude Code)
 
-- [ ] 0.1 Instalar Node.js (versión LTS compatible con Angular 22, ver angular.dev), pnpm y git.
+- [x] 0.1 Instalar Node.js (versión LTS compatible con Angular 22, ver angular.dev), pnpm y git.
 - [ ] 0.2 Generar los diseños en Claude Design y guardarlos en `docs/design/`.
 - [x] 0.3 Elegir el estilo del MVP: solo Vivid, como estilo por defecto.
-- [ ] 0.4 `git init` y primer commit con estos documentos.
+- [x] 0.4 `git init` y primer commit con estos documentos.
 
 ## Fase 1: Base
 

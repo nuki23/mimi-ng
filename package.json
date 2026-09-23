@@ -6,6 +6,11 @@
   "scripts": {
     "dev": "pnpm --filter docs start",
     "build": "pnpm --filter docs build",
-    "test": "pnpm --filter docs exec ng test --watch=false"
+    "test": "pnpm --filter docs exec ng test --watch=false",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.9.8"
   }
 }

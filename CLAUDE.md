@@ -56,5 +56,6 @@ packages/cli/       # @mimi-ng/cli (Angular Schematics)
 
 - Una tarea de `docs/plan.md` por vez. Antes de escribir código, propone un plan breve.
 - Al terminar: verifica que `pnpm build` pase, marca la casilla en `docs/plan.md` y resume qué cambió.
+- Al terminar cada tarea, ejecuta `pnpm format`.
 - No agregues dependencias que no estén en la spec sin preguntar.
 - Cada componente nuevo tiene su página en el showcase con todos sus estados.

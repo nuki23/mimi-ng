@@ -164,7 +164,11 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      prettier:
+        specifier: ^3.9.8
+        version: 3.9.8
 
   apps/docs:
     dependencies:
@@ -211,9 +215,6 @@ importers:
       postcss:
         specifier: ^8.5.3
         version: 8.5.28
-      prettier:
-        specifier: ^3.8.1
-        version: 3.9.8
       tailwindcss:
         specifier: ^4.1.12
         version: 4.3.3
