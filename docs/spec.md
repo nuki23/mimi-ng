@@ -369,6 +369,36 @@ export const controlInvalidStyles =
   'aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive';
 ```
 
+### 6.6 Movimiento
+
+Dos variables controlan las micro-animaciones del estilo Vivid:
+
+| Variable | Valor | Uso |
+|---|---|---|
+| `--mimi-transition` | `background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease, transform .15s cubic-bezier(.2,.8,.2,1)` | Lista completa de transiciones de los componentes interactivos. |
+| `--mimi-press-scale` | `0.975` | Escala al hacer clic (`:active`). |
+
+Con `prefers-reduced-motion: reduce`, `--mimi-press-scale` pasa a `1` y `--mimi-transition` pierde `transform`:
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mimi-press-scale: 1;
+    --mimi-transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease;
+  }
+}
+```
+
+La transición se aplica con una utilidad de Tailwind 4, definida junto a los tokens (`theme-base.css`):
+
+```css
+@utility mimi-transition {
+  transition: var(--mimi-transition);
+}
+```
+
+Uso en un componente: `mimi-transition active:[transform:scale(var(--mimi-press-scale))]`. No usar `active:scale-*`: en Tailwind 4 esa utilidad escribe la propiedad `scale`, no `transform`, y `--mimi-transition` no la anima. Nunca escribir la lista de transiciones a mano en las clases.
+
 ## 7. Personalización (cuatro niveles)
 
 1. **Tema:** `mimi.preset.ts` o variables en CSS. Afecta a toda la app.

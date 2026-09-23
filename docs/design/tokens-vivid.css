@@ -1,7 +1,9 @@
 /* Mimi · estilo Vivid — tokens claro y oscuro.
    Fuente: mimi-variables.css (Claude Design). Nombres según docs/spec.md, sección 6.1.
    Selectores: :root (claro) y .dark (oscuro), como en la spec; el diseño usaba [data-mimi-style="vivid"].
-   Unidades: px del diseño convertidos a rem (16px = 1rem). */
+   Unidades: px del diseño convertidos a rem (16px = 1rem).
+   Cambios respecto al diseño: las sombras de primary se tiñen con var(--mimi-primary) (como las de
+   destructive) y se agrega el bloque prefers-reduced-motion al final. */
 
 :root {
   /* ── Colores (spec 6.1) ── */
@@ -33,7 +35,7 @@
 
   /* ── Extras del diseño (no están en la spec 6.1) ── */
   --mimi-input-background: oklch(1 0 0);
-  --mimi-font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --mimi-font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;  /* Outfit no se carga aquí: solo el showcase la importa */
   --mimi-font-mono: "Geist Mono", ui-monospace, monospace;
   --mimi-badge-radius: 999px;
   --mimi-radius-card: min(calc(var(--mimi-radius) + 4px), 24px);
@@ -46,8 +48,8 @@
 
   /* ── Sombras ── */
   --mimi-shadow-card: 0 0 0 1px oklch(0 0 0 / 0.02), 0 1px 2px oklch(0 0 0 / 0.04), 0 6px 12px -4px oklch(0 0 0 / 0.05), 0 20px 40px -16px oklch(0 0 0 / 0.12);
-  --mimi-shadow-primary: 0 1px 2px oklch(0 0 0 / 0.12), 0 4px 10px -4px oklch(0 0 0 / 0.2);
-  --mimi-shadow-primary-hover: 0 1px 2px oklch(0 0 0 / 0.14), 0 8px 18px -6px oklch(0 0 0 / 0.26);
+  --mimi-shadow-primary: 0 1px 2px color-mix(in oklch, var(--mimi-primary) 25%, transparent), 0 4px 12px -4px color-mix(in oklch, var(--mimi-primary) 35%, transparent);
+  --mimi-shadow-primary-hover: 0 1px 2px color-mix(in oklch, var(--mimi-primary) 30%, transparent), 0 8px 18px -6px color-mix(in oklch, var(--mimi-primary) 42%, transparent);
   --mimi-shadow-destructive: 0 1px 2px color-mix(in oklch, var(--mimi-destructive) 25%, transparent), 0 4px 12px -4px color-mix(in oklch, var(--mimi-destructive) 35%, transparent);
   --mimi-shadow-destructive-hover: 0 1px 2px color-mix(in oklch, var(--mimi-destructive) 30%, transparent), 0 8px 18px -6px color-mix(in oklch, var(--mimi-destructive) 42%, transparent);
   --mimi-shadow-neutral: 0 1px 2px oklch(0 0 0 / 0.06), 0 4px 10px -4px oklch(0 0 0 / 0.08);
@@ -87,8 +89,8 @@
   --mimi-input-background: oklch(1 0 0 / 4.5%);
 
   --mimi-shadow-card: inset 0 1px 0 oklch(1 0 0 / 0.04), 0 1px 2px oklch(0 0 0 / 0.5), 0 20px 40px -16px oklch(0 0 0 / 0.7);
-  --mimi-shadow-primary: 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 12px -4px oklch(0 0 0 / 0.6);
-  --mimi-shadow-primary-hover: 0 1px 2px oklch(0 0 0 / 0.5), 0 8px 18px -6px oklch(0 0 0 / 0.7);
+  --mimi-shadow-primary: 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 12px -4px color-mix(in oklch, var(--mimi-primary) 30%, transparent);
+  --mimi-shadow-primary-hover: 0 1px 2px oklch(0 0 0 / 0.5), 0 8px 18px -6px color-mix(in oklch, var(--mimi-primary) 40%, transparent);
   --mimi-shadow-destructive: 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 12px -4px color-mix(in oklch, var(--mimi-destructive) 30%, transparent);
   --mimi-shadow-destructive-hover: 0 1px 2px oklch(0 0 0 / 0.5), 0 8px 18px -6px color-mix(in oklch, var(--mimi-destructive) 40%, transparent);
   --mimi-shadow-neutral: inset 0 1px 0 oklch(1 0 0 / 0.05), 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 10px -4px oklch(0 0 0 / 0.6);
@@ -103,6 +105,14 @@
   --mimi-switch-off: color-mix(in oklch, var(--mimi-foreground) 20%, transparent);
 
   color-scheme: dark;
+}
+
+/* Movimiento reducido: sin escala al hacer clic y sin transición de transform */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --mimi-press-scale: 1;
+    --mimi-transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease;
+  }
 }
 
 @keyframes mimi-spin { to { transform: rotate(360deg); } }
