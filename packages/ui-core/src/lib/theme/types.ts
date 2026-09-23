@@ -26,6 +26,8 @@ export interface MimiColorTokens {
   input?: string;
   inputBackground?: string;
   ring?: string;
+  /** Fondo que oscurece la página detrás de paneles y diálogos. */
+  overlay?: string;
 }
 
 /** Sombras (`box-shadow` completo). `shadows` en claro y `darkShadows` en oscuro. */

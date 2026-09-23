@@ -11,7 +11,10 @@ describe('TokensPage', () => {
     html.classList.remove('dark');
   });
 
-  afterEach(() => html.classList.remove('dark'));
+  afterEach(() => {
+    html.classList.remove('dark');
+    localStorage.clear();
+  });
 
   it('alterna la clase .dark en <html>', async () => {
     const fixture = TestBed.createComponent(TokensPage);

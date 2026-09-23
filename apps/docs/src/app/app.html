@@ -1,1 +1,12 @@
-<router-outlet />
+<a
+  href="#contenido"
+  class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-lg focus:bg-background focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-card focus:outline-2 focus:outline-offset-2 focus:outline-ring"
+  (click)="skipToContent($event)"
+>
+  Saltar al contenido
+</a>
+<app-site-header />
+<app-mobile-nav />
+<main #main id="contenido" tabindex="-1" class="outline-none">
+  <router-outlet />
+</main>

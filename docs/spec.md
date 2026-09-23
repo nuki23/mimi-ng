@@ -42,6 +42,7 @@ Frase principal: _"Los componentes son tuyos. Las actualizaciones también."_
 | TypeScript             | 6.0.3             | Angular 22 exige `>=6.0.0 <6.1.0`                                                            |
 | Tailwind CSS           | 4.3.3             | Con `@tailwindcss/postcss`                                                                   |
 | Vitest                 | 4.1.11            | Pruebas de docs y ui-core con `ng test` (con jsdom)                                          |
+| @lucide/angular        | 1.47.0            | Íconos del showcase (peer `@angular/core >=17`); en el `package.json` raíz                   |
 
 pnpm 11+ bloquea los scripts de instalación: los autorizados están en `allowBuilds` de `pnpm-workspace.yaml` (`@parcel/watcher`, `esbuild`, `lmdb`, `msgpackr-extract`).
 
@@ -229,15 +230,15 @@ El tema vive en `packages/ui-core/src/lib/theme/theme-base.css` (valores de `doc
 
 **Variables `--mimi-*`** (todas en `:root`; las marcadas con ◐ se redefinen en `.dark`):
 
-| Grupo                     | Variables                                                                                                                                                                                                                                                                                                        |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Colores ◐                 | `background`, `foreground`, `card`, `card-foreground`, `popover`, `popover-foreground`, `primary`, `primary-foreground`, `secondary`, `secondary-foreground`, `muted`, `muted-foreground`, `accent`, `accent-foreground`, `destructive`, `destructive-foreground`, `border`, `input`, `input-background`, `ring` |
-| Derivados ◐ (`color-mix`) | `primary-hover`, `secondary-hover`, `destructive-hover`, `ring-soft`, `destructive-soft`, `switch-off`                                                                                                                                                                                                           |
-| Sombras ◐                 | `shadow-card`, `shadow-primary`, `shadow-primary-hover`, `shadow-destructive`, `shadow-destructive-hover`, `shadow-neutral`, `shadow-neutral-hover`                                                                                                                                                              |
-| Fuentes                   | `font-sans` (`'Outfit', ui-sans-serif, system-ui, sans-serif`), `font-mono` (`'Geist Mono', ui-monospace, monospace`)                                                                                                                                                                                            |
-| Forma                     | `radius` (0.75rem), `radius-sm` (`min(radius / 2, 6px)`), `radius-card` (`min(radius + 4px, 24px)`), `badge-radius` (999px)                                                                                                                                                                                      |
-| Alturas                   | `control-height` (2.5rem), `control-height-sm` (2rem), `control-height-lg` (3rem)                                                                                                                                                                                                                                |
-| Movimiento                | `transition`, `press-scale`, `lift` (0px, sin uso por ahora). Ver 6.6                                                                                                                                                                                                                                            |
+| Grupo                     | Variables                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Colores ◐                 | `background`, `foreground`, `card`, `card-foreground`, `popover`, `popover-foreground`, `primary`, `primary-foreground`, `secondary`, `secondary-foreground`, `muted`, `muted-foreground`, `accent`, `accent-foreground`, `destructive`, `destructive-foreground`, `border`, `input`, `input-background`, `ring`, `overlay` (fondo detrás de paneles y diálogos: `oklch(0 0 0 / 50%)` en los dos modos) |
+| Derivados ◐ (`color-mix`) | `primary-hover`, `secondary-hover`, `destructive-hover`, `ring-soft`, `destructive-soft`, `switch-off`                                                                                                                                                                                                                                                                                                  |
+| Sombras ◐                 | `shadow-card`, `shadow-primary`, `shadow-primary-hover`, `shadow-destructive`, `shadow-destructive-hover`, `shadow-neutral`, `shadow-neutral-hover`                                                                                                                                                                                                                                                     |
+| Fuentes                   | `font-sans` (`'Outfit', ui-sans-serif, system-ui, sans-serif`), `font-mono` (`'Geist Mono', ui-monospace, monospace`)                                                                                                                                                                                                                                                                                   |
+| Forma                     | `radius` (0.75rem), `radius-sm` (`min(radius / 2, 6px)`), `radius-card` (`min(radius + 4px, 24px)`), `badge-radius` (999px)                                                                                                                                                                                                                                                                             |
+| Alturas                   | `control-height` (2.5rem), `control-height-sm` (2rem), `control-height-lg` (3rem)                                                                                                                                                                                                                                                                                                                       |
+| Movimiento                | `transition`, `press-scale`, `lift` (0px, sin uso por ahora). Ver 6.6                                                                                                                                                                                                                                                                                                                                   |
 
 **`@theme inline`** (siempre `inline`: los valores son `var()` y deben resolverse donde se usan, o el modo oscuro falla):
 
@@ -310,6 +311,7 @@ export interface MimiColorTokens {
   input?: string;
   inputBackground?: string;
   ring?: string;
+  overlay?: string; // fondo detrás de paneles y diálogos
 }
 
 export interface MimiShadowTokens {
@@ -586,11 +588,84 @@ Además, cada componente expone `data-variant`, `data-size`, `data-state` y `dat
 
 ## 10. Showcase (`apps/docs`)
 
-- **Layout:** header fijo translúcido (logo, versión, buscador ⌘K, ES/EN, GitHub, claro/oscuro), sidebar 240px, contenido máx. ~900px, TOC 200px.
-- **Páginas:** Inicio, Instalación, Personalización, Temas (personalizador en vivo + exportar `mimi.preset.ts`), Migrar desde PrimeNG / NG-ZORRO, una página por componente. Select y Dialog aparecen como "Próximamente" hasta la Fase 4.
-- **Página de componente:** título, descripción, pestañas de instalación, `CodePreview` (Preview/Código, copiar, canvas centrado), ejemplos por estado, ejemplo con `class`, tabla de API.
-- Resaltado con Shiki. Prerender para generar páginas estáticas.
-- El diseño visual sale de `docs/design/`.
+El diseño visual sale de `docs/design/Mimi Sitio.dc.html`. Los botones del layout son HTML con Tailwind hasta que exista `mimiBtn` (tarea 2.1).
+
+### Layout (tarea 1.6)
+
+```
+apps/docs/src/app/
+├── app.ts / app.html        # Shell: «Saltar al contenido», header, panel móvil, <main id="contenido">
+├── site.ts                  # SITE = { version, githubUrl }: única fuente
+├── core/theme.service.ts    # Modo claro/oscuro
+├── layout/
+│   ├── site-header.*        # Header fijo
+│   ├── docs-nav.ts          # Configuración de la sidebar (DOCS_NAV)
+│   ├── docs-sidebar.*       # Sidebar generada desde DOCS_NAV
+│   ├── docs-layout.*        # Grilla: sidebar + migas + contenido + TOC
+│   ├── docs-toc.*           # TOC automática
+│   └── mobile-nav.*         # Panel lateral (< lg) y su servicio
+├── pages/                   # home-page, not-found-page, docs/*-page
+└── dev/                     # /dev/tokens y /dev/theme (internas, fuera del menú)
+```
+
+- **Header:** fijo (`sticky`), 60px de alto, fondo `bg-background/78` con desenfoque de 14px y borde inferior. Contiene el botón de menú (solo bajo `lg`), el logo (enlace a `/`), la versión, el enlace a GitHub y el botón claro/oscuro. Sin nav superior, buscador ⌘K ni selector ES/EN: quedan en la Fase 5.
+  - **Versión:** `SITE.version`, que por ahora lee `packages/ui-core/package.json` (ui-core exporta `./package.json` y `tsconfig.base.json` activa `resolveJsonModule`). En la Fase 3 se leerá de `@mimi-ng/cli`.
+  - **GitHub:** `SITE.githubUrl` (`https://github.com/nuki23/mimi-ng`). Lucide ya no tiene logos de marcas, así que el ícono es el SVG oficial de GitHub (Octicon mark-github, MIT) en línea, con `fill="currentColor"` y `aria-hidden`; el enlace lleva `aria-label="Repositorio de Mimi en GitHub"`.
+- **Grilla de la documentación:** `max-w-[1440px]`, `px-6`; columnas `240px | contenido | 200px`; separación de 28px (48px desde 1100px). Contenido con `max-w-[900px]`, 40px arriba y 120px abajo, y migas (sección › página) sacadas de `DOCS_NAV`.
+- **Responsive:** desde `lg` (1024px) la sidebar es una columna fija; bajo `lg` se abre en el panel móvil. Desde `xl` (1280px) se muestra la TOC; bajo `xl` se oculta.
+
+### Rutas
+
+| Ruta                                       | Página                                                        |
+| ------------------------------------------ | ------------------------------------------------------------- |
+| `/`                                        | Placeholder de inicio (la landing es la tarea 2.12)           |
+| `/docs`                                    | Redirige a `/docs/introduction`                               |
+| `/docs/introduction`, `/docs/installation` | Páginas de Primeros pasos, dentro del layout de documentación |
+| `/docs/components/<nombre>`                | Páginas de componentes (Fase 2)                               |
+| `/dev/tokens`, `/dev/theme`                | Páginas internas, sin sidebar y fuera del menú                |
+| `**`                                       | 404                                                           |
+
+Las rutas y los archivos están en inglés; los títulos visibles, en español. En la Fase 5 el idioma se separará con un prefijo en la ruta.
+
+El router usa `withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' })` y `ViewportScroller.setOffset([0, 76])` (60px del header + 16px), para que los anclas no queden debajo del header.
+
+### Sidebar (`docs-nav.ts`)
+
+La sidebar, las migas y una prueba de rutas salen de `DOCS_NAV`: una lista de secciones con ítems `{ title, path, status }`. No se escriben enlaces de la documentación a mano en el HTML.
+
+| `status`  | Cómo se ve                                                                               |
+| --------- | ---------------------------------------------------------------------------------------- |
+| `ready`   | Enlace con `routerLinkActive`; el activo tiene `aria-current="page"` y fondo `secondary` |
+| `pending` | La página todavía no existe: atenuado, `aria-disabled`, sin enlace                       |
+| `soon`    | Llega en una fase posterior: atenuado, sin enlace, con la etiqueta «Próximamente»        |
+
+Al crear una página, se agrega su ruta y se cambia su ítem a `ready`. Una prueba falla si un ítem `ready` no tiene ruta.
+
+### TOC
+
+Lee los `h2[id]` y `h3[id]` del contenido de la página con un `MutationObserver` (así funciona con rutas lazy y al cambiar de ruta) y resalta la sección visible con un `IntersectionObserver` (`aria-current="location"`). Los enlaces usan `routerLink` + `fragment`, porque un `href="#id"` con `<base href="/">` navegaría a la raíz. Si la página no tiene encabezados, no se muestra. Cada encabezado que deba aparecer necesita un `id`.
+
+### Modo claro/oscuro
+
+- `ThemeService` (signals): si el usuario no eligió, sigue `prefers-color-scheme` (y sus cambios); `toggle()` guarda la elección en `localStorage` (`mimi-docs-theme`, con try/catch) y pone o quita `.dark` en `<html>`.
+- Un script pequeño en el `<head>` de `index.html` aplica `.dark` antes de que cargue Angular, con la misma clave, para evitar el parpadeo de claro a oscuro al recargar.
+- `/dev/tokens` y `/dev/theme` usan el mismo servicio.
+
+### Panel móvil
+
+`<dialog>` nativo abierto con `showModal()`: el resto de la página queda inerte, así que el foco no sale del panel, y al cerrar el foco vuelve al botón de menú. Se cierra con Escape, con un clic en el fondo (`bg-overlay`), con el botón de cerrar, al navegar y al llegar a `lg`. Mientras está abierto, `<html>` tiene `overflow: hidden`, y al cerrar se restaura el valor anterior. El botón de menú tiene `aria-expanded` y `aria-controls`.
+
+### Accesibilidad
+
+- «Saltar al contenido» es el primer elemento enfocable y enfoca `<main id="contenido">` por código.
+- `<nav aria-label="Documentación">` en la sidebar y `<nav aria-label="En esta página">` en la TOC.
+- Foco visible en botones y enlaces (`focus-visible:outline-ring`).
+
+### Pendiente
+
+- **Páginas:** Personalización, Temas (personalizador en vivo y exportar `mimi.preset.ts`), Iconos, Migrar desde PrimeNG / NG-ZORRO y una página por componente. Select y Dialog aparecen como «Próximamente» hasta la Fase 4.
+- **Página de componente:** título, descripción, pestañas de instalación, `CodePreview` (Preview/Código, copiar, canvas centrado), ejemplos por estado, ejemplo con `class` y tabla de API.
+- Resaltado con Shiki. Prerender para generar páginas estáticas (Fase 5).
 
 ## 11. Estilos visuales
 

@@ -1,9 +1,10 @@
 {
   "name": "@mimi-ng/ui-core",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
   "exports": {
-    "./theme.css": "./src/lib/theme/theme-base.css"
+    "./theme.css": "./src/lib/theme/theme-base.css",
+    "./package.json": "./package.json"
   },
   "peerDependencies": {
     "@angular/core": "^22.0.0"

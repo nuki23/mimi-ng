@@ -1,0 +1,24 @@
+<div
+  class="mx-auto grid max-w-[1440px] gap-7 px-6 lg:grid-cols-[240px_minmax(0,1fr)] min-[1100px]:gap-12 xl:grid-cols-[240px_minmax(0,1fr)_200px]"
+>
+  <aside
+    class="sticky top-15 hidden max-h-[calc(100vh-60px)] self-start overflow-y-auto py-8 lg:block"
+  >
+    <app-docs-sidebar />
+  </aside>
+
+  <div class="min-w-0 pt-10 pb-30">
+    <div #content class="flex max-w-[900px] flex-col gap-5">
+      @if (crumb(); as crumb) {
+        <p class="flex items-center gap-1.5 text-[13px] text-muted-foreground">
+          <span>{{ crumb.section.title }}</span>
+          <svg lucideChevronRight [size]="14" aria-hidden="true"></svg>
+          <span class="font-medium text-foreground">{{ crumb.item.title }}</span>
+        </p>
+      }
+      <router-outlet />
+    </div>
+  </div>
+
+  <app-docs-toc class="hidden xl:block" [content]="content" />
+</div>

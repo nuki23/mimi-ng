@@ -1,0 +1,25 @@
+<dialog
+  #dialog
+  id="docs-mobile-nav"
+  aria-label="Navegación"
+  class="m-0 mr-auto h-dvh max-h-dvh w-[280px] max-w-[85vw] border-r bg-background p-0 text-foreground shadow-card backdrop:bg-overlay lg:hidden"
+  (close)="nav.close()"
+  (click)="onDialogClick($event)"
+>
+  <div class="flex h-full flex-col">
+    <div class="flex h-15 shrink-0 items-center justify-between border-b px-5">
+      <span class="text-[17px] font-bold tracking-[-0.02em]">Mimi</span>
+      <button
+        type="button"
+        class="-mr-2 inline-flex size-9 items-center justify-center rounded-[min(var(--mimi-radius),10px)] text-foreground mimi-transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+        aria-label="Cerrar menú"
+        (click)="nav.close()"
+      >
+        <svg lucideX [size]="18" aria-hidden="true"></svg>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto px-5 py-8">
+      <app-docs-sidebar />
+    </div>
+  </div>
+</dialog>

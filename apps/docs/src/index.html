@@ -1,10 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
-    <title>Docs</title>
+    <title>Mimi</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Aplica .dark antes de que cargue Angular para evitar el parpadeo. Misma clave que ThemeService. -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('mimi-docs-theme');
+          var dark = stored
+            ? stored === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {}
+      })();
+    </script>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <!-- Outfit solo se carga en el showcase; ui-core no carga fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

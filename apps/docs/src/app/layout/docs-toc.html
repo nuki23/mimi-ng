@@ -1,0 +1,19 @@
+@if (items().length > 0) {
+  <nav aria-label="En esta página" class="sticky top-15 flex flex-col gap-1 py-10">
+    <p class="pb-1.5 text-[13px] font-semibold">En esta página</p>
+    <ul class="flex flex-col gap-1">
+      @for (item of items(); track item.id) {
+        <li [class.pl-3]="item.level === 3">
+          <a
+            [routerLink]="[]"
+            [fragment]="item.id"
+            [attr.aria-current]="activeId() === item.id ? 'location' : null"
+            class="block py-1 text-[13px] text-muted-foreground mimi-transition hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring aria-[current=location]:font-semibold aria-[current=location]:text-foreground"
+          >
+            {{ item.text }}
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+}

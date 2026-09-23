@@ -27,6 +27,7 @@
   --mimi-input: oklch(0.88 0 0);
   --mimi-input-background: oklch(1 0 0);
   --mimi-ring: oklch(0.708 0 0);
+  --mimi-overlay: oklch(0 0 0 / 50%);
 
   /* Fuentes (sin cargar: la app decide si trae Outfit) */
   --mimi-font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
@@ -104,6 +105,7 @@
   --mimi-input: oklch(1 0 0 / 15%);
   --mimi-input-background: oklch(1 0 0 / 4.5%);
   --mimi-ring: oklch(0.556 0 0);
+  --mimi-overlay: oklch(0 0 0 / 50%);
 
   --mimi-shadow-card:
     inset 0 1px 0 oklch(1 0 0 / 0.04), 0 1px 2px oklch(0 0 0 / 0.5),
@@ -178,6 +180,7 @@
   --color-input-background: var(--mimi-input-background);
   --color-ring: var(--mimi-ring);
   --color-ring-soft: var(--mimi-ring-soft);
+  --color-overlay: var(--mimi-overlay);
   --color-switch-off: var(--mimi-switch-off);
 
   --radius-sm: var(--mimi-radius-sm);

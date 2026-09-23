@@ -1,0 +1,103 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Introducción</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Mimi es una colección de componentes para Angular 22 y Tailwind CSS 4. No se instala como
+    dependencia: la CLI copia el código a tu proyecto y a partir de ahí es tuyo.
+  </p>
+
+  <h2 id="what-is" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    ¿Qué es Mimi?
+  </h2>
+  <p class="text-pretty">
+    Cada componente es un archivo standalone de Angular con clases de Tailwind y variables CSS
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-*</code>. Puedes
+    leerlo, cambiarlo o borrarlo sin pedir permiso a nadie.
+  </p>
+  <p class="text-pretty">
+    Los componentes se distribuyen como código fuente, igual que en shadcn/ui: usan un solo prefijo
+    (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi</code>) y un
+    archivo de tema opcional tipado, al estilo de los presets de PrimeNG. El objetivo principal es
+    que sean muy fáciles de usar.
+  </p>
+
+  <h2 id="why" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Por qué Mimi</h2>
+  <h3 id="updates" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Actualizaciones que respetan tus cambios
+  </h3>
+  <p class="text-pretty">
+    La CLI guarda la versión original de cada componente en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">.mimi/base/</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi update</code>
+    combina la versión nueva con tus personalizaciones, mostrando solo los conflictos.
+  </p>
+  <h3 id="one-model" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Un solo modelo mental
+  </h3>
+  <p class="text-pretty">
+    Sin capas intermedias: un prefijo y todo el código en tu proyecto. Lo que ves en la
+    documentación es exactamente lo que entrega la CLI.
+  </p>
+  <h3 id="familiar" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Familiar si vienes de PrimeNG o NG-ZORRO
+  </h3>
+  <p class="text-pretty">
+    APIs como
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">showSearch</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">allowClear</code>,
+    modales por servicio y presets tipados. La documentación incluirá una página de migración con
+    las equivalencias.
+  </p>
+  <h3 id="forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Formularios listos</h3>
+  <p class="text-pretty">
+    Los campos se ponen en rojo y muestran el mensaje de error solos, a partir de los validadores
+    del formulario.
+  </p>
+
+  <h2 id="how-it-works" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Cómo funciona
+  </h2>
+  <div class="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+    @for (step of steps; track step.n) {
+      <div
+        class="flex flex-col gap-2 rounded-card border bg-card p-5 text-card-foreground shadow-card"
+      >
+        <span
+          class="inline-flex size-7 items-center justify-center rounded-full bg-primary text-[13px] font-bold text-primary-foreground"
+        >
+          {{ step.n }}
+        </span>
+        <span class="text-[15px] font-bold">{{ step.title }}</span>
+        <span class="text-sm text-pretty text-muted-foreground">{{ step.body }}</span>
+      </div>
+    }
+  </div>
+
+  <h2 id="phase-1" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Qué incluye la Fase 1
+  </h2>
+  <div class="flex flex-wrap gap-2">
+    @for (name of phase1; track name) {
+      <span
+        class="inline-flex h-[26px] items-center rounded-badge bg-secondary px-3 text-[13px] font-semibold text-secondary-foreground"
+      >
+        {{ name }}
+      </span>
+    }
+    <span
+      class="inline-flex h-[26px] items-center rounded-badge border border-dashed px-3 text-[13px] text-muted-foreground"
+    >
+      Select y Dialog · próximamente
+    </span>
+  </div>
+
+  <a
+    routerLink="/docs/installation"
+    class="mt-6 flex items-center justify-between rounded-card border bg-card px-5 py-[18px] text-foreground shadow-neutral mimi-transition hover:border-ring focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+  >
+    <span class="flex flex-col gap-0.5">
+      <span class="text-[13px] text-muted-foreground">Siguiente</span>
+      <span class="font-semibold">Instalación</span>
+    </span>
+    <svg lucideChevronRight [size]="18" aria-hidden="true"></svg>
+  </a>
+</article>

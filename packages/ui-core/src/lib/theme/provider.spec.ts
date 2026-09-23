@@ -83,6 +83,17 @@ describe('mimiThemeToCss', () => {
     expect(css).toBe(':root:not(.dark) {\n  --mimi-secondary: blue;\n}\n');
   });
 
+  it('convierte overlay en claro y en oscuro', () => {
+    const css = mimiThemeToCss({
+      colors: { overlay: 'oklch(0 0 0 / 40%)' },
+      darkColors: { overlay: 'oklch(0 0 0 / 70%)' },
+    });
+    expect(css).toBe(
+      ':root:not(.dark) {\n  --mimi-overlay: oklch(0 0 0 / 40%);\n}\n' +
+        '.dark {\n  --mimi-overlay: oklch(0 0 0 / 70%);\n}\n',
+    );
+  });
+
   it('nunca emite los derivados con color-mix', () => {
     const css = mimiThemeToCss({ colors: { primary: 'red', ring: 'red', destructive: 'red' } });
     expect(css).not.toMatch(/--mimi-(primary-hover|ring-soft|destructive-soft|switch-off)/);

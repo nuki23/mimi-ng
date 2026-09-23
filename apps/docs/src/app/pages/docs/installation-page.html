@@ -1,0 +1,27 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Instalación</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Seis pasos para tener Mimi en un proyecto Angular 22 con Tailwind CSS 4.
+  </p>
+
+  @for (step of steps; track step.id; let i = $index) {
+    <h2 [id]="step.id" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+      {{ i + 1 }}. {{ step.title }}
+    </h2>
+    <p class="text-pretty">{{ step.description }}</p>
+    <pre
+      class="overflow-x-auto rounded-card border bg-muted px-4 py-3 font-mono text-[13px]"
+    ><code>{{ step.command }}</code></pre>
+    @for (detail of step.details ?? []; track detail.id) {
+      <h3 [id]="detail.id" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+        {{ detail.title }}
+      </h3>
+      <p class="text-pretty">{{ detail.description }}</p>
+      @if (detail.command) {
+        <pre
+          class="overflow-x-auto rounded-card border bg-muted px-4 py-3 font-mono text-[13px]"
+        ><code>{{ detail.command }}</code></pre>
+      }
+    }
+  }
+</article>

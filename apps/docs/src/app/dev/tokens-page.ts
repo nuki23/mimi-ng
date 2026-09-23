@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, DOCUMENT, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ThemeService } from '../core/theme.service';
 
 interface Sample {
   name: string;
@@ -12,9 +13,8 @@ interface Sample {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TokensPage {
-  private readonly document = inject(DOCUMENT);
-
-  protected readonly isDark = signal(this.document.documentElement.classList.contains('dark'));
+  private readonly theme = inject(ThemeService);
+  protected readonly isDark = this.theme.isDark;
 
   // Clases escritas completas para que Tailwind las detecte.
   protected readonly colors: Sample[] = [
@@ -66,7 +66,6 @@ export class TokensPage {
   ];
 
   protected toggleDark(): void {
-    const dark = this.document.documentElement.classList.toggle('dark');
-    this.isDark.set(dark);
+    this.theme.toggle();
   }
 }

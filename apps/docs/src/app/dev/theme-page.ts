@@ -15,6 +15,7 @@ import {
   fieldFocusStyles,
   type MimiThemePreset,
 } from '@mimi-ng/ui-core';
+import { ThemeService } from '../core/theme.service';
 
 interface DemoPreset {
   id: string;
@@ -39,7 +40,8 @@ export class ThemePage {
   /** Preset de la app (provideMimiTheme), si lo hay: se restaura al salir de la página. */
   private readonly appPreset = inject(MIMI_THEME, { optional: true });
 
-  protected readonly isDark = signal(this.document.documentElement.classList.contains('dark'));
+  private readonly theme = inject(ThemeService);
+  protected readonly isDark = this.theme.isDark;
   protected readonly activeId = signal('base');
   protected readonly css = signal('');
 
@@ -119,6 +121,6 @@ export class ThemePage {
   }
 
   protected toggleDark(): void {
-    this.isDark.set(this.document.documentElement.classList.toggle('dark'));
+    this.theme.toggle();
   }
 }
