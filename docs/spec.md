@@ -141,7 +141,7 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 
 1. Verifica Tailwind 4.
 2. Instala `clsx`, `tailwind-merge`, `class-variance-authority` como dependencias normales.
-3. Agrega las variables base, `@theme inline` y `@source` al `styles.css`.
+3. Agrega las variables base y `@theme inline` al `styles.css`. **No** agrega `@source`: en el proyecto del usuario los componentes se copian dentro de `src/` (por defecto `src/app/components/ui`), y la detección automática de Tailwind 4 ya escanea esa carpeta. El `@source` solo hace falta en el showcase de este monorepo, porque ahí los componentes viven fuera de la app, en `packages/ui-core/src`.
 4. Crea `utils/cn.ts` y `utils/control-styles.ts`.
 5. Agrega el alias `@/components/ui/*` al `tsconfig.json`.
 6. Registra `@mimi-ng/cli` en `schematicCollections` de `angular.json`.
