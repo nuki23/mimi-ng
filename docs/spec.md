@@ -609,7 +609,7 @@ apps/docs/src/app/
 ```
 
 - **Header:** fijo (`sticky`), 60px de alto, fondo `bg-background/78` con desenfoque de 14px y borde inferior. Contiene el botón de menú (solo bajo `lg`), el logo (enlace a `/`), la versión, el enlace a GitHub y el botón claro/oscuro. Sin nav superior, buscador ⌘K ni selector ES/EN: quedan en la Fase 5.
-  - **Versión:** `SITE.version`, que por ahora lee `packages/ui-core/package.json` (ui-core exporta `./package.json` y `tsconfig.base.json` activa `resolveJsonModule`). En la Fase 3 se leerá de `@mimi-ng/cli`.
+  - **Versión:** `SITE.version`, que por ahora lee `packages/ui-core/package.json` con el alias `@mimi-ng/ui-core/package.json` de `tsconfig.base.json` (y `resolveJsonModule`). Tiene que ser un alias y no una importación de paquete: `ng serve` deja los paquetes de `node_modules` fuera del bundle y Vite los busca desde la raíz del workspace, donde `@mimi-ng/ui-core` no está instalado. En la Fase 3 se leerá de `@mimi-ng/cli`.
   - **GitHub:** `SITE.githubUrl` (`https://github.com/nuki23/mimi-ng`). Lucide ya no tiene logos de marcas, así que el ícono es el SVG oficial de GitHub (Octicon mark-github, MIT) en línea, con `fill="currentColor"` y `aria-hidden`; el enlace lleva `aria-label="Repositorio de Mimi en GitHub"`.
 - **Grilla de la documentación:** `max-w-[1440px]`, `px-6`; columnas `240px | contenido | 200px`; separación de 28px (48px desde 1100px). Contenido con `max-w-[900px]`, 40px arriba y 120px abajo, y migas (sección › página) sacadas de `DOCS_NAV`.
 - **Responsive:** desde `lg` (1024px) la sidebar es una columna fija; bajo `lg` se abre en el panel móvil. Desde `xl` (1280px) se muestra la TOC; bajo `xl` se oculta.
