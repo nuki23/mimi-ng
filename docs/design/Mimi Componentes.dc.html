@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<template id="__bundler_thumbnail" data-bg-color="#0a0a0a"><svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><rect x="120" y="120" width="160" height="160" rx="36" fill="#ebebeb"/><text x="200" y="232" text-anchor="middle" font-family="sans-serif" font-size="110" font-weight="800" fill="#0a0a0a">m</text></svg></template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<script src="image-slot.js"></script>
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0.004 286)}a{color:inherit}a:hover{opacity:.8}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Geist,system-ui,sans-serif">
+  <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0.01 286)">Mimi · Hoja de componentes, Fase 1</h1>
+    <span style="font-size:14px;color:oklch(0.45 0.01 286)">Claro y oscuro, lado a lado. Pasa el mouse sobre los botones para ver los efectos.</span>
+    <a href="Mimi Sitio.dc.html" style="font-size:14px;font-weight:600;color:oklch(0.35 0.15 277);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">Abrir sitio de documentación →</a>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,780px);gap:32px;align-items:start">
+    <sc-for list="{{ panels }}" as="p" hint-placeholder-count="2">
+      <div data-mimi-style="{{ p.style }}" class="{{ p.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:40px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">{{ p.name }}</span>
+            <span style="font-size:14px;color:var(--mimi-muted-foreground)">{{ p.desc }}</span>
+          </div>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ p.icon }}" size="14"></mimi-icon>{{ p.mode }}</span>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">1 · Button</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;white-space:nowrap;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Default</button>
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;white-space:nowrap;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-secondary-hover);box-shadow:var(--mimi-shadow-neutral-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Secondary</button>
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;white-space:nowrap;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-destructive);color:var(--mimi-destructive-foreground);box-shadow:var(--mimi-shadow-destructive)" style-hover="background:var(--mimi-destructive-hover);box-shadow:var(--mimi-shadow-destructive-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-destructive-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-destructive-soft)">Destructive</button>
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;white-space:nowrap;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-card);color:var(--mimi-foreground);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground);box-shadow:var(--mimi-shadow-neutral-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Outline</button>
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;white-space:nowrap;cursor:pointer;transition:var(--mimi-transition);background:transparent;color:var(--mimi-foreground)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground)" style-active="transform:scale(var(--mimi-press-scale))">Ghost</button>
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 4px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;white-space:nowrap;cursor:pointer;transition:var(--mimi-transition);background:transparent;color:var(--mimi-primary);text-underline-offset:4px" style-hover="text-decoration:underline" style-active="transform:scale(var(--mimi-press-scale))">Link</button>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:6px;height:calc(var(--mimi-control-height) - 8px);padding:0 12px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Small</button>
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Default</button>
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:calc(var(--mimi-control-height) + 8px);padding:0 24px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:15px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Large</button>
+            <button aria-label="Añadir" style="display:inline-flex;align-items:center;justify-content:center;width:var(--mimi-control-height);height:var(--mimi-control-height);padding:0;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="plus" size="16"></mimi-icon></button>
+            <button aria-label="Ajustes" style="display:inline-flex;align-items:center;justify-content:center;width:var(--mimi-control-height);height:var(--mimi-control-height);padding:0;box-sizing:border-box;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-card);color:var(--mimi-foreground);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-accent);box-shadow:var(--mimi-shadow-neutral-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="settings" size="16"></mimi-icon></button>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">sm · default · lg · icon</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,max-content);gap:12px 16px;align-items:center">
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;background:var(--mimi-primary-hover);color:var(--mimi-primary-foreground);transform:translateY(var(--mimi-lift));box-shadow:var(--mimi-shadow-primary-hover);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">Guardar</button>
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary);outline:2px solid var(--mimi-ring);outline-offset:2px;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Guardar</button>
+            <button disabled="" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:not-allowed;background:var(--mimi-primary);color:var(--mimi-primary-foreground);opacity:.5">Guardar</button>
+            <button disabled="" aria-busy="true" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:progress;background:var(--mimi-primary);color:var(--mimi-primary-foreground);opacity:.85;box-shadow:var(--mimi-shadow-primary)"><span style="display:inline-flex;animation:mimi-spin .8s linear infinite"><mimi-icon name="loader-circle" size="16"></mimi-icon></span>Guardando…</button>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Hover</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Foco</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Deshabilitado</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Cargando</span>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">2 · Input y Textarea</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 24px">
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Normal</span><input value="Ana Torres" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Foco</span><input value="ana@mimi.dev" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-ring);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;box-shadow:0 0 0 3px var(--mimi-ring-soft);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Con placeholder</span><input placeholder="tu@correo.com" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Deshabilitado</span><input disabled="" value="No editable" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;opacity:.5;cursor:not-allowed"></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Con error</span><input value="ana@" aria-invalid="true" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-destructive);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;box-shadow:0 0 0 3px var(--mimi-destructive-soft);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))"><span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mimi-destructive)"><mimi-icon name="circle-alert" size="14"></mimi-icon>Ingresa un correo válido.</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Textarea</span><textarea rows="3" placeholder="Cuéntanos más…" style="min-height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:calc((var(--mimi-control-height) - 22px) / 2) 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;line-height:20px;outline:none;resize:vertical;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))"></textarea></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Textarea deshabilitado</span><textarea rows="2" disabled="" style="min-height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:calc((var(--mimi-control-height) - 22px) / 2) 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;line-height:20px;outline:none;resize:none;opacity:.5;cursor:not-allowed">Solo lectura</textarea></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Textarea con error</span><textarea rows="2" aria-invalid="true" style="min-height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:calc((var(--mimi-control-height) - 22px) / 2) 12px;border:1px solid var(--mimi-destructive);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;line-height:20px;outline:none;resize:vertical;box-shadow:0 0 0 3px var(--mimi-destructive-soft);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">Hola</textarea><span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mimi-destructive)"><mimi-icon name="circle-alert" size="14"></mimi-icon>Escribe al menos 20 caracteres.</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Alineación en fila · Input + Textarea (1 fila) + Button, todos a var(--mimi-control-height)</span>
+            <div style="position:relative;display:flex;gap:8px;align-items:flex-start">
+              <div style="position:absolute;left:-8px;right:-8px;top:0;height:0;border-top:1px dashed var(--mimi-ring);opacity:.6;pointer-events:none"></div>
+              <div style="position:absolute;left:-8px;right:-8px;top:var(--mimi-control-height);height:0;border-top:1px dashed var(--mimi-ring);opacity:.6;pointer-events:none"></div>
+              <input placeholder="Buscar componente" style="flex:1;min-width:0;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))">
+              <textarea rows="1" placeholder="Nota" style="flex:1;min-width:0;height:var(--mimi-control-height);min-height:var(--mimi-control-height);box-sizing:border-box;padding:calc((var(--mimi-control-height) - 22px) / 2) 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;line-height:20px;outline:none;resize:none;display:block;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))"></textarea>
+              <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="search" size="16"></mimi-icon>Buscar</button>
+            </div>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">3 · FormField · formulario de registro</h3>
+          <form style="background:var(--mimi-card);color:var(--mimi-card-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);padding:24px;display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <span style="font-size:18px;font-weight:600;letter-spacing:-0.01em">Crea tu cuenta</span>
+              <span style="font-size:14px;color:var(--mimi-muted-foreground)">Tarda menos de un minuto.</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:14px;font-weight:500">Nombre</label>
+              <input value="Ana Torres" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="font-size:14px;font-weight:500;color:var(--mimi-destructive)">Correo</label>
+                <input value="ana@" aria-invalid="true" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-destructive);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="box-shadow:0 0 0 3px var(--mimi-destructive-soft)" style-active="transform:scale(var(--mimi-press-scale))">
+                <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mimi-destructive)"><mimi-icon name="circle-alert" size="14"></mimi-icon>Ingresa un correo válido.</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px">
+                <label style="font-size:14px;font-weight:500;color:var(--mimi-destructive)">Contraseña</label>
+                <input type="password" value="abc12" aria-invalid="true" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-destructive);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="box-shadow:0 0 0 3px var(--mimi-destructive-soft)" style-active="transform:scale(var(--mimi-press-scale))">
+                <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mimi-destructive)"><mimi-icon name="circle-alert" size="14"></mimi-icon>Usa al menos 8 caracteres.</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:14px;font-weight:500">Comentario <span style="font-weight:400;color:var(--mimi-muted-foreground)">(opcional)</span></label>
+              <textarea rows="3" placeholder="¿Cómo nos conociste?" style="min-height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:calc((var(--mimi-control-height) - 22px) / 2) 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;line-height:20px;outline:none;resize:vertical;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))"></textarea>
+            </div>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer">
+              <span role="checkbox" aria-checked="true" tabindex="0" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;box-sizing:border-box;border-radius:var(--mimi-radius-sm);background:var(--mimi-primary);border:1px solid var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></span>
+              Acepto los términos y la política de privacidad
+            </label>
+            <button type="button" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary);width:100%" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Crear cuenta</button>
+          </form>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+          <section style="display:flex;flex-direction:column;gap:20px">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">4 · Card</h3>
+            <div style="background:var(--mimi-card);color:var(--mimi-card-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);display:flex;flex-direction:column">
+              <div style="padding:24px 24px 16px;display:flex;flex-direction:column;gap:6px">
+                <span style="font-size:18px;font-weight:600;letter-spacing:-0.01em">Plan Equipo</span>
+                <span style="font-size:14px;color:var(--mimi-muted-foreground)">Para equipos de hasta 10 personas.</span>
+              </div>
+              <div style="padding:0 24px 20px;display:flex;align-items:baseline;gap:6px">
+                <span style="font-size:32px;font-weight:700;letter-spacing:-0.02em">$12</span>
+                <span style="font-size:14px;color:var(--mimi-muted-foreground)">por persona / mes</span>
+              </div>
+              <div style="padding:0 24px 24px;display:flex;gap:8px;justify-content:flex-end">
+                <button style="display:inline-flex;align-items:center;justify-content:center;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:transparent;color:var(--mimi-foreground)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))">Detalles</button>
+                <button style="display:inline-flex;align-items:center;justify-content:center;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Elegir plan</button>
+              </div>
+            </div>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">header · title · description · content · footer</span>
+          </section>
+          <div style="display:flex;flex-direction:column;gap:32px">
+            <section style="display:flex;flex-direction:column;gap:20px">
+              <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">5 · Badge</h3>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:var(--mimi-primary);color:var(--mimi-primary-foreground);border:1px solid transparent">Default</span>
+                <span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);border:1px solid transparent">Secondary</span>
+                <span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:transparent;color:var(--mimi-foreground);border:1px solid var(--mimi-border)">Outline</span>
+                <span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:var(--mimi-destructive);color:var(--mimi-destructive-foreground);border:1px solid transparent">Destructive</span>
+              </div>
+            </section>
+            <section style="display:flex;flex-direction:column;gap:20px">
+              <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">6 · Avatar</h3>
+              <div style="display:flex;align-items:center;gap:12px">
+                <image-slot id="avatar-{{ p.mode }}-1" shape="circle" placeholder="Lucía" style="width:32px;height:32px;flex-shrink:0;background:var(--mimi-muted)"></image-slot>
+                <image-slot id="avatar-{{ p.mode }}-2" shape="circle" placeholder="Diego" style="width:40px;height:40px;flex-shrink:0;background:var(--mimi-muted)"></image-slot>
+                <image-slot id="avatar-{{ p.mode }}-3" shape="circle" placeholder="Marta" style="width:56px;height:56px;flex-shrink:0;background:var(--mimi-muted)"></image-slot>
+                <div style="width:1px;height:32px;background:var(--mimi-border)"></div>
+                <span style="width:32px;height:32px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font-size:12px;font-weight:600">AT</span>
+                <span style="width:40px;height:40px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font-size:14px;font-weight:600">JR</span>
+                <span style="width:56px;height:56px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font-size:18px;font-weight:600">MG</span>
+              </div>
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">sm 32 · default 40 · lg 56 · imagen / iniciales</span>
+            </section>
+          </div>
+        </div>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">7 · Switch y Checkbox</h3>
+          <div style="display:grid;grid-template-columns:110px repeat(4,1fr);gap:16px;align-items:center">
+            <span></span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Apagado</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Encendido</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Foco</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Deshabilitado</span>
+            <span style="font-size:14px;font-weight:500">Switch</span>
+            <span role="switch" aria-checked="false" tabindex="0" style="display:inline-flex;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border-radius:999px;background:var(--mimi-switch-off);cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-background);box-shadow:0 1px 3px oklch(0 0 0 / .2)"></span></span>
+            <span role="switch" aria-checked="true" tabindex="0" style="display:inline-flex;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border-radius:999px;background:var(--mimi-primary);box-shadow:var(--mimi-shadow-primary);cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-primary-foreground);transform:translateX(16px);box-shadow:0 1px 3px oklch(0 0 0 / .2)"></span></span>
+            <span role="switch" aria-checked="true" tabindex="0" style="display:inline-flex;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border-radius:999px;background:var(--mimi-primary);outline:2px solid var(--mimi-ring);outline-offset:2px;cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-primary-foreground);transform:translateX(16px)"></span></span>
+            <span role="switch" aria-checked="false" aria-disabled="true" style="display:inline-flex;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border-radius:999px;background:var(--mimi-switch-off);opacity:.5;cursor:not-allowed"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-background)"></span></span>
+            <span style="font-size:14px;font-weight:500">Checkbox</span>
+            <span role="checkbox" aria-checked="false" tabindex="0" style="display:inline-flex;width:16px;height:16px;box-sizing:border-box;border-radius:var(--mimi-radius-sm);border:1px solid var(--mimi-input);background:var(--mimi-input-background);cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(0.9)"></span>
+            <span role="checkbox" aria-checked="true" tabindex="0" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;box-sizing:border-box;border-radius:var(--mimi-radius-sm);border:1px solid var(--mimi-primary);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary);cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></span>
+            <span role="checkbox" aria-checked="false" tabindex="0" style="display:inline-flex;width:16px;height:16px;box-sizing:border-box;border-radius:var(--mimi-radius-sm);border:1px solid var(--mimi-ring);background:var(--mimi-input-background);outline:2px solid var(--mimi-ring);outline-offset:2px;transition:var(--mimi-transition)" style-active="transform:scale(0.9)"></span>
+            <span role="checkbox" aria-checked="true" aria-disabled="true" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;box-sizing:border-box;border-radius:var(--mimi-radius-sm);border:1px solid var(--mimi-primary);background:var(--mimi-primary);color:var(--mimi-primary-foreground);opacity:.5;cursor:not-allowed"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></span>
+          </div>
+          <div style="display:flex;gap:32px;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer"><span role="switch" aria-checked="true" style="display:inline-flex;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border-radius:999px;background:var(--mimi-primary);box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-primary-foreground);transform:translateX(16px)"></span></span>Modo avión</label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer"><span role="checkbox" aria-checked="true" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;box-sizing:border-box;border-radius:var(--mimi-radius-sm);border:1px solid var(--mimi-primary);background:var(--mimi-primary);color:var(--mimi-primary-foreground);transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></span>Recordarme</label>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer"><span role="checkbox" aria-checked="false" style="display:inline-flex;width:16px;height:16px;box-sizing:border-box;border-radius:var(--mimi-radius-sm);border:1px solid var(--mimi-input);background:var(--mimi-input-background);transition:var(--mimi-transition)" style-active="transform:scale(0.9)"></span>Enviarme novedades</label>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+          <section style="display:flex;flex-direction:column;gap:20px">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">8 · Separator</h3>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600">Mimi UI</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">Componentes para Angular.</span></div>
+              <div role="separator" aria-orientation="horizontal" style="height:1px;background:var(--mimi-border)"></div>
+              <div style="display:flex;align-items:center;gap:12px;font-size:14px;height:20px"><span>Docs</span><div role="separator" aria-orientation="vertical" style="width:1px;align-self:stretch;background:var(--mimi-border)"></div><span>Componentes</span><div role="separator" aria-orientation="vertical" style="width:1px;align-self:stretch;background:var(--mimi-border)"></div><span>GitHub</span></div>
+            </div>
+          </section>
+          <section style="display:flex;flex-direction:column;gap:20px">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">9 · Skeleton</h3>
+            <div aria-busy="true" style="background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);padding:20px;display:flex;flex-direction:column;gap:16px">
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:48px;height:48px;border-radius:999px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+                <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+                  <div style="height:14px;width:60%;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+                  <div style="height:12px;width:40%;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+                </div>
+              </div>
+              <div style="height:12px;width:100%;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+              <div style="height:12px;width:85%;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+              <div style="height:var(--mimi-control-height);width:110px;border-radius:var(--mimi-radius);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+        const v = 'Paleta neutra, radio 12px, sombras en capas y micro-animaciones.';
+    return {
+      panels: [
+        { style: 'vivid', cls: '', name: 'Mimi', desc: v, mode: 'Claro', icon: 'sun' },
+        { style: 'vivid', cls: 'dark', name: 'Mimi', desc: v, mode: 'Oscuro', icon: 'moon' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

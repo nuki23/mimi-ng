@@ -1,0 +1,97 @@
+/* Mimi — variables de tema.
+   Paleta neutra (al estilo spartan.ng) + estilo Vivid: radio 12px, sombras en capas, micro-animaciones.
+   Uso: <html data-mimi-style="vivid" class="dark?"> */
+
+/* ── PALETA · claro ────────────────────────────── */
+[data-mimi-style] {
+  --mimi-background: oklch(1 0 0);
+  --mimi-foreground: oklch(0.145 0 0);
+  --mimi-card: oklch(1 0 0);
+  --mimi-card-foreground: oklch(0.145 0 0);
+  --mimi-primary: oklch(0.205 0 0);
+  --mimi-primary-foreground: oklch(0.985 0 0);
+  --mimi-secondary: oklch(0.97 0 0);
+  --mimi-secondary-foreground: oklch(0.205 0 0);
+  --mimi-muted: oklch(0.97 0 0);
+  --mimi-muted-foreground: oklch(0.54 0 0);
+  --mimi-accent: oklch(0.97 0 0);
+  --mimi-accent-foreground: oklch(0.205 0 0);
+  --mimi-destructive: oklch(0.577 0.245 27.325);
+  --mimi-destructive-foreground: oklch(0.985 0 0);
+  --mimi-border: oklch(0.922 0 0);
+  --mimi-input: oklch(0.88 0 0);
+  --mimi-input-background: oklch(1 0 0);
+  --mimi-ring: oklch(0.708 0 0);
+  --mimi-control-height: 40px;
+  --mimi-font-mono: "Geist Mono", ui-monospace, monospace;
+}
+
+/* ── PALETA · oscuro ───────────────────────────── */
+[data-mimi-style].dark {
+  --mimi-background: oklch(0.145 0 0);
+  --mimi-foreground: oklch(0.985 0 0);
+  --mimi-card: oklch(0.175 0 0);
+  --mimi-card-foreground: oklch(0.985 0 0);
+  --mimi-primary: oklch(0.922 0 0);
+  --mimi-primary-foreground: oklch(0.205 0 0);
+  --mimi-secondary: oklch(0.269 0 0);
+  --mimi-secondary-foreground: oklch(0.985 0 0);
+  --mimi-muted: oklch(0.225 0 0);
+  --mimi-muted-foreground: oklch(0.708 0 0);
+  --mimi-accent: oklch(0.269 0 0);
+  --mimi-accent-foreground: oklch(0.985 0 0);
+  --mimi-destructive: oklch(0.704 0.191 22.216);
+  --mimi-destructive-foreground: oklch(0.2 0.04 25);
+  --mimi-border: oklch(1 0 0 / 10%);
+  --mimi-input: oklch(1 0 0 / 15%);
+  --mimi-input-background: oklch(1 0 0 / 4.5%);
+  --mimi-ring: oklch(0.556 0 0);
+}
+
+/* ── VIVID · efectos (mismos colores, más forma y movimiento) ── */
+[data-mimi-style="vivid"] {
+  --mimi-radius: 12px;
+  --mimi-badge-radius: 999px;
+  --mimi-font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --mimi-lift: 0px;
+  --mimi-press-scale: 0.975;
+  --mimi-transition: background-color .2s ease, border-color .2s ease, color .2s ease, box-shadow .25s ease, transform .15s cubic-bezier(.2,.8,.2,1);
+  --mimi-shadow-card: 0 0 0 1px oklch(0 0 0 / 0.02), 0 1px 2px oklch(0 0 0 / 0.04), 0 6px 12px -4px oklch(0 0 0 / 0.05), 0 20px 40px -16px oklch(0 0 0 / 0.12);
+  --mimi-shadow-primary: 0 1px 2px oklch(0 0 0 / 0.12), 0 4px 10px -4px oklch(0 0 0 / 0.2);
+  --mimi-shadow-primary-hover: 0 1px 2px oklch(0 0 0 / 0.14), 0 8px 18px -6px oklch(0 0 0 / 0.26);
+  --mimi-shadow-destructive: 0 1px 2px color-mix(in oklch, var(--mimi-destructive) 25%, transparent), 0 4px 12px -4px color-mix(in oklch, var(--mimi-destructive) 35%, transparent);
+  --mimi-shadow-destructive-hover: 0 1px 2px color-mix(in oklch, var(--mimi-destructive) 30%, transparent), 0 8px 18px -6px color-mix(in oklch, var(--mimi-destructive) 42%, transparent);
+  --mimi-shadow-neutral: 0 1px 2px oklch(0 0 0 / 0.06), 0 4px 10px -4px oklch(0 0 0 / 0.08);
+  --mimi-shadow-neutral-hover: 0 2px 4px oklch(0 0 0 / 0.06), 0 10px 20px -8px oklch(0 0 0 / 0.14);
+}
+[data-mimi-style="vivid"].dark {
+  --mimi-shadow-card: inset 0 1px 0 oklch(1 0 0 / 0.04), 0 1px 2px oklch(0 0 0 / 0.5), 0 20px 40px -16px oklch(0 0 0 / 0.7);
+  --mimi-shadow-primary: 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 12px -4px oklch(0 0 0 / 0.6);
+  --mimi-shadow-primary-hover: 0 1px 2px oklch(0 0 0 / 0.5), 0 8px 18px -6px oklch(0 0 0 / 0.7);
+  --mimi-shadow-destructive: 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 12px -4px color-mix(in oklch, var(--mimi-destructive) 30%, transparent);
+  --mimi-shadow-destructive-hover: 0 1px 2px oklch(0 0 0 / 0.5), 0 8px 18px -6px color-mix(in oklch, var(--mimi-destructive) 40%, transparent);
+  --mimi-shadow-neutral: inset 0 1px 0 oklch(1 0 0 / 0.05), 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 10px -4px oklch(0 0 0 / 0.6);
+  --mimi-shadow-neutral-hover: inset 0 1px 0 oklch(1 0 0 / 0.06), 0 2px 4px oklch(0 0 0 / 0.5), 0 10px 20px -8px oklch(0 0 0 / 0.75);
+}
+
+/* ── Derivados (se recalculan donde se sobreescribe un token) ── */
+[data-mimi-style] { color-scheme: light; }
+[data-mimi-style].dark { color-scheme: dark; }
+[data-mimi-style] {
+  --mimi-primary-hover: color-mix(in oklch, var(--mimi-primary) 88%, var(--mimi-background));
+  --mimi-secondary-hover: color-mix(in oklch, var(--mimi-secondary) 80%, var(--mimi-foreground) 6%);
+  --mimi-destructive-hover: color-mix(in oklch, var(--mimi-destructive) 88%, var(--mimi-background));
+  --mimi-ring-soft: color-mix(in oklch, var(--mimi-ring) 32%, transparent);
+  --mimi-destructive-soft: color-mix(in oklch, var(--mimi-destructive) 24%, transparent);
+  --mimi-switch-off: color-mix(in oklch, var(--mimi-foreground) 20%, transparent);
+  --mimi-radius-card: min(calc(var(--mimi-radius) + 4px), 24px);
+  --mimi-radius-sm: min(calc(var(--mimi-radius) / 2), 6px);
+  color: var(--mimi-foreground);
+  font-family: var(--mimi-font-sans);
+}
+[data-mimi-style] :focus-visible { outline: 2px solid var(--mimi-ring); outline-offset: 2px; }
+[data-mimi-style] input:focus-visible, [data-mimi-style] textarea:focus-visible { outline: none; }
+[data-mimi-style] ::placeholder { color: var(--mimi-muted-foreground); opacity: 1; }
+[data-mimi-style] ::selection { background: color-mix(in oklch, var(--mimi-primary) 28%, transparent); }
+@keyframes mimi-spin { to { transform: rotate(360deg); } }
+@keyframes mimi-pulse { 50% { opacity: .45; } }

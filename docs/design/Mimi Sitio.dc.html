@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<template id="__bundler_thumbnail" data-bg-color="#0a0a0a"><svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><rect x="120" y="120" width="160" height="160" rx="36" fill="#ebebeb"/><text x="200" y="232" text-anchor="middle" font-family="sans-serif" font-size="110" font-weight="800" fill="#0a0a0a">m</text></svg></template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0}a{color:inherit;text-decoration:none}a:hover{text-decoration:underline}</style>
+</helmet>
+<div data-mimi-style="vivid" style="position:sticky;top:0;z-index:50;height:52px;box-sizing:border-box;display:flex;align-items:center;gap:14px;padding:0 20px;background:var(--mimi-background);border-bottom:1px solid var(--mimi-border);font-size:13px;overflow-x:auto">
+  <span style="font-weight:700;white-space:nowrap">Mimi · diseño</span>
+  <sc-for list="{{ toolbar }}" as="g" hint-placeholder-count="3">
+    <div role="radiogroup" aria-label="{{ g.label }}" style="display:inline-flex;gap:2px;padding:3px;border-radius:9px;background:var(--mimi-muted)">
+      <sc-for list="{{ g.items }}" as="o">
+        <sc-if value="{{ o.active }}"><button role="radio" aria-checked="true" onClick="{{ o.onClick }}" style="height:26px;padding:0 10px;border:0;border-radius:6px;background:var(--mimi-background);color:var(--mimi-foreground);font:inherit;font-size:12px;font-weight:600;white-space:nowrap;box-shadow:0 1px 2px oklch(0 0 0 / .08);cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">{{ o.label }}</button></sc-if>
+        <sc-if value="{{ o.inactive }}"><button role="radio" aria-checked="false" onClick="{{ o.onClick }}" style="height:26px;padding:0 10px;border:0;border-radius:6px;background:transparent;color:var(--mimi-muted-foreground);font:inherit;font-size:12px;font-weight:500;white-space:nowrap;cursor:pointer;transition:var(--mimi-transition)" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(var(--mimi-press-scale))">{{ o.label }}</button></sc-if>
+      </sc-for>
+    </div>
+  </sc-for>
+  <a href="Mimi Componentes.dc.html" style="margin-left:auto;font-weight:600;white-space:nowrap;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">Hoja de componentes →</a>
+</div>
+
+<sc-for list="{{ panels }}" as="p" hint-placeholder-count="1">
+<div data-mimi-style="{{ p.style }}" class="{{ p.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:15px;line-height:1.6">
+  <sc-if value="{{ p.showLabel }}"><div style="display:flex;align-items:center;gap:8px;height:36px;padding:0 24px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground);background:var(--mimi-muted);border-bottom:1px solid var(--mimi-border)"><mimi-icon name="{{ p.modeIcon }}" size="14"></mimi-icon>{{ p.label }}</div></sc-if>
+
+  <header style="position:sticky;top:52px;z-index:20;height:60px;box-sizing:border-box;display:flex;align-items:center;gap:12px;padding:0 24px;background:color-mix(in oklch, var(--mimi-background) 78%, transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--mimi-border)">
+    <button onClick="{{ go.home }}" aria-label="Mimi, inicio" style="display:flex;align-items:center;gap:8px;border:0;background:transparent;padding:4px;margin-left:-4px;border-radius:8px;cursor:pointer;color:var(--mimi-foreground);font:inherit;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">
+      <span style="width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:min(var(--mimi-radius),9px);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:16px;font-weight:800;line-height:1;box-shadow:var(--mimi-shadow-primary)">m</span>
+      <span style="font-size:17px;font-weight:700;letter-spacing:-0.02em">Mimi</span>
+    </button>
+    <span style="display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:var(--mimi-badge-radius);border:1px solid var(--mimi-border);font-family:var(--mimi-font-mono);font-size:12px;color:var(--mimi-muted-foreground)">v0.1.0</span>
+    <nav style="display:flex;gap:2px;margin-left:12px">
+      <sc-for list="{{ topNav }}" as="o" hint-placeholder-count="3">
+        <sc-if value="{{ o.active }}"><button onClick="{{ o.onClick }}" aria-current="page" style="height:34px;padding:0 14px;border:0;border-radius:var(--mimi-badge-radius);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">{{ o.label }}</button></sc-if>
+        <sc-if value="{{ o.inactive }}"><button onClick="{{ o.onClick }}" style="height:34px;padding:0 14px;border:0;border-radius:var(--mimi-badge-radius);background:transparent;color:var(--mimi-muted-foreground);font:inherit;font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(var(--mimi-press-scale))">{{ o.label }}</button></sc-if>
+      </sc-for>
+    </nav>
+    <div style="flex:1"></div>
+    <button aria-label="Buscar (⌘K)" style="display:flex;align-items:center;gap:8px;width:240px;height:36px;box-sizing:border-box;padding:0 6px 0 12px;border:1px solid var(--mimi-border);border-radius:min(var(--mimi-radius),10px);background:var(--mimi-input-background);color:var(--mimi-muted-foreground);font:inherit;font-size:14px;cursor:pointer;transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-ring)" style-active="transform:scale(var(--mimi-press-scale))">
+      <mimi-icon name="search" size="15"></mimi-icon><span style="flex:1;text-align:left">Buscar…</span>
+      <kbd style="display:inline-flex;align-items:center;height:22px;padding:0 6px;border:1px solid var(--mimi-border);border-radius:6px;background:var(--mimi-background);font-family:var(--mimi-font-mono);font-size:11px;color:var(--mimi-muted-foreground)">⌘K</kbd>
+    </button>
+    <div role="radiogroup" aria-label="Idioma" style="display:inline-flex;gap:2px;padding:2px;border-radius:min(calc(var(--mimi-radius) + 2px),12px);border:1px solid var(--mimi-border)">
+      <sc-for list="{{ langs }}" as="o" hint-placeholder-count="2">
+        <sc-if value="{{ o.active }}"><button role="radio" aria-checked="true" onClick="{{ o.onClick }}" style="height:28px;padding:0 8px;border:0;border-radius:min(var(--mimi-radius),9px);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">{{ o.label }}</button></sc-if>
+        <sc-if value="{{ o.inactive }}"><button role="radio" aria-checked="false" onClick="{{ o.onClick }}" style="height:28px;padding:0 8px;border:0;border-radius:min(var(--mimi-radius),9px);background:transparent;color:var(--mimi-muted-foreground);font:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:var(--mimi-transition)" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(var(--mimi-press-scale))">{{ o.label }}</button></sc-if>
+      </sc-for>
+    </div>
+    <a href="https://github.com" aria-label="GitHub" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:min(var(--mimi-radius),10px);color:var(--mimi-foreground);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="github" size="18"></mimi-icon></a>
+    <button onClick="{{ p.toggleTheme }}" aria-label="{{ p.themeLabel }}" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border:0;border-radius:min(var(--mimi-radius),10px);background:transparent;color:var(--mimi-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ p.themeIcon }}" size="18"></mimi-icon></button>
+  </header>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <main style="max-width:1200px;margin:0 auto;padding:0 24px">
+      <section style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:24px;padding:96px 0 72px">
+        <span style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 12px;border-radius:var(--mimi-badge-radius);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font-size:13px;font-weight:600"><mimi-icon name="sparkles" size="14"></mimi-icon>v0.1.0 · Fase 1 disponible</span>
+        <h1 style="margin:0;max-width:860px;font-size:60px;line-height:1.05;font-weight:800;letter-spacing:-0.035em;text-wrap:balance">Los componentes son tuyos. Las actualizaciones también.</h1>
+        <p style="margin:0;max-width:680px;font-size:19px;line-height:1.6;color:var(--mimi-muted-foreground);text-wrap:pretty">Componentes para Angular 22 y Tailwind CSS 4 que una CLI copia a tu proyecto. Todo usa un solo prefijo, <code style="font-family:var(--mimi-font-mono);font-size:.9em;color:var(--mimi-foreground)">mimi</code>, el tema es opcional y tipado, y cuando actualizas, Mimi respeta los cambios que hiciste.</p>
+        <div style="display:flex;align-items:center;height:50px;box-sizing:border-box;padding:0 6px 0 18px;border:1px solid var(--mimi-border);border-radius:min(calc(var(--mimi-radius) + 4px),24px);background:var(--mimi-card);box-shadow:var(--mimi-shadow-card);font-family:var(--mimi-font-mono);font-size:15px">
+          <span style="color:var(--mimi-muted-foreground);margin-right:10px">$</span><span>ng add @mimi-ng/cli</span>
+          <button onClick="{{ copyFns.hero }}" aria-label="Copiar comando" style="margin-left:18px;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:0;border-radius:min(var(--mimi-radius),10px);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ ic.hero }}" size="16"></mimi-icon></button>
+        </div>
+        <div style="display:flex;gap:12px">
+          <button onClick="{{ go.install }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:calc(var(--mimi-control-height) + 4px);padding:0 22px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:15px;font-weight:600;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Empezar<mimi-icon name="arrow-right" size="16"></mimi-icon></button>
+          <button onClick="{{ go.input }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:calc(var(--mimi-control-height) + 4px);padding:0 22px;box-sizing:border-box;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:15px;font-weight:600;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-card);color:var(--mimi-foreground);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground);box-shadow:var(--mimi-shadow-neutral-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Ver componentes</button>
+        </div>
+      </section>
+
+      <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;padding-bottom:104px">
+        <sc-for list="{{ features }}" as="f" hint-placeholder-count="4">
+          <div style="background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);padding:24px;display:flex;flex-direction:column;gap:12px;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">
+            <span style="width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground)"><mimi-icon name="{{ f.icon }}" size="20"></mimi-icon></span>
+            <h3 style="margin:0;font-size:17px;line-height:1.3;font-weight:700;letter-spacing:-0.01em;text-wrap:balance">{{ f.title }}</h3>
+            <p style="margin:0;font-size:14px;color:var(--mimi-muted-foreground);text-wrap:pretty">{{ f.body }}</p>
+          </div>
+        </sc-for>
+      </section>
+
+      <section style="display:flex;flex-direction:column;align-items:center;gap:10px;padding-bottom:40px;text-align:center">
+        <h2 style="margin:0;font-size:34px;font-weight:800;letter-spacing:-0.025em">Hecho con la Fase 1</h2>
+        <p style="margin:0;font-size:16px;color:var(--mimi-muted-foreground)">Un formulario real con Card, FormField, Input, Switch, Checkbox, Avatar, Badge y Button. Pruébalo.</p>
+      </section>
+      <section style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:24px;max-width:960px;margin:0 auto;padding-bottom:120px;align-items:start">
+        <div style="background:var(--mimi-card);color:var(--mimi-card-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);display:flex;flex-direction:column">
+          <div style="padding:24px 24px 8px;display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:18px;font-weight:700;letter-spacing:-0.01em">Preferencias del proyecto</span>
+            <span style="font-size:14px;color:var(--mimi-muted-foreground)">Elige cómo te avisamos de los cambios.</span>
+          </div>
+          <div style="padding:16px 24px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:14px;font-weight:500">Nombre del proyecto</label>
+              <input value="panel-ventas" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:14px;font-weight:500">Correo de avisos</label>
+              <div style="display:flex;gap:8px">
+                <input type="email" placeholder="equipo@empresa.com" style="flex:1;min-width:0;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))">
+                <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-secondary-hover);box-shadow:var(--mimi-shadow-neutral-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Verificar</button>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 14px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius)">
+              <div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:500">Resumen semanal</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">Un correo cada lunes con los cambios.</span></div>
+              <button role="switch" aria-checked="{{ sw.aria }}" aria-label="Resumen semanal" onClick="{{ sw.toggle }}" style="display:inline-flex;align-items:center;flex-shrink:0;width:36px;height:20px;padding:2px;box-sizing:border-box;border:0;border-radius:999px;cursor:pointer;transition:var(--mimi-transition);background:{{ sw.track }};box-shadow:{{ sw.shadow }}" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:{{ sw.thumbBg }};box-shadow:0 1px 3px oklch(0 0 0 / .2);transition:transform .2s cubic-bezier(.2,.8,.2,1);transform:{{ sw.thumb }}"></span></button>
+            </div>
+            <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer">
+              <button type="button" role="checkbox" aria-checked="{{ cb.aria }}" onClick="{{ cb.toggle }}" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;box-sizing:border-box;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);color:var(--mimi-primary-foreground);border:1px solid {{ cb.border }};background:{{ cb.bg }}" style-active="transform:scale(0.9)"><sc-if value="{{ cb.on }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if></button>
+              Avisarme cuando haya una versión nueva de Mimi
+            </label>
+          </div>
+          <div style="padding:8px 24px 24px;display:flex;justify-content:flex-end;gap:8px">
+            <button style="display:inline-flex;align-items:center;justify-content:center;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-card);color:var(--mimi-foreground);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground);box-shadow:var(--mimi-shadow-neutral-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Cancelar</button>
+            <button style="display:inline-flex;align-items:center;justify-content:center;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Guardar cambios</button>
+          </div>
+        </div>
+        <div style="background:var(--mimi-card);color:var(--mimi-card-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);display:flex;flex-direction:column">
+          <div style="padding:24px 24px 12px;display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:18px;font-weight:700;letter-spacing:-0.01em">Equipo</span>
+            <span style="font-size:14px;color:var(--mimi-muted-foreground)">3 personas con acceso.</span>
+          </div>
+          <div style="padding:0 24px 16px;display:flex;flex-direction:column">
+            <sc-for list="{{ team }}" as="m" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--mimi-border)">
+                <span style="width:36px;height:36px;border-radius:999px;overflow:hidden;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font-size:13px;font-weight:600">{{ m.initials }}</span>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35"><span style="font-size:14px;font-weight:600">{{ m.name }}</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">{{ m.mail }}</span></div>
+                <span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;border:1px solid var(--mimi-border);color:var(--mimi-foreground)">{{ m.role }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="padding:8px 24px 24px">
+            <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:transparent;color:var(--mimi-foreground)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="user-plus" size="16"></mimi-icon>Invitar persona</button>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer style="border-top:1px solid var(--mimi-border);padding:28px 24px;display:flex;justify-content:center;gap:8px;font-size:13px;color:var(--mimi-muted-foreground)">Mimi · Licencia MIT · Hecho para Angular</footer>
+  </sc-if>
+
+  <sc-if value="{{ isDocs }}">
+    <div style="display:grid;grid-template-columns:{{ docsCols }};gap:{{ docsGap }};max-width:1440px;margin:0 auto;padding:0 24px;box-sizing:border-box">
+      <aside style="position:sticky;top:112px;align-self:start;max-height:calc(100vh - 112px);overflow-y:auto;overflow-x:hidden;padding:32px 0;display:flex;flex-direction:column;gap:24px">
+        <sc-for list="{{ sidebar }}" as="g" hint-placeholder-count="2">
+          <div style="display:flex;flex-direction:column;gap:2px">
+            <span style="padding:0 12px 6px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">{{ g.title }}</span>
+            <sc-for list="{{ g.items }}" as="it">
+              <sc-if value="{{ it.active }}"><button aria-current="page" onClick="{{ it.onClick }}" style="display:flex;align-items:center;width:100%;min-height:34px;padding:7px 12px;line-height:1.35;box-sizing:border-box;border:0;border-radius:var(--mimi-radius);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">{{ it.label }}</button></sc-if>
+              <sc-if value="{{ it.normal }}"><button onClick="{{ it.onClick }}" style="display:flex;align-items:center;width:100%;min-height:34px;padding:7px 12px;line-height:1.35;box-sizing:border-box;border:0;border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-muted-foreground);font:inherit;font-size:14px;font-weight:500;text-align:left;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground)" style-active="transform:scale(var(--mimi-press-scale))">{{ it.label }}</button></sc-if>
+              <sc-if value="{{ it.soon }}"><div aria-disabled="true" style="display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:34px;padding:0 12px;font-size:14px;color:var(--mimi-muted-foreground);opacity:.55;cursor:default">{{ it.label }}<span style="display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:var(--mimi-badge-radius);border:1px solid var(--mimi-border);font-size:10px;font-weight:600;letter-spacing:.02em">Próximamente</span></div></sc-if>
+            </sc-for>
+          </div>
+        </sc-for>
+      </aside>
+
+      <main style="padding:40px 0 120px;min-width:0">
+        <div style="max-width:900px;display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mimi-muted-foreground)"><span>{{ crumb.group }}</span><mimi-icon name="chevron-right" size="14"></mimi-icon><span style="color:var(--mimi-foreground);font-weight:500">{{ crumb.page }}</span></div>
+
+          <sc-if value="{{ isIntro }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <h1 style="margin:0;font-size:38px;line-height:1.15;font-weight:800;letter-spacing:-0.03em">Introducción</h1>
+              <p style="margin:0;font-size:18px;color:var(--mimi-muted-foreground);text-wrap:pretty">Mimi es una colección de componentes para Angular 22 y Tailwind CSS 4. No se instala como dependencia: la CLI copia el código a tu proyecto y a partir de ahí es tuyo.</p>
+              <h2 id="que-es" style="margin:28px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em;padding-bottom:10px;border-bottom:1px solid var(--mimi-border)">¿Qué es Mimi?</h2>
+              <p style="margin:0;text-wrap:pretty">Cada componente es un archivo standalone de Angular con clases de Tailwind y variables CSS <code style="font-family:var(--mimi-font-mono);font-size:13px;padding:2px 6px;border-radius:6px;background:var(--mimi-muted)">--mimi-*</code>. Puedes leerlo, cambiarlo o borrarlo sin pedir permiso a nadie.</p>
+              <h2 id="como-funciona" style="margin:28px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em;padding-bottom:10px;border-bottom:1px solid var(--mimi-border)">Cómo funciona</h2>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+                <sc-for list="{{ howItWorks }}" as="h" hint-placeholder-count="3">
+                  <div style="background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);padding:20px;display:flex;flex-direction:column;gap:8px">
+                    <span style="width:28px;height:28px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:13px;font-weight:700">{{ h.n }}</span>
+                    <span style="font-size:15px;font-weight:700">{{ h.title }}</span>
+                    <span style="font-size:14px;color:var(--mimi-muted-foreground);text-wrap:pretty">{{ h.body }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <h2 id="fase-1" style="margin:28px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em;padding-bottom:10px;border-bottom:1px solid var(--mimi-border)">Qué incluye la Fase 1</h2>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <sc-for list="{{ phase1 }}" as="c" hint-placeholder-count="9"><span style="display:inline-flex;align-items:center;height:26px;padding:0 12px;border-radius:var(--mimi-badge-radius);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font-size:13px;font-weight:600">{{ c }}</span></sc-for>
+                <span style="display:inline-flex;align-items:center;height:26px;padding:0 12px;border-radius:var(--mimi-badge-radius);border:1px dashed var(--mimi-border);color:var(--mimi-muted-foreground);font-size:13px">Select y Dialog · próximamente</span>
+              </div>
+              <button onClick="{{ go.install }}" style="margin-top:24px;display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);color:var(--mimi-foreground);font:inherit;cursor:pointer;text-align:left;transition:var(--mimi-transition);box-shadow:var(--mimi-shadow-neutral)" style-hover="border-color:var(--mimi-ring)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)"><span style="display:flex;flex-direction:column"><span style="font-size:13px;color:var(--mimi-muted-foreground)">Siguiente</span><span style="font-size:16px;font-weight:700">Instalación</span></span><mimi-icon name="arrow-right" size="18"></mimi-icon></button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isInput }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <div style="display:flex;align-items:center;gap:12px"><h1 style="margin:0;font-size:38px;line-height:1.15;font-weight:800;letter-spacing:-0.03em">Input</h1><span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font-size:12px;font-weight:600">Fase 1</span></div>
+              <p style="margin:0;font-size:18px;color:var(--mimi-muted-foreground);text-wrap:pretty">Campo de texto de una línea. Es una directiva, <code style="font-family:var(--mimi-font-mono);font-size:15px;color:var(--mimi-foreground)">mimiInput</code>, sobre el <code style="font-family:var(--mimi-font-mono);font-size:15px;color:var(--mimi-foreground)">&lt;input&gt;</code> nativo: conserva todos sus atributos y funciona con Reactive Forms.</p>
+
+              <h2 id="instalacion" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">Instalación</h2>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card)">
+                <div role="tablist" style="display:flex;gap:4px;padding:0 12px;border-bottom:1px solid var(--mimi-border)">
+                  <sc-for list="{{ installTabs }}" as="t" hint-placeholder-count="2">
+                    <sc-if value="{{ t.active }}"><button role="tab" aria-selected="true" onClick="{{ t.onClick }}" style="height:42px;padding:0 10px;border:0;background:transparent;color:var(--mimi-foreground);font:inherit;font-size:13px;font-weight:600;cursor:pointer;box-shadow:inset 0 -2px 0 var(--mimi-primary);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">{{ t.label }}</button></sc-if>
+                    <sc-if value="{{ t.inactive }}"><button role="tab" aria-selected="false" onClick="{{ t.onClick }}" style="height:42px;padding:0 10px;border:0;background:transparent;color:var(--mimi-muted-foreground);font:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(var(--mimi-press-scale))">{{ t.label }}</button></sc-if>
+                  </sc-for>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;padding:14px 12px 14px 20px;font-family:var(--mimi-font-mono);font-size:14px">
+                  <span style="color:var(--mimi-muted-foreground)">$</span><span style="flex:1">{{ installCmd }}</span>
+                  <button onClick="{{ copyFns.install }}" aria-label="Copiar comando" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ ic.install }}" size="16"></mimi-icon></button>
+                </div>
+              </div>
+
+              <h2 id="uso" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">Uso</h2>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card);box-shadow:var(--mimi-shadow-card)">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px 6px 12px;border-bottom:1px solid var(--mimi-border)">
+                  <div role="tablist" style="display:inline-flex;gap:2px;padding:3px;border-radius:calc(var(--mimi-radius) + 2px);background:var(--mimi-muted)">
+                    <sc-for list="{{ mainTabs }}" as="t" hint-placeholder-count="2">
+                      <sc-if value="{{ t.active }}"><button role="tab" aria-selected="true" onClick="{{ t.onClick }}" style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font:inherit;font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="{{ t.icon }}" size="14"></mimi-icon>{{ t.label }}</button></sc-if>
+                      <sc-if value="{{ t.inactive }}"><button role="tab" aria-selected="false" onClick="{{ t.onClick }}" style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border:0;border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-muted-foreground);font:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ t.icon }}" size="14"></mimi-icon>{{ t.label }}</button></sc-if>
+                    </sc-for>
+                  </div>
+                  <button onClick="{{ copyFns.main }}" style="display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-foreground);font:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ ic.main }}" size="14"></mimi-icon>{{ copyLabel.main }}</button>
+                </div>
+                <sc-if value="{{ mainPreview }}">
+                  <div style="position:relative;margin:12px;min-height:260px;border:1px dashed var(--mimi-border);border-radius:var(--mimi-radius);display:flex;align-items:center;justify-content:center;padding:40px;background:var(--mimi-background)">
+                    <div aria-hidden="true" style="position:absolute;top:10px;left:12px;display:flex;gap:6px"><span style="width:8px;height:8px;border-radius:999px;border:1px solid var(--mimi-border)"></span><span style="width:8px;height:8px;border-radius:999px;border:1px solid var(--mimi-border)"></span><span style="width:8px;height:8px;border-radius:999px;border:1px solid var(--mimi-border)"></span></div>
+                    <input type="email" placeholder="tu@correo.com" aria-label="Correo" style="width:320px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))">
+                  </div>
+                </sc-if>
+                <sc-if value="{{ mainCodeOn }}"><pre style="margin:0;padding:20px 24px;min-height:260px;box-sizing:border-box;background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:13px;line-height:1.75;overflow:auto;color:var(--mimi-foreground)">{{ code.main }}</pre></sc-if>
+              </div>
+
+              <h2 id="ejemplos" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">Ejemplos</h2>
+
+              <h3 id="con-etiqueta" style="margin:8px 0 0;font-size:18px;font-weight:700">Con etiqueta</h3>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card)">
+                <div style="display:flex;justify-content:center;padding:40px;background:var(--mimi-background)">
+                  <div style="width:320px;display:flex;flex-direction:column;gap:6px">
+                    <label for="ex-email" style="font-size:14px;font-weight:500">Correo</label>
+                    <input id="ex-email" type="email" placeholder="tu@correo.com" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))">
+                  </div>
+                </div>
+                <pre style="margin:0;padding:16px 20px;border-top:1px solid var(--mimi-border);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:13px;line-height:1.7;overflow:auto">{{ code.label }}</pre>
+              </div>
+
+              <h3 id="deshabilitado" style="margin:8px 0 0;font-size:18px;font-weight:700">Deshabilitado</h3>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card)">
+                <div style="display:flex;justify-content:center;padding:40px;background:var(--mimi-background)">
+                  <input disabled="" value="No editable" aria-label="Campo deshabilitado" style="width:320px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;opacity:.5;cursor:not-allowed">
+                </div>
+                <pre style="margin:0;padding:16px 20px;border-top:1px solid var(--mimi-border);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:13px;line-height:1.7;overflow:auto">{{ code.disabled }}</pre>
+              </div>
+
+              <h3 id="con-error" style="margin:8px 0 0;font-size:18px;font-weight:700">Con error, dentro de FormField</h3>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card)">
+                <div style="display:flex;justify-content:center;padding:40px;background:var(--mimi-background)">
+                  <div style="width:320px;display:flex;flex-direction:column;gap:6px">
+                    <label for="ex-err" style="font-size:14px;font-weight:500;color:var(--mimi-destructive)">Correo</label>
+                    <input id="ex-err" value="ana@" aria-invalid="true" aria-describedby="ex-err-msg" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-destructive);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;box-shadow:0 0 0 3px var(--mimi-destructive-soft);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">
+                    <span id="ex-err-msg" style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mimi-destructive)"><mimi-icon name="circle-alert" size="14"></mimi-icon>Ingresa un correo válido.</span>
+                  </div>
+                </div>
+                <pre style="margin:0;padding:16px 20px;border-top:1px solid var(--mimi-border);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:13px;line-height:1.7;overflow:auto">{{ code.error }}</pre>
+              </div>
+
+              <h3 id="con-boton" style="margin:8px 0 0;font-size:18px;font-weight:700">Junto a un botón</h3>
+              <p style="margin:0;color:var(--mimi-muted-foreground)">Input y Button comparten <code style="font-family:var(--mimi-font-mono);font-size:13px;color:var(--mimi-foreground)">--mimi-control-height</code>, así que quedan alineados al píxel sin clases extra.</p>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card)">
+                <div style="display:flex;justify-content:center;padding:40px;background:var(--mimi-background)">
+                  <div style="position:relative;width:420px;display:flex;gap:8px">
+                    <div aria-hidden="true" style="position:absolute;left:-16px;right:-16px;top:0;border-top:1px dashed var(--mimi-ring);opacity:.55"></div>
+                    <div aria-hidden="true" style="position:absolute;left:-16px;right:-16px;top:var(--mimi-control-height);border-top:1px dashed var(--mimi-ring);opacity:.55"></div>
+                    <input type="email" placeholder="tu@correo.com" aria-label="Correo" style="flex:1;min-width:0;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))">
+                    <button style="display:inline-flex;align-items:center;justify-content:center;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Suscribirme</button>
+                  </div>
+                </div>
+                <pre style="margin:0;padding:16px 20px;border-top:1px solid var(--mimi-border);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:13px;line-height:1.7;overflow:auto">{{ code.row }}</pre>
+              </div>
+
+              <h2 id="api" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">API</h2>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden">
+                <table style="width:100%;border-collapse:collapse;font-size:14px">
+                  <thead><tr style="background:var(--mimi-muted);text-align:left">
+                    <th style="padding:10px 16px;font-weight:600">Input</th><th style="padding:10px 16px;font-weight:600">Tipo</th><th style="padding:10px 16px;font-weight:600">Por defecto</th><th style="padding:10px 16px;font-weight:600">Descripción</th>
+                  </tr></thead>
+                  <tbody>
+                    <sc-for list="{{ api }}" as="r" hint-placeholder-count="4">
+                      <tr style="border-top:1px solid var(--mimi-border);vertical-align:top">
+                        <td style="padding:12px 16px;font-family:var(--mimi-font-mono);font-size:13px;font-weight:500;color:var(--mimi-primary)">{{ r.name }}</td>
+                        <td style="padding:12px 16px;font-family:var(--mimi-font-mono);font-size:13px">{{ r.type }}</td>
+                        <td style="padding:12px 16px;font-family:var(--mimi-font-mono);font-size:13px;color:var(--mimi-muted-foreground)">{{ r.def }}</td>
+                        <td style="padding:12px 16px;color:var(--mimi-muted-foreground);text-wrap:pretty">{{ r.desc }}</td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isInstall }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <h1 style="margin:0;font-size:38px;line-height:1.15;font-weight:800;letter-spacing:-0.03em">Instalación</h1>
+              <p style="margin:0;font-size:18px;color:var(--mimi-muted-foreground);text-wrap:pretty">Seis pasos, de un proyecto vacío a tu primer componente. Necesitas Node 22 o superior.</p>
+              <ol style="list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column">
+                <sc-for list="{{ steps }}" as="s" hint-placeholder-count="6">
+                  <li style="position:relative;display:grid;grid-template-columns:36px minmax(0,1fr);gap:20px;padding-bottom:36px">
+                    <div style="display:flex;flex-direction:column;align-items:center">
+                      <span style="width:36px;height:36px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);border:1px solid var(--mimi-border);font-size:14px;font-weight:700">{{ s.n }}</span>
+                      <span style="flex:1;width:1px;margin-top:8px;background:var(--mimi-border)"></span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:10px;padding-top:4px;min-width:0">
+                      <h2 id="{{ s.id }}" style="margin:0;font-size:19px;font-weight:700;letter-spacing:-0.01em">{{ s.title }}</h2>
+                      <p style="margin:0;color:var(--mimi-muted-foreground);text-wrap:pretty">{{ s.desc }}</p>
+                      <div style="display:flex;align-items:center;gap:12px;padding:10px 8px 10px 18px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:14px">
+                        <span style="color:var(--mimi-muted-foreground)">{{ s.prompt }}</span><span style="flex:1;white-space:pre;overflow:auto">{{ s.cmd }}</span>
+                        <button onClick="{{ s.copy }}" aria-label="Copiar" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;border:0;border-radius:8px;background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ s.icon }}" size="16"></mimi-icon></button>
+                      </div>
+                    </div>
+                  </li>
+                </sc-for>
+              </ol>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isThemes }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <h1 style="margin:0;font-size:38px;line-height:1.15;font-weight:800;letter-spacing:-0.03em">Temas</h1>
+              <p style="margin:0;font-size:18px;color:var(--mimi-muted-foreground);text-wrap:pretty">Ajusta los tokens y mira el resultado al instante. Cuando te guste, exporta un preset tipado. El archivo es opcional: sin él, Mimi usa los valores base.</p>
+              <div id="personalizar" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px 28px;padding:24px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);box-shadow:var(--mimi-shadow-card)">
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <span style="font-size:14px;font-weight:600">Color primario</span>
+                  <div role="radiogroup" aria-label="Color primario" style="display:flex;flex-wrap:wrap;gap:10px">
+                    <sc-for list="{{ swatches }}" as="o" hint-placeholder-count="5">
+                      <sc-if value="{{ o.active }}"><button role="radio" aria-checked="true" aria-label="{{ o.label }}" title="{{ o.label }}" onClick="{{ o.onClick }}" style="width:32px;height:32px;flex-shrink:0;border-radius:999px;border:2px solid var(--mimi-card);background:{{ o.color }};box-shadow:0 0 0 2px var(--mimi-foreground);cursor:pointer;padding:0;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))"></button></sc-if>
+                      <sc-if value="{{ o.inactive }}"><button role="radio" aria-checked="false" aria-label="{{ o.label }}" title="{{ o.label }}" onClick="{{ o.onClick }}" style="width:32px;height:32px;flex-shrink:0;border-radius:999px;border:2px solid var(--mimi-card);background:{{ o.color }};box-shadow:0 0 0 1px var(--mimi-border);cursor:pointer;padding:0;transition:var(--mimi-transition)" style-hover="box-shadow:0 0 0 2px var(--mimi-ring)" style-active="transform:scale(var(--mimi-press-scale))"></button></sc-if>
+                    </sc-for>
+                  </div>
+                  <span style="font-size:13px;color:var(--mimi-muted-foreground)">{{ swatchName }}</span>
+                </div>
+                <sc-for list="{{ themeSegs }}" as="g" hint-placeholder-count="3">
+                  <div style="display:flex;flex-direction:column;gap:10px">
+                    <span style="font-size:14px;font-weight:600">{{ g.label }}</span>
+                    <div role="radiogroup" aria-label="{{ g.label }}" style="display:inline-flex;flex-wrap:wrap;max-width:100%;box-sizing:border-box;align-self:flex-start;gap:2px;padding:3px;border-radius:calc(min(var(--mimi-radius),12px) + 3px);background:var(--mimi-muted)">
+                      <sc-for list="{{ g.items }}" as="o">
+                        <sc-if value="{{ o.active }}"><button role="radio" aria-checked="true" onClick="{{ o.onClick }}" style="height:30px;padding:0 12px;border:0;border-radius:min(var(--mimi-radius),12px);background:var(--mimi-card);color:var(--mimi-foreground);font:inherit;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">{{ o.label }}</button></sc-if>
+                        <sc-if value="{{ o.inactive }}"><button role="radio" aria-checked="false" onClick="{{ o.onClick }}" style="height:30px;padding:0 12px;border:0;border-radius:min(var(--mimi-radius),12px);background:transparent;color:var(--mimi-muted-foreground);font:inherit;font-size:13px;font-weight:500;white-space:nowrap;cursor:pointer;transition:var(--mimi-transition)" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(var(--mimi-press-scale))">{{ o.label }}</button></sc-if>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div id="vista-previa" data-mimi-style="{{ tStyle }}" class="{{ p.cls }}" style="{{ p.previewVars }}">
+                <div style="background:var(--mimi-background);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);padding:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;font-family:var(--mimi-font-sans);color:var(--mimi-foreground)">
+                  <div style="background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);padding:22px;display:flex;flex-direction:column;gap:14px">
+                    <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:17px;font-weight:700">Iniciar sesión</span><span style="font-size:14px;color:var(--mimi-muted-foreground)">Usa tu correo de trabajo.</span></div>
+                    <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:14px;font-weight:500">Correo</label><input value="ana@mimi.dev" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))"></div>
+                    <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:14px;font-weight:500;color:var(--mimi-destructive)">Contraseña</label><input type="password" value="123" aria-invalid="true" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-destructive);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))"><span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mimi-destructive)"><mimi-icon name="circle-alert" size="14"></mimi-icon>Usa al menos 8 caracteres.</span></div>
+                    <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer"><span role="checkbox" aria-checked="true" tabindex="0" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;box-sizing:border-box;border-radius:var(--mimi-radius-sm);border:1px solid var(--mimi-primary);background:var(--mimi-primary);color:var(--mimi-primary-foreground);cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></span>Recordarme</label>
+                    <div style="display:flex;gap:8px">
+                      <button style="flex:1;display:inline-flex;align-items:center;justify-content:center;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Entrar</button>
+                      <button style="display:inline-flex;align-items:center;justify-content:center;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-card);color:var(--mimi-foreground);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-accent);box-shadow:var(--mimi-shadow-neutral-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Crear cuenta</button>
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:18px">
+                    <div style="display:flex;gap:8px"><input placeholder="Buscar" aria-label="Buscar" style="flex:1;min-width:0;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-active="transform:scale(var(--mimi-press-scale))"><button aria-label="Buscar" style="display:inline-flex;align-items:center;justify-content:center;width:var(--mimi-control-height);height:var(--mimi-control-height);padding:0;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="search" size="16"></mimi-icon></button></div>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px">
+                      <button style="display:inline-flex;align-items:center;height:calc(var(--mimi-control-height) - 8px);padding:0 12px;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);box-shadow:var(--mimi-shadow-neutral)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">Secondary</button>
+                      <button style="display:inline-flex;align-items:center;height:calc(var(--mimi-control-height) - 8px);padding:0 12px;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-destructive);color:var(--mimi-destructive-foreground);box-shadow:var(--mimi-shadow-destructive)" style-hover="box-shadow:var(--mimi-shadow-destructive-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-destructive-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-destructive-soft)">Eliminar</button>
+                      <button style="display:inline-flex;align-items:center;height:calc(var(--mimi-control-height) - 8px);padding:0 12px;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;background:transparent;color:var(--mimi-foreground);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))">Ghost</button>
+                    </div>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px">
+                      <span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:var(--mimi-primary);color:var(--mimi-primary-foreground)">Nuevo</span>
+                      <span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:var(--mimi-secondary);color:var(--mimi-secondary-foreground)">Beta</span>
+                      <span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;border:1px solid var(--mimi-border)">v0.1.0</span>
+                    </div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card)"><span style="font-size:14px;font-weight:500">Notificaciones</span><span role="switch" aria-checked="true" style="display:inline-flex;flex-shrink:0;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border-radius:999px;background:var(--mimi-primary);box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-primary-foreground);transform:translateX(16px)"></span></span></div>
+                    <div style="display:flex;align-items:center;gap:12px">
+                      <div style="display:flex">
+                        <span style="width:36px;height:36px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font-size:13px;font-weight:600;box-shadow:0 0 0 2px var(--mimi-background)">AT</span>
+                        <span style="width:36px;height:36px;margin-left:-8px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:13px;font-weight:600;box-shadow:0 0 0 2px var(--mimi-background)">JR</span>
+                        <span style="width:36px;height:36px;margin-left:-8px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:var(--mimi-muted);color:var(--mimi-muted-foreground);font-size:12px;font-weight:600;box-shadow:0 0 0 2px var(--mimi-background)">+4</span>
+                      </div>
+                      <div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:10px;width:70%;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div><div style="height:10px;width:45%;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="exportar" style="display:flex;align-items:center;gap:12px">
+                <button onClick="{{ toggleExport }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="file-code" size="16"></mimi-icon>Exportar mimi.preset.ts</button>
+                <span style="font-size:13px;color:var(--mimi-muted-foreground)">Se importa en <code style="font-family:var(--mimi-font-mono)">app.config.ts</code> con <code style="font-family:var(--mimi-font-mono)">provideMimi(preset)</code>.</span>
+              </div>
+              <sc-if value="{{ showExport }}">
+                <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card);box-shadow:var(--mimi-shadow-card)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 8px 8px 16px;border-bottom:1px solid var(--mimi-border)">
+                    <span style="display:flex;align-items:center;gap:8px;font-family:var(--mimi-font-mono);font-size:13px;font-weight:500"><mimi-icon name="file-code" size="14"></mimi-icon>src/mimi.preset.ts</span>
+                    <button onClick="{{ copyFns.preset }}" style="display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-foreground);font:inherit;font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ ic.preset }}" size="14"></mimi-icon>{{ copyLabel.preset }}</button>
+                  </div>
+                  <pre style="margin:0;padding:20px 24px;background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:13px;line-height:1.75;overflow:auto">{{ presetCode }}</pre>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isIcons }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <h1 style="margin:0;font-size:38px;line-height:1.15;font-weight:800;letter-spacing:-0.03em">Iconos</h1>
+              <p style="margin:0;font-size:18px;color:var(--mimi-muted-foreground);text-wrap:pretty">Mimi usa Lucide en todos sus componentes. Los iconos son SVG de trazo, heredan el color del texto con currentColor y se dibujan sobre una rejilla de 24px.</p>
+
+              <h2 id="ic-instalacion" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">Instalación</h2>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 8px 10px 18px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:14px">
+                <span style="color:var(--mimi-muted-foreground)">$</span><span style="flex:1">pnpm add lucide-angular</span>
+                <button onClick="{{ copyFns.icInstall }}" aria-label="Copiar" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border:0;border-radius:8px;background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ ic.icInstall }}" size="16"></mimi-icon></button>
+              </div>
+
+              <h2 id="ic-galeria" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">Iconos más usados</h2>
+              <p style="margin:0;color:var(--mimi-muted-foreground)">Haz click en un icono para ver su nombre y cómo usarlo.</p>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);box-shadow:var(--mimi-shadow-card);overflow:hidden">
+                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:8px;padding:16px">
+                  <sc-for list="{{ iconGrid }}" as="g" hint-placeholder-count="24">
+                    <sc-if value="{{ g.active }}"><button aria-label="{{ g.name }}" aria-pressed="true" title="{{ g.name }}" onClick="{{ g.onClick }}" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border:1px solid var(--mimi-foreground);border-radius:var(--mimi-radius);background:var(--mimi-accent);color:var(--mimi-foreground);cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(0.92)"><mimi-icon name="{{ g.name }}" size="20"></mimi-icon></button></sc-if>
+                    <sc-if value="{{ g.inactive }}"><button aria-label="{{ g.name }}" aria-pressed="false" title="{{ g.name }}" onClick="{{ g.onClick }}" style="aspect-ratio:1;display:flex;align-items:center;justify-content:center;border:1px solid transparent;border-radius:var(--mimi-radius);background:var(--mimi-muted);color:var(--mimi-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);border-color:var(--mimi-border)" style-active="transform:scale(0.92)"><mimi-icon name="{{ g.name }}" size="20"></mimi-icon></button></sc-if>
+                  </sc-for>
+                </div>
+                <div style="display:grid;grid-template-columns:160px minmax(0,1fr);gap:24px;padding:20px;border-top:1px solid var(--mimi-border);align-items:center">
+                  <div style="width:160px;height:160px;display:flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);color:var(--mimi-foreground);background-color:var(--mimi-background);background-image:linear-gradient(var(--mimi-border) 1px, transparent 1px),linear-gradient(90deg, var(--mimi-border) 1px, transparent 1px);background-size:16px 16px;background-position:-1px -1px"><mimi-icon name="{{ selIcon }}" size="96" stroke="1.5"></mimi-icon></div>
+                  <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+                    <span style="font-family:var(--mimi-font-mono);font-size:20px;font-weight:600">{{ selIcon }}</span>
+                    <div style="display:flex;align-items:center;gap:12px;padding:10px 8px 10px 16px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:13px">
+                      <span style="flex:1;min-width:0;white-space:pre-wrap;word-break:break-all">{{ selIconCode }}</span>
+                      <button onClick="{{ copyFns.icSel }}" aria-label="Copiar" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;flex-shrink:0;border:0;border-radius:8px;background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-accent-foreground)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ ic.icSel }}" size="16"></mimi-icon></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h2 id="ic-tamanos" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">Tamaños</h2>
+              <p style="margin:0;color:var(--mimi-muted-foreground);text-wrap:pretty">Dentro de los componentes Mimi usa 16px. Usa 14px en badges y texto pequeño, y 20–24px en encabezados o botones grandes.</p>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+                <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:center;gap:40px;padding:40px 24px;background:var(--mimi-background)">
+                  <sc-for list="{{ iconSizes }}" as="z" hint-placeholder-count="6">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:12px"><mimi-icon name="{{ selIcon }}" size="{{ z.size }}"></mimi-icon><span style="font-family:var(--mimi-font-mono);font-size:12px;color:var(--mimi-muted-foreground)">{{ z.label }}</span></div>
+                  </sc-for>
+                </div>
+                <pre style="margin:0;padding:16px 20px;border-top:1px solid var(--mimi-border);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:13px;line-height:1.7;overflow:auto">{{ code.icSizes }}</pre>
+              </div>
+
+              <h2 id="ic-grosor" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">Grosor del trazo</h2>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+                <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:center;gap:40px;padding:40px 24px;background:var(--mimi-background)">
+                  <sc-for list="{{ iconStrokes }}" as="z" hint-placeholder-count="4">
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:12px"><mimi-icon name="{{ selIcon }}" size="32" stroke="{{ z.stroke }}"></mimi-icon><span style="font-family:var(--mimi-font-mono);font-size:12px;color:var(--mimi-muted-foreground)">{{ z.label }}</span></div>
+                  </sc-for>
+                </div>
+                <pre style="margin:0;padding:16px 20px;border-top:1px solid var(--mimi-border);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:13px;line-height:1.7;overflow:auto">{{ code.icStroke }}</pre>
+              </div>
+
+              <h2 id="ic-componentes" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">Dentro de componentes</h2>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;padding:40px 24px;background:var(--mimi-background)">
+                  <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="mail" size="16"></mimi-icon>Enviar correo</button>
+                  <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-card);color:var(--mimi-foreground);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-accent);box-shadow:var(--mimi-shadow-neutral-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)">Descargar<mimi-icon name="download" size="16"></mimi-icon></button>
+                  <button aria-label="Ajustes" style="display:inline-flex;align-items:center;justify-content:center;width:var(--mimi-control-height);height:var(--mimi-control-height);padding:0;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);cursor:pointer;transition:var(--mimi-transition);background:transparent;color:var(--mimi-foreground)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="settings" size="16"></mimi-icon></button>
+                  <div style="position:relative;width:240px">
+                    <span style="position:absolute;left:12px;top:0;height:var(--mimi-control-height);display:flex;align-items:center;color:var(--mimi-muted-foreground);pointer-events:none;z-index:1"><mimi-icon name="search" size="16"></mimi-icon></span>
+                    <input placeholder="Buscar…" aria-label="Buscar" style="width:100%;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px 0 36px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)">
+                  </div>
+                  <span style="display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:var(--mimi-secondary);color:var(--mimi-secondary-foreground)"><mimi-icon name="circle-check" size="12"></mimi-icon>Activo</span>
+                </div>
+                <pre style="margin:0;padding:16px 20px;border-top:1px solid var(--mimi-border);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:13px;line-height:1.7;overflow:auto">{{ code.icComp }}</pre>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isMigrate }}">
+            <div style="display:flex;flex-direction:column;gap:20px">
+              <h1 style="margin:0;font-size:38px;line-height:1.15;font-weight:800;letter-spacing:-0.03em">Migrar desde PrimeNG / NG-ZORRO</h1>
+              <p style="margin:0;font-size:18px;color:var(--mimi-muted-foreground);text-wrap:pretty">Puedes migrar componente por componente: Mimi convive con PrimeNG y NG-ZORRO en el mismo proyecto mientras haces el cambio.</p>
+              <h2 id="equivalencias" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">Equivalencias de la Fase 1</h2>
+              <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden">
+                <table style="width:100%;border-collapse:collapse;font-size:14px">
+                  <thead><tr style="background:var(--mimi-muted);text-align:left"><th style="padding:10px 16px;font-weight:600">PrimeNG</th><th style="padding:10px 16px;font-weight:600">NG-ZORRO</th><th style="padding:10px 16px;font-weight:600">Mimi</th></tr></thead>
+                  <tbody>
+                    <sc-for list="{{ migrate }}" as="r" hint-placeholder-count="8">
+                      <tr style="border-top:1px solid var(--mimi-border)">
+                        <td style="padding:11px 16px;font-family:var(--mimi-font-mono);font-size:13px;color:var(--mimi-muted-foreground)">{{ r.p }}</td>
+                        <td style="padding:11px 16px;font-family:var(--mimi-font-mono);font-size:13px;color:var(--mimi-muted-foreground)">{{ r.z }}</td>
+                        <td style="padding:11px 16px;font-family:var(--mimi-font-mono);font-size:13px;font-weight:600;color:var(--mimi-primary)">{{ r.m }}</td>
+                      </tr>
+                    </sc-for>
+                    <sc-for list="{{ migrateSoon }}" as="r" hint-placeholder-count="2">
+                      <tr aria-disabled="true" style="border-top:1px solid var(--mimi-border);opacity:.5">
+                        <td style="padding:11px 16px;font-family:var(--mimi-font-mono);font-size:13px">{{ r.p }}</td>
+                        <td style="padding:11px 16px;font-family:var(--mimi-font-mono);font-size:13px">{{ r.z }}</td>
+                        <td style="padding:11px 16px;font-family:var(--mimi-font-mono);font-size:13px"><span style="display:inline-flex;align-items:center;gap:10px">{{ r.m }}<span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:var(--mimi-badge-radius);border:1px solid var(--mimi-border);font-family:var(--mimi-font-sans);font-size:11px;font-weight:600">Próximamente</span></span></td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+              <h2 id="antes-despues" style="margin:20px 0 0;font-size:24px;font-weight:700;letter-spacing:-0.02em">Antes y después: un formulario</h2>
+              <p style="margin:0;color:var(--mimi-muted-foreground);text-wrap:pretty">El mismo formulario de registro. Con Mimi, <code style="font-family:var(--mimi-font-mono);font-size:13px;color:var(--mimi-foreground)">mimi-form-field</code> se encarga de la etiqueta, el estado de error y el mensaje.</p>
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+                <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card);display:flex;flex-direction:column">
+                  <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 8px 6px 16px;border-bottom:1px solid var(--mimi-border)">
+                    <span style="font-size:13px;font-weight:600">Antes</span>
+                    <div role="tablist" style="display:inline-flex;gap:2px;padding:3px;border-radius:calc(var(--mimi-radius) + 2px);background:var(--mimi-muted)">
+                      <sc-for list="{{ migTabs }}" as="t" hint-placeholder-count="2">
+                        <sc-if value="{{ t.active }}"><button role="tab" aria-selected="true" onClick="{{ t.onClick }}" style="height:26px;padding:0 10px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font:inherit;font-size:12px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">{{ t.label }}</button></sc-if>
+                        <sc-if value="{{ t.inactive }}"><button role="tab" aria-selected="false" onClick="{{ t.onClick }}" style="height:26px;padding:0 10px;border:0;border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-muted-foreground);font:inherit;font-size:12px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(var(--mimi-press-scale))">{{ t.label }}</button></sc-if>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <pre style="flex:1;margin:0;padding:16px 20px;background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:12.5px;line-height:1.75;overflow:auto">{{ beforeCode }}</pre>
+                </div>
+                <div style="border:1px solid var(--mimi-ring);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card);display:flex;flex-direction:column;box-shadow:var(--mimi-shadow-card)">
+                  <div style="display:flex;align-items:center;height:44px;padding:0 16px;border-bottom:1px solid var(--mimi-border)"><span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600"><span style="width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;border-radius:5px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:11px;font-weight:800">m</span>Después, con Mimi</span></div>
+                  <pre style="flex:1;margin:0;padding:16px 20px;background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:12.5px;line-height:1.75;overflow:auto">{{ code.after }}</pre>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </main>
+
+      <sc-if value="{{ showToc }}"><aside style="position:sticky;top:112px;align-self:start;padding:40px 0;display:flex;flex-direction:column;gap:4px">
+        <span style="font-size:13px;font-weight:600;padding-bottom:6px">En esta página</span>
+        <sc-for list="{{ toc }}" as="t" hint-placeholder-count="4">
+          <sc-if value="{{ t.active }}"><a href="{{ t.href }}" style="display:block;padding:4px 0;font-size:13px;font-weight:600;color:var(--mimi-foreground);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">{{ t.label }}</a></sc-if>
+          <sc-if value="{{ t.inactive }}"><a href="{{ t.href }}" style="display:block;padding:4px 0;font-size:13px;color:var(--mimi-muted-foreground);transition:var(--mimi-transition)" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(var(--mimi-press-scale))">{{ t.label }}</a></sc-if>
+        </sc-for>
+      </aside></sc-if>
+    </div>
+  </sc-if>
+</div>
+</sc-for>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const PAL = {
+  vivid: { light: ['oklch(0.205 0 0)', 'oklch(0.985 0 0)'], dark: ['oklch(0.922 0 0)', 'oklch(0.205 0 0)'] }
+};
+const SWATCHES = [
+  ['style', 'Neutro'],
+  ['oklch(0.54 0.24 292)', 'Violeta'],
+  ['oklch(0.52 0.13 160)', 'Esmeralda'],
+  ['oklch(0.52 0.2 262)', 'Azul'],
+  ['oklch(0.55 0.17 45)', 'Naranja']
+];
+const RADII = { '0': '0px', '4': '4px', '8': '8px', '12': '12px', 'full': '9999px' };
+const HEIGHTS = { compact: '36px', normal: '40px', comfy: '44px' };
+
+class Component extends DCLogic {
+  componentDidMount() { this._r = () => this.setState({ w: window.innerWidth }); window.addEventListener('resize', this._r); this._r(); }
+  componentWillUnmount() { window.removeEventListener('resize', this._r); }
+  state = { w: 1440, selIcon: 'search', view: 'home', mode: 'both', style: 'vivid', lang: 'es', copied: null, installTab: 'pnpm', mainTab: 'preview', sw: true, cb: false, tPrimary: 'style', tRadius: '12', tDensity: 'normal', tStyle: 'vivid', showExport: false, migTab: 'primeng' };
+
+  copy(key, text) {
+    try { navigator.clipboard.writeText(text); } catch (e) {}
+    this.setState({ copied: key });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ copied: null }), 1400);
+  }
+  seg(list, key) {
+    const cur = this.state[key];
+    return list.map(([v, l]) => ({ label: l, active: cur === v, inactive: cur !== v, onClick: () => this.setState({ [key]: v }) }));
+  }
+  go(view) { return () => { this.setState({ view }); window.scrollTo({ top: 0 }); }; }
+
+  preset() {
+    const s = this.state;
+    const lines = [
+      "import { definePreset } from '@mimi-ng/theme';",
+      '',
+      'export default definePreset({',
+      "  radius: '" + RADII[s.tRadius] + "',",
+      "  controlHeight: '" + HEIGHTS[s.tDensity] + "',"
+    ];
+    if (s.tPrimary === 'style') {
+      lines.push('  // colores: paleta neutra');
+    } else {
+      const c = s.tPrimary;
+      lines.push('  colors: {');
+      lines.push("    light: { primary: '" + c + "', primaryForeground: 'oklch(0.99 0 0)', ring: '" + c + "' },");
+      lines.push("    dark:  { primary: '" + c + "', primaryForeground: 'oklch(0.99 0 0)', ring: '" + c + "' },");
+      lines.push('  },');
+    }
+    lines.push('});');
+    return lines.join('\n');
+  }
+
+  renderVals() {
+    const s = this.state;
+    const v = s.view;
+    const isDocs = v !== 'home';
+    const modes = s.mode === 'both' ? [false, true] : [s.mode === 'dark'];
+    const radius = RADII[s.tRadius];
+    const panels = modes.map(dark => {
+      const pal = PAL[s.tStyle][dark ? 'dark' : 'light'];
+      const custom = s.tPrimary !== 'style';
+      const vars = {
+        '--mimi-radius': radius,
+        '--mimi-control-height': HEIGHTS[s.tDensity],
+        '--mimi-primary': custom ? s.tPrimary : pal[0],
+        '--mimi-primary-foreground': custom ? 'oklch(0.99 0 0)' : pal[1]
+      };
+      if (custom) vars['--mimi-ring'] = s.tPrimary;
+      if (s.tRadius === 'full') vars['--mimi-badge-radius'] = '999px';
+      return {
+        style: s.style, cls: dark ? 'dark' : '', dark,
+        showLabel: s.mode === 'both', label: dark ? 'Modo oscuro' : 'Modo claro', modeIcon: dark ? 'moon' : 'sun',
+        themeIcon: dark ? 'sun' : 'moon', themeLabel: dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro',
+        toggleTheme: () => this.setState({ mode: dark ? 'light' : 'dark' }),
+        previewVars: vars
+      };
+    });
+
+    const views = [['home', 'Inicio'], ['intro', 'Plantilla docs'], ['input', 'Input'], ['install', 'Instalación'], ['themes', 'Temas'], ['icons', 'Iconos'], ['migrate', 'Migrar']];
+    const toolbar = [
+      { label: 'Vista', items: views.map(([k, l]) => ({ label: l, active: v === k, inactive: v !== k, onClick: this.go(k) })) },
+      { label: 'Modo', items: this.seg([['light', 'Claro'], ['dark', 'Oscuro'], ['both', 'Ambos']], 'mode') }
+    ];
+
+    const topNav = [['intro', 'Documentación', ['intro', 'install', 'migrate', 'icons']], ['input', 'Componentes', ['input']], ['themes', 'Temas', ['themes']]]
+      .map(([k, l, on]) => ({ label: l, active: on.includes(v), inactive: !on.includes(v), onClick: this.go(k) }));
+
+    const item = (label, key, target) => ({ label, active: key === v, normal: key !== v, soon: false, onClick: target ? this.go(target) : undefined });
+    const soon = label => ({ label, active: false, normal: false, soon: true });
+    const sidebar = [
+      { title: 'Primeros pasos', items: [item('Introducción', 'intro', 'intro'), item('Instalación', 'install', 'install'), item('Personalización', 'custom', 'themes'), item('Temas', 'themes', 'themes'), item('Iconos', 'icons', 'icons'), item('Migrar desde PrimeNG / NG-ZORRO', 'migrate', 'migrate')] },
+      { title: 'Componentes', items: [item('Button', 'button'), item('Input y Textarea', 'input', 'input'), item('FormField', 'formfield'), item('Card', 'card'), item('Badge', 'badge'), item('Avatar', 'avatar'), item('Switch y Checkbox', 'switch'), item('Separator', 'separator'), item('Skeleton', 'skeleton'), soon('Select'), soon('Dialog')] }
+    ];
+
+    const tocs = {
+      intro: [['#que-es', '¿Qué es Mimi?'], ['#como-funciona', 'Cómo funciona'], ['#fase-1', 'Qué incluye la Fase 1']],
+      input: [['#instalacion', 'Instalación'], ['#uso', 'Uso'], ['#con-etiqueta', 'Con etiqueta'], ['#deshabilitado', 'Deshabilitado'], ['#con-error', 'Con error'], ['#con-boton', 'Junto a un botón'], ['#api', 'API']],
+      install: [['#paso-1', 'Proyecto Angular'], ['#paso-2', 'Tailwind CSS 4'], ['#paso-3', 'Inicializar Mimi'], ['#paso-4', 'Agregar componentes'], ['#paso-5', 'Usarlos'], ['#paso-6', 'Actualizar']],
+      themes: [['#personalizar', 'Personalizar'], ['#vista-previa', 'Vista previa'], ['#exportar', 'Exportar preset']],
+      icons: [['#ic-instalacion', 'Instalación'], ['#ic-galeria', 'Iconos más usados'], ['#ic-tamanos', 'Tamaños'], ['#ic-grosor', 'Grosor del trazo'], ['#ic-componentes', 'Dentro de componentes']],
+      migrate: [['#equivalencias', 'Equivalencias'], ['#antes-despues', 'Antes y después']]
+    };
+    const toc = (tocs[v] || []).map(([href, label], i) => ({ href, label, active: i === 0, inactive: i !== 0 }));
+    const crumbs = { intro: ['Primeros pasos', 'Introducción'], input: ['Componentes', 'Input'], install: ['Primeros pasos', 'Instalación'], themes: ['Primeros pasos', 'Temas'], icons: ['Primeros pasos', 'Iconos'], migrate: ['Primeros pasos', 'Migrar'] };
+    const cr = crumbs[v] || ['', ''];
+
+    const cmds = { pnpm: 'pnpm mimi add input', ng: 'ng g @mimi-ng/cli:ui input' };
+    const code = {
+      main: "import { MimiInput } from '@/components/ui/input';\n\n@Component({\n  selector: 'app-email',\n  imports: [MimiInput],\n  template: `<input mimiInput type=\"email\" placeholder=\"tu@correo.com\" />`,\n})\nexport class EmailComponent {}",
+      label: '<label for="email">Correo</label>\n<input mimiInput id="email" type="email" placeholder="tu@correo.com" />',
+      disabled: '<input mimiInput disabled value="No editable" />',
+      error: '<mimi-form-field label="Correo">\n  <input mimiInput type="email" formControlName="email" />\n</mimi-form-field>\n<!-- El mensaje sale del validador: email → «Ingresa un correo válido.» -->',
+      row: '<div class="flex gap-2">\n  <input mimiInput type="email" placeholder="tu@correo.com" />\n  <button mimiBtn>Suscribirme</button>\n</div>',
+      after: '<form [formGroup]="form" (ngSubmit)="save()">\n  <mimi-form-field label="Nombre">\n    <input mimiInput formControlName="name" />\n  </mimi-form-field>\n\n  <mimi-form-field label="Correo">\n    <input mimiInput type="email" formControlName="email" />\n  </mimi-form-field>\n\n  <mimi-checkbox formControlName="terms">\n    Acepto los términos\n  </mimi-checkbox>\n\n  <button mimiBtn type="submit">Crear cuenta</button>\n</form>'
+    };
+    const before = {
+      primeng: '<form [formGroup]="form" (ngSubmit)="save()">\n  <label for="name">Nombre</label>\n  <input pInputText id="name" formControlName="name" />\n\n  <label for="email">Correo</label>\n  <input pInputText id="email" formControlName="email"\n    [class.ng-invalid]="email.invalid && email.touched" />\n  @if (email.invalid && email.touched) {\n    <small class="p-error">Ingresa un correo válido</small>\n  }\n\n  <p-checkbox formControlName="terms" [binary]="true"\n    inputId="terms" />\n  <label for="terms">Acepto los términos</label>\n\n  <p-button type="submit" label="Crear cuenta" />\n</form>',
+      zorro: '<form nz-form [formGroup]="form" (ngSubmit)="save()">\n  <nz-form-item>\n    <nz-form-label nzFor="name">Nombre</nz-form-label>\n    <nz-form-control>\n      <input nz-input id="name" formControlName="name" />\n    </nz-form-control>\n  </nz-form-item>\n  <nz-form-item>\n    <nz-form-label nzFor="email">Correo</nz-form-label>\n    <nz-form-control nzErrorTip="Ingresa un correo válido">\n      <input nz-input id="email" formControlName="email" />\n    </nz-form-control>\n  </nz-form-item>\n  <label nz-checkbox formControlName="terms">Acepto los términos</label>\n  <button nz-button nzType="primary">Crear cuenta</button>\n</form>'
+    };
+    const presetCode = this.preset();
+
+    const selCode = '<lucide-icon name="' + s.selIcon + '" [size]="16" />';
+    code.icSizes = '<lucide-icon name="' + s.selIcon + '" [size]="12" />\n<lucide-icon name="' + s.selIcon + '" [size]="16" />  <!-- tamaño por defecto en Mimi -->\n<lucide-icon name="' + s.selIcon + '" [size]="24" />';
+    code.icStroke = '<lucide-icon name="' + s.selIcon + '" [size]="32" [strokeWidth]="1.5" />';
+    code.icComp = '<button mimiBtn>\n  <lucide-icon name="mail" [size]="16" /> Enviar correo\n</button>\n\n<button mimiBtn variant="ghost" size="icon" aria-label="Ajustes">\n  <lucide-icon name="settings" [size]="16" />\n</button>';
+    const copyTexts = { icInstall: 'pnpm add lucide-angular', icSel: selCode, hero: 'ng add @mimi-ng/cli', install: cmds[s.installTab], main: code.main, preset: presetCode };
+    const copyFns = {}, ic = {}, copyLabel = {};
+    Object.keys(copyTexts).forEach(k => {
+      copyFns[k] = () => this.copy(k, copyTexts[k]);
+      ic[k] = s.copied === k ? 'check' : 'copy';
+      copyLabel[k] = s.copied === k ? 'Copiado' : 'Copiar';
+    });
+
+    const stepData = [
+      ['Crea un proyecto Angular 22', 'Si ya tienes uno, salta al paso 2.', 'ng new mi-app --style=css'],
+      ['Añade Tailwind CSS 4', 'Instala Tailwind y su plugin de PostCSS. Luego agrega @import "tailwindcss"; al inicio de src/styles.css.', 'pnpm add tailwindcss @tailwindcss/postcss postcss'],
+      ['Inicializa Mimi', 'Crea mimi.json, copia las variables --mimi-* a styles.css y configura el alias @/components/ui.', 'ng add @mimi-ng/cli'],
+      ['Agrega componentes', 'Cada componente se copia a src/components/ui. Puedes pedir varios a la vez.', 'pnpm mimi add button input card'],
+      ['Úsalos', 'Importa el componente o la directiva en tu componente standalone.', '<button mimiBtn>Hola, Mimi</button>'],
+      ['Actualiza cuando quieras', 'Mimi compara tu copia con la versión original y la nueva. Solo aplica lo que no tocaste y te avisa si hay conflictos.', 'pnpm mimi update']
+    ];
+    const steps = stepData.map(([title, desc, cmd], i) => {
+      const k = 's' + i;
+      return { n: i + 1, id: 'paso-' + (i + 1), title, desc, cmd, prompt: i === 4 ? '<>' : '$', icon: s.copied === k ? 'check' : 'copy', copy: () => this.copy(k, cmd) };
+    });
+
+    const swatches = SWATCHES.map(([c, label]) => ({
+      label, active: s.tPrimary === c, inactive: s.tPrimary !== c,
+      color: c === 'style' ? PAL[s.tStyle].light[0] : c,
+      onClick: () => this.setState({ tPrimary: c })
+    }));
+
+    const w = s.w, showToc = w >= 1280;
+    const docsCols = (w < 900 ? '200px' : '240px') + ' minmax(0,1fr)' + (showToc ? ' 200px' : '');
+    return {
+      showToc, docsCols, docsGap: w < 1100 ? '28px' : '48px',
+      toolbar, panels, topNav, sidebar, toc,
+      crumb: { group: cr[0], page: cr[1] },
+      langs: this.seg([['es', 'ES'], ['en', 'EN']], 'lang'),
+      go: { home: this.go('home'), intro: this.go('intro'), input: this.go('input'), install: this.go('install'), themes: this.go('themes') },
+      isHome: v === 'home', isDocs, isIntro: v === 'intro', isInput: v === 'input', isInstall: v === 'install', isThemes: v === 'themes', isMigrate: v === 'migrate', isIcons: v === 'icons',
+      selIcon: s.selIcon, selIconCode: selCode,
+      iconGrid: ['search','x','check','plus','minus','chevron-down','chevron-right','arrow-right','house','user','users','mail','settings','bell','heart','star','trash-2','pencil','copy','download','upload','calendar','clock','lock','eye','eye-off','circle-alert','circle-check','info','loader-circle','sun','moon','log-out','external-link','link','image','file-text','folder','filter','menu','ellipsis','share-2'].map(name => ({ name, active: s.selIcon === name, inactive: s.selIcon !== name, onClick: () => this.setState({ selIcon: name }) })),
+      iconSizes: [12, 14, 16, 20, 24, 32].map(size => ({ size, label: size + 'px' })),
+      iconStrokes: [1, 1.5, 2, 2.5].map(stroke => ({ stroke, label: 'stroke ' + stroke })),
+      copyFns, ic, copyLabel,
+      features: [
+        { icon: 'git-merge', title: 'Actualiza sin perder tus cambios', body: 'mimi update compara tu copia con la versión original y la nueva, y solo aplica lo que no tocaste. Si hay conflicto, te lo muestra antes de escribir.' },
+        { icon: 'layers', title: 'Un solo prefijo, cero capas', body: 'Todo se llama mimi: mimiBtn, mimiInput, mimi-card. Sin wrappers ni dependencias ocultas: el código que ves es el que corre.' },
+        { icon: 'arrow-left-right', title: '¿Vienes de PrimeNG o NG-ZORRO? Te sentirás en casa', body: 'Los mismos conceptos, presets de tema tipados y una tabla de equivalencias para migrar componente por componente.' },
+        { icon: 'list-checks', title: 'Formularios listos: errores automáticos', body: 'mimi-form-field lee el estado del FormControl y muestra el mensaje correcto sin escribir un solo @if.' }
+      ],
+      team: [
+        { initials: 'AT', name: 'Ana Torres', mail: 'ana@empresa.com', role: 'Admin' },
+        { initials: 'JR', name: 'Julián Ríos', mail: 'julian@empresa.com', role: 'Editor' },
+        { initials: 'MG', name: 'Marta Gil', mail: 'marta@empresa.com', role: 'Lectura' }
+      ],
+      sw: {
+        aria: s.sw ? 'true' : 'false', toggle: () => this.setState({ sw: !s.sw }),
+        track: s.sw ? 'var(--mimi-primary)' : 'var(--mimi-switch-off)', shadow: s.sw ? 'var(--mimi-shadow-primary)' : 'none',
+        thumbBg: s.sw ? 'var(--mimi-primary-foreground)' : 'var(--mimi-background)', thumb: s.sw ? 'translateX(16px)' : 'translateX(0)'
+      },
+      cb: {
+        on: s.cb, aria: s.cb ? 'true' : 'false', toggle: e => { e && e.preventDefault(); this.setState({ cb: !s.cb }); },
+        border: s.cb ? 'var(--mimi-primary)' : 'var(--mimi-input)', bg: s.cb ? 'var(--mimi-primary)' : 'var(--mimi-input-background)'
+      },
+      howItWorks: [
+        { n: 1, title: 'La CLI copia', body: 'mimi add escribe el componente en src/components/ui. No hay paquete que actualizar a ciegas.' },
+        { n: 2, title: 'Un prefijo', body: 'Directivas y componentes empiezan por mimi. Nada de p-, nz- ni capas intermedias.' },
+        { n: 3, title: 'Tema opcional', body: 'Las variables --mimi-* funcionan solas. Si quieres más control, un preset tipado las define.' }
+      ],
+      phase1: ['Button', 'Input', 'Textarea', 'FormField', 'Card', 'Badge', 'Avatar', 'Switch', 'Checkbox', 'Separator', 'Skeleton'],
+      installTabs: this.seg([['pnpm', 'pnpm'], ['ng', 'Angular CLI']], 'installTab'),
+      installCmd: cmds[s.installTab],
+      mainTabs: [['preview', 'Preview', 'eye'], ['code', 'Código', 'code']].map(([k, l, icon]) => ({ label: l, icon, active: s.mainTab === k, inactive: s.mainTab !== k, onClick: () => this.setState({ mainTab: k }) })),
+      mainPreview: s.mainTab === 'preview', mainCodeOn: s.mainTab === 'code',
+      code,
+      api: [
+        { name: 'size', type: "'sm' | 'default' | 'lg'", def: "'default'", desc: 'Altura del control. default usa --mimi-control-height; sm y lg restan o suman 8px.' },
+        { name: 'invalid', type: 'boolean', def: 'auto', desc: 'Fuerza el estado de error. Con un FormControl se calcula solo a partir de invalid && touched.' },
+        { name: 'disabled', type: 'boolean', def: 'false', desc: 'Atributo nativo. También se aplica con control.disable().' },
+        { name: 'class', type: 'string', def: "''", desc: 'Clases extra. Se combinan con las base mediante tailwind-merge.' }
+      ],
+      steps,
+      swatches,
+      swatchName: SWATCHES.find(x => x[0] === s.tPrimary)[1],
+      themeSegs: [
+        { label: 'Radio', items: this.seg([['0', '0'], ['4', '4'], ['8', '8'], ['12', '12'], ['full', 'full']], 'tRadius') },
+        { label: 'Densidad', items: this.seg([['compact', 'Compacta 36'], ['normal', 'Normal 40'], ['comfy', 'Cómoda 44']], 'tDensity') }
+      ],
+      tStyle: s.tStyle,
+      showExport: s.showExport, toggleExport: () => this.setState({ showExport: !s.showExport }),
+      presetCode,
+      migrate: [
+        ['p-button', 'nz-button', 'button mimiBtn'], ['pInputText', 'nz-input', 'input mimiInput'], ['p-card', 'nz-card', 'mimi-card'], ['p-checkbox', 'nz-checkbox', 'mimi-checkbox'],
+        ['p-toggleswitch', 'nz-switch', 'mimi-switch'], ['p-avatar', 'nz-avatar', 'mimi-avatar'], ['p-tag', 'nz-tag', 'span mimiBadge'], ['p-skeleton', 'nz-skeleton', 'mimi-skeleton']
+      ].map(([p, z, m]) => ({ p, z, m })),
+      migrateSoon: [{ p: 'p-select', z: 'nz-select', m: 'mimi-select' }, { p: 'DialogService', z: 'NzModalService', m: 'MimiDialogService' }],
+      migTabs: this.seg([['primeng', 'PrimeNG'], ['zorro', 'NG-ZORRO']], 'migTab'),
+      beforeCode: before[s.migTab]
+    };
+  }
+}
+</script>
+</body>
+</html>
