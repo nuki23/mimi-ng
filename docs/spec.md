@@ -751,7 +751,9 @@ import buttonVariantsSource from './examples/button-variants.example' with { loa
 
 **Accesibilidad.** El `<pre>` tiene `tabindex="0"` y un `aria-label`, para recorrer el scroll horizontal con el teclado.
 
-**Presupuesto del bundle inicial** (`angular.json`, configuración de producción): aviso a partir de 420 kB y error a partir de 460 kB. En la tarea 2.2 mide 404.6 kB (98 kB en transferencia). Si un cambio lo acerca al aviso, hay que averiguar por qué antes de subir el límite: así se detectó que `@angular/forms` entraba en el bundle inicial por el índice de utils.
+**Presupuesto del bundle inicial** (`angular.json`, configuración de producción): aviso a partir de 370 kB y error a partir de 410 kB (unos 15 y 55 kB por encima del tamaño actual). Después de la tarea 2.2 mide 353.3 kB (95 kB en transferencia).
+
+**Íconos del layout en línea:** los íconos del header y del panel móvil (menú, cerrar, sol, luna y GitHub) son SVG en línea con los trazos de Lucide, no `@lucide/angular`. Si el layout usara el paquete, esbuild pondría en el chunk compartido con el bundle inicial todos los íconos de las páginas diferidas (llegó a 60 kB). Las páginas y los ejemplos sí usan `@lucide/angular`. Si un cambio lo acerca al aviso, hay que averiguar por qué antes de subir el límite: así se detectó que `@angular/forms` entraba en el bundle inicial por el índice de utils.
 
 **Bundle inicial** en la tarea 1.7 (producción): pasó de 313.5 kB (79.7 kB en transferencia) a 336.3 kB (84.3 kB). Shiki no está en el bundle inicial. La diferencia se reparte así:
 

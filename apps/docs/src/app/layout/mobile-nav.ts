@@ -10,7 +10,6 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
-import { LucideX } from '@lucide/angular';
 import { MimiButton } from '@/components/ui/button';
 import { filter } from 'rxjs';
 import { DocsSidebar } from './docs-sidebar';
@@ -24,7 +23,7 @@ import { MobileNavService } from './mobile-nav.service';
  */
 @Component({
   selector: 'app-mobile-nav',
-  imports: [DocsSidebar, MimiButton, LucideX],
+  imports: [DocsSidebar, MimiButton],
   templateUrl: './mobile-nav.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
