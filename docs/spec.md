@@ -101,6 +101,16 @@ El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve e
 | Checkbox   | `mimi-checkbox`                                                                                                      | `role="checkbox"`, Espacio, estado indeterminado, ControlValueAccessor                                                        |
 | FormField  | `mimi-form-field`, `mimi-form-error`                                                                                 | Etiqueta + control + mensaje                                                                                                  |
 
+**Nombres y archivos.** Sin sufijo en todos los componentes: la clase es `Mimi<Nombre>` (`MimiButton`, `MimiInput`, `MimiTextarea`, `MimiBadge`, `MimiCard`, `MimiFormField`, `MimiFormError`…) y el archivo `<nombre>.ts` (`button.ts`, `form-field.ts`), sin `.component` ni `.directive`. Las variantes de `cva` van en `<nombre>.variants.ts`. Los servicios conservan su sufijo (`MimiDialogService`).
+
+### Archivos por componente (para `registry.json`, Fase 3)
+
+Rutas relativas a `packages/ui-core/src/lib/`. En el proyecto del usuario, `components/<nombre>/` va a `src/app/components/ui/<nombre>/` y `utils/` a `src/app/components/ui/utils/`; la CLI ajusta las importaciones relativas.
+
+| Componente | Archivos                                                                                            | Dependencias npm                                     | Otros archivos de ui-core                                                                                                                                                                                 |
+| ---------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Button     | `components/button/button.ts`, `components/button/button.variants.ts`, `components/button/index.ts` | `class-variance-authority`, `clsx`, `tailwind-merge` | `utils/cn.ts`, `utils/control-styles.ts`; tokens de `theme/theme-base.css` (colores, sombras, `--mimi-control-height*`, `--mimi-radius`, `--mimi-press-scale`, `mimi-transition`, `@keyframes mimi-spin`) |
+
 ### Fase 4 del plan: overlays
 
 - **Select** (`mimi-select`), estilo NG-ZORRO: buscador interno, limpiar, cargando, sin resultados, opciones deshabilitadas, check en la activa, teclado (flechas, Enter, Escape, Home/End), ControlValueAccessor.
@@ -182,12 +192,12 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
     "button": {
       "dependencies": ["class-variance-authority", "clsx", "tailwind-merge"],
       "registryDependencies": ["utils"],
-      "files": ["button.directive.ts", "index.ts"]
+      "files": ["button.ts", "button.variants.ts", "index.ts"]
     },
     "form-field": {
       "dependencies": [],
       "registryDependencies": ["utils"],
-      "files": ["form-field.component.ts", "form-error.component.ts", "index.ts"]
+      "files": ["form-field.ts", "form-error.ts", "index.ts"]
     }
   }
 }
@@ -196,10 +206,10 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 ### Uso en código
 
 ```ts
-import { MimiButtonDirective } from '@/components/ui/button';
-import { MimiInputDirective } from '@/components/ui/input';
+import { MimiButton } from '@/components/ui/button';
+import { MimiInput } from '@/components/ui/input';
 import { MimiCardImports } from '@/components/ui/card';
-import { MimiFormFieldComponent, MimiFormErrorComponent } from '@/components/ui/form-field';
+import { MimiFormField, MimiFormError } from '@/components/ui/form-field';
 ```
 
 ```html
@@ -356,10 +366,11 @@ export interface MimiControlTokens extends MimiControlSizeTokens {
   borderWidth?: string;
   focusRingWidth?: string;
 }
+// paddingX y fontSize se aplican al tamaño default; sm y lg usan los valores del diseño.
+// Sin transitionDuration: el movimiento lo controla --mimi-transition (spec 6.6).
 export interface MimiButtonTokens extends MimiControlTokens {
   fontWeight?: string | number;
   letterSpacing?: string;
-  transitionDuration?: string;
 }
 export interface MimiInputTokens extends MimiControlTokens {
   placeholderColor?: string;
@@ -477,7 +488,7 @@ const twMerge = extendTailwindMerge({
 
 Si se agrega una sombra, un radio o una utilidad propia a `theme-base.css`, hay que registrarla aquí y agregar una prueba en `cn.spec.ts`.
 
-**`control-styles.ts`**: estilos compartidos de Button, Input y Textarea, tomados de la hoja de componentes. El padding no va aquí: lo pone cada componente (16px en botones, 12px en campos).
+**`control-styles.ts`**: estilos compartidos de Button, Input y Textarea, tomados de la hoja de componentes. El padding no va aquí: lo pone cada componente (16px en botones, 12px en campos). Button no usa `controlSizes`: define sus alturas con su propia cascada (`--mimi-btn-height*` → `--mimi-control-height*`, spec 6.2); Input hará lo mismo y ahí se decide si `controlSizes` se elimina (tarea 2.2).
 
 ```ts
 export const controlSizes = {
@@ -589,7 +600,7 @@ Además, cada componente expone `data-variant`, `data-size`, `data-state` y `dat
 
 ## 10. Showcase (`apps/docs`)
 
-El diseño visual sale de `docs/design/Mimi Sitio.dc.html`. Los botones del layout son HTML con Tailwind hasta que exista `mimiBtn` (tarea 2.1).
+El diseño visual sale de `docs/design/Mimi Sitio.dc.html`. Los botones del layout (header, panel móvil, copiar, inicio, 404 y páginas `/dev`) usan `mimiBtn` desde la tarea 2.1; las pestañas siguen hechas a mano hasta que exista Tabs.
 
 ### Layout (tarea 1.6)
 
@@ -692,6 +703,7 @@ import buttonVariantsSource from './examples/button-variants.example' with { loa
 - El atributo tiene prioridad sobre el cargador de TypeScript: el mismo archivo se importa como componente y como texto. Funciona con `ng build`, `ng serve` y `ng test`, y con `module: preserve`.
 - TypeScript no admite tipos según el atributo, y un `.d.ts` con comodín no sirve para un `.ts`. Por eso cada una de esas importaciones lleva `@ts-expect-error`.
 - Nunca se escribe el código de un ejemplo dos veces.
+- Los ejemplos importan los componentes igual que en el proyecto del usuario (`import { MimiButton } from '@/components/ui/button'`). En el monorepo lo resuelve el alias `@/components/ui/*` → `packages/ui-core/src/lib/components/*` de `tsconfig.base.json`.
 
 **Resaltado con Shiki** (`shiki` 4.4.3, `@shikijs/langs` y `@shikijs/themes`):
 

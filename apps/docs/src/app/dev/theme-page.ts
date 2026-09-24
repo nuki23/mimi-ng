@@ -15,6 +15,7 @@ import {
   fieldFocusStyles,
   type MimiThemePreset,
 } from '@mimi-ng/ui-core';
+import { MimiButton } from '@mimi-ng/ui-core';
 import { ThemeService } from '../core/theme.service';
 
 interface DemoPreset {
@@ -32,6 +33,7 @@ interface Sample {
 /** Página interna (/dev/theme) para probar applyMimiTheme con presets. No aparece en el menú. */
 @Component({
   selector: 'app-theme-page',
+  imports: [MimiButton],
   templateUrl: './theme-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

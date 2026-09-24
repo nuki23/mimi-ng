@@ -8,7 +8,8 @@
     </div>
     <button
       type="button"
-      class="h-(--mimi-control-height) rounded-lg border bg-card px-4 text-sm font-medium shadow-neutral mimi-transition hover:bg-accent hover:shadow-neutral-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+      mimiBtn
+      variant="outline"
       [attr.aria-pressed]="isDark()"
       (click)="toggleDark()"
     >

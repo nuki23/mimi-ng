@@ -3,7 +3,10 @@
 >
   <button
     type="button"
-    class="-ml-2 inline-flex size-9 items-center justify-center rounded-[min(var(--mimi-radius),10px)] text-foreground mimi-transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale) lg:hidden"
+    mimiBtn
+    variant="ghost"
+    size="icon"
+    class="-ml-2 size-9 rounded-[min(var(--mimi-radius),10px)] lg:hidden [&_svg]:size-[18px]"
     aria-label="Abrir menú"
     aria-controls="docs-mobile-nav"
     [attr.aria-expanded]="mobileNav.isOpen()"
@@ -39,7 +42,10 @@
     target="_blank"
     rel="noopener noreferrer"
     aria-label="Repositorio de Mimi en GitHub"
-    class="inline-flex size-9 items-center justify-center rounded-[min(var(--mimi-radius),10px)] text-foreground mimi-transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+    mimiBtn
+    variant="ghost"
+    size="icon"
+    class="size-9 rounded-[min(var(--mimi-radius),10px)] [&_svg]:size-[18px]"
   >
     <!-- Octicon mark-github (MIT, © GitHub). Lucide ya no incluye logos de marcas. -->
     <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -51,7 +57,10 @@
 
   <button
     type="button"
-    class="inline-flex size-9 items-center justify-center rounded-[min(var(--mimi-radius),10px)] text-foreground mimi-transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+    mimiBtn
+    variant="ghost"
+    size="icon"
+    class="size-9 rounded-[min(var(--mimi-radius),10px)] [&_svg]:size-[18px]"
     [attr.aria-label]="theme.isDark() ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
     (click)="theme.toggle()"
   >

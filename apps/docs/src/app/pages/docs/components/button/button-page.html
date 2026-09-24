@@ -1,0 +1,134 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Button</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Botón para acciones y enlaces. Es un componente sobre el elemento nativo,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">button[mimiBtn]</code>
+    o
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">a[mimiBtn]</code>:
+    conserva todo lo que ya hace un botón (formularios, teclado, foco) y le suma estilos, estado de
+    carga y deshabilitado accesible.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="button" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="variants" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variantes</h3>
+  <app-code-preview [code]="source.variants">
+    <app-button-variants-example />
+  </app-code-preview>
+
+  <h3 id="sizes" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tamaños</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">icon</code> es
+    cuadrado: dale un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code>,
+    porque no tiene texto.
+  </p>
+  <app-code-preview [code]="source.sizes">
+    <app-button-sizes-example />
+  </app-code-preview>
+
+  <h3 id="with-icon" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con ícono</h3>
+  <p class="text-pretty">
+    Los íconos que pongas dentro se dimensionan solos a 16px. En la documentación usamos
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@lucide/angular</code>.
+  </p>
+  <app-code-preview [code]="source.withIcon">
+    <app-button-with-icon-example />
+  </app-code-preview>
+
+  <h3 id="states" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Deshabilitado y cargando
+  </h3>
+  <p class="text-pretty">
+    Con <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">loading</code>
+    el botón muestra un spinner, queda deshabilitado y lleva
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-busy</code>. Pulsa
+    «Guardar» para verlo: el ancho no cambia.
+  </p>
+  <app-code-preview [code]="source.states">
+    <app-button-states-example />
+  </app-code-preview>
+
+  <h3 id="as-link" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Como enlace</h3>
+  <p class="text-pretty">
+    Sobre un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;a&gt;</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">disabled</code> pone
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-disabled</code>,
+    lo saca del orden de tabulación y cancela el clic.
+  </p>
+  <app-code-preview [code]="source.asLink">
+    <app-button-as-link-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Personalizar con class
+  </h3>
+  <p class="text-pretty">
+    Tus clases se mezclan con las del componente usando
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">cn()</code>: si chocan,
+    ganan las tuyas.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-button-custom-class-example />
+  </app-code-preview>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <p class="text-pretty">
+    Se definen en tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">styles.css</code> o con
+    el preset (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >components.button</code
+    >). Si no las defines, se usan las compartidas y, al final, los valores del diseño.
+  </p>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Variable</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (token of tokens; track token.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px] whitespace-nowrap">{{ token.name }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ token.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</article>

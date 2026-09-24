@@ -23,6 +23,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/docs/installation-page').then((m) => m.InstallationPage),
       },
+      {
+        path: 'components/button',
+        title: 'Button · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/button/button-page').then((m) => m.ButtonPage),
+      },
       // Los componentes irán en components/<nombre> (Fase 2).
     ],
   },

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { MimiButton } from '@mimi-ng/ui-core';
 import { ThemeService } from '../core/theme.service';
 
 interface Sample {
@@ -9,6 +10,7 @@ interface Sample {
 /** Página interna (/dev/tokens) para revisar los tokens del tema. No aparece en el menú. */
 @Component({
   selector: 'app-tokens-page',
+  imports: [MimiButton],
   templateUrl: './tokens-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -14,7 +14,8 @@
     "resolveJsonModule": true,
     "paths": {
       "@mimi-ng/ui-core": ["./packages/ui-core/src/index.ts"],
-      "@mimi-ng/ui-core/package.json": ["./packages/ui-core/package.json"]
+      "@mimi-ng/ui-core/package.json": ["./packages/ui-core/package.json"],
+      "@/components/ui/*": ["./packages/ui-core/src/lib/components/*"]
     }
   }
 }

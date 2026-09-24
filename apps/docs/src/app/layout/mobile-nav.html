@@ -11,7 +11,10 @@
       <span class="text-[17px] font-bold tracking-[-0.02em]">Mimi</span>
       <button
         type="button"
-        class="-mr-2 inline-flex size-9 items-center justify-center rounded-[min(var(--mimi-radius),10px)] text-foreground mimi-transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+        mimiBtn
+        variant="ghost"
+        size="icon"
+        class="-mr-2 size-9 rounded-[min(var(--mimi-radius),10px)] [&_svg]:size-[18px]"
         aria-label="Cerrar menú"
         (click)="nav.close()"
       >

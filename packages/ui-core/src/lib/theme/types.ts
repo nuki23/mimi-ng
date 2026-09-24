@@ -76,10 +76,10 @@ export interface MimiControlTokens extends MimiControlSizeTokens {
   focusRingWidth?: string;
 }
 
+/** paddingX y fontSize se aplican al tamaño default; sm y lg usan los valores del diseño. */
 export interface MimiButtonTokens extends MimiControlTokens {
   fontWeight?: string | number;
   letterSpacing?: string;
-  transitionDuration?: string;
 }
 
 export interface MimiInputTokens extends MimiControlTokens {

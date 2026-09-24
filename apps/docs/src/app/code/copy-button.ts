@@ -8,6 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { LucideCheck, LucideCopy } from '@lucide/angular';
+import { MimiButton } from '@mimi-ng/ui-core';
 
 /** Tiempo que se muestra el estado «Copiado». */
 export const COPIED_DURATION = 2000;
@@ -19,14 +20,17 @@ export const COPIED_DURATION = 2000;
  */
 @Component({
   selector: 'app-copy-button',
-  imports: [LucideCheck, LucideCopy],
+  imports: [MimiButton, LucideCheck, LucideCopy],
   template: `
     <button
       type="button"
+      mimiBtn
+      [variant]="withLabel() ? 'outline' : 'ghost'"
+      [size]="withLabel() ? 'sm' : 'icon'"
       [class]="
         withLabel()
-          ? 'inline-flex h-[30px] items-center gap-1.5 rounded-lg border px-2.5 text-[13px] font-medium text-foreground mimi-transition hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)'
-          : 'inline-flex size-8 shrink-0 items-center justify-center rounded-[8px] text-muted-foreground mimi-transition hover:bg-accent hover:text-accent-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)'
+          ? 'h-[30px] rounded-lg bg-transparent px-2.5 font-medium shadow-none [&_svg]:size-3.5'
+          : 'size-8 rounded-[8px] text-muted-foreground'
       "
       [attr.aria-label]="withLabel() ? null : label()"
       (click)="copy()"
