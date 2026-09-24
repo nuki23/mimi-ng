@@ -53,6 +53,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 
 - [ ] 4.1 Select (estilo NG-ZORRO, con todos sus estados).
 - [ ] 4.2 Dialog (servicio, X siempre visible).
+- [ ] 4.3 Evaluar @angular/aria (estable en v22) en lugar de @angular/cdk para Select y Tabs.
 
 ## Fase 5: Experiencia y lanzamiento
 
@@ -71,6 +72,6 @@ Usar el comando `/componente <nombre>` para cada uno.
 ## Decisiones pendientes
 
 - [x] Estilo del MVP: solo Vivid (por defecto).
-- [ ] Formularios: Reactive Forms, Signal Forms o ambos (revisar el estado de Signal Forms en Angular 22).
+- [x] Formularios: Signal Forms, Reactive Forms y ngModel. Campos nativos detectan FormField o NgControl; controles propios con FormValueControl (spec, sección 8).
 - [ ] Idioma por defecto de los mensajes de error.
 - [x] Versión exacta de Node.js y TypeScript según los requisitos de Angular 22 (ver spec, sección 2).

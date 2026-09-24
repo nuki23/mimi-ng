@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { cn } from './utils/cn';
-import { controlSizes, type ControlSize } from './utils/control-styles';
+import { cn, controlSizes, type ControlSize } from '@/components/ui/utils';
 
 /** Componente solo para la prueba: comprueba que ui-core compila y corre con TestBed. */
 @Component({

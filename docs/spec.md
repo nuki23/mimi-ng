@@ -105,7 +105,9 @@ El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve e
 
 ### Archivos por componente (para `registry.json`, Fase 3)
 
-Rutas relativas a `packages/ui-core/src/lib/`. En el proyecto del usuario, `components/<nombre>/` va a `src/app/components/ui/<nombre>/` y `utils/` a `src/app/components/ui/utils/`; la CLI ajusta las importaciones relativas.
+Rutas relativas a `packages/ui-core/src/lib/`. En el proyecto del usuario, `components/<nombre>/` va a `src/app/components/ui/<nombre>/`, `utils/` a `src/app/components/ui/utils/` y `theme/` a `src/app/components/ui/theme/`.
+
+**Importaciones entre archivos de ui-core:** siempre con el alias (`@/components/ui/utils`, `@/components/ui/theme`, `@/components/ui/<otro-componente>`), nunca con rutas relativas que salgan de su carpeta (`../../utils/cn`). Así el mismo código sirve en el monorepo y en el proyecto del usuario sin reescribir importaciones. Dentro de una misma carpeta sí se usan rutas relativas (`./button.variants`). En el monorepo, `tsconfig.base.json` define `@/components/ui/utils` y `@/components/ui/theme` (sus `index.ts`) antes del comodín `@/components/ui/*` → `components/*`.
 
 | Componente | Archivos                                                                                            | Dependencias npm                                     | Otros archivos de ui-core                                                                                                                                                                                 |
 | ---------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -154,8 +156,8 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 1. Verifica Tailwind 4.
 2. Instala `clsx`, `tailwind-merge`, `class-variance-authority` como dependencias normales.
 3. Agrega las variables base y `@theme inline` al `styles.css`. **No** agrega `@source`: en el proyecto del usuario los componentes se copian dentro de `src/` (por defecto `src/app/components/ui`), y la detección automática de Tailwind 4 ya escanea esa carpeta. El `@source` solo hace falta en el showcase de este monorepo, porque ahí los componentes viven fuera de la app, en `packages/ui-core/src`.
-4. Crea `utils/cn.ts` y `utils/control-styles.ts`.
-5. Agrega el alias `@/components/ui/*` al `tsconfig.json`.
+4. Crea `utils/cn.ts`, `utils/control-styles.ts` y `utils/index.ts` en `src/app/components/ui/`.
+5. Agrega el alias `@/components/ui/*` al `tsconfig.json` (cubre también `@/components/ui/utils`).
 6. Registra `@mimi-ng/cli` en `schematicCollections` de `angular.json`.
 7. Crea `mimi.json`.
 8. Pregunta: _"¿Quieres instalar @lucide/angular para tus íconos? (recomendado)"_.
@@ -565,9 +567,30 @@ Además, cada componente expone `data-variant`, `data-size`, `data-state` y `dat
 
 ## 8. Formularios
 
-- `mimiInput`, `mimiTextarea` (y `mimi-select`, `mimi-checkbox`, `mimi-switch`) inyectan `NgControl` de forma opcional. Si el control es inválido y fue tocado o modificado, agregan `aria-invalid="true"` y se ponen en rojo con los estilos de `controlInvalidStyles`.
-- El estado se obtiene con `toSignal(control.events)` (los flags de Reactive Forms no son signals).
+Mimi soporta los tres sistemas de formularios de Angular 22: **Signal Forms** (`[formField]`, estable en v22), **Reactive Forms** (`formControlName`, `[formControl]`) y **template-driven** (`[(ngModel)]`).
+
+### Campos nativos: `input[mimiInput]` y `textarea[mimiTextarea]`
+
+Son directivas de atributo sobre el elemento nativo, así que funcionan con los tres sistemas sin hacer nada: Angular conecta el `<input>` directamente. Para pintar el error:
+
+- Detectan qué sistema usa el campo inyectando de forma opcional `FormField` (de `@angular/forms/signals`) y `NgControl` (de `@angular/forms`).
+- **Signal Forms:** leen `formField.state().invalid()` y `touched()` / `dirty()`, que ya son signals.
+- **Reactive Forms y ngModel:** los flags del control no son signals, así que el estado se obtiene con `toSignal(control.events)` (nunca con un `computed()` que lea el control directamente, `CLAUDE.md` regla 7).
+- Si el campo es inválido y fue tocado o modificado, agregan `aria-invalid="true"` y se ponen en rojo con `controlInvalidStyles`. Sin formulario, no hacen nada.
+
+### Controles propios: Switch, Checkbox y Select
+
+Implementan **`FormValueControl<T>`** (o `FormCheckboxControl` para un booleano con `checked`) de `@angular/forms/signals`: un `value = model<T>()` (o `checked = model<boolean>()`), un `touch` output y, opcionalmente, los inputs `invalid`, `touched`, `disabled` y `required`, que Angular les pasa solo.
+
+Verificado en Angular 22.1.7 con una prueba real: un control que implementa solo `FormValueControl` funciona sin adaptador con `[formField]`, con `formControlName` / `[formControl]` y con `[(ngModel)]`. En los tres casos se sincroniza el valor, `touch` marca el control como tocado y los inputs `invalid`, `touched` y `disabled` reciben el estado del formulario. Internamente, `NgModel`, `FormControlName` y `FormControlDirective` detectan el contrato de controles propios cuando no hay un `ControlValueAccessor`.
+
+- **No** implementar `ControlValueAccessor` en los componentes de Mimi. Angular advierte que no hay que implementar a la vez `ControlValueAccessor` y `FormValueControl` / `FormCheckboxControl`.
+- Para migrar de a poco existen `compatForm` y `SignalFormControl` (`@angular/forms/signals/compat`); Mimi no los necesita.
+
+### Mensajes de error
+
 - `mimi-form-field` agrupa etiqueta, control y mensaje. `mimi-form-error` muestra el mensaje del primer error; si tiene contenido propio, usa ese.
+- Con Signal Forms, los errores ya traen `message` desde el esquema de validación; con Reactive Forms y ngModel se usa el mapa de mensajes.
 - Mensajes personalizables:
   ```ts
   provideMimiErrorMessages({
@@ -576,10 +599,10 @@ Además, cada componente expone `data-variant`, `data-size`, `data-state` y `dat
     minlength: (e) => `Mínimo ${e.requiredLength} caracteres.`,
   });
   ```
-- Pendiente: soporte de Signal Forms.
 
 ```html
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4 max-w-md">
+<!-- Reactive Forms -->
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="max-w-md space-y-4">
   <mimi-form-field>
     <label>Correo</label>
     <input mimiInput type="email" formControlName="email" />
@@ -587,6 +610,14 @@ Además, cada componente expone `data-variant`, `data-size`, `data-state` y `dat
   </mimi-form-field>
   <button mimiBtn type="submit">Guardar</button>
 </form>
+
+<!-- Signal Forms -->
+<mimi-form-field>
+  <label>Correo</label>
+  <input mimiInput type="email" [formField]="profileForm.email" />
+  <mimi-form-error />
+</mimi-form-field>
+<mimi-switch [formField]="profileForm.newsletter">Recibir novedades</mimi-switch>
 ```
 
 ## 9. Íconos
