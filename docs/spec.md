@@ -92,7 +92,7 @@ El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve e
 | Button     | `button[mimiBtn]`, `a[mimiBtn]`                                                                                      | Variantes: default, secondary, destructive, outline, ghost, link. Tamaños: sm, default, lg, icon. Input `loading` con spinner |
 | Input      | `input[mimiInput]`                                                                                                   | Error automático                                                                                                              |
 | Textarea   | `textarea[mimiTextarea]`                                                                                             | Error automático                                                                                                              |
-| Badge      | `span[mimiBadge]`                                                                                                    | default, secondary, outline, destructive                                                                                      |
+| Badge      | `span[mimiBadge]`                                                                                                    | default, secondary, outline, destructive. Solo `<span>`, sin hover ni foco; íconos a 12px                                     |
 | Card       | `mimi-card`, `mimi-card-header`, `mimi-card-title`, `mimi-card-description`, `mimi-card-content`, `mimi-card-footer` | Exporta `MimiCardImports`                                                                                                     |
 | Separator  | `mimi-separator`                                                                                                     | `orientation`: horizontal / vertical                                                                                          |
 | Skeleton   | `mimi-skeleton`                                                                                                      | `animate-pulse`                                                                                                               |
@@ -116,6 +116,7 @@ En el monorepo, `tsconfig.base.json` define `@/components/ui/utils/*` y `@/compo
 | Button     | `components/button/button.ts`, `components/button/button.variants.ts`, `components/button/index.ts`           | `class-variance-authority`, `clsx`, `tailwind-merge`                        | `utils/cn.ts`, `utils/control-styles.ts`; tokens de `theme/theme-base.css` (colores, sombras, `--mimi-control-height*`, `--mimi-radius`, `--mimi-press-scale`, `mimi-transition`, `@keyframes mimi-spin`)                                                                  |
 | Input      | `components/input/input.ts`, `components/input/input.variants.ts`, `components/input/index.ts`                | `class-variance-authority`, `clsx`, `tailwind-merge`; peer `@angular/forms` | `utils/cn.ts`, `utils/control-styles.ts`, `utils/field-state.ts`; tokens de `theme/theme-base.css` (`input`, `input-background`, `ring`, `ring-soft`, `destructive`, `destructive-soft`, `muted-foreground`, `--mimi-control-height*`, `--mimi-radius`, `mimi-transition`) |
 | Textarea   | `components/textarea/textarea.ts`, `components/textarea/textarea.variants.ts`, `components/textarea/index.ts` | `class-variance-authority`, `clsx`, `tailwind-merge`; peer `@angular/forms` | `utils/cn.ts`, `utils/control-styles.ts`, `utils/field-state.ts`; los mismos tokens que Input (usa `--mimi-input-*`)                                                                                                                                                       |
+| Badge      | `components/badge/badge.ts`, `components/badge/badge.variants.ts`, `components/badge/index.ts`                | `class-variance-authority`, `clsx`, `tailwind-merge`                        | `utils/cn.ts`; tokens de `theme/theme-base.css` (`primary`, `secondary`, `destructive` y sus `-foreground`, `foreground`, `border`, `--mimi-badge-radius`). Sin variables propias; íconos a 12px (`[&_svg]:size-3`, `shrink-0`)                                            |
 
 ### Fase 4 del plan: overlays
 
@@ -131,7 +132,7 @@ En el monorepo, `tsconfig.base.json` define `@/components/ui/utils/*` y `@/compo
 
 ### Después
 
-DropdownMenu, Tooltip, Tabs, Popover, Combobox múltiple, DatePicker, Toast, Table.
+DropdownMenu, Tooltip, Tabs, Popover, Combobox múltiple, DatePicker, Toast, Table. Badge interactivo (`a[mimiBadge]` o `button[mimiBadge]`, con hover y foco).
 
 ## 5. Uso para el desarrollador final
 

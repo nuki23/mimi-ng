@@ -1,0 +1,76 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Badge</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Etiqueta corta para estados, categorías o conteos. Es una directiva sobre el
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;span&gt;</code>
+    nativo:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">span[mimiBadge]</code>.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="badge" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="variants" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variantes</h3>
+  <app-code-preview [code]="source.variants">
+    <app-badge-variants-example />
+  </app-code-preview>
+
+  <h3 id="with-icon" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con ícono</h3>
+  <p class="text-pretty">
+    Los íconos que pongas dentro se dimensionan solos a 12px, el tamaño de la letra, y no se
+    deforman aunque el texto sea largo.
+  </p>
+  <app-code-preview [code]="source.withIcon">
+    <app-badge-with-icon-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Personalizar con class
+  </h3>
+  <p class="text-pretty">
+    Un contador: ancho mínimo, texto centrado y números del mismo ancho. Tus clases ganan a las del
+    componente.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-badge-custom-class-example />
+  </app-code-preview>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    El radio sale de la variable global
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-badge-radius</code
+    >
+    (píldora por defecto). Badge no tiene variables propias: para cambiar una medida, usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code>.
+  </p>
+</article>
