@@ -29,6 +29,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/docs/components/button/button-page').then((m) => m.ButtonPage),
       },
+      {
+        path: 'components/input',
+        title: 'Input y Textarea · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/input/input-page').then((m) => m.InputPage),
+      },
       // Los componentes irán en components/<nombre> (Fase 2).
     ],
   },

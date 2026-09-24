@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MimiButton } from '@mimi-ng/ui-core';
+import { MimiButton } from '@/components/ui/button';
 import { ThemeService } from '../core/theme.service';
 
 interface Sample {

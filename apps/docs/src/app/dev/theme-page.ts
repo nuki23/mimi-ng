@@ -6,16 +6,10 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import {
-  MIMI_THEME,
-  applyMimiTheme,
-  cn,
-  controlInvalidStyles,
-  controlSizes,
-  fieldFocusStyles,
-  type MimiThemePreset,
-} from '@mimi-ng/ui-core';
-import { MimiButton } from '@mimi-ng/ui-core';
+import { MimiButton } from '@/components/ui/button';
+import { MimiInput } from '@/components/ui/input';
+import { MIMI_THEME, applyMimiTheme } from '@/components/ui/theme/provider';
+import type { MimiThemePreset } from '@/components/ui/theme/types';
 import { ThemeService } from '../core/theme.service';
 
 interface DemoPreset {
@@ -33,7 +27,7 @@ interface Sample {
 /** Página interna (/dev/theme) para probar applyMimiTheme con presets. No aparece en el menú. */
 @Component({
   selector: 'app-theme-page',
-  imports: [MimiButton],
+  imports: [MimiButton, MimiInput],
   templateUrl: './theme-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -108,13 +102,6 @@ export class ThemePage {
     { name: 'destructive', class: 'bg-destructive' },
     { name: 'destructive-soft', class: 'bg-destructive-soft' },
   ];
-
-  protected readonly inputClasses = cn(
-    'w-full rounded-lg border border-input bg-input-background px-3 text-foreground placeholder:text-muted-foreground mimi-transition',
-    controlSizes.default,
-    fieldFocusStyles,
-    controlInvalidStyles,
-  );
 
   protected apply(demo: DemoPreset): void {
     applyMimiTheme(this.document, demo.preset);

@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { LucideCheck, LucideCopy } from '@lucide/angular';
-import { MimiButton } from '@mimi-ng/ui-core';
+import { MimiButton } from '@/components/ui/button';
 
 /** Tiempo que se muestra el estado «Copiado». */
 export const COPIED_DURATION = 2000;

@@ -3,7 +3,7 @@ import {
   buttonFocusStyles,
   controlDisabledStyles,
   controlPressStyles,
-} from '@/components/ui/utils';
+} from '@/components/ui/utils/control-styles';
 
 /**
  * Clases de mimiBtn (docs/design/Mimi Componentes.dc.html, sección 1). Todas literales para

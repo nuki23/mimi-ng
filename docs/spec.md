@@ -107,11 +107,15 @@ El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve e
 
 Rutas relativas a `packages/ui-core/src/lib/`. En el proyecto del usuario, `components/<nombre>/` va a `src/app/components/ui/<nombre>/`, `utils/` a `src/app/components/ui/utils/` y `theme/` a `src/app/components/ui/theme/`.
 
-**Importaciones entre archivos de ui-core:** siempre con el alias (`@/components/ui/utils`, `@/components/ui/theme`, `@/components/ui/<otro-componente>`), nunca con rutas relativas que salgan de su carpeta (`../../utils/cn`). Así el mismo código sirve en el monorepo y en el proyecto del usuario sin reescribir importaciones. Dentro de una misma carpeta sí se usan rutas relativas (`./button.variants`). En el monorepo, `tsconfig.base.json` define `@/components/ui/utils` y `@/components/ui/theme` (sus `index.ts`) antes del comodín `@/components/ui/*` → `components/*`.
+**Importaciones entre archivos de ui-core:** siempre con el alias y el **archivo concreto** (`@/components/ui/utils/cn`, `@/components/ui/utils/control-styles`, `@/components/ui/utils/field-state`, `@/components/ui/theme/provider`, `@/components/ui/<otro-componente>`). Nunca con el índice de `utils` o `theme`: el de utils reexporta `field-state`, que importa `@angular/forms`, y esbuild no puede descartarlo, así que quien usara solo Button cargaría los formularios completos (unos 97 kB). Tampoco con rutas relativas que salgan de su carpeta (`../../utils/cn`), porque la CLI copia los archivos a otra estructura. Dentro de una misma carpeta sí se usan rutas relativas (`./button.variants`). `packages/ui-core/src/lib/imports.spec.ts` recorre los archivos y falla si no se cumple.
 
-| Componente | Archivos                                                                                            | Dependencias npm                                     | Otros archivos de ui-core                                                                                                                                                                                 |
-| ---------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Button     | `components/button/button.ts`, `components/button/button.variants.ts`, `components/button/index.ts` | `class-variance-authority`, `clsx`, `tailwind-merge` | `utils/cn.ts`, `utils/control-styles.ts`; tokens de `theme/theme-base.css` (colores, sombras, `--mimi-control-height*`, `--mimi-radius`, `--mimi-press-scale`, `mimi-transition`, `@keyframes mimi-spin`) |
+En el monorepo, `tsconfig.base.json` define `@/components/ui/utils/*` y `@/components/ui/theme/*` (y sus índices) antes del comodín `@/components/ui/*` → `components/*`; en el proyecto del usuario basta el comodín. El showcase importa los componentes igual que el usuario (`@/components/ui/button`), no desde `@mimi-ng/ui-core`, para que el monorepo se comporte igual que un proyecto real.
+
+| Componente | Archivos                                                                                                      | Dependencias npm                                                            | Otros archivos de ui-core                                                                                                                                                                                                                                                  |
+| ---------- | ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Button     | `components/button/button.ts`, `components/button/button.variants.ts`, `components/button/index.ts`           | `class-variance-authority`, `clsx`, `tailwind-merge`                        | `utils/cn.ts`, `utils/control-styles.ts`; tokens de `theme/theme-base.css` (colores, sombras, `--mimi-control-height*`, `--mimi-radius`, `--mimi-press-scale`, `mimi-transition`, `@keyframes mimi-spin`)                                                                  |
+| Input      | `components/input/input.ts`, `components/input/input.variants.ts`, `components/input/index.ts`                | `class-variance-authority`, `clsx`, `tailwind-merge`; peer `@angular/forms` | `utils/cn.ts`, `utils/control-styles.ts`, `utils/field-state.ts`; tokens de `theme/theme-base.css` (`input`, `input-background`, `ring`, `ring-soft`, `destructive`, `destructive-soft`, `muted-foreground`, `--mimi-control-height*`, `--mimi-radius`, `mimi-transition`) |
+| Textarea   | `components/textarea/textarea.ts`, `components/textarea/textarea.variants.ts`, `components/textarea/index.ts` | `class-variance-authority`, `clsx`, `tailwind-merge`; peer `@angular/forms` | `utils/cn.ts`, `utils/control-styles.ts`, `utils/field-state.ts`; los mismos tokens que Input (usa `--mimi-input-*`)                                                                                                                                                       |
 
 ### Fase 4 del plan: overlays
 
@@ -490,17 +494,9 @@ const twMerge = extendTailwindMerge({
 
 Si se agrega una sombra, un radio o una utilidad propia a `theme-base.css`, hay que registrarla aquí y agregar una prueba en `cn.spec.ts`.
 
-**`control-styles.ts`**: estilos compartidos de Button, Input y Textarea, tomados de la hoja de componentes. El padding no va aquí: lo pone cada componente (16px en botones, 12px en campos). Button no usa `controlSizes`: define sus alturas con su propia cascada (`--mimi-btn-height*` → `--mimi-control-height*`, spec 6.2); Input hará lo mismo y ahí se decide si `controlSizes` se elimina (tarea 2.2).
+**`control-styles.ts`**: estilos compartidos de Button, Input y Textarea, tomados de la hoja de componentes. Las alturas, el padding y el tamaño de letra no van aquí: cada componente los define con su propia cascada (`--mimi-btn-*` o `--mimi-input-*` → `--mimi-control-*`, spec 6.2). Por eso se eliminó `controlSizes` en la tarea 2.2.
 
 ```ts
-export const controlSizes = {
-  sm: 'h-[var(--mimi-control-height-sm,2rem)] text-[13px]',
-  default: 'h-[var(--mimi-control-height,2.5rem)] text-sm',
-  lg: 'h-[var(--mimi-control-height-lg,3rem)] text-[15px]',
-} as const;
-
-export type ControlSize = keyof typeof controlSizes;
-
 // Botones: contorno del color de anillo
 export const buttonFocusStyles =
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
@@ -520,6 +516,8 @@ export const controlInvalidStyles =
 // Solo botones. Switch y Checkbox tienen su propia escala.
 export const controlPressStyles = 'mimi-transition active:scale-(--mimi-press-scale)';
 ```
+
+**`field-state.ts`**: `injectFieldState()` devuelve el estado del campo del elemento actual como signals (`invalid`, `touched`, `dirty`, `disabled` y `showError` = inválido y tocado o modificado), sea cual sea el sistema de formularios (spec, sección 8). Lo usan Input y Textarea, y lo usará `mimi-form-error`.
 
 **Pruebas de ui-core:** corren con `ng test ui-core` (`pnpm test:ui-core`, incluido en `pnpm test`), con TestBed disponible.
 
@@ -576,7 +574,11 @@ Son directivas de atributo sobre el elemento nativo, así que funcionan con los 
 - Detectan qué sistema usa el campo inyectando de forma opcional `FormField` (de `@angular/forms/signals`) y `NgControl` (de `@angular/forms`).
 - **Signal Forms:** leen `formField.state().invalid()` y `touched()` / `dirty()`, que ya son signals.
 - **Reactive Forms y ngModel:** los flags del control no son signals, así que el estado se obtiene con `toSignal(control.events)` (nunca con un `computed()` que lea el control directamente, `CLAUDE.md` regla 7).
+- La detección está en `utils/field-state.ts` (`injectFieldState()`). Con `formControlName` / `[formControl]` el control existe recién después de que esa directiva procesa sus entradas; por eso la suscripción se intenta enseguida y, si todavía no hay control, después del primer render. Con SSR no se pintan errores en el servidor (al cargar, los campos no se tocaron).
 - Si el campo es inválido y fue tocado o modificado, agregan `aria-invalid="true"` y se ponen en rojo con `controlInvalidStyles`. Sin formulario, no hacen nada.
+- `showError` (`boolean | undefined`) decide a mano: `undefined` (por defecto) deja decidir al formulario, `true` muestra el error y `false` lo oculta aunque el formulario sea inválido.
+- Exponen el estado con `exportAs` (`mimiInput`, `mimiTextarea`): `#campo="mimiInput"` → `campo.fieldState.showError()`.
+- **Nombres de entrada:** Signal Forms escribe su estado en cualquier entrada llamada `invalid`, `touched`, `dirty`, `disabled`, `errors`, `required`, `name`… de las directivas del mismo elemento. Por eso la entrada es `showError` y no `invalid`. En directivas que conviven con `[formField]` no se usan esos nombres; en controles propios con `FormValueControl` sí, porque es justamente cómo reciben el estado.
 
 ### Controles propios: Switch, Checkbox y Select
 
@@ -749,7 +751,9 @@ import buttonVariantsSource from './examples/button-variants.example' with { loa
 
 **Accesibilidad.** El `<pre>` tiene `tabindex="0"` y un `aria-label`, para recorrer el scroll horizontal con el teclado.
 
-**Bundle inicial** (producción): pasó de 313.5 kB (79.7 kB en transferencia) a 336.3 kB (84.3 kB). Shiki no está en el bundle inicial. La diferencia se reparte así:
+**Presupuesto del bundle inicial** (`angular.json`, configuración de producción): aviso a partir de 420 kB y error a partir de 460 kB. En la tarea 2.2 mide 404.6 kB (98 kB en transferencia). Si un cambio lo acerca al aviso, hay que averiguar por qué antes de subir el límite: así se detectó que `@angular/forms` entraba en el bundle inicial por el índice de utils.
+
+**Bundle inicial** en la tarea 1.7 (producción): pasó de 313.5 kB (79.7 kB en transferencia) a 336.3 kB (84.3 kB). Shiki no está en el bundle inicial. La diferencia se reparte así:
 
 - 14.8 kB de `@lucide/angular`: esbuild pone en un chunk compartido el código que usan a la vez el bundle inicial y los chunks diferidos, y ahí caen los íconos de copiar, check, código y ojo.
 - 6.3 kB de `@angular/core`: partes del framework que usan los componentes nuevos, como `effect` y `viewChildren`.

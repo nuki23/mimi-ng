@@ -61,17 +61,12 @@
     <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Controles</h2>
     <div class="flex flex-wrap items-start gap-3">
       <button type="button" data-test="button" mimiBtn>Guardar</button>
+      <input mimiInput class="max-w-xs" placeholder="tu@correo.com" aria-label="Correo" />
       <input
+        mimiInput
         class="max-w-xs"
-        [class]="inputClasses"
-        placeholder="tu@correo.com"
-        aria-label="Correo"
-      />
-      <input
-        class="max-w-xs"
-        [class]="inputClasses"
         value="ana@"
-        aria-invalid="true"
+        [showError]="true"
         aria-label="Correo con error"
       />
     </div>

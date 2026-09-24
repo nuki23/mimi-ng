@@ -1,0 +1,181 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Input y Textarea</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Campos de texto de una y de varias líneas. Son directivas sobre los elementos nativos,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">input[mimiInput]</code>
+    y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >textarea[mimiTextarea]</code
+    >: funcionan con cualquier sistema de formularios y se ponen en rojo solos cuando hay un error.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <h3 id="installation-input" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Input</h3>
+  <app-install-command name="input" />
+  <h3 id="installation-textarea" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textarea</h3>
+  <app-install-command name="textarea" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="with-label" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con etiqueta</h3>
+  <app-code-preview [code]="source.inputBasic">
+    <app-input-basic-example />
+  </app-code-preview>
+
+  <h3 id="sizes" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tamaños</h3>
+  <p class="text-pretty">
+    Los mismos altos que Button, para que un campo y un botón del mismo tamaño queden alineados.
+  </p>
+  <app-code-preview [code]="source.inputSizes">
+    <app-input-sizes-example />
+  </app-code-preview>
+
+  <h3 id="disabled" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Deshabilitado</h3>
+  <app-code-preview [code]="source.inputDisabled">
+    <app-input-disabled-example />
+  </app-code-preview>
+
+  <h3 id="show-error" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Error a mano</h3>
+  <p class="text-pretty">
+    Con un formulario el error sale solo. Para una validación propia, usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">showError</code>.
+  </p>
+  <app-code-preview [code]="source.inputShowError">
+    <app-input-show-error-example />
+  </app-code-preview>
+
+  <h3 id="textarea" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textarea</h3>
+  <app-code-preview [code]="source.textareaBasic">
+    <app-textarea-basic-example />
+  </app-code-preview>
+
+  <h3 id="textarea-states" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Textarea deshabilitado y con error
+  </h3>
+  <app-code-preview [code]="source.textareaStates">
+    <app-textarea-states-example />
+  </app-code-preview>
+
+  <h3 id="field-row" class="mt-2 text-lg font-semibold tracking-[-0.01em]">En fila</h3>
+  <p class="text-pretty">
+    Input, Textarea con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">rows="1"</code> y
+    Button miden lo mismo: quedan alineados al píxel.
+  </p>
+  <app-code-preview [code]="source.fieldRow">
+    <app-field-row-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Personalizar con class
+  </h3>
+  <app-code-preview [code]="source.inputCustomClass">
+    <app-input-custom-class-example />
+  </app-code-preview>
+
+  <h2 id="forms" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Formularios</h2>
+  <p class="text-pretty">
+    Funcionan con Signal Forms, Reactive Forms y ngModel sin configurar nada. El campo se pone en
+    rojo cuando es inválido y ya se tocó o modificó. Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >#campo="mimiInput"</code
+    >
+    puedes leer
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >campo.fieldState.showError()</code
+    >
+    para mostrar un mensaje; FormField lo hará por ti.
+  </p>
+
+  <h3 id="reactive-forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Reactive Forms</h3>
+  <p class="text-pretty">Escribe algo inválido o pulsa «Suscribirme» con el campo vacío.</p>
+  <app-code-preview [code]="source.inputReactiveForms">
+    <app-input-reactive-forms-example />
+  </app-code-preview>
+
+  <h3 id="signal-forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Signal Forms</h3>
+  <app-code-preview [code]="source.inputSignalForms">
+    <app-input-signal-forms-example />
+  </app-code-preview>
+
+  <h3 id="ng-model" class="mt-2 text-lg font-semibold tracking-[-0.01em]">ngModel</h3>
+  <app-code-preview [code]="source.inputNgModel">
+    <app-input-ng-model-example />
+  </app-code-preview>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  @for (table of apiTables; track table.id) {
+    <h3 [id]="table.id" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+      {{ table.title }}
+    </h3>
+    <div class="overflow-x-auto rounded-card border">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-muted text-muted-foreground">
+          <tr>
+            <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of table.rows; track row.name) {
+            <tr class="border-t align-top">
+              <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+              <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">
+                {{ row.type }}
+              </td>
+              <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+              <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  <p class="text-pretty">
+    Las dos directivas exportan
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">fieldState</code>
+    (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">invalid</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">touched</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">dirty</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">disabled</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">showError</code>, como
+    signals) con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">exportAs</code>
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiInput</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiTextarea</code>.
+  </p>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <p class="text-pretty">
+    Textarea usa las mismas variables que Input. Se definen en tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">styles.css</code> o con
+    el preset (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >components.input</code
+    >).
+  </p>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Variable</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (token of tokens; track token.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px] whitespace-nowrap">{{ token.name }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ token.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</article>

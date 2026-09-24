@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MimiButton } from '@mimi-ng/ui-core';
+import { MimiButton } from '@/components/ui/button';
 
 @Component({
   selector: 'app-not-found-page',

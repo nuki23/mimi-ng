@@ -1,3 +1,5 @@
 export * from './lib/utils';
 export * from './lib/theme';
 export * from './lib/components/button';
+export * from './lib/components/input';
+export * from './lib/components/textarea';

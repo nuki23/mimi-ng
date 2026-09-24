@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { cn, controlSizes, type ControlSize } from '@/components/ui/utils';
+import { cn } from '@/components/ui/utils/cn';
 
 /** Componente solo para la prueba: comprueba que ui-core compila y corre con TestBed. */
 @Component({
@@ -13,10 +13,10 @@ import { cn, controlSizes, type ControlSize } from '@/components/ui/utils';
   },
 })
 class ProbeComponent {
-  readonly size = input<ControlSize>('default');
+  readonly size = input<'sm' | 'lg'>('sm');
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
-    cn('rounded-lg shadow-primary', controlSizes[this.size()], this.userClass()),
+    cn('rounded-lg shadow-primary', this.size() === 'lg' ? 'h-12' : 'h-8', this.userClass()),
   );
 }
 
@@ -29,7 +29,7 @@ describe('ui-core con TestBed', () => {
 
     const host = fixture.nativeElement as HTMLElement;
     expect(host.getAttribute('data-size')).toBe('lg');
-    expect(host.classList).toContain('h-[var(--mimi-control-height-lg,3rem)]');
+    expect(host.classList).toContain('h-12');
     expect(host.classList).toContain('shadow-none');
     expect(host.classList).not.toContain('shadow-primary');
   });

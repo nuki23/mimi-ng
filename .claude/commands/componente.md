@@ -18,8 +18,8 @@ Crea el componente **$ARGUMENTS** de Mimi siguiendo estos pasos en orden. Cumple
 - Archivo del componente o directiva con las reglas de `CLAUDE.md`: OnPush, `input()`/`output()`/`model()`, objeto `host`, `inject()` en propiedades, control de flujo nuevo, zoneless.
 - Elementos nativos (`button`, `input`, `textarea`, `a`) con directiva de atributo (`button[mimiBtn]`, `input[mimiInput]`…), sin romper `formControlName` ni `[(ngModel)]`.
 - Variantes con `cva` y clases **completas y literales**; input `class` (alias) mezclado con `cn()`; estado en atributos `data-*` (`data-variant`, `data-size`, `data-state`, `data-disabled`).
-- Importaciones: los demás archivos de ui-core con el alias (`@/components/ui/utils`, `@/components/ui/theme`, `@/components/ui/<componente>`), nunca con rutas relativas que salgan de la carpeta del componente (la CLI los copia a otra estructura). Dentro de la carpeta, rutas relativas.
-- Formularios (spec 8): si es un campo nativo, detecta `FormField` o `NgControl` y pinta el error con `controlInvalidStyles`; si es un control propio, implementa `FormValueControl` / `FormCheckboxControl` (nunca `ControlValueAccessor`) y prueba que funcione con `[formField]`, `formControlName` y `[(ngModel)]`.
+- Importaciones: los demás archivos de ui-core con el alias y el archivo concreto (`@/components/ui/utils/cn`, `@/components/ui/utils/control-styles`, `@/components/ui/theme/provider`, `@/components/ui/<componente>`), nunca con el índice de `utils` o `theme` ni con rutas relativas que salgan de la carpeta del componente. Dentro de la carpeta, rutas relativas. `imports.spec.ts` falla si no se cumple.
+- Formularios (spec 8): si es un campo nativo, detecta `FormField` o `NgControl` y pinta el error con `controlInvalidStyles`; si es un control propio, implementa `FormValueControl` / `FormCheckboxControl` (nunca `ControlValueAccessor`) y prueba que funcione con `[formField]`, `formControlName` y `[(ngModel)]`. En directivas que conviven con `[formField]` (Input, Textarea), no uses nombres de entrada que Signal Forms escribe (`invalid`, `touched`, `dirty`, `disabled`, `errors`, `required`, `name`…), salvo en controles propios que implementen `FormValueControl`, donde es intencional.
 - Reutiliza `utils/control-styles.ts`: `controlSizes`, `buttonFocusStyles`, `fieldFocusStyles`, `controlDisabledStyles`, `controlInvalidStyles` y `controlPressStyles` (este último solo en botones).
 - Cascada de tokens (spec 6.2): `var(--mimi-<prefijo>-<prop>, var(--mimi-<compartida>, <respaldo>))`. Si agregas tokens por componente, regístralos en `theme/types.ts` (`MimiComponentTokens`) y el prefijo en `COMPONENT_PREFIX` de `theme/provider.ts`, con prueba en `provider.spec.ts`.
 - Si agregas una sombra, un radio o una utilidad propia en `theme-base.css`, regístrala en `utils/cn.ts` (`extendTailwindMerge`) con su prueba en `cn.spec.ts`, y en la spec 6.1.
@@ -55,7 +55,7 @@ Crea el componente **$ARGUMENTS** de Mimi siguiendo estos pasos en orden. Cumple
 
 ## 4. Al terminar
 
-1. `pnpm build`, `pnpm test` y `pnpm format` (y `pnpm format:check`).
+1. `pnpm build`, `pnpm test` y `pnpm format` (y `pnpm format:check`). El build falla si el bundle inicial del showcase supera el presupuesto de `angular.json`: si crece, averigua por qué antes de subirlo.
 2. Levanta `pnpm dev` en un puerto libre y comprueba que `main.js` responde HTTP 200 sin errores en el log (`pnpm build` no detecta los fallos de resolución de `ng serve`). No lo dejes corriendo.
 3. Revisa que el CSS generado no tenga colores fijos.
 4. Actualiza `docs/spec.md` si cambió algo (API, tokens nuevos).

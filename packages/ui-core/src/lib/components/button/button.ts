@@ -8,7 +8,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { cn } from '@/components/ui/utils';
+import { cn } from '@/components/ui/utils/cn';
 import { type ButtonSize, type ButtonVariant, buttonVariants } from './button.variants';
 
 /**

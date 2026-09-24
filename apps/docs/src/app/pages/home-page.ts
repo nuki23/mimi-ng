@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { MimiButton } from '@mimi-ng/ui-core';
+import { MimiButton } from '@/components/ui/button';
 
 /** Placeholder de la página de inicio: la landing real es la tarea 2.12. */
 @Component({

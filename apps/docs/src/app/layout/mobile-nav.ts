@@ -11,7 +11,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { LucideX } from '@lucide/angular';
-import { MimiButton } from '@mimi-ng/ui-core';
+import { MimiButton } from '@/components/ui/button';
 import { filter } from 'rxjs';
 import { DocsSidebar } from './docs-sidebar';
 import { MobileNavService } from './mobile-nav.service';

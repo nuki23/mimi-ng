@@ -1,17 +1,8 @@
 /**
  * Estilos compartidos de Button, Input y Textarea (docs/design, hoja de componentes).
- * Clases completas y literales para que Tailwind las detecte. El padding lo pone cada
- * componente: en el diseño es 16px en botones y 12px en campos.
+ * Clases completas y literales para que Tailwind las detecte. Las alturas, el padding y el
+ * tamaño de letra los pone cada componente con su propia cascada de tokens (spec 6.2).
  */
-
-/** Altura (cascada de tokens, spec 6.2) y tamaño de letra de cada tamaño. */
-export const controlSizes = {
-  sm: 'h-[var(--mimi-control-height-sm,2rem)] text-[13px]',
-  default: 'h-[var(--mimi-control-height,2.5rem)] text-sm',
-  lg: 'h-[var(--mimi-control-height-lg,3rem)] text-[15px]',
-} as const;
-
-export type ControlSize = keyof typeof controlSizes;
 
 /** Foco de botones: contorno del color de anillo, separado 2px. */
 export const buttonFocusStyles =
