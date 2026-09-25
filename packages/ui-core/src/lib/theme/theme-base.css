@@ -200,6 +200,8 @@
 
   --font-sans: var(--mimi-font-sans);
   --font-mono: var(--mimi-font-mono);
+
+  --animate-mimi-pulse: mimi-pulse 1.6s ease-in-out infinite;
 }
 
 @utility mimi-transition {

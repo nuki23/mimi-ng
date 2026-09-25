@@ -6,3 +6,4 @@ export * from './lib/components/textarea';
 export * from './lib/components/badge';
 export * from './lib/components/card';
 export * from './lib/components/separator';
+export * from './lib/components/skeleton';

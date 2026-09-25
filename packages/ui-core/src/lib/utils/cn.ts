@@ -4,8 +4,9 @@ import { extendTailwindMerge } from 'tailwind-merge';
 /**
  * tailwind-merge solo reconoce tallas (sm, md, lg…) en las escalas de sombra y radio.
  * Sin registrar los tokens de Mimi, `shadow-card` se tomaría como color de sombra y
- * `rounded-card` no se fusionaría con otros `rounded-*`. Los colores no hace falta
- * registrarlos: la escala de color acepta cualquier nombre.
+ * `rounded-card` no se fusionaría con otros `rounded-*`; lo mismo `animate-mimi-pulse` con
+ * `animate-none`. Los colores no hace falta registrarlos: la escala de color acepta cualquier
+ * nombre.
  */
 const twMerge = extendTailwindMerge({
   extend: {
@@ -20,6 +21,7 @@ const twMerge = extendTailwindMerge({
         'neutral-hover',
       ],
       radius: ['card', 'badge'],
+      animate: ['mimi-pulse'],
     },
     classGroups: {
       transition: ['mimi-transition'],

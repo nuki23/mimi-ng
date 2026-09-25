@@ -53,6 +53,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/docs/components/separator/separator-page').then((m) => m.SeparatorPage),
       },
+      {
+        path: 'components/skeleton',
+        title: 'Skeleton · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/skeleton/skeleton-page').then((m) => m.SkeletonPage),
+      },
       // Los componentes irán en components/<nombre> (Fase 2).
     ],
   },

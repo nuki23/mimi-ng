@@ -1,0 +1,120 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Skeleton</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Bloque que late mientras el contenido carga. Le das el tamaño y la forma del contenido que va a
+    reemplazar con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code>.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="skeleton" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="card" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tarjeta</h3>
+  <p class="text-pretty">Avatar, dos líneas, un párrafo y un botón, como en el diseño.</p>
+  <app-code-preview [code]="source.card">
+    <app-skeleton-card-example />
+  </app-code-preview>
+
+  <h3 id="shapes" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Formas</h3>
+  <p class="text-pretty">
+    Por defecto tiene el radio pequeño, el de las líneas de texto. Para un avatar usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">rounded-full</code>, y
+    para un botón
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">rounded-lg</code> con
+    la altura de los controles.
+  </p>
+  <app-code-preview [code]="source.shapes">
+    <app-skeleton-shapes-example />
+  </app-code-preview>
+
+  <h3 id="loading" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Mientras carga</h3>
+  <p class="text-pretty">
+    Pulsa «Recargar»: el skeleton ocupa el lugar del contenido y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-busy</code>
+    cambia a la vez.
+  </p>
+  <app-code-preview [code]="source.loading">
+    <app-skeleton-loading-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Personalizar con class
+  </h3>
+  <p class="text-pretty">
+    Una imagen de portada con el radio de las tarjetas. Tus clases ganan a las del componente;
+    incluso
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">animate-none</code>
+    lo deja quieto.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-skeleton-custom-class-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Accesibilidad</h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Cada
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-skeleton</code>
+      lleva
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-hidden="true"</code
+      >: no tiene nada que anunciar.
+    </li>
+    <li>
+      Pon
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-busy="true"</code
+      >
+      en el contenedor que carga y un texto para lectores de pantalla:
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >&lt;span class="sr-only"&gt;Cargando…&lt;/span&gt;</code
+      >.
+    </li>
+    <li>
+      Con movimiento reducido (<code
+        class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >prefers-reduced-motion</code
+      >) el bloque queda quieto.
+    </li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    El color sale del token
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-muted</code> y
+    la animación de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >animate-mimi-pulse</code
+    >
+    (1,6 s). Skeleton no tiene variables propias.
+  </p>
+</article>

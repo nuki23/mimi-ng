@@ -42,7 +42,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Avatar', path: '/docs/components/avatar', status: 'pending' },
       { title: 'Switch y Checkbox', path: '/docs/components/switch', status: 'pending' },
       { title: 'Separator', path: '/docs/components/separator', status: 'ready' },
-      { title: 'Skeleton', path: '/docs/components/skeleton', status: 'pending' },
+      { title: 'Skeleton', path: '/docs/components/skeleton', status: 'ready' },
       { title: 'Select', path: '/docs/components/select', status: 'soon' },
       { title: 'Dialog', path: '/docs/components/dialog', status: 'soon' },
     ],

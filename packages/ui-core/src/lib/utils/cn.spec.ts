@@ -34,6 +34,10 @@ describe('cn', () => {
     expect(cn('rounded-lg', 'rounded-badge')).toBe('rounded-badge');
   });
 
+  it('animate-none reemplaza a animate-mimi-pulse', () => {
+    expect(cn('animate-mimi-pulse', 'animate-none')).toBe('animate-none');
+  });
+
   it('mimi-transition entra en el grupo de transiciones', () => {
     expect(cn('mimi-transition', 'transition-none')).toBe('transition-none');
   });
