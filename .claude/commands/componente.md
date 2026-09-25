@@ -61,4 +61,4 @@ Crea el componente **$ARGUMENTS** de Mimi siguiendo estos pasos en orden. Cumple
 3. Revisa que el CSS generado no tenga colores fijos.
 4. Actualiza `docs/spec.md` si cambió algo (API, tokens nuevos).
 5. Registra en `docs/spec.md`, sección 4 (catálogo), los archivos del componente, sus dependencias de npm y los otros archivos de ui-core que necesita (utils, otros componentes). Servirá para el `registry.json` de la Fase 3.
-6. Marca la tarea en `docs/plan.md`, haz el commit y resume qué creaste y qué revisar en el navegador, en claro y oscuro.
+6. Marca la tarea en `docs/plan.md`, resume qué creaste y qué revisar en el navegador, en claro y oscuro, y avisa que toca commit con un mensaje sugerido y breve. No hagas el commit: lo hace el usuario.
