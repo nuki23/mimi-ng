@@ -5,3 +5,4 @@ export * from './lib/components/input';
 export * from './lib/components/textarea';
 export * from './lib/components/badge';
 export * from './lib/components/card';
+export * from './lib/components/separator';

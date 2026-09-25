@@ -29,7 +29,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [x] 2.3 Textarea
 - [x] 2.4 Badge
 - [x] 2.5 Card
-- [ ] 2.6 Separator
+- [x] 2.6 Separator
 - [ ] 2.7 Skeleton
 - [ ] 2.8 Avatar
 - [ ] 2.9 Switch

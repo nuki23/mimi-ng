@@ -1,0 +1,107 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Separator</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Línea de 1px para separar contenido, en horizontal o en vertical. Por defecto es solo visual.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="separator" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="horizontal" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Horizontal</h3>
+  <p class="text-pretty">Ocupa todo el ancho de su contenedor.</p>
+  <app-code-preview [code]="source.horizontal">
+    <app-separator-horizontal-example />
+  </app-code-preview>
+
+  <h3 id="vertical" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Vertical</h3>
+  <p class="text-pretty">
+    Toma el alto de su fila, así que el contenedor necesita
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">flex</code> y un alto
+    (aquí, <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">h-5</code>).
+    Fuera de una fila flex no se ve.
+  </p>
+  <app-code-preview [code]="source.vertical">
+    <app-separator-vertical-example />
+  </app-code-preview>
+
+  <h3 id="semantic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Semántico</h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >decorative="false"</code
+    >
+    la línea pasa a
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="separator"</code>
+    con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-orientation</code>
+    y los lectores de pantalla la anuncian. Aquí divide dos grupos de acciones.
+  </p>
+  <app-code-preview [code]="source.semantic">
+    <app-separator-semantic-example />
+  </app-code-preview>
+
+  <h3 id="when" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Cuándo usar cada uno</h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      <strong>Decorativo</strong> (por defecto): la línea es solo visual o la estructura ya la dan
+      los títulos, las listas o el texto. Es el caso más común: entre secciones con título, entre
+      enlaces, dentro de una tarjeta. Anunciarla solo agregaría ruido.
+    </li>
+    <li>
+      <strong>Semántico</strong>
+      (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >decorative="false"</code
+      >): la línea separa grupos con significado que no se distinguen de otra forma, como grupos de
+      acciones en una barra o en un menú. Saber que ahí empieza otro grupo ayuda a quien navega con
+      lector de pantalla.
+    </li>
+  </ul>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Personalizar con class
+  </h3>
+  <p class="text-pretty">
+    Un acento bajo un título: más grueso, corto, redondeado y del color primario. Tus clases ganan a
+    las del componente.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-separator-custom-class-example />
+  </app-code-preview>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    El color sale del token
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-border</code>.
+    Separator no tiene variables propias: para cambiar el color o el grosor, usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code>.
+  </p>
+</article>

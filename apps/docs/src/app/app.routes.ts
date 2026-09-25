@@ -47,6 +47,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/docs/components/card/card-page').then((m) => m.CardPage),
       },
+      {
+        path: 'components/separator',
+        title: 'Separator · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/separator/separator-page').then((m) => m.SeparatorPage),
+      },
       // Los componentes irán en components/<nombre> (Fase 2).
     ],
   },
