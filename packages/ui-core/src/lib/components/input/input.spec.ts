@@ -87,6 +87,29 @@ describe('MimiInput', () => {
     expect(get('plain').classList).toContain(expected);
   });
 
+  it('los valores tipados (length, color) ceden ante la clase del usuario', async () => {
+    const { fixture, host, get } = await setup();
+    host.extra.set('border-2 text-base placeholder:text-foreground focus-visible:ring-1');
+    await settle(fixture);
+    const el = get('plain');
+    for (const cls of [
+      'border-2',
+      'text-base',
+      'placeholder:text-foreground',
+      'focus-visible:ring-1',
+    ]) {
+      expect(el.classList).toContain(cls);
+    }
+    for (const cls of [
+      'border-[length:var(--mimi-input-border-width,1px)]',
+      'text-[length:var(--mimi-input-font-size,0.875rem)]',
+      'placeholder:text-[color:var(--mimi-input-placeholder-color,var(--mimi-muted-foreground))]',
+      'focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
+    ]) {
+      expect(el.classList).not.toContain(cls);
+    }
+  });
+
   it('la clase del usuario gana y los tokens reemplazan a los estilos compartidos', async () => {
     const { fixture, host, get } = await setup();
     host.extra.set('h-12 rounded-full');

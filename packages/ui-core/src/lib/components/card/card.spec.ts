@@ -90,7 +90,7 @@ describe('MimiCard', () => {
 
   it('la clase del usuario gana', async () => {
     const { host, q, update } = await setup();
-    await update(() => host.extra.set('shadow-none rounded-none bg-muted'));
+    await update(() => host.extra.set('shadow-none rounded-none bg-muted border-2'));
     const card = q('#full');
     expect(card.classList).toContain('shadow-none');
     expect(card.classList).toContain('rounded-none');
@@ -99,6 +99,10 @@ describe('MimiCard', () => {
       'shadow-[shadow:var(--mimi-card-shadow,var(--mimi-shadow-card))]',
     );
     expect(card.classList).not.toContain('bg-card');
+    expect(card.classList).toContain('border-2');
+    expect(card.classList).not.toContain('border-[length:var(--mimi-card-border-width,1px)]');
+    // El color del borde es otra propiedad: se mantiene.
+    expect(card.classList).toContain('border-border');
   });
 
   it('MimiCardImports trae las seis piezas', () => {

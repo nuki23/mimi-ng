@@ -23,6 +23,7 @@ Crea el componente **$ARGUMENTS** de Mimi siguiendo estos pasos en orden. Cumple
 - Si es un control, reutiliza `utils/control-styles.ts`: `buttonFocusStyles`, `fieldFocusStyles`, `controlDisabledStyles`, `controlInvalidStyles` y `controlPressStyles` (este último solo en botones).
 - Cascada de tokens (spec 6.2): `var(--mimi-<prefijo>-<prop>, var(--mimi-<compartida>, <respaldo>))`. Si agregas tokens por componente, regístralos en `theme/types.ts` (`MimiComponentTokens`) y el prefijo en `COMPONENT_PREFIX` de `theme/provider.ts`, con prueba en `provider.spec.ts`.
 - Si agregas una sombra, un radio o una utilidad propia en `theme-base.css`, regístrala en `utils/cn.ts` (`extendTailwindMerge`) con su prueba en `cn.spec.ts`, y en la spec 6.1.
+- En valores arbitrarios con `var()`, indica siempre el tipo cuando la utilidad sea ambigua: `shadow-[shadow:var(…)]`, `text-[length:var(…)]` o `text-[color:var(…)]`, `border-[length:var(…)]` o `border-[color:var(…)]`, `bg-[color:var(…)]`. Sin el tipo, tailwind-merge no resuelve el conflicto con la clase del usuario. Cubre cada caso con una prueba de `class`.
 - Movimiento: `mimi-transition` + `active:scale-(--mimi-press-scale)`. Nunca `active:[transform:...]` (la transición anima `scale`, spec 6.6).
 - Cero colores fijos. Íconos internos como SVG en línea con los trazos de Lucide; los del usuario por `ng-content` con `[&_svg]:size-4 [&_svg]:shrink-0`.
 - Accesibilidad: foco visible, roles y atributos ARIA correctos, teclado.

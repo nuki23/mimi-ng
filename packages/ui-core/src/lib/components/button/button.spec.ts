@@ -114,6 +114,27 @@ describe('MimiButton', () => {
     );
   });
 
+  it('los valores tipados (length, weight) ceden ante la clase del usuario', async () => {
+    const { host, button, update } = await setup();
+    await update(() => host.extra.set('border-2 font-bold text-base focus-visible:outline-4'));
+    for (const cls of ['border-2', 'font-bold', 'text-base', 'focus-visible:outline-4']) {
+      expect(button.classList).toContain(cls);
+    }
+    for (const cls of [
+      'border-[length:var(--mimi-btn-border-width,1px)]',
+      'font-[weight:var(--mimi-btn-font-weight,500)]',
+      'text-[length:var(--mimi-btn-font-size,0.875rem)]',
+      'focus-visible:outline-[length:var(--mimi-btn-focus-ring-width,2px)]',
+    ]) {
+      expect(button.classList).not.toContain(cls);
+    }
+    // Un color de contorno del usuario no borra el grosor (sin el tipo, sí lo borraría).
+    await update(() => host.extra.set('focus-visible:outline-ring'));
+    expect(button.classList).toContain(
+      'focus-visible:outline-[length:var(--mimi-btn-focus-ring-width,2px)]',
+    );
+  });
+
   it('deshabilitado: disabled nativo en <button>, sin sombra y sin clics', async () => {
     const { host, button, update } = await setup();
     await update(() => host.disabled.set(true));
