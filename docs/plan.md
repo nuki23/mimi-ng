@@ -28,7 +28,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [x] 2.2 Input (usar su propia cascada de alturas, `--mimi-input-height*` → `--mimi-control-height*`, como Button, y decidir ahí si `controlSizes` se elimina)
 - [x] 2.3 Textarea
 - [x] 2.4 Badge
-- [ ] 2.5 Card
+- [x] 2.5 Card
 - [ ] 2.6 Separator
 - [ ] 2.7 Skeleton
 - [ ] 2.8 Avatar

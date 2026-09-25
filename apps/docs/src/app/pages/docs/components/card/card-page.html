@@ -1,0 +1,139 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Card</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Contenedor para agrupar información y acciones relacionadas. Se arma con seis piezas que
+    importas juntas con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">MimiCardImports</code>.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="card" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <p class="text-pretty">Todas las piezas son opcionales, salvo el contenedor:</p>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    @for (part of parts; track part.name) {
+      <li>
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">{{
+          part.name
+        }}</code>
+        {{ part.description }}
+      </li>
+    }
+  </ul>
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="plan" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Completa</h3>
+  <p class="text-pretty">Encabezado, contenido y pie con acciones, como en el diseño.</p>
+  <app-code-preview [code]="source.plan">
+    <app-card-plan-example />
+  </app-code-preview>
+
+  <h3 id="form" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con un formulario</h3>
+  <p class="text-pretty">
+    El
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;form&gt;</code>
+    envuelve el contenido y el pie, así el botón del pie envía el formulario.
+  </p>
+  <app-code-preview [code]="source.form">
+    <app-card-form-example />
+  </app-code-preview>
+
+  <h3 id="content-only" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Solo contenido</h3>
+  <p class="text-pretty">
+    Sin encabezado, el contenido suma espacio arriba para no quedar pegado al borde. Lo mismo pasa
+    con el pie si es la primera pieza.
+  </p>
+  <app-code-preview [code]="source.contentOnly">
+    <app-card-content-only-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Personalizar con class
+  </h3>
+  <p class="text-pretty">
+    Una tarjeta destacada con el borde y la sombra del color primario, y otra sin sombra sobre fondo
+    atenuado. Tus clases ganan a las del componente.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-card-custom-class-example />
+  </app-code-preview>
+
+  <h3 id="heading" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Título y accesibilidad</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-card-title</code>
+    ya es un encabezado para los lectores de pantalla, de nivel 3. Si en tu página le corresponde
+    otro, cámbialo con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">level</code>:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;mimi-card-title [level]="2"&gt;</code
+    >.
+  </p>
+  <p class="text-pretty">
+    Si prefieres tu propio encabezado (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;h2&gt;</code
+    >, <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;h3&gt;</code>…),
+    úsalo <strong>en lugar de</strong>
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-card-title</code>,
+    con las mismas clases. No lo pongas dentro de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-card-title</code>:
+    los lectores de pantalla anunciarían el título dos veces.
+  </p>
+  <app-code-block [code]="ownHeading" lang="angular-html" />
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <p class="text-pretty">
+    Se definen en tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">styles.css</code> o con
+    el preset (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >components.card</code
+    >). Si no las defines, se usan los valores de la columna «Por defecto».
+  </p>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Variable</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (token of tokens; track token.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px] whitespace-nowrap">{{ token.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ token.default }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</article>

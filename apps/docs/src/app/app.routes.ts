@@ -41,6 +41,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/docs/components/badge/badge-page').then((m) => m.BadgePage),
       },
+      {
+        path: 'components/card',
+        title: 'Card · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/card/card-page').then((m) => m.CardPage),
+      },
       // Los componentes irán en components/<nombre> (Fase 2).
     ],
   },
