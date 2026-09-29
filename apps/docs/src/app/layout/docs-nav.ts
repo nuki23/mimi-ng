@@ -39,7 +39,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'FormField', path: '/docs/components/form-field', status: 'pending' },
       { title: 'Card', path: '/docs/components/card', status: 'ready' },
       { title: 'Badge', path: '/docs/components/badge', status: 'ready' },
-      { title: 'Avatar', path: '/docs/components/avatar', status: 'pending' },
+      { title: 'Avatar', path: '/docs/components/avatar', status: 'ready' },
       { title: 'Switch y Checkbox', path: '/docs/components/switch', status: 'pending' },
       { title: 'Separator', path: '/docs/components/separator', status: 'ready' },
       { title: 'Skeleton', path: '/docs/components/skeleton', status: 'ready' },

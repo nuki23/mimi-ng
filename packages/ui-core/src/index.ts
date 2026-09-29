@@ -7,3 +7,4 @@ export * from './lib/components/badge';
 export * from './lib/components/card';
 export * from './lib/components/separator';
 export * from './lib/components/skeleton';
+export * from './lib/components/avatar';

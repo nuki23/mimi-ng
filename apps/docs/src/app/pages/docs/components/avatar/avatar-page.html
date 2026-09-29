@@ -1,0 +1,111 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Avatar</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Foto de una persona con iniciales de respaldo: mientras la imagen carga, si falla o si no hay
+    imagen, se ven las iniciales.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="avatar" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <p class="text-pretty">
+    La imagen es el
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;img&gt;</code>
+    nativo con la directiva
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiAvatarImage</code>:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">alt</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">srcset</code> o
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">loading="lazy"</code>
+    funcionan como siempre. Por ahora no admite
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ngSrc</code>
+    (NgOptimizedImage): usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">src</code>.
+  </p>
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="sizes" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tamaños</h3>
+  <p class="text-pretty">Con imagen y solo con iniciales, en los tres tamaños del diseño.</p>
+  <app-code-preview [code]="source.sizes">
+    <app-avatar-sizes-example />
+  </app-code-preview>
+
+  <h3 id="fallback" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Si la imagen falla</h3>
+  <p class="text-pretty">
+    Mientras la imagen carga y si no se puede cargar, se ven las iniciales. El estado queda en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-state</code>
+    (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >idle | loading | loaded | error</code
+    >) por si quieres darle estilos.
+  </p>
+  <app-code-preview [code]="source.fallback">
+    <app-avatar-fallback-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Personalizar con class
+  </h3>
+  <p class="text-pretty">
+    Un grupo superpuesto: cada avatar con un anillo del color de fondo, y un contador con otro
+    color. Tus clases ganan a las del componente.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-avatar-custom-class-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Accesibilidad</h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Pon siempre
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">alt</code> con el
+      nombre de la persona en la imagen.
+    </li>
+    <li>
+      Pasa también
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">label</code> al
+      fallback: si la imagen falla, los lectores de pantalla anuncian el nombre en lugar de leer las
+      letras sueltas.
+    </li>
+    <li>
+      Mientras no carga, la imagen queda oculta para los lectores de pantalla, así el nombre no se
+      anuncia dos veces.
+    </li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Pieza</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.part + row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px] whitespace-nowrap">{{ row.part }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    Los colores salen de los tokens
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-muted</code>
+    (fondo mientras no hay foto) y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-secondary</code>
+    (iniciales). Avatar no tiene variables propias.
+  </p>
+</article>

@@ -31,7 +31,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [x] 2.5 Card
 - [x] 2.6 Separator
 - [x] 2.7 Skeleton
-- [ ] 2.8 Avatar
+- [x] 2.8 Avatar
 - [ ] 2.9 Switch
 - [ ] 2.10 Checkbox
 - [ ] 2.11 FormField + FormError (y error automático en Input y Textarea). Actualizar los ejemplos de Input y Textarea que usan #ref='mimiInput' para mostrar errores, y pasarlos a mimi-form-field + mimi-form-error.

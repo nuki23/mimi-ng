@@ -59,6 +59,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/docs/components/skeleton/skeleton-page').then((m) => m.SkeletonPage),
       },
+      {
+        path: 'components/avatar',
+        title: 'Avatar · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/avatar/avatar-page').then((m) => m.AvatarPage),
+      },
       // Los componentes irán en components/<nombre> (Fase 2).
     ],
   },
