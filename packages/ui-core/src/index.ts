@@ -10,3 +10,4 @@ export * from './lib/components/skeleton';
 export * from './lib/components/avatar';
 export * from './lib/components/switch';
 export * from './lib/components/checkbox';
+export * from './lib/components/form-field';

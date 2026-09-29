@@ -1,6 +1,10 @@
-import { Directive, computed, input } from '@angular/core';
+import { Directive, ElementRef, computed, inject, input } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
-import { injectFieldState } from '@/components/ui/utils/field-state';
+import {
+  MIMI_FIELD_CONTROL,
+  type MimiFieldControl,
+  injectFieldState,
+} from '@/components/ui/utils/field-state';
 import { textareaVariants } from './textarea.variants';
 
 /**
@@ -10,6 +14,8 @@ import { textareaVariants } from './textarea.variants';
  */
 @Directive({
   selector: 'textarea[mimiTextarea]',
+  // mimi-form-field lo encuentra por este token (utils/field-state.ts).
+  providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiTextarea }],
   exportAs: 'mimiTextarea',
   host: {
     '[class]': 'classes()',
@@ -18,7 +24,7 @@ import { textareaVariants } from './textarea.variants';
     '[attr.data-disabled]': 'fieldState.disabled() ? "" : null',
   },
 })
-export class MimiTextarea {
+export class MimiTextarea implements MimiFieldControl {
   /**
    * Muestra el error a mano. `undefined` (por defecto): decide el formulario. `true`: lo muestra.
    * `false`: lo oculta aunque el formulario sea inválido.
@@ -29,10 +35,12 @@ export class MimiTextarea {
   readonly showError = input<boolean | undefined>(undefined);
   readonly userClass = input('', { alias: 'class' });
 
-  /** Estado del campo según su formulario. Lo lee también MimiFormField (tarea 2.11). */
+  /** Estado del campo según su formulario. Lo lee también MimiFormField. */
   readonly fieldState = injectFieldState();
+  readonly controlElement = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
 
-  protected readonly showInvalid = computed(() => this.showError() ?? this.fieldState.showError());
+  /** Error visible: el formulario o `showError` a mano. */
+  readonly showInvalid = computed(() => this.showError() ?? this.fieldState.showError());
 
   protected readonly classes = computed(() => cn(textareaVariants(), this.userClass()));
 }

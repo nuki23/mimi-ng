@@ -71,6 +71,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/docs/components/switch/switch-page').then((m) => m.SwitchPage),
       },
+      {
+        path: 'components/form-field',
+        title: 'FormField · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/form-field/form-field-page').then((m) => m.FormFieldPage),
+      },
       // Los componentes irán en components/<nombre> (Fase 2).
     ],
   },

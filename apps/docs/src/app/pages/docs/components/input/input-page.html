@@ -43,7 +43,9 @@
   <h3 id="show-error" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Error a mano</h3>
   <p class="text-pretty">
     Con un formulario el error sale solo. Para una validación propia, usa
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">showError</code>.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">showError</code> y
+    escribe el mensaje en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-form-error</code>.
   </p>
   <app-code-preview [code]="source.inputShowError">
     <app-input-show-error-example />
@@ -81,15 +83,9 @@
   <h2 id="forms" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Formularios</h2>
   <p class="text-pretty">
     Funcionan con Signal Forms, Reactive Forms y ngModel sin configurar nada. El campo se pone en
-    rojo cuando es inválido y ya se tocó o modificó. Con
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-      >#campo="mimiInput"</code
-    >
-    puedes leer
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-      >campo.fieldState.showError()</code
-    >
-    para mostrar un mensaje; FormField lo hará por ti.
+    rojo cuando es inválido y ya se tocó o modificó. Envuélvelo en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-form-field</code>
+    y la etiqueta y el mensaje de error salen solos (ver FormField).
   </p>
 
   <h3 id="reactive-forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Reactive Forms</h3>

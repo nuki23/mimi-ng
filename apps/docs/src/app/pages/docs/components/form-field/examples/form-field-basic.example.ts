@@ -5,10 +5,10 @@ import { MimiFormField } from '@/components/ui/form-field';
 import { MimiInput } from '@/components/ui/input';
 
 @Component({
-  selector: 'app-input-reactive-forms-example',
+  selector: 'app-form-field-basic-example',
   imports: [ReactiveFormsModule, MimiFormField, MimiInput, MimiButton],
   template: `
-    <form class="flex w-80 flex-col gap-3" [formGroup]="form" (ngSubmit)="form.markAllAsTouched()">
+    <form class="flex w-80 flex-col gap-4" [formGroup]="form" (ngSubmit)="form.markAllAsTouched()">
       <mimi-form-field label="Correo">
         <input mimiInput type="email" formControlName="email" placeholder="tu@correo.com" />
       </mimi-form-field>
@@ -17,7 +17,7 @@ import { MimiInput } from '@/components/ui/input';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputReactiveFormsExample {
+export class FormFieldBasicExample {
   protected readonly form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
   });

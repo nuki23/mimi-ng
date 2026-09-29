@@ -1,0 +1,232 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">FormField</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Agrupa la etiqueta, el control y el mensaje de error. Lee el estado del formulario y muestra el
+    mensaje correcto sin escribir un solo
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;if</code>.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="form-field" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Funciona con Input, Textarea, Switch y Checkbox, y con Signal Forms, Reactive Forms y ngModel.
+    </li>
+    <li>
+      La etiqueta queda enlazada al control: si el control no tiene
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">id</code>, se le
+      asigna uno.
+    </li>
+    <li>
+      Cuando el campo es inválido y ya se tocó o modificó, la etiqueta se pone roja y aparece el
+      mensaje del primer error. El control lo lleva en su
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-describedby</code
+      >.
+    </li>
+  </ul>
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Error automático</h3>
+  <p class="text-pretty">Escribe un correo inválido o pulsa «Suscribirme» con el campo vacío.</p>
+  <app-code-preview [code]="source.basic">
+    <app-form-field-basic-example />
+  </app-code-preview>
+
+  <h3 id="own-label" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Etiqueta propia</h3>
+  <p class="text-pretty">
+    Para una etiqueta con más detalle, proyecta tu propio
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;label&gt;</code>:
+    si no tiene <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">for</code>,
+    el form-field se lo asigna, y con error también se pone roja.
+  </p>
+  <app-code-preview [code]="source.ownLabel">
+    <app-form-field-own-label-example />
+  </app-code-preview>
+
+  <h3 id="register" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Formulario de registro
+  </h3>
+  <p class="text-pretty">
+    Card, FormField, Input, Textarea, Checkbox y Button juntos. Pulsa «Crear cuenta» para ver todos
+    los errores.
+  </p>
+  <app-code-preview [code]="source.register">
+    <app-form-field-register-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Personalizar con class
+  </h3>
+  <p class="text-pretty">
+    Etiqueta a la izquierda con una grilla. El mensaje va en la segunda columna con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-form-error</code>.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-form-field-custom-class-example />
+  </app-code-preview>
+
+  <h2 id="messages" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Mensajes de error
+  </h2>
+  <p class="text-pretty">
+    Por defecto los mensajes están en inglés. Para usarlos en español, registra
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >MIMI_ERROR_MESSAGES_ES</code
+    >
+    (este sitio lo hace):
+  </p>
+  <app-code-block [code]="messagesEs" lang="angular-ts" />
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Error</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Inglés (por defecto)</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">MIMI_ERROR_MESSAGES_ES</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of messages; track row.key) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.key }}</td>
+            <td class="px-4 py-2.5">{{ row.en }}</td>
+            <td class="px-4 py-2.5">{{ row.es }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="customize-messages" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Personalizar los mensajes
+  </h2>
+  <p class="text-pretty">
+    El texto se elige en este orden: gana el primer nivel que tenga un mensaje para el error.
+  </p>
+  <ol class="flex list-decimal flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >mimi-form-error</code
+      >
+      con tu texto, en un campo.
+    </li>
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">message</code> en el
+      validador (Signal Forms).
+    </li>
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >provideMimiErrorMessages</code
+      >, para toda la app.
+    </li>
+    <li>Los predeterminados, en inglés.</li>
+  </ol>
+
+  <h3 id="level-form-error" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    1. mimi-form-error en un campo
+  </h3>
+  <p class="text-pretty">
+    Tu texto reemplaza al automático, sea cual sea el error. Aquí la validación es propia, con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">showError</code>:
+    prueba con «ana» o «admin».
+  </p>
+  <app-code-preview [code]="source.customError">
+    <app-form-field-custom-error-example />
+  </app-code-preview>
+
+  <h3 id="level-validator" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    2. message en el validador
+  </h3>
+  <p class="text-pretty">
+    Con Signal Forms, el
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">message</code> del
+    esquema viaja con el error. El campo «Contraseña» no lo tiene, así que usa el nivel siguiente.
+  </p>
+  <app-code-preview [code]="source.signalForms">
+    <app-form-field-signal-forms-example />
+  </app-code-preview>
+
+  <h3 id="level-provider" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    3. provideMimiErrorMessages
+  </h3>
+  <p class="text-pretty">
+    Parte de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >...MIMI_ERROR_MESSAGES_ES</code
+    >, cambia los que quieras y agrega los de tus validadores: la clave es la del error (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >usernameTaken</code
+    >). Lo que no definas queda en inglés. Los datos del error usan los nombres de Reactive Forms en
+    los tres sistemas (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >requiredLength</code
+    >, <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">min</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">max</code>…). Borra el
+    campo para ver el
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">required</code>
+    cambiado.
+  </p>
+  <app-code-preview [code]="source.messagesProvider">
+    <app-form-field-messages-provider-example />
+  </app-code-preview>
+
+  <h3 id="level-default" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    4. Los predeterminados
+  </h3>
+  <p class="text-pretty">
+    Sin configurar nada, los mensajes están en inglés (la tabla de arriba). Si un error no tiene
+    mensaje en ningún nivel, se usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">default</code>.
+  </p>
+  <app-code-preview [code]="source.messagesDefault">
+    <app-form-field-messages-default-example />
+  </app-code-preview>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  @for (table of apiTables; track table.id) {
+    <h3 [id]="table.id" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+      {{ table.title }}
+    </h3>
+    <div class="overflow-x-auto rounded-card border">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-muted text-muted-foreground">
+          <tr>
+            <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of table.rows; track row.name) {
+            <tr class="border-t align-top">
+              <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+              <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">
+                {{ row.type }}
+              </td>
+              <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+              <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  <p class="text-pretty">
+    El mensaje está siempre en el DOM con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >aria-live="polite"</code
+    >: vacío sin error, así los lectores de pantalla lo anuncian cuando aparece. Los colores salen
+    de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-destructive</code
+    >. FormField no tiene variables propias.
+  </p>
+</article>

@@ -34,7 +34,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [x] 2.8 Avatar
 - [x] 2.9 Switch
 - [x] 2.10 Checkbox
-- [ ] 2.11 FormField + FormError (y error automático en Input y Textarea). Actualizar los ejemplos de Input y Textarea que usan #ref='mimiInput' para mostrar errores, y pasarlos a mimi-form-field + mimi-form-error.
+- [x] 2.11 FormField + FormError (y error automático en Input y Textarea). Actualizar los ejemplos de Input y Textarea que usan #ref='mimiInput' para mostrar errores, y pasarlos a mimi-form-field + mimi-form-error.
 - [ ] 2.12 Página de inicio del showcase (landing) con el formulario de vitrina
 
 ## Fase 3: CLI básica
@@ -73,5 +73,5 @@ Usar el comando `/componente <nombre>` para cada uno.
 
 - [x] Estilo del MVP: solo Vivid (por defecto).
 - [x] Formularios: Signal Forms, Reactive Forms y ngModel. Campos nativos detectan FormField o NgControl; controles propios con FormValueControl (spec, sección 8).
-- [ ] Idioma por defecto de los mensajes de error.
+- [x] Idioma por defecto de los mensajes de error: inglés. `MIMI_ERROR_MESSAGES_ES` trae el español: `provideMimiErrorMessages(MIMI_ERROR_MESSAGES_ES)` (el showcase lo usa). Ver spec, sección 8.
 - [x] Versión exacta de Node.js y TypeScript según los requisitos de Angular 22 (ver spec, sección 2).

@@ -1,25 +1,15 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormField, email, form, required } from '@angular/forms/signals';
+import { MimiFormField } from '@/components/ui/form-field';
 import { MimiInput } from '@/components/ui/input';
 
 @Component({
   selector: 'app-input-signal-forms-example',
-  imports: [FormField, MimiInput],
+  imports: [FormField, MimiFormField, MimiInput],
   template: `
-    <div class="flex w-80 flex-col gap-1.5">
-      <label for="signal-email" class="text-sm font-medium">Correo</label>
-      <input
-        mimiInput
-        #emailInput="mimiInput"
-        id="signal-email"
-        type="email"
-        placeholder="tu@correo.com"
-        [formField]="profileForm.email"
-      />
-      @if (emailInput.fieldState.showError()) {
-        <p class="text-[13px] text-destructive">Ingresa un correo válido.</p>
-      }
-    </div>
+    <mimi-form-field label="Correo" class="w-80">
+      <input mimiInput type="email" placeholder="tu@correo.com" [formField]="profileForm.email" />
+    </mimi-form-field>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

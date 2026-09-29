@@ -12,6 +12,11 @@ import {
 import type { FormCheckboxControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles, controlDisabledStyles } from '@/components/ui/utils/control-styles';
+import {
+  MIMI_FIELD_CONTROL,
+  type MimiFieldControl,
+  injectFieldState,
+} from '@/components/ui/utils/field-state';
 
 let nextId = 0;
 
@@ -29,6 +34,8 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-checkbox',
+  // mimi-form-field lo encuentra por este token para mostrar el mensaje de error.
+  providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiCheckbox }],
   template: `
     <button
       #control
@@ -38,7 +45,7 @@ let nextId = 0;
       [class]="boxClasses"
       [disabled]="disabled()"
       [attr.aria-checked]="indeterminate() ? 'mixed' : checked()"
-      [attr.aria-invalid]="showError() || null"
+      [attr.aria-invalid]="showInvalid() || null"
       [attr.aria-required]="required() || null"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabelledby() || null"
@@ -99,7 +106,7 @@ let nextId = 0;
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MimiCheckbox implements FormCheckboxControl {
+export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
   /** Marcada o no. Con `[(checked)]` o un formulario. */
   readonly checked = model(false);
   /** Estado mixto ("algunos"): gana a `checked`. Al hacer clic se marca y deja de ser mixto. */
@@ -120,13 +127,22 @@ export class MimiCheckbox implements FormCheckboxControl {
   readonly touch = output<void>();
 
   private readonly control = viewChild.required<ElementRef<HTMLButtonElement>>('control');
+
+  /** Estado del formulario, con los errores, para el mensaje de mimi-form-field. */
+  readonly fieldState = injectFieldState();
+
+  /** El botón interno: mimi-form-field le agrega el aria-describedby del mensaje. */
+  get controlElement(): HTMLElement {
+    return this.control().nativeElement;
+  }
   private readonly autoId = `mimi-checkbox-${nextId++}`;
 
   protected readonly controlId = computed(() => this.id() || this.autoId);
   protected readonly state = computed(() =>
     this.indeterminate() ? 'indeterminate' : this.checked() ? 'checked' : 'unchecked',
   );
-  protected readonly showError = computed(() => this.invalid() && (this.touched() || this.dirty()));
+  /** Error visible (inválido y tocado o modificado). Lo lee también mimi-form-field. */
+  readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly classes = computed(() =>
     cn('inline-flex items-center gap-2.5 text-sm', this.userClass()),
