@@ -237,3 +237,88 @@ describe('ui', () => {
     expect(result.exists('/projects/app/src/shared/ui/skeleton/skeleton.ts')).toBe(true);
   });
 });
+
+/**
+ * La CLI de Angular pasa el Prettier del proyecto por lo que escriben los schematics: el archivo
+ * y su base quedan con el mismo formato, distinto de la plantilla. Se simula reformateando los
+ * dos igual (comillas dobles).
+ */
+const prettierLike = (content: string) => content.replace(/'/g, '"');
+const BUTTON = ['button.ts', 'button.variants.ts', 'index.ts'];
+
+async function withButtonFormatted() {
+  const h = await initialized();
+  const tree = await h.run('ui', { components: ['button'] }, h.tree);
+  for (const name of BUTTON) {
+    const formatted = prettierLike(tree.readContent(`/${UI}/button/${name}`));
+    tree.overwrite(`/${UI}/button/${name}`, formatted);
+    tree.overwrite(`/.mimi/base/button/${name}`, formatted);
+  }
+  h.logs.length = 0;
+  return { ...h, tree };
+}
+
+describe('ui: modificados según .mimi/base (no según la plantilla)', () => {
+  it('guarda en .mimi/manifest.json la versión de cada base', async () => {
+    const { run, tree } = await initialized();
+    const result = await run('ui', { components: ['button'] }, tree);
+    const manifest = json(result, '/.mimi/manifest.json').files;
+    for (const name of BUTTON) expect(manifest[`button/${name}`]).toBe(registry.version);
+    expect(manifest['utils/cn.ts']).toBe(registry.version);
+  });
+
+  it('formateado por Prettier y de la misma versión: no lo toca ni avisa', async () => {
+    const { run, tree, warnings, logs } = await withButtonFormatted();
+    const before = snapshot(tree);
+    const result = await run('ui', { components: ['button'] }, tree);
+    expect(snapshot(result)).toEqual(before);
+    expect(warnings()).toEqual([]);
+    expect(logs.map((l) => l.message)).toContain('Nada que hacer: los archivos ya están al día.');
+  });
+
+  it('igual a su base pero de una versión anterior: lo actualiza y lo dice', async () => {
+    const { run, tree, warnings, logs } = await withButtonFormatted();
+    const manifest = json(tree, '/.mimi/manifest.json');
+    for (const name of BUTTON) manifest.files[`button/${name}`] = '0.0.9';
+    tree.overwrite('/.mimi/manifest.json', JSON.stringify(manifest, null, 2));
+    const config = json(tree, '/mimi.json');
+    config.components.button.version = '0.0.9';
+    tree.overwrite('/mimi.json', JSON.stringify(config, null, 2));
+
+    const result = await run('ui', { components: ['button'] }, tree);
+    for (const name of BUTTON) {
+      expect(result.readContent(`/${UI}/button/${name}`)).toBe(
+        template(`components/button/${name}`),
+      );
+      expect(result.readContent(`/.mimi/base/button/${name}`)).toBe(
+        template(`components/button/${name}`),
+      );
+      expect(json(result, '/.mimi/manifest.json').files[`button/${name}`]).toBe(registry.version);
+    }
+    expect(json(result, '/mimi.json').components.button.version).toBe(registry.version);
+    expect(logs.map((l) => l.message)).toContain(
+      `button actualizado de 0.0.9 a ${registry.version}`,
+    );
+    expect(warnings()).toEqual([]);
+  });
+
+  it('distinto de su base (cambio del usuario sobre el formateado): se omite', async () => {
+    const { run, tree, warnings } = await withButtonFormatted();
+    const file = `/${UI}/button/button.ts`;
+    tree.overwrite(file, `${tree.readContent(file)}// cambio propio\n`);
+    const result = await run('ui', { components: ['button'] }, tree);
+    expect(result.readContent(file)).toContain('// cambio propio');
+    expect(warnings()).toEqual([
+      `Omitido: ${UI}/button/button.ts ya existe con otro contenido (usa --overwrite para reemplazarlo).`,
+    ]);
+  });
+
+  it('sin base (archivo del usuario que ya estaba): se omite', async () => {
+    const { run, tree, warnings } = await initialized();
+    tree.create(`/${UI}/badge/badge.ts`, '// badge propio\n');
+    const result = await run('ui', { components: ['badge'] }, tree);
+    expect(result.readContent(`/${UI}/badge/badge.ts`)).toBe('// badge propio\n');
+    expect(result.exists('/.mimi/base/badge/badge.ts')).toBe(false);
+    expect(warnings()).toHaveLength(1);
+  });
+});

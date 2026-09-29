@@ -45,13 +45,13 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [x] 3.4 Schematic `ng-add` que ejecuta `init`.
 - [x] 3.5 Schematic `ui`: varios componentes a la vez, menú si no hay nombres, guarda la copia original en `.mimi/base/`, no sobrescribe sin `--overwrite`.
 - [x] 3.6 Registrar la colección en `schematicCollections` para permitir `ng g ui button`.
-- [ ] 3.7 Probar la CLI en un proyecto Angular 22 limpio, fuera del monorepo. Primera prueba (Angular 22.2.0, pnpm y npm): funciona de punta a punta, pero queda abierta hasta corregir:
-  - [ ] Si el Prettier del proyecto tiene otro estilo que ui-core, la CLI de Angular reformatea los archivos que copia Mimi y la siguiente ejecución de `ui` o `init` los toma por modificados («Omitido: … ya existe con otro contenido»). Propuesta: «modificado por el usuario» = distinto de su base en `.mimi/base/`, no de la plantilla.
-  - [ ] `init` repetido dice «Mimi quedó configurado… Agrega tu primer componente» aunque no cambió nada. Propuesta: «Mimi ya estaba configurado; no hubo cambios».
-  - [ ] A evaluar: `utils/field-state.ts` trae Signal Forms (10,6 kB) al bundle aunque la app solo use Reactive Forms.
+- [x] 3.7 Probar la CLI en un proyecto Angular 22 limpio, fuera del monorepo. Probada con Angular 22.2.0, pnpm y npm; segunda prueba tras las correcciones, también con un .prettierrc distinto (80 columnas, comillas dobles): sin omisiones falsas. Hallazgos:
+  - [x] Si el Prettier del proyecto tiene otro estilo que ui-core, la CLI de Angular reformatea los archivos que copia Mimi y la siguiente ejecución de `ui` o `init` los toma por modificados («Omitido: … ya existe con otro contenido»). Corregido: «modificado por el usuario» = distinto de su base en `.mimi/base/`, con la versión de cada base en `.mimi/manifest.json` (spec 5).
+  - [x] `init` repetido dice «Mimi quedó configurado… Agrega tu primer componente» aunque no cambió nada. Corregido: «Mimi ya estaba configurado; no hubo cambios.».
+  - [x] Evaluado: `utils/field-state.ts` trae Signal Forms (10,6 kB) aunque la app solo use Reactive Forms. Evitarlo exigiría un detalle interno de Angular; se deja y se documenta el costo (spec 1 y 8).
   - Observación (no es de Mimi): `ng add <archivo.tgz>` falla con pnpm y npm («Unable to fetch package information»); para probar sin publicar: instalar el `.tgz` y ejecutar `ng add @mimi-ng/cli`.
 - [ ] 3.8 Leer la versión del showcase desde @mimi-ng/cli.
-- [ ] 3.9 Revisar la página de Instalación contra la CLI real.
+- [ ] 3.9 Revisar la página de Instalación contra la CLI real. Incluir la nota sobre pnpm: desde pnpm 10, los scripts de instalación de las dependencias están bloqueados salvo los aprobados (en la prueba de la 3.7, con pnpm 12, `pnpm add` avisó «Ignored build scripts» para esbuild, lmdb, @parcel/watcher y msgpackr-extract, y creó `pnpm-workspace.yaml` con `allowBuilds` para completar). Se aprueban con `pnpm approve-builds` o poniendo `true` en `allowBuilds`. Ojo: mientras no se aprueben, el siguiente `pnpm add` falla con `ERR_PNPM_IGNORED_BUILDS` (lo vimos al reinstalar la CLI), y eso afectaría también a la instalación de dependencias que agendan `ng add` y `ng g ui`.
 
 ## Fase 4: Componentes con overlays
 
@@ -64,7 +64,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [ ] 5.1 Schematic `theme` (preguntas + opciones `--palette`, `--radius`).
 - [ ] 5.2 Página "Temas" con personalizador en vivo y exportación de `mimi.preset.ts`.
 - [ ] 5.3 Comando `mimi` (`pnpm mimi add button`, `mimi list`, `mimi theme`).
-- [ ] 5.4 `mimi update`: combina la versión nueva con los cambios del usuario usando `.mimi/base/`.
+- [ ] 5.4 `mimi update`: combina la versión nueva con los cambios del usuario usando `.mimi/base/`. La base queda formateada con el Prettier del usuario (la CLI de Angular formatea lo que escriben los schematics), así que antes de combinar hay que formatear la plantilla nueva con el Prettier del proyecto; si no, las diferencias de formato se mezclarán con los cambios reales.
 - [ ] 5.5 Página "Migrar desde PrimeNG / NG-ZORRO".
 - [ ] 5.6 Documentación en español e inglés.
 - [ ] 5.7 Publicar `@mimi-ng/cli` en npm.

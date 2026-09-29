@@ -15,6 +15,10 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 
 Frase principal: _"Los componentes son tuyos. Las actualizaciones también."_
 
+### Reglas del código que se entrega
+
+- **Solo APIs documentadas de Angular.** El código que la CLI copia queda en el proyecto de cada usuario: si dependiera de un detalle interno de Angular y ese detalle cambiara, tras un `ng update` el componente dejaría de funcionar sin ningún aviso, y la corrección de Mimi no le llegaría sola. Por eso no se usan símbolos `ɵ`, clases internas ni comportamientos no documentados, aunque ahorren código o peso. Ver el costo aceptado en la sección 8 (`field-state` y Signal Forms).
+
 ## 2. Stack
 
 | Capa              | Tecnología                                                                                                      |
@@ -204,7 +208,8 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 
 - Rutas siempre con "/" en lo que escribe (CSS, tsconfig, `mimi.json`), también en Windows.
 - Idempotente: ejecutarlo dos veces no duplica nada ni falla, y no vuelve a instalar.
-- Archivos: antes de escribir revisa el árbol. Igual → nada; distinto → se omite con un aviso y se reemplaza solo con `--overwrite`. Nunca salta el error "merge conflicted".
+- Archivos: antes de escribir revisa el árbol, con la misma regla que `ui` (ver «Qué hace `ui`», punto 4): «modificado por el usuario» es distinto de su base en `.mimi/base/`, no de la plantilla. Nunca salta el error "merge conflicted".
+- Si no cambió nada (archivos, CSS, tsconfig, `angular.json`, `mimi.json` ni dependencias), dice "Mimi ya estaba configurado; no hubo cambios." en lugar de repetir los pasos siguientes.
 - **`schematicCollections`** (para `ng g ui button`, tarea 3.6): `cli.schematicCollections` reemplaza al valor por defecto de la CLI de Angular, así que si no existe se crea con `["@schematics/angular", "@mimi-ng/cli"]`, en ese orden (solo con Mimi, el usuario perdería `ng g component`). Si existe, Mimi se agrega al final sin quitar nada. El de un proyecto gana al del workspace, así que si el proyecto elegido tiene el suyo, también va ahí. La CLI busca el nombre en las colecciones en orden y gana la primera: una prueba comprueba que `ui` resuelve a Mimi, `component` a `@schematics/angular`, y que ningún nombre ni alias de Mimi (`ng-add`, `init`, `ui`) choca con los de `@schematics/angular`, ocultos incluidos.
 - `init` también guarda la copia original de los archivos que escribe en `.mimi/base/` (misma regla que `ui`).
 
@@ -220,8 +225,14 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 
 **Después escribe:**
 
-4. **Archivos** en la carpeta de `mimi.json`. Los componentes van sin `components/` (`<carpeta>/button/button.ts`), para que `@/components/ui/button` los encuentre; utils y tema conservan su carpeta. Antes de escribir revisa el árbol: igual → nada; distinto → se omite con aviso; `--overwrite` → se reemplaza. Nunca salta "merge conflicted".
-5. **`.mimi/base/`** (en la raíz del workspace, con la misma estructura: `.mimi/base/button/button.ts`, `.mimi/base/utils/cn.ts`): la copia original de cada archivo, que usará `mimi update` (Fase 5). Se escribe cuando el archivo del proyecto queda igual a la plantilla (creado, reemplazado con `--overwrite`, o idéntico y todavía sin base). Si el archivo se omitió por estar modificado, su base **no** cambia.
+4. **Archivos** en la carpeta de `mimi.json`. Los componentes van sin `components/` (`<carpeta>/button/button.ts`), para que `@/components/ui/button` los encuentre; utils y tema conservan su carpeta. Antes de escribir revisa el árbol. Si el archivo ya existe:
+   - igual a la plantilla → al día;
+   - igual a su base en `.mimi/base/` → el usuario no lo tocó. Si la base es de esta versión, la diferencia con la plantilla es solo de formato: al día. Si es de una versión anterior, se actualiza y lo dice ("button actualizado de 0.1.0 a 0.2.0");
+   - distinto de su base, o sin base → modificado por el usuario: se omite con aviso; `--overwrite` lo reemplaza.
+
+   **Por qué contra la base y no contra la plantilla:** la CLI de Angular pasa el Prettier del proyecto por los archivos que escriben los schematics. Si el Prettier del usuario tiene otro estilo que ui-core, el archivo y su base quedan reformateados igual y distintos de la plantilla; compararlos con la plantilla los haría pasar por modificados en cada ejecución (lo encontró la prueba de la tarea 3.7). Nunca salta "merge conflicted".
+
+5. **`.mimi/base/`** (en la raíz del workspace, con la misma estructura: `.mimi/base/button/button.ts`, `.mimi/base/utils/cn.ts`): la copia original de cada archivo, que usará `mimi update` (Fase 5). Se escribe cuando el archivo del proyecto queda igual a la plantilla (creado, actualizado, reemplazado con `--overwrite`, o idéntico y todavía sin base). Si el archivo se omitió por estar modificado, su base **no** cambia. **`.mimi/manifest.json`** guarda con qué versión de Mimi se escribió cada base (`{ "files": { "button/button.ts": "0.1.0", … } }`); con eso se distingue un archivo formateado (misma versión) de uno que hay que actualizar (versión anterior).
 6. **`mimi.json` → `components`:** `{ "button": { "version": "0.1.0" } }` para cada componente pedido o traído como dependencia, solo si todos sus archivos quedaron iguales a la plantilla; si alguno se omitió, se conserva lo que había.
 7. **Dependencias:** las `dependencies` de los ítems, con la versión del registro, si el proyecto no las tiene. Las `peerDependencies` (como `@angular/forms`) solo si faltan; las de `@angular/*` con el mismo rango que el `@angular/core` del proyecto, para que no queden desalineadas. Se instalan con el gestor de paquetes del proyecto.
 8. **Mensaje final:** qué se agregó o reemplazó, qué se omitió y por qué (con la sugerencia de `--overwrite`), qué dependencias se instalan, y que `.mimi/` debe quedar en git.
@@ -654,6 +665,7 @@ Son directivas de atributo sobre el elemento nativo, así que funcionan con los 
 - Detectan qué sistema usa el campo inyectando de forma opcional `FormField` (de `@angular/forms/signals`) y `NgControl` (de `@angular/forms`).
 - **Signal Forms:** leen `formField.state().invalid()` y `touched()` / `dirty()`, que ya son signals.
 - **Reactive Forms y ngModel:** los flags del control no son signals, así que el estado se obtiene con `toSignal(control.events)` (nunca con un `computed()` que lea el control directamente, `CLAUDE.md` regla 7).
+- **Costo aceptado:** `field-state` inyecta `FormField` de `@angular/forms/signals` para detectar Signal Forms, así que una app que solo usa Reactive Forms o ngModel carga igual unos **10 kB** de `@angular/forms/signals` (medido en la prueba de la tarea 3.7: 10,6 kB). Hay una forma de evitarlo: `FormField` también provee `NgControl` (un `InteropNgControl` cuyos _getters_ leen los signals del campo), y bastaría con `NgControl`. Pero que esos _getters_ sean reactivos es un detalle interno, no API documentada: si Angular lo cambiara, los formularios del usuario dejarían de mostrar errores sin aviso tras un `ng update`. Por la regla de la sección 1 (solo APIs documentadas en el código que se entrega), se paga el costo.
 - La detección está en `utils/field-state.ts` (`injectFieldState()`). Con `formControlName` / `[formControl]` el control existe recién después de que esa directiva procesa sus entradas; por eso la suscripción se intenta enseguida y, si todavía no hay control, después del primer render. Con SSR no se pintan errores en el servidor (al cargar, los campos no se tocaron).
 - Si el campo es inválido y fue tocado o modificado, agregan `aria-invalid="true"` y se ponen en rojo con `controlInvalidStyles`. Sin formulario, no hacen nada.
 - `showError` (`boolean | undefined`) decide a mano: `undefined` (por defecto) deja decidir al formulario, `true` muestra el error y `false` lo oculta aunque el formulario sea inválido.

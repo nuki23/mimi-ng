@@ -18,7 +18,14 @@ import {
   majorOf,
   readJson,
 } from '../utils/project';
-import { BASE_DIR, type FileReport, emptyReport, writeTemplates } from '../utils/write-files';
+import {
+  BASE_DIR,
+  type FileReport,
+  emptyReport,
+  hasFileChanges,
+  updatedMessages,
+  writeTemplates,
+} from '../utils/write-files';
 import { findTailwindImport, hasDirective, insertAfterTailwind } from './css';
 import { dirnameOf, normalizePath, relativePath } from './paths';
 
@@ -49,6 +56,10 @@ interface Plan {
   buildTsConfig?: string;
   mimiConfig: MimiConfig | null;
   sourceRoot: string;
+  /** Dependencias que el proyecto ya tiene. */
+  installed: Record<string, string>;
+  /** Alguna regla cambió algo (CSS, tsconfig, angular.json, mimi.json o package.json). */
+  changed: boolean;
 }
 
 /**
@@ -70,13 +81,14 @@ export function init(options: InitOptions): Rule {
         ),
         componentsDir: plan.componentsDir,
         overwrite: options.overwrite ?? false,
+        version: registry.version,
         report,
       }),
       updateGlobalCss(plan),
       updateTsConfigs(plan),
       registerCollection(plan),
       writeMimiConfig(plan),
-      ...dependencies(options.icons ?? false),
+      ...dependencies(plan, options.icons ?? false),
       nextSteps(plan, report, options.icons ?? false),
     ]);
   };
@@ -151,6 +163,8 @@ async function inspect(tree: Tree, options: InitOptions): Promise<Plan> {
     buildTsConfig: typeof tsConfig === 'string' ? normalizePath(tsConfig) : undefined,
     mimiConfig,
     sourceRoot,
+    installed: deps,
+    changed: false,
   };
 }
 
@@ -200,6 +214,7 @@ function updateGlobalCss(plan: Plan): Rule {
     if (lines.length === 0) return;
     css = insertAfterTailwind(css, lines);
     tree.overwrite(plan.cssPath, css);
+    plan.changed = true;
   };
 }
 
@@ -231,6 +246,7 @@ function updateTsConfigs(plan: Plan): Rule {
       const current = file.get(['compilerOptions', 'paths', ALIAS]);
       if (current === undefined) {
         file.modify(['compilerOptions', 'paths', ALIAS], [value]);
+        plan.changed = true;
       } else if (!sameAlias(current, value)) {
         context.logger.warn(
           `${path} ya tiene el alias ${ALIAS} con otro valor (${JSON.stringify(current)}); no se ` +
@@ -266,9 +282,12 @@ function registerCollection(plan: Plan): Rule {
     const add = (path: (string | number)[], createIfMissing: boolean) => {
       const current = file.get(path);
       if (current === undefined) {
-        if (createIfMissing) file.modify(path, [DEFAULT_COLLECTION, MIMI_COLLECTION]);
+        if (!createIfMissing) return;
+        file.modify(path, [DEFAULT_COLLECTION, MIMI_COLLECTION]);
+        plan.changed = true;
       } else if (Array.isArray(current) && !current.includes(MIMI_COLLECTION)) {
         file.modify(path, [...(current as string[]), MIMI_COLLECTION]);
+        plan.changed = true;
       }
     };
     add(['cli', 'schematicCollections'], true);
@@ -292,6 +311,7 @@ function writeMimiConfig(plan: Plan): Rule {
       components: {},
     };
     tree.create('mimi.json', `${JSON.stringify(config, null, 2)}\n`);
+    plan.changed = true;
   };
 }
 
@@ -313,8 +333,11 @@ function registryVersion(name: string): string {
  * `ng add` / `ng g` la ejecutan con el gestor de paquetes que detecta la CLI de Angular
  * por el lockfile del proyecto.
  */
-function dependencies(icons: boolean): Rule[] {
-  const names = icons ? [...INIT_PACKAGES, ICONS_PACKAGE] : INIT_PACKAGES;
+function dependencies(plan: Plan, icons: boolean): Rule[] {
+  const names = (icons ? [...INIT_PACKAGES, ICONS_PACKAGE] : INIT_PACKAGES).filter(
+    (name) => !plan.installed[name],
+  );
+  if (names.length > 0) plan.changed = true;
   return names.map((name) =>
     addDependency(name, registryVersion(name), {
       type: DependencyType.Default,
@@ -336,6 +359,15 @@ function nextSteps(plan: Plan, report: FileReport, icons: boolean): Rule {
     }
     for (const file of report.overwritten) {
       context.logger.info(`Reemplazado: ${plan.componentsDir}/${file}`);
+    }
+    const itemOf = (file: string) =>
+      INIT_ITEMS.find((item) => registry.items[item].files.includes(file)) ?? file;
+    for (const message of updatedMessages(report, itemOf, registry.version)) {
+      context.logger.info(message);
+    }
+    if (!plan.changed && !hasFileChanges(report)) {
+      context.logger.info('Mimi ya estaba configurado; no hubo cambios.');
+      return;
     }
     context.logger.info('');
     context.logger.info(`Mimi quedó configurado en "${plan.projectName}":`);

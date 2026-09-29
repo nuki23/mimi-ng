@@ -12,7 +12,9 @@ import {
   BASE_DIR,
   type FileReport,
   emptyReport,
+  hasFileChanges,
   projectPathOf,
+  updatedMessages,
   writeTemplates,
 } from '../utils/write-files';
 
@@ -54,6 +56,7 @@ export function ui(options: UiOptions): Rule {
         files: plan.items.flatMap((item) => registry.items[item].files),
         componentsDir: plan.componentsDir,
         overwrite: options.overwrite ?? false,
+        version: registry.version,
         report,
       }),
       updateMimiConfig(plan, report),
@@ -183,12 +186,15 @@ function summary(plan: Plan, report: FileReport): Rule {
       log.info('Reemplazado (--overwrite):');
       for (const file of report.overwritten) log.info(`  ~ ${path(file)}`);
     }
+    const itemOf = (file: string) =>
+      plan.items.find((item) => registry.items[item].files.includes(file)) ?? file;
+    for (const message of updatedMessages(report, itemOf, registry.version)) log.info(message);
     for (const file of report.skipped) {
       log.warn(
         `Omitido: ${path(file)} ya existe con otro contenido (usa --overwrite para reemplazarlo).`,
       );
     }
-    if (report.created.length + report.overwritten.length === 0 && report.skipped.length === 0) {
+    if (!hasFileChanges(report) && report.skipped.length === 0) {
       log.info('Nada que hacer: los archivos ya están al día.');
     }
 
@@ -197,7 +203,7 @@ function summary(plan: Plan, report: FileReport): Rule {
       log.info('Dependencias que se instalan:');
       for (const [name, version] of packages) log.info(`  ${name}@${version}`);
     }
-    if (report.created.length + report.overwritten.length > 0) {
+    if (hasFileChanges(report)) {
       log.info(
         `Guarda la carpeta ${BASE_DIR.split('/')[0]}/ en git: Mimi la usa para actualizar tus ` +
           'componentes sin perder tus cambios.',

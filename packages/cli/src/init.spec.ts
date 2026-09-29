@@ -501,6 +501,48 @@ describe('init: schematicCollections (tarea 3.6)', () => {
   });
 });
 
+describe('init: repetido y formateado por Prettier', () => {
+  it('la segunda vez dice que ya estaba configurado, sin repetir los pasos', async () => {
+    const { runner, run, logs } = harness();
+    const first = await run({}, await createWorkspace(runner));
+    expect(logs.map((l) => l.message)).not.toContain(
+      'Mimi ya estaba configurado; no hubo cambios.',
+    );
+    logs.length = 0;
+    await run({}, first);
+    const messages = logs.map((l) => l.message);
+    expect(messages).toContain('Mimi ya estaba configurado; no hubo cambios.');
+    expect(messages).not.toContain('Agrega tu primer componente:');
+  });
+
+  it('con los archivos y sus bases formateados igual: sin avisos ni cambios', async () => {
+    const { runner, run, logs } = harness();
+    const first = await run({}, await createWorkspace(runner));
+    for (const file of BASE_FILES) {
+      const formatted = first.readContent(`/${UI}/${file}`).replace(/'/g, '"');
+      first.overwrite(`/${UI}/${file}`, formatted);
+      first.overwrite(`/.mimi/base/${file}`, formatted);
+    }
+    const before = snapshot(first);
+    logs.length = 0;
+    const second = await run({}, first);
+    expect(snapshot(second)).toEqual(before);
+    expect(logs.filter((l) => l.level === 'warn')).toEqual([]);
+    expect(logs.map((l) => l.message)).toContain('Mimi ya estaba configurado; no hubo cambios.');
+  });
+
+  it('si algo faltaba, no dice que ya estaba configurado', async () => {
+    const { runner, run, logs } = harness();
+    const first = await run({}, await createWorkspace(runner));
+    first.overwrite(STYLES, "@import 'tailwindcss';\n");
+    logs.length = 0;
+    await run({}, first);
+    expect(logs.map((l) => l.message)).not.toContain(
+      'Mimi ya estaba configurado; no hubo cambios.',
+    );
+  });
+});
+
 describe('ng-add', () => {
   it('ejecuta init con las mismas opciones', async () => {
     const a = harness();
