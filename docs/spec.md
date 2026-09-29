@@ -768,7 +768,17 @@ import buttonVariantsSource from './examples/button-variants.example' with { loa
 
 **Accesibilidad.** El `<pre>` tiene `tabindex="0"` y un `aria-label`, para recorrer el scroll horizontal con el teclado.
 
-**Presupuesto del bundle inicial** (`angular.json`, configuración de producción): aviso a partir de 370 kB y error a partir de 410 kB (unos 15 y 55 kB por encima del tamaño actual). Después de la tarea 2.2 mide 353.3 kB (95 kB en transferencia).
+**Presupuesto del bundle inicial** (`angular.json`, configuración de producción): aviso a partir de 380 kB y error a partir de 420 kB (unos 15 y 55 kB por encima del tamaño actual). Después de la tarea 2.2 medía 353.3 kB (95 kB en transferencia); después de la 2.11, 364.7 kB (96.9 kB).
+
+**Por qué subió el presupuesto (tarea 2.11, de 370/410 a 380/420 kB).** Entre las tareas 2.2 y 2.11 el bundle inicial creció 11.2 kB (medido con el `metafile` de esbuild, `ng build docs --stats-json`):
+
+- **CSS: +7.5 kB** (42.8 → 50.3 kB). Las clases de los componentes nuevos (Card, Separator, Skeleton, Avatar, Switch, Checkbox, FormField) y de sus páginas. Es esperado: Tailwind escanea todo `ui-core` (`@source`) y las páginas, aunque estas sean diferidas, y todo el CSS va en `styles.css`.
+- **JS: +3.7 kB** (310.6 → 314.4 kB), todo justificado:
+  - Mensajes de error en español (`form-field/error-messages.ts`, 1.2 kB): el showcase registra `provideMimiErrorMessages(MIMI_ERROR_MESSAGES_ES)` en `app.config.ts`. Se importa el archivo concreto, así `@angular/forms` no entra.
+  - Rutas nuevas (`app.routes.ts`, 1.1 kB): una por página, todas diferidas.
+  - APIs de `@angular/core` (unos 2 kB): `model`, `contentChild`, `booleanAttribute`, `numberAttribute`, `afterRenderEffect`, `untracked`… Las usan solo componentes diferidos, pero esbuild no parte un módulo de Angular entre chunks: van en el chunk de `@angular/core`, que es inicial. No se puede evitar desde el showcase.
+
+Si el crecimiento es CSS de componentes o APIs de Angular, se sube el límite con el mismo margen; si aparece JS de una página o de una dependencia diferida, primero se investiga.
 
 **Íconos del layout en línea:** los íconos del header y del panel móvil (menú, cerrar, sol, luna y GitHub) son SVG en línea con los trazos de Lucide, no `@lucide/angular`. Si el layout usara el paquete, esbuild pondría en el chunk compartido con el bundle inicial todos los íconos de las páginas diferidas (llegó a 60 kB). Las páginas y los ejemplos sí usan `@lucide/angular`. Si un cambio lo acerca al aviso, hay que averiguar por qué antes de subir el límite: así se detectó que `@angular/forms` entraba en el bundle inicial por el índice de utils.
 
