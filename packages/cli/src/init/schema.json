@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "MimiInit",
+  "title": "Mimi init",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Proyecto de angular.json. Solo hace falta si el workspace tiene varias aplicaciones.",
+      "$default": { "$source": "projectName" }
+    },
+    "icons": {
+      "type": "boolean",
+      "description": "Instala @lucide/angular para tus íconos.",
+      "default": false,
+      "x-prompt": "¿Quieres instalar @lucide/angular para tus íconos? (recomendado)"
+    },
+    "overwrite": {
+      "type": "boolean",
+      "description": "Reemplaza los archivos de Mimi que ya existan con otro contenido.",
+      "default": false
+    }
+  }
+}

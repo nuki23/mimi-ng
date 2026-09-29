@@ -94,7 +94,7 @@ El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve e
 - **`ng add`:** `@angular/cli` lee del `package.json` el campo `"schematics"` y `"ng-add": { "save": … }`, y ejecuta el schematic `ng-add` (puede ser `hidden`). Mimi usa `"save": "devDependencies"`: la CLI solo se usa al desarrollar.
 - **Compilación** (`pnpm build:cli`, incluido en `pnpm build`): `scripts/build.mjs` limpia `dist/`, compila con `tsc`, copia `collection.json`, `registry.json` y los `schema.json`, copia `ui-core/src/lib/{components,utils,theme}` a `dist/templates/` (con `theme-base.css`, sin `*.spec.ts`) y copia `LICENSE` y `THIRD_PARTY_NOTICES.md` de la raíz (ignorados en git; npm solo publica lo que está dentro del paquete). Solo usa APIs de Node (`fs.rm`, `fs.cp`, `path.join`), sin `cp` ni `rm` de shell, para que funcione en Windows.
 - **Sin red:** las plantillas viajan dentro del paquete; los schematics las leen con `url('../templates')`.
-- **Dependencias:** `@angular-devkit/core`, `@angular-devkit/schematics` y `@schematics/angular` (`readWorkspace` / `updateWorkspace` para `init` y `ui`), con el mismo rango que ui-core declara para `@angular/core` (`^22.0.0`). Si al final `@schematics/angular` solo lo usan las pruebas, pasa a `devDependencies`.
+- **Dependencias:** `@angular-devkit/core`, `@angular-devkit/schematics` y `@schematics/angular`, con el mismo rango que ui-core declara para `@angular/core` (`^22.0.0`). `@schematics/angular` va en `dependencies` porque `init` lo usa en tiempo de ejecución: `readWorkspace` (leer `angular.json`), `addDependency` (agregar e instalar con el gestor del proyecto) y `JSONFile` (editar el tsconfig conservando comentarios).
 - `"private": true` hasta la tarea 3.7, para no publicarla por error.
 - **Pruebas** (`pnpm test:cli`, incluido en `pnpm test`): Vitest en Node, contra `dist/`. `registry.spec.ts` comprueba el registro contra el código real; `smoke.spec.ts` usa `SchematicTestRunner` sobre un workspace creado en memoria con `@schematics/angular` (`workspace` + `application`), no jsdom.
 
@@ -178,16 +178,32 @@ ng g @mimi-ng/cli:theme --palette=violet --radius=lg
 
 El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta varios nombres (`"$default": { "$source": "argv" }`) y muestra un `x-prompt` de selección múltiple si no recibe ninguno.
 
-### Qué hace `init`
+### Qué hace `init` (y `ng add`)
 
-1. Verifica Tailwind 4.
-2. Instala `clsx`, `tailwind-merge`, `class-variance-authority` como dependencias normales.
-3. Agrega las variables base y `@theme inline` al `styles.css`. **No** agrega `@source`: en el proyecto del usuario los componentes se copian dentro de `src/` (por defecto `src/app/components/ui`), y la detección automática de Tailwind 4 ya escanea esa carpeta. El `@source` solo hace falta en el showcase de este monorepo, porque ahí los componentes viven fuera de la app, en `packages/ui-core/src`.
-4. Crea `utils/cn.ts`, `utils/control-styles.ts` y `utils/index.ts` en `src/app/components/ui/`.
-5. Agrega el alias `@/components/ui/*` al `tsconfig.json` (cubre también `@/components/ui/utils`).
-6. Registra `@mimi-ng/cli` en `schematicCollections` de `angular.json`.
-7. Crea `mimi.json`.
-8. Pregunta: _"¿Quieres instalar @lucide/angular para tus íconos? (recomendado)"_.
+`ng add @mimi-ng/cli` ejecuta el schematic `ng-add`, que corre `init` con las mismas opciones. Opciones: `--project` (si el workspace tiene varias aplicaciones), `--icons` (instala `@lucide/angular`; por defecto no, y con terminal interactiva lo pregunta: _"¿Quieres instalar @lucide/angular para tus íconos? (recomendado)"_) y `--overwrite`.
+
+**Primero verifica, sin modificar nada.** Si algo falla, termina con un mensaje claro y el proyecto queda como estaba:
+
+1. Proyecto: el de `--project`; si no, la única aplicación de `angular.json`; si hay varias, pide `--project`.
+2. Angular 22 o superior (`@angular/core` en `package.json`).
+3. Tailwind 4: `tailwindcss` con versión mayor ≥ 4, y `@import "tailwindcss"` en el CSS global. El CSS global se busca en `angular.json` (`build` → `options` → `styles`, solo `.css`), no se supone `src/styles.css`. Si falta, explica cómo agregarlo (`ng add tailwindcss` o la guía de Tailwind para Angular); no lo instala.
+
+**Después configura:**
+
+4. Carpeta de componentes: `aliases.components` de `mimi.json` si existe; si no, `<sourceRoot>/app/components/ui` (`src/app/components/ui`).
+5. Copia el tema (`theme/theme-base.css`, `types.ts`, `provider.ts`, `index.ts`) y las utilidades base (`utils/cn.ts`, `utils/control-styles.ts`) a esa carpeta. `utils/field-state.ts` llega con los componentes que lo necesitan. No hay `utils/index.ts`: arrastraría `@angular/forms` a quien use solo Button.
+6. Agrega `@import "<ruta>/theme/theme-base.css";` justo después del `@import "tailwindcss"`. **No** agrega `@source`: en el proyecto del usuario los componentes están dentro de `src/` y la detección automática de Tailwind 4 ya los escanea (el `@source` solo hace falta en el showcase, donde los componentes viven en `packages/ui-core/src`). Excepción: si el import usa `source(none)`, Tailwind no escanea nada por su cuenta, así que agrega `@source "<ruta a la carpeta>";` y lo avisa.
+7. Agrega el alias `"@/components/ui/*": ["./<carpeta>/*"]` al `tsconfig.json` con `JSONFile` de `@schematics/angular`, que conserva los comentarios (el tsconfig de Angular es JSONC) y los `paths` existentes. Sin `baseUrl` (TypeScript 6 lo depreca). Si el tsconfig del build (`options.tsConfig`, normalmente `tsconfig.app.json`) define su propio `compilerOptions.paths`, ese reemplaza al de la raíz, así que el alias va también ahí. Si el alias ya existe con otro valor, avisa y no lo toca. **Las importaciones no se reescriben:** el alias siempre es `@/components/ui/*`; lo configurable es la carpeta.
+8. Agrega `clsx`, `tailwind-merge` y `class-variance-authority` a `dependencies` con las versiones del registro (si ya están, se dejan). `@angular/cli` los instala con el gestor de paquetes del proyecto, que detecta por el lockfile.
+9. Crea `mimi.json` si no existe.
+10. Muestra qué configuró y el siguiente paso: `ng g @mimi-ng/cli:ui button`.
+
+**Reglas comunes:**
+
+- Rutas siempre con "/" en lo que escribe (CSS, tsconfig, `mimi.json`), también en Windows.
+- Idempotente: ejecutarlo dos veces no duplica nada ni falla, y no vuelve a instalar.
+- Archivos: antes de escribir revisa el árbol. Igual → nada; distinto → se omite con un aviso y se reemplaza solo con `--overwrite`. Nunca salta el error "merge conflicted".
+- `schematicCollections` (para `ng g ui button`) se registra en la tarea 3.6.
 
 ### Qué hace `ui`
 
@@ -215,7 +231,7 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 
 ### `registry.json` (dentro de la CLI)
 
-`packages/cli/src/registry.json`. Un ítem por componente, por util y para el tema. Los utils van por separado (`utils/cn`, `utils/control-styles`, `utils/field-state`): así Button no arrastra `@angular/forms`. No hay un ítem para el índice `utils/index.ts` (se entrega pero no se copia; se decide en la tarea 3.3).
+`packages/cli/src/registry.json`. Un ítem por componente, por util y para el tema. Los utils van por separado (`utils/cn`, `utils/control-styles`, `utils/field-state`): así Button no arrastra `@angular/forms`. El índice `utils/index.ts` no se entrega (el build lo excluye): arrastraría `@angular/forms` a quien use solo Button.
 
 ```json
 {
@@ -248,8 +264,9 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 - `files`: rutas relativas a las plantillas (`dist/templates`, copia de `ui-core/src/lib`).
 - `dependencies` / `peerDependencies`: con la versión exacta del `package.json` de ui-core, nunca escrita a mano.
 - `registryDependencies`: otros ítems que se copian con este (se resuelven en orden, dependencias primero).
+- `suggestedDependencies` (nivel superior): paquetes opcionales que la CLI ofrece instalar, como `@lucide/angular` en `init`. Se llama así para no confundirlo con `optionalDependencies` de npm; su versión es la del `package.json` de la raíz (la que usa el showcase).
 
-**Prueba de consistencia** (`registry.spec.ts`): falla si un archivo listado no existe; si un archivo entregado no pertenece a un solo ítem; si una importación `@/components/ui/<x>` no está en `registryDependencies` o una relativa sale del ítem; si un paquete importado (también con `import type`; `@angular/forms/signals` cuenta como `@angular/forms`) no está declarado, o sobra uno; si una versión no coincide con ui-core; o si una `registryDependency` no existe. `@angular/core`, `@angular/common` y `rxjs` son implícitos (constante `IMPLICIT`); cualquier otro, como `@angular/cdk`, debe declararse. Así el registro no puede quedar desactualizado cuando cambia un componente.
+**Prueba de consistencia** (`registry.spec.ts`): lee lo que de verdad se empaqueta (`dist/templates`). Falla si un archivo listado no existe; si un archivo entregado no pertenece a un solo ítem o un archivo listado no se entrega; si el paquete trae pruebas o `utils/index.ts`; si una importación `@/components/ui/<x>` no está en `registryDependencies` o una relativa sale del ítem; si un paquete importado (también con `import type`; `@angular/forms/signals` cuenta como `@angular/forms`) no está declarado, o sobra uno; si una versión no coincide con ui-core; o si una `registryDependency` no existe. `@angular/core`, `@angular/common` y `rxjs` son implícitos (constante `IMPLICIT`); cualquier otro, como `@angular/cdk`, debe declararse. Así el registro no puede quedar desactualizado cuando cambia un componente.
 
 ### Uso en código
 

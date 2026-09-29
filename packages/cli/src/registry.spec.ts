@@ -25,15 +25,6 @@ const uiCorePackage = JSON.parse(readFileSync(join(uiCoreRoot, 'package.json'), 
  */
 const IMPLICIT = ['@angular/core', '@angular/common', 'rxjs'];
 
-/**
- * Archivos de ui-core que se empaquetan pero no pertenecen a ningún ítem. `utils/index.ts` es
- * el índice de utils: no es un ítem porque haría que Button arrastrara `@angular/forms`
- * (se decide en la tarea 3.3).
- */
-const UNLISTED = ['utils/index.ts'];
-
-const TEMPLATE_DIRS = ['components', 'utils', 'theme'];
-
 function walk(dir: string): string[] {
   return readdirSync(dir).flatMap((name) => {
     const full = join(dir, name);
@@ -41,10 +32,12 @@ function walk(dir: string): string[] {
   });
 }
 
-/** Archivos que se entregan (como en scripts/build.mjs), relativos a lib y con "/". */
-const shipped = TEMPLATE_DIRS.flatMap((d) => walk(join(lib, d)))
-  .map((f) => relative(lib, f).split(sep).join('/'))
-  .filter((f) => !f.endsWith('.spec.ts'));
+/**
+ * Archivos que de verdad se entregan: lo que scripts/build.mjs dejó en dist/templates
+ * (`pnpm test:cli` compila antes). Así la prueba y el build no pueden divergir.
+ */
+const templates = join(here, '..', 'dist', 'templates');
+const shipped = walk(templates).map((f) => relative(templates, f).split(sep).join('/'));
 
 /** Especificadores importados por un archivo (también `import type` y `export … from`). */
 function importsOf(file: string): string[] {
@@ -77,15 +70,31 @@ describe('registry.json', () => {
     }
   });
 
-  it('cada archivo entregado pertenece a un solo ítem (salvo UNLISTED)', () => {
+  it('cada archivo entregado pertenece a un solo ítem, y cada archivo listado se entrega', () => {
     const owners = new Map<string, string[]>();
     for (const [name, item] of entries) {
       for (const file of item.files) owners.set(file, [...(owners.get(file) ?? []), name]);
     }
     for (const file of shipped) {
-      if (UNLISTED.includes(file)) continue;
       expect(owners.get(file) ?? [], file).toHaveLength(1);
     }
+    expect([...owners.keys()].sort()).toEqual([...shipped].sort());
+  });
+
+  it('el paquete no trae pruebas ni el índice de utils (arrastraría @angular/forms)', () => {
+    expect(shipped.filter((f) => f.endsWith('.spec.ts'))).toEqual([]);
+    expect(shipped).not.toContain('utils/index.ts');
+    expect(shipped).toContain('theme/theme-base.css');
+  });
+
+  it('suggestedDependencies usan la versión del showcase (package.json de la raíz)', () => {
+    const rootPackage = JSON.parse(
+      readFileSync(join(uiCoreRoot, '..', '..', 'package.json'), 'utf8'),
+    ) as { dependencies: Record<string, string> };
+    for (const [pkg, range] of Object.entries(registry.suggestedDependencies ?? {})) {
+      expect(range, pkg).toBe(rootPackage.dependencies[pkg]);
+    }
+    expect(registry.suggestedDependencies).toHaveProperty('@lucide/angular');
   });
 
   it('las importaciones de un ítem están declaradas; nada sobra', () => {

@@ -15,8 +15,17 @@ const uiCoreLib = join(repoRoot, 'packages', 'ui-core', 'src', 'lib');
 /** Carpetas de ui-core que se entregan con la CLI. */
 const TEMPLATE_DIRS = ['components', 'utils', 'theme'];
 
-/** Pruebas: nunca van en el paquete. Normaliza "\" para que funcione en Windows. */
-const isSpec = (file) => /\.spec\.ts$/.test(file.split(sep).join('/'));
+/**
+ * Archivos que no se entregan, relativos a ui-core/src/lib. `utils/index.ts` es el índice de
+ * utils: haría que quien use solo Button arrastre `@angular/forms`.
+ */
+const EXCLUDED = ['utils/index.ts'];
+
+/** Pruebas y excluidos: nunca van en el paquete. Normaliza "\" para que funcione en Windows. */
+const isShipped = (file) => {
+  const rel = relative(uiCoreLib, file).split(sep).join('/');
+  return !rel.endsWith('.spec.ts') && !EXCLUDED.includes(rel);
+};
 
 // 1. Limpia.
 await rm(dist, { recursive: true, force: true });
@@ -36,11 +45,11 @@ await cp(src, dist, {
   },
 });
 
-// 4. Plantillas: los archivos de ui-core que copia la CLI, sin pruebas.
+// 4. Plantillas: los archivos de ui-core que copia la CLI, sin pruebas ni excluidos.
 for (const dir of TEMPLATE_DIRS) {
   await cp(join(uiCoreLib, dir), join(dist, 'templates', dir), {
     recursive: true,
-    filter: (file) => !isSpec(file),
+    filter: isShipped,
   });
 }
 

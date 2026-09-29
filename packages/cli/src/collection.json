@@ -1,6 +1,17 @@
 {
   "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
+    "ng-add": {
+      "factory": "./ng-add/index#ngAdd",
+      "schema": "./init/schema.json",
+      "description": "Instala Mimi en el proyecto: ejecuta init.",
+      "hidden": true
+    },
+    "init": {
+      "factory": "./init/index#init",
+      "schema": "./init/schema.json",
+      "description": "Configura Mimi: tema, utilidades, alias, dependencias y mimi.json."
+    },
     "smoke": {
       "factory": "./smoke/index#smoke",
       "schema": "./smoke/schema.json",

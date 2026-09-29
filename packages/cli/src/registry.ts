@@ -15,6 +15,8 @@ export interface RegistryItem {
 
 export interface Registry {
   version: string;
+  /** Paquetes opcionales que la CLI ofrece instalar (p. ej. @lucide/angular en init). */
+  suggestedDependencies?: Record<string, string>;
   items: Record<string, RegistryItem>;
 }
 

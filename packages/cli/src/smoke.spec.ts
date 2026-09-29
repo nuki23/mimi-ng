@@ -76,11 +76,9 @@ describe('schematic smoke', () => {
     );
   });
 
-  // Tarea 3.3
+  // Tarea 3.5 (ui). Las importaciones no se reescriben: el alias siempre es @/components/ui/*
+  // y init lo apunta a la carpeta de mimi.json. Los archivos existentes ya los resuelve init.
   it.todo(
-    'reescribe las importaciones "@/components/ui/<x>" según la ruta o el alias configurado en el proyecto del usuario (si no, el código copiado no compila)',
-  );
-  it.todo(
-    'decide qué hacer si el archivo ya existe con otro contenido (hoy falla con "A merge conflicted on path"; si es idéntico, no pasa nada): omitir, sobrescribir con --overwrite o avisar',
+    'ui: un archivo existente con otro contenido se omite con aviso y se reemplaza solo con --overwrite (sin "merge conflicted")',
   );
 });
