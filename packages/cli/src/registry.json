@@ -1,0 +1,115 @@
+{
+  "version": "0.1.0",
+  "items": {
+    "utils/cn": {
+      "type": "util",
+      "files": ["utils/cn.ts"],
+      "dependencies": { "clsx": "^2.1.1", "tailwind-merge": "^3.7.0" }
+    },
+    "utils/control-styles": {
+      "type": "util",
+      "files": ["utils/control-styles.ts"]
+    },
+    "utils/field-state": {
+      "type": "util",
+      "files": ["utils/field-state.ts"],
+      "peerDependencies": { "@angular/forms": "^22.0.0" }
+    },
+    "theme": {
+      "type": "theme",
+      "files": ["theme/theme-base.css", "theme/types.ts", "theme/provider.ts", "theme/index.ts"]
+    },
+    "avatar": {
+      "type": "component",
+      "files": [
+        "components/avatar/avatar.ts",
+        "components/avatar/avatar.variants.ts",
+        "components/avatar/index.ts"
+      ],
+      "dependencies": { "class-variance-authority": "^0.7.1" },
+      "registryDependencies": ["utils/cn"]
+    },
+    "badge": {
+      "type": "component",
+      "files": [
+        "components/badge/badge.ts",
+        "components/badge/badge.variants.ts",
+        "components/badge/index.ts"
+      ],
+      "dependencies": { "class-variance-authority": "^0.7.1" },
+      "registryDependencies": ["utils/cn"]
+    },
+    "button": {
+      "type": "component",
+      "files": [
+        "components/button/button.ts",
+        "components/button/button.variants.ts",
+        "components/button/index.ts"
+      ],
+      "dependencies": { "class-variance-authority": "^0.7.1" },
+      "registryDependencies": ["utils/cn", "utils/control-styles"]
+    },
+    "card": {
+      "type": "component",
+      "files": ["components/card/card.ts", "components/card/index.ts"],
+      "registryDependencies": ["utils/cn"]
+    },
+    "checkbox": {
+      "type": "component",
+      "files": ["components/checkbox/checkbox.ts", "components/checkbox/index.ts"],
+      "peerDependencies": { "@angular/forms": "^22.0.0" },
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+    },
+    "form-field": {
+      "type": "component",
+      "files": [
+        "components/form-field/form-field.ts",
+        "components/form-field/form-error.ts",
+        "components/form-field/error-messages.ts",
+        "components/form-field/index.ts"
+      ],
+      "registryDependencies": ["utils/cn", "utils/field-state"]
+    },
+    "input": {
+      "type": "component",
+      "files": [
+        "components/input/input.ts",
+        "components/input/input.variants.ts",
+        "components/input/index.ts"
+      ],
+      "dependencies": { "class-variance-authority": "^0.7.1" },
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+    },
+    "separator": {
+      "type": "component",
+      "files": [
+        "components/separator/separator.ts",
+        "components/separator/separator.variants.ts",
+        "components/separator/index.ts"
+      ],
+      "dependencies": { "class-variance-authority": "^0.7.1" },
+      "registryDependencies": ["utils/cn"]
+    },
+    "skeleton": {
+      "type": "component",
+      "files": ["components/skeleton/skeleton.ts", "components/skeleton/index.ts"],
+      "registryDependencies": ["utils/cn"]
+    },
+    "switch": {
+      "type": "component",
+      "files": ["components/switch/switch.ts", "components/switch/index.ts"],
+      "peerDependencies": { "@angular/forms": "^22.0.0" },
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+    },
+    "textarea": {
+      "type": "component",
+      "files": [
+        "components/textarea/textarea.ts",
+        "components/textarea/textarea.variants.ts",
+        "components/textarea/index.ts"
+      ],
+      "dependencies": { "class-variance-authority": "^0.7.1" },
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+    }
+  }
+}

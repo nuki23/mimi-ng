@@ -7,9 +7,11 @@
   "scripts": {
     "ng": "ng",
     "dev": "ng serve docs",
-    "build": "ng build docs",
-    "test": "ng test docs --watch=false && ng test ui-core --watch=false",
+    "build": "ng build docs && pnpm build:cli",
+    "build:cli": "node packages/cli/scripts/build.mjs",
+    "test": "ng test docs --watch=false && ng test ui-core --watch=false && pnpm test:cli",
     "test:ui-core": "ng test ui-core --watch=false",
+    "test:cli": "pnpm build:cli && vitest run --config packages/cli/vitest.config.mts",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

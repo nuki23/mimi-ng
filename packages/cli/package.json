@@ -1,0 +1,25 @@
+{
+  "name": "@mimi-ng/cli",
+  "version": "0.1.0",
+  "license": "MIT",
+  "private": true,
+  "description": "Componentes para Angular y Tailwind CSS que se copian a tu proyecto.",
+  "type": "commonjs",
+  "schematics": "./dist/collection.json",
+  "ng-add": {
+    "save": "devDependencies"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "@angular-devkit/core": "^22.0.0",
+    "@angular-devkit/schematics": "^22.0.0",
+    "@schematics/angular": "^22.0.0"
+  }
+}

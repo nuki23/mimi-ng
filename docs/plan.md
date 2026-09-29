@@ -39,8 +39,8 @@ Usar el comando `/componente <nombre>` para cada uno.
 
 ## Fase 3: CLI básica
 
-- [ ] 3.1 `packages/cli` con Angular Schematics y `registry.json` (con `dependencies` y `registryDependencies`).
-- [ ] 3.2 Script de build que copia `ui-core/src/lib/**` a las plantillas de la CLI.
+- [x] 3.1 `packages/cli` con Angular Schematics y `registry.json` (con `dependencies` y `registryDependencies`).
+- [x] 3.2 Script de build que copia `ui-core/src/lib/**` a las plantillas de la CLI.
 - [ ] 3.3 Schematic `init`: dependencias, variables en `styles.css` (sin `@source`, ver spec 5), utils, alias en `tsconfig.json`, `mimi.json`, pregunta opcional por `@lucide/angular`.
 - [ ] 3.4 Schematic `ng-add` que ejecuta `init`.
 - [ ] 3.5 Schematic `ui`: varios componentes a la vez, menú si no hay nombres, guarda la copia original en `.mimi/base/`, no sobrescribe sin `--overwrite`.

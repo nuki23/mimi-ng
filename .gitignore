@@ -33,3 +33,7 @@ Thumbs.db
 
 # Configuración local de Claude Code
 .claude/settings.local.json
+
+# Copias que genera el build de la CLI (el original está en la raíz)
+packages/cli/LICENSE
+packages/cli/THIRD_PARTY_NOTICES.md

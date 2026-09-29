@@ -67,11 +67,15 @@ mimi-ng/
 │   │       ├── theme/         # theme-base.css, types.ts, provider.ts
 │   │       ├── utils/         # cn.ts, control-styles.ts
 │   │       └── components/    # button/, input/, card/…
-│   └── cli/src/
-│       ├── collection.json
-│       ├── registry.json
-│       ├── ng-add/  init/  ui/  theme/
-│       └── bin/mimi.js
+│   └── cli/                   # @mimi-ng/cli (CommonJS, "type": "commonjs")
+│       ├── package.json       # "schematics": "./dist/collection.json", "ng-add": { "save": "devDependencies" }
+│       ├── tsconfig.json      # tsc → dist/ (module "nodenext" + package CJS = CommonJS)
+│       ├── vitest.config.mts  # pruebas en Node contra dist/
+│       ├── scripts/build.mjs  # compila y empaqueta las plantillas
+│       └── src/
+│           ├── collection.json, registry.json, registry.ts
+│           ├── smoke/         # schematic de prueba (hidden)
+│           └── ng-add/  init/  ui/  theme/  bin/mimi.js   # tareas 3.3 a 3.5
 ├── docs/                      # spec.md, plan.md, design/
 ├── README.md
 └── CLAUDE.md
@@ -81,7 +85,18 @@ Angular CLI se ejecuta siempre desde la raíz. `ui-core` no tiene build propio: 
 
 Como Angular corre desde la raíz, el `styles.css` del showcase usa `@import 'tailwindcss' source(none)` y declara sus fuentes a mano (`apps/docs/src` y `packages/ui-core/src`, sin los `.spec.ts`); si no, Tailwind escanearía todo el repositorio (`docs/`, `CLAUDE.md`…) y generaría clases de más.
 
-El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve en la documentación es exactamente lo que entrega la CLI. Al compilar la CLI, un script copia `ui-core/src/lib/**` a sus plantillas.
+El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve en la documentación es exactamente lo que entrega la CLI.
+
+**La CLI (`packages/cli`, tareas 3.1 y 3.2).** Verificado en `@angular-devkit/schematics` 22.1.8:
+
+- **CommonJS.** El runtime de schematics carga cada `factory` con `require()` (`tools/export-ref.js`), y `@schematics/angular` se publica igual. Por eso el paquete declara `"type": "commonjs"` explícito: si alguien lo quitara o pusiera `"module"`, `tsc` con `"module": "nodenext"` emitiría ESM y la CLI se rompería sin avisar.
+- **`collection.json`:** `{ "schematics": { "<nombre>": { "factory": "./carpeta/index#fn", "schema", "description", "hidden", "aliases" } } }`.
+- **`ng add`:** `@angular/cli` lee del `package.json` el campo `"schematics"` y `"ng-add": { "save": … }`, y ejecuta el schematic `ng-add` (puede ser `hidden`). Mimi usa `"save": "devDependencies"`: la CLI solo se usa al desarrollar.
+- **Compilación** (`pnpm build:cli`, incluido en `pnpm build`): `scripts/build.mjs` limpia `dist/`, compila con `tsc`, copia `collection.json`, `registry.json` y los `schema.json`, copia `ui-core/src/lib/{components,utils,theme}` a `dist/templates/` (con `theme-base.css`, sin `*.spec.ts`) y copia `LICENSE` y `THIRD_PARTY_NOTICES.md` de la raíz (ignorados en git; npm solo publica lo que está dentro del paquete). Solo usa APIs de Node (`fs.rm`, `fs.cp`, `path.join`), sin `cp` ni `rm` de shell, para que funcione en Windows.
+- **Sin red:** las plantillas viajan dentro del paquete; los schematics las leen con `url('../templates')`.
+- **Dependencias:** `@angular-devkit/core`, `@angular-devkit/schematics` y `@schematics/angular` (`readWorkspace` / `updateWorkspace` para `init` y `ui`), con el mismo rango que ui-core declara para `@angular/core` (`^22.0.0`). Si al final `@schematics/angular` solo lo usan las pruebas, pasa a `devDependencies`.
+- `"private": true` hasta la tarea 3.7, para no publicarla por error.
+- **Pruebas** (`pnpm test:cli`, incluido en `pnpm test`): Vitest en Node, contra `dist/`. `registry.spec.ts` comprueba el registro contra el código real; `smoke.spec.ts` usa `SchematicTestRunner` sobre un workspace creado en memoria con `@schematics/angular` (`workspace` + `application`), no jsdom.
 
 ## 4. Catálogo
 
@@ -200,22 +215,41 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 
 ### `registry.json` (dentro de la CLI)
 
+`packages/cli/src/registry.json`. Un ítem por componente, por util y para el tema. Los utils van por separado (`utils/cn`, `utils/control-styles`, `utils/field-state`): así Button no arrastra `@angular/forms`. No hay un ítem para el índice `utils/index.ts` (se entrega pero no se copia; se decide en la tarea 3.3).
+
 ```json
 {
-  "components": {
-    "button": {
-      "dependencies": ["class-variance-authority", "clsx", "tailwind-merge"],
-      "registryDependencies": ["utils"],
-      "files": ["button.ts", "button.variants.ts", "index.ts"]
+  "version": "0.1.0",
+  "items": {
+    "utils/cn": {
+      "type": "util",
+      "files": ["utils/cn.ts"],
+      "dependencies": { "clsx": "^2.1.1", "tailwind-merge": "^3.7.0" }
     },
-    "form-field": {
-      "dependencies": [],
-      "registryDependencies": ["utils"],
-      "files": ["form-field.ts", "form-error.ts", "error-messages.ts", "index.ts"]
+    "utils/field-state": {
+      "type": "util",
+      "files": ["utils/field-state.ts"],
+      "peerDependencies": { "@angular/forms": "^22.0.0" }
+    },
+    "button": {
+      "type": "component",
+      "files": [
+        "components/button/button.ts",
+        "components/button/button.variants.ts",
+        "components/button/index.ts"
+      ],
+      "dependencies": { "class-variance-authority": "^0.7.1" },
+      "registryDependencies": ["utils/cn", "utils/control-styles"]
     }
   }
 }
 ```
+
+- `files`: rutas relativas a las plantillas (`dist/templates`, copia de `ui-core/src/lib`).
+- `dependencies` / `peerDependencies`: con la versión exacta del `package.json` de ui-core, nunca escrita a mano.
+- `registryDependencies`: otros ítems que se copian con este (se resuelven en orden, dependencias primero).
+
+**Prueba de consistencia** (`registry.spec.ts`): falla si un archivo listado no existe; si un archivo entregado no pertenece a un solo ítem; si una importación `@/components/ui/<x>` no está en `registryDependencies` o una relativa sale del ítem; si un paquete importado (también con `import type`; `@angular/forms/signals` cuenta como `@angular/forms`) no está declarado, o sobra uno; si una versión no coincide con ui-core; o si una `registryDependency` no existe. `@angular/core`, `@angular/common` y `rxjs` son implícitos (constante `IMPLICIT`); cualquier otro, como `@angular/cdk`, debe declararse. Así el registro no puede quedar desactualizado cuando cambia un componente.
 
 ### Uso en código
 

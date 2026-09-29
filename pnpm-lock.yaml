@@ -249,6 +249,18 @@ importers:
         specifier: workspace:*
         version: link:../../packages/ui-core
 
+  packages/cli:
+    dependencies:
+      '@angular-devkit/core':
+        specifier: ^22.0.0
+        version: 22.1.8(chokidar@5.0.0)
+      '@angular-devkit/schematics':
+        specifier: ^22.0.0
+        version: 22.1.8(chokidar@5.0.0)
+      '@schematics/angular':
+        specifier: ^22.0.0
+        version: 22.1.8(chokidar@5.0.0)
+
   packages/ui-core:
     dependencies:
       '@angular/core':

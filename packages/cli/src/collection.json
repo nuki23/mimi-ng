@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "smoke": {
+      "factory": "./smoke/index#smoke",
+      "schema": "./smoke/schema.json",
+      "description": "Prueba mínima: copia un ítem del registro y sus dependencias desde las plantillas.",
+      "hidden": true
+    }
+  }
+}
