@@ -74,8 +74,10 @@ mimi-ng/
 │       ├── scripts/build.mjs  # compila y empaqueta las plantillas
 │       └── src/
 │           ├── collection.json, registry.json, registry.ts
-│           ├── smoke/         # schematic de prueba (hidden)
-│           └── ng-add/  init/  ui/  theme/  bin/mimi.js   # tareas 3.3 a 3.5
+│           ├── init/  ng-add/  ui/   # schematics
+│           ├── utils/         # write-files.ts (escritura con revisión y .mimi/base), project.ts
+│           ├── testing/       # ayudantes de las pruebas (no se compilan)
+│           └── theme/  bin/mimi.js      # tareas posteriores (theme, 5.3)
 ├── docs/                      # spec.md, plan.md, design/
 ├── README.md
 └── CLAUDE.md
@@ -96,7 +98,7 @@ El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve e
 - **Sin red:** las plantillas viajan dentro del paquete; los schematics las leen con `url('../templates')`.
 - **Dependencias:** `@angular-devkit/core`, `@angular-devkit/schematics` y `@schematics/angular`, con el mismo rango que ui-core declara para `@angular/core` (`^22.0.0`). `@schematics/angular` va en `dependencies` porque `init` lo usa en tiempo de ejecución: `readWorkspace` (leer `angular.json`), `addDependency` (agregar e instalar con el gestor del proyecto) y `JSONFile` (editar el tsconfig conservando comentarios).
 - `"private": true` hasta la tarea 3.7, para no publicarla por error.
-- **Pruebas** (`pnpm test:cli`, incluido en `pnpm test`): Vitest en Node, contra `dist/`. `registry.spec.ts` comprueba el registro contra el código real; `smoke.spec.ts` usa `SchematicTestRunner` sobre un workspace creado en memoria con `@schematics/angular` (`workspace` + `application`), no jsdom.
+- **Pruebas** (`pnpm test:cli`, incluido en `pnpm test`): Vitest en Node, contra `dist/`. `registry.spec.ts` comprueba el registro contra el código real; `init.spec.ts` y `ui.spec.ts` usan `SchematicTestRunner` sobre un workspace creado en memoria con `@schematics/angular` (`workspace` + `application`), no jsdom.
 
 ## 4. Catálogo
 
@@ -176,7 +178,7 @@ ng g ui button                      # tras init (schematicCollections)
 ng g @mimi-ng/cli:theme --palette=violet --radius=lg
 ```
 
-El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta varios nombres (`"$default": { "$source": "argv" }`) y muestra un `x-prompt` de selección múltiple si no recibe ninguno.
+El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta varios nombres (opción `components` de tipo `array` con `"$default": { "$source": "argv", "index": 0 }`: la CLI de Angular la registra como posicional variádica, `ui [components ..]`) y, sin nombres y con terminal interactiva, muestra un `x-prompt` de selección múltiple (`"type": "list"`, `"multiselect": true`).
 
 ### Qué hace `init` (y `ng add`)
 
@@ -203,14 +205,30 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 - Rutas siempre con "/" en lo que escribe (CSS, tsconfig, `mimi.json`), también en Windows.
 - Idempotente: ejecutarlo dos veces no duplica nada ni falla, y no vuelve a instalar.
 - Archivos: antes de escribir revisa el árbol. Igual → nada; distinto → se omite con un aviso y se reemplaza solo con `--overwrite`. Nunca salta el error "merge conflicted".
-- `schematicCollections` (para `ng g ui button`) se registra en la tarea 3.6.
+- **`schematicCollections`** (para `ng g ui button`, tarea 3.6): `cli.schematicCollections` reemplaza al valor por defecto de la CLI de Angular, así que si no existe se crea con `["@schematics/angular", "@mimi-ng/cli"]`, en ese orden (solo con Mimi, el usuario perdería `ng g component`). Si existe, Mimi se agrega al final sin quitar nada. El de un proyecto gana al del workspace, así que si el proyecto elegido tiene el suyo, también va ahí. La CLI busca el nombre en las colecciones en orden y gana la primera: una prueba comprueba que `ui` resuelve a Mimi, `component` a `@schematics/angular`, y que ningún nombre ni alias de Mimi (`ng-add`, `init`, `ui`) choca con los de `@schematics/angular`, ocultos incluidos.
+- `init` también guarda la copia original de los archivos que escribe en `.mimi/base/` (misma regla que `ui`).
 
 ### Qué hace `ui`
 
-1. Copia los archivos del componente y los de sus `registryDependencies`.
-2. Instala sus `dependencies` si faltan (por ejemplo `@angular/cdk` para Select).
-3. Guarda una copia original en `.mimi/base/<componente>/` y registra la versión en `mimi.json`.
-4. Si el componente ya existe, no lo sobrescribe sin `--overwrite`.
+`ng g ui button input form-field` (o `ng g @mimi-ng/cli:ui …`). Opciones: los nombres y `--overwrite`.
+
+**Primero verifica, sin modificar nada:**
+
+1. **Requiere init:** sin `mimi.json`, falla con "Mimi no está configurado en este proyecto (falta mimi.json). Ejecuta primero: ng add @mimi-ng/cli".
+2. **Nombres:** sin nombres (y sin terminal para preguntar) explica cómo usarlo. Un nombre desconocido falla con la lista de disponibles y, si se parece a uno (distancia de edición ≤ 2 o prefijo), lo sugiere: "¿Quisiste decir button?". La lista del `x-prompt` va escrita en `ui/schema.json` y la prueba de consistencia exige que sea la de los ítems `component` del registro. No se usa `enum`: con él, la validación del esquema rechazaría el nombre antes de poder sugerir el parecido.
+3. **Resolución:** los pedidos y sus `registryDependencies`, de forma transitiva, sin duplicados y con las dependencias primero (`form-field` trae `utils/cn` y `utils/field-state`). Si falta un archivo de init (por ejemplo, el usuario borró `utils/cn.ts`), se vuelve a copiar.
+
+**Después escribe:**
+
+4. **Archivos** en la carpeta de `mimi.json`. Los componentes van sin `components/` (`<carpeta>/button/button.ts`), para que `@/components/ui/button` los encuentre; utils y tema conservan su carpeta. Antes de escribir revisa el árbol: igual → nada; distinto → se omite con aviso; `--overwrite` → se reemplaza. Nunca salta "merge conflicted".
+5. **`.mimi/base/`** (en la raíz del workspace, con la misma estructura: `.mimi/base/button/button.ts`, `.mimi/base/utils/cn.ts`): la copia original de cada archivo, que usará `mimi update` (Fase 5). Se escribe cuando el archivo del proyecto queda igual a la plantilla (creado, reemplazado con `--overwrite`, o idéntico y todavía sin base). Si el archivo se omitió por estar modificado, su base **no** cambia.
+6. **`mimi.json` → `components`:** `{ "button": { "version": "0.1.0" } }` para cada componente pedido o traído como dependencia, solo si todos sus archivos quedaron iguales a la plantilla; si alguno se omitió, se conserva lo que había.
+7. **Dependencias:** las `dependencies` de los ítems, con la versión del registro, si el proyecto no las tiene. Las `peerDependencies` (como `@angular/forms`) solo si faltan; las de `@angular/*` con el mismo rango que el `@angular/core` del proyecto, para que no queden desalineadas. Se instalan con el gestor de paquetes del proyecto.
+8. **Mensaje final:** qué se agregó o reemplazó, qué se omitió y por qué (con la sugerencia de `--overwrite`), qué dependencias se instalan, y que `.mimi/` debe quedar en git.
+
+Idempotente: `ng g ui button` dos veces no cambia nada ni vuelve a instalar.
+
+**Limitación conocida:** una sola configuración de Mimi por workspace (`mimi.json` y `.mimi/` en la raíz). Varias aplicaciones con carpetas de componentes distintas no están soportadas por ahora: `init --project` configura la aplicación elegida y `ui` usa la carpeta de `mimi.json`.
 
 ### `mimi.json`
 

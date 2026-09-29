@@ -131,7 +131,8 @@ describe('init', () => {
     await run({}, await createWorkspace(runner));
     const text = logs.map((l) => l.message).join('\n');
     expect(text).toContain('Agrega tu primer componente:');
-    expect(text).toContain('ng g @mimi-ng/cli:ui button');
+    expect(text).toContain('ng g ui button');
+    expect(text).toContain('Guarda la carpeta .mimi/ en git');
   });
 
   it('es idempotente: dos ejecuciones dan el mismo resultado y no reinstalan', async () => {
@@ -393,6 +394,110 @@ describe('init', () => {
     expect(replaced.readContent(`/${UI}/utils/cn.ts`)).toBe(
       readFileSync(join(uiCoreLib, 'utils/cn.ts'), 'utf8'),
     );
+  });
+});
+
+describe('init: copias originales en .mimi/base', () => {
+  it('guarda la base de los archivos que escribe', async () => {
+    const { runner, run } = harness();
+    const tree = await run({}, await createWorkspace(runner));
+    for (const file of BASE_FILES) {
+      expect(tree.readContent(`/.mimi/base/${file}`), file).toBe(
+        readFileSync(join(uiCoreLib, file), 'utf8'),
+      );
+    }
+  });
+
+  it('si un archivo se omite por estar modificado, no crea ni cambia su base', async () => {
+    const { runner, run } = harness();
+    const tree = await createWorkspace(runner);
+    tree.create(`/${UI}/utils/cn.ts`, '// mi versión\n');
+    const result = await run({}, tree);
+    expect(result.exists('/.mimi/base/utils/cn.ts')).toBe(false);
+    expect(result.exists('/.mimi/base/utils/control-styles.ts')).toBe(true);
+  });
+});
+
+describe('init: schematicCollections (tarea 3.6)', () => {
+  const MIMI = '@mimi-ng/cli';
+  const ANGULAR = '@schematics/angular';
+
+  it('sin el campo lo crea con @schematics/angular primero', async () => {
+    const { runner, run } = harness();
+    const workspace = await createWorkspace(runner);
+    expect(json(workspace, '/angular.json').cli?.schematicCollections).toBeUndefined();
+    const tree = await run({}, workspace);
+    expect(json(tree, '/angular.json').cli.schematicCollections).toEqual([ANGULAR, MIMI]);
+  });
+
+  it('con el campo agrega Mimi al final sin quitar nada; dos ejecuciones no lo repiten', async () => {
+    const { runner, run } = harness();
+    const workspace = await createWorkspace(runner);
+    const angular = json(workspace, '/angular.json');
+    angular.cli = { ...angular.cli, schematicCollections: ['@acme/schematics', ANGULAR] };
+    workspace.overwrite('/angular.json', JSON.stringify(angular, null, 2));
+
+    const first = await run({}, workspace);
+    const second = await run({}, first);
+    expect(json(second, '/angular.json').cli.schematicCollections).toEqual([
+      '@acme/schematics',
+      ANGULAR,
+      MIMI,
+    ]);
+    expect(second.readContent('/angular.json')).toBe(first.readContent('/angular.json'));
+  });
+
+  it('si el proyecto tiene su propio schematicCollections (gana al del workspace), también va ahí', async () => {
+    const { runner, run } = harness();
+    const workspace = await createWorkspace(runner);
+    const angular = json(workspace, '/angular.json');
+    angular.projects.app.cli = { schematicCollections: [ANGULAR] };
+    workspace.overwrite('/angular.json', JSON.stringify(angular, null, 2));
+
+    const tree = await run({}, workspace);
+    const result = json(tree, '/angular.json');
+    expect(result.projects.app.cli.schematicCollections).toEqual([ANGULAR, MIMI]);
+    expect(result.cli.schematicCollections).toEqual([ANGULAR, MIMI]);
+  });
+
+  it('ng g ui y ng g component resuelven como en la CLI de Angular', async () => {
+    const { runner, run } = harness();
+    const tree = await run({}, await createWorkspace(runner));
+    const order: string[] = json(tree, '/angular.json').cli.schematicCollections;
+
+    // Igual que @angular/cli (commands/generate): recorre las colecciones en orden y gana la
+    // primera que tiene el nombre (o el alias).
+    const resolve = (name: string) =>
+      order.find((collectionName) => {
+        const collection = runner.engine.createCollection(collectionName);
+        const schematics = collection.description.schematics as Record<
+          string,
+          { aliases?: string[] }
+        >;
+        return Object.entries(schematics).some(
+          ([schematic, d]) => schematic === name || (d.aliases ?? []).includes(name),
+        );
+      });
+    expect(resolve('ui')).toBe(MIMI);
+    expect(resolve('init')).toBe(MIMI);
+    expect(resolve('component')).toBe(ANGULAR);
+    expect(resolve('c')).toBe(ANGULAR);
+    expect(resolve('service')).toBe(ANGULAR);
+  });
+
+  it('ningún nombre ni alias de Mimi choca con los de @schematics/angular (incluidos los ocultos)', () => {
+    const { runner } = harness();
+    const names = (collectionName: string) =>
+      Object.entries(
+        runner.engine.createCollection(collectionName).description.schematics as Record<
+          string,
+          { aliases?: string[] }
+        >,
+      ).flatMap(([name, d]) => [name, ...(d.aliases ?? [])]);
+    const angular = new Set(names(ANGULAR));
+    const mimi = names(MIMI);
+    expect(mimi).toEqual(expect.arrayContaining(['ng-add', 'init', 'ui']));
+    expect(mimi.filter((name) => angular.has(name))).toEqual([]);
   });
 });
 

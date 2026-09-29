@@ -43,8 +43,8 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [x] 3.2 Script de build que copia `ui-core/src/lib/**` a las plantillas de la CLI.
 - [x] 3.3 Schematic `init`: dependencias, variables en `styles.css` (sin `@source`, ver spec 5), utils, alias en `tsconfig.json`, `mimi.json`, pregunta opcional por `@lucide/angular`.
 - [x] 3.4 Schematic `ng-add` que ejecuta `init`.
-- [ ] 3.5 Schematic `ui`: varios componentes a la vez, menú si no hay nombres, guarda la copia original en `.mimi/base/`, no sobrescribe sin `--overwrite`.
-- [ ] 3.6 Registrar la colección en `schematicCollections` para permitir `ng g ui button`.
+- [x] 3.5 Schematic `ui`: varios componentes a la vez, menú si no hay nombres, guarda la copia original en `.mimi/base/`, no sobrescribe sin `--overwrite`.
+- [x] 3.6 Registrar la colección en `schematicCollections` para permitir `ng g ui button`.
 - [ ] 3.7 Probar la CLI en un proyecto Angular 22 limpio, fuera del monorepo.
 - [ ] 3.8 Leer la versión del showcase desde @mimi-ng/cli.
 - [ ] 3.9 Revisar la página de Instalación contra la CLI real.

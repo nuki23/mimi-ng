@@ -157,4 +157,16 @@ describe('registry.json', () => {
     ]);
     expect(() => resolveItems('nope', registry)).toThrow('"nope" no existe');
   });
+
+  it('la lista del x-prompt de ui es la de los componentes del registro', () => {
+    const schema = JSON.parse(readFileSync(join(here, 'ui', 'schema.json'), 'utf8'));
+    const items = schema.properties.components['x-prompt'].items as { value: string }[];
+    const components = entries
+      .filter(([, item]) => item.type === 'component')
+      .map(([name]) => name)
+      .sort();
+    expect(items.map((i) => i.value)).toEqual(components);
+    // Sin enum: un nombre desconocido llega al schematic, que sugiere el parecido.
+    expect(schema.properties.components.items.enum).toBeUndefined();
+  });
 });

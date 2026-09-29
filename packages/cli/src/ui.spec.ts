@@ -1,0 +1,239 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import type { UnitTestTree } from '@angular-devkit/schematics/testing';
+import { describe, expect, it } from 'vitest';
+import registryJson from './registry.json';
+import {
+  UI_CORE_LIB,
+  createWorkspace,
+  harness,
+  json,
+  nodeTasks,
+  snapshot,
+} from './testing/harness';
+
+/** Pruebas de ui con SchematicTestRunner, sobre un workspace en memoria ya inicializado. */
+
+const UI = 'projects/app/src/app/components/ui';
+const registry = registryJson as { version: string };
+const template = (file: string) => readFileSync(join(UI_CORE_LIB, file), 'utf8');
+
+async function initialized() {
+  const h = harness();
+  const tree = await h.run('init', {}, await createWorkspace(h.runner));
+  h.logs.length = 0;
+  return { ...h, tree };
+}
+
+const filesUnder = (tree: UnitTestTree, dir: string) =>
+  tree.files
+    .filter((f) => f.startsWith(`/${dir}/`))
+    .map((f) => f.slice(dir.length + 2))
+    .sort();
+
+describe('ui', () => {
+  it('agrega un componente con sus registryDependencies, idéntico a ui-core, y su base', async () => {
+    const { run, tree } = await initialized();
+    const result = await run('ui', { components: ['button'] }, tree);
+
+    for (const file of [
+      'components/button/button.ts',
+      'components/button/button.variants.ts',
+      'components/button/index.ts',
+    ]) {
+      // En el proyecto, los componentes van sin "components/": @/components/ui/button.
+      expect(result.readContent(`/${UI}/${file.replace('components/', '')}`), file).toBe(
+        template(file),
+      );
+      // Copia original en .mimi/base, sin "components/".
+      expect(result.readContent(`/.mimi/base/${file.replace('components/', '')}`), file).toBe(
+        template(file),
+      );
+    }
+    expect(result.exists(`/${UI}/components`)).toBe(false);
+    // Button no arrastra field-state (ni @angular/forms).
+    expect(result.exists(`/${UI}/utils/field-state.ts`)).toBe(false);
+    expect(json(result, '/mimi.json').components).toEqual({
+      button: { version: registry.version },
+    });
+  });
+
+  it('varios a la vez, con dependencias transitivas y sin duplicados', async () => {
+    const { run, tree, logs } = await initialized();
+    const result = await run(
+      'ui',
+      { components: ['input', 'form-field', 'button', 'input'] },
+      tree,
+    );
+
+    expect(filesUnder(result, UI)).toEqual(
+      [
+        'button/button.ts',
+        'button/button.variants.ts',
+        'button/index.ts',
+        'form-field/error-messages.ts',
+        'form-field/form-error.ts',
+        'form-field/form-field.ts',
+        'form-field/index.ts',
+        'input/index.ts',
+        'input/input.ts',
+        'input/input.variants.ts',
+        'theme/index.ts',
+        'theme/provider.ts',
+        'theme/theme-base.css',
+        'theme/types.ts',
+        'utils/cn.ts',
+        'utils/control-styles.ts',
+        'utils/field-state.ts',
+      ].sort(),
+    );
+    expect(result.readContent(`/${UI}/utils/field-state.ts`)).toBe(
+      template('utils/field-state.ts'),
+    );
+    expect(Object.keys(json(result, '/mimi.json').components).sort()).toEqual([
+      'button',
+      'form-field',
+      'input',
+    ]);
+    // Cada archivo se informa una sola vez.
+    const added = logs.filter((l) => l.message.startsWith('  + ')).map((l) => l.message);
+    expect(added.length).toBe(new Set(added).size);
+  });
+
+  it('vuelve a copiar un archivo de init que el usuario borró', async () => {
+    const { run, tree } = await initialized();
+    tree.delete(`/${UI}/utils/cn.ts`);
+    const result = await run('ui', { components: ['card'] }, tree);
+    expect(result.readContent(`/${UI}/utils/cn.ts`)).toBe(template('utils/cn.ts'));
+  });
+
+  it('sin mimi.json falla pidiendo ng add, sin cambios', async () => {
+    const { runner, run } = harness();
+    const tree = await createWorkspace(runner);
+    const before = snapshot(tree);
+    await expect(run('ui', { components: ['button'] }, tree)).rejects.toThrow(
+      'Mimi no está configurado en este proyecto (falta mimi.json). Ejecuta primero:\n  ng add @mimi-ng/cli',
+    );
+    expect(snapshot(tree)).toEqual(before);
+  });
+
+  it('nombre desconocido: lista los disponibles y sugiere el parecido', async () => {
+    const { run, tree } = await initialized();
+    const before = snapshot(tree);
+    const error = run('ui', { components: ['buton', 'zzz'] }, tree);
+    await expect(error).rejects.toThrow(
+      '"buton" no es un componente de Mimi. ¿Quisiste decir button?',
+    );
+    await expect(run('ui', { components: ['zzz'] }, tree)).rejects.toThrow(
+      /"zzz" no es un componente de Mimi\.\nDisponibles: avatar, badge, button, card/,
+    );
+    await expect(run('ui', { components: ['form'] }, tree)).rejects.toThrow(
+      '¿Quisiste decir form-field?',
+    );
+    expect(snapshot(tree)).toEqual(before);
+  });
+
+  it('sin nombres (y sin terminal para preguntar) explica cómo usarlo', async () => {
+    const { run, tree } = await initialized();
+    await expect(run('ui', {}, tree)).rejects.toThrow(
+      'Indica qué componentes agregar, por ejemplo: ng g ui button',
+    );
+  });
+
+  it('archivo modificado: se omite con aviso y no cambia su base ni su versión', async () => {
+    const { run, tree, warnings } = await initialized();
+    const first = await run('ui', { components: ['badge'] }, tree);
+    const file = `/${UI}/badge/badge.ts`;
+    first.overwrite(file, '// mi versión\n');
+    // La base de una versión anterior de Mimi: debe quedar tal cual.
+    first.overwrite('/.mimi/base/badge/badge.ts', '// base de la 0.0.9\n');
+    const config = json(first, '/mimi.json');
+    config.components.badge.version = '0.0.9';
+    first.overwrite('/mimi.json', JSON.stringify(config, null, 2));
+
+    const second = await run('ui', { components: ['badge'] }, first);
+    expect(second.readContent(file)).toBe('// mi versión\n');
+    expect(second.readContent('/.mimi/base/badge/badge.ts')).toBe('// base de la 0.0.9\n');
+    expect(json(second, '/mimi.json').components.badge.version).toBe('0.0.9');
+    expect(warnings()).toContain(
+      `Omitido: ${UI}/badge/badge.ts ya existe con otro contenido (usa --overwrite para reemplazarlo).`,
+    );
+  });
+
+  it('--overwrite reemplaza el archivo y actualiza su base y su versión', async () => {
+    const { run, tree } = await initialized();
+    const first = await run('ui', { components: ['badge'] }, tree);
+    const file = `/${UI}/badge/badge.ts`;
+    first.overwrite(file, '// mi versión\n');
+    first.overwrite('/.mimi/base/badge/badge.ts', '// base vieja\n');
+    const config = json(first, '/mimi.json');
+    config.components.badge.version = '0.0.9';
+    first.overwrite('/mimi.json', JSON.stringify(config, null, 2));
+
+    const result = await run('ui', { components: ['badge'], overwrite: true }, first);
+    expect(result.readContent(file)).toBe(template('components/badge/badge.ts'));
+    expect(result.readContent('/.mimi/base/badge/badge.ts')).toBe(
+      template('components/badge/badge.ts'),
+    );
+    expect(json(result, '/mimi.json').components.badge.version).toBe(registry.version);
+  });
+
+  it('es idempotente: ui button dos veces no cambia nada ni reinstala', async () => {
+    const { runner, run, tree, logs } = await initialized();
+    const first = await run('ui', { components: ['button'] }, tree);
+    const after = snapshot(first);
+    const second = await run('ui', { components: ['button'] }, first);
+    expect(snapshot(second)).toEqual(after);
+    expect(nodeTasks(runner)).toBe(0);
+    expect(logs.map((l) => l.message)).toContain('Nada que hacer: los archivos ya están al día.');
+  });
+
+  it('dependencias de npm con la versión del registro, instaladas una sola vez', async () => {
+    const { runner, run, tree } = await initialized();
+    const pkg = json(tree, '/package.json');
+    delete pkg.dependencies['class-variance-authority'];
+    tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+
+    const result = await run('ui', { components: ['button'] }, tree);
+    expect(json(result, '/package.json').dependencies['class-variance-authority']).toBe('^0.7.1');
+    expect(nodeTasks(runner)).toBe(1);
+  });
+
+  it('peerDependencies: @angular/forms solo si falta, con el rango de @angular/core', async () => {
+    // El proyecto generado ya trae @angular/forms: no se toca.
+    const { run, tree } = await initialized();
+    const withForms = json(tree, '/package.json').dependencies['@angular/forms'];
+    const kept = await run('ui', { components: ['switch'] }, tree);
+    expect(json(kept, '/package.json').dependencies['@angular/forms']).toBe(withForms);
+
+    // Sin @angular/forms: se agrega con el rango de @angular/core.
+    const h = await initialized();
+    const pkg = json(h.tree, '/package.json');
+    delete pkg.dependencies['@angular/forms'];
+    h.tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+    const added = await h.run('ui', { components: ['switch'] }, h.tree);
+    const deps = json(added, '/package.json').dependencies;
+    expect(deps['@angular/forms']).toBe(deps['@angular/core']);
+    expect(h.logs.map((l) => l.message)).toContain(`  @angular/forms@${deps['@angular/core']}`);
+  });
+
+  it('el mensaje final recuerda guardar .mimi/ en git', async () => {
+    const { run, tree, logs } = await initialized();
+    await run('ui', { components: ['card'] }, tree);
+    expect(logs.map((l) => l.message)).toContain(
+      'Guarda la carpeta .mimi/ en git: Mimi la usa para actualizar tus componentes sin perder tus cambios.',
+    );
+  });
+
+  it('usa la carpeta de mimi.json', async () => {
+    const h = harness();
+    const workspace = await createWorkspace(h.runner);
+    workspace.create(
+      '/mimi.json',
+      JSON.stringify({ aliases: { components: 'projects/app/src/shared/ui' }, components: {} }),
+    );
+    const tree = await h.run('init', {}, workspace);
+    const result = await h.run('ui', { components: ['skeleton'] }, tree);
+    expect(result.exists('/projects/app/src/shared/ui/skeleton/skeleton.ts')).toBe(true);
+  });
+});

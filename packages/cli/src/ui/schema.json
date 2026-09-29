@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "MimiUi",
+  "title": "Mimi ui",
+  "type": "object",
+  "properties": {
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Componentes que se agregan (varios a la vez: button input form-field).",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": {
+        "message": "¿Qué componentes quieres agregar?",
+        "type": "list",
+        "multiselect": true,
+        "items": [
+          {
+            "value": "avatar",
+            "label": "avatar"
+          },
+          {
+            "value": "badge",
+            "label": "badge"
+          },
+          {
+            "value": "button",
+            "label": "button"
+          },
+          {
+            "value": "card",
+            "label": "card"
+          },
+          {
+            "value": "checkbox",
+            "label": "checkbox"
+          },
+          {
+            "value": "form-field",
+            "label": "form-field"
+          },
+          {
+            "value": "input",
+            "label": "input"
+          },
+          {
+            "value": "separator",
+            "label": "separator"
+          },
+          {
+            "value": "skeleton",
+            "label": "skeleton"
+          },
+          {
+            "value": "switch",
+            "label": "switch"
+          },
+          {
+            "value": "textarea",
+            "label": "textarea"
+          }
+        ]
+      }
+    },
+    "overwrite": {
+      "type": "boolean",
+      "default": false,
+      "description": "Reemplaza los archivos que ya existan con otro contenido."
+    }
+  }
+}

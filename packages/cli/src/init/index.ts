@@ -1,15 +1,4 @@
-import {
-  type Rule,
-  SchematicsException,
-  type Tree,
-  apply,
-  chain,
-  filter,
-  forEach,
-  mergeWith,
-  move,
-  url,
-} from '@angular-devkit/schematics';
+import { type Rule, SchematicsException, type Tree, chain } from '@angular-devkit/schematics';
 import {
   DependencyType,
   ExistingBehavior,
@@ -21,6 +10,15 @@ import {
 } from '@schematics/angular/utility';
 import { JSONFile } from '@schematics/angular/utility/json-file';
 import { registry, resolveItems } from '../registry';
+import {
+  MIMI_COLLECTION,
+  type MimiConfig,
+  type PackageJson,
+  allDependencies,
+  majorOf,
+  readJson,
+} from '../utils/project';
+import { BASE_DIR, type FileReport, emptyReport, writeTemplates } from '../utils/write-files';
 import { findTailwindImport, hasDirective, insertAfterTailwind } from './css';
 import { dirnameOf, normalizePath, relativePath } from './paths';
 
@@ -37,15 +35,10 @@ const INIT_ITEMS = ['theme', 'utils/cn', 'utils/control-styles'];
 /** Paquetes que instala init (versiones del registro). */
 const INIT_PACKAGES = ['clsx', 'tailwind-merge', 'class-variance-authority'];
 const ICONS_PACKAGE = '@lucide/angular';
+/** Colección por defecto de la CLI de Angular (ng g component, service…). */
+const DEFAULT_COLLECTION = '@schematics/angular';
 const MIN_ANGULAR = 22;
 const MIN_TAILWIND = 4;
-
-interface MimiConfig {
-  style?: string;
-  tailwind?: { css?: string };
-  aliases?: { components?: string; utils?: string; theme?: string };
-  components?: Record<string, unknown>;
-}
 
 /** Lo que init averigua antes de escribir nada. */
 interface Plan {
@@ -69,13 +62,22 @@ interface Plan {
 export function init(options: InitOptions): Rule {
   return async (tree: Tree): Promise<Rule> => {
     const plan = await inspect(tree, options);
+    const report = emptyReport();
     return chain([
-      copyBaseFiles(plan.componentsDir, options.overwrite ?? false),
+      writeTemplates({
+        files: INIT_ITEMS.flatMap((item) => resolveItems(item)).flatMap(
+          (item) => registry.items[item].files,
+        ),
+        componentsDir: plan.componentsDir,
+        overwrite: options.overwrite ?? false,
+        report,
+      }),
       updateGlobalCss(plan),
       updateTsConfigs(plan),
+      registerCollection(plan),
       writeMimiConfig(plan),
       ...dependencies(options.icons ?? false),
-      nextSteps(plan, options.icons ?? false),
+      nextSteps(plan, report, options.icons ?? false),
     ]);
   };
 }
@@ -83,16 +85,13 @@ export function init(options: InitOptions): Rule {
 // ── Verificaciones (sin escribir) ─────────────────────────────────────────────────────
 
 async function inspect(tree: Tree, options: InitOptions): Promise<Plan> {
-  const packageJson = readJson<{
-    dependencies?: Record<string, string>;
-    devDependencies?: Record<string, string>;
-  }>(tree, 'package.json');
+  const packageJson = readJson<PackageJson>(tree, 'package.json');
   if (!packageJson) {
     throw new SchematicsException(
       'No se encontró package.json. Ejecuta init en la raíz del workspace.',
     );
   }
-  const deps = { ...packageJson.devDependencies, ...packageJson.dependencies };
+  const deps = allDependencies(packageJson);
 
   const angular = majorOf(deps['@angular/core']);
   if (angular === null) {
@@ -180,57 +179,6 @@ function selectProject(
   );
 }
 
-/** `^22.1.0`, `~22.0.0`, `>=22`, `22.1.0` → 22. `latest` → null. */
-function majorOf(range: string | undefined): number | null {
-  const match = range ? /(\d+)/.exec(range) : null;
-  return match ? Number(match[1]) : null;
-}
-
-function readJson<T>(tree: Tree, path: string): T | null {
-  if (!tree.exists(path)) return null;
-  try {
-    return JSON.parse(tree.readText(path)) as T;
-  } catch {
-    throw new SchematicsException(`${path} no es un JSON válido.`);
-  }
-}
-
-// ── Archivos ──────────────────────────────────────────────────────────────────────────
-
-/**
- * Copia el tema y las utilidades desde las plantillas del paquete. Antes de escribir revisa el
- * árbol: igual → no hace nada; distinto → lo omite con un aviso (o lo reemplaza con
- * --overwrite). Nunca deja que mergeWith encuentre un archivo existente ("merge conflicted").
- */
-function copyBaseFiles(componentsDir: string, overwrite: boolean): Rule {
-  const files = new Set(
-    INIT_ITEMS.flatMap((item) => resolveItems(item)).flatMap((item) => registry.items[item].files),
-  );
-  return (tree, context) =>
-    mergeWith(
-      apply(url('../templates'), [
-        filter((path) => files.has(path.replace(/^\//, ''))),
-        move(componentsDir),
-        forEach((entry) => {
-          if (!tree.exists(entry.path)) return entry;
-          const current = tree.readText(entry.path);
-          const incoming = entry.content.toString('utf8');
-          if (current === incoming) return null;
-          if (overwrite) {
-            tree.overwrite(entry.path, incoming);
-            context.logger.info(`Reemplazado: ${entry.path.replace(/^\//, '')}`);
-          } else {
-            context.logger.warn(
-              `Omitido: ${entry.path.replace(/^\//, '')} ya existe con otro contenido ` +
-                '(usa --overwrite para reemplazarlo).',
-            );
-          }
-          return null;
-        }),
-      ]),
-    );
-}
-
 // ── CSS global ────────────────────────────────────────────────────────────────────────
 
 function updateGlobalCss(plan: Plan): Rule {
@@ -302,6 +250,32 @@ function sameAlias(current: unknown, value: string): boolean {
   );
 }
 
+// ── schematicCollections (tarea 3.6) ─────────────────────────────────────────────────
+
+/**
+ * Registra la colección para que funcione `ng g ui button`. `cli.schematicCollections`
+ * reemplaza al valor por defecto de la CLI de Angular, así que si no existe se crea con
+ * `@schematics/angular` primero (si no, el usuario perdería `ng g component`). Si ya existe,
+ * Mimi se agrega al final sin quitar nada. El de un proyecto gana al del workspace, así que si
+ * el proyecto tiene el suyo, también va ahí.
+ */
+function registerCollection(plan: Plan): Rule {
+  return (tree) => {
+    if (!tree.exists('angular.json')) return;
+    const file = new JSONFile(tree, 'angular.json');
+    const add = (path: (string | number)[], createIfMissing: boolean) => {
+      const current = file.get(path);
+      if (current === undefined) {
+        if (createIfMissing) file.modify(path, [DEFAULT_COLLECTION, MIMI_COLLECTION]);
+      } else if (Array.isArray(current) && !current.includes(MIMI_COLLECTION)) {
+        file.modify(path, [...(current as string[]), MIMI_COLLECTION]);
+      }
+    };
+    add(['cli', 'schematicCollections'], true);
+    add(['projects', plan.projectName, 'cli', 'schematicCollections'], false);
+  };
+}
+
 // ── mimi.json ─────────────────────────────────────────────────────────────────────────
 
 function writeMimiConfig(plan: Plan): Rule {
@@ -352,19 +326,32 @@ function dependencies(icons: boolean): Rule[] {
 
 // ── Mensaje final ─────────────────────────────────────────────────────────────────────
 
-function nextSteps(plan: Plan, icons: boolean): Rule {
+function nextSteps(plan: Plan, report: FileReport, icons: boolean): Rule {
   return (_tree, context) => {
+    for (const file of report.skipped) {
+      context.logger.warn(
+        `Omitido: ${plan.componentsDir}/${file} ya existe con otro contenido ` +
+          '(usa --overwrite para reemplazarlo).',
+      );
+    }
+    for (const file of report.overwritten) {
+      context.logger.info(`Reemplazado: ${plan.componentsDir}/${file}`);
+    }
     context.logger.info('');
     context.logger.info(`Mimi quedó configurado en "${plan.projectName}":`);
     context.logger.info(`  · Tema y utilidades en ${plan.componentsDir}`);
     context.logger.info(`  · Tema importado en ${plan.cssPath}`);
     context.logger.info(`  · Alias ${ALIAS} en el tsconfig`);
-    context.logger.info(`  · Configuración en mimi.json`);
+    context.logger.info(`  · Configuración en mimi.json y copias originales en ${BASE_DIR}/`);
+    context.logger.info(`  · ${MIMI_COLLECTION} en schematicCollections de angular.json`);
     if (icons) context.logger.info(`  · ${ICONS_PACKAGE} para tus íconos`);
     context.logger.info('');
     context.logger.info('Agrega tu primer componente:');
-    context.logger.info('  ng g @mimi-ng/cli:ui button');
+    context.logger.info('  ng g ui button');
     context.logger.info('');
     context.logger.info(`Y úsalo: import { MimiButton } from '@/components/ui/button';`);
+    context.logger.info(
+      'Guarda la carpeta .mimi/ en git: Mimi la usa para actualizar tus componentes sin perder tus cambios.',
+    );
   };
 }
