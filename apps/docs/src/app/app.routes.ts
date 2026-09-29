@@ -4,6 +4,7 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    title: 'Mimi · Componentes para Angular y Tailwind CSS',
     loadComponent: () => import('./pages/home-page').then((m) => m.HomePage),
   },
   {

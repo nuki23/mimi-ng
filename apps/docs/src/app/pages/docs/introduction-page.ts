@@ -28,7 +28,7 @@ export class IntroductionPage {
     },
   ];
 
-  protected readonly phase1 = [
+  protected readonly available = [
     'Button',
     'Input',
     'Textarea',

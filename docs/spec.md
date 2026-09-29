@@ -641,7 +641,7 @@ Verificado en Angular 22.1.7 con una prueba real: un control que implementa solo
 
 ## 9. Íconos
 
-- Los componentes traen sus íconos internos como SVG en línea con trazos de Lucide (licencia ISC, aviso en el repositorio). Fase 2: spinner, check, minus. Fase 4: chevron-down, x, search.
+- Los componentes traen sus íconos internos como SVG en línea con trazos de Lucide (licencia ISC; avisos en `THIRD_PARTY_NOTICES.md`, junto con el Octicon de GitHub del header). Fase 2: spinner, check, minus. Fase 4: chevron-down, x, search.
 - Los íconos del usuario van por `ng-content` y se dimensionan solos: `[&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:pointer-events-none`.
 - Recomendado para el usuario y usado en el showcase: `@lucide/angular` (standalone, signals, un componente por ícono):
   ```html
@@ -681,7 +681,7 @@ apps/docs/src/app/
 
 | Ruta                                       | Página                                                        |
 | ------------------------------------------ | ------------------------------------------------------------- |
-| `/`                                        | Placeholder de inicio (la landing es la tarea 2.12)           |
+| `/`                                        | Landing (tarea 2.12)                                          |
 | `/docs`                                    | Redirige a `/docs/introduction`                               |
 | `/docs/introduction`, `/docs/installation` | Páginas de Primeros pasos, dentro del layout de documentación |
 | `/docs/components/<nombre>`                | Páginas de componentes (Fase 2)                               |
@@ -793,6 +793,13 @@ Si el crecimiento es CSS de componentes o APIs de Angular, se sube el límite co
 - **Páginas:** Personalización, Temas (personalizador en vivo y exportar `mimi.preset.ts`), Iconos, Migrar desde PrimeNG / NG-ZORRO y una página por componente. Select y Dialog aparecen como «Próximamente» hasta la Fase 4.
 - **Página de componente:** título, descripción, `InstallCommand`, un `CodePreview` por estado (cada ejemplo en su archivo `examples/*.example.ts`), ejemplo con `class` y tabla de API.
 - Prerender para generar páginas estáticas (Fase 5).
+
+**Landing (`/`, tarea 2.12)** según `docs/design/Mimi Sitio.dc.html`: hero (badge con la versión, titular, subtítulo, `ng add @mimi-ng/cli` con `CodeBlock` y botones «Empezar» → `/docs/installation` y «Componentes» → `/docs/components/button`), cuatro diferenciales y la vitrina «Hecho con Mimi» (`pages/home/`: un formulario real con Reactive Forms y una lista de equipo). Reglas:
+
+- **Honestidad:** lo que todavía no existe (`mimi update`, la guía de migración) lleva «Próximamente» y no enlaza. Ningún enlace lleva a una página deshabilitada o a un 404: una prueba compara los `href` con las rutas `ready` de `DOCS_NAV`. Los textos públicos no mencionan las fases del plan.
+- **Bundle:** la ruta es lazy; los componentes de la vitrina y `@lucide/angular` no entran al bundle inicial (comprobado con el `metafile`).
+- **Título y descripción:** la ruta tiene `title` y `index.html` trae el mismo `<title>` y un `<meta name="description">`: sin SSR, es lo que leen los buscadores y las vistas previas.
+- **Tamaños que el diseño no define:** el titular baja de 60px a 40px bajo `md`, el padding del hero de 96/72 a 64/48px, y la vitrina se apila bajo `lg`.
 
 ## 11. Estilos visuales
 

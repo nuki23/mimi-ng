@@ -35,7 +35,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [x] 2.9 Switch
 - [x] 2.10 Checkbox
 - [x] 2.11 FormField + FormError (y error automático en Input y Textarea). Actualizar los ejemplos de Input y Textarea que usan #ref='mimiInput' para mostrar errores, y pasarlos a mimi-form-field + mimi-form-error.
-- [ ] 2.12 Página de inicio del showcase (landing) con el formulario de vitrina
+- [x] 2.12 Página de inicio del showcase (landing) con el formulario de vitrina
 
 ## Fase 3: CLI básica
 
@@ -66,7 +66,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [ ] 5.7 Publicar `@mimi-ng/cli` en npm.
 - [ ] 5.8 Buscador ⌘K en el header del showcase.
 - [ ] 5.9 Selector ES/EN en el header (el idioma va como prefijo en la ruta).
-- [ ] 5.10 Navegación superior del header (Documentación · Componentes · Temas), como en el diseño.
+- [ ] 5.10 Navegación superior del header (Documentación · Componentes · Temas), como en el diseño. Revisado en la 2.12: todavía no aporta. Documentación y Componentes ya están a un clic (botones de la landing y sidebar), y «Temas» apuntaría a una página que no existe. Hacerla cuando exista la página de Temas, junto con el buscador ⌘K, que ocupa el mismo lugar del header; «Documentación» y «Componentes» viven bajo `/docs` y necesitan una regla propia para el estado activo, y en móvil irían en el panel.
 - [ ] 5.11 Cuando exista el componente Tabs (catálogo «Después»), reemplazar las pestañas hechas a mano de CodePreview e InstallCommand.
 
 ## Decisiones pendientes
