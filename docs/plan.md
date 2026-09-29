@@ -45,7 +45,11 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [x] 3.4 Schematic `ng-add` que ejecuta `init`.
 - [x] 3.5 Schematic `ui`: varios componentes a la vez, menú si no hay nombres, guarda la copia original en `.mimi/base/`, no sobrescribe sin `--overwrite`.
 - [x] 3.6 Registrar la colección en `schematicCollections` para permitir `ng g ui button`.
-- [ ] 3.7 Probar la CLI en un proyecto Angular 22 limpio, fuera del monorepo.
+- [ ] 3.7 Probar la CLI en un proyecto Angular 22 limpio, fuera del monorepo. Primera prueba (Angular 22.2.0, pnpm y npm): funciona de punta a punta, pero queda abierta hasta corregir:
+  - [ ] Si el Prettier del proyecto tiene otro estilo que ui-core, la CLI de Angular reformatea los archivos que copia Mimi y la siguiente ejecución de `ui` o `init` los toma por modificados («Omitido: … ya existe con otro contenido»). Propuesta: «modificado por el usuario» = distinto de su base en `.mimi/base/`, no de la plantilla.
+  - [ ] `init` repetido dice «Mimi quedó configurado… Agrega tu primer componente» aunque no cambió nada. Propuesta: «Mimi ya estaba configurado; no hubo cambios».
+  - [ ] A evaluar: `utils/field-state.ts` trae Signal Forms (10,6 kB) al bundle aunque la app solo use Reactive Forms.
+  - Observación (no es de Mimi): `ng add <archivo.tgz>` falla con pnpm y npm («Unable to fetch package information»); para probar sin publicar: instalar el `.tgz` y ejecutar `ng add @mimi-ng/cli`.
 - [ ] 3.8 Leer la versión del showcase desde @mimi-ng/cli.
 - [ ] 3.9 Revisar la página de Instalación contra la CLI real.
 
