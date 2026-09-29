@@ -104,10 +104,12 @@ export function mimiThemeToCss(preset: MimiThemePreset): string {
     .map((scope) => `${SELECTORS[scope]} {\n${declarations[scope].join('\n')}\n}`);
 
   // El :root del preset le ganaría al prefers-reduced-motion de theme-base.css.
-  const hasMotion = declarations.any.some((d) => /--mimi-(press-scale|lift|transition):/.test(d));
+  const hasMotion = declarations.any.some((d) =>
+    /--mimi-(press-scale|press-scale-sm|lift|transition):/.test(d),
+  );
   if (hasMotion) {
     blocks.push(
-      '@media (prefers-reduced-motion: reduce) {\n  :root {\n    --mimi-press-scale: 1;\n    --mimi-lift: 0;\n  }\n}',
+      '@media (prefers-reduced-motion: reduce) {\n  :root {\n    --mimi-press-scale: 1;\n    --mimi-press-scale-sm: 1;\n    --mimi-lift: 0;\n  }\n}',
     );
   }
 

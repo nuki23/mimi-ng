@@ -8,3 +8,5 @@ export * from './lib/components/card';
 export * from './lib/components/separator';
 export * from './lib/components/skeleton';
 export * from './lib/components/avatar';
+export * from './lib/components/switch';
+export * from './lib/components/checkbox';

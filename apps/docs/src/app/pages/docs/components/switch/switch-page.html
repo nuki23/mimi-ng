@@ -1,0 +1,158 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Switch y Checkbox</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Controles de sí o no. El switch aplica un ajuste al instante; el checkbox marca una opción que
+    se confirma después, por ejemplo al enviar un formulario.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="switch" />
+  <app-install-command name="checkbox" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <p class="text-pretty">
+    El texto de adentro es la etiqueta: al hacer clic en él, el control se alterna. Por dentro son
+    un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;button type="button"&gt;</code
+    >
+    con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="switch"</code> o
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="checkbox"</code>,
+    así que nunca envían el formulario que los contiene.
+  </p>
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="switch-states" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Estados del switch
+  </h3>
+  <p class="text-pretty">
+    Apagado, encendido y deshabilitado. Prueba el foco con Tab: se alterna con Espacio o Enter.
+  </p>
+  <app-code-preview [code]="source.switchStates">
+    <app-switch-states-example />
+  </app-code-preview>
+
+  <h3 id="checkbox-states" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Estados del checkbox
+  </h3>
+  <p class="text-pretty">
+    Sin marcar, marcada, mixta y deshabilitada. Se alterna con Espacio; Enter no hace nada, como
+    pide el patrón de accesibilidad para casillas.
+  </p>
+  <app-code-preview [code]="source.checkboxStates">
+    <app-checkbox-states-example />
+  </app-code-preview>
+
+  <h3 id="select-all" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Seleccionar todo</h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">indeterminate</code>,
+    la casilla principal muestra un guion cuando solo algunas están marcadas.
+  </p>
+  <app-code-preview [code]="source.checkboxSelectAll">
+    <app-checkbox-select-all-example />
+  </app-code-preview>
+
+  <h3 id="labels" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Etiquetas</h3>
+  <p class="text-pretty">
+    Sin texto adentro, nombra el control con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code> o con
+    un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;label for&gt;</code
+    >
+    que apunte a su
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">id</code>: los dos se
+    pasan al botón interno.
+  </p>
+  <app-code-preview [code]="source.labels">
+    <app-switch-labels-example />
+  </app-code-preview>
+
+  <h3 id="signal-forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Signal Forms</h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[formField]</code>, sin
+    adaptadores: el formulario pasa el valor, el estado deshabilitado y el de error.
+  </p>
+  <app-code-preview [code]="source.signalForms">
+    <app-switch-signal-forms-example />
+  </app-code-preview>
+
+  <h3 id="reactive-forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Reactive Forms y ngModel
+  </h3>
+  <p class="text-pretty">
+    También funcionan con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">formControlName</code>
+    y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(ngModel)]</code>.
+    Envía el formulario sin marcar la casilla: queda con el borde de error.
+  </p>
+  <app-code-preview [code]="source.reactiveForms">
+    <app-switch-reactive-forms-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Personalizar con class
+  </h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> va al
+    envoltorio del control y su texto. Aquí, una lista de ajustes con el texto a la izquierda y el
+    switch a la derecha.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-switch-custom-class-example />
+  </app-code-preview>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+
+  @for (table of apiTables; track table.id) {
+    <h3 [id]="table.id" class="mt-2 text-lg font-semibold tracking-[-0.01em]">{{ table.title }}</h3>
+    <div class="overflow-x-auto rounded-card border">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-muted text-muted-foreground">
+          <tr>
+            <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of table.rows; track row.name) {
+            <tr class="border-t align-top">
+              <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+              <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">
+                {{ row.type }}
+              </td>
+              <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+              <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  <p class="text-pretty">
+    Los dos emiten
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">touch</code> al perder
+    el foco (marca el campo como tocado). Los colores salen de los tokens
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-switch-off</code
+    >,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-primary</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-input</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-shadow-thumb</code
+    >; la escala al presionar, de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-press-scale-sm</code
+    >
+    (0,9; 1 con movimiento reducido).
+  </p>
+</article>

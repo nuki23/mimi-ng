@@ -34,6 +34,10 @@ describe('cn', () => {
     expect(cn('rounded-lg', 'rounded-badge')).toBe('rounded-badge');
   });
 
+  it('shadow-none reemplaza a shadow-thumb', () => {
+    expect(cn('shadow-thumb', 'shadow-none')).toBe('shadow-none');
+  });
+
   it('animate-none reemplaza a animate-mimi-pulse', () => {
     expect(cn('animate-mimi-pulse', 'animate-none')).toBe('animate-none');
   });

@@ -19,6 +19,7 @@ const twMerge = extendTailwindMerge({
         'destructive-hover',
         'neutral',
         'neutral-hover',
+        'thumb',
       ],
       radius: ['card', 'badge'],
       animate: ['mimi-pulse'],

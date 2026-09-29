@@ -39,6 +39,8 @@ export interface MimiShadowTokens {
   destructiveHover?: string;
   neutral?: string;
   neutralHover?: string;
+  /** Pulgar del Switch. */
+  thumb?: string;
 }
 
 /** Radios fijos. Si no se definen, sm y card se calculan a partir de `radius`. */
@@ -54,9 +56,11 @@ export interface MimiFontTokens {
 }
 
 export interface MimiMotionTokens {
-  /** Lista de transiciones. Debe animar `scale` (y `translate` si se usa `lift`). */
+  /** Lista de transiciones. Debe animar `scale` y `translate` (pulgar del Switch y `lift`). */
   transition?: string;
   pressScale?: string | number;
+  /** Escala al presionar de Switch y Checkbox. */
+  pressScaleSm?: string | number;
   lift?: string;
 }
 

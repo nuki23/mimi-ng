@@ -104,8 +104,19 @@ describe('mimiThemeToCss', () => {
     const css = mimiThemeToCss({ motion: { pressScale: 0.95 } });
     expect(css).toContain('--mimi-press-scale: 0.95;');
     expect(css).toContain(
-      '@media (prefers-reduced-motion: reduce) {\n  :root {\n    --mimi-press-scale: 1;\n    --mimi-lift: 0;\n  }\n}',
+      '@media (prefers-reduced-motion: reduce) {\n  :root {\n    --mimi-press-scale: 1;\n    --mimi-press-scale-sm: 1;\n    --mimi-lift: 0;\n  }\n}',
     );
+  });
+
+  it('pressScaleSm va a --mimi-press-scale-sm y activa el bloque de movimiento reducido', () => {
+    const css = mimiThemeToCss({ motion: { pressScaleSm: 0.85 } });
+    expect(css).toContain(':root {\n  --mimi-press-scale-sm: 0.85;\n}');
+    expect(css).toContain('@media (prefers-reduced-motion: reduce)');
+    expect(css).toContain('    --mimi-press-scale-sm: 1;');
+  });
+
+  it('shadows.thumb va a --mimi-shadow-thumb', () => {
+    expect(mimiThemeToCss({ shadows: { thumb: 'none' } })).toContain('--mimi-shadow-thumb: none;');
   });
 
   it('ignora valores que romperían el CSS y avisa en modo desarrollo', () => {

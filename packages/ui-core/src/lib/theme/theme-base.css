@@ -42,12 +42,14 @@
   --mimi-control-height-sm: 2rem;
   --mimi-control-height-lg: 3rem;
 
-  /* Movimiento. Si se usa --mimi-lift, agregar `translate` a la transición. */
+  /* Movimiento. `translate` mueve el pulgar del Switch (y --mimi-lift si se usa). */
   --mimi-lift: 0px;
   --mimi-press-scale: 0.975;
+  /* Escala al presionar de Switch y Checkbox (diseño: scale(0.9)) */
+  --mimi-press-scale-sm: 0.9;
   --mimi-transition:
     background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.25s ease,
-    scale 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+    scale 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), translate 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
 
   /* Sombras */
   --mimi-shadow-card:
@@ -67,6 +69,8 @@
     0 8px 18px -6px color-mix(in oklch, var(--mimi-destructive) 42%, transparent);
   --mimi-shadow-neutral: 0 1px 2px oklch(0 0 0 / 0.06), 0 4px 10px -4px oklch(0 0 0 / 0.08);
   --mimi-shadow-neutral-hover: 0 2px 4px oklch(0 0 0 / 0.06), 0 10px 20px -8px oklch(0 0 0 / 0.14);
+  /* Pulgar del Switch (igual en claro y oscuro) */
+  --mimi-shadow-thumb: 0 1px 3px oklch(0 0 0 / 0.2);
 
   /* Derivados */
   --mimi-primary-hover: color-mix(in oklch, var(--mimi-primary) 88%, var(--mimi-background));
@@ -144,10 +148,11 @@
   color-scheme: dark;
 }
 
-/* ── Movimiento reducido: sin escala al hacer clic ni transición de scale ── */
+/* ── Movimiento reducido: sin escala al hacer clic ni transición de scale y translate ── */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --mimi-press-scale: 1;
+    --mimi-press-scale-sm: 1;
     --mimi-transition:
       background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.25s ease;
   }
@@ -197,6 +202,7 @@
   --shadow-destructive-hover: var(--mimi-shadow-destructive-hover);
   --shadow-neutral: var(--mimi-shadow-neutral);
   --shadow-neutral-hover: var(--mimi-shadow-neutral-hover);
+  --shadow-thumb: var(--mimi-shadow-thumb);
 
   --font-sans: var(--mimi-font-sans);
   --font-mono: var(--mimi-font-mono);

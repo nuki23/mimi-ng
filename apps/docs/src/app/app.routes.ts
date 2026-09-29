@@ -65,6 +65,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/docs/components/avatar/avatar-page').then((m) => m.AvatarPage),
       },
+      {
+        path: 'components/switch',
+        title: 'Switch y Checkbox · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/switch/switch-page').then((m) => m.SwitchPage),
+      },
       // Los componentes irán en components/<nombre> (Fase 2).
     ],
   },
