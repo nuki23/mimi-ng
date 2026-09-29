@@ -1,6 +1,7 @@
 {
   "name": "@mimi-ng/ui-core",
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
   "exports": {
     "./theme.css": "./src/lib/theme/theme-base.css",
