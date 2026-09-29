@@ -876,3 +876,43 @@ Si el crecimiento es CSS de componentes o APIs de Angular, se sube el límite co
 - **Vivid:** paleta neutra (primario casi negro en claro, casi blanco en oscuro), radio 12px, sombras en capas (solo la de destructive va teñida de su color), fuente Outfit y micro-animaciones (escala al hacer clic, transiciones suaves de color y sombra). Inspirado en Vuesax sin copiarlo.
 - Los tokens están en `docs/design/tokens-vivid.css`. El primario se cambia con el preset (el personalizador del diseño trae violeta, esmeralda, azul y naranja).
 - `mimi.json` guarda `"style": "vivid"`; el campo queda para poder sumar estilos más adelante.
+
+## 12. Política de versiones
+
+### Versionado de Mimi
+
+Mimi usa versionado semántico propio, independiente del de Angular: `0.x` mientras está en desarrollo y `1.0` cuando la API sea estable.
+
+- **Mayor:** cambios que rompen. Por ejemplo, renombrar una entrada de un componente o subir la versión mínima de Angular.
+- **Menor:** componentes o funciones nuevas.
+- **Parche:** correcciones.
+
+La versión está en `packages/ui-core/package.json` y `packages/cli/package.json` (y en `registry.json`, que la prueba de consistencia compara con la de ui-core).
+
+### Versiones de Angular soportadas
+
+Mimi soporta las versiones de Angular con soporte oficial (activo o LTS). Cuando Angular retira una, Mimi sube su mínimo en una versión **mayor** y actualiza:
+
+- la verificación de `init` (`MIN_ANGULAR` en `packages/cli/src/init/index.ts`);
+- el rango de la CLI (`@angular-devkit/*` y `@schematics/angular` en `packages/cli/package.json`) y las `peerDependencies` de ui-core;
+- la tabla de compatibilidad.
+
+### El código copiado es del usuario
+
+Lo que la CLI copia al proyecto es código del usuario: se actualiza con `ng update` junto al resto de su proyecto y no depende de una versión de Mimi instalada. `@mimi-ng/cli` solo se necesita para agregar componentes o actualizarlos con `mimi update` (Fase 5).
+
+### Tabla de compatibilidad
+
+| Mimi | Angular | Tailwind CSS |
+| ---- | ------- | ------------ |
+| 0.x  | 22+     | 4            |
+
+### Rutina ante una versión nueva de Angular
+
+1. Probar la versión candidata (RC) en una rama con `ng update`.
+2. Correr todas las pruebas (`pnpm test`: showcase, ui-core y CLI) y `pnpm build`.
+3. Revisar las novedades que afecten a Mimi: APIs de signals y formularios (`FormValueControl`, `FormCheckboxControl`), control de flujo, cambios en `@angular/cli` y `@schematics/angular` (`ng add`, `schematicCollections`, utilidades que usan `init` y `ui`).
+4. Probar la CLI en un proyecto limpio creado con esa versión (`ng new` + `ng add @mimi-ng/cli` + `ng g ui …` + `ng build`).
+5. Publicar declarando el soporte: actualizar rangos y la tabla de compatibilidad.
+
+Lo mismo para Tailwind CSS: probar la versión nueva en una rama, correr las pruebas, revisar el CSS generado (tokens, `@theme inline`, `@source`, variantes) y probar la CLI en un proyecto limpio.
