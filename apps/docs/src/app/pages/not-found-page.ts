@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
+import { Meta } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { MimiButton } from '@/components/ui/button';
 
@@ -22,4 +23,12 @@ import { MimiButton } from '@/components/ui/button';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NotFoundPage {}
+export class NotFoundPage {
+  constructor() {
+    // Sin prerender, el servidor responde 200 a cualquier ruta (modo SPA): `noindex`
+    // evita que los buscadores indexen la 404. Se quita al salir de la página.
+    const meta = inject(Meta);
+    meta.updateTag({ name: 'robots', content: 'noindex' });
+    inject(DestroyRef).onDestroy(() => meta.removeTag("name='robots'"));
+  }
+}

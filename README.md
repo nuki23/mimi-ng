@@ -57,6 +57,7 @@ Requiere Node.js 24.15+ y pnpm 12 (ver `docs/spec.md`, sección 2). Todo se ejec
 pnpm install        # instalar dependencias
 pnpm dev            # levantar el showcase en http://localhost:4200
 pnpm build          # compilar el showcase (dist/docs) y la CLI (packages/cli/dist)
+pnpm build:docs     # compilar solo el showcase (lo que se despliega en Cloudflare)
 pnpm build:cli      # compilar solo la CLI
 pnpm test           # pruebas del showcase, de ui-core y de la CLI
 pnpm test:ui-core   # solo ui-core

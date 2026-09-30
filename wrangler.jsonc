@@ -1,0 +1,16 @@
+// Despliegue del showcase en Cloudflare Workers (solo archivos estáticos, sin script).
+// Ver docs/spec.md, sección 10 («Despliegue»).
+{
+  "$schema": "https://unpkg.com/wrangler@4/config-schema.json",
+  "name": "mimi-ng-docs",
+  "compatibility_date": "2026-09-30",
+  "assets": {
+    // Salida de `pnpm build:docs` (ng build docs).
+    "directory": "./dist/docs/browser",
+    // Rutas sin archivo → index.html (200) y Angular resuelve, incluida su página 404.
+    "not_found_handling": "single-page-application",
+  },
+  // Solo se sirve en ng.mimiworks.dev: sin *.workers.dev ni URLs de vista previa.
+  "workers_dev": false,
+  "preview_urls": false,
+}

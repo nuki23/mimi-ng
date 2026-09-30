@@ -8,6 +8,7 @@
     "ng": "ng",
     "dev": "ng serve docs",
     "build": "ng build docs && pnpm build:cli",
+    "build:docs": "ng build docs",
     "build:cli": "node packages/cli/scripts/build.mjs",
     "test": "ng test docs --watch=false && ng test ui-core --watch=false && pnpm test:cli",
     "test:ui-core": "ng test ui-core --watch=false",

@@ -49,6 +49,8 @@ Frase principal: _"Los componentes son tuyos. Las actualizaciones también."_
 | @lucide/angular        | 1.47.0            | Íconos del showcase (peer `@angular/core >=17`); en el `package.json` raíz                   |
 | shiki                  | 4.4.3             | Resaltado del showcase (con `@shikijs/langs` y `@shikijs/themes`); en el `package.json` raíz |
 
+El showcase se despliega con wrangler 4 (`npx wrangler@4 deploy`, sin instalarlo como dependencia) y Node 24.18.0 (`.node-version`); ver sección 10, «Despliegue».
+
 pnpm 11+ bloquea los scripts de instalación: los autorizados están en `allowBuilds` de `pnpm-workspace.yaml` (`@parcel/watcher`, `esbuild`, `lmdb`, `msgpackr-extract`).
 
 ## 3. Estructura del monorepo
@@ -872,11 +874,22 @@ Si el crecimiento es CSS de componentes o APIs de Angular, se sube el límite co
 - 6.3 kB de `@angular/core`: partes del framework que usan los componentes nuevos, como `effect` y `viewChildren`.
 - 1.4 kB de `platform-browser`.
 
+### Despliegue
+
+El showcase se publica en **https://ng.mimiworks.dev** con **Cloudflare Workers** (solo archivos estáticos, sin script). Se eligió Workers y no Pages porque Cloudflare recomienda Workers para proyectos nuevos; la configuración queda en el repositorio.
+
+- **`wrangler.jsonc`** (raíz): sirve `dist/docs/browser` con `not_found_handling: "single-page-application"`. Sin `*.workers.dev` ni URLs de vista previa (`workers_dev: false`, `preview_urls: false`): solo el dominio propio.
+- **Build (Workers Builds, desde GitHub):** `pnpm build:docs` (`ng build docs`, sin la CLI). Despliegue: `npx wrangler@4 deploy`. Wrangler no es dependencia del repositorio; la versión mayor se fija en el comando y se revisa según la sección 12.
+- **Versiones del build:** Node en `.node-version` (24.18.0, dentro del rango de Angular 22); pnpm con la variable `PNPM_VERSION` del panel, igual a `packageManager` (12.5.1).
+- **Rutas:** una ruta sin archivo entrega `index.html` con estado 200 y la resuelve Angular. Recargar `/docs/components/button` funciona, y una ruta inexistente muestra la 404 del showcase, pero con estado **200** (soft 404). Por eso la 404 agrega `<meta name="robots" content="noindex">` mientras se muestra. El estado 404 real llega con el prerender (Fase 5).
+- **Caché:** `apps/docs/public/_headers` (Angular lo copia a la salida) marca `main-*`, `chunk-*`, `polyfills-*` y `styles-*` como `public, max-age=31536000, immutable`: llevan hash (`outputHashing: all`). `index.html`, `favicon.ico` y `avatars/` quedan con la caché por defecto de Cloudflare (`max-age=0, must-revalidate` con ETag). Si se agrega un archivo sin hash con esos prefijos, hay que sacarlo de `_headers`.
+- **Dominio:** Custom Domain del Worker (Cloudflare crea el registro DNS y el certificado); el subdominio no debe tener un CNAME previo.
+
 ### Pendiente
 
 - **Páginas:** Personalización, Temas (personalizador en vivo y exportar `mimi.preset.ts`), Iconos, Migrar desde PrimeNG / NG-ZORRO y una página por componente. Select y Dialog aparecen como «Próximamente» hasta la Fase 4.
 - **Página de componente:** título, descripción, `InstallCommand`, un `CodePreview` por estado (cada ejemplo en su archivo `examples/*.example.ts`), ejemplo con `class` y tabla de API.
-- Prerender para generar páginas estáticas (Fase 5).
+- Prerender para generar páginas estáticas y responder 404 con estado real (Fase 5).
 
 **Landing (`/`, tarea 2.12)** según `docs/design/Mimi Sitio.dc.html`: hero (badge con la versión, titular, subtítulo, `ng add @mimi-ng/cli` con `CodeBlock` y botones «Empezar» → `/docs/installation` y «Componentes» → `/docs/components/button`), cuatro diferenciales y la vitrina «Hecho con Mimi» (`pages/home/`: un formulario real con Reactive Forms y una lista de equipo). Reglas:
 
@@ -931,3 +944,8 @@ Lo que la CLI copia al proyecto es código del usuario: se actualiza con `ng upd
 5. Publicar declarando el soporte: actualizar rangos y la tabla de compatibilidad.
 
 Lo mismo para Tailwind CSS: probar la versión nueva en una rama, correr las pruebas, revisar el CSS generado (tokens, `@theme inline`, `@source`, variantes) y probar la CLI en un proyecto limpio.
+
+### Herramientas fijadas por versión mayor
+
+- **wrangler** (despliegue del showcase): el comando de despliegue de Workers Builds es `npx wrangler@4 deploy`. Cuando salga una versión mayor nueva (`npm view wrangler version`), revisar sus cambios que rompen en `wrangler.jsonc` (`assets`, `not_found_handling`, `workers_dev`, `preview_urls`) y en `_headers`, cambiar la mayor en el comando del panel de Cloudflare y en esta spec (secciones 2 y 10), y comprobar en el sitio que recargar una ruta, la 404 y los encabezados de caché sigan funcionando.
+- **Node y pnpm del build:** `.node-version` y la variable `PNPM_VERSION` del panel se actualizan junto con la sección 2 (`packageManager` y el rango de Node que exige Angular).

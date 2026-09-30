@@ -1,0 +1,10 @@
+# Cloudflare: los archivos con hash de Angular no cambian nunca (outputHashing: all).
+# index.html, avatars/ y favicon.ico mantienen la caché por defecto (revalidar siempre).
+/main-*
+  Cache-Control: public, max-age=31536000, immutable
+/chunk-*
+  Cache-Control: public, max-age=31536000, immutable
+/polyfills-*
+  Cache-Control: public, max-age=31536000, immutable
+/styles-*
+  Cache-Control: public, max-age=31536000, immutable

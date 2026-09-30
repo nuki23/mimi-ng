@@ -59,7 +59,7 @@ Publicar `@mimi-ng/cli` 0.1.0 antes de la Fase 4. La publicación en npm la hace
 
 - [x] L.1 READMEs: `packages/cli/README.md` (el que muestra npm: qué es Mimi, requisitos, `ng add`, `ng g ui`, componentes y enlace a la documentación) y `README.md` de la raíz (GitHub). Documentación en https://ng.mimiworks.dev; repositorio en https://github.com/nuki23/mimi-ng.
 - [x] L.2 `package.json` de la CLI: `description`, `keywords`, `repository`, `homepage` (https://ng.mimiworks.dev), `bugs`, `author` ("Ariel O (https://github.com/nuki23)", sin correo), `license`, `engines` y `publishConfig.access: public`.
-- [ ] L.3 Documentación en Cloudflare Pages con reescritura SPA, en ng.mimiworks.dev (prerender en la Fase 5): qué va en el repositorio y qué se configura en Cloudflare.
+- [x] L.3 Documentación en Cloudflare Workers (archivos estáticos, modo SPA), en ng.mimiworks.dev (prerender en la Fase 5): `wrangler.jsonc`, `_headers`, `.node-version`, `pnpm build:docs` y `noindex` en la 404 (spec, sección 10, «Despliegue»). La configuración del panel de Cloudflare la hace el dueño del proyecto.
 - [ ] L.4 `pnpm publish --dry-run`: lista de archivos y tamaño.
 - [ ] L.5 Quitar `"private": true` de la CLI (último paso antes de publicar).
 - [ ] L.6 Después de publicar: probar `ng add @mimi-ng/cli` desde npm en un proyecto limpio; quitar «La CLI estará disponible pronto.» (landing e Instalación) y ajustar sus pruebas; `CHANGELOG.md`; etiqueta `v0.1.0` y release en GitHub; hacer público el repositorio; cuando el sitio y el paquete estén publicados, agregar a los dos READMEs una captura de pantalla del sitio y badges de npm (versión) y licencia.
@@ -85,6 +85,7 @@ Publicar `@mimi-ng/cli` 0.1.0 antes de la Fase 4. La publicación en npm la hace
 - [ ] 5.11 Cuando exista el componente Tabs (catálogo «Después»), reemplazar las pestañas hechas a mano de CodePreview e InstallCommand.
 - [ ] 5.12 GitHub Actions: pruebas de la CLI en proyectos limpios con cada versión de Angular soportada.
 - [ ] 5.13 Tabla de compatibilidad en la documentación.
+- [ ] 5.14 Prerender del showcase: páginas estáticas y 404 con estado real (hoy el modo SPA de Cloudflare responde 200 y la 404 lleva `noindex`). Revisar `not_found_handling` en `wrangler.jsonc` (pasaría a `404-page` con un `404.html`).
 
 ## Decisiones pendientes
 
