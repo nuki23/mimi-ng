@@ -8,15 +8,15 @@ import { MimiSeparator } from '@/components/ui/separator';
   template: `
     <div class="flex h-14 items-center gap-3">
       <mimi-avatar size="sm">
-        <img mimiAvatarImage src="/avatars/avatar-1.png" alt="Lucía Pérez" />
+        <img mimiAvatarImage src="/avatars/avatar-1.svg" alt="Lucía Pérez" />
         <mimi-avatar-fallback label="Lucía Pérez">LP</mimi-avatar-fallback>
       </mimi-avatar>
       <mimi-avatar>
-        <img mimiAvatarImage src="/avatars/avatar-2.png" alt="Diego Ruiz" />
+        <img mimiAvatarImage src="/avatars/avatar-2.svg" alt="Diego Ruiz" />
         <mimi-avatar-fallback label="Diego Ruiz">DR</mimi-avatar-fallback>
       </mimi-avatar>
       <mimi-avatar size="lg">
-        <img mimiAvatarImage src="/avatars/avatar-3.png" alt="Marta Gómez" />
+        <img mimiAvatarImage src="/avatars/avatar-3.svg" alt="Marta Gómez" />
         <mimi-avatar-fallback label="Marta Gómez">MG</mimi-avatar-fallback>
       </mimi-avatar>
 

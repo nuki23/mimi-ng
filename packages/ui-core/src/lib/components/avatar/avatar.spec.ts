@@ -24,7 +24,7 @@ import type { AvatarSize } from './avatar.variants';
 })
 class Host {
   readonly size = signal<AvatarSize>('default');
-  readonly src = signal<string | null>('/avatars/avatar-1.png');
+  readonly src = signal<string | null>('/avatars/avatar-1.svg');
   readonly extra = signal('');
   readonly imgExtra = signal('');
   readonly fallbackExtra = signal('');
@@ -68,12 +68,12 @@ describe('MimiAvatar', () => {
 
   it('src vuelve a escribirse en el <img> y los atributos nativos se conservan', async () => {
     const { host, img, update } = await setup();
-    expect(img.getAttribute('src')).toBe('/avatars/avatar-1.png');
+    expect(img.getAttribute('src')).toBe('/avatars/avatar-1.svg');
     expect(img.getAttribute('alt')).toBe('Ana Torres');
     expect(img.getAttribute('loading')).toBe('lazy');
     expect(img.getAttribute('referrerpolicy')).toBe('no-referrer');
-    await update(() => host.src.set('/avatars/avatar-2.png'));
-    expect(img.getAttribute('src')).toBe('/avatars/avatar-2.png');
+    await update(() => host.src.set('/avatars/avatar-2.svg'));
+    expect(img.getAttribute('src')).toBe('/avatars/avatar-2.svg');
   });
 
   it('mientras carga se ve el fallback; al cargar, la imagen', async () => {
@@ -99,7 +99,7 @@ describe('MimiAvatar', () => {
   it('un src nuevo vuelve a cargar; sin src, se ve el fallback', async () => {
     const { host, avatar, fire, update } = await setup();
     await fire('load');
-    await update(() => host.src.set('/avatars/avatar-3.png'));
+    await update(() => host.src.set('/avatars/avatar-3.svg'));
     expect(avatar.dataset['state']).toBe('loading');
     await update(() => host.src.set(null));
     expect(avatar.dataset['state']).toBe('error');

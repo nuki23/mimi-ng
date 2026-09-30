@@ -28,9 +28,9 @@ describe('AvatarPage', () => {
     const srcs = Array.from(el.querySelectorAll('img[src^="/avatars/"]')).map((i) =>
       i.getAttribute('src'),
     );
-    expect(srcs).toContain('/avatars/avatar-1.png');
-    expect(srcs).toContain('/avatars/avatar-2.png');
-    expect(srcs).toContain('/avatars/avatar-3.png');
+    expect(srcs).toContain('/avatars/avatar-1.svg');
+    expect(srcs).toContain('/avatars/avatar-2.svg');
+    expect(srcs).toContain('/avatars/avatar-3.svg');
     expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
       'installation',
       'usage',

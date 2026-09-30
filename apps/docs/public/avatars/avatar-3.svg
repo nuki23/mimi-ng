@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Luna sobre el mar">
+  <!-- Ilustración original de Mimi (MIT): luna, estrellas y olas. -->
+  <rect width="96" height="96" fill="#1e2a4a"/>
+  <circle cx="60" cy="32" r="14" fill="#f4efd8"/>
+  <circle cx="66" cy="27" r="12" fill="#1e2a4a"/>
+  <circle cx="22" cy="20" r="2" fill="#f4efd8"/>
+  <circle cx="36" cy="34" r="1.5" fill="#f4efd8"/>
+  <circle cx="80" cy="54" r="1.5" fill="#f4efd8"/>
+  <path d="M0 66 Q12 58 24 66 T48 66 T72 66 T96 66 V96 H0 Z" fill="#3b82c4"/>
+  <path d="M0 78 Q12 70 24 78 T48 78 T72 78 T96 78 V96 H0 Z" fill="#2563a6"/>
+</svg>
