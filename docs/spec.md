@@ -91,7 +91,7 @@ Angular CLI se ejecuta siempre desde la raíz. `ui-core` no tiene build propio: 
 
 Como Angular corre desde la raíz, el `styles.css` del showcase usa `@import 'tailwindcss' source(none)` y declara sus fuentes a mano (`apps/docs/src` y `packages/ui-core/src`, sin los `.spec.ts`); si no, Tailwind escanearía todo el repositorio (`docs/`, `CLAUDE.md`…) y generaría clases de más.
 
-El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve en la documentación es exactamente lo que entrega la CLI.
+El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve en la documentación es exactamente lo que entrega la CLI. La versión de Mimi está solo en `packages/cli/package.json` (ui-core no tiene `version`; ver sección 12).
 
 **La CLI (`packages/cli`, tareas 3.1 y 3.2).** Verificado en `@angular-devkit/schematics` 22.1.8:
 
@@ -167,20 +167,22 @@ DropdownMenu, Tooltip, Tabs, Popover, Combobox múltiple, DatePicker, Toast, Tab
 ### Comandos
 
 ```bash
+# Hoy
 ng add @mimi-ng/cli                 # instala y ejecuta init
+ng g ui button                      # uno (tras init: schematicCollections)
+ng g ui button input card           # varios
+ng g ui                             # menú para elegir (terminal interactiva)
+ng g @mimi-ng/cli:ui button         # forma larga, funciona siempre
 
-pnpm mimi add button                # uno
-pnpm mimi add button input card     # varios
-pnpm mimi add                       # menú para elegir
-pnpm mimi list                      # disponibles e instalados
-pnpm mimi theme                     # crea mimi.preset.ts
-pnpm mimi update button             # actualiza respetando cambios (Fase 5)
-
-# Equivalentes con Angular CLI
-ng g @mimi-ng/cli:ui button
-ng g ui button                      # tras init (schematicCollections)
-ng g @mimi-ng/cli:theme --palette=violet --radius=lg
+# Más adelante
+pnpm mimi add button                # comando mimi (tarea 5.3)
+pnpm mimi list                      # disponibles e instalados (5.3)
+pnpm mimi theme                     # crea mimi.preset.ts (5.1 y 5.3)
+pnpm mimi update button             # combina tus cambios con la versión nueva (5.4)
+ng g @mimi-ng/cli:theme --palette=violet --radius=lg   # (5.1)
 ```
+
+El sitio solo muestra comandos que funcionan hoy, salvo los marcados como versión futura: una prueba del showcase (`apps/docs/src/app/commands.spec.ts`) falla si aparece `mimi add`, `mimi list` o `mimi theme`, o `mimi update` sin marcarlo como futuro. `InstallCommand` muestra `ng g ui <nombre>` y la forma larga; la pestaña de pnpm vuelve con la tarea 5.3.
 
 El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta varios nombres (opción `components` de tipo `array` con `"$default": { "$source": "argv", "index": 0 }`: la CLI de Angular la registra como posicional variádica, `ui [components ..]`) y, sin nombres y con terminal interactiva, muestra un `x-prompt` de selección múltiple (`"type": "list"`, `"multiselect": true`).
 
@@ -264,7 +266,7 @@ Idempotente: `ng g ui button` dos veces no cambia nada ni vuelve a instalar.
 
 ```json
 {
-  "version": "0.1.0",
+  "suggestedDependencies": { "@lucide/angular": "^1.47.0" },
   "items": {
     "utils/cn": {
       "type": "util",
@@ -290,6 +292,7 @@ Idempotente: `ng g ui button` dos veces no cambia nada ni vuelve a instalar.
 }
 ```
 
+- **Versión:** el `registry.json` fuente no la tiene. El build la toma del `package.json` de la CLI (única fuente, tarea 3.8) y la escribe en `dist/registry.json`, que es lo que leen los schematics para el manifiesto (`.mimi/manifest.json`) y `mimi.json` → `components`.
 - `files`: rutas relativas a las plantillas (`dist/templates`, copia de `ui-core/src/lib`).
 - `dependencies` / `peerDependencies`: con la versión exacta del `package.json` de ui-core, nunca escrita a mano.
 - `registryDependencies`: otros ítems que se copian con este (se resuelven en orden, dependencias primero).
@@ -753,7 +756,7 @@ apps/docs/src/app/
 ```
 
 - **Header:** fijo (`sticky`), 60px de alto, fondo `bg-background/78` con desenfoque de 14px y borde inferior. Contiene el botón de menú (solo bajo `lg`), el logo (enlace a `/`), la versión, el enlace a GitHub y el botón claro/oscuro. Sin nav superior, buscador ⌘K ni selector ES/EN: quedan en la Fase 5.
-  - **Versión:** `SITE.version`, que por ahora lee `packages/ui-core/package.json` con el alias `@mimi-ng/ui-core/package.json` de `tsconfig.base.json` (y `resolveJsonModule`). Tiene que ser un alias y no una importación de paquete: `ng serve` deja los paquetes de `node_modules` fuera del bundle y Vite los busca desde la raíz del workspace, donde `@mimi-ng/ui-core` no está instalado. En la Fase 3 se leerá de `@mimi-ng/cli`.
+  - **Versión:** `SITE.version`, que lee `packages/cli/package.json` (única fuente de la versión de Mimi, tarea 3.8) con el alias `@mimi-ng/cli/package.json` de `tsconfig.base.json` (y `resolveJsonModule`). Tiene que ser un alias y no una importación de paquete: `ng serve` deja los paquetes de `node_modules` fuera del bundle y Vite los busca desde la raíz del workspace, donde `@mimi-ng/cli` no está instalado. La prueba `site.spec.ts` lo comprueba.
   - **GitHub:** `SITE.githubUrl` (`https://github.com/nuki23/mimi-ng`). Lucide ya no tiene logos de marcas, así que el ícono es el SVG oficial de GitHub (Octicon mark-github, MIT) en línea, con `fill="currentColor"` y `aria-hidden`; el enlace lleva `aria-label="Repositorio de Mimi en GitHub"`.
 - **Grilla de la documentación:** `max-w-[1440px]`, `px-6`; columnas `240px | contenido | 200px`; separación de 28px (48px desde 1100px). Contenido con `max-w-[900px]`, 40px arriba y 120px abajo, y migas (sección › página) sacadas de `DOCS_NAV`.
 - **Responsive:** desde `lg` (1024px) la sidebar es una columna fija; bajo `lg` se abre en el panel móvil. Desde `xl` (1280px) se muestra la TOC; bajo `xl` se oculta.
@@ -813,7 +816,7 @@ Están en `apps/docs/src/app/code/`. Las medidas salen de la página de Input de
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CodePreview`        | Tarjeta con pestañas tipo segmento (Preview con ícono de ojo, Código con ícono de código) y un botón «Copiar». El lienzo tiene 260px de alto mínimo, borde punteado, `bg-background`, contenido centrado y tres puntos decorativos. El ejemplo va por `ng-content`; `code` es el texto de su archivo. `lang` vale `angular-ts` por defecto. |
 | `CodeBlock`          | Bloque de código con botón copiar. Entradas: `code`, `lang`, `prompt` (`$` delante de un comando, que no se copia), `bordered`, `copyable` y `roomy` (la variante holgada del panel Código).                                                                                                                                                |
-| `InstallCommand`     | Pestañas subrayadas `pnpm` (`pnpm mimi add <nombre>`) y `Angular CLI` (`ng g @mimi-ng/cli:ui <nombre>`), cada una con un `CodeBlock`.                                                                                                                                                                                                       |
+| `InstallCommand`     | Pestañas subrayadas `Angular CLI` (`ng g ui <nombre>`) y `Forma larga` (`ng g @mimi-ng/cli:ui <nombre>`), cada una con un `CodeBlock`. La de pnpm (`pnpm mimi add`) vuelve con la tarea 5.3.                                                                                                                                                |
 | `CopyButton`         | `navigator.clipboard.writeText` con try/catch. Muestra un check durante 2 s y anuncia «Copiado» en una región `aria-live`. Tiene una variante solo ícono (32px) y otra con texto.                                                                                                                                                           |
 | `HighlighterService` | Shiki (ver abajo).                                                                                                                                                                                                                                                                                                                          |
 
@@ -899,7 +902,7 @@ Mimi usa versionado semántico propio, independiente del de Angular: `0.x` mient
 - **Menor:** componentes o funciones nuevas.
 - **Parche:** correcciones.
 
-La versión está en `packages/ui-core/package.json` y `packages/cli/package.json` (y en `registry.json`, que la prueba de consistencia compara con la de ui-core).
+La versión está en un solo lugar: `packages/cli/package.json`. De ahí la toman el showcase (`SITE.version`), el build de la CLI (que la escribe en `dist/registry.json`) y, a través del registro, `.mimi/manifest.json` y `mimi.json` en los proyectos. ui-core no tiene versión: se entrega dentro de la CLI. Las pruebas `registry.spec.ts` (CLI) y `site.spec.ts` (showcase) fallan si alguna quedara distinta.
 
 ### Versiones de Angular soportadas
 

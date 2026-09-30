@@ -20,8 +20,11 @@ interface Feature {
   icon: 'git-merge' | 'layers' | 'arrow-left-right' | 'list-checks';
   title: string;
   body: string;
-  /** Todavía no existe: lleva «Próximamente» y no enlaza a ninguna página. */
-  soon?: boolean;
+  /**
+   * Etiqueta para lo que todavía no existe (del todo): «Próximamente», o qué parte falta.
+   * Ninguna tarjeta enlaza a una página.
+   */
+  badge?: string;
 }
 
 /** Landing del showcase (docs/design/Mimi Sitio.dc.html). Ruta lazy: nada de aquí va al bundle inicial. */
@@ -52,8 +55,8 @@ export class HomePage {
     {
       icon: 'git-merge',
       title: 'Actualiza sin perder tus cambios',
-      body: 'mimi update compara tu copia con la versión original y la nueva, y solo aplica lo que no tocaste. Si hay conflicto, te lo muestra antes de escribir.',
-      soon: true,
+      body: 'Los componentes que modificaste nunca se sobrescriben, y los que no tocaste se actualizan solos al volver a ejecutar ng g ui. Pronto, mimi update combinará tus cambios con la versión nueva.',
+      badge: 'mimi update: próximamente',
     },
     {
       icon: 'layers',
@@ -64,7 +67,7 @@ export class HomePage {
       icon: 'arrow-left-right',
       title: '¿Vienes de PrimeNG o NG-ZORRO? Te sentirás en casa',
       body: 'Los mismos conceptos, presets de tema tipados y una tabla de equivalencias para migrar componente por componente.',
-      soon: true,
+      badge: 'Próximamente',
     },
     {
       icon: 'list-checks',

@@ -1,135 +1,98 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../code/code-block';
-import type { CodeLang } from '../../code/highlighter.service';
-import { InstallCommand } from '../../code/install-command';
-
-interface Snippet {
-  code: string;
-  lang: CodeLang;
-  /** `$` delante de un comando de una línea. */
-  prompt?: string;
-}
-
-interface InstallDetail {
-  id: string;
-  title: string;
-  description: string;
-  snippet?: Snippet;
-}
-
-interface InstallStep {
-  id: string;
-  title: string;
-  description: string;
-  snippet: Snippet;
-  /** Muestra las pestañas pnpm / Angular CLI para este componente. */
-  installName?: string;
-  /** Todavía no existe en la CLI: se marca como disponible en una versión futura. */
-  future?: boolean;
-  details?: InstallDetail[];
-}
 
 /**
- * Instalación. Pasos de docs/design/Mimi Sitio.dc.html y comandos de docs/spec.md (sección 5).
- * Se revisará contra la CLI real en la Fase 3.
+ * Instalación, contra lo que la CLI hace de verdad (tareas 3.7 y 3.9; spec, sección 5).
+ * `mimi update` sigue marcado como versión futura (tarea 5.4).
  */
 @Component({
   selector: 'app-installation-page',
-  imports: [CodeBlock, InstallCommand],
+  imports: [CodeBlock],
   templateUrl: './installation-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InstallationPage {
-  protected readonly steps: InstallStep[] = [
+  protected readonly tailwindGuide =
+    'https://tailwindcss.com/docs/installation/framework-guides/angular';
+
+  /** Qué modifica `ng add @mimi-ng/cli` (init), archivo por archivo. */
+  protected readonly changes = [
     {
-      id: 'step-1',
-      title: 'Crea un proyecto Angular 22',
-      description: 'Si ya tienes uno, salta al paso 2.',
-      snippet: { code: 'ng new mi-app --style=css', lang: 'bash', prompt: '$' },
+      file: 'src/styles.css',
+      what: 'Importa el tema de Mimi justo después de @import "tailwindcss".',
     },
     {
-      id: 'step-2',
-      title: 'Añade Tailwind CSS 4',
-      description:
-        'Instala Tailwind y su plugin de PostCSS. Luego agrega @import "tailwindcss"; al inicio de src/styles.css.',
-      snippet: {
-        code: 'pnpm add tailwindcss @tailwindcss/postcss postcss',
-        lang: 'bash',
-        prompt: '$',
-      },
-      details: [
-        {
-          id: 'step-2-postcss',
-          title: 'Configura PostCSS',
-          description: 'Crea .postcssrc.json en la raíz del proyecto con el plugin de Tailwind.',
-          snippet: { code: '{\n  "plugins": { "@tailwindcss/postcss": {} }\n}', lang: 'json' },
-        },
-      ],
+      file: 'tsconfig.json',
+      what: 'Agrega el alias @/components/ui/* apuntando a la carpeta de componentes, sin borrar tus comentarios ni tus paths. Si tsconfig.app.json tiene sus propios paths, también ahí.',
     },
     {
-      id: 'step-3',
-      title: 'Inicializa Mimi',
-      description:
-        'Instala la CLI y ejecuta init: crea mimi.json, agrega las variables --mimi-* a styles.css y configura el alias @/components/ui.',
-      snippet: { code: 'ng add @mimi-ng/cli', lang: 'bash', prompt: '$' },
-      details: [
-        {
-          id: 'step-3-dependencies',
-          title: 'Dependencias',
-          description:
-            'Instala clsx, tailwind-merge y class-variance-authority como dependencias normales.',
-        },
-        {
-          id: 'step-3-files',
-          title: 'Archivos que crea',
-          description:
-            'utils/cn.ts, utils/control-styles.ts y mimi.json. Registra @mimi-ng/cli en angular.json y pregunta si quieres instalar @lucide/angular para tus íconos.',
-        },
-      ],
+      file: 'angular.json',
+      what: 'Agrega @mimi-ng/cli a cli.schematicCollections, después de @schematics/angular: así funcionan ng g ui y también ng g component.',
     },
     {
-      id: 'step-4',
-      title: 'Agrega componentes',
-      description:
-        'Cada componente se copia a src/app/components/ui. Puedes pedir uno o varios a la vez.',
-      snippet: { code: 'pnpm mimi add button input card', lang: 'bash', prompt: '$' },
-      installName: 'button',
-      details: [
-        {
-          id: 'step-4-more',
-          title: 'Otros comandos',
-          description:
-            'Sin nombres, la CLI muestra un menú para elegir. También puedes listar los disponibles.',
-          snippet: {
-            code: 'pnpm mimi add    # menú para elegir\npnpm mimi list   # disponibles e instalados',
-            lang: 'bash',
-          },
-        },
-        {
-          id: 'step-4-angular-cli',
-          title: 'Con Angular CLI',
-          description:
-            'Los mismos schematics funcionan con ng generate. Después de init, basta con ng g ui.',
-          snippet: {
-            code: 'ng g @mimi-ng/cli:ui button\nng g ui button   # tras init (schematicCollections)',
-            lang: 'bash',
-          },
-        },
-      ],
+      file: 'package.json',
+      what: 'Agrega clsx, tailwind-merge y class-variance-authority, y los instala con tu gestor de paquetes (pnpm, npm, yarn o bun).',
     },
     {
-      id: 'step-5',
-      title: 'Úsalos',
-      description: 'Importa el componente o la directiva en tu componente standalone.',
-      snippet: { code: '<button mimiBtn>Hola, Mimi</button>', lang: 'angular-html' },
+      file: 'src/app/components/ui/',
+      what: 'Copia el tema (theme/) y las utilidades base (utils/cn.ts y utils/control-styles.ts).',
+    },
+    { file: 'mimi.json', what: 'Crea la configuración de Mimi.' },
+    { file: '.mimi/', what: 'Guarda las copias originales de los archivos y sus versiones.' },
+  ];
+
+  protected readonly options = [
+    {
+      name: '--icons',
+      what: 'Instala @lucide/angular para tus íconos. Si la terminal es interactiva, lo pregunta; si no, no lo instala.',
     },
     {
-      id: 'step-6',
-      title: 'Actualiza cuando quieras',
-      description:
-        'Mimi compara tu copia con la versión original y la nueva. Solo aplica lo que no tocaste y te avisa si hay conflictos.',
-      snippet: { code: 'pnpm mimi update button', lang: 'bash', prompt: '$' },
-      future: true,
+      name: '--project',
+      what: 'Elige la aplicación si el workspace tiene varias.',
+    },
+    {
+      name: '--overwrite',
+      what: 'Reemplaza los archivos de Mimi que modificaste (pierdes tus cambios).',
     },
   ];
+
+  protected readonly usage = [
+    "import { MimiButton } from '@/components/ui/button';",
+    '',
+    '@Component({',
+    "  selector: 'app-root',",
+    '  imports: [MimiButton],',
+    '  template: `<button mimiBtn>Hola, Mimi</button>`,',
+    '})',
+    'export class App {}',
+  ].join('\n');
+
+  protected readonly mimiJson = [
+    '{',
+    '  "style": "vivid",',
+    '  "tailwind": { "css": "src/styles.css" },',
+    '  "aliases": {',
+    '    "components": "src/app/components/ui",',
+    '    "utils": "src/app/components/ui/utils",',
+    '    "theme": "src/app/mimi.preset.ts"',
+    '  },',
+    '  "components": {',
+    '    "button": { "version": "0.1.0" }',
+    '  }',
+    '}',
+  ].join('\n');
+
+  protected readonly pnpmError = [
+    'ERR_PNPM_IGNORED_BUILDS',
+    'Ignored build scripts: @parcel/watcher, esbuild, lmdb, msgpackr-extract',
+  ].join('\n');
+
+  protected readonly pnpmAllowBuilds = [
+    '# pnpm-workspace.yaml',
+    'allowBuilds:',
+    "  '@parcel/watcher': true",
+    '  esbuild: true',
+    '  lmdb: true',
+    '  msgpackr-extract: true',
+  ].join('\n');
 }

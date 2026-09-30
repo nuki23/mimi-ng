@@ -1,8 +1,8 @@
-import uiCore from '@mimi-ng/ui-core/package.json';
+import cli from '@mimi-ng/cli/package.json';
 
 /** Datos del sitio. Única fuente: no escribir la versión ni la URL en otro lugar. */
 export const SITE = {
-  /** Versión de Mimi (por ahora, la de ui-core; en la Fase 3 se leerá de @mimi-ng/cli). */
-  version: uiCore.version,
+  /** Versión de Mimi: la del package.json de @mimi-ng/cli, única fuente (tarea 3.8). */
+  version: cli.version,
   githubUrl: 'https://github.com/nuki23/mimi-ng',
 } as const;

@@ -57,9 +57,17 @@ const registryName = (spec: string) => spec.replace('@/components/ui/', '');
 describe('registry.json', () => {
   const entries = Object.entries(registry.items);
 
-  it('tiene la versión de ui-core', () => {
-    const version = JSON.parse(readFileSync(join(uiCoreRoot, 'package.json'), 'utf8')).version;
-    expect(registry.version).toBe(version);
+  it('una sola fuente de versión: el package.json de la CLI (tarea 3.8)', () => {
+    const cliVersion = JSON.parse(readFileSync(join(here, '..', 'package.json'), 'utf8')).version;
+    expect(cliVersion).toMatch(/^\d+\.\d+\.\d+/);
+    // El registry.json fuente no la repite; el build la escribe en dist/registry.json.
+    expect((registryJson as { version?: string }).version).toBeUndefined();
+    const built = JSON.parse(readFileSync(join(here, '..', 'dist', 'registry.json'), 'utf8'));
+    expect(built.version).toBe(cliVersion);
+    // ui-core no tiene versión propia: se entrega dentro de la CLI.
+    expect(
+      JSON.parse(readFileSync(join(uiCoreRoot, 'package.json'), 'utf8')).version,
+    ).toBeUndefined();
   });
 
   it('cada archivo listado existe en ui-core', () => {

@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { UnitTestTree } from '@angular-devkit/schematics/testing';
 import { describe, expect, it } from 'vitest';
-import registryJson from './registry.json';
+import cliPackage from '../package.json';
 import {
   UI_CORE_LIB,
   createWorkspace,
@@ -15,7 +15,8 @@ import {
 /** Pruebas de ui con SchematicTestRunner, sobre un workspace en memoria ya inicializado. */
 
 const UI = 'projects/app/src/app/components/ui';
-const registry = registryJson as { version: string };
+/** La versión de Mimi es la del package.json de la CLI (la que el build escribe en el registro). */
+const registry = { version: cliPackage.version };
 const template = (file: string) => readFileSync(join(UI_CORE_LIB, file), 'utf8');
 
 async function initialized() {

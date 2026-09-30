@@ -11,12 +11,16 @@ import { CodeBlock } from './code-block';
 import { nextTabIndex, uniqueTabsId } from './tab-keys';
 
 interface InstallTab {
-  id: 'pnpm' | 'ng';
+  id: 'short' | 'long';
   label: string;
   command: string;
 }
 
-/** Comandos para instalar un componente (spec, sección 5), en pestañas pnpm / Angular CLI. */
+/**
+ * Comandos para agregar un componente (spec, sección 5): `ng g ui` (tras init, por
+ * schematicCollections) y la forma larga. La pestaña de pnpm vuelve cuando exista el comando
+ * de Mimi (tarea 5.3).
+ */
 @Component({
   selector: 'app-install-command',
   imports: [CodeBlock],
@@ -28,8 +32,8 @@ export class InstallCommand {
   readonly name = input.required<string>();
 
   protected readonly tabs = computed<InstallTab[]>(() => [
-    { id: 'pnpm', label: 'pnpm', command: `pnpm mimi add ${this.name()}` },
-    { id: 'ng', label: 'Angular CLI', command: `ng g @mimi-ng/cli:ui ${this.name()}` },
+    { id: 'short', label: 'Angular CLI', command: `ng g ui ${this.name()}` },
+    { id: 'long', label: 'Forma larga', command: `ng g @mimi-ng/cli:ui ${this.name()}` },
   ]);
   protected readonly selected = signal(0);
   protected readonly idPrefix = uniqueTabsId('install');

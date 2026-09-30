@@ -66,17 +66,23 @@ describe('HomePage', () => {
     for (const href of hrefs) expect(ready).toContain(href);
   });
 
-  it('cuatro diferenciales; los que no existen llevan «Próximamente» y ninguno enlaza', async () => {
+  it('cuatro diferenciales; lo que no existe lleva su etiqueta y ninguno enlaza', async () => {
     const { el, text } = await setup();
     const cards = Array.from(el.querySelectorAll('[data-feature]'));
     expect(cards.length).toBe(4);
-    const soon = cards
-      .filter((c) => text(c.querySelector('[mimiBadge]')) === 'Próximamente')
-      .map((c) => text(c.querySelector('h2')));
-    expect(soon).toEqual([
-      'Actualiza sin perder tus cambios',
-      '¿Vienes de PrimeNG o NG-ZORRO? Te sentirás en casa',
+    const badges = cards
+      .filter((c) => c.querySelector('[mimiBadge]'))
+      .map((c) => [text(c.querySelector('h2')), text(c.querySelector('[mimiBadge]'))]);
+    expect(badges).toEqual([
+      // Ya funciona: omitir los modificados y actualizar los que no tocaste. Falta mimi update.
+      ['Actualiza sin perder tus cambios', 'mimi update: próximamente'],
+      ['¿Vienes de PrimeNG o NG-ZORRO? Te sentirás en casa', 'Próximamente'],
     ]);
+    const updates = cards.find(
+      (c) => text(c.querySelector('h2')) === 'Actualiza sin perder tus cambios',
+    )!;
+    expect(text(updates.querySelector('p'))).toContain('nunca se sobrescriben');
+    expect(text(updates.querySelector('p'))).toContain('ng g ui');
     for (const card of cards) expect(card.querySelector('a')).toBeNull();
   });
 

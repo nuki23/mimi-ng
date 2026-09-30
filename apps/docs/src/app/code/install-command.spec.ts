@@ -3,7 +3,7 @@ import { HighlighterService } from './highlighter.service';
 import { InstallCommand } from './install-command';
 
 describe('InstallCommand', () => {
-  it('arma los dos comandos con el nombre del componente y cambia de pestaña', async () => {
+  it('arma los dos comandos de ng g con el nombre del componente y cambia de pestaña', async () => {
     TestBed.configureTestingModule({
       providers: [
         {
@@ -19,9 +19,9 @@ describe('InstallCommand', () => {
 
     const tabs = Array.from(el.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
     const panels = Array.from(el.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
-    expect(tabs.map((t) => t.textContent?.trim())).toEqual(['pnpm', 'Angular CLI']);
+    expect(tabs.map((t) => t.textContent?.trim())).toEqual(['Angular CLI', 'Forma larga']);
     expect(panels.map((p) => p.querySelector('pre')?.textContent)).toEqual([
-      'pnpm mimi add card',
+      'ng g ui card',
       'ng g @mimi-ng/cli:ui card',
     ]);
     expect(panels[1].hidden).toBe(true);

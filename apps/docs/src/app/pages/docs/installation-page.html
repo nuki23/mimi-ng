@@ -1,45 +1,184 @@
 <article class="flex flex-col gap-5">
   <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Instalación</h1>
   <p class="text-lg text-pretty text-muted-foreground">
-    Seis pasos para tener Mimi en un proyecto Angular 22 con Tailwind CSS 4.
+    Mimi se instala con una CLI que copia los componentes a tu proyecto. Desde ese momento, el
+    código es tuyo.
   </p>
   <p class="text-sm text-pretty text-muted-foreground">La CLI estará disponible pronto.</p>
 
-  @for (step of steps; track step.id; let i = $index) {
-    <h2 [id]="step.id" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
-      {{ i + 1 }}. {{ step.title }}
-    </h2>
-    @if (step.future) {
-      <p class="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-        <span
-          class="inline-flex h-[22px] items-center rounded-badge border px-2.5 text-xs font-semibold"
-        >
-          Versión futura
-        </span>
-        Este comando estará disponible en una versión futura de la CLI.
-      </p>
+  <h2 id="requirements" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    1. Requisitos
+  </h2>
+  <p class="text-pretty">Angular 22 o superior y Tailwind CSS 4. Para un proyecto nuevo:</p>
+  <app-code-block code="ng new mi-app --style=tailwind" lang="bash" prompt="$" />
+  <p class="text-pretty">
+    Si tu proyecto ya existe y todavía no usa Tailwind, sigue la
+    <a
+      [href]="tailwindGuide"
+      target="_blank"
+      rel="noopener"
+      class="font-medium underline underline-offset-4 hover:text-muted-foreground"
+      >guía de Tailwind CSS para Angular</a
+    >. Mimi lo verifica antes de empezar: si falta algo, se detiene con un mensaje que explica qué
+    hacer y no modifica nada.
+  </p>
+
+  <h2 id="install" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    2. Instala Mimi
+  </h2>
+  <app-code-block code="ng add @mimi-ng/cli" lang="bash" prompt="$" />
+  <p class="text-pretty">
+    Instala la CLI como dependencia de desarrollo y configura el proyecto. Esto es lo que cambia:
+  </p>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Archivo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Qué cambia</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of changes; track row.file) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px] whitespace-nowrap">{{ row.file }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.what }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    Si lo ejecutas de nuevo no duplica nada: te dice que Mimi ya estaba configurado.
+  </p>
+
+  <h3 id="install-options" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Opciones</h3>
+  <app-code-block code="ng add @mimi-ng/cli --icons" lang="bash" prompt="$" />
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    @for (option of options; track option.name) {
+      <li>
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">{{
+          option.name
+        }}</code>
+        {{ option.what }}
+      </li>
     }
-    <p class="text-pretty">{{ step.description }}</p>
-    @if (step.installName; as name) {
-      <app-install-command [name]="name" />
-    }
-    <app-code-block
-      [code]="step.snippet.code"
-      [lang]="step.snippet.lang"
-      [prompt]="step.snippet.prompt ?? null"
-    />
-    @for (detail of step.details ?? []; track detail.id) {
-      <h3 [id]="detail.id" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
-        {{ detail.title }}
-      </h3>
-      <p class="text-pretty">{{ detail.description }}</p>
-      @if (detail.snippet; as snippet) {
-        <app-code-block
-          [code]="snippet.code"
-          [lang]="snippet.lang"
-          [prompt]="snippet.prompt ?? null"
-        />
-      }
-    }
-  }
+  </ul>
+
+  <h2 id="add" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    3. Agrega componentes
+  </h2>
+  <app-code-block code="ng g ui button" lang="bash" prompt="$" />
+  <p class="text-pretty">
+    Cada componente se copia a
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >src/app/components/ui/&lt;nombre&gt;</code
+    >, junto con lo que necesita (por ejemplo, FormField trae
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >utils/field-state.ts</code
+    >), y se instalan las dependencias que falten. Puedes pedir varios a la vez:
+  </p>
+  <app-code-block code="ng g ui button input card" lang="bash" prompt="$" />
+  <p class="text-pretty">
+    Sin nombres, la CLI muestra un menú para elegirlos (en una terminal interactiva):
+  </p>
+  <app-code-block code="ng g ui" lang="bash" prompt="$" />
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g ui</code> funciona
+    porque
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng add</code> registró
+    Mimi en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">angular.json</code>. La
+    forma larga funciona siempre:
+  </p>
+  <app-code-block code="ng g @mimi-ng/cli:ui button" lang="bash" prompt="$" />
+
+  <h2 id="use" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">4. Úsalos</h2>
+  <p class="text-pretty">
+    Importa el componente con el alias
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@/components/ui</code>
+    en tu componente standalone.
+  </p>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="files" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    mimi.json y .mimi/
+  </h2>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi.json</code> es la
+    configuración de Mimi: dónde están el CSS global y la carpeta de componentes, y qué versión de
+    cada componente tienes.
+  </p>
+  <app-code-block [code]="mimiJson" lang="json" />
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">.mimi/</code> guarda la
+    copia original de cada archivo que escribió Mimi (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >.mimi/base/</code
+    >) y con qué versión (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >.mimi/manifest.json</code
+    >). Con esas copias Mimi sabe qué cambiaste tú.
+    <strong>Guarda la carpeta .mimi/ en git</strong>: sin ella, Mimi no puede distinguir tus cambios
+    y trataría todos tus componentes como modificados.
+  </p>
+
+  <h2 id="updates" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Si modificaste un componente
+  </h2>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Los componentes que modificaste <strong>nunca se sobrescriben</strong>: al volver a ejecutar
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g ui</code>, se
+      omiten con un aviso.
+    </li>
+    <li>
+      Con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--overwrite</code>
+      se reemplazan por la versión de Mimi, y pierdes tus cambios.
+    </li>
+    <li>
+      Los que no tocaste se actualizan solos cuando ejecutas
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g ui</code> con
+      una versión nueva de la CLI, y te dice cuáles («button actualizado de 0.1.0 a 0.2.0»). Si tu
+      Prettier les dio otro formato, no cuentan como modificados.
+    </li>
+  </ul>
+  <app-code-block code="ng g ui button --overwrite" lang="bash" prompt="$" />
+
+  <h3 id="update" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Combinar tus cambios con la versión nueva
+  </h3>
+  <p class="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+    <span
+      class="inline-flex h-[22px] items-center rounded-badge border px-2.5 text-xs font-semibold"
+    >
+      Versión futura
+    </span>
+    Este comando estará disponible en una versión futura de la CLI.
+  </p>
+  <p class="text-pretty">
+    Mimi comparará tu copia con la versión original y la nueva, aplicará lo que no tocaste y te
+    mostrará los conflictos antes de escribir.
+  </p>
+  <app-code-block code="pnpm mimi update button" lang="bash" prompt="$" />
+
+  <h2 id="pnpm" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Si usas pnpm</h2>
+  <p class="text-pretty">
+    Desde pnpm 10, los scripts de instalación de las dependencias están bloqueados salvo los que
+    apruebes. Los de Angular (esbuild, lmdb…) quedan pendientes, y mientras no los apruebes,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">pnpm add</code> (y la
+    instalación que hacen
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng add</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g ui</code>) puede
+    fallar con:
+  </p>
+  <app-code-block [code]="pnpmError" lang="bash" [copyable]="false" />
+  <p class="text-pretty">Apruébalos con:</p>
+  <app-code-block code="pnpm approve-builds" lang="bash" prompt="$" />
+  <p class="text-pretty">
+    O a mano, poniendo
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">true</code> en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">allowBuilds</code>:
+  </p>
+  <app-code-block [code]="pnpmAllowBuilds" lang="bash" [copyable]="false" />
 </article>

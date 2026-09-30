@@ -14,13 +14,17 @@ export interface RegistryItem {
 }
 
 export interface Registry {
+  /**
+   * Versión de Mimi. No está en el registry.json fuente: el build la toma del package.json de
+   * la CLI (única fuente) y la escribe en dist/registry.json, que es lo que se lee aquí.
+   */
   version: string;
   /** Paquetes opcionales que la CLI ofrece instalar (p. ej. @lucide/angular en init). */
   suggestedDependencies?: Record<string, string>;
   items: Record<string, RegistryItem>;
 }
 
-export const registry = registryJson as Registry;
+export const registry = registryJson as unknown as Registry;
 
 /**
  * El ítem y todas sus `registryDependencies`, sin repetir, dependencias primero.

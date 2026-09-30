@@ -1,7 +1,7 @@
 // Compila los schematics de @mimi-ng/cli y empaqueta las plantillas de ui-core (tareas 3.1 y 3.2).
 // Solo APIs de Node (sin cp ni rm de shell), para que funcione igual en Windows.
 import { execFileSync } from 'node:child_process';
-import { cp, rm } from 'node:fs/promises';
+import { cp, readFile, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -44,6 +44,13 @@ await cp(src, dist, {
     return rel === '' || !rel.includes('.') || rel.endsWith('.json');
   },
 });
+
+// 3b. Versión: una sola fuente, el package.json de la CLI (tarea 3.8). El registry.json fuente
+// no la tiene; se escribe en dist/registry.json, que es lo que leen los schematics.
+const { version } = JSON.parse(await readFile(join(cliRoot, 'package.json'), 'utf8'));
+const registryPath = join(dist, 'registry.json');
+const builtRegistry = JSON.parse(await readFile(registryPath, 'utf8'));
+await writeFile(registryPath, `${JSON.stringify({ version, ...builtRegistry }, null, 2)}\n`);
 
 // 4. Plantillas: los archivos de ui-core que copia la CLI, sin pruebas ni excluidos.
 for (const dir of TEMPLATE_DIRS) {

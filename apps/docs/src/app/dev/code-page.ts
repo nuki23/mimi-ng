@@ -58,7 +58,7 @@ export class CodePage {
   protected readonly previewDemoSource: string = previewDemoSource;
 
   protected readonly samples: { lang: CodeLang; code: string; prompt?: string }[] = [
-    { lang: 'bash', code: 'pnpm mimi add button input card', prompt: '$' },
+    { lang: 'bash', code: 'ng g ui button input card', prompt: '$' },
     {
       lang: 'angular-html',
       code: '@if (user(); as user) {\n  <button mimiBtn (click)="save()">Guardar {{ user.name }}</button>\n}',

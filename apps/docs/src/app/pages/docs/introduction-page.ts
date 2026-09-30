@@ -14,7 +14,7 @@ export class IntroductionPage {
     {
       n: 1,
       title: 'La CLI copia',
-      body: 'mimi add escribe el componente en src/app/components/ui. No hay paquete que actualizar a ciegas.',
+      body: 'ng g ui escribe el componente en src/app/components/ui. No hay paquete que actualizar a ciegas.',
     },
     {
       n: 2,
