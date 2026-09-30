@@ -2,16 +2,24 @@
 
 > Angular + Tailwind CSS components you copy into your project. Docs in Spanish; English coming soon.
 
-Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se distribuye como código fuente: una CLI copia cada componente a tu proyecto y desde ese momento el código es tuyo.
+Librería de componentes UI para **Angular 22 o superior** y **Tailwind CSS 4** que se distribuye como código fuente: una CLI copia cada componente a tu proyecto y desde ese momento el código es tuyo.
 
 - Documentación: https://ng.mimiworks.dev
 - Paquete: [`@mimi-ng/cli`](https://www.npmjs.com/package/@mimi-ng/cli) (vista previa 0.x)
 
 Mimi para Angular es un proyecto de [Mimi Works](https://mimiworks.dev).
 
+## Por qué "Mimi"
+
+Mimi viene de "mi, mi": mis componentes, mis herramientas, mis desarrollos. Empezó como lo que yo usaba en mis propios proyectos.
+
+Pero la idea que más me importa es la contraria: que lo que construyas con Mimi sea tuyo. Por eso Mimi no se instala como una caja cerrada: la CLI copia cada componente a tu proyecto y, desde ese momento, el código es tuyo. Puedes cambiarlo como quieras, y Mimi respeta tus cambios cuando hay versiones nuevas.
+
+Mimi nació como "lo mío". Su promesa es que sea tuyo.
+
 ## Inicio rápido
 
-En un proyecto de Angular 22 con Tailwind CSS 4 (`ng new mi-app --style=tailwind`):
+En un proyecto de Angular 22 o superior con Tailwind CSS 4 (`ng new mi-app --style=tailwind`):
 
 ```sh
 ng add @mimi-ng/cli
@@ -20,6 +28,13 @@ ng g ui button input card
 
 ```ts
 import { MimiButton } from '@/components/ui/button';
+
+@Component({
+  selector: 'app-root',
+  imports: [MimiButton],
+  template: `<button mimiBtn>Guardar</button>`,
+})
+export class App {}
 ```
 
 Más detalles en [`packages/cli/README.md`](packages/cli/README.md) y en la [página de Instalación](https://ng.mimiworks.dev/docs/installation).
@@ -51,21 +66,26 @@ pnpm format         # formatear con Prettier (pnpm format:check solo revisa)
 
 ## Probar la CLI sin publicarla
 
-1. Compila y empaqueta la CLI:
+1. Compila la CLI y empaquétala en una carpeta **fuera de este repositorio** (aquí, `<carpeta-de-pruebas>`):
 
    ```sh
    pnpm build:cli
-   cd packages/cli && pnpm pack --pack-destination ../../../mimi-sandbox
+   cd packages/cli
+   pnpm pack --pack-destination <carpeta-de-pruebas>
    ```
 
-2. En un proyecto de Angular aparte (fuera de este repositorio), instala el `.tgz` como dependencia de desarrollo y ejecuta `ng add`. `ng add` no acepta el archivo directamente, pero si el paquete ya está instalado, ejecuta su schematic:
+2. Crea el proyecto de prueba también **fuera de este repositorio** (dentro, pnpm lo trataría como parte del workspace), por ejemplo en `<carpeta-de-pruebas>/app`. Ahí instala el `.tgz` como dependencia de desarrollo y ejecuta `ng add`. `ng add` no acepta el archivo directamente, pero si el paquete ya está instalado, ejecuta su schematic:
 
    ```sh
-   pnpm add -D ../mimi-ng-cli-0.1.0.tgz
+   pnpm add -D <carpeta-de-pruebas>/mimi-ng-cli-0.1.0.tgz
    pnpm ng add @mimi-ng/cli
    ```
 
 3. Si vuelves a empaquetar la misma versión, dale otro nombre al `.tgz` antes de instalarlo: pnpm guarda en caché el contenido por nombre de archivo.
+
+## Contribuir
+
+Los errores y las sugerencias van en los [issues del repositorio](https://github.com/nuki23/mimi-ng/issues).
 
 ## Documentación del proyecto
 

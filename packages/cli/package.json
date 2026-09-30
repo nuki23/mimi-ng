@@ -1,10 +1,41 @@
 {
   "name": "@mimi-ng/cli",
   "version": "0.1.0",
-  "license": "MIT",
   "private": true,
-  "description": "Componentes para Angular y Tailwind CSS que se copian a tu proyecto.",
+  "description": "Angular + Tailwind CSS 4 UI components that a CLI copies into your project, so you own the code. Schematics for ng add and ng generate.",
+  "keywords": [
+    "angular",
+    "angular-components",
+    "tailwind",
+    "tailwindcss",
+    "tailwindcss-v4",
+    "ui",
+    "ui-components",
+    "component-library",
+    "design-system",
+    "schematics",
+    "ng-add",
+    "shadcn",
+    "mimi"
+  ],
+  "homepage": "https://ng.mimiworks.dev",
+  "bugs": {
+    "url": "https://github.com/nuki23/mimi-ng/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nuki23/mimi-ng.git",
+    "directory": "packages/cli"
+  },
+  "license": "MIT",
+  "author": "Ariel O (https://github.com/nuki23)",
   "type": "commonjs",
+  "engines": {
+    "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "schematics": "./dist/collection.json",
   "ng-add": {
     "save": "devDependencies"

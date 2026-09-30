@@ -4,6 +4,8 @@
 
 Componentes para **Angular** y **Tailwind CSS 4** que una CLI copia a tu proyecto: desde ese momento, el código es tuyo. Un solo prefijo (`mimi`), tema opcional y tipado, y formularios con errores automáticos.
 
+Mimi nació como "lo mío". Su promesa es que sea tuyo.
+
 **Vista previa 0.x:** la API puede cambiar entre versiones menores hasta la 1.0.
 
 Documentación: **https://ng.mimiworks.dev**
