@@ -40,7 +40,7 @@ interface Plan {
 }
 
 /**
- * `ng g ui button input form-field`: copia los componentes y sus dependencias del registro a la
+ * `ng g mimi button input form-field`: copia los componentes y sus dependencias del registro a la
  * carpeta de mimi.json. Sin nombres, pregunta (x-prompt de selección múltiple).
  *
  * Requiere init (mimi.json). Archivos existentes: igual → nada; distinto → se omite con aviso;
@@ -88,7 +88,7 @@ function inspect(tree: Tree, options: UiOptions): Plan {
   );
   if (requested.length === 0) {
     throw new SchematicsException(
-      `Indica qué componentes agregar, por ejemplo: ng g ui button\nDisponibles: ${AVAILABLE.join(', ')}.`,
+      `Indica qué componentes agregar, por ejemplo: ng g mimi button\nDisponibles: ${AVAILABLE.join(', ')}.`,
     );
   }
   const unknown = requested.filter((name) => !AVAILABLE.includes(name));

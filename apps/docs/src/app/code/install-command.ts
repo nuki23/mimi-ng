@@ -17,7 +17,7 @@ interface InstallTab {
 }
 
 /**
- * Comandos para agregar un componente (spec, sección 5): `ng g ui` (tras init, por
+ * Comandos para agregar un componente (spec, sección 5): `ng g mimi` (tras init, por
  * schematicCollections) y la forma larga. La pestaña de pnpm vuelve cuando exista el comando
  * de Mimi (tarea 5.3).
  */
@@ -32,7 +32,7 @@ export class InstallCommand {
   readonly name = input.required<string>();
 
   protected readonly tabs = computed<InstallTab[]>(() => [
-    { id: 'short', label: 'Angular CLI', command: `ng g ui ${this.name()}` },
+    { id: 'short', label: 'Angular CLI', command: `ng g mimi ${this.name()}` },
     { id: 'long', label: 'Forma larga', command: `ng g @mimi-ng/cli:ui ${this.name()}` },
   ]);
   protected readonly selected = signal(0);

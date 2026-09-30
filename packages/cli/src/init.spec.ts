@@ -131,7 +131,7 @@ describe('init', () => {
     await run({}, await createWorkspace(runner));
     const text = logs.map((l) => l.message).join('\n');
     expect(text).toContain('Agrega tu primer componente:');
-    expect(text).toContain('ng g ui button');
+    expect(text).toContain('ng g mimi button');
     expect(text).toContain('Guarda la carpeta .mimi/ en git');
   });
 
@@ -460,29 +460,57 @@ describe('init: schematicCollections (tarea 3.6)', () => {
     expect(result.cli.schematicCollections).toEqual([ANGULAR, MIMI]);
   });
 
-  it('ng g ui y ng g component resuelven como en la CLI de Angular', async () => {
-    const { runner, run } = harness();
-    const tree = await run({}, await createWorkspace(runner));
-    const order: string[] = json(tree, '/angular.json').cli.schematicCollections;
+  describe('ng g <nombre> resuelve como en la CLI de Angular', () => {
+    type Schematics = Record<string, { aliases?: string[] }>;
 
-    // Igual que @angular/cli (commands/generate): recorre las colecciones en orden y gana la
-    // primera que tiene el nombre (o el alias).
-    const resolve = (name: string) =>
-      order.find((collectionName) => {
-        const collection = runner.engine.createCollection(collectionName);
-        const schematics = collection.description.schematics as Record<
-          string,
-          { aliases?: string[] }
-        >;
-        return Object.entries(schematics).some(
-          ([schematic, d]) => schematic === name || (d.aliases ?? []).includes(name),
-        );
-      });
-    expect(resolve('ui')).toBe(MIMI);
-    expect(resolve('init')).toBe(MIMI);
-    expect(resolve('component')).toBe(ANGULAR);
-    expect(resolve('c')).toBe(ANGULAR);
-    expect(resolve('service')).toBe(ANGULAR);
+    /**
+     * Igual que @angular/cli 22 (commands/generate, getSchematics y getSchematicsToRegister):
+     * recorre las colecciones en orden, descarta los schematics cuyo NOMBRE ya apareció en una
+     * colección anterior (con sus alias) y gana el primero que tiene el nombre o el alias.
+     */
+    const resolve = (collections: [string, Schematics][], name: string) => {
+      const seen = new Set<string>();
+      for (const [collectionName, schematics] of collections) {
+        for (const [schematic, d] of Object.entries(schematics)) {
+          if (seen.has(schematic)) continue;
+          seen.add(schematic);
+          if (schematic === name || (d.aliases ?? []).includes(name)) return collectionName;
+        }
+      }
+      return undefined;
+    };
+
+    async function installed() {
+      const { runner, run } = harness();
+      const tree = await run({}, await createWorkspace(runner));
+      const order: string[] = json(tree, '/angular.json').cli.schematicCollections;
+      const schematicsOf = (collectionName: string) =>
+        runner.engine.createCollection(collectionName).description.schematics as Schematics;
+      return { order, schematicsOf };
+    }
+
+    it('con el orden que deja init: mimi y ui van a Mimi, component a Angular', async () => {
+      const { order, schematicsOf } = await installed();
+      const collections = order.map((c): [string, Schematics] => [c, schematicsOf(c)]);
+      expect(resolve(collections, 'mimi')).toBe(MIMI);
+      expect(resolve(collections, 'ui')).toBe(MIMI);
+      expect(resolve(collections, 'init')).toBe(MIMI);
+      expect(resolve(collections, 'component')).toBe(ANGULAR);
+      expect(resolve(collections, 'c')).toBe(ANGULAR);
+      expect(resolve(collections, 'service')).toBe(ANGULAR);
+    });
+
+    it('con otra colección con un schematic "ui" antes de Mimi (como Spartan): mimi sigue yendo a Mimi', async () => {
+      const { schematicsOf } = await installed();
+      const other: Schematics = { ui: {} };
+      const collections: [string, Schematics][] = [
+        [ANGULAR, schematicsOf(ANGULAR)],
+        ['otra-coleccion', other],
+        [MIMI, schematicsOf(MIMI)],
+      ];
+      expect(resolve(collections, 'mimi')).toBe(MIMI);
+      expect(resolve(collections, 'ui')).toBe('otra-coleccion');
+    });
   });
 
   it('ningún nombre ni alias de Mimi choca con los de @schematics/angular (incluidos los ocultos)', () => {
@@ -496,7 +524,7 @@ describe('init: schematicCollections (tarea 3.6)', () => {
       ).flatMap(([name, d]) => [name, ...(d.aliases ?? [])]);
     const angular = new Set(names(ANGULAR));
     const mimi = names(MIMI);
-    expect(mimi).toEqual(expect.arrayContaining(['ng-add', 'init', 'ui']));
+    expect(mimi).toEqual(expect.arrayContaining(['ng-add', 'init', 'mimi', 'ui']));
     expect(mimi.filter((name) => angular.has(name))).toEqual([]);
   });
 });

@@ -23,7 +23,7 @@ En un proyecto de Angular 22 o superior con Tailwind CSS 4 (`ng new mi-app --sty
 
 ```sh
 ng add @mimi-ng/cli
-ng g ui button input card
+ng g mimi button input card
 ```
 
 ```ts

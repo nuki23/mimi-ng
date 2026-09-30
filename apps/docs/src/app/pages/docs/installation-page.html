@@ -68,7 +68,7 @@
   <h2 id="add" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
     3. Agrega componentes
   </h2>
-  <app-code-block code="ng g ui button" lang="bash" prompt="$" />
+  <app-code-block code="ng g mimi button" lang="bash" prompt="$" />
   <p class="text-pretty">
     Cada componente se copia a
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
@@ -78,20 +78,38 @@
       >utils/field-state.ts</code
     >), y se instalan las dependencias que falten. Puedes pedir varios a la vez:
   </p>
-  <app-code-block code="ng g ui button input card" lang="bash" prompt="$" />
+  <app-code-block code="ng g mimi button input card" lang="bash" prompt="$" />
   <p class="text-pretty">
     Sin nombres, la CLI muestra un menú para elegirlos (en una terminal interactiva):
   </p>
-  <app-code-block code="ng g ui" lang="bash" prompt="$" />
+  <app-code-block code="ng g mimi" lang="bash" prompt="$" />
+  <h3 id="add-long-form" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Cuándo usar la forma larga
+  </h3>
   <p class="text-pretty">
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g ui</code> funciona
-    porque
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g mimi</code>
+    funciona porque
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng add</code> registró
     Mimi en
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">angular.json</code>. La
-    forma larga funciona siempre:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >schematicCollections</code
+    >, dentro de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">angular.json</code>. Si
+    Mimi no está en esa lista (por ejemplo, porque la editaste o porque otra herramienta la
+    reemplazó), la CLI de Angular no encuentra
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi</code> y hace
+    falta la forma larga, que nombra el paquete y funciona siempre:
   </p>
   <app-code-block code="ng g @mimi-ng/cli:ui button" lang="bash" prompt="$" />
+  <p class="text-pretty">
+    Si todavía no ejecutaste
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >ng add @mimi-ng/cli</code
+    >, ninguna de las dos funciona: falta la configuración de Mimi (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >mimi.json</code
+    >), y la CLI te pide ejecutarlo primero.
+  </p>
 
   <h2 id="use" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">4. Úsalos</h2>
   <p class="text-pretty">
@@ -128,7 +146,7 @@
   <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
     <li>
       Los componentes que modificaste <strong>nunca se sobrescriben</strong>: al volver a ejecutar
-      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g ui</code>, se
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g mimi</code>, se
       omiten con un aviso.
     </li>
     <li>
@@ -138,12 +156,12 @@
     </li>
     <li>
       Los que no tocaste se actualizan solos cuando ejecutas
-      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g ui</code> con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g mimi</code> con
       una versión nueva de la CLI, y te dice cuáles («button actualizado de 0.1.0 a 0.2.0»). Si tu
       Prettier les dio otro formato, no cuentan como modificados.
     </li>
   </ul>
-  <app-code-block code="ng g ui button --overwrite" lang="bash" prompt="$" />
+  <app-code-block code="ng g mimi button --overwrite" lang="bash" prompt="$" />
 
   <h3 id="update" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
     Combinar tus cambios con la versión nueva
@@ -169,7 +187,7 @@
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">pnpm add</code> (y la
     instalación que hacen
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng add</code> y
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g ui</code>) puede
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g mimi</code>) puede
     fallar con:
   </p>
   <app-code-block [code]="pnpmError" lang="bash" [copyable]="false" />

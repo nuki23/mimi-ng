@@ -82,7 +82,7 @@ describe('HomePage', () => {
       (c) => text(c.querySelector('h2')) === 'Actualiza sin perder tus cambios',
     )!;
     expect(text(updates.querySelector('p'))).toContain('nunca se sobrescriben');
-    expect(text(updates.querySelector('p'))).toContain('ng g ui');
+    expect(text(updates.querySelector('p'))).toContain('ng g mimi');
     for (const card of cards) expect(card.querySelector('a')).toBeNull();
   });
 

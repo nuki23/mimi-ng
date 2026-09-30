@@ -21,7 +21,7 @@ describe('InstallCommand', () => {
     const panels = Array.from(el.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
     expect(tabs.map((t) => t.textContent?.trim())).toEqual(['Angular CLI', 'Forma larga']);
     expect(panels.map((p) => p.querySelector('pre')?.textContent)).toEqual([
-      'ng g ui card',
+      'ng g mimi card',
       'ng g @mimi-ng/cli:ui card',
     ]);
     expect(panels[1].hidden).toBe(true);

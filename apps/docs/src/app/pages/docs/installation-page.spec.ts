@@ -41,16 +41,28 @@ describe('InstallationPage', () => {
       'ng new mi-app --style=tailwind',
       'ng add @mimi-ng/cli',
       'ng add @mimi-ng/cli --icons',
-      'ng g ui button',
-      'ng g ui button input card',
-      'ng g ui',
+      'ng g mimi button',
+      'ng g mimi button input card',
+      'ng g mimi',
       'ng g @mimi-ng/cli:ui button',
-      'ng g ui button --overwrite',
+      'ng g mimi button --overwrite',
       'pnpm approve-builds',
     ]) {
       expect(commands, command).toContain(command);
     }
     expect(commands.join('\n')).not.toContain('mimi add');
+  });
+
+  it('explica cuándo usar la forma larga, y que sin ng add no funciona ninguna', async () => {
+    const { el } = await setup();
+    const heading = el.querySelector('h3#add-long-form')!;
+    expect(heading.textContent?.trim()).toBe('Cuándo usar la forma larga');
+    const explanation = heading.nextElementSibling!.textContent!.replace(/\s+/g, ' ');
+    expect(explanation).toContain('Si Mimi no está en esa lista');
+    const block = heading.nextElementSibling!.nextElementSibling!;
+    expect(block.textContent).toContain('ng g @mimi-ng/cli:ui button');
+    const caveat = block.nextElementSibling!.textContent!.replace(/\s+/g, ' ');
+    expect(caveat).toContain('ninguna de las dos funciona');
   });
 
   it('mimi update está marcado como versión futura', async () => {

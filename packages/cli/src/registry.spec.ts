@@ -166,15 +166,15 @@ describe('registry.json', () => {
     expect(() => resolveItems('nope', registry)).toThrow('"nope" no existe');
   });
 
-  it('el README del paquete lista todos los componentes del registro, con su ng g ui', () => {
+  it('el README del paquete lista todos los componentes del registro, con su ng g mimi', () => {
     const readme = readFileSync(join(here, '..', 'README.md'), 'utf8');
     const components = entries
       .filter(([, item]) => item.type === 'component')
       .map(([name]) => name);
-    const missing = components.filter((name) => !readme.includes(`\`ng g ui ${name}\``));
+    const missing = components.filter((name) => !readme.includes(`\`ng g mimi ${name}\``));
     expect(missing).toEqual([]);
     // Y ninguno de más.
-    const listed = [...readme.matchAll(/`ng g ui ([a-z-]+)`/g)].map((m) => m[1]);
+    const listed = [...readme.matchAll(/`ng g mimi ([a-z-]+)`/g)].map((m) => m[1]);
     expect(listed.filter((name) => !components.includes(name))).toEqual([]);
   });
 

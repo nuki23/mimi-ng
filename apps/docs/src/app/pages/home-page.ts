@@ -55,7 +55,7 @@ export class HomePage {
     {
       icon: 'git-merge',
       title: 'Actualiza sin perder tus cambios',
-      body: 'Los componentes que modificaste nunca se sobrescriben, y los que no tocaste se actualizan solos al volver a ejecutar ng g ui. Pronto, mimi update combinará tus cambios con la versión nueva.',
+      body: 'Los componentes que modificaste nunca se sobrescriben, y los que no tocaste se actualizan solos al volver a ejecutar ng g mimi. Pronto, mimi update combinará tus cambios con la versión nueva.',
       badge: 'mimi update: próximamente',
     },
     {

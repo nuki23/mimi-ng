@@ -171,10 +171,10 @@ DropdownMenu, Tooltip, Tabs, Popover, Combobox múltiple, DatePicker, Toast, Tab
 ```bash
 # Hoy
 ng add @mimi-ng/cli                 # instala y ejecuta init
-ng g ui button                      # uno (tras init: schematicCollections)
-ng g ui button input card           # varios
-ng g ui                             # menú para elegir (terminal interactiva)
-ng g @mimi-ng/cli:ui button         # forma larga, funciona siempre
+ng g mimi button                    # uno (tras init: schematicCollections)
+ng g mimi button input card         # varios
+ng g mimi                           # menú para elegir (terminal interactiva)
+ng g @mimi-ng/cli:ui button         # forma larga: si Mimi no está en schematicCollections
 
 # Más adelante
 pnpm mimi add button                # comando mimi (tarea 5.3)
@@ -184,9 +184,13 @@ pnpm mimi update button             # combina tus cambios con la versión nueva 
 ng g @mimi-ng/cli:theme --palette=violet --radius=lg   # (5.1)
 ```
 
-El sitio solo muestra comandos que funcionan hoy, salvo los marcados como versión futura: una prueba del showcase (`apps/docs/src/app/commands.spec.ts`) falla si aparece `mimi add`, `mimi list` o `mimi theme`, o `mimi update` sin marcarlo como futuro. `InstallCommand` muestra `ng g ui <nombre>` y la forma larga; la pestaña de pnpm vuelve con la tarea 5.3.
+El sitio solo muestra comandos que funcionan hoy, salvo los marcados como versión futura: una prueba del showcase (`apps/docs/src/app/commands.spec.ts`) falla si aparece `mimi add`, `mimi list` o `mimi theme`, o `mimi update` sin marcarlo como futuro. La misma prueba falla si aparece `ng g ui` (sin el paquete): funciona, pero no se muestra; la forma larga `ng g @mimi-ng/cli:ui` sí. `InstallCommand` muestra `ng g mimi <nombre>` y la forma larga; la pestaña de pnpm vuelve con la tarea 5.3.
 
-El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta varios nombres (opción `components` de tipo `array` con `"$default": { "$source": "argv", "index": 0 }`: la CLI de Angular la registra como posicional variádica, `ui [components ..]`) y, sin nombres y con terminal interactiva, muestra un `x-prompt` de selección múltiple (`"type": "list"`, `"multiselect": true`).
+**Nombre del schematic: `mimi`, con `ui` como alias** (`collection.json`; el código sigue en `src/ui/`). `ng g ui` no dice de qué librería es y otras (Spartan) también tienen un schematic `ui`. Además, la CLI de Angular (22, `commands/generate`) recorre `schematicCollections` en orden y **descarta los schematics cuyo nombre ya apareció en una colección anterior, con sus alias**, antes de buscar el pedido. Si el schematic se llamara `ui` con alias `mimi` y otra colección con un `ui` fuera antes, `ng g mimi` fallaría. Con el nombre `mimi`, `ng g mimi` funciona siempre que Mimi esté en `schematicCollections`; `ng g ui` va a Mimi solo si ninguna colección anterior tiene un `ui`. Con el paquete explícito (`ng g @mimi-ng/cli:ui`) solo se busca en Mimi y el alias resuelve.
+
+**Cuándo hace falta la forma larga:** si Mimi no está en `schematicCollections` (el usuario editó la lista u otra herramienta la reemplazó). Sin `ng add` no funciona ninguna de las dos: falta `mimi.json` y la CLI pide ejecutar `ng add` primero.
+
+El comando `mimi` es una capa delgada que llama a los schematics. El schematic `mimi` acepta varios nombres (opción `components` de tipo `array` con `"$default": { "$source": "argv", "index": 0 }`: la CLI de Angular la registra como posicional variádica, `mimi [components ..]`) y, sin nombres y con terminal interactiva, muestra un `x-prompt` de selección múltiple (`"type": "list"`, `"multiselect": true`).
 
 ### Qué hace `init` (y `ng add`)
 
@@ -206,20 +210,20 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 7. Agrega el alias `"@/components/ui/*": ["./<carpeta>/*"]` al `tsconfig.json` con `JSONFile` de `@schematics/angular`, que conserva los comentarios (el tsconfig de Angular es JSONC) y los `paths` existentes. Sin `baseUrl` (TypeScript 6 lo depreca). Si el tsconfig del build (`options.tsConfig`, normalmente `tsconfig.app.json`) define su propio `compilerOptions.paths`, ese reemplaza al de la raíz, así que el alias va también ahí. Si el alias ya existe con otro valor, avisa y no lo toca. **Las importaciones no se reescriben:** el alias siempre es `@/components/ui/*`; lo configurable es la carpeta.
 8. Agrega `clsx`, `tailwind-merge` y `class-variance-authority` a `dependencies` con las versiones del registro (si ya están, se dejan). `@angular/cli` los instala con el gestor de paquetes del proyecto, que detecta por el lockfile.
 9. Crea `mimi.json` si no existe.
-10. Muestra qué configuró y el siguiente paso: `ng g @mimi-ng/cli:ui button`.
+10. Muestra qué configuró y el siguiente paso: `ng g mimi button`.
 
 **Reglas comunes:**
 
 - Rutas siempre con "/" en lo que escribe (CSS, tsconfig, `mimi.json`), también en Windows.
 - Idempotente: ejecutarlo dos veces no duplica nada ni falla, y no vuelve a instalar.
-- Archivos: antes de escribir revisa el árbol, con la misma regla que `ui` (ver «Qué hace `ui`», punto 4): «modificado por el usuario» es distinto de su base en `.mimi/base/`, no de la plantilla. Nunca salta el error "merge conflicted".
+- Archivos: antes de escribir revisa el árbol, con la misma regla que `mimi` (ver «Qué hace `mimi`», punto 4): «modificado por el usuario» es distinto de su base en `.mimi/base/`, no de la plantilla. Nunca salta el error "merge conflicted".
 - Si no cambió nada (archivos, CSS, tsconfig, `angular.json`, `mimi.json` ni dependencias), dice "Mimi ya estaba configurado; no hubo cambios." en lugar de repetir los pasos siguientes.
-- **`schematicCollections`** (para `ng g ui button`, tarea 3.6): `cli.schematicCollections` reemplaza al valor por defecto de la CLI de Angular, así que si no existe se crea con `["@schematics/angular", "@mimi-ng/cli"]`, en ese orden (solo con Mimi, el usuario perdería `ng g component`). Si existe, Mimi se agrega al final sin quitar nada. El de un proyecto gana al del workspace, así que si el proyecto elegido tiene el suyo, también va ahí. La CLI busca el nombre en las colecciones en orden y gana la primera: una prueba comprueba que `ui` resuelve a Mimi, `component` a `@schematics/angular`, y que ningún nombre ni alias de Mimi (`ng-add`, `init`, `ui`) choca con los de `@schematics/angular`, ocultos incluidos.
-- `init` también guarda la copia original de los archivos que escribe en `.mimi/base/` (misma regla que `ui`).
+- **`schematicCollections`** (para `ng g mimi button`, tarea 3.6): `cli.schematicCollections` reemplaza al valor por defecto de la CLI de Angular, así que si no existe se crea con `["@schematics/angular", "@mimi-ng/cli"]`, en ese orden (solo con Mimi, el usuario perdería `ng g component`). Si existe, Mimi se agrega al final sin quitar nada. El de un proyecto gana al del workspace, así que si el proyecto elegido tiene el suyo, también va ahí. La CLI busca el nombre en las colecciones en orden y gana la primera (descartando antes los nombres repetidos, ver «Comandos»): una prueba imita esa búsqueda y comprueba que `mimi` y `ui` resuelven a Mimi, `component` a `@schematics/angular`, que con otra colección con un `ui` antes de Mimi `mimi` sigue yendo a Mimi, y que ningún nombre ni alias de Mimi (`ng-add`, `init`, `mimi`, `ui`) choca con los de `@schematics/angular`, ocultos incluidos.
+- `init` también guarda la copia original de los archivos que escribe en `.mimi/base/` (misma regla que `mimi`).
 
-### Qué hace `ui`
+### Qué hace `mimi` (alias `ui`)
 
-`ng g ui button input form-field` (o `ng g @mimi-ng/cli:ui …`). Opciones: los nombres y `--overwrite`.
+`ng g mimi button input form-field` (o `ng g @mimi-ng/cli:ui …`). Opciones: los nombres y `--overwrite`.
 
 **Primero verifica, sin modificar nada:**
 
@@ -241,9 +245,9 @@ El comando `mimi` es una capa delgada que llama a los schematics. `ui` acepta va
 7. **Dependencias:** las `dependencies` de los ítems, con la versión del registro, si el proyecto no las tiene. Las `peerDependencies` (como `@angular/forms`) solo si faltan; las de `@angular/*` con el mismo rango que el `@angular/core` del proyecto, para que no queden desalineadas. Se instalan con el gestor de paquetes del proyecto.
 8. **Mensaje final:** qué se agregó o reemplazó, qué se omitió y por qué (con la sugerencia de `--overwrite`), qué dependencias se instalan, y que `.mimi/` debe quedar en git.
 
-Idempotente: `ng g ui button` dos veces no cambia nada ni vuelve a instalar.
+Idempotente: `ng g mimi button` dos veces no cambia nada ni vuelve a instalar.
 
-**Limitación conocida:** una sola configuración de Mimi por workspace (`mimi.json` y `.mimi/` en la raíz). Varias aplicaciones con carpetas de componentes distintas no están soportadas por ahora: `init --project` configura la aplicación elegida y `ui` usa la carpeta de `mimi.json`.
+**Limitación conocida:** una sola configuración de Mimi por workspace (`mimi.json` y `.mimi/` en la raíz). Varias aplicaciones con carpetas de componentes distintas no están soportadas por ahora: `init --project` configura la aplicación elegida y `mimi` usa la carpeta de `mimi.json`.
 
 ### `mimi.json`
 
@@ -818,7 +822,7 @@ Están en `apps/docs/src/app/code/`. Las medidas salen de la página de Input de
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `CodePreview`        | Tarjeta con pestañas tipo segmento (Preview con ícono de ojo, Código con ícono de código) y un botón «Copiar». El lienzo tiene 260px de alto mínimo, borde punteado, `bg-background`, contenido centrado y tres puntos decorativos. El ejemplo va por `ng-content`; `code` es el texto de su archivo. `lang` vale `angular-ts` por defecto. |
 | `CodeBlock`          | Bloque de código con botón copiar. Entradas: `code`, `lang`, `prompt` (`$` delante de un comando, que no se copia), `bordered`, `copyable` y `roomy` (la variante holgada del panel Código).                                                                                                                                                |
-| `InstallCommand`     | Pestañas subrayadas `Angular CLI` (`ng g ui <nombre>`) y `Forma larga` (`ng g @mimi-ng/cli:ui <nombre>`), cada una con un `CodeBlock`. La de pnpm (`pnpm mimi add`) vuelve con la tarea 5.3.                                                                                                                                                |
+| `InstallCommand`     | Pestañas subrayadas `Angular CLI` (`ng g mimi <nombre>`) y `Forma larga` (`ng g @mimi-ng/cli:ui <nombre>`), cada una con un `CodeBlock`. La de pnpm (`pnpm mimi add`) vuelve con la tarea 5.3.                                                                                                                                              |
 | `CopyButton`         | `navigator.clipboard.writeText` con try/catch. Muestra un check durante 2 s y anuncia «Copiado» en una región `aria-live`. Tiene una variante solo ícono (32px) y otra con texto.                                                                                                                                                           |
 | `HighlighterService` | Shiki (ver abajo).                                                                                                                                                                                                                                                                                                                          |
 
@@ -940,7 +944,7 @@ Lo que la CLI copia al proyecto es código del usuario: se actualiza con `ng upd
 1. Probar la versión candidata (RC) en una rama con `ng update`.
 2. Correr todas las pruebas (`pnpm test`: showcase, ui-core y CLI) y `pnpm build`.
 3. Revisar las novedades que afecten a Mimi: APIs de signals y formularios (`FormValueControl`, `FormCheckboxControl`), control de flujo, cambios en `@angular/cli` y `@schematics/angular` (`ng add`, `schematicCollections`, utilidades que usan `init` y `ui`).
-4. Probar la CLI en un proyecto limpio creado con esa versión (`ng new` + `ng add @mimi-ng/cli` + `ng g ui …` + `ng build`).
+4. Probar la CLI en un proyecto limpio creado con esa versión (`ng new` + `ng add @mimi-ng/cli` + `ng g mimi …` + `ng build`).
 5. Publicar declarando el soporte: actualizar rangos y la tabla de compatibilidad.
 
 Lo mismo para Tailwind CSS: probar la versión nueva en una rama, correr las pruebas, revisar el CSS generado (tokens, `@theme inline`, `@source`, variantes) y probar la CLI en un proyecto limpio.

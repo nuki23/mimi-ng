@@ -32,10 +32,10 @@ const filesUnder = (tree: UnitTestTree, dir: string) =>
     .map((f) => f.slice(dir.length + 2))
     .sort();
 
-describe('ui', () => {
+describe('mimi (alias ui)', () => {
   it('agrega un componente con sus registryDependencies, idéntico a ui-core, y su base', async () => {
     const { run, tree } = await initialized();
-    const result = await run('ui', { components: ['button'] }, tree);
+    const result = await run('mimi', { components: ['button'] }, tree);
 
     for (const file of [
       'components/button/button.ts',
@@ -62,7 +62,7 @@ describe('ui', () => {
   it('varios a la vez, con dependencias transitivas y sin duplicados', async () => {
     const { run, tree, logs } = await initialized();
     const result = await run(
-      'ui',
+      'mimi',
       { components: ['input', 'form-field', 'button', 'input'] },
       tree,
     );
@@ -101,10 +101,18 @@ describe('ui', () => {
     expect(added.length).toBe(new Set(added).size);
   });
 
+  it('el alias ui ejecuta el mismo schematic (ng g ui y ng g @mimi-ng/cli:ui)', async () => {
+    const { run, tree } = await initialized();
+    const viaAlias = await run('ui', { components: ['badge'] }, tree);
+    const { run: runAgain, tree: fresh } = await initialized();
+    const viaName = await runAgain('mimi', { components: ['badge'] }, fresh);
+    expect(snapshot(viaAlias)).toEqual(snapshot(viaName));
+  });
+
   it('vuelve a copiar un archivo de init que el usuario borró', async () => {
     const { run, tree } = await initialized();
     tree.delete(`/${UI}/utils/cn.ts`);
-    const result = await run('ui', { components: ['card'] }, tree);
+    const result = await run('mimi', { components: ['card'] }, tree);
     expect(result.readContent(`/${UI}/utils/cn.ts`)).toBe(template('utils/cn.ts'));
   });
 
@@ -112,7 +120,7 @@ describe('ui', () => {
     const { runner, run } = harness();
     const tree = await createWorkspace(runner);
     const before = snapshot(tree);
-    await expect(run('ui', { components: ['button'] }, tree)).rejects.toThrow(
+    await expect(run('mimi', { components: ['button'] }, tree)).rejects.toThrow(
       'Mimi no está configurado en este proyecto (falta mimi.json). Ejecuta primero:\n  ng add @mimi-ng/cli',
     );
     expect(snapshot(tree)).toEqual(before);
@@ -121,14 +129,14 @@ describe('ui', () => {
   it('nombre desconocido: lista los disponibles y sugiere el parecido', async () => {
     const { run, tree } = await initialized();
     const before = snapshot(tree);
-    const error = run('ui', { components: ['buton', 'zzz'] }, tree);
+    const error = run('mimi', { components: ['buton', 'zzz'] }, tree);
     await expect(error).rejects.toThrow(
       '"buton" no es un componente de Mimi. ¿Quisiste decir button?',
     );
-    await expect(run('ui', { components: ['zzz'] }, tree)).rejects.toThrow(
+    await expect(run('mimi', { components: ['zzz'] }, tree)).rejects.toThrow(
       /"zzz" no es un componente de Mimi\.\nDisponibles: avatar, badge, button, card/,
     );
-    await expect(run('ui', { components: ['form'] }, tree)).rejects.toThrow(
+    await expect(run('mimi', { components: ['form'] }, tree)).rejects.toThrow(
       '¿Quisiste decir form-field?',
     );
     expect(snapshot(tree)).toEqual(before);
@@ -136,14 +144,14 @@ describe('ui', () => {
 
   it('sin nombres (y sin terminal para preguntar) explica cómo usarlo', async () => {
     const { run, tree } = await initialized();
-    await expect(run('ui', {}, tree)).rejects.toThrow(
-      'Indica qué componentes agregar, por ejemplo: ng g ui button',
+    await expect(run('mimi', {}, tree)).rejects.toThrow(
+      'Indica qué componentes agregar, por ejemplo: ng g mimi button',
     );
   });
 
   it('archivo modificado: se omite con aviso y no cambia su base ni su versión', async () => {
     const { run, tree, warnings } = await initialized();
-    const first = await run('ui', { components: ['badge'] }, tree);
+    const first = await run('mimi', { components: ['badge'] }, tree);
     const file = `/${UI}/badge/badge.ts`;
     first.overwrite(file, '// mi versión\n');
     // La base de una versión anterior de Mimi: debe quedar tal cual.
@@ -152,7 +160,7 @@ describe('ui', () => {
     config.components.badge.version = '0.0.9';
     first.overwrite('/mimi.json', JSON.stringify(config, null, 2));
 
-    const second = await run('ui', { components: ['badge'] }, first);
+    const second = await run('mimi', { components: ['badge'] }, first);
     expect(second.readContent(file)).toBe('// mi versión\n');
     expect(second.readContent('/.mimi/base/badge/badge.ts')).toBe('// base de la 0.0.9\n');
     expect(json(second, '/mimi.json').components.badge.version).toBe('0.0.9');
@@ -163,7 +171,7 @@ describe('ui', () => {
 
   it('--overwrite reemplaza el archivo y actualiza su base y su versión', async () => {
     const { run, tree } = await initialized();
-    const first = await run('ui', { components: ['badge'] }, tree);
+    const first = await run('mimi', { components: ['badge'] }, tree);
     const file = `/${UI}/badge/badge.ts`;
     first.overwrite(file, '// mi versión\n');
     first.overwrite('/.mimi/base/badge/badge.ts', '// base vieja\n');
@@ -171,7 +179,7 @@ describe('ui', () => {
     config.components.badge.version = '0.0.9';
     first.overwrite('/mimi.json', JSON.stringify(config, null, 2));
 
-    const result = await run('ui', { components: ['badge'], overwrite: true }, first);
+    const result = await run('mimi', { components: ['badge'], overwrite: true }, first);
     expect(result.readContent(file)).toBe(template('components/badge/badge.ts'));
     expect(result.readContent('/.mimi/base/badge/badge.ts')).toBe(
       template('components/badge/badge.ts'),
@@ -181,9 +189,9 @@ describe('ui', () => {
 
   it('es idempotente: ui button dos veces no cambia nada ni reinstala', async () => {
     const { runner, run, tree, logs } = await initialized();
-    const first = await run('ui', { components: ['button'] }, tree);
+    const first = await run('mimi', { components: ['button'] }, tree);
     const after = snapshot(first);
-    const second = await run('ui', { components: ['button'] }, first);
+    const second = await run('mimi', { components: ['button'] }, first);
     expect(snapshot(second)).toEqual(after);
     expect(nodeTasks(runner)).toBe(0);
     expect(logs.map((l) => l.message)).toContain('Nada que hacer: los archivos ya están al día.');
@@ -195,7 +203,7 @@ describe('ui', () => {
     delete pkg.dependencies['class-variance-authority'];
     tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
 
-    const result = await run('ui', { components: ['button'] }, tree);
+    const result = await run('mimi', { components: ['button'] }, tree);
     expect(json(result, '/package.json').dependencies['class-variance-authority']).toBe('^0.7.1');
     expect(nodeTasks(runner)).toBe(1);
   });
@@ -204,7 +212,7 @@ describe('ui', () => {
     // El proyecto generado ya trae @angular/forms: no se toca.
     const { run, tree } = await initialized();
     const withForms = json(tree, '/package.json').dependencies['@angular/forms'];
-    const kept = await run('ui', { components: ['switch'] }, tree);
+    const kept = await run('mimi', { components: ['switch'] }, tree);
     expect(json(kept, '/package.json').dependencies['@angular/forms']).toBe(withForms);
 
     // Sin @angular/forms: se agrega con el rango de @angular/core.
@@ -212,7 +220,7 @@ describe('ui', () => {
     const pkg = json(h.tree, '/package.json');
     delete pkg.dependencies['@angular/forms'];
     h.tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
-    const added = await h.run('ui', { components: ['switch'] }, h.tree);
+    const added = await h.run('mimi', { components: ['switch'] }, h.tree);
     const deps = json(added, '/package.json').dependencies;
     expect(deps['@angular/forms']).toBe(deps['@angular/core']);
     expect(h.logs.map((l) => l.message)).toContain(`  @angular/forms@${deps['@angular/core']}`);
@@ -220,7 +228,7 @@ describe('ui', () => {
 
   it('el mensaje final recuerda guardar .mimi/ en git', async () => {
     const { run, tree, logs } = await initialized();
-    await run('ui', { components: ['card'] }, tree);
+    await run('mimi', { components: ['card'] }, tree);
     expect(logs.map((l) => l.message)).toContain(
       'Guarda la carpeta .mimi/ en git: Mimi la usa para actualizar tus componentes sin perder tus cambios.',
     );
@@ -234,7 +242,7 @@ describe('ui', () => {
       JSON.stringify({ aliases: { components: 'projects/app/src/shared/ui' }, components: {} }),
     );
     const tree = await h.run('init', {}, workspace);
-    const result = await h.run('ui', { components: ['skeleton'] }, tree);
+    const result = await h.run('mimi', { components: ['skeleton'] }, tree);
     expect(result.exists('/projects/app/src/shared/ui/skeleton/skeleton.ts')).toBe(true);
   });
 });
@@ -249,7 +257,7 @@ const BUTTON = ['button.ts', 'button.variants.ts', 'index.ts'];
 
 async function withButtonFormatted() {
   const h = await initialized();
-  const tree = await h.run('ui', { components: ['button'] }, h.tree);
+  const tree = await h.run('mimi', { components: ['button'] }, h.tree);
   for (const name of BUTTON) {
     const formatted = prettierLike(tree.readContent(`/${UI}/button/${name}`));
     tree.overwrite(`/${UI}/button/${name}`, formatted);
@@ -262,7 +270,7 @@ async function withButtonFormatted() {
 describe('ui: modificados según .mimi/base (no según la plantilla)', () => {
   it('guarda en .mimi/manifest.json la versión de cada base', async () => {
     const { run, tree } = await initialized();
-    const result = await run('ui', { components: ['button'] }, tree);
+    const result = await run('mimi', { components: ['button'] }, tree);
     const manifest = json(result, '/.mimi/manifest.json').files;
     for (const name of BUTTON) expect(manifest[`button/${name}`]).toBe(registry.version);
     expect(manifest['utils/cn.ts']).toBe(registry.version);
@@ -271,7 +279,7 @@ describe('ui: modificados según .mimi/base (no según la plantilla)', () => {
   it('formateado por Prettier y de la misma versión: no lo toca ni avisa', async () => {
     const { run, tree, warnings, logs } = await withButtonFormatted();
     const before = snapshot(tree);
-    const result = await run('ui', { components: ['button'] }, tree);
+    const result = await run('mimi', { components: ['button'] }, tree);
     expect(snapshot(result)).toEqual(before);
     expect(warnings()).toEqual([]);
     expect(logs.map((l) => l.message)).toContain('Nada que hacer: los archivos ya están al día.');
@@ -286,7 +294,7 @@ describe('ui: modificados según .mimi/base (no según la plantilla)', () => {
     config.components.button.version = '0.0.9';
     tree.overwrite('/mimi.json', JSON.stringify(config, null, 2));
 
-    const result = await run('ui', { components: ['button'] }, tree);
+    const result = await run('mimi', { components: ['button'] }, tree);
     for (const name of BUTTON) {
       expect(result.readContent(`/${UI}/button/${name}`)).toBe(
         template(`components/button/${name}`),
@@ -307,7 +315,7 @@ describe('ui: modificados según .mimi/base (no según la plantilla)', () => {
     const { run, tree, warnings } = await withButtonFormatted();
     const file = `/${UI}/button/button.ts`;
     tree.overwrite(file, `${tree.readContent(file)}// cambio propio\n`);
-    const result = await run('ui', { components: ['button'] }, tree);
+    const result = await run('mimi', { components: ['button'] }, tree);
     expect(result.readContent(file)).toContain('// cambio propio');
     expect(warnings()).toEqual([
       `Omitido: ${UI}/button/button.ts ya existe con otro contenido (usa --overwrite para reemplazarlo).`,
@@ -317,7 +325,7 @@ describe('ui: modificados según .mimi/base (no según la plantilla)', () => {
   it('sin base (archivo del usuario que ya estaba): se omite', async () => {
     const { run, tree, warnings } = await initialized();
     tree.create(`/${UI}/badge/badge.ts`, '// badge propio\n');
-    const result = await run('ui', { components: ['badge'] }, tree);
+    const result = await run('mimi', { components: ['badge'] }, tree);
     expect(result.readContent(`/${UI}/badge/badge.ts`)).toBe('// badge propio\n');
     expect(result.exists('/.mimi/base/badge/badge.ts')).toBe(false);
     expect(warnings()).toHaveLength(1);

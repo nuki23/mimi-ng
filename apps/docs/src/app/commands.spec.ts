@@ -5,6 +5,9 @@
  *
  * Cuando exista el comando `mimi`, actualizar esta lista (anotado en la tarea 5.3).
  *
+ * `ng g ui` sigue funcionando (alias del schematic `mimi`), pero no se muestra: la forma
+ * principal es `ng g mimi <nombre>` y la larga, `ng g @mimi-ng/cli:ui <nombre>`, que sí se muestra.
+ *
  * Las pruebas corren en Node (Vitest): se leen los archivos con fs sin importarlo, como en
  * packages/ui-core/src/lib/imports.spec.ts.
  */
@@ -31,6 +34,8 @@ const ROOT = path.join(process.cwd(), 'apps', 'docs', 'src', 'app');
 const NOT_YET = ['add', 'list', 'theme'].map((cmd) => new RegExp(`\\bmimi ${cmd}\\b`));
 const UPDATE = new RegExp(`\\bmimi ${'update'}\\b`);
 const MARKED_FUTURE = /próximamente|versión futura/i;
+// Solo la forma corta: `ng g @mimi-ng/cli:ui` no coincide.
+const SHORT_UI = new RegExp(`\\bng (g|generate) ${'ui'}\\b`);
 
 function files(dir: string): string[] {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
@@ -62,6 +67,13 @@ describe('comandos del sitio', () => {
       const text = fs.readFileSync(file, 'utf8');
       return NOT_YET.some((re) => re.test(text));
     });
+    expect(offenders.map((f) => path.relative(ROOT, f))).toEqual([]);
+  });
+
+  it('no muestra ng g ui (se muestra ng g mimi), pero sí la forma larga', () => {
+    expect(SHORT_UI.test('ng g ' + 'ui button')).toBe(true);
+    expect(SHORT_UI.test('ng g @mimi-ng/cli:ui button')).toBe(false);
+    const offenders = all.filter((file) => SHORT_UI.test(fs.readFileSync(file, 'utf8')));
     expect(offenders.map((f) => path.relative(ROOT, f))).toEqual([]);
   });
 

@@ -269,7 +269,7 @@ function sameAlias(current: unknown, value: string): boolean {
 // ── schematicCollections (tarea 3.6) ─────────────────────────────────────────────────
 
 /**
- * Registra la colección para que funcione `ng g ui button`. `cli.schematicCollections`
+ * Registra la colección para que funcione `ng g mimi button`. `cli.schematicCollections`
  * reemplaza al valor por defecto de la CLI de Angular, así que si no existe se crea con
  * `@schematics/angular` primero (si no, el usuario perdería `ng g component`). Si ya existe,
  * Mimi se agrega al final sin quitar nada. El de un proyecto gana al del workspace, así que si
@@ -379,7 +379,7 @@ function nextSteps(plan: Plan, report: FileReport, icons: boolean): Rule {
     if (icons) context.logger.info(`  · ${ICONS_PACKAGE} para tus íconos`);
     context.logger.info('');
     context.logger.info('Agrega tu primer componente:');
-    context.logger.info('  ng g ui button');
+    context.logger.info('  ng g mimi button');
     context.logger.info('');
     context.logger.info(`Y úsalo: import { MimiButton } from '@/components/ui/button';`);
     context.logger.info(

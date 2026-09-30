@@ -27,7 +27,7 @@ export class InstallationPage {
     },
     {
       file: 'angular.json',
-      what: 'Agrega @mimi-ng/cli a cli.schematicCollections, después de @schematics/angular: así funcionan ng g ui y también ng g component.',
+      what: 'Agrega @mimi-ng/cli a cli.schematicCollections, después de @schematics/angular: así funcionan ng g mimi y también ng g component.',
     },
     {
       file: 'package.json',

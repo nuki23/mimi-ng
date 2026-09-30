@@ -12,7 +12,8 @@
       "schema": "./init/schema.json",
       "description": "Configura Mimi: tema, utilidades, alias, dependencias y mimi.json."
     },
-    "ui": {
+    "mimi": {
+      "aliases": ["ui"],
       "factory": "./ui/index#ui",
       "schema": "./ui/schema.json",
       "description": "Agrega componentes de Mimi (varios a la vez) con sus dependencias."
