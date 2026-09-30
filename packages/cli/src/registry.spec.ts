@@ -166,6 +166,18 @@ describe('registry.json', () => {
     expect(() => resolveItems('nope', registry)).toThrow('"nope" no existe');
   });
 
+  it('el README del paquete lista todos los componentes del registro, con su ng g ui', () => {
+    const readme = readFileSync(join(here, '..', 'README.md'), 'utf8');
+    const components = entries
+      .filter(([, item]) => item.type === 'component')
+      .map(([name]) => name);
+    const missing = components.filter((name) => !readme.includes(`\`ng g ui ${name}\``));
+    expect(missing).toEqual([]);
+    // Y ninguno de más.
+    const listed = [...readme.matchAll(/`ng g ui ([a-z-]+)`/g)].map((m) => m[1]);
+    expect(listed.filter((name) => !components.includes(name))).toEqual([]);
+  });
+
   it('la lista del x-prompt de ui es la de los componentes del registro', () => {
     const schema = JSON.parse(readFileSync(join(here, 'ui', 'schema.json'), 'utf8'));
     const items = schema.properties.components['x-prompt'].items as { value: string }[];

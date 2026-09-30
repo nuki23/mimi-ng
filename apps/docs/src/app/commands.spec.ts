@@ -1,7 +1,7 @@
 /**
- * El sitio no muestra comandos que hoy no funcionan (tarea 3.9). El comando `mimi` todavía no
- * existe (tarea 5.3): `mimi add`, `mimi list` y `mimi theme` no pueden aparecer. `mimi update`
- * (tarea 5.4) solo puede aparecer en archivos que lo marcan como futuro.
+ * El sitio y los READMEs no muestran comandos que hoy no funcionan (tareas 3.9 y L.1). El
+ * comando `mimi` todavía no existe (tarea 5.3): `mimi add`, `mimi list` y `mimi theme` no pueden
+ * aparecer. `mimi update` (tarea 5.4) solo puede aparecer en archivos que lo marcan como futuro.
  *
  * Cuando exista el comando `mimi`, actualizar esta lista (anotado en la tarea 5.3).
  *
@@ -42,7 +42,16 @@ function files(dir: string): string[] {
 }
 
 describe('comandos del sitio', () => {
-  const all = files(ROOT);
+  // El sitio y los READMEs (GitHub y npm): la misma regla.
+  const readmes = [
+    path.join(process.cwd(), 'README.md'),
+    path.join(process.cwd(), 'packages', 'cli', 'README.md'),
+  ];
+  const all = [...files(ROOT), ...readmes];
+
+  it('revisa también los READMEs', () => {
+    for (const readme of readmes) expect(fs.readFileSync(readme, 'utf8').length).toBeGreaterThan(0);
+  });
 
   it('encuentra los archivos del sitio', () => {
     expect(all.some((f) => f.endsWith(path.join('pages', 'home-page.html')))).toBe(true);

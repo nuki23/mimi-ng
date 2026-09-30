@@ -53,6 +53,17 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [x] 3.8 Leer la versión del showcase desde @mimi-ng/cli. Única fuente: `packages/cli/package.json` (showcase, `dist/registry.json`, manifiesto y `mimi.json`); ui-core ya no tiene `version`.
 - [x] 3.9 Revisar la página de Instalación contra la CLI real. Incluir la nota sobre pnpm: desde pnpm 10, los scripts de instalación de las dependencias están bloqueados salvo los aprobados (en la prueba de la 3.7, con pnpm 12, `pnpm add` avisó «Ignored build scripts» para esbuild, lmdb, @parcel/watcher y msgpackr-extract, y creó `pnpm-workspace.yaml` con `allowBuilds` para completar). Se aprueban con `pnpm approve-builds` o poniendo `true` en `allowBuilds`. Ojo: mientras no se aprueben, el siguiente `pnpm add` falla con `ERR_PNPM_IGNORED_BUILDS` (lo vimos al reinstalar la CLI), y eso afectaría también a la instalación de dependencias que agendan `ng add` y `ng g ui`.
 
+## Lanzamiento 0.1.0 (vista previa)
+
+Publicar `@mimi-ng/cli` 0.1.0 antes de la Fase 4. La publicación en npm la hace el dueño del proyecto; Claude Code no publica nada.
+
+- [x] L.1 READMEs: `packages/cli/README.md` (el que muestra npm: qué es Mimi, requisitos, `ng add`, `ng g ui`, componentes y enlace a la documentación) y `README.md` de la raíz (GitHub). Documentación en https://ng.mimiworks.dev; repositorio en https://github.com/nuki23/mimi-ng.
+- [ ] L.2 `package.json` de la CLI: `description`, `keywords`, `repository`, `homepage` (https://ng.mimiworks.dev), `bugs`, `author` ("Ariel O (https://github.com/nuki23)", sin correo), `license`, `engines` y `publishConfig.access: public`.
+- [ ] L.3 Documentación en Cloudflare Pages con reescritura SPA, en ng.mimiworks.dev (prerender en la Fase 5): qué va en el repositorio y qué se configura en Cloudflare.
+- [ ] L.4 `pnpm publish --dry-run`: lista de archivos y tamaño.
+- [ ] L.5 Quitar `"private": true` de la CLI (último paso antes de publicar).
+- [ ] L.6 Después de publicar: probar `ng add @mimi-ng/cli` desde npm en un proyecto limpio; quitar «La CLI estará disponible pronto.» (landing e Instalación) y ajustar sus pruebas; `CHANGELOG.md`; etiqueta `v0.1.0` y release en GitHub; hacer público el repositorio.
+
 ## Fase 4: Componentes con overlays
 
 - [ ] 4.1 Select (estilo NG-ZORRO, con todos sus estados).
@@ -66,7 +77,7 @@ Usar el comando `/componente <nombre>` para cada uno.
 - [ ] 5.3 Comando `mimi` (`pnpm mimi add button`, `mimi list`, `mimi theme`). Al hacerlo: volver a agregar la pestaña de pnpm en `InstallCommand` (hoy muestra `ng g ui` y la forma larga) y actualizar la prueba de comandos prohibidos (`apps/docs/src/app/commands.spec.ts`) para permitir los que ya existan.
 - [ ] 5.4 `mimi update`: combina la versión nueva con los cambios del usuario usando `.mimi/base/`. La base queda formateada con el Prettier del usuario (la CLI de Angular formatea lo que escriben los schematics), así que antes de combinar hay que formatear la plantilla nueva con el Prettier del proyecto; si no, las diferencias de formato se mezclarán con los cambios reales.
 - [ ] 5.5 Página "Migrar desde PrimeNG / NG-ZORRO".
-- [ ] 5.6 Documentación en español e inglés.
+- [ ] 5.6 Documentación en español e inglés. Cuando exista la documentación en inglés, los READMEs (raíz y `packages/cli`) pasan a ser bilingües; hoy tienen solo una línea en inglés arriba.
 - [ ] 5.7 Publicar `@mimi-ng/cli` en npm.
 - [ ] 5.8 Buscador ⌘K en el header del showcase.
 - [ ] 5.9 Selector ES/EN en el header (el idioma va como prefijo en la ruta).
