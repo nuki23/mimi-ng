@@ -1,7 +1,6 @@
 {
   "name": "@mimi-ng/cli",
   "version": "0.1.0",
-  "private": true,
   "description": "Angular + Tailwind CSS 4 UI components that a CLI copies into your project, so you own the code. Schematics for ng add and ng generate.",
   "keywords": [
     "angular",
@@ -46,7 +45,8 @@
     "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
-    "build": "node scripts/build.mjs"
+    "build": "node scripts/build.mjs",
+    "prepublishOnly": "node scripts/build.mjs"
   },
   "dependencies": {
     "@angular-devkit/core": "^22.0.0",

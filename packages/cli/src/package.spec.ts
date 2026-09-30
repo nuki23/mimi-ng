@@ -37,6 +37,12 @@ describe('package.json de @mimi-ng/cli', () => {
     expect(pkg.publishConfig).toEqual({ access: 'public' });
   });
 
+  it('se puede publicar (sin private) y compila justo antes (prepublishOnly)', () => {
+    expect(pkg.private).toBeUndefined();
+    // dist/ está en .gitignore: sin esto, se publicaría el dist que hubiera en disco.
+    expect(pkg.scripts.prepublishOnly).toBe('node scripts/build.mjs');
+  });
+
   it('engines.node es el mismo que exige @angular/core (spec, sección 12)', () => {
     expect(pkg.engines.node).toBe(angularCore.engines.node);
   });
