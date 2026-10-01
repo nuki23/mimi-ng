@@ -156,7 +156,7 @@ Mimi solo agrega componentes **funcionales y difíciles de hacer bien a mano**: 
 
 ### Hoja de ruta
 
-Cada grupo es una versión menor y va precedido por su tarea de diseño en Claude Design (`docs/plan.md`, D1–D5). Antes del Grupo 1: la tarea 4.3 (`@angular/aria` frente a `@angular/cdk`, que decide la base de overlays, listbox, menús, tabs y toolbar) y los tokens nuevos (T.1: `success`, `warning`, `info` con sus `-foreground` y sombras de color, y `--mimi-glow` con `color-mix`; valores de D1). El orden de cada tabla es el orden en que conviene hacerlos.
+Cada grupo es una versión menor y va precedido por su tarea de diseño en Claude Design (`docs/plan.md`, D1–D5). Antes del Grupo 1: la tarea 4.3 (`@angular/aria` frente a `@angular/cdk`, que decide la base de overlays, listbox, menús, tabs y toolbar) y los tokens nuevos (T.1: `success`, `warning`, `info` con sus `-foreground` y sombras de color, y `--mimi-glow` con `color-mix`; valores de D1). El orden de cada tabla es el orden en que conviene hacerlos. Cada componente registra sus tokens (sección 13).
 
 **Grupo 1 → v0.2.0: overlays y navegación**
 
@@ -498,6 +498,8 @@ Valores de respaldo por tamaño (los mismos que los tokens de `theme-base.css`):
 | lg      | `--mimi-control-height-lg` | 3rem     |
 
 ### 6.3 Preset tipado (`theme/types.ts`)
+
+El catálogo completo de tokens, en tres niveles y con una tabla por componente, está en la sección 13.
 
 Los tipos siguen a `theme-base.css`, que es la fuente de verdad. Los derivados con `color-mix` (`primary-hover`, `secondary-hover`, `destructive-hover`, `ring-soft`, `destructive-soft`, `switch-off`) **no** están en el preset: se recalculan solos a partir de los colores.
 
@@ -1050,3 +1052,45 @@ Lo mismo para Tailwind CSS: probar la versión nueva en una rama, correr las pru
 
 - **wrangler** (despliegue del showcase): el comando de despliegue de Workers Builds es `npx wrangler@4 deploy`. Cuando salga una versión mayor nueva (`npm view wrangler version`), revisar sus cambios que rompen en `wrangler.jsonc` (`assets`, `not_found_handling`, `workers_dev`, `preview_urls`) y en `_headers`, cambiar la mayor en el comando del panel de Cloudflare y en esta spec (secciones 2 y 10), y comprobar en el sitio que recargar una ruta, la 404 y los encabezados de caché sigan funcionando.
 - **Node y pnpm del build:** `.node-version` y la variable `PNPM_VERSION` del panel se actualizan junto con la sección 2 (`packageManager` y el rango de Node que exige Angular).
+
+## 13. Tokens
+
+Catálogo de los tokens del tema en tres niveles (tarea T.0). Va al final para no renumerar las secciones que citan el código y los documentos; amplía las secciones 6.1 a 6.3.
+
+**Fuente:** la hoja de tokens por componente del diseño (Claude Design), que se guarda en `docs/design/` antes de T.0. Hoy `docs/design/` solo tiene los tokens globales (`tokens-vivid.css`, `mimi-variables.css`) y dos de componente que viven como globales (`--mimi-badge-radius`, `--mimi-switch-off`). Ningún valor de esta sección se inventa: lo que la hoja no defina, se pregunta.
+
+### Niveles
+
+1. **Globales:** colores, radios, sombras, fuentes y movimiento de todo Mimi (`--mimi-primary`, `--mimi-radius`, `--mimi-shadow-card`, `--mimi-transition`…). Sección 6.1; en el preset, `colors`, `radii`, `shadows`, `fonts` y `motion`.
+2. **Compartidos:** los que comparte una familia de componentes para quedar alineados (`--mimi-control-height`, `-sm` y `-lg`, de Button, Input, Textarea y Select). Sección 6.2; en el preset, `controls`.
+3. **Por componente:** `--mimi-<prefijo>-<propiedad>` (`--mimi-btn-font-weight`). Heredan de un compartido o de un global con la cascada de la sección 6.2 y se configuran con `components.<nombre>` del preset.
+
+### Tabla de cada componente
+
+Cada componente tiene su tabla con este formato (la fila es un ejemplo con un token que ya existe):
+
+| Variable            | Qué controla              | Hereda de               | Valor por defecto |
+| ------------------- | ------------------------- | ----------------------- | ----------------- |
+| `--mimi-btn-height` | Alto con el tamaño normal | `--mimi-control-height` | `2.5rem`          |
+
+### Reglas
+
+- **Obligatorio en cada componente nuevo:** registrar sus tokens en `MimiComponentTokens` (`theme/types.ts`) y su prefijo en `COMPONENT_PREFIX` (`theme/provider.ts`), con prueba en `provider.spec.ts`, y agregar su tabla a esta sección. Es un paso del comando `/componente`.
+- Prefijos registrados hoy: `button` → `btn`, `input` → `input` (Textarea usa los mismos), `card` → `card`.
+- **Componentes existentes sin tokens propios:** Avatar, Switch, Checkbox, FormField, Separator, Skeleton y Badge (`--mimi-badge-radius` y `--mimi-switch-off` existen, pero como globales, fuera de `components`). Se completan según la hoja de tokens en la tarea T.0b.
+
+### Theme Studio: variantes, propiedades y presets
+
+Modelo: **variante** (el estilo base: default, secondary, outline…) + **propiedades combinables** (tamaño, tono, radio, glow, block…) + **presets guardados**. Los valores heredan del tema global salvo que se personalicen, y el usuario puede crear **variantes propias**.
+
+**Decisión pendiente para T.2: cómo se expresa una variante propia en `mimi.preset.ts`.** Evaluación:
+
+- **Hoy no es posible solo con el preset.** Los colores de cada variante son clases literales de `cva` (`bg-primary`, `shadow-primary`…), no tokens, y `variant` está tipado como unión cerrada (`ButtonVariant`). Con un nombre desconocido, `cva` no aplica clases de variante y el template no compila con plantillas estrictas. Tailwind genera las clases al compilar, así que un preset (que se aplica en tiempo de ejecución) no puede crear clases nuevas.
+- **Opción A (recomendada): variantes por tokens.** `components.button.variants.<nombre>` (con claro y oscuro) genera en `mimiThemeToCss` CSS para `[data-slot="button"][data-variant="<nombre>"]` que define tokens del componente (`--mimi-btn-bg`, `--mimi-btn-fg`, `--mimi-btn-shadow`, `--mimi-btn-bg-hover`…). Requisitos:
+  1. Las clases de las variantes del componente leen esos tokens (`bg-[color:var(--mimi-btn-bg,…)]`), con los valores actuales como respaldo, y las variantes de Mimi los definen igual: así una variante propia es un juego de tokens más.
+  2. El componente expone `data-slot` (para no depender del atributo del selector, `mimiBtn`) además de `data-variant`.
+  3. El tipo de `variant` acepta nombres propios sin perder el autocompletado (por ejemplo, `ButtonVariant | (string & {})`, o una interfaz que el usuario amplía).
+  4. El nombre se valida (`^[a-z][a-z0-9-]*$`) igual que hoy se rechazan los valores inseguros (`UNSAFE_VALUE`).
+  5. Una variante sin definición en el preset se ve como `default`.
+- **Opción B: solo código.** Como el código es del usuario, el botón «Código» de Theme Studio entrega el fragmento para agregar la variante en `button.variants.ts`. No exige cambios en los componentes, pero no se puede aplicar ni previsualizar en tiempo de ejecución, y una actualización de Mimi deja ese archivo como modificado.
+- La opción A depende del catálogo de tokens (T.0) y de que los componentes lean sus colores de tokens. Se decide en T.2, con una prueba de concepto en Button.

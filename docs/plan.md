@@ -78,14 +78,16 @@ Hallazgos de la prueba real de la 0.1.0 desde npm (L.6).
 
 ## Hoja de ruta del catálogo
 
-Criterio (spec, sección 4): solo componentes funcionales y difíciles de hacer bien a mano (teclado, accesibilidad, overlays, estados). Cada grupo es una versión menor. Antes de cada grupo va su tarea de diseño en Claude Design (D1–D5): colores, radios y sombras salen de `docs/design/`, nunca inventados. Inspiración y dependencias de cada componente: spec, sección 4, «Hoja de ruta».
+Criterio (spec, sección 4): solo componentes funcionales y difíciles de hacer bien a mano (teclado, accesibilidad, overlays, estados). Cada grupo es una versión menor. Antes de cada grupo va su tarea de diseño en Claude Design (D1–D5): colores, radios y sombras salen de `docs/design/`, nunca inventados. Inspiración y dependencias de cada componente: spec, sección 4, «Hoja de ruta». Cada componente nuevo registra sus tokens en `MimiComponentTokens` y su prefijo en `COMPONENT_PREFIX`, con prueba, y agrega su tabla a la spec, sección 13 (paso obligatorio de `/componente`).
 
 Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → Grupo 4. Mimi Effects tiene prioridad baja y puede empezar después del Grupo 3. El Grupo 5 se prioriza según lo que pidan los usuarios después de la 0.2.0.
 
 ## Fase 4: Preparación del catálogo ampliado
 
 - [ ] 4.3 Evaluar @angular/aria (estable en v22) frente a @angular/cdk. Decide cómo se construyen la mayoría de los componentes: base de overlays y posicionamiento, listbox, menús, tabs y el patrón toolbar. Registrar la decisión en la spec (secciones 2 y 4).
-- [ ] D1 Diseño en Claude Design: tokens nuevos, Grupo 1 (incluida Pagination) y mimi-toolbar.
+- [ ] D1 Diseño en Claude Design: tokens nuevos, Grupo 1 (incluida Pagination) y mimi-toolbar. Incluye la hoja de tokens por componente (fuente de T.0), guardada en `docs/design/`.
+- [ ] T.0 Catálogo de tokens en la spec (sección 13), en tres niveles: globales, compartidos y por componente. Cada componente con su tabla: variable `--mimi-<prefijo>-<propiedad>`, qué controla, de qué token hereda y valor por defecto. Fuente: la hoja de tokens del diseño (hoy no está en `docs/design/`: se guarda con D1).
+- [ ] T.0b Tokens propios de los componentes existentes que no los tienen (Avatar, Switch, Checkbox, FormField, Separator, Skeleton y Badge), según la hoja de tokens: en el CSS del componente con la cascada de la spec 6.2, en `MimiComponentTokens` y en `COMPONENT_PREFIX`, con pruebas. `--mimi-badge-radius` y `--mimi-switch-off` hoy son globales: decidir si pasan a `components` sin romper los presets existentes.
 - [ ] T.1 Tokens nuevos (los necesita Toast), con los valores de D1: colores semánticos `success`, `warning` e `info` (claro y oscuro, con sus `-foreground` y sombras de color) y `--mimi-glow` (sombra de color con `color-mix`). Registrarlos en `theme-base.css`, `types.ts`, `mimiThemeToCss` y `cn.ts` (sombras para tailwind-merge), con pruebas.
 
 ## Grupo 1 → v0.2.0: overlays y navegación
@@ -120,9 +122,9 @@ Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → 
 
 ## Theme Studio (después del Grupo 2; reemplaza la 5.2)
 
-Construido con componentes de Mimi (mimi-toolbar, Toggle Group, Select, Color Picker, Switch, Input). Ver spec, sección 4.
+Construido con componentes de Mimi (mimi-toolbar, Toggle Group, Select, Color Picker, Switch, Input). Ver spec, secciones 4 y 13. Modelo: variante (estilo base) + propiedades combinables + presets guardados; los valores heredan del tema global salvo que se personalicen, y el usuario puede crear variantes propias.
 
-- [ ] T.2 Estructura: sidebar con la lista de componentes y su número de variantes, lienzo con un solo componente, tira de variantes debajo y panel de propiedades a la derecha (variante, tamaño, tono, radio, texto, block, deshabilitado, cargando, solo ícono, glow…) con «Propiedades actuales» en JSON.
+- [ ] T.2 Antes de empezar, resolver la decisión pendiente «Variantes propias en `mimi.preset.ts`» (spec, sección 13), con una prueba de concepto en Button. Estructura: sidebar con la lista de componentes y su número de variantes, lienzo con un solo componente, tira de variantes debajo y panel de propiedades a la derecha (variante, tamaño, tono, radio, texto, block, deshabilitado, cargando, solo ícono, glow…) con «Propiedades actuales» en JSON.
 - [ ] T.3 Botones «Código» (el HTML generado, para copiar) y «Copiar prompt».
 - [ ] T.4 Modo «Tema global»: tokens de todo Mimi (colores, radios, alturas, sombras, movimiento) con exportación de `mimi.preset.ts`. En cada control, opciones prediseñadas más «Personalizado» con un campo libre validado (por ejemplo, un radio de 14px). Presets propios con nombre, importar y exportar.
 - [ ] T.5 Radio «Squircle»: verificar el soporte actual de `corner-shape` y proponerlo como mejora progresiva, con respaldo a `border-radius`.
@@ -216,3 +218,4 @@ Las tareas que eran la Fase 5. Conservan sus números porque el código y la spe
 - [x] Formularios: Signal Forms, Reactive Forms y ngModel. Campos nativos detectan FormField o NgControl; controles propios con FormValueControl (spec, sección 8).
 - [x] Idioma por defecto de los mensajes de error: inglés. `MIMI_ERROR_MESSAGES_ES` trae el español: `provideMimiErrorMessages(MIMI_ERROR_MESSAGES_ES)` (el showcase lo usa). Ver spec, sección 8.
 - [x] Versión exacta de Node.js y TypeScript según los requisitos de Angular 22 (ver spec, sección 2).
+- [ ] Variantes propias en `mimi.preset.ts` (para T.2): cómo se expresan y aplican. Evaluación y opción recomendada (`components.<nombre>.variants.<variante>` → CSS para `[data-slot][data-variant]` con tokens del componente) en la spec, sección 13.
