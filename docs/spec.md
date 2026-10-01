@@ -13,7 +13,7 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 5. **Estilo Vivid:** paleta neutra con radio amplio, sombras en capas y micro-animaciones (inspirado en Vuesax).
 6. **Documentación en español e inglés.**
 
-Frase principal: _"Los componentes son tuyos. Las actualizaciones también."_
+**Lema (fijo):** _"Los componentes son tuyos. Las actualizaciones también."_ Es el titular de la landing y no se cambia en rediseños.
 
 ### Reglas del código que se entrega
 
@@ -21,19 +21,19 @@ Frase principal: _"Los componentes son tuyos. Las actualizaciones también."_
 
 ## 2. Stack
 
-| Capa              | Tecnología                                                                                                      |
-| ----------------- | --------------------------------------------------------------------------------------------------------------- |
-| Framework         | Angular 22 (standalone, OnPush, zoneless, signals)                                                              |
-| Estilos           | Tailwind CSS 4 (configuración en CSS, sin `tailwind.config.js`)                                                 |
-| Colores           | OKLCH en variables CSS `--mimi-*`                                                                               |
-| Clases            | `clsx` + `tailwind-merge` → `cn()`                                                                              |
-| Variantes         | `class-variance-authority` (`cva`)                                                                              |
-| Overlays (Fase 4) | `@angular/cdk` (`overlay`, `dialog`, `a11y`)                                                                    |
-| Íconos            | Lucide: SVG en línea dentro de los componentes; `@lucide/angular` en el showcase y como recomendación           |
-| CLI               | Angular Schematics + comando `mimi`                                                                             |
-| Monorepo          | pnpm workspaces                                                                                                 |
-| Formato           | Prettier en la raíz (`.prettierrc`, `.prettierignore`); `pnpm format` escribe y `pnpm format:check` solo revisa |
-| Showcase          | Angular 22 puro (no AnalogJS), con prerender                                                                    |
+| Capa               | Tecnología                                                                                                                      |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| Framework          | Angular 22 (standalone, OnPush, zoneless, signals)                                                                              |
+| Estilos            | Tailwind CSS 4 (configuración en CSS, sin `tailwind.config.js`)                                                                 |
+| Colores            | OKLCH en variables CSS `--mimi-*`                                                                                               |
+| Clases             | `clsx` + `tailwind-merge` → `cn()`                                                                                              |
+| Variantes          | `class-variance-authority` (`cva`)                                                                                              |
+| Overlays (Grupo 1) | `@angular/cdk` (`overlay`, `dialog`, `a11y`) o `@angular/aria`, según la tarea 4.3; `@angular/cdk/drag-drop` para Sortable List |
+| Íconos             | Lucide: SVG en línea dentro de los componentes; `@lucide/angular` en el showcase y como recomendación                           |
+| CLI                | Angular Schematics + comando `mimi`                                                                                             |
+| Monorepo           | pnpm workspaces                                                                                                                 |
+| Formato            | Prettier en la raíz (`.prettierrc`, `.prettierignore`); `pnpm format` escribe y `pnpm format:check` solo revisa                 |
+| Showcase           | Angular 22 puro (no AnalogJS), con prerender                                                                                    |
 
 ### Versiones
 
@@ -108,7 +108,7 @@ El showcase importa desde `ui-core` con alias de TypeScript, así lo que se ve e
 
 ## 4. Catálogo
 
-### Fase 2 del plan: componentes básicos (MVP)
+### Componentes básicos (0.1.0)
 
 | Componente | Selector                                                                                                             | Notas                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | ---------- | -------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -148,9 +148,33 @@ En el monorepo, `tsconfig.base.json` define `@/components/ui/utils/*` y `@/compo
 | Checkbox   | `components/checkbox/checkbox.ts`, `components/checkbox/index.ts`                                                                                         | `clsx`, `tailwind-merge` (vía `cn`); peer `@angular/forms`                  | `utils/cn.ts`, `utils/control-styles.ts`, `utils/field-state.ts` (provee `MIMI_FIELD_CONTROL`); de `theme/theme-base.css`: `input`, `input-background`, `primary`, `primary-foreground`, `ring`, `destructive`, `--mimi-shadow-primary`, `--mimi-press-scale-sm`, `--radius-sm`. Íconos check y minus de Lucide en línea |
 | FormField  | `components/form-field/form-field.ts`, `components/form-field/form-error.ts`, `components/form-field/error-messages.ts`, `components/form-field/index.ts` | `clsx`, `tailwind-merge` (vía `cn`); peer `@angular/forms`                  | `utils/cn.ts`, `utils/field-state.ts` (`MIMI_FIELD_CONTROL`, `MimiFieldError`); token `destructive`. No depende de Input, Textarea, Switch ni Checkbox: los encuentra por el token. Ícono circle-alert de Lucide en línea                                                                                                |
 
-### Fase 4 del plan: overlays
+### Criterio del catálogo
 
-- **Select** (`mimi-select`), estilo NG-ZORRO: buscador interno, limpiar, cargando, sin resultados, opciones deshabilitadas, check en la activa, teclado (flechas, Enter, Escape, Home/End), ControlValueAccessor.
+Mimi solo agrega componentes **funcionales y difíciles de hacer bien a mano**: los que exigen teclado, accesibilidad, overlays o manejo de estados. Card y los demás componentes básicos de la 0.1.0 se mantienen, pero no se agregan más componentes de ese tipo (contenedores o estilos que el usuario resuelve con unas clases de Tailwind).
+
+**No serán componentes de la CLI:** el editor de texto enriquecido, los gráficos y el calendario de eventos. Dependerían de librerías externas grandes; si se hacen, serán recetas en la documentación.
+
+### Hoja de ruta
+
+Cada grupo es una versión menor y va precedido por su tarea de diseño en Claude Design (`docs/plan.md`, D1–D5). Antes del Grupo 1: la tarea 4.3 (`@angular/aria` frente a `@angular/cdk`, que decide la base de overlays, listbox, menús, tabs y toolbar) y los tokens nuevos (T.1: `success`, `warning`, `info` con sus `-foreground` y sombras de color, y `--mimi-glow` con `color-mix`; valores de D1). El orden de cada tabla es el orden en que conviene hacerlos.
+
+**Grupo 1 → v0.2.0: overlays y navegación**
+
+| Orden | Componente    | Inspiración                             | Depende de                                   |
+| ----- | ------------- | --------------------------------------- | -------------------------------------------- |
+| 1     | Popover       | shadcn/Spartan                          | Decisión 4.3 (base de los demás overlays)    |
+| 2     | Tooltip       | shadcn/Spartan                          | Popover (posicionamiento)                    |
+| 3     | Dropdown Menu | shadcn/Spartan                          | Popover                                      |
+| 4     | Context Menu  | shadcn/Spartan                          | Dropdown Menu                                |
+| 5     | Select        | NG-ZORRO (API) y PrimeNG                | Popover, FormField                           |
+| 6     | Dialog        | shadcn y Vuesax                         | Decisión 4.3, Button                         |
+| 7     | Confirm       | PrimeNG ConfirmDialog y Vuesax          | Dialog, Button                               |
+| 8     | Toast         | Sonner (shadcn) y Vuesax                | Tokens T.1, Button                           |
+| 9     | Tabs          | HeroUI                                  | Decisión 4.3                                 |
+| 10    | mimi-toolbar  | Vuesax (VsCanvasToolbar)                | Tooltip, Separator, Badge (contadores)       |
+| 11    | Pagination    | Diseño propio (píldora de mimi-toolbar) | Select, Input, Button, mimi-toolbar (estilo) |
+
+- **Select** (`mimi-select`), estilo NG-ZORRO: buscador interno, limpiar, cargando, sin resultados, opciones deshabilitadas, check en la activa, teclado (flechas, Enter, Escape, Home/End). Implementa `FormValueControl` (sección 8), nunca `ControlValueAccessor`.
   ```ts
   export interface MimiOption<T = unknown> {
     label: string;
@@ -159,10 +183,83 @@ En el monorepo, `tsconfig.base.json` define `@/components/ui/utils/*` y `@/compo
   }
   ```
 - **Dialog** (`MimiDialogService`): `dialog.open(MiComponente, { data, width, maxWidth, disableClose, injector })`. Sin header/body/footer obligatorios, **siempre** con una X arriba a la derecha. Cierra con X, Escape y clic en el fondo (salvo `disableClose`). Datos con `inject(MIMI_DIALOG_DATA)`.
+- **Confirm:** `mimi.confirm()`, construido sobre Dialog. La API se define en su tarea (G1.7).
+- **Toast:** estilo Sonner + Vuesax; usa los tokens semánticos y `--mimi-glow` (T.1). El detalle sale de D1.
+- **Tabs:** indicador animado que se desliza a la pestaña activa, estilo HeroUI.
+- **mimi-toolbar:** horizontal o vertical. Píldora translúcida, ítem activo sobre un disco, anillo animado en hover y selección, tooltips, flechas, separadores, contadores, estado presionado y herramientas propias del usuario. Patrón toolbar de WAI-ARIA (una sola parada de Tab, flechas entre ítems).
+- **Pagination:** componente independiente en forma de píldora como mimi-toolbar: `[←] [input de página] / total [→] | select de registros por página`. Variantes flotante y en línea. La usa Data Table.
 
-### Después
+**Grupo 2 → v0.3.0: entradas avanzadas**
 
-DropdownMenu, Tooltip, Tabs, Popover, Combobox múltiple, DatePicker, Toast, Table. Badge interactivo (`a[mimiBadge]` o `button[mimiBadge]`, con hover y foco).
+| Orden | Componente                                 | Inspiración                                | Depende de                                     |
+| ----- | ------------------------------------------ | ------------------------------------------ | ---------------------------------------------- |
+| 1     | Toggle Group                               | shadcn/Spartan                             | —                                              |
+| 2     | Number Input                               | PrimeNG (InputNumber) y HeroUI             | `utils/control-styles`, `FormValueControl`     |
+| 3     | Password (mostrar/ocultar y medidor)       | PrimeNG (Password)                         | Input                                          |
+| 4     | Input Mask                                 | PrimeNG (InputMask)                        | Input                                          |
+| 5     | Input OTP                                  | shadcn                                     | `utils/control-styles`                         |
+| 6     | Tags Input                                 | HeroUI y PrimeNG (Chips)                   | Badge, Input                                   |
+| 7     | Slider (rango doble)                       | shadcn y HeroUI                            | Tooltip                                        |
+| 8     | Combobox/Autocomplete (múltiple con chips) | shadcn (Combobox) y PrimeNG (AutoComplete) | Popover, lógica de lista de Select, Tags Input |
+| 9     | Date Picker y Date Range                   | shadcn (Calendar) y PrimeNG                | Popover, Button                                |
+| 10    | Progress (barra y circular)                | shadcn y HeroUI                            | —                                              |
+| 11    | File Upload                                | PrimeNG (FileUpload) y Vuesax              | Button, Progress                               |
+| 12    | Color Picker                               | PrimeNG (ColorPicker) y HeroUI             | Popover, Slider, Input                         |
+
+**Grupo 3 → v0.4.0: datos**
+
+| Orden | Componente                                                          | Inspiración                           | Depende de                                         |
+| ----- | ------------------------------------------------------------------- | ------------------------------------- | -------------------------------------------------- |
+| 1     | Tree                                                                | PrimeNG (Tree)                        | Checkbox                                           |
+| 2     | Sortable List                                                       | `@angular/cdk/drag-drop`              | `@angular/cdk/drag-drop`, manejo de teclado propio |
+| 3     | Command (⌘K; también el buscador de la documentación, tarea 5.8)    | shadcn (Command)                      | Dialog, lógica de lista de Combobox                |
+| 4     | Data Table (ordenar, filtrar, paginar, seleccionar, columnas fijas) | shadcn (Data Table) y PrimeNG (Table) | Checkbox, Dropdown Menu, Pagination, Input         |
+
+**Grupo 4 → v0.5.0: estructura**
+
+| Orden | Componente   | Inspiración                | Depende de       |
+| ----- | ------------ | -------------------------- | ---------------- |
+| 1     | Accordion    | shadcn/Spartan             | Decisión 4.3     |
+| 2     | Sheet/Drawer | shadcn (Sheet y Drawer)    | Dialog           |
+| 3     | Stepper      | PrimeNG (Stepper) y Vuesax | Button, Progress |
+
+- **Sheet/Drawer:** flotante, como el de shadcn: separado de los bordes de la pantalla, con el radio de las tarjetas y, en la versión inferior, una barra de agarre.
+
+**Grupo 5: según lo que pidan los usuarios** (prioridad decidida después de la 0.2.0; sin orden fijo)
+
+| Componente           | Inspiración              | Depende de                |
+| -------------------- | ------------------------ | ------------------------- |
+| Sidebar de dashboard | shadcn                   | Sheet (en móvil), Tooltip |
+| Time Picker          | PrimeNG y HeroUI         | Popover                   |
+| Carousel             | shadcn                   | —                         |
+| Image Preview        | PrimeNG (Image) y Vuesax | Dialog                    |
+| Timeline             | PrimeNG                  | —                         |
+| Resizable            | shadcn                   | —                         |
+| Hover Card           | shadcn                   | Popover                   |
+| Rating               | PrimeNG y HeroUI         | `FormValueControl`        |
+
+### Theme Studio
+
+Reemplaza a la página «Temas» (tarea 5.2). Va después del Grupo 2 y está construido con componentes de Mimi (mimi-toolbar, Toggle Group, Select, Color Picker, Switch, Input).
+
+- **Estructura:** sidebar con la lista de componentes y su número de variantes; lienzo con un solo componente; tira de variantes debajo; panel de propiedades a la derecha (variante, tamaño, tono, radio, texto, block, deshabilitado, cargando, solo ícono, glow…) con «Propiedades actuales» en JSON.
+- **Salida:** botón «Código» (el HTML generado, para copiar) y botón «Copiar prompt».
+- **Modo «Tema global»:** los tokens de todo Mimi (colores, radios, alturas, sombras, movimiento), con exportación de `mimi.preset.ts`.
+- **Controles:** opciones prediseñadas más «Personalizado» con un campo libre validado (por ejemplo, un radio de 14px). Presets propios con nombre, importar y exportar.
+- **Radio «Squircle»:** verificar el soporte actual de `corner-shape` y proponerlo como mejora progresiva, con respaldo a `border-radius`.
+
+### Blocks
+
+Pantallas completas que la CLI copia como cualquier componente (`ng g mimi login-01`), con los componentes que usan: login, registro, configuración, dashboard, tabla con filtros y precios. Después del Grupo 2; la tabla con filtros espera a Data Table.
+
+### Mimi Effects
+
+Prioridad baja, después del Grupo 3. Inspirados en Magic UI: Animated Theme Toggler, Terminal, Marquee, Bento Grid, Number Ticker, Border Beam / Shine Border, Magic Card, Blur Fade, Text Animate, Animated List, Confetti, Ripple, fondos (Grid y Dot Pattern), marcos Safari/iPhone, File Tree y Code Comparison.
+
+- Todos respetan `prefers-reduced-motion`.
+- Sin Globe, Icon Cloud ni partículas 3D: dependencias pesadas.
+- Si se porta código de Magic UI (MIT), su aviso va en `THIRD_PARTY_NOTICES.md`.
+- El showcase usa el Animated Theme Toggler y la Terminal cuando existan.
 
 ## 5. Uso para el desarrollador final
 
@@ -240,7 +337,7 @@ El comando `mimi` es una capa delgada que llama a los schematics. El schematic `
 
    **Por qué contra la base y no contra la plantilla:** la CLI de Angular pasa el Prettier del proyecto por los archivos que escriben los schematics. Si el Prettier del usuario tiene otro estilo que ui-core, el archivo y su base quedan reformateados igual y distintos de la plantilla; compararlos con la plantilla los haría pasar por modificados en cada ejecución (lo encontró la prueba de la tarea 3.7). Nunca salta "merge conflicted".
 
-5. **`.mimi/base/`** (en la raíz del workspace, con la misma estructura: `.mimi/base/button/button.ts`, `.mimi/base/utils/cn.ts`): la copia original de cada archivo, que usará `mimi update` (Fase 5). Se escribe cuando el archivo del proyecto queda igual a la plantilla (creado, actualizado, reemplazado con `--overwrite`, o idéntico y todavía sin base). Si el archivo se omitió por estar modificado, su base **no** cambia. **`.mimi/manifest.json`** guarda con qué versión de Mimi se escribió cada base (`{ "files": { "button/button.ts": "0.1.0", … } }`); con eso se distingue un archivo formateado (misma versión) de uno que hay que actualizar (versión anterior).
+5. **`.mimi/base/`** (en la raíz del workspace, con la misma estructura: `.mimi/base/button/button.ts`, `.mimi/base/utils/cn.ts`): la copia original de cada archivo, que usará `mimi update` (tarea 5.4). Se escribe cuando el archivo del proyecto queda igual a la plantilla (creado, actualizado, reemplazado con `--overwrite`, o idéntico y todavía sin base). Si el archivo se omitió por estar modificado, su base **no** cambia. **`.mimi/manifest.json`** guarda con qué versión de Mimi se escribió cada base (`{ "files": { "button/button.ts": "0.1.0", … } }`); con eso se distingue un archivo formateado (misma versión) de uno que hay que actualizar (versión anterior).
 6. **`mimi.json` → `components`:** `{ "button": { "version": "0.1.0" } }` para cada componente pedido o traído como dependencia, solo si todos sus archivos quedaron iguales a la plantilla; si alguno se omitió, se conserva lo que había.
 7. **Dependencias:** las `dependencies` de los ítems, con la versión del registro, si el proyecto no las tiene. Las `peerDependencies` (como `@angular/forms`) solo si faltan; las de `@angular/*` con el mismo rango que el `@angular/core` del proyecto, para que no queden desalineadas. Se instalan con el gestor de paquetes del proyecto.
 8. **Mensaje final:** qué se agregó o reemplazó, qué se omitió y por qué (con la sugerencia de `--overwrite`), qué dependencias se instalan, y que `.mimi/` debe quedar en git.
@@ -386,11 +483,11 @@ height: var(--mimi-btn-height, var(--mimi-control-height, 2.5rem));
 border-radius: var(--mimi-btn-radius, var(--mimi-radius, 0.75rem));
 ```
 
-| Si defines…             | Afecta a…                                    |
-| ----------------------- | -------------------------------------------- |
-| `--mimi-control-height` | Button, Input, Textarea (y Select en Fase 4) |
-| `--mimi-btn-height`     | Solo Button                                  |
-| nada                    | Todos usan 2.5rem                            |
+| Si defines…             | Afecta a…                                   |
+| ----------------------- | ------------------------------------------- |
+| `--mimi-control-height` | Button, Input, Textarea (y Select, Grupo 1) |
+| `--mimi-btn-height`     | Solo Button                                 |
+| nada                    | Todos usan 2.5rem                           |
 
 Valores de respaldo por tamaño (los mismos que los tokens de `theme-base.css`):
 
@@ -492,7 +589,7 @@ export interface MimiComponentTokens {
   button?: MimiButtonTokens;
   input?: MimiInputTokens;
   card?: MimiCardTokens;
-  // select y dialog se agregan en la Fase 4
+  // select y dialog se agregan en el Grupo 1 (G1.5 y G1.6)
 }
 
 export interface MimiThemePreset {
@@ -532,7 +629,7 @@ providers: [provideMimiTheme(mimiTheme)]; // opcional
 | Pieza                              | Qué hace                                                                                                                                                                                         |
 | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `mimiThemeToCss(preset)`           | Función pura: convierte el preset en texto CSS. Devuelve `''` si no hay nada que aplicar.                                                                                                        |
-| `applyMimiTheme(document, preset)` | Crea o reutiliza `<style id="mimi-theme">`, reemplaza su contenido y lo mueve al final del `<head>`. Con un preset vacío o `null` lo elimina. La usa también el personalizador de la Fase 5.     |
+| `applyMimiTheme(document, preset)` | Crea o reutiliza `<style id="mimi-theme">`, reemplaza su contenido y lo mueve al final del `<head>`. Con un preset vacío o `null` lo elimina. La usará también Theme Studio.                     |
 | `MIMI_THEME`                       | `InjectionToken<MimiThemePreset>` con el preset registrado.                                                                                                                                      |
 | `provideMimiTheme(preset)`         | `makeEnvironmentProviders` con `MIMI_THEME` y un `provideAppInitializer` que llama a `applyMimiTheme(inject(DOCUMENT), inject(MIMI_THEME))`. Opcional: sin él, se usa `theme-base.css` tal cual. |
 
@@ -731,7 +828,7 @@ Verificado en Angular 22.1.7 con una prueba real: un control que implementa solo
 
 ## 9. Íconos
 
-- Los componentes traen sus íconos internos como SVG en línea con trazos de Lucide (licencia ISC; avisos en `THIRD_PARTY_NOTICES.md`, junto con el Octicon de GitHub del header). Fase 2: spinner, check, minus. Fase 4: chevron-down, x, search.
+- Los componentes traen sus íconos internos como SVG en línea con trazos de Lucide (licencia ISC; avisos en `THIRD_PARTY_NOTICES.md`, junto con el Octicon de GitHub del header). Fase 2: spinner, check, minus. Grupo 1: chevron-down, x, search.
 - Los íconos del usuario van por `ng-content` y se dimensionan solos: `[&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:pointer-events-none`.
 - Recomendado para el usuario y usado en el showcase: `@lucide/angular` (standalone, signals, un componente por ícono):
   ```html
@@ -761,7 +858,7 @@ apps/docs/src/app/
 └── dev/                     # /dev/tokens, /dev/theme y /dev/code (internas, fuera del menú)
 ```
 
-- **Header:** fijo (`sticky`), 60px de alto, fondo `bg-background/78` con desenfoque de 14px y borde inferior. Contiene el botón de menú (solo bajo `lg`), el logo (enlace a `/`), la versión, el enlace a GitHub y el botón claro/oscuro. Sin nav superior, buscador ⌘K ni selector ES/EN: quedan en la Fase 5.
+- **Header:** fijo (`sticky`), 60px de alto, fondo `bg-background/78` con desenfoque de 14px y borde inferior. Contiene el botón de menú (solo bajo `lg`), el logo (enlace a `/`), la versión, el enlace a GitHub y el botón claro/oscuro. Sin nav superior, buscador ⌘K ni selector ES/EN: quedan para las tareas 5.10, 5.8 y 5.9.
   - **Versión:** `SITE.version`, que lee `packages/cli/package.json` (única fuente de la versión de Mimi, tarea 3.8) con el alias `@mimi-ng/cli/package.json` de `tsconfig.base.json` (y `resolveJsonModule`). Tiene que ser un alias y no una importación de paquete: `ng serve` deja los paquetes de `node_modules` fuera del bundle y Vite los busca desde la raíz del workspace, donde `@mimi-ng/cli` no está instalado. La prueba `site.spec.ts` lo comprueba.
   - **GitHub:** `SITE.githubUrl` (`https://github.com/nuki23/mimi-ng`). Lucide ya no tiene logos de marcas, así que el ícono es el SVG oficial de GitHub (Octicon mark-github, MIT) en línea, con `fill="currentColor"` y `aria-hidden`; el enlace lleva `aria-label="Repositorio de Mimi en GitHub"`.
 - **Grilla de la documentación:** `max-w-[1440px]`, `px-6`; columnas `240px | contenido | 200px`; separación de 28px (48px desde 1100px). Contenido con `max-w-[900px]`, 40px arriba y 120px abajo, y migas (sección › página) sacadas de `DOCS_NAV`.
@@ -778,7 +875,7 @@ apps/docs/src/app/
 | `/dev/tokens`, `/dev/theme`, `/dev/code`   | Páginas internas, sin sidebar y fuera del menú                |
 | `**`                                       | 404                                                           |
 
-Las rutas y los archivos están en inglés; los títulos visibles, en español. En la Fase 5 el idioma se separará con un prefijo en la ruta.
+Las rutas y los archivos están en inglés; los títulos visibles, en español. El idioma se separará con un prefijo en la ruta (tarea 5.9).
 
 El router usa `withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' })` y `ViewportScroller.setOffset([0, 76])` (60px del header + 16px), para que los anclas no queden debajo del header.
 
@@ -885,15 +982,15 @@ El showcase se publica en **https://ng.mimiworks.dev** con **Cloudflare Workers*
 - **`wrangler.jsonc`** (raíz): sirve `dist/docs/browser` con `not_found_handling: "single-page-application"`. Sin `*.workers.dev` ni URLs de vista previa (`workers_dev: false`, `preview_urls: false`): solo el dominio propio.
 - **Build (Workers Builds, desde GitHub):** `pnpm build:docs` (`ng build docs`, sin la CLI), que antes ejecuta `apps/docs/scripts/check-public.mjs`: falla si `apps/docs/public` tiene archivos que no sean `.svg`, `.png`, `.ico`, `.webp` o `_headers`. Todo lo que está en `public/` se publica tal cual, y como Cloudflare compila desde GitHub, esa verificación es la última barrera para que un documento que cayó ahí por error no llegue al sitio (la prueba `public-files.spec.ts` ejecuta el mismo script). Un tipo nuevo se agrega a propósito en el script. Despliegue: `npx wrangler@4 deploy`. Wrangler no es dependencia del repositorio; la versión mayor se fija en el comando y se revisa según la sección 12.
 - **Versiones del build:** Node en `.node-version` (24.18.0, dentro del rango de Angular 22); pnpm con la variable `PNPM_VERSION` del panel, igual a `packageManager` (12.5.1).
-- **Rutas:** una ruta sin archivo entrega `index.html` con estado 200 y la resuelve Angular. Recargar `/docs/components/button` funciona, y una ruta inexistente muestra la 404 del showcase, pero con estado **200** (soft 404). Por eso la 404 agrega `<meta name="robots" content="noindex">` mientras se muestra. El estado 404 real llega con el prerender (Fase 5).
+- **Rutas:** una ruta sin archivo entrega `index.html` con estado 200 y la resuelve Angular. Recargar `/docs/components/button` funciona, y una ruta inexistente muestra la 404 del showcase, pero con estado **200** (soft 404). Por eso la 404 agrega `<meta name="robots" content="noindex">` mientras se muestra. El estado 404 real llega con el prerender (tarea 5.14).
 - **Caché:** `apps/docs/public/_headers` (Angular lo copia a la salida) marca `main-*`, `chunk-*`, `polyfills-*` y `styles-*` como `public, max-age=31536000, immutable`: llevan hash (`outputHashing: all`). `index.html`, `favicon.ico` y `avatars/` quedan con la caché por defecto de Cloudflare (`max-age=0, must-revalidate` con ETag). Si se agrega un archivo sin hash con esos prefijos, hay que sacarlo de `_headers`.
 - **Dominio:** Custom Domain del Worker (Cloudflare crea el registro DNS y el certificado); el subdominio no debe tener un CNAME previo.
 
 ### Pendiente
 
-- **Páginas:** Personalización, Temas (personalizador en vivo y exportar `mimi.preset.ts`), Iconos, Migrar desde PrimeNG / NG-ZORRO y una página por componente. Select y Dialog aparecen como «Próximamente» hasta la Fase 4.
+- **Páginas:** Personalización, Theme Studio (sección 4), Iconos, Migrar desde PrimeNG / NG-ZORRO y una página por componente. Select y Dialog aparecen como «Próximamente» hasta la 0.2.0 (Grupo 1).
 - **Página de componente:** título, descripción, `InstallCommand`, un `CodePreview` por estado (cada ejemplo en su archivo `examples/*.example.ts`), ejemplo con `class` y tabla de API.
-- Prerender para generar páginas estáticas y responder 404 con estado real (Fase 5).
+- Prerender para generar páginas estáticas y responder 404 con estado real (tarea 5.14).
 
 **Landing (`/`, tarea 2.12)** según `docs/design/Mimi Sitio.dc.html`: hero (badge con la versión, «v0.1.0 · Vista previa» mientras sea 0.x, titular, subtítulo, `ng add @mimi-ng/cli` con `CodeBlock` y botones «Empezar» → `/docs/installation` y «Componentes» → `/docs/components/button`), cuatro diferenciales y la vitrina «Hecho con Mimi» (`pages/home/`: un formulario real con Reactive Forms y una lista de equipo). Reglas:
 
@@ -931,7 +1028,7 @@ Mimi soporta las versiones de Angular con soporte oficial (activo o LTS). Cuando
 
 ### El código copiado es del usuario
 
-Lo que la CLI copia al proyecto es código del usuario: se actualiza con `ng update` junto al resto de su proyecto y no depende de una versión de Mimi instalada. `@mimi-ng/cli` solo se necesita para agregar componentes o actualizarlos con `mimi update` (Fase 5).
+Lo que la CLI copia al proyecto es código del usuario: se actualiza con `ng update` junto al resto de su proyecto y no depende de una versión de Mimi instalada. `@mimi-ng/cli` solo se necesita para agregar componentes o actualizarlos con `mimi update` (tarea 5.4).
 
 ### Tabla de compatibilidad
 

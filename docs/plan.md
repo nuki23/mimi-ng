@@ -76,28 +76,139 @@ Hallazgos de la prueba real de la 0.1.0 desde npm (L.6).
 - [ ] 0.1.1-1 `ng add @mimi-ng/cli --icons=false` falla con "Data path "/icons" must be boolean": `ng add` pasa el valor como texto (antes de instalar el paquete no conoce su esquema). `--icons` sí funciona. Investigar en `@angular/cli` (`commands/add`) cómo se pasan las opciones y si alcanza con aceptar también `"true"`/`"false"` en el esquema o en `init`; probar `--icons=false` y `--no-icons` en un proyecto limpio.
 - [ ] 0.1.1-2 pnpm 12 creó un `pnpm-workspace.yaml` en el proyecto del usuario con `minimumReleaseAgeExclude: ['@mimi-ng/cli@0.1.0']` al instalar una versión de pocas horas (política de antigüedad mínima de pnpm). No impidió nada. Confirmar el mecanismo y el valor por defecto de `minimumReleaseAge` en pnpm 12, y decidir si la página de Instalación lo menciona (junto a la nota de pnpm).
 
-## Fase 4: Componentes con overlays
+## Hoja de ruta del catálogo
 
-- [ ] 4.1 Select (estilo NG-ZORRO, con todos sus estados).
-- [ ] 4.2 Dialog (servicio, X siempre visible).
-- [ ] 4.3 Evaluar @angular/aria (estable en v22) en lugar de @angular/cdk para Select y Tabs.
+Criterio (spec, sección 4): solo componentes funcionales y difíciles de hacer bien a mano (teclado, accesibilidad, overlays, estados). Cada grupo es una versión menor. Antes de cada grupo va su tarea de diseño en Claude Design (D1–D5): colores, radios y sombras salen de `docs/design/`, nunca inventados. Inspiración y dependencias de cada componente: spec, sección 4, «Hoja de ruta».
 
-## Fase 5: Experiencia y lanzamiento
+Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → Grupo 4. Mimi Effects tiene prioridad baja y puede empezar después del Grupo 3. El Grupo 5 se prioriza según lo que pidan los usuarios después de la 0.2.0.
+
+## Fase 4: Preparación del catálogo ampliado
+
+- [ ] 4.3 Evaluar @angular/aria (estable en v22) frente a @angular/cdk. Decide cómo se construyen la mayoría de los componentes: base de overlays y posicionamiento, listbox, menús, tabs y el patrón toolbar. Registrar la decisión en la spec (secciones 2 y 4).
+- [ ] D1 Diseño en Claude Design: tokens nuevos, Grupo 1 (incluida Pagination) y mimi-toolbar.
+- [ ] T.1 Tokens nuevos (los necesita Toast), con los valores de D1: colores semánticos `success`, `warning` e `info` (claro y oscuro, con sus `-foreground` y sombras de color) y `--mimi-glow` (sombra de color con `color-mix`). Registrarlos en `theme-base.css`, `types.ts`, `mimiThemeToCss` y `cn.ts` (sombras para tailwind-merge), con pruebas.
+
+## Grupo 1 → v0.2.0: overlays y navegación
+
+- [ ] G1.1 Popover. Base de posicionamiento de los demás overlays.
+- [ ] G1.2 Tooltip.
+- [ ] G1.3 Dropdown Menu (submenús, búsqueda por letra).
+- [ ] G1.4 Context Menu, sobre Dropdown Menu.
+- [ ] G1.5 Select, estilo NG-ZORRO, con `FormValueControl` (spec 8). Al hacerlo, completar `MimiComponentTokens` en `theme/types.ts` (hoy tiene el comentario «select y dialog se agregan en la Fase 4»).
+- [ ] G1.6 Dialog (servicio, X siempre visible).
+- [ ] G1.7 Confirm: `mimi.confirm()` sobre Dialog.
+- [ ] G1.8 Toast, estilo Sonner + Vuesax. Usa los tokens de T.1.
+- [ ] G1.9 Tabs con indicador animado, estilo HeroUI. Después, la tarea 5.11.
+- [ ] G1.10 mimi-toolbar, horizontal o vertical, inspirada en VsCanvasToolbar de Vuesax: píldora translúcida, ítem activo sobre un disco, anillo animado en hover y selección, tooltips, flechas, separadores, contadores, estado presionado y herramientas propias del usuario.
+- [ ] G1.11 Pagination: píldora flotante como mimi-toolbar (`[←] [input de página] / total [→] | select de registros por página`), con variantes flotante y en línea.
+
+## Grupo 2 → v0.3.0: entradas avanzadas
+
+- [ ] D2 Diseño en Claude Design: Grupo 2 y Theme Studio.
+- [ ] G2.1 Toggle Group.
+- [ ] G2.2 Number Input.
+- [ ] G2.3 Password (mostrar/ocultar y medidor de seguridad).
+- [ ] G2.4 Input Mask.
+- [ ] G2.5 Input OTP.
+- [ ] G2.6 Tags Input.
+- [ ] G2.7 Slider (rango doble).
+- [ ] G2.8 Combobox/Autocomplete (múltiple con chips).
+- [ ] G2.9 Date Picker y Date Range.
+- [ ] G2.10 Progress (barra y circular).
+- [ ] G2.11 File Upload, con Progress.
+- [ ] G2.12 Color Picker (lo usa Theme Studio).
+
+## Theme Studio (después del Grupo 2; reemplaza la 5.2)
+
+Construido con componentes de Mimi (mimi-toolbar, Toggle Group, Select, Color Picker, Switch, Input). Ver spec, sección 4.
+
+- [ ] T.2 Estructura: sidebar con la lista de componentes y su número de variantes, lienzo con un solo componente, tira de variantes debajo y panel de propiedades a la derecha (variante, tamaño, tono, radio, texto, block, deshabilitado, cargando, solo ícono, glow…) con «Propiedades actuales» en JSON.
+- [ ] T.3 Botones «Código» (el HTML generado, para copiar) y «Copiar prompt».
+- [ ] T.4 Modo «Tema global»: tokens de todo Mimi (colores, radios, alturas, sombras, movimiento) con exportación de `mimi.preset.ts`. En cada control, opciones prediseñadas más «Personalizado» con un campo libre validado (por ejemplo, un radio de 14px). Presets propios con nombre, importar y exportar.
+- [ ] T.5 Radio «Squircle»: verificar el soporte actual de `corner-shape` y proponerlo como mejora progresiva, con respaldo a `border-radius`.
+
+## Blocks (después del Grupo 2)
+
+Pantallas completas copiables con la CLI.
+
+- [ ] D5 Diseño en Claude Design: Blocks.
+- [ ] B.1 Ítems de tipo `block` en el registro: `ng g mimi login-01` copia la pantalla y los componentes que usa.
+- [ ] B.2 Login.
+- [ ] B.3 Registro.
+- [ ] B.4 Configuración.
+- [ ] B.5 Dashboard.
+- [ ] B.6 Tabla con filtros (cuando exista Data Table, G3.4).
+- [ ] B.7 Precios.
+
+## Grupo 3 → v0.4.0: datos
+
+- [ ] D3 Diseño en Claude Design: Grupo 3.
+- [ ] G3.1 Tree.
+- [ ] G3.2 Sortable List, con `@angular/cdk/drag-drop` y accesible con teclado.
+- [ ] G3.3 Command (⌘K). Después, la tarea 5.8 (buscador de la documentación).
+- [ ] G3.4 Data Table (ordenar, filtrar, paginar, seleccionar, columnas fijas). Usa Checkbox, Dropdown Menu y Pagination.
+
+## Grupo 4 → v0.5.0: estructura
+
+- [ ] D4 Diseño en Claude Design: Grupo 4, Grupo 5 y Mimi Effects.
+- [ ] G4.1 Accordion.
+- [ ] G4.2 Sheet/Drawer, flotante como el de shadcn (separado de los bordes, radio de tarjeta y barra de agarre en la versión inferior).
+- [ ] G4.3 Stepper.
+
+## Mimi Effects (prioridad baja, después del Grupo 3)
+
+Inspirados en Magic UI. Todos respetan `prefers-reduced-motion`. Sin Globe, Icon Cloud ni partículas 3D (dependencias pesadas). Si se porta código de Magic UI (MIT), su aviso va en `THIRD_PARTY_NOTICES.md`. Su diseño va en D4.
+
+- [ ] E.1 Animated Theme Toggler.
+- [ ] E.2 Terminal.
+- [ ] E.3 Usar el Animated Theme Toggler y la Terminal en el showcase.
+- [ ] E.4 Marquee.
+- [ ] E.5 Bento Grid.
+- [ ] E.6 Number Ticker.
+- [ ] E.7 Border Beam / Shine Border.
+- [ ] E.8 Magic Card.
+- [ ] E.9 Blur Fade.
+- [ ] E.10 Text Animate.
+- [ ] E.11 Animated List.
+- [ ] E.12 Confetti.
+- [ ] E.13 Ripple.
+- [ ] E.14 Fondos: Grid y Dot Pattern.
+- [ ] E.15 Marcos Safari e iPhone.
+- [ ] E.16 File Tree.
+- [ ] E.17 Code Comparison.
+
+## Grupo 5: según lo que pidan los usuarios
+
+Prioridad según lo que pidan los usuarios después de la 0.2.0. Sin orden fijo.
+
+- [ ] G5.1 Sidebar de dashboard.
+- [ ] G5.2 Time Picker.
+- [ ] G5.3 Carousel.
+- [ ] G5.4 Image Preview.
+- [ ] G5.5 Timeline.
+- [ ] G5.6 Resizable.
+- [ ] G5.7 Hover Card.
+- [ ] G5.8 Rating.
+
+## Plataforma y experiencia
+
+Las tareas que eran la Fase 5. Conservan sus números porque el código y la spec los citan.
 
 - [ ] 5.1 Schematic `theme` (preguntas + opciones `--palette`, `--radius`).
-- [ ] 5.2 Página "Temas" con personalizador en vivo y exportación de `mimi.preset.ts`.
+- ~~5.2 Página "Temas" con personalizador en vivo y exportación de `mimi.preset.ts`.~~ Reemplazada por Theme Studio (T.2–T.5).
 - [ ] 5.3 Comando `mimi` (`pnpm mimi add button`, `mimi list`, `mimi theme`). Al hacerlo: volver a agregar la pestaña de pnpm en `InstallCommand` (hoy muestra `ng g mimi` y la forma larga) y actualizar la prueba de comandos prohibidos (`apps/docs/src/app/commands.spec.ts`) para permitir los que ya existan.
 - [ ] 5.4 `mimi update`: combina la versión nueva con los cambios del usuario usando `.mimi/base/`. La base queda formateada con el Prettier del usuario (la CLI de Angular formatea lo que escriben los schematics), así que antes de combinar hay que formatear la plantilla nueva con el Prettier del proyecto; si no, las diferencias de formato se mezclarán con los cambios reales.
 - [ ] 5.5 Página "Migrar desde PrimeNG / NG-ZORRO".
 - [ ] 5.6 Documentación en español e inglés. Cuando exista la documentación en inglés, los READMEs (raíz y `packages/cli`) pasan a ser bilingües; hoy tienen solo una línea en inglés arriba.
 - [x] 5.7 Publicar `@mimi-ng/cli` en npm: hecha en la 0.1.0 (ver Lanzamiento 0.1.0).
-- [ ] 5.8 Buscador ⌘K en el header del showcase.
+- [ ] 5.8 Buscador ⌘K en el header del showcase, con Command (G3.3).
 - [ ] 5.9 Selector ES/EN en el header (el idioma va como prefijo en la ruta).
-- [ ] 5.10 Navegación superior del header (Documentación · Componentes · Temas), como en el diseño. Revisado en la 2.12: todavía no aporta. Documentación y Componentes ya están a un clic (botones de la landing y sidebar), y «Temas» apuntaría a una página que no existe. Hacerla cuando exista la página de Temas, junto con el buscador ⌘K, que ocupa el mismo lugar del header; «Documentación» y «Componentes» viven bajo `/docs` y necesitan una regla propia para el estado activo, y en móvil irían en el panel.
-- [ ] 5.11 Cuando exista el componente Tabs (catálogo «Después»), reemplazar las pestañas hechas a mano de CodePreview e InstallCommand.
+- [ ] 5.10 Navegación superior del header (Documentación · Componentes · Temas), como en el diseño. Revisado en la 2.12: todavía no aporta. Documentación y Componentes ya están a un clic (botones de la landing y sidebar), y «Temas» apuntaría a una página que no existe. Hacerla cuando exista Theme Studio, junto con el buscador ⌘K, que ocupa el mismo lugar del header; «Documentación» y «Componentes» viven bajo `/docs` y necesitan una regla propia para el estado activo, y en móvil irían en el panel.
+- [ ] 5.11 Cuando exista el componente Tabs (G1.9), reemplazar las pestañas hechas a mano de CodePreview e InstallCommand.
 - [ ] 5.12 GitHub Actions: pruebas de la CLI en proyectos limpios con cada versión de Angular soportada.
 - [ ] 5.13 Tabla de compatibilidad en la documentación.
 - [ ] 5.14 Prerender del showcase: páginas estáticas y 404 con estado real (hoy el modo SPA de Cloudflare responde 200 y la 404 lleva `noindex`). Revisar `not_found_handling` en `wrangler.jsonc` (pasaría a `404-page` con un `404.html`).
+- [ ] 5.15 Badge interactivo: variante de Badge sobre `a[mimiBadge]` o `button[mimiBadge]`, con hover y foco (mejora de un componente existente, no un componente nuevo).
 
 ## Decisiones pendientes
 
