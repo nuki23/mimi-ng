@@ -21,19 +21,19 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 
 ## 2. Stack
 
-| Capa               | Tecnología                                                                                                                      |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------- |
-| Framework          | Angular 22 (standalone, OnPush, zoneless, signals)                                                                              |
-| Estilos            | Tailwind CSS 4 (configuración en CSS, sin `tailwind.config.js`)                                                                 |
-| Colores            | OKLCH en variables CSS `--mimi-*`                                                                                               |
-| Clases             | `clsx` + `tailwind-merge` → `cn()`                                                                                              |
-| Variantes          | `class-variance-authority` (`cva`)                                                                                              |
-| Overlays (Grupo 1) | `@angular/cdk` (`overlay`, `dialog`, `a11y`) o `@angular/aria`, según la tarea 4.3; `@angular/cdk/drag-drop` para Sortable List |
-| Íconos             | Lucide: SVG en línea dentro de los componentes; `@lucide/angular` en el showcase y como recomendación                           |
-| CLI                | Angular Schematics + comando `mimi`                                                                                             |
-| Monorepo           | pnpm workspaces                                                                                                                 |
-| Formato            | Prettier en la raíz (`.prettierrc`, `.prettierignore`); `pnpm format` escribe y `pnpm format:check` solo revisa                 |
-| Showcase           | Angular 22 puro (no AnalogJS), con prerender                                                                                    |
+| Capa               | Tecnología                                                                                                                                    |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework          | Angular 22 (standalone, OnPush, zoneless, signals)                                                                                            |
+| Estilos            | Tailwind CSS 4 (configuración en CSS, sin `tailwind.config.js`)                                                                               |
+| Colores            | OKLCH en variables CSS `--mimi-*`                                                                                                             |
+| Clases             | `clsx` + `tailwind-merge` → `cn()`                                                                                                            |
+| Variantes          | `class-variance-authority` (`cva`)                                                                                                            |
+| Overlays (Grupo 1) | `@angular/aria` (listbox, combobox, menu, tabs, toolbar) y `@angular/cdk` (`overlay`, `dialog`, `a11y`, `drag-drop`); decisión 4.3, sección 4 |
+| Íconos             | Lucide: SVG en línea dentro de los componentes; `@lucide/angular` en el showcase y como recomendación                                         |
+| CLI                | Angular Schematics + comando `mimi`                                                                                                           |
+| Monorepo           | pnpm workspaces                                                                                                                               |
+| Formato            | Prettier en la raíz (`.prettierrc`, `.prettierignore`); `pnpm format` escribe y `pnpm format:check` solo revisa                               |
+| Showcase           | Angular 22 puro (no AnalogJS), con prerender                                                                                                  |
 
 ### Versiones
 
@@ -163,6 +163,56 @@ Dos ejes separados en todos los componentes con color:
 
 `destructive` deja de ser una variante. Para no romper la 0.1.0, `variant="destructive"` se mantiene en Button y Badge como atajo de `variant="solid" tone="danger"` (tarea V.1). Regla para los componentes nuevos: variante y tono desde el principio, sin variantes de color. Los colores de cada combinación salen de los tokens del tono (`--mimi-<tono>`, `-foreground`, `-soft`, `-soft-foreground`, `-hover`, `-ring`, `--mimi-shadow-<tono>` y `--mimi-glow-<tono>`).
 
+### Base técnica de los componentes: @angular/aria y @angular/cdk (decisión 4.3)
+
+**Decisión (01/10/2026): una combinación.**
+
+- **`@angular/aria`** para los patrones con semántica, foco y teclado: Listbox + Combobox (Select; después Combobox/Autocomplete y Command), Menu (Dropdown Menu y Context Menu), Tabs y Toolbar (mimi-toolbar). Accordion, Tree y Grid (Data Table) también existen en aria; se confirman en su tarea.
+- **`@angular/cdk`** para lo que aria no trae:
+  - el posicionamiento de todos los popups, con `@angular/cdk/overlay` (`cdkConnectedOverlay` con `usePopover: 'inline'`, igual que los ejemplos oficiales de aria);
+  - Dialog, Confirm y Sheet, con `@angular/cdk/dialog`;
+  - Popover y Tooltip: Overlay más su semántica propia (`aria-describedby`, `role="tooltip"`);
+  - foco y anuncios, con `@angular/cdk/a11y`;
+  - Sortable List, con `@angular/cdk/drag-drop`.
+- **Formularios:** aria no trae integración con formularios (ni `ControlValueAccessor` ni `FormValueControl`). Los controles de Mimi implementan `FormValueControl` (sección 8) por fuera y conectan su `value` con el `value` del listbox de aria.
+- **No se usan:**
+  - `@angular/cdk/menu` ni `@angular/cdk/listbox`: son los patrones anteriores a aria, y `CdkListbox` implementa `ControlValueAccessor`, contra la sección 8;
+  - los entry points `private` de aria o cdk, ni símbolos `ɵ` (sección 1, «Reglas del código que se entrega»). La prueba `imports.spec.ts` debe comprobarlo (tarea G1.1).
+
+**Evidencia:**
+
+- **Documentación de Angular 22** (MCP de Angular y angular.dev):
+  - aria son «directivas headless y accesibles que implementan patrones WAI-ARIA»: Autocomplete, Listbox, Select, Multiselect, Combobox, Menu, Menubar, Toolbar, Accordion, Tabs, Tree y Grid;
+  - no trae overlays ni diálogos, y sus ejemplos posicionan con CDK Overlay;
+  - el filtrado del autocomplete lo implementa la app (no hay «búsqueda» incorporada en Select).
+- **Código instalado (22.2.1):**
+  - las declaraciones de aria no tienen marcas `@developerPreview` ni `@experimental`;
+  - aria declara `@angular/cdk` **22.2.1 exacto** como peerDependency y `@angular/core ^22 || ^23`;
+  - no hay ninguna integración con formularios.
+- **Prueba de concepto** (proyecto temporal fuera del repositorio, Angular 22.2, `ng build` de producción, JS total por encima de una app base):
+
+  | Variante                                       | Crudo     | gzip     |
+  | ---------------------------------------------- | --------- | -------- |
+  | Solo CDK Overlay (un popup vacío)              | +64,9 kB  | +17,1 kB |
+  | aria: Select con búsqueda (Combobox + Listbox) | +116,0 kB | +31,5 kB |
+  | aria: menú con submenú                         | +109,1 kB | +28,7 kB |
+  | aria: los dos                                  | +136,7 kB | +35,8 kB |
+  | cdk: Select con búsqueda (a mano)              | +93,9 kB  | +26,4 kB |
+  | cdk: menú con submenú (`@angular/cdk/menu`)    | +98,6 kB  | +27,3 kB |
+  | cdk: los dos                                   | +125,3 kB | +34,4 kB |
+
+  CDK Overlay es la mitad del costo y lo pagan las dos opciones. Con Select y menú juntos, aria cuesta unos 11 kB crudos (1,4 kB gzip) más que cdk solo. Pero el Select solo con cdk se escribió a mano y con menos comportamiento (sin búsqueda por letra, sin selección múltiple, sin desplazar el activo a la vista): en Mimi ese código viviría en el proyecto del usuario. El costo se paga solo en las rutas que usan estos componentes.
+
+- **Formularios, probado:** un control con `FormValueControl` que usa el Listbox de aria por dentro funciona con `[formField]` (modelo → control, control → modelo, `disabled` del formulario), con `[formControl]` y con `[(ngModel)]`, sin `ControlValueAccessor`. El comportamiento de teclado con overlay no se probó en un navegador real: se prueba en cada componente.
+
+**Por qué aria, en el modelo copy-paste:** el teclado, el foco y los atributos ARIA viven en una dependencia versionada que el usuario actualiza con `ng update`, y el código que la CLI copia queda corto y legible: estructura, estilos y el puente con los formularios. Las APIs usadas son las documentadas de `@angular/aria` y `@angular/cdk`.
+
+**Costos y riesgos:**
+
+- Dos dependencias más en el proyecto del usuario.
+- aria exige **la misma versión exacta** de cdk. La CLI ya alinea toda peerDependency `@angular/*` al rango de `@angular/core` del proyecto (sección 5, «Qué hace `mimi`», punto 7). Como aria y cdk salen juntas, el gestor de paquetes resuelve las dos a la misma versión.
+- aria figura como «New» en la documentación. Si cambia, se revisa con la rutina de la sección 12.
+
 ### Hoja de ruta
 
 Cada grupo es una versión menor y va precedido por su tarea de diseño en Claude Design (`docs/plan.md`, D1–D5). Antes del Grupo 1: la tarea 4.3 (`@angular/aria` frente a `@angular/cdk`, que decide la base de overlays, listbox, menús, tabs y toolbar) y los tokens nuevos (T.1: `success`, `warning`, `info` con sus `-foreground` y sombras de color, y `--mimi-glow` con `color-mix`; valores de D1). El orden de cada tabla es el orden en que conviene hacerlos. Cada componente registra sus tokens (sección 13).
@@ -171,15 +221,15 @@ Cada grupo es una versión menor y va precedido por su tarea de diseño en Claud
 
 | Orden | Componente    | Inspiración                             | Depende de                                   |
 | ----- | ------------- | --------------------------------------- | -------------------------------------------- |
-| 1     | Popover       | shadcn/Spartan                          | Decisión 4.3 (base de los demás overlays)    |
+| 1     | Popover       | shadcn/Spartan                          | CDK Overlay (base de los demás overlays)     |
 | 2     | Tooltip       | shadcn/Spartan                          | Popover (posicionamiento)                    |
 | 3     | Dropdown Menu | shadcn/Spartan                          | Popover                                      |
 | 4     | Context Menu  | shadcn/Spartan                          | Dropdown Menu                                |
 | 5     | Select        | NG-ZORRO (API) y PrimeNG                | Popover, FormField                           |
-| 6     | Dialog        | shadcn y Vuesax                         | Decisión 4.3, Button                         |
+| 6     | Dialog        | shadcn y Vuesax                         | `@angular/cdk/dialog`, Button                |
 | 7     | Confirm       | PrimeNG ConfirmDialog y Vuesax          | Dialog, Button                               |
 | 8     | Toast         | Sonner (shadcn) y Vuesax                | Tokens T.1, Button                           |
-| 9     | Tabs          | HeroUI                                  | Decisión 4.3                                 |
+| 9     | Tabs          | HeroUI                                  | `@angular/aria/tabs`                         |
 | 10    | mimi-toolbar  | Vuesax (VsCanvasToolbar)                | Tooltip, Separator, Badge (contadores)       |
 | 11    | Pagination    | Diseño propio (píldora de mimi-toolbar) | Select, Input, Button, mimi-toolbar (estilo) |
 
@@ -226,11 +276,11 @@ Cada grupo es una versión menor y va precedido por su tarea de diseño en Claud
 
 **Grupo 4 → v0.5.0: estructura**
 
-| Orden | Componente   | Inspiración                | Depende de       |
-| ----- | ------------ | -------------------------- | ---------------- |
-| 1     | Accordion    | shadcn/Spartan             | Decisión 4.3     |
-| 2     | Sheet/Drawer | shadcn (Sheet y Drawer)    | Dialog           |
-| 3     | Stepper      | PrimeNG (Stepper) y Vuesax | Button, Progress |
+| Orden | Componente   | Inspiración                | Depende de                              |
+| ----- | ------------ | -------------------------- | --------------------------------------- |
+| 1     | Accordion    | shadcn/Spartan             | `@angular/aria/accordion` (a confirmar) |
+| 2     | Sheet/Drawer | shadcn (Sheet y Drawer)    | Dialog                                  |
+| 3     | Stepper      | PrimeNG (Stepper) y Vuesax | Button, Progress                        |
 
 - **Sheet/Drawer:** flotante, como el de shadcn: separado de los bordes de la pantalla, con el radio de las tarjetas y, en la versión inferior, una barra de agarre.
 
@@ -429,6 +479,7 @@ Idempotente: `ng g mimi button` dos veces no cambia nada ni vuelve a instalar.
 - **Versión:** el `registry.json` fuente no la tiene. El build la toma del `package.json` de la CLI (única fuente, tarea 3.8) y la escribe en `dist/registry.json`, que es lo que leen los schematics para el manifiesto (`.mimi/manifest.json`) y `mimi.json` → `components`.
 - `files`: rutas relativas a las plantillas (`dist/templates`, copia de `ui-core/src/lib`).
 - `dependencies` / `peerDependencies`: con la versión exacta del `package.json` de ui-core, nunca escrita a mano.
+- **Desde el Grupo 1** (decisión 4.3): los ítems que usan aria declaran `@angular/aria` y `@angular/cdk` en `peerDependencies` (Select, Dropdown Menu, Context Menu, Tabs y mimi-toolbar); los que solo usan cdk declaran `@angular/cdk` (Popover, Tooltip, Dialog y Confirm). Por ser `@angular/*`, la CLI los instala con el rango de `@angular/core` del proyecto: no hace falta cambiar la CLI. ui-core los agrega a sus `peerDependencies` y el `package.json` raíz los instala para el showcase (tarea G1.1).
 - `registryDependencies`: otros ítems que se copian con este (se resuelven en orden, dependencias primero).
 - `suggestedDependencies` (nivel superior): paquetes opcionales que la CLI ofrece instalar, como `@lucide/angular` en `init`. Se llama así para no confundirlo con `optionalDependencies` de npm; su versión es la del `package.json` de la raíz (la que usa el showcase).
 

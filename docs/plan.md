@@ -87,7 +87,7 @@ Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → 
 ## Fase 4: Preparación del catálogo ampliado
 
 - [x] D1 Diseño: tokens nuevos, Grupo 1 (incluida Pagination) y mimi-toolbar, con la hoja de tokens por componente. Archivos: `Tokens`, `F2 Tokens y Tonos`, `F2 Overlays`, `F2 Select`, `F2 Toast Tabs Toolbar`, `F7 Pagination` y `Pagination`; variables en `tokens-mimi.css`, `mimi-variables-componentes.css` y `mimi-tokens-data.js`.
-- [ ] 4.3 Evaluar @angular/aria (estable en v22) frente a @angular/cdk. Decide cómo se construyen la mayoría de los componentes: base de overlays y posicionamiento, listbox, menús, tabs y el patrón toolbar. Registrar la decisión en la spec (secciones 2 y 4).
+- [x] 4.3 Evaluar @angular/aria (estable en v22) frente a @angular/cdk. Decisión (spec, sección 4, «Base técnica»): **combinación**. `@angular/aria` para listbox/combobox (Select), menú (Dropdown y Context Menu), tabs y toolbar; `@angular/cdk` para el posicionamiento (Overlay), Dialog, a11y y drag-drop. Sin `@angular/cdk/menu` ni `@angular/cdk/listbox`. Prueba de concepto fuera del repositorio: Select con búsqueda y menú con submenú; aria cuesta +1,4 kB gzip frente a cdk solo (CDK Overlay, +17 kB gzip, lo pagan las dos), y un control con `FormValueControl` sobre el Listbox de aria funciona con Signal Forms, Reactive Forms y ngModel.
 - [x] T.0 Catálogo de tokens en la spec (sección 13), en tres niveles (globales, compartidos y por componente), con una tabla por cada uno de los 21 componentes de la hoja (los de la 0.1.0 y los del Grupo 1). Los Grupos 2 a 5 agregan sus tokens y su tabla con cada tanda.
 - [ ] T.0b Tokens propios de los componentes existentes (Avatar, Switch, Checkbox, FormField, Separator, Skeleton, Badge, y Textarea separado de Input), según la spec, sección 13: en el CSS del componente con la cascada de la spec 6.2, en `MimiComponentTokens` y en `COMPONENT_PREFIX`, con pruebas. Resolver las diferencias de nombres entre el código de la 0.1.0 y la hoja (Button, Input, Card; spec 13, «Reglas») sin romper los presets que ya usan los nombres viejos, y decidir si el global `--mimi-badge-radius` se renombra (choca con el token de Badge) y si `--mimi-switch-off` pasa a `components`.
 - [ ] T.1 Tokens nuevos de `tokens-mimi.css` en ui-core: tonos `success`, `warning` e `info` (con `-foreground`, `-soft`, `-soft-foreground`, `-hover`, `-ring` y sombras de color), `destructive-soft-foreground` y `destructive-soft-bg`, `--mimi-glow` y `--mimi-glow-<tono>`, `shadow-popover`, `tooltip`, `glass`, `overlay-blur` y los compartidos (foco, deshabilitado, íconos). Valores del diseño para `--mimi-overlay` (claro `oklch(0.145 0 0 / 0.38)`, oscuro `oklch(0 0 0 / 0.6)`) y `--mimi-popover` en oscuro (`oklch(0.205 0 0)`). Renombrar `--mimi-destructive-soft` (un anillo) a `--mimi-destructive-ring`, con la convención `<tono>-soft` = fondo suave, `<tono>-ring` = anillo. Registrarlos en `theme-base.css`, `types.ts`, `mimiThemeToCss` y `cn.ts` (sombras para tailwind-merge), con pruebas. Diseño: `F2 Tokens y Tonos` y `Tokens`.
@@ -96,16 +96,16 @@ Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → 
 
 ## Grupo 1 → v0.2.0: overlays y navegación
 
-- [ ] G1.1 Popover. Base de posicionamiento de los demás overlays. Diseño: `F2 Overlays`.
-- [ ] G1.2 Tooltip. Diseño: `F2 Overlays`.
-- [ ] G1.3 Dropdown Menu (submenús, búsqueda por letra). Diseño: `F2 Overlays`.
-- [ ] G1.4 Context Menu, sobre Dropdown Menu. Diseño: `F2 Overlays`.
-- [ ] G1.5 Select, estilo NG-ZORRO, con `FormValueControl` (spec 8). Al hacerlo, completar `MimiComponentTokens` en `theme/types.ts` (hoy tiene el comentario «select y dialog se agregan en la Fase 4»). Diseño: `F2 Select`.
-- [ ] G1.6 Dialog (servicio, X siempre visible). Diseño: `F2 Overlays`.
+- [ ] G1.1 Popover, con CDK Overlay. Base de posicionamiento de los demás overlays. Al empezar: instalar `@angular/aria` y `@angular/cdk` (misma versión que `@angular/core`) en el `package.json` raíz y agregarlos a las `peerDependencies` de ui-core; que `imports.spec.ts` rechace los entry points `private` de aria y cdk. Diseño: `F2 Overlays`.
+- [ ] G1.2 Tooltip, con CDK Overlay (semántica propia: `role="tooltip"`, `aria-describedby`). Diseño: `F2 Overlays`.
+- [ ] G1.3 Dropdown Menu (submenús, búsqueda por letra), con `@angular/aria/menu` y CDK Overlay. Diseño: `F2 Overlays`.
+- [ ] G1.4 Context Menu, sobre Dropdown Menu (patrón de menú contextual de aria). Diseño: `F2 Overlays`.
+- [ ] G1.5 Select, estilo NG-ZORRO, con `FormValueControl` (spec 8) sobre `@angular/aria` (Combobox + Listbox) y CDK Overlay; el filtrado de la búsqueda lo hace Mimi. Al hacerlo, completar `MimiComponentTokens` en `theme/types.ts` (hoy tiene el comentario «select y dialog se agregan en la Fase 4»). Diseño: `F2 Select`.
+- [ ] G1.6 Dialog (servicio, X siempre visible), con `@angular/cdk/dialog`. Diseño: `F2 Overlays`.
 - [ ] G1.7 Confirm: `mimi.confirm()` sobre Dialog. Diseño: `F2 Overlays`.
 - [ ] G1.8 Toast, estilo Sonner + Vuesax. Usa los tokens de T.1. Diseño: `F2 Toast Tabs Toolbar`.
-- [ ] G1.9 Tabs con indicador animado, estilo HeroUI. Después, la tarea 5.11. Diseño: `F2 Toast Tabs Toolbar`.
-- [ ] G1.10 mimi-toolbar, horizontal o vertical, inspirada en VsCanvasToolbar de Vuesax (sin modo Dock): píldora translúcida, ítem activo sobre un disco, anillo animado en hover y selección, tooltips, flechas, separadores, contadores, estado presionado y herramientas propias del usuario. Diseño: `F2 Toast Tabs Toolbar`.
+- [ ] G1.9 Tabs con indicador animado, estilo HeroUI, con `@angular/aria/tabs`. Después, la tarea 5.11. Diseño: `F2 Toast Tabs Toolbar`.
+- [ ] G1.10 mimi-toolbar, con `@angular/aria/toolbar`, horizontal o vertical, inspirada en VsCanvasToolbar de Vuesax (sin modo Dock): píldora translúcida, ítem activo sobre un disco, anillo animado en hover y selección, tooltips, flechas, separadores, contadores, estado presionado y herramientas propias del usuario. Diseño: `F2 Toast Tabs Toolbar`.
 - [ ] G1.11 Pagination: píldora flotante compacta como mimi-toolbar (`[←] [input de página] / total [→] | registros por página`). Tamaño SM por defecto (hereda la altura global de control SM) y MD opcional; variantes flotante y en línea; en móvil, sin el selector de registros. Diseño: `F7 Pagination` (con `Pagination`).
 
 ## Grupo 2 → v0.3.0: entradas avanzadas
