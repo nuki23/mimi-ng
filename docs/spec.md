@@ -207,6 +207,12 @@ Dos ejes separados en todos los componentes con color:
 
 **Por qué aria, en el modelo copy-paste:** el teclado, el foco y los atributos ARIA viven en una dependencia versionada que el usuario actualiza con `ng update`, y el código que la CLI copia queda corto y legible: estructura, estilos y el puente con los formularios. Las APIs usadas son las documentadas de `@angular/aria` y `@angular/cdk`.
 
+**Reglas de uso (obligatorias):**
+
+- **aria y cdk se usan solo dentro de los componentes.** La API pública de Mimi (selectores, entradas, salidas y tipos) es propia y **nunca expone directivas ni tipos de aria o cdk**: ni `hostDirectives` con sus entradas, ni tipos suyos en entradas, salidas o valores exportados. Así se pueden reemplazar en el futuro sin cambiar cómo se usan los componentes.
+- **Nunca se usan los entry points `private` de aria** (ni los de cdk, ni símbolos `ɵ`). `imports.spec.ts` lo rechaza desde la tarea G1.1.
+- **Revisión después de G1.5 (Select):** antes de usar aria en el resto del Grupo 1, se confirma que funcionó bien (teclado, lectores de pantalla, formularios y bundle). Si no convence, la alternativa es una capa propia de comportamiento, al estilo de las directivas Brain de Spartan, sin cambiar la API de Mimi.
+
 **Costos y riesgos:**
 
 - Dos dependencias más en el proyecto del usuario.
@@ -1127,6 +1133,8 @@ Lo que la CLI copia al proyecto es código del usuario: se actualiza con `ng upd
 3. Revisar las novedades que afecten a Mimi: APIs de signals y formularios (`FormValueControl`, `FormCheckboxControl`), control de flujo, cambios en `@angular/cli` y `@schematics/angular` (`ng add`, `schematicCollections`, utilidades que usan `init` y `ui`).
 4. Probar la CLI en un proyecto limpio creado con esa versión (`ng new` + `ng add @mimi-ng/cli` + `ng g mimi …` + `ng build`).
 5. Publicar declarando el soporte: actualizar rangos y la tabla de compatibilidad.
+
+Con cada versión nueva de Angular, leer también las notas de `@angular/aria` (es reciente y la usan Select, los menús, Tabs y mimi-toolbar) y de `@angular/cdk`, y correr las pruebas de esos componentes.
 
 Lo mismo para Tailwind CSS: probar la versión nueva en una rama, correr las pruebas, revisar el CSS generado (tokens, `@theme inline`, `@source`, variantes) y probar la CLI en un proyecto limpio.
 
