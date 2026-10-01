@@ -1122,7 +1122,9 @@ import buttonVariantsSource from './examples/button-variants.example' with { loa
 
 **Accesibilidad.** El `<pre>` tiene `tabindex="0"` y un `aria-label`, para recorrer el scroll horizontal con el teclado.
 
-**Presupuesto del bundle inicial** (`angular.json`, configuración de producción): aviso a partir de 380 kB y error a partir de 420 kB (unos 15 y 55 kB por encima del tamaño actual). Después de la tarea 2.2 medía 353.3 kB (95 kB en transferencia); después de la 2.11, 364.7 kB (96.9 kB).
+**Presupuesto del bundle inicial** (`angular.json`, configuración de producción): aviso a partir de 400 kB y error a partir de 420 kB. Después de la tarea 2.2 medía 353.3 kB (95 kB en gzip); después de la 2.11, 364.7 kB (96.9 kB); después de la T.1, 388.31 kB (98.96 kB). Al informar el bundle se dan siempre el tamaño crudo y el gzip.
+
+**Por qué subió el aviso (tarea T.1, de 380 a 400 kB; el error sigue en 420 kB).** La T.1 sumó unos 20 kB de CSS (52.14 → 72.51 kB; JS 315.60 → 315.80 kB): las variables nuevas del tema (tonos, sombras de color y glow, de tres capas con `color-mix`, en claro y oscuro) y los respaldos `@supports` que Tailwind (Lightning CSS) agrega a todo lo que usa `color-mix` (13.5 kB del archivo), más las muestras de `/dev/tokens` y `/dev/theme` (6.4 kB). En gzip fue solo +1.3 kB (97.65 → 98.96 kB). No se sube otra vez sin decidirlo: los componentes con `@angular/cdk` y `@angular/aria` llegan solo en rutas diferidas (tarea G1.1).
 
 **Por qué subió el presupuesto (tarea 2.11, de 370/410 a 380/420 kB).** Entre las tareas 2.2 y 2.11 el bundle inicial creció 11.2 kB (medido con el `metafile` de esbuild, `ng build docs --stats-json`):
 

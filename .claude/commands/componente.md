@@ -58,7 +58,7 @@ Crea el componente **$ARGUMENTS** de Mimi siguiendo estos pasos en orden. Cumple
 
 ## 4. Al terminar
 
-1. `pnpm build`, `pnpm test` y `pnpm format` (y `pnpm format:check`). El build falla si el bundle inicial del showcase supera el presupuesto de `angular.json`: si crece, averigua por qué antes de subirlo.
+1. `pnpm build`, `pnpm test` y `pnpm format` (y `pnpm format:check`). El build avisa a partir de 400 kB de bundle inicial y falla a partir de 420 kB (`angular.json`, spec 10): si crece, averigua por qué; el presupuesto no se sube sin que lo decida el usuario. Informa siempre el bundle inicial antes y después, crudo y gzip (y separando JS y CSS si cambió).
 2. Levanta `pnpm dev` en un puerto libre y comprueba que `main.js` responde HTTP 200 sin errores en el log (`pnpm build` no detecta los fallos de resolución de `ng serve`). No lo dejes corriendo.
 3. Revisa que el CSS generado no tenga colores fijos.
 4. Actualiza `docs/spec.md` si cambió algo (API, tokens nuevos: la tabla del componente en la sección 13).

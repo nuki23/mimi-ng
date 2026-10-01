@@ -96,7 +96,7 @@ Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → 
 
 ## Grupo 1 → v0.2.0: overlays y navegación
 
-- [ ] G1.1 Popover, con CDK Overlay. Base de posicionamiento de los demás overlays. Al empezar: instalar `@angular/aria` y `@angular/cdk` (misma versión que `@angular/core`) en el `package.json` raíz y agregarlos a las `peerDependencies` de ui-core; que `imports.spec.ts` rechace los entry points `private` de aria y cdk. Diseño: `F2 Overlays`.
+- [ ] G1.1 Popover, con CDK Overlay. Base de posicionamiento de los demás overlays. Al empezar: instalar `@angular/aria` y `@angular/cdk` (misma versión que `@angular/core`) en el `package.json` raíz y agregarlos a las `peerDependencies` de ui-core; que `imports.spec.ts` rechace los entry points `private` de aria y cdk. Medir el bundle inicial antes y después de instalar @angular/cdk y @angular/aria. Los componentes que los usan deben llegar al showcase solo en rutas lazy, nunca en el bundle inicial. Si el aviso de 400 kB salta, se revisa antes de seguir; no se sube el presupuesto otra vez sin decidirlo. Diseño: `F2 Overlays`.
 - [ ] G1.2 Tooltip, con CDK Overlay (semántica propia: `role="tooltip"`, `aria-describedby`). Diseño: `F2 Overlays`.
 - [ ] G1.3 Dropdown Menu (submenús, búsqueda por letra), con `@angular/aria/menu` y CDK Overlay. Diseño: `F2 Overlays`.
 - [ ] G1.4 Context Menu, sobre Dropdown Menu (patrón de menú contextual de aria). Diseño: `F2 Overlays`.
