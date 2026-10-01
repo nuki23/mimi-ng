@@ -5,7 +5,7 @@ Marca `[x]` al terminar cada tarea. Una tarea por sesión de Claude Code (usa `/
 ## Fase 0: Preparación (la haces tú, fuera de Claude Code)
 
 - [x] 0.1 Instalar Node.js (versión LTS compatible con Angular 22, ver angular.dev), pnpm y git.
-- [ ] 0.2 Generar los diseños en Claude Design y guardarlos en `docs/design/`.
+- [x] 0.2 Generar los diseños en Claude Design y guardarlos en `docs/design/`.
 - [x] 0.3 Elegir el estilo del MVP: solo Vivid, como estilo por defecto.
 - [x] 0.4 `git init` y primer commit con estos documentos.
 
@@ -90,7 +90,7 @@ Hallazgos de la prueba real de la 0.1.0 desde npm (L.6).
 - [ ] 5.4 `mimi update`: combina la versión nueva con los cambios del usuario usando `.mimi/base/`. La base queda formateada con el Prettier del usuario (la CLI de Angular formatea lo que escriben los schematics), así que antes de combinar hay que formatear la plantilla nueva con el Prettier del proyecto; si no, las diferencias de formato se mezclarán con los cambios reales.
 - [ ] 5.5 Página "Migrar desde PrimeNG / NG-ZORRO".
 - [ ] 5.6 Documentación en español e inglés. Cuando exista la documentación en inglés, los READMEs (raíz y `packages/cli`) pasan a ser bilingües; hoy tienen solo una línea en inglés arriba.
-- [ ] 5.7 Publicar `@mimi-ng/cli` en npm.
+- [x] 5.7 Publicar `@mimi-ng/cli` en npm: hecha en la 0.1.0 (ver Lanzamiento 0.1.0).
 - [ ] 5.8 Buscador ⌘K en el header del showcase.
 - [ ] 5.9 Selector ES/EN en el header (el idioma va como prefijo en la ruta).
 - [ ] 5.10 Navegación superior del header (Documentación · Componentes · Temas), como en el diseño. Revisado en la 2.12: todavía no aporta. Documentación y Componentes ya están a un clic (botones de la landing y sidebar), y «Temas» apuntaría a una página que no existe. Hacerla cuando exista la página de Temas, junto con el buscador ⌘K, que ocupa el mismo lugar del header; «Documentación» y «Componentes» viven bajo `/docs` y necesitan una regla propia para el estado activo, y en móvil irían en el panel.
