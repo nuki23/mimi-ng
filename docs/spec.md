@@ -895,7 +895,7 @@ El showcase se publica en **https://ng.mimiworks.dev** con **Cloudflare Workers*
 - **Página de componente:** título, descripción, `InstallCommand`, un `CodePreview` por estado (cada ejemplo en su archivo `examples/*.example.ts`), ejemplo con `class` y tabla de API.
 - Prerender para generar páginas estáticas y responder 404 con estado real (Fase 5).
 
-**Landing (`/`, tarea 2.12)** según `docs/design/Mimi Sitio.dc.html`: hero (badge con la versión, titular, subtítulo, `ng add @mimi-ng/cli` con `CodeBlock` y botones «Empezar» → `/docs/installation` y «Componentes» → `/docs/components/button`), cuatro diferenciales y la vitrina «Hecho con Mimi» (`pages/home/`: un formulario real con Reactive Forms y una lista de equipo). Reglas:
+**Landing (`/`, tarea 2.12)** según `docs/design/Mimi Sitio.dc.html`: hero (badge con la versión, «v0.1.0 · Vista previa» mientras sea 0.x, titular, subtítulo, `ng add @mimi-ng/cli` con `CodeBlock` y botones «Empezar» → `/docs/installation` y «Componentes» → `/docs/components/button`), cuatro diferenciales y la vitrina «Hecho con Mimi» (`pages/home/`: un formulario real con Reactive Forms y una lista de equipo). Reglas:
 
 - **Honestidad:** lo que todavía no existe (`mimi update`, la guía de migración) lleva «Próximamente» y no enlaza. Ningún enlace lleva a una página deshabilitada o a un 404: una prueba compara los `href` con las rutas `ready` de `DOCS_NAV`. Los textos públicos no mencionan las fases del plan.
 - **Bundle:** la ruta es lazy; los componentes de la vitrina y `@lucide/angular` no entran al bundle inicial (comprobado con el `metafile`).

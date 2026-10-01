@@ -1,11 +1,16 @@
 # Mimi para Angular (@mimi-ng)
 
+[![npm](https://img.shields.io/npm/v/@mimi-ng/cli)](https://www.npmjs.com/package/@mimi-ng/cli)
+[![Licencia: MIT](https://img.shields.io/npm/l/@mimi-ng/cli)](LICENSE)
+
 > Angular + Tailwind CSS components you copy into your project. Docs in Spanish; English coming soon.
 
 Librería de componentes UI para **Angular 22 o superior** y **Tailwind CSS 4** que se distribuye como código fuente: una CLI copia cada componente a tu proyecto y desde ese momento el código es tuyo.
 
 - Documentación: https://ng.mimiworks.dev
 - Paquete: [`@mimi-ng/cli`](https://www.npmjs.com/package/@mimi-ng/cli) (vista previa 0.x)
+
+![Página de inicio de Mimi para Angular en ng.mimiworks.dev](docs/assets/mimi-ng-showcase.png)
 
 Mimi para Angular es un proyecto de [Mimi Works](https://mimiworks.dev).
 
@@ -92,6 +97,7 @@ Los errores y las sugerencias van en los [issues del repositorio](https://github
 
 - [`docs/spec.md`](docs/spec.md): especificación completa.
 - [`docs/plan.md`](docs/plan.md): tareas por fase.
+- [`CHANGELOG.md`](CHANGELOG.md): cambios por versión.
 
 ## Licencia
 

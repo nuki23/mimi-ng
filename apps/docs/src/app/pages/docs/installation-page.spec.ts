@@ -32,7 +32,8 @@ describe('InstallationPage', () => {
       'updates',
       'pnpm',
     ]);
-    expect(el.textContent).toContain('La CLI estará disponible pronto.');
+    // La CLI ya está publicada en npm (tarea L.6).
+    expect(el.textContent).not.toContain('disponible pronto');
   });
 
   it('muestra los comandos que existen hoy', async () => {

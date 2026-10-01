@@ -64,6 +64,15 @@ Publicar `@mimi-ng/cli` 0.1.0 antes de la Fase 4. La publicación en npm la hace
 - [x] L.4 `pnpm publish --dry-run`: lista de archivos y tamaño. Resultado (30/09/2026, repetido tras la L.3b y la L.5): 53 archivos, 37,8 kB comprimido y 133,6 kB descomprimido; `dist/` (schematics compilados, `registry.json` con la versión 0.1.0 y 37 plantillas de ui-core, sin pruebas ni `utils/index.ts`), `README.md`, `LICENSE`, `THIRD_PARTY_NOTICES.md` y `package.json`. Sin correos ni rutas `workspace:`. pnpm 12 no lista los archivos en el dry-run de `publish`; la lista sale de `pnpm pack --dry-run --json` y los tamaños de un `pnpm pack` fuera del repositorio.
 - [x] L.5 Quitar `"private": true` de la CLI (último paso antes de publicar). También: `prepublishOnly` compila la CLI antes de publicar, y `pnpm build:docs` (el build de Cloudflare) falla si `apps/docs/public` tiene archivos que no sean svg, png, ico, webp o `_headers` (`apps/docs/scripts/check-public.mjs`, con su prueba).
 - [ ] L.6 Después de publicar: probar `ng add @mimi-ng/cli` desde npm en un proyecto limpio; quitar «La CLI estará disponible pronto.» (landing e Instalación) y ajustar sus pruebas; `CHANGELOG.md`; etiqueta `v0.1.0` y release en GitHub; hacer público el repositorio; cuando el sitio y el paquete estén publicados, agregar a los dos READMEs una captura de pantalla del sitio y badges de npm (versión) y licencia.
+  - Hecho (30/09/2026): `@mimi-ng/cli@0.1.0` publicado; prueba real desde npm en un proyecto limpio fuera del repositorio (Angular CLI 22.2.0, pnpm 12.5.1): `ng new --style=tailwind` + `ng add @mimi-ng/cli` + `ng g mimi button` + uso del botón + `ng build` sin avisos, y `ng add @mimi-ng/cli --icons` en otro proyecto limpio. Repositorio público. Quitado «La CLI estará disponible pronto.» (landing e Instalación, con sus pruebas); `CHANGELOG.md`; badges de npm y licencia en los dos READMEs; captura referenciada en `docs/assets/mimi-ng-showcase.png` (en el README de npm, por URL absoluta de GitHub: se verá en npm con la próxima publicación).
+  - Falta (dueño del proyecto): la captura en `docs/assets/mimi-ng-showcase.png`, la etiqueta `v0.1.0` y el release en GitHub.
+
+## Versión 0.1.1
+
+Hallazgos de la prueba real de la 0.1.0 desde npm (L.6).
+
+- [ ] 0.1.1-1 `ng add @mimi-ng/cli --icons=false` falla con "Data path "/icons" must be boolean": `ng add` pasa el valor como texto (antes de instalar el paquete no conoce su esquema). `--icons` sí funciona. Investigar en `@angular/cli` (`commands/add`) cómo se pasan las opciones y si alcanza con aceptar también `"true"`/`"false"` en el esquema o en `init`; probar `--icons=false` y `--no-icons` en un proyecto limpio.
+- [ ] 0.1.1-2 pnpm 12 creó un `pnpm-workspace.yaml` en el proyecto del usuario con `minimumReleaseAgeExclude: ['@mimi-ng/cli@0.1.0']` al instalar una versión de pocas horas (política de antigüedad mínima de pnpm). No impidió nada. Confirmar el mecanismo y el valor por defecto de `minimumReleaseAge` en pnpm 12, y decidir si la página de Instalación lo menciona (junto a la nota de pnpm).
 
 ## Fase 4: Componentes con overlays
 

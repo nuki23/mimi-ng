@@ -8,7 +8,7 @@
       class="inline-flex h-[26px] items-center gap-1.5 rounded-badge bg-secondary px-3 text-[13px] font-semibold text-secondary-foreground"
     >
       <svg lucideSparkles [size]="14" aria-hidden="true"></svg>
-      v{{ version }} · En desarrollo
+      v{{ version }} · Vista previa
     </span>
 
     <h1
@@ -24,9 +24,8 @@
       y tipado, y cuando actualizas, Mimi respeta los cambios que hiciste.
     </p>
 
-    <div class="flex w-full max-w-sm flex-col gap-2">
+    <div class="w-full max-w-sm">
       <app-code-block code="ng add @mimi-ng/cli" lang="bash" prompt="$" />
-      <p class="text-sm text-muted-foreground">La CLI estará disponible pronto.</p>
     </div>
 
     <div class="flex flex-wrap justify-center gap-3">

@@ -35,14 +35,14 @@ describe('HomePage', () => {
     return { fixture, el, text };
   }
 
-  it('hero: titular, badge sin fases, comando copiable y aviso de la CLI', async () => {
+  it('hero: titular, badge sin fases y comando copiable (la CLI ya está publicada)', async () => {
     const { el, text } = await setup();
     expect(text(el.querySelector('h1'))).toBe(
       'Los componentes son tuyos. Las actualizaciones también.',
     );
-    expect(text(el.querySelector('section span'))).toMatch(/^v\d+\.\d+\.\d+ · En desarrollo$/);
+    expect(text(el.querySelector('section span'))).toMatch(/^v\d+\.\d+\.\d+ · Vista previa$/);
     expect(el.querySelector('app-code-block')).not.toBeNull();
-    expect(el.textContent).toContain('La CLI estará disponible pronto.');
+    expect(el.textContent).not.toContain('disponible pronto');
     // En los textos públicos no se mencionan las fases del plan.
     expect(el.textContent).not.toMatch(/\bFase\b/i);
   });
