@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<link rel="stylesheet" href="mimi-effects.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<script src="image-slot.js"></script>
+<style>body{margin:0}a{color:inherit}a:hover{opacity:.8}
+::view-transition-old(root){animation:none}
+::view-transition-new(root){animation:mimi-reveal .7s cubic-bezier(.65,0,.35,1)}
+@media (prefers-reduced-motion: reduce){::view-transition-new(root){animation:none}}</style>
+</helmet>
+<div data-mimi-style="mimi" class="{{ cls }}" style="min-height:100vh;background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans)">
+  <header style="position:sticky;top:0;z-index:30;border-bottom:1px solid var(--mimi-border);background:var(--mimi-glass);backdrop-filter:blur(var(--mimi-glass-blur)) saturate(1.4);-webkit-backdrop-filter:blur(var(--mimi-glass-blur)) saturate(1.4)">
+    <div style="max-width:1200px;margin:0 auto;height:64px;padding:0 24px;box-sizing:border-box;display:flex;align-items:center;gap:20px">
+      <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none"><span style="width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:18px;font-weight:800;line-height:1;box-shadow:var(--mimi-shadow-primary)">m</span><span style="font-size:18px;font-weight:800;letter-spacing:-0.02em">Mimi</span></a>
+      <span style="display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;border:1px solid var(--mimi-border);font-family:var(--mimi-font-mono);font-size:11.5px;color:var(--mimi-muted-foreground)">v0.5</span>
+      <nav aria-label="Principal" style="display:flex;gap:4px;flex:1;min-width:0;overflow:hidden">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4"><a href="{{ n.href }}" style="display:inline-flex;align-items:center;height:34px;padding:0 12px;border-radius:999px;font-size:14px;font-weight:500;color:var(--mimi-muted-foreground);text-decoration:none;white-space:nowrap;transition:var(--mimi-transition)" style-hover="color:var(--mimi-foreground);background:var(--mimi-accent);opacity:1">{{ n.label }}</a></sc-for>
+      </nav>
+      <a href="https://github.com" aria-label="GitHub" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:999px;color:var(--mimi-foreground);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);opacity:1"><mimi-icon name="github" size="18"></mimi-icon></a>
+      <button aria-label="{{ toggleLabel }}" onClick="{{ toggleTheme }}" style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:1px solid var(--mimi-border);border-radius:999px;background:var(--mimi-card);color:var(--mimi-foreground);cursor:pointer;overflow:hidden;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.9)"><span data-fx="" style="display:inline-flex;transition:transform .6s cubic-bezier(.2,.8,.2,1);transform:{{ iconRot }}"><mimi-icon name="{{ themeIcon }}" size="17"></mimi-icon></span></button>
+      <a href="#empezar" style="display:inline-flex;align-items:center;height:38px;padding:0 16px;border-radius:999px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover);opacity:1">Empezar</a>
+    </div>
+  </header>
+
+  <main>
+    <section style="position:relative;overflow:hidden">
+      <div aria-hidden="true" style="position:absolute;inset:0;background-image:linear-gradient(color-mix(in oklab, var(--mimi-foreground) 7%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--mimi-foreground) 7%, transparent) 1px, transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);mask-image:radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%)"></div>
+      <div style="position:relative;max-width:1200px;margin:0 auto;padding:88px 24px 72px;box-sizing:border-box;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:48px;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:22px">
+          <a href="#novedades" data-fx="" style="align-self:flex-start;display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 6px 0 12px;border-radius:999px;border:1px solid var(--mimi-border);background:var(--mimi-card);font-size:13px;font-weight:600;text-decoration:none;box-shadow:var(--mimi-shadow-neutral);animation:mimi-blurfade-a .5s cubic-bezier(.2,.8,.2,1) both">Novedad: Blocks y Mimi Effects<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:999px;background:var(--mimi-muted)"><mimi-icon name="arrow-right" size="12"></mimi-icon></span></a>
+          <h1 style="margin:0;font-size:clamp(38px, 4.8vw, 58px);line-height:1.04;font-weight:800;letter-spacing:-0.04em;text-wrap:balance"><sc-for list="{{ heroWords }}" as="w"><span data-fx="" style="display:inline-block;margin-right:.24em;animation:{{ w.anim }}">{{ w.t }}</span></sc-for></h1>
+          <p data-fx="" style="margin:0;max-width:540px;font-size:18px;line-height:1.6;color:var(--mimi-muted-foreground);text-wrap:pretty;animation:mimi-blurfade-a .6s cubic-bezier(.2,.8,.2,1) .45s both">Componentes para Angular y Tailwind CSS que la CLI copia a tu proyecto. Un solo prefijo, temas tipados y actualizaciones que respetan tus cambios.</p>
+          <div data-fx="" style="display:flex;flex-wrap:wrap;gap:12px;animation:mimi-blurfade-a .6s cubic-bezier(.2,.8,.2,1) .6s both">
+            <a href="#empezar" style="display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 22px;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:15px;font-weight:600;text-decoration:none;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover);opacity:1">Empezar ahora<mimi-icon name="arrow-right" size="16"></mimi-icon></a>
+            <a href="Mimi F6 Blocks.dc.html" style="display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 22px;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);background:var(--mimi-card);font-size:15px;font-weight:600;text-decoration:none;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);opacity:1"><mimi-icon name="layout-template" size="16"></mimi-icon>Ver blocks</a>
+          </div>
+        </div>
+        <div role="img" aria-label="Terminal instalando Mimi con ng add @mimi-ng/cli" style="border-radius:var(--mimi-radius-card);background:oklch(0.16 0 0);border:1px solid oklch(1 0 0 / .1);box-shadow:var(--mimi-shadow-popover);overflow:hidden">
+          <div style="display:flex;align-items:center;gap:7px;height:40px;padding:0 14px;border-bottom:1px solid oklch(1 0 0 / .08)"><span style="width:11px;height:11px;border-radius:999px;background:oklch(0.65 0.2 25)"></span><span style="width:11px;height:11px;border-radius:999px;background:oklch(0.8 0.15 85)"></span><span style="width:11px;height:11px;border-radius:999px;background:oklch(0.72 0.17 150)"></span><span style="flex:1;text-align:center;font-family:var(--mimi-font-mono);font-size:12px;color:oklch(0.7 0 0)">~/panel-ventas — zsh</span><button onClick="{{ replay }}" aria-label="Repetir animación" style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;border:0;border-radius:6px;background:transparent;color:oklch(0.7 0 0);cursor:pointer" style-hover="background:oklch(1 0 0 / .08)"><mimi-icon name="rotate-ccw" size="13"></mimi-icon></button></div>
+          <div style="padding:18px 20px 22px;min-height:240px;display:flex;flex-direction:column;gap:6px;font-family:var(--mimi-font-mono);font-size:14px;line-height:1.5;color:oklch(0.92 0 0)">
+            <sc-for list="{{ term }}" as="t" hint-placeholder-count="7"><div style="display:flex;gap:10px;white-space:nowrap"><span style="color:oklch(0.72 0.17 150)">{{ t.prompt }}</span><span data-fx="" style="display:inline-block;overflow:hidden;vertical-align:top;width:{{ t.w }};color:{{ t.color }};animation:{{ t.anim }}">{{ t.text }}</span><sc-if value="{{ t.caret }}"><span data-fx="" style="width:8px;height:17px;margin-top:2px;background:oklch(0.92 0 0);animation:mimi-caret 1s steps(1) infinite"></span></sc-if></div></sc-for>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="componentes" aria-label="Componentes disponibles" style="padding:8px 0 72px;display:flex;flex-direction:column;gap:12px;-webkit-mask-image:linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);mask-image:linear-gradient(to right, transparent, #000 10%, #000 90%, transparent)">
+      <sc-for list="{{ marquee }}" as="row" hint-placeholder-count="2">
+        <div style="overflow:hidden"><div data-fx="" style="display:flex;gap:12px;width:max-content;animation:{{ row.anim }}" style-hover="animation-play-state:paused">
+          <sc-for list="{{ row.items }}" as="it"><span style="display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 16px;border:1px solid var(--mimi-border);border-radius:999px;background:var(--mimi-card);font-size:14.5px;font-weight:600;white-space:nowrap;box-shadow:var(--mimi-shadow-neutral)"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ it.icon }}" size="16"></mimi-icon></span>{{ it.label }}</span></sc-for>
+        </div></div>
+      </sc-for>
+    </section>
+
+    <section id="por-que" style="max-width:1200px;margin:0 auto;padding:40px 24px 96px;box-sizing:border-box;display:flex;flex-direction:column;gap:36px">
+      <div style="display:flex;flex-direction:column;gap:12px;max-width:640px"><span style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Por qué Mimi</span><h2 style="margin:0;font-size:clamp(30px, 3.6vw, 44px);line-height:1.1;font-weight:800;letter-spacing:-0.03em;text-wrap:balance">Tuyos desde el primer comando</h2></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));grid-auto-rows:minmax(200px,auto);gap:16px">
+        <sc-for list="{{ bento }}" as="b" hint-placeholder-count="5">
+          <article style="position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:8px;padding:24px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);box-shadow:var(--mimi-shadow-card);overflow:hidden;transition:var(--mimi-transition);grid-column:{{ b.span }};grid-row:{{ b.rspan }}" style-hover="box-shadow:var(--mimi-shadow-popover)">
+            <sc-if value="{{ b.dots }}"><div aria-hidden="true" style="position:absolute;inset:0;background-image:radial-gradient(color-mix(in oklab, var(--mimi-foreground) 14%, transparent) 1px, transparent 1px);background-size:16px 16px;-webkit-mask-image:linear-gradient(to bottom, #000, transparent 75%);mask-image:linear-gradient(to bottom, #000, transparent 75%)"></div></sc-if>
+            <sc-if value="{{ b.hasCode }}"><pre style="position:relative;margin:0 0 auto;padding:14px 16px;border-radius:var(--mimi-radius);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:12.5px;line-height:1.7;overflow:auto">{{ b.code }}</pre></sc-if>
+            <span style="position:relative;width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border-radius:12px;background:{{ b.iconBg }};color:{{ b.iconFg }}"><mimi-icon name="{{ b.icon }}" size="19"></mimi-icon></span>
+            <h3 style="position:relative;margin:0;font-size:18px;font-weight:700;letter-spacing:-0.01em">{{ b.title }}</h3>
+            <p style="position:relative;margin:0;font-size:14.5px;line-height:1.55;color:var(--mimi-muted-foreground);text-wrap:pretty">{{ b.text }}</p>
+          </article>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="blocks" style="border-top:1px solid var(--mimi-border);border-bottom:1px solid var(--mimi-border);background:var(--mimi-muted)">
+      <div style="max-width:1200px;margin:0 auto;padding:88px 24px;box-sizing:border-box;display:flex;flex-direction:column;gap:36px">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap"><div style="display:flex;flex-direction:column;gap:12px;max-width:600px"><span style="font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Blocks</span><h2 style="margin:0;font-size:clamp(30px, 3.6vw, 44px);line-height:1.1;font-weight:800;letter-spacing:-0.03em;text-wrap:balance">Pantallas completas, listas para copiar</h2><p style="margin:0;font-size:16px;line-height:1.55;color:var(--mimi-muted-foreground)">Ocho pantallas hechas solo con componentes de Mimi, en claro, oscuro, escritorio y móvil.</p></div><a href="Mimi F6 Blocks.dc.html" style="display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 18px;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);background:var(--mimi-card);font-size:14.5px;font-weight:600;text-decoration:none;box-shadow:var(--mimi-shadow-neutral)">Ver todos<mimi-icon name="arrow-right" size="15"></mimi-icon></a></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,268px),1fr));gap:18px">
+          <sc-for list="{{ blocks }}" as="b" hint-placeholder-count="8">
+            <a href="{{ b.href }}" style="display:flex;flex-direction:column;gap:12px;text-decoration:none;color:inherit;border-radius:var(--mimi-radius-card);transition:transform .2s cubic-bezier(.2,.8,.2,1)" style-hover="opacity:1;transform:translateY(-2px)">
+              <div aria-hidden="true" style="position:relative;aspect-ratio:16 / 10;border-radius:var(--mimi-radius-card);border:1px solid var(--mimi-border);overflow:hidden;background:var(--mimi-background);box-shadow:var(--mimi-shadow-card);pointer-events:none">
+                <div style="position:absolute;left:0;top:0;width:1280px;height:800px;transform-origin:0 0;transform:scale(.215)">
+                  <sc-if value="{{ b.isLogin01 }}"><dc-import name="Block login-01" hint-size="1280px,800px" style="width:1280px;height:800px"></dc-import></sc-if>
+                  <sc-if value="{{ b.isLogin02 }}"><dc-import name="Block login-02" slot-key="lp" hint-size="1280px,800px" style="width:1280px;height:800px"></dc-import></sc-if>
+                  <sc-if value="{{ b.isSignup01 }}"><dc-import name="Block signup-01" hint-size="1280px,800px" style="width:1280px;height:800px"></dc-import></sc-if>
+                  <sc-if value="{{ b.isOtp01 }}"><dc-import name="Block otp-01" hint-size="1280px,800px" style="width:1280px;height:800px"></dc-import></sc-if>
+                  <sc-if value="{{ b.isSettings01 }}"><dc-import name="Block settings-01" hint-size="1280px,800px" style="width:1280px;height:800px"></dc-import></sc-if>
+                  <sc-if value="{{ b.isDashboard01 }}"><dc-import name="Block dashboard-01" hint-size="1280px,800px" style="width:1280px;height:800px"></dc-import></sc-if>
+                  <sc-if value="{{ b.isTable01 }}"><dc-import name="Block table-01" hint-size="1280px,800px" style="width:1280px;height:800px"></dc-import></sc-if>
+                  <sc-if value="{{ b.isPricing01 }}"><dc-import name="Block pricing-01" hint-size="1280px,800px" style="width:1280px;height:800px"></dc-import></sc-if>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 4px"><span style="display:flex;flex-direction:column;line-height:1.3"><span style="font-family:var(--mimi-font-mono);font-size:13.5px;font-weight:600">{{ b.id }}</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">{{ b.label }}</span></span><span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:999px;background:var(--mimi-card);border:1px solid var(--mimi-border)"><mimi-icon name="arrow-up-right" size="14"></mimi-icon></span></div>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section id="empezar" style="max-width:1200px;margin:0 auto;padding:96px 24px;box-sizing:border-box">
+      <div data-fx="" style="padding:1.5px;border-radius:calc(var(--mimi-radius-card) + 8px);background:conic-gradient(from var(--mimi-beam-a), transparent 0deg 250deg, var(--mimi-info) 310deg, var(--mimi-success) 345deg, transparent 360deg), var(--mimi-border);animation:mimi-beam 5s linear infinite">
+        <div style="position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:20px;padding:64px 24px;text-align:center;border-radius:calc(var(--mimi-radius-card) + 6.5px);background:var(--mimi-card)">
+          <div aria-hidden="true" style="position:absolute;inset:0;background-image:radial-gradient(color-mix(in oklab, var(--mimi-foreground) 12%, transparent) 1px, transparent 1px);background-size:18px 18px;-webkit-mask-image:radial-gradient(ellipse at 50% 100%, #000 10%, transparent 65%);mask-image:radial-gradient(ellipse at 50% 100%, #000 10%, transparent 65%)"></div>
+          <h2 style="position:relative;margin:0;font-size:clamp(30px, 3.6vw, 44px);line-height:1.1;font-weight:800;letter-spacing:-0.03em;text-wrap:balance">Empieza en dos minutos</h2>
+          <p style="position:relative;margin:0;max-width:520px;font-size:16px;line-height:1.55;color:var(--mimi-muted-foreground)">Un comando verifica Angular y Tailwind, agrega el tema y crea mimi.json. Después, ng g mimi button y listo.</p>
+          <div style="position:relative;display:flex;align-items:center;gap:6px;height:52px;padding:0 6px 0 18px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-background);box-shadow:var(--mimi-shadow-card);font-family:var(--mimi-font-mono);font-size:15px"><span style="color:var(--mimi-muted-foreground);margin-right:6px">$</span>ng add @mimi-ng/cli<button onClick="{{ copy }}" aria-label="Copiar comando" style="margin-left:14px;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:0;border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.9)"><mimi-icon name="{{ copyIcon }}" size="16"></mimi-icon></button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer style="border-top:1px solid var(--mimi-border)">
+    <div style="max-width:1200px;margin:0 auto;padding:28px 24px;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--mimi-muted-foreground)"><span>Mimi · Licencia MIT · Hecho para Angular</span><nav style="display:flex;gap:18px"><a href="Mimi Sitio.dc.html" style="text-decoration:none">Documentación</a><a href="Mimi F6 Blocks.dc.html" style="text-decoration:none">Blocks</a><a href="Mimi F5 Effects.dc.html" style="text-decoration:none">Effects</a></nav></div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const TERM = [['$', 'ng add @mimi-ng/cli', 'oklch(0.97 0 0)', true], ['', '✓ Angular 22 y Tailwind CSS 4 detectados', 'oklch(0.76 0.15 150)'], ['', '✓ Tema y utilidades agregados', 'oklch(0.76 0.15 150)'], ['', '✓ mimi.json creado', 'oklch(0.76 0.15 150)'], ['$', 'ng g mimi button input', 'oklch(0.97 0 0)', true], ['', '+ src/app/components/ui/button/button.ts', 'oklch(0.78 0.12 250)'], ['', '+ src/app/components/ui/input/input.ts', 'oklch(0.78 0.12 250)']];
+const COMPS = [['Button', 'square-mouse-pointer'], ['Input', 'text-cursor-input'], ['Select', 'chevrons-up-down'], ['Combobox', 'search'], ['Date Picker', 'calendar'], ['Data Table', 'table'], ['Dialog', 'app-window'], ['Toast', 'bell'], ['Tabs', 'panels-top-left'], ['Command', 'command'], ['Tree', 'folder-tree'], ['Slider', 'sliders-horizontal'], ['Input OTP', 'rectangle-ellipsis'], ['Color Picker', 'palette'], ['Stepper', 'list-ordered'], ['Sheet', 'panel-right'], ['Carousel', 'gallery-horizontal'], ['Rating', 'star']];
+const BLOCKS = [['login-01', 'Inicio de sesión'], ['login-02', 'Login dividido'], ['signup-01', 'Registro'], ['otp-01', 'Verificación'], ['settings-01', 'Configuración'], ['dashboard-01', 'Dashboard'], ['table-01', 'Listado'], ['pricing-01', 'Precios']];
+class Component extends DCLogic {
+  state = { dark: false, rep: 0, copied: false };
+  renderVals() {
+    const s = this.state, rm = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const sfx = s.rep % 2 ? 'b' : 'a';
+    let delay = 0.6;
+    const term = TERM.map(([prompt, text, color, typed], i) => {
+      const n = text.length, dur = typed ? n * 0.045 : 0;
+      const anim = rm ? 'none' : typed ? 'mimi-typing-' + sfx + ' ' + dur.toFixed(2) + 's steps(' + n + ') ' + delay.toFixed(2) + 's both' : 'mimi-blurfade-' + sfx + ' .3s ease ' + delay.toFixed(2) + 's both';
+      delay += typed ? dur + 0.4 : 0.22;
+      return { prompt, text, color, w: typed ? n + 'ch' : 'auto', anim, caret: i === TERM.length - 1 };
+    });
+    return {
+      cls: s.dark ? 'dark' : '', themeIcon: s.dark ? 'sun' : 'moon', iconRot: s.dark ? 'rotate(180deg)' : 'rotate(0deg)', toggleLabel: s.dark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro',
+      toggleTheme: e => {
+        const r = e.currentTarget.getBoundingClientRect();
+        document.documentElement.style.setProperty('--mimi-reveal-x', (r.left + r.width / 2) + 'px');
+        document.documentElement.style.setProperty('--mimi-reveal-y', (r.top + r.height / 2) + 'px');
+        const go = () => this.setState({ dark: !s.dark });
+        if (document.startViewTransition && !rm) document.startViewTransition(go); else go();
+      },
+      nav: [['Componentes', '#componentes'], ['Por qué Mimi', '#por-que'], ['Blocks', '#blocks'], ['Documentación', 'Mimi Sitio.dc.html']].map(([label, href]) => ({ label, href })),
+      heroWords: ['Los', 'componentes', 'son', 'tuyos.', 'Las', 'actualizaciones', 'también.'].map((t, i) => ({ t, anim: rm ? 'none' : 'mimi-blurfade-a .55s cubic-bezier(.2,.8,.2,1) ' + (0.08 + i * 0.08) + 's both' })),
+      term, replay: () => this.setState({ rep: s.rep + 1 }),
+      marquee: [0, 1].map(r => { const list = r ? COMPS.slice(9).concat(COMPS.slice(0, 9)) : COMPS; return { anim: rm ? 'none' : 'mimi-marquee 40s linear infinite' + (r ? ' reverse' : ''), items: [...list, ...list].map(([label, icon]) => ({ label, icon })) }; }),
+      bento: [
+        { span: 'span 2', rspan: 'span 2', dots: true, hasCode: true, code: '$ ng g mimi button input\n  + src/app/components/ui/button/button.ts\n  + src/app/components/ui/input/input.ts\n\n// El código es tuyo: edítalo libremente', icon: 'git-merge', iconBg: 'var(--mimi-info)', iconFg: 'var(--mimi-info-foreground)', title: 'El código es tuyo', text: 'ng g mimi copia cada componente en su carpeta dentro de src/app/components/ui. Lo lees, lo cambias y lo versionas como el resto de tu app.' },
+        { span: 'auto', rspan: 'auto', icon: 'at-sign', iconBg: 'var(--mimi-muted)', iconFg: 'var(--mimi-foreground)', title: 'Un solo prefijo', text: 'mimiBtn, mimiInput, mimi-card. Sin capas ni dependencias ocultas.' },
+        { span: 'auto', rspan: 'auto', icon: 'palette', iconBg: 'var(--mimi-warning-soft)', iconFg: 'var(--mimi-warning-soft-foreground)', title: 'Temas tipados', text: 'Un mimi.preset.ts con autocompletado. Diséñalo en el editor visual.' },
+        { span: 'auto', rspan: 'auto', icon: 'list-checks', iconBg: 'var(--mimi-success-soft)', iconFg: 'var(--mimi-success-soft-foreground)', title: 'Errores automáticos', text: 'mimi-form-field lee el FormControl y muestra el mensaje correcto.' },
+        { span: 'auto', rspan: 'auto', icon: 'arrow-left-right', iconBg: 'var(--mimi-destructive-soft-bg)', iconFg: 'var(--mimi-destructive-soft-foreground)', title: 'Desde PrimeNG o NG-ZORRO', text: 'Tabla de equivalencias para migrar componente por componente.' }
+      ].map(b => ({ ...b, dots: !!b.dots, hasCode: !!b.hasCode, code: b.code || '' })),
+      blocks: BLOCKS.map(([id, label]) => ({ id, label, href: 'Mimi F6 Blocks.dc.html#' + id, isLogin01: id === 'login-01', isLogin02: id === 'login-02', isSignup01: id === 'signup-01', isOtp01: id === 'otp-01', isSettings01: id === 'settings-01', isDashboard01: id === 'dashboard-01', isTable01: id === 'table-01', isPricing01: id === 'pricing-01' })),
+      copy: () => { try { navigator.clipboard.writeText('ng add @mimi-ng/cli'); } catch (e) {} this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1500); },
+      copyIcon: s.copied ? 'check' : 'copy'
+    };
+  }
+}
+</script>
+</body>
+</html>

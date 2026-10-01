@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:100%;min-height:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:center;background:{{ bg }};color:var(--mimi-foreground);font-family:var(--mimi-font-sans);padding:{{ pad }}">
+  <div style="width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:22px;text-align:center;max-width:{{ maxW }};padding:{{ cardPad }};background:{{ cardBg }};border:{{ cardBorder }};border-radius:var(--mimi-radius-card);box-shadow:{{ cardSh }}">
+    <span style="width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);box-shadow:0 0 0 8px color-mix(in oklab, var(--mimi-info) 8%, transparent)"><mimi-icon name="mail-check" size="26"></mimi-icon></span>
+    <div style="display:flex;flex-direction:column;gap:6px"><h1 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.02em">Revisa tu correo</h1><p style="margin:0;font-size:14px;line-height:1.5;color:var(--mimi-muted-foreground)">Enviamos un código de 6 dígitos a <b style="color:var(--mimi-foreground)">a••••@empresa.com</b>.</p></div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+      <div style="position:relative;display:inline-flex;align-items:center;gap:{{ gap }};animation:{{ shake }}">
+        <sc-for list="{{ boxes }}" as="b" hint-placeholder-count="7">
+          <sc-if value="{{ b.isSep }}"><span aria-hidden="true" style="width:10px;height:2px;border-radius:2px;background:var(--mimi-border)"></span></sc-if>
+          <sc-if value="{{ b.isBox }}"><div aria-hidden="true" style="display:flex;align-items:center;justify-content:center;box-sizing:border-box;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-weight:700;font-variant-numeric:tabular-nums;transition:var(--mimi-transition);width:{{ bw }};height:{{ bh }};font-size:{{ bfs }};border:1px solid {{ b.border }};box-shadow:{{ b.ring }}">{{ b.ch }}<sc-if value="{{ b.caret }}"><span style="width:2px;height:22px;border-radius:1px;background:var(--mimi-foreground);animation:mimi-caret 1s steps(1) infinite"></span></sc-if></div></sc-if>
+        </sc-for>
+        <input aria-label="Código de verificación" inputmode="numeric" autocomplete="one-time-code" maxLength="6" aria-invalid="{{ inv }}" value="{{ code }}" onChange="{{ onChange }}" onFocus="{{ onFocus }}" onBlur="{{ onBlur }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;padding:0;font-size:16px;cursor:text">
+      </div>
+      <span role="status" style="display:flex;align-items:center;gap:6px;min-height:20px;font-size:13px;color:{{ msgFg }}"><sc-if value="{{ hasIcon }}"><mimi-icon name="{{ msgIcon }}" size="14"></mimi-icon></sc-if>{{ msg }}</span>
+    </div>
+    <button onClick="{{ verify }}" style="width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:calc(var(--mimi-control-height) + 4px);border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:15px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)">Verificar</button>
+    <div style="display:flex;flex-direction:column;gap:8px;font-size:13.5px;color:var(--mimi-muted-foreground)">
+      <span>¿No te llegó? <button onClick="{{ resend }}" disabled="{{ resendDis }}" style="padding:0;border:0;background:transparent;font-family:var(--mimi-font-sans);font-size:13.5px;font-weight:600;text-decoration:underline;text-underline-offset:3px;color:{{ resendFg }};cursor:{{ resendCur }}">{{ resendLabel }}</button></span>
+      <a href="#" style="display:inline-flex;align-items:center;justify-content:center;gap:6px;color:var(--mimi-muted-foreground);text-decoration:none"><mimi-icon name="arrow-left" size="14"></mimi-icon>Usar otro correo</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1280px&quot;,&quot;height&quot;:&quot;800px&quot;},&quot;mobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { code: '246', focus: true, left: 42, tried: false };
+  componentDidMount() { this.iv = setInterval(() => this.setState(s => ({ left: Math.max(0, s.left - 1) })), 1000); }
+  componentWillUnmount() { clearInterval(this.iv); }
+  renderVals() {
+    const m = this.props.mobile === true || this.props.mobile === 'true', s = this.state;
+    const full = s.code.length === 6, ok = full && s.code === '246810', err = full && !ok;
+    const boxes = [];
+    for (let i = 0; i < 6; i++) {
+      if (i === 3) boxes.push({ isSep: true });
+      const active = s.focus && i === Math.min(s.code.length, 5) && !full;
+      boxes.push({ isBox: true, ch: s.code[i] || '', caret: active && !s.code[i], border: err ? 'var(--mimi-destructive)' : ok ? 'var(--mimi-success)' : active ? 'var(--mimi-ring)' : 'var(--mimi-input)', ring: err ? '0 0 0 3px var(--mimi-destructive-soft)' : ok ? '0 0 0 3px var(--mimi-success-ring)' : active ? '0 0 0 3px var(--mimi-ring-soft)' : 'none' });
+    }
+    return {
+      bg: m ? 'var(--mimi-background)' : 'var(--mimi-muted)', pad: m ? '32px 20px' : '40px', maxW: m ? '100%' : '440px', cardPad: m ? '0' : '36px 32px',
+      cardBg: m ? 'transparent' : 'var(--mimi-card)', cardBorder: m ? '0' : '1px solid var(--mimi-border)', cardSh: m ? 'none' : 'var(--mimi-shadow-card)',
+      gap: m ? '6px' : '8px', bw: m ? '42px' : '48px', bh: m ? '50px' : '56px', bfs: m ? '20px' : '22px',
+      boxes, code: s.code, inv: String(err), shake: err ? 'mimi-shake .4s ease' : 'none',
+      msg: ok ? 'Código verificado. Entrando…' : err ? 'Código incorrecto. Prueba con 246810.' : 'Expira en 10 minutos.',
+      msgFg: ok ? 'var(--mimi-success-soft-foreground)' : err ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-muted-foreground)', hasIcon: ok || err, msgIcon: ok ? 'circle-check' : 'circle-alert',
+      onChange: e => this.setState({ code: e.target.value.replace(/\D/g, '').slice(0, 6) }), onFocus: () => this.setState({ focus: true }), onBlur: () => this.setState({ focus: false }),
+      verify: () => this.setState({ tried: true }),
+      resendDis: s.left > 0, resendLabel: s.left > 0 ? 'Reenviar en 0:' + String(s.left).padStart(2, '0') : 'Reenviar código', resendFg: s.left > 0 ? 'var(--mimi-muted-foreground)' : 'var(--mimi-foreground)', resendCur: s.left > 0 ? 'not-allowed' : 'pointer',
+      resend: () => this.setState({ left: 60, code: '' })
+    };
+  }
+}
+</script>
+</body>
+</html>

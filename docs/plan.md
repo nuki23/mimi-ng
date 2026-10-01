@@ -6,7 +6,7 @@ Marca `[x]` al terminar cada tarea. Una tarea por sesión de Claude Code (usa `/
 
 - [x] 0.1 Instalar Node.js (versión LTS compatible con Angular 22, ver angular.dev), pnpm y git.
 - [x] 0.2 Generar los diseños en Claude Design y guardarlos en `docs/design/`.
-- [x] 0.3 Elegir el estilo del MVP: solo Vivid, como estilo por defecto.
+- [x] 0.3 Elegir el estilo del MVP: un solo tema base, Mimi.
 - [x] 0.4 `git init` y primer commit con estos documentos.
 
 ## Fase 1: Base
@@ -78,88 +78,94 @@ Hallazgos de la prueba real de la 0.1.0 desde npm (L.6).
 
 ## Hoja de ruta del catálogo
 
-Criterio (spec, sección 4): solo componentes funcionales y difíciles de hacer bien a mano (teclado, accesibilidad, overlays, estados). Cada grupo es una versión menor. Antes de cada grupo va su tarea de diseño en Claude Design (D1–D5): colores, radios y sombras salen de `docs/design/`, nunca inventados. Inspiración y dependencias de cada componente: spec, sección 4, «Hoja de ruta». Cada componente nuevo registra sus tokens en `MimiComponentTokens` y su prefijo en `COMPONENT_PREFIX`, con prueba, y agrega su tabla a la spec, sección 13 (paso obligatorio de `/componente`).
+Criterio (spec, sección 4): solo componentes funcionales y difíciles de hacer bien a mano (teclado, accesibilidad, overlays, estados). Cada grupo es una versión menor. Colores, radios y sombras salen de `docs/design/`, nunca inventados. Inspiración y dependencias de cada componente: spec, sección 4, «Hoja de ruta». Cada componente nuevo registra sus tokens en `MimiComponentTokens` y su prefijo en `COMPONENT_PREFIX`, con prueba, y tiene su tabla en la spec, sección 13 (paso obligatorio de `/componente`). Los componentes con color usan variante y tono por separado (spec, sección 4).
+
+**Diseños:** las tandas D1–D5 están hechas (exportadas el 01/10/2026). En cada tarea, «Diseño:» indica el archivo de `docs/design/` (sin el prefijo `Mimi ` ni la extensión `.dc.html`). Los textos de los diseños que contradicen la spec están en la spec, sección 13, «Correcciones pendientes del diseño».
 
 Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → Grupo 4. Mimi Effects tiene prioridad baja y puede empezar después del Grupo 3. El Grupo 5 se prioriza según lo que pidan los usuarios después de la 0.2.0.
 
 ## Fase 4: Preparación del catálogo ampliado
 
+- [x] D1 Diseño: tokens nuevos, Grupo 1 (incluida Pagination) y mimi-toolbar, con la hoja de tokens por componente. Archivos: `Tokens`, `F2 Tokens y Tonos`, `F2 Overlays`, `F2 Select`, `F2 Toast Tabs Toolbar`, `F7 Pagination` y `Pagination`; variables en `tokens-mimi.css`, `mimi-variables-componentes.css` y `mimi-tokens-data.js`.
 - [ ] 4.3 Evaluar @angular/aria (estable en v22) frente a @angular/cdk. Decide cómo se construyen la mayoría de los componentes: base de overlays y posicionamiento, listbox, menús, tabs y el patrón toolbar. Registrar la decisión en la spec (secciones 2 y 4).
-- [ ] D1 Diseño en Claude Design: tokens nuevos, Grupo 1 (incluida Pagination) y mimi-toolbar. Incluye la hoja de tokens por componente (fuente de T.0), guardada en `docs/design/`.
-- [ ] T.0 Catálogo de tokens en la spec (sección 13), en tres niveles: globales, compartidos y por componente. Cada componente con su tabla: variable `--mimi-<prefijo>-<propiedad>`, qué controla, de qué token hereda y valor por defecto. Fuente: la hoja de tokens del diseño (hoy no está en `docs/design/`: se guarda con D1).
-- [ ] T.0b Tokens propios de los componentes existentes que no los tienen (Avatar, Switch, Checkbox, FormField, Separator, Skeleton y Badge), según la hoja de tokens: en el CSS del componente con la cascada de la spec 6.2, en `MimiComponentTokens` y en `COMPONENT_PREFIX`, con pruebas. `--mimi-badge-radius` y `--mimi-switch-off` hoy son globales: decidir si pasan a `components` sin romper los presets existentes.
-- [ ] T.1 Tokens nuevos (los necesita Toast), con los valores de D1: colores semánticos `success`, `warning` e `info` (claro y oscuro, con sus `-foreground` y sombras de color) y `--mimi-glow` (sombra de color con `color-mix`). Registrarlos en `theme-base.css`, `types.ts`, `mimiThemeToCss` y `cn.ts` (sombras para tailwind-merge), con pruebas.
+- [x] T.0 Catálogo de tokens en la spec (sección 13), en tres niveles (globales, compartidos y por componente), con una tabla por cada uno de los 21 componentes de la hoja (los de la 0.1.0 y los del Grupo 1). Los Grupos 2 a 5 agregan sus tokens y su tabla con cada tanda.
+- [ ] T.0b Tokens propios de los componentes existentes (Avatar, Switch, Checkbox, FormField, Separator, Skeleton, Badge, y Textarea separado de Input), según la spec, sección 13: en el CSS del componente con la cascada de la spec 6.2, en `MimiComponentTokens` y en `COMPONENT_PREFIX`, con pruebas. Resolver las diferencias de nombres entre el código de la 0.1.0 y la hoja (Button, Input, Card; spec 13, «Reglas») sin romper los presets que ya usan los nombres viejos, y decidir si el global `--mimi-badge-radius` se renombra (choca con el token de Badge) y si `--mimi-switch-off` pasa a `components`.
+- [ ] T.1 Tokens nuevos de `tokens-mimi.css` en ui-core: tonos `success`, `warning` e `info` (con `-foreground`, `-soft`, `-soft-foreground`, `-hover`, `-ring` y sombras de color), `destructive-soft-foreground` y `destructive-soft-bg`, `--mimi-glow` y `--mimi-glow-<tono>`, `shadow-popover`, `tooltip`, `glass`, `overlay-blur` y los compartidos (foco, deshabilitado, íconos). Valores del diseño para `--mimi-overlay` (claro `oklch(0.145 0 0 / 0.38)`, oscuro `oklch(0 0 0 / 0.6)`) y `--mimi-popover` en oscuro (`oklch(0.205 0 0)`). Renombrar `--mimi-destructive-soft` (un anillo) a `--mimi-destructive-ring`, con la convención `<tono>-soft` = fondo suave, `<tono>-ring` = anillo. Registrarlos en `theme-base.css`, `types.ts`, `mimiThemeToCss` y `cn.ts` (sombras para tailwind-merge), con pruebas. Diseño: `F2 Tokens y Tonos` y `Tokens`.
+- [ ] V.1 Variante y tono separados en Button y Badge (spec, sección 4): variantes `solid`, `soft`, `outline`, `ghost`, `link`… y tonos `primary`, `secondary`, `success`, `warning`, `info` y `danger`. `variant="destructive"` sigue funcionando como atajo de `solid` + `danger` (compatibilidad con la 0.1.0). Necesita T.1. Diseño: `F2 Tokens y Tonos`.
+- [ ] V.2 Quitar el nombre «Vivid» del código: `mimi.json` pasa a `"style": "mimi"` (la 0.1.0 escribe `"vivid"`: `init` y `ui` deben aceptar los dos), con sus pruebas (`init.spec.ts`), el ejemplo de `mimi.json` de la página de Instalación y el comentario de `theme-base.css`.
 
 ## Grupo 1 → v0.2.0: overlays y navegación
 
-- [ ] G1.1 Popover. Base de posicionamiento de los demás overlays.
-- [ ] G1.2 Tooltip.
-- [ ] G1.3 Dropdown Menu (submenús, búsqueda por letra).
-- [ ] G1.4 Context Menu, sobre Dropdown Menu.
-- [ ] G1.5 Select, estilo NG-ZORRO, con `FormValueControl` (spec 8). Al hacerlo, completar `MimiComponentTokens` en `theme/types.ts` (hoy tiene el comentario «select y dialog se agregan en la Fase 4»).
-- [ ] G1.6 Dialog (servicio, X siempre visible).
-- [ ] G1.7 Confirm: `mimi.confirm()` sobre Dialog.
-- [ ] G1.8 Toast, estilo Sonner + Vuesax. Usa los tokens de T.1.
-- [ ] G1.9 Tabs con indicador animado, estilo HeroUI. Después, la tarea 5.11.
-- [ ] G1.10 mimi-toolbar, horizontal o vertical, inspirada en VsCanvasToolbar de Vuesax: píldora translúcida, ítem activo sobre un disco, anillo animado en hover y selección, tooltips, flechas, separadores, contadores, estado presionado y herramientas propias del usuario.
-- [ ] G1.11 Pagination: píldora flotante como mimi-toolbar (`[←] [input de página] / total [→] | select de registros por página`), con variantes flotante y en línea.
+- [ ] G1.1 Popover. Base de posicionamiento de los demás overlays. Diseño: `F2 Overlays`.
+- [ ] G1.2 Tooltip. Diseño: `F2 Overlays`.
+- [ ] G1.3 Dropdown Menu (submenús, búsqueda por letra). Diseño: `F2 Overlays`.
+- [ ] G1.4 Context Menu, sobre Dropdown Menu. Diseño: `F2 Overlays`.
+- [ ] G1.5 Select, estilo NG-ZORRO, con `FormValueControl` (spec 8). Al hacerlo, completar `MimiComponentTokens` en `theme/types.ts` (hoy tiene el comentario «select y dialog se agregan en la Fase 4»). Diseño: `F2 Select`.
+- [ ] G1.6 Dialog (servicio, X siempre visible). Diseño: `F2 Overlays`.
+- [ ] G1.7 Confirm: `mimi.confirm()` sobre Dialog. Diseño: `F2 Overlays`.
+- [ ] G1.8 Toast, estilo Sonner + Vuesax. Usa los tokens de T.1. Diseño: `F2 Toast Tabs Toolbar`.
+- [ ] G1.9 Tabs con indicador animado, estilo HeroUI. Después, la tarea 5.11. Diseño: `F2 Toast Tabs Toolbar`.
+- [ ] G1.10 mimi-toolbar, horizontal o vertical, inspirada en VsCanvasToolbar de Vuesax (sin modo Dock): píldora translúcida, ítem activo sobre un disco, anillo animado en hover y selección, tooltips, flechas, separadores, contadores, estado presionado y herramientas propias del usuario. Diseño: `F2 Toast Tabs Toolbar`.
+- [ ] G1.11 Pagination: píldora flotante compacta como mimi-toolbar (`[←] [input de página] / total [→] | registros por página`). Tamaño SM por defecto (hereda la altura global de control SM) y MD opcional; variantes flotante y en línea; en móvil, sin el selector de registros. Diseño: `F7 Pagination` (con `Pagination`).
 
 ## Grupo 2 → v0.3.0: entradas avanzadas
 
-- [ ] D2 Diseño en Claude Design: Grupo 2 y Theme Studio.
-- [ ] G2.1 Toggle Group.
-- [ ] G2.2 Number Input.
-- [ ] G2.3 Password (mostrar/ocultar y medidor de seguridad).
-- [ ] G2.4 Input Mask.
-- [ ] G2.5 Input OTP.
-- [ ] G2.6 Tags Input.
-- [ ] G2.7 Slider (rango doble).
-- [ ] G2.8 Combobox/Autocomplete (múltiple con chips).
-- [ ] G2.9 Date Picker y Date Range.
-- [ ] G2.10 Progress (barra y circular).
-- [ ] G2.11 File Upload, con Progress.
-- [ ] G2.12 Color Picker (lo usa Theme Studio).
+- [x] D2 Diseño: Grupo 2 y Theme Studio. Archivos: `F3 Archivos Tags Toggle Color` (con `Color Picker`), `F3 Combobox Fechas Hora`, `F3 Slider OTP Numero Mascara` y `Theme Studio`; variables en `mimi-variables-fase3.css` (en `tokens-mimi.css`). La hoja de tokens todavía no tiene tablas para estos componentes: se agregan antes de construirlos.
+- [ ] G2.1 Toggle Group. Diseño: `F3 Archivos Tags Toggle Color`.
+- [ ] G2.2 Number Input. Diseño: `F3 Slider OTP Numero Mascara`.
+- [ ] G2.3 Password (mostrar/ocultar y medidor de seguridad). Diseño: `F3 Slider OTP Numero Mascara`.
+- [ ] G2.4 Input Mask. Diseño: `F3 Slider OTP Numero Mascara`.
+- [ ] G2.5 Input OTP. Diseño: `F3 Slider OTP Numero Mascara`.
+- [ ] G2.6 Tags Input. Diseño: `F3 Archivos Tags Toggle Color`.
+- [ ] G2.7 Slider (rango doble). Diseño: `F3 Slider OTP Numero Mascara`.
+- [ ] G2.8 Combobox/Autocomplete (múltiple con chips). Diseño: `F3 Combobox Fechas Hora`.
+- [ ] G2.9 Date Picker y Date Range. Diseño: `F3 Combobox Fechas Hora`.
+- [ ] G2.10 Progress (barra y circular). Diseño: `F5 Estructura`.
+- [ ] G2.11 File Upload, con Progress. Diseño: `F3 Archivos Tags Toggle Color`.
+- [ ] G2.12 Color Picker (lo usa Theme Studio). Diseño: `Color Picker` (en `F3 Archivos Tags Toggle Color`).
 
 ## Theme Studio (después del Grupo 2; reemplaza la 5.2)
 
-Construido con componentes de Mimi (mimi-toolbar, Toggle Group, Select, Color Picker, Switch, Input). Ver spec, secciones 4 y 13. Modelo: variante (estilo base) + propiedades combinables + presets guardados; los valores heredan del tema global salvo que se personalicen, y el usuario puede crear variantes propias.
+Solo sirve para editar los componentes de Mimi tal como existen: sin presets guardados, sin «Mis variantes» y sin tonos propios. Se construye solo con componentes de Mimi; si necesita uno que no está en el plan, se agrega. Ver spec, sección 4, «Theme Studio». Diseño: `Theme Studio` (corregir: quitar «Mis variantes» y agregar «Copiar prompt»; spec 13).
 
-- [ ] T.2 Antes de empezar, resolver la decisión pendiente «Variantes propias en `mimi.preset.ts`» (spec, sección 13), con una prueba de concepto en Button. Estructura: sidebar con la lista de componentes y su número de variantes, lienzo con un solo componente, tira de variantes debajo y panel de propiedades a la derecha (variante, tamaño, tono, radio, texto, block, deshabilitado, cargando, solo ícono, glow…) con «Propiedades actuales» en JSON.
-- [ ] T.3 Botones «Código» (el HTML generado, para copiar) y «Copiar prompt».
-- [ ] T.4 Modo «Tema global»: tokens de todo Mimi (colores, radios, alturas, sombras, movimiento) con exportación de `mimi.preset.ts`. En cada control, opciones prediseñadas más «Personalizado» con un campo libre validado (por ejemplo, un radio de 14px). Presets propios con nombre, importar y exportar.
-- [ ] T.5 Radio «Squircle»: verificar el soporte actual de `corner-shape` y proponerlo como mejora progresiva, con respaldo a `border-radius`.
+- [ ] T.2 Modo Componente (estructura de Vuesax): lista de componentes a la izquierda; barra flotante arriba (mimi-toolbar) con Volver, Móvil/Tablet/Escritorio, Claro/Oscuro, fondo del lienzo, «Uno | Ver todos» (matriz tonos × variantes), «Código» y «Copiar prompt»; un solo componente en el lienzo; la tira de variantes abajo.
+- [ ] T.3 Panel derecho: «Vista previa», que no se guarda (tono, estado, tamaño y texto), y «Estilo del componente», que sí se guarda (radio: Rounded, Squircle, Pill o un valor propio; borde; efectos: sombra, glow y escala al presionar). Cada propiedad muestra su origen (el token del que hereda, o «Mío»); pestaña «Variables» con todas las variables del componente y su cadena de herencia. Todo valor cambiado por el usuario se etiqueta «Mío».
+- [ ] T.4 Modo Tema global: Simple (color principal, radio, densidad y fuente) y Avanzado (Marca, Estados, Superficies, Texto, Bordes, Forma, Profundidad, Movimiento y Tipografía), con parejas de color y su texto, indicador de contraste AA y vista previa en vivo. El color y los tamaños SM, MD y LG (compartidos por todos los controles) solo se editan aquí. Exportación de `mimi.preset.ts` para `provideMimiTheme()`.
+- [ ] T.5 Radio «Squircle»: verificar el soporte actual de `corner-shape` y usarlo como mejora progresiva, con respaldo a `border-radius`.
 
 ## Blocks (después del Grupo 2)
 
 Pantallas completas copiables con la CLI.
 
-- [ ] D5 Diseño en Claude Design: Blocks.
+- [x] D5 Diseño: Blocks. Archivos: `F6 Blocks` (índice) y `Block <nombre>` de cada uno.
 - [ ] B.1 Ítems de tipo `block` en el registro: `ng g mimi login-01` copia la pantalla y los componentes que usa.
-- [ ] B.2 Login.
-- [ ] B.3 Registro.
-- [ ] B.4 Configuración.
-- [ ] B.5 Dashboard.
-- [ ] B.6 Tabla con filtros (cuando exista Data Table, G3.4).
-- [ ] B.7 Precios.
+- [ ] B.2 `login-01`. Diseño: `Block login-01`.
+- [ ] B.3 `login-02`. Diseño: `Block login-02`.
+- [ ] B.4 `signup-01` (registro). Diseño: `Block signup-01`.
+- [ ] B.5 `otp-01` (código de verificación; usa Input OTP). Diseño: `Block otp-01`.
+- [ ] B.6 `settings-01` (configuración). Diseño: `Block settings-01`.
+- [ ] B.7 `pricing-01` (precios). Diseño: `Block pricing-01`.
+- [ ] B.8 `dashboard-01` (usa Data Table: después del Grupo 3). Diseño: `Block dashboard-01`.
+- [ ] B.9 `table-01` (tabla con filtros; usa Data Table: después del Grupo 3). Diseño: `Block table-01`.
 
 ## Grupo 3 → v0.4.0: datos
 
-- [ ] D3 Diseño en Claude Design: Grupo 3.
-- [ ] G3.1 Tree.
-- [ ] G3.2 Sortable List, con `@angular/cdk/drag-drop` y accesible con teclado.
-- [ ] G3.3 Command (⌘K). Después, la tarea 5.8 (buscador de la documentación).
-- [ ] G3.4 Data Table (ordenar, filtrar, paginar, seleccionar, columnas fijas). Usa Checkbox, Dropdown Menu y Pagination.
+- [x] D3 Diseño: Grupo 3. Archivos: `F4 Command Tree Sortable`, `F4 Data Table y Pagination` (con `Data Table`) y `F4 Panel admin` (composición de referencia).
+- [ ] G3.1 Tree. Diseño: `F4 Command Tree Sortable`.
+- [ ] G3.2 Sortable List, con `@angular/cdk/drag-drop` y accesible con teclado. Diseño: `F4 Command Tree Sortable`.
+- [ ] G3.3 Command (⌘K). Después, la tarea 5.8 (buscador de la documentación). Diseño: `F4 Command Tree Sortable`.
+- [ ] G3.4 Data Table (ordenar, filtrar, paginar, seleccionar, columnas fijas). Usa Checkbox, Dropdown Menu y Pagination. Diseño: `Data Table` (en `F4 Data Table y Pagination`).
 
 ## Grupo 4 → v0.5.0: estructura
 
-- [ ] D4 Diseño en Claude Design: Grupo 4, Grupo 5 y Mimi Effects.
-- [ ] G4.1 Accordion.
-- [ ] G4.2 Sheet/Drawer, flotante como el de shadcn (separado de los bordes, radio de tarjeta y barra de agarre en la versión inferior).
-- [ ] G4.3 Stepper.
+- [x] D4 Diseño: Grupo 4, Grupo 5 y Mimi Effects. Archivos: `F5 Estructura`, `F5 Dashboard y Media` y `F5 Effects`.
+- [ ] G4.1 Accordion. Diseño: `F5 Estructura`.
+- [ ] G4.2 Sheet/Drawer, flotante como el de shadcn (separado de los bordes, radio de tarjeta y barra de agarre en la versión inferior). Diseño: `F5 Estructura`.
+- [ ] G4.3 Stepper. Diseño: `F5 Estructura`.
 
 ## Mimi Effects (prioridad baja, después del Grupo 3)
 
-Inspirados en Magic UI. Todos respetan `prefers-reduced-motion`. Sin Globe, Icon Cloud ni partículas 3D (dependencias pesadas). Si se porta código de Magic UI (MIT), su aviso va en `THIRD_PARTY_NOTICES.md`. Su diseño va en D4.
+Inspirados en Magic UI. Todos respetan `prefers-reduced-motion`. Sin Globe, Icon Cloud ni partículas 3D (dependencias pesadas). Si se porta código de Magic UI (MIT), su aviso va en `THIRD_PARTY_NOTICES.md`. Diseño de todos: `F5 Effects` (keyframes en `mimi-effects.css`, también en `tokens-mimi.css`).
 
 - [ ] E.1 Animated Theme Toggler.
 - [ ] E.2 Terminal.
@@ -183,14 +189,14 @@ Inspirados en Magic UI. Todos respetan `prefers-reduced-motion`. Sin Globe, Icon
 
 Prioridad según lo que pidan los usuarios después de la 0.2.0. Sin orden fijo.
 
-- [ ] G5.1 Sidebar de dashboard.
-- [ ] G5.2 Time Picker.
-- [ ] G5.3 Carousel.
-- [ ] G5.4 Image Preview.
-- [ ] G5.5 Timeline.
-- [ ] G5.6 Resizable.
-- [ ] G5.7 Hover Card.
-- [ ] G5.8 Rating.
+- [ ] G5.1 Sidebar de dashboard. Diseño: `F5 Dashboard y Media`.
+- [ ] G5.2 Time Picker. Diseño: `F3 Combobox Fechas Hora`.
+- [ ] G5.3 Carousel. Diseño: `F5 Dashboard y Media`.
+- [ ] G5.4 Image Preview (lightbox con zoom). Diseño: `F5 Dashboard y Media`.
+- [ ] G5.5 Timeline. Diseño: `F5 Dashboard y Media`.
+- [ ] G5.6 Resizable. Diseño: `F5 Dashboard y Media`.
+- [ ] G5.7 Hover Card. Diseño: `F5 Dashboard y Media`.
+- [ ] G5.8 Rating. Diseño: `F5 Dashboard y Media`.
 
 ## Plataforma y experiencia
 
@@ -211,11 +217,13 @@ Las tareas que eran la Fase 5. Conservan sus números porque el código y la spe
 - [ ] 5.13 Tabla de compatibilidad en la documentación.
 - [ ] 5.14 Prerender del showcase: páginas estáticas y 404 con estado real (hoy el modo SPA de Cloudflare responde 200 y la 404 lleva `noindex`). Revisar `not_found_handling` en `wrangler.jsonc` (pasaría a `404-page` con un `404.html`).
 - [ ] 5.15 Badge interactivo: variante de Badge sobre `a[mimiBadge]` o `button[mimiBadge]`, con hover y foco (mejora de un componente existente, no un componente nuevo).
+- [ ] 5.16 Landing v2: rediseño de la landing según `Landing v2` (`docs/design/Mimi Landing v2.dc.html`), manteniendo el lema «Los componentes son tuyos. Las actualizaciones también.» como titular (spec, sección 1). Usa Mimi Effects (Marquee, Terminal…) cuando existan; textos según la regla de la spec, sección 5.
+- [ ] 5.17 Revisión móvil componente por componente, después del Grupo 1: cómo se usa cada uno en pantallas chicas. Por ejemplo, en móvil el Select se abre como un panel flotante tipo modal en la parte superior, con buscador y más opciones visibles.
 
 ## Decisiones pendientes
 
-- [x] Estilo del MVP: solo Vivid (por defecto).
+- [x] Estilo del MVP: un solo tema base, Mimi («Mimi» de fábrica, «Mi tema» cuando el usuario lo cambia).
 - [x] Formularios: Signal Forms, Reactive Forms y ngModel. Campos nativos detectan FormField o NgControl; controles propios con FormValueControl (spec, sección 8).
 - [x] Idioma por defecto de los mensajes de error: inglés. `MIMI_ERROR_MESSAGES_ES` trae el español: `provideMimiErrorMessages(MIMI_ERROR_MESSAGES_ES)` (el showcase lo usa). Ver spec, sección 8.
 - [x] Versión exacta de Node.js y TypeScript según los requisitos de Angular 22 (ver spec, sección 2).
-- [ ] Variantes propias en `mimi.preset.ts` (para T.2): cómo se expresan y aplican. Evaluación y opción recomendada (`components.<nombre>.variants.<variante>` → CSS para `[data-slot][data-variant]` con tokens del componente) en la spec, sección 13.
+- [x] Variantes propias en `mimi.preset.ts`: no se harán. Theme Studio solo edita los componentes tal como existen (spec, sección 4).

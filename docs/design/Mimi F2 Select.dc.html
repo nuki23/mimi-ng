@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 2 · Select con buscador</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F2 Tokens y Tonos.dc.html">Tokens y tonos</a>
+      <a href="Mimi F2 Select.dc.html">Select</a>
+      <a href="Mimi F2 Overlays.dc.html">Dialog · Confirm · Popover · Tooltip · Menús</a>
+      <a href="Mimi F2 Toast Tabs Toolbar.dc.html">Toast · Tabs · Toolbar</a>
+      <a href="Mimi Componentes.dc.html">Fase 1</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,760px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:32px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Select</span>
+            <span style="font-size:14px;color:var(--mimi-muted-foreground)">mimi-select · buscador, grupos, check, limpiar y estados de carga.</span>
+          </div>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 28px;align-items:start">
+          <sc-for list="{{ m.selects }}" as="s" hint-placeholder-count="10">
+            <div style="display:flex;flex-direction:column;gap:10px;min-width:0;grid-column:{{ s.span }}">
+              <span style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--mimi-muted-foreground)">{{ s.caption }}<sc-if value="{{ s.live }}"><span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11px;letter-spacing:0;text-transform:none">Interactivo</span></sc-if></span>
+              <div style="display:flex;flex-direction:column;gap:6px;max-width:{{ s.maxW }}">
+                <label id="{{ s.id }}-lbl" style="font-size:14px;font-weight:500;color:{{ s.labelColor }}">País de envío</label>
+                <div role="combobox" tabIndex="{{ s.tab }}" aria-labelledby="{{ s.id }}-lbl" aria-expanded="{{ s.ariaOpen }}" aria-haspopup="listbox" aria-invalid="{{ s.ariaInvalid }}" aria-disabled="{{ s.ariaDisabled }}" onClick="{{ s.toggle }}" onKeyDown="{{ s.triggerKey }}" style="display:flex;align-items:center;gap:8px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 10px 0 12px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:14px;transition:var(--mimi-transition);border:1px solid {{ s.border }};box-shadow:{{ s.ring }};cursor:{{ s.cursor }};opacity:{{ s.opacity }}" style-active="transform:scale(var(--mimi-press-scale))">
+                  <sc-if value="{{ s.hasValue }}"><span style="flex:1;min-width:0;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><span style="font-family:var(--mimi-font-mono);font-size:11px;font-weight:600;padding:1px 5px;border-radius:5px;background:var(--mimi-muted);color:var(--mimi-muted-foreground)">{{ s.valueCode }}</span>{{ s.valueLabel }}</span></sc-if>
+                  <sc-if value="{{ s.isEmpty }}"><span style="flex:1;min-width:0;color:var(--mimi-muted-foreground)">Selecciona un país</span></sc-if>
+                  <sc-if value="{{ s.showClear }}"><button aria-label="Limpiar selección" onClick="{{ s.clear }}" style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border:0;border-radius:999px;background:var(--mimi-muted);color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.9)"><mimi-icon name="x" size="14"></mimi-icon></button></sc-if>
+                  <sc-if value="{{ s.spinTrigger }}"><span style="display:inline-flex;color:var(--mimi-muted-foreground);animation:mimi-spin .8s linear infinite"><mimi-icon name="loader-circle" size="16"></mimi-icon></span></sc-if>
+                  <span style="display:inline-flex;color:var(--mimi-muted-foreground);transition:transform .2s cubic-bezier(.2,.8,.2,1);transform:{{ s.chev }}"><mimi-icon name="chevron-down" size="16"></mimi-icon></span>
+                </div>
+                <sc-if value="{{ s.error }}"><span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mimi-destructive-soft-foreground)"><mimi-icon name="circle-alert" size="14"></mimi-icon>Selecciona un país para continuar.</span></sc-if>
+                <sc-if value="{{ s.open }}">
+                  <div style="margin-top:2px;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);overflow:hidden">
+                    <div style="display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border-bottom:1px solid var(--mimi-border);color:var(--mimi-muted-foreground)">
+                      <mimi-icon name="search" size="15"></mimi-icon>
+                      <input aria-label="Buscar país" placeholder="Buscar país…" value="{{ s.q }}" onChange="{{ s.onQ }}" onKeyDown="{{ s.searchKey }}" readOnly="{{ s.ro }}" style="flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none">
+                      <sc-if value="{{ s.hasQ }}"><span style="font-family:var(--mimi-font-mono);font-size:11px">{{ s.count }}</span></sc-if>
+                    </div>
+                    <sc-if value="{{ s.loading }}">
+                      <div aria-busy="true" style="padding:8px;display:flex;flex-direction:column;gap:6px">
+                        <div style="display:flex;align-items:center;gap:8px;padding:6px 8px;font-size:13px;color:var(--mimi-muted-foreground)"><span style="display:inline-flex;animation:mimi-spin .8s linear infinite"><mimi-icon name="loader-circle" size="14"></mimi-icon></span>Cargando países…</div>
+                        <div style="height:28px;margin:0 8px;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+                        <div style="height:28px;margin:0 8px;width:70%;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+                        <div style="height:28px;margin:0 8px 6px;width:84%;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ s.noResults }}">
+                      <div role="status" style="padding:24px 16px;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">
+                        <span style="width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-muted);color:var(--mimi-muted-foreground)"><mimi-icon name="search-x" size="18"></mimi-icon></span>
+                        <span style="font-size:14px;font-weight:600">Sin resultados</span>
+                        <span style="font-size:13px;color:var(--mimi-muted-foreground)">No hay países que coincidan con «{{ s.q }}».</span>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ s.hasOptions }}">
+                      <div role="listbox" aria-labelledby="{{ s.id }}-lbl" style="padding:4px;display:flex;flex-direction:column;gap:1px">
+                        <span style="padding:6px 8px 4px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Latinoamérica y España</span>
+                        <sc-for list="{{ s.options }}" as="o">
+                          <sc-if value="{{ o.enabled }}"><div role="option" aria-selected="{{ o.ariaSel }}" onClick="{{ o.pick }}" onMouseEnter="{{ o.hover }}" style="display:flex;align-items:center;gap:8px;height:34px;padding:0 8px;border-radius:var(--mimi-radius-sm);font-size:14px;cursor:pointer;transition:background-color .12s ease;background:{{ o.bg }}" style-active="transform:scale(0.985)"><span style="font-family:var(--mimi-font-mono);font-size:11px;font-weight:600;color:var(--mimi-muted-foreground);width:22px">{{ o.code }}</span><span style="flex:1;min-width:0">{{ o.pre }}<mark style="background:transparent;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px">{{ o.match }}</mark>{{ o.post }}</span><sc-if value="{{ o.selected }}"><mimi-icon name="check" size="16"></mimi-icon></sc-if></div></sc-if>
+                          <sc-if value="{{ o.disabled }}"><div role="option" aria-disabled="true" aria-selected="false" style="display:flex;align-items:center;gap:8px;height:34px;padding:0 8px;border-radius:var(--mimi-radius-sm);font-size:14px;opacity:.5;cursor:not-allowed"><span style="font-family:var(--mimi-font-mono);font-size:11px;font-weight:600;color:var(--mimi-muted-foreground);width:22px">{{ o.code }}</span><span style="flex:1;min-width:0">{{ o.pre }}<mark style="background:transparent;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px">{{ o.match }}</mark>{{ o.post }}</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">Sin cobertura</span></div></sc-if>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px 20px;padding-top:4px;border-top:1px solid var(--mimi-border);font-size:12px;color:var(--mimi-muted-foreground)">
+          <span style="padding-top:14px">Teclado: ↑ ↓ para moverte · Enter para elegir · Esc para cerrar</span>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const COUNTRIES = [['AR', 'Argentina'], ['BR', 'Brasil'], ['CL', 'Chile'], ['CO', 'Colombia'], ['ES', 'España'], ['MX', 'México'], ['PE', 'Perú', true], ['UY', 'Uruguay']];
+const norm = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const noop = () => {};
+
+class Component extends DCLogic {
+  state = { live: { l: { open: true, q: '', value: 'MX', active: 'CO' }, d: { open: true, q: '', value: 'MX', active: 'CO' } } };
+
+  setLive(k, patch) { this.setState(s => ({ live: { ...s.live, [k]: { ...s.live[k], ...patch } } })); }
+
+  filter(q) {
+    const nq = norm(q);
+    return COUNTRIES.filter(([, n]) => !nq || norm(n).includes(nq));
+  }
+
+  build(k, cfg) {
+    const { caption, value = null, open = false, q = '', active = null, loading = false, error = false, disabled = false, clear = false, live = false, span = 'auto', maxW = '100%' } = cfg;
+    const list = loading ? [] : this.filter(q);
+    const nq = norm(q);
+    const options = list.map(([code, name, dis]) => {
+      const i = nq ? norm(name).indexOf(nq) : -1;
+      const pre = i >= 0 ? name.slice(0, i) : name, match = i >= 0 ? name.slice(i, i + q.length) : '', post = i >= 0 ? name.slice(i + q.length) : '';
+      return {
+        code, pre, match, post, enabled: !dis, disabled: !!dis, selected: value === code, ariaSel: value === code ? 'true' : 'false',
+        bg: active === code ? 'var(--mimi-accent)' : 'transparent',
+        pick: live ? () => this.setLive(k, { value: code, open: false, q: '' }) : noop,
+        hover: live ? () => this.setLive(k, { active: code }) : noop
+      };
+    });
+    const v = COUNTRIES.find(c => c[0] === value);
+    const enabled = list.filter(c => !c[2]).map(c => c[0]);
+    const move = d => { const i = enabled.indexOf(active); const n = enabled[(i + d + enabled.length) % enabled.length]; if (n) this.setLive(k, { active: n }); };
+    const focused = open && !error;
+    return {
+      caption, live, span, maxW, id: k + '-' + caption.replace(/\W+/g, '-').toLowerCase(),
+      open, q, hasQ: !!q && !loading, count: list.length + (list.length === 1 ? ' resultado' : ' resultados'),
+      ro: !live, loading, noResults: open && !loading && list.length === 0, hasOptions: open && !loading && list.length > 0, options,
+      hasValue: !!v, isEmpty: !v, valueLabel: v ? v[1] : '', valueCode: v ? v[0] : '',
+      showClear: clear && !!v && !disabled, spinTrigger: loading,
+      error, labelColor: error ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-foreground)',
+      border: error ? 'var(--mimi-destructive)' : focused ? 'var(--mimi-ring)' : 'var(--mimi-input)',
+      ring: error ? '0 0 0 3px var(--mimi-destructive-soft)' : focused ? '0 0 0 3px var(--mimi-ring-soft)' : 'none',
+      chev: open ? 'rotate(180deg)' : 'rotate(0deg)',
+      ariaOpen: open ? 'true' : 'false', ariaInvalid: error ? 'true' : 'false', ariaDisabled: disabled ? 'true' : 'false',
+      tab: disabled ? '-1' : '0', cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? '.5' : '1',
+      toggle: live ? () => this.setLive(k, { open: !open }) : noop,
+      clear: live ? e => { e.stopPropagation(); this.setLive(k, { value: null }); } : e => e.stopPropagation(),
+      onQ: live ? e => { const nqv = e.target.value; const first = this.filter(nqv).find(c => !c[2]); this.setLive(k, { q: nqv, active: first ? first[0] : null }); } : noop,
+      triggerKey: live ? e => { if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') { e.preventDefault(); this.setLive(k, { open: true }); } if (e.key === 'Escape') this.setLive(k, { open: false }); } : noop,
+      searchKey: live ? e => {
+        if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+        else if (e.key === 'Enter' && active) { e.preventDefault(); this.setLive(k, { value: active, open: false, q: '' }); }
+        else if (e.key === 'Escape') this.setLive(k, { open: false });
+      } : noop
+    };
+  }
+
+  renderVals() {
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+      const L = this.state.live[k];
+      const b = c => this.build(k, c);
+      return {
+        cls, label, icon,
+        selects: [
+          b({ caption: 'Interactivo', live: true, clear: true, span: '1 / -1', maxW: '360px', ...L }),
+          b({ caption: 'Cerrado · vacío' }),
+          b({ caption: 'Con valor', value: 'CL' }),
+          b({ caption: 'Abierto · check y deshabilitada', open: true, value: 'MX', active: 'CO' }),
+          b({ caption: 'Filtrando «co»', open: true, q: 'co', value: 'MX', active: 'CO' }),
+          b({ caption: 'Sin resultados', open: true, q: 'Japón' }),
+          b({ caption: 'Cargando', open: true, loading: true }),
+          b({ caption: 'Con valor · botón limpiar', value: 'AR', clear: true }),
+          b({ caption: 'Con error', error: true }),
+          b({ caption: 'Deshabilitado', value: 'ES', disabled: true })
+        ]
+      };
+    });
+    return { modes };
+  }
+}
+</script>
+</body>
+</html>

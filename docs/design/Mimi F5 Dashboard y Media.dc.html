@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<script src="image-slot.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}
+@media (prefers-reduced-motion: reduce){[data-fx]{animation:none !important;transition:none !important}}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 5 · Dashboard y media</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F5 Estructura.dc.html">Sheet · Accordion · Stepper · Progress</a>
+      <a href="Mimi F5 Dashboard y Media.dc.html">Sidebar · Carousel · Preview · Timeline · Resizable · Hover Card · Rating</a>
+      <a href="Mimi F5 Effects.dc.html">Mimi Effects</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,780px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:40px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Dashboard y media</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">1 · Sidebar de dashboard</h3>
+          <div style="display:flex;gap:16px;align-items:stretch">
+            <sc-for list="{{ m.sidebars }}" as="sb" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;gap:8px;flex:{{ sb.flex }}">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ sb.caption }}</span>
+                <div style="display:flex;height:470px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:visible;background:var(--mimi-muted)">
+                  <aside aria-label="Navegación" data-fx="" style="flex-shrink:0;display:flex;flex-direction:column;gap:14px;padding:12px 10px;box-sizing:border-box;background:var(--mimi-card);border-right:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card) 0 0 var(--mimi-radius-card);transition:width .3s cubic-bezier(.2,.8,.2,1);width:{{ sb.w }}">
+                    <div style="display:flex;align-items:center;gap:10px;height:36px;padding:0 3px">
+                      <span style="width:30px;height:30px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:17px;font-weight:800;line-height:1">m</span>
+                      <sc-if value="{{ sb.expanded }}"><span style="flex:1;font-size:14px;font-weight:700;white-space:nowrap">Mimi Ventas</span></sc-if>
+                      <sc-if value="{{ sb.canToggle }}"><button aria-label="{{ sb.toggleLabel }}" aria-expanded="{{ sb.ariaExp }}" onClick="{{ sb.toggle }}" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.9)"><mimi-icon name="{{ sb.toggleIcon }}" size="16"></mimi-icon></button></sc-if>
+                    </div>
+                    <sc-for list="{{ sb.groups }}" as="g">
+                      <nav aria-label="{{ g.label }}" style="display:flex;flex-direction:column;gap:2px">
+                        <sc-if value="{{ sb.expanded }}"><span style="padding:0 8px 4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground);white-space:nowrap">{{ g.label }}</span></sc-if>
+                        <sc-if value="{{ sb.collapsed }}"><span aria-hidden="true" style="height:1px;margin:4px 8px 6px;background:var(--mimi-border)"></span></sc-if>
+                        <sc-for list="{{ g.items }}" as="it">
+                          <div style="position:relative;display:flex">
+                            <button aria-label="{{ it.label }}" aria-current="{{ it.current }}" onClick="{{ it.pick }}" style="--hbg:{{ it.hbg }};--hfg:{{ it.hfg }};position:relative;flex:1;display:flex;align-items:center;gap:10px;height:36px;padding:0 9px;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:14px;text-align:left;white-space:nowrap;cursor:pointer;transition:var(--mimi-transition);background:{{ it.bg }};color:{{ it.fg }};font-weight:{{ it.fw }}" style-hover="background:var(--hbg);color:var(--hfg)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ it.icon }}" size="18"></mimi-icon><sc-if value="{{ sb.expanded }}"><span style="flex:1">{{ it.label }}</span></sc-if><sc-if value="{{ it.showCount }}"><span style="display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:999px;font-size:11px;font-weight:700;background:{{ it.cBg }};color:{{ it.cFg }}">{{ it.count }}</span></sc-if><sc-if value="{{ it.dot }}"><span style="position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:999px;background:var(--mimi-warning);box-shadow:0 0 0 2px var(--mimi-card)"></span></sc-if></button>
+                            <sc-if value="{{ it.tip }}"><div role="tooltip" style="position:absolute;left:calc(100% + 14px);top:50%;transform:translateY(-50%);z-index:5;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;background:var(--mimi-tooltip);color:var(--mimi-tooltip-foreground);font-size:12.5px;font-weight:500;white-space:nowrap">{{ it.label }}<sc-if value="{{ it.hasTipCount }}"><span style="opacity:.75">· {{ it.count }}</span></sc-if><span aria-hidden="true" style="position:absolute;top:50%;left:-4px;width:8px;height:8px;margin-top:-4px;background:var(--mimi-tooltip);transform:rotate(45deg)"></span></div></sc-if>
+                          </div>
+                        </sc-for>
+                      </nav>
+                    </sc-for>
+                    <div style="flex:1"></div>
+                    <button aria-label="Ana Torres, cuenta" style="display:flex;align-items:center;gap:10px;padding:6px 4px;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);text-align:left;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))">
+                      <span style="position:relative;width:30px;height:30px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11.5px;font-weight:700">AT<span style="position:absolute;right:-1px;bottom:-1px;width:9px;height:9px;border-radius:999px;background:var(--mimi-success);box-shadow:0 0 0 2px var(--mimi-card)"></span></span>
+                      <sc-if value="{{ sb.expanded }}"><span style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3"><span style="font-size:13px;font-weight:600;white-space:nowrap">Ana Torres</span><span style="font-size:11.5px;color:var(--mimi-muted-foreground);white-space:nowrap">Administradora</span></span><mimi-icon name="chevrons-up-down" size="14"></mimi-icon></sc-if>
+                    </button>
+                  </aside>
+                  <div style="flex:1;min-width:0;padding:14px;display:flex;flex-direction:column;gap:10px"><div style="height:30px;width:60%;border-radius:var(--mimi-radius-sm);background:var(--mimi-card)"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="height:70px;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div><div style="height:70px;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div></div><div style="flex:1;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">2 · Carousel</h3>
+          <div role="region" aria-roledescription="carrusel" aria-label="Colección otoño" onKeyDown="{{ m.car.key }}" style="position:relative;height:320px;border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-muted);box-shadow:var(--mimi-shadow-card)">
+            <div data-fx="" style="display:flex;height:100%;transition:transform .55s cubic-bezier(.32,.72,0,1);transform:{{ m.car.tf }}">
+              <sc-for list="{{ m.car.slides }}" as="s" hint-placeholder-count="4">
+                <div role="group" aria-roledescription="diapositiva" aria-label="{{ s.aria }}" aria-hidden="{{ s.hidden }}" style="position:relative;flex:0 0 100%;height:100%">
+                  <image-slot id="{{ s.slot }}" placeholder="{{ s.ph }}" style="position:absolute;inset:0"></image-slot>
+                  <div style="position:absolute;left:16px;bottom:16px;display:flex;flex-direction:column;gap:2px;padding:10px 14px;border-radius:var(--mimi-radius);background:var(--mimi-glass);border:1px solid var(--mimi-glass-border);backdrop-filter:blur(var(--mimi-glass-blur));-webkit-backdrop-filter:blur(var(--mimi-glass-blur));pointer-events:none"><span style="font-size:15px;font-weight:700">{{ s.title }}</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">{{ s.sub }}</span></div>
+                </div>
+              </sc-for>
+            </div>
+            <button aria-label="Diapositiva anterior" onClick="{{ m.car.prev }}" style="position:absolute;left:14px;top:50%;margin-top:-20px;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:1px solid var(--mimi-glass-border);border-radius:999px;background:var(--mimi-glass);backdrop-filter:blur(var(--mimi-glass-blur));-webkit-backdrop-filter:blur(var(--mimi-glass-blur));color:var(--mimi-foreground);cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><mimi-icon name="chevron-left" size="18"></mimi-icon></button>
+            <button aria-label="Diapositiva siguiente" onClick="{{ m.car.next }}" style="position:absolute;right:14px;top:50%;margin-top:-20px;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:1px solid var(--mimi-glass-border);border-radius:999px;background:var(--mimi-glass);backdrop-filter:blur(var(--mimi-glass-blur));-webkit-backdrop-filter:blur(var(--mimi-glass-blur));color:var(--mimi-foreground);cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><mimi-icon name="chevron-right" size="18"></mimi-icon></button>
+            <div style="position:absolute;right:16px;bottom:16px;display:flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;background:var(--mimi-glass);border:1px solid var(--mimi-glass-border);backdrop-filter:blur(var(--mimi-glass-blur));-webkit-backdrop-filter:blur(var(--mimi-glass-blur))">
+              <sc-for list="{{ m.car.dots }}" as="d" hint-placeholder-count="4"><button aria-label="{{ d.aria }}" aria-current="{{ d.current }}" onClick="{{ d.pick }}" data-fx="" style="height:8px;padding:0;border:0;border-radius:999px;cursor:pointer;transition:width .3s cubic-bezier(.2,.8,.2,1), background-color .2s ease;width:{{ d.w }};background:{{ d.bg }}"></button></sc-for>
+            </div>
+          </div>
+          <span style="font-size:12.5px;color:var(--mimi-muted-foreground)">Arrastra tus imágenes a cada diapositiva. Se desliza 550 ms; con «reducir movimiento» cambia sin desplazamiento. También responde a ← →.</span>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">3 · Image Preview · lightbox con zoom</h3>
+          <div style="display:flex;gap:10px">
+            <sc-for list="{{ m.lb.thumbs }}" as="t" hint-placeholder-count="4">
+              <div style="position:relative;width:96px;height:96px;border-radius:var(--mimi-radius);overflow:hidden;box-shadow:{{ t.ring }}">
+                <image-slot id="{{ t.slot }}" placeholder="{{ t.ph }}" style="position:absolute;inset:0"></image-slot>
+                <button aria-label="{{ t.aria }}" onClick="{{ t.open }}" style="position:absolute;right:6px;bottom:6px;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0;border:0;border-radius:999px;background:oklch(0 0 0 / .6);color:#fff;cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(0.9)"><mimi-icon name="maximize-2" size="14"></mimi-icon></button>
+              </div>
+            </sc-for>
+          </div>
+          <div role="dialog" aria-modal="true" aria-label="Vista previa de imagen" style="position:relative;height:420px;border-radius:var(--mimi-radius-card);overflow:hidden;background:oklch(0.12 0 0 / .94)">
+            <div style="position:absolute;top:14px;left:16px;right:14px;display:flex;align-items:center;justify-content:space-between;z-index:2;color:oklch(0.97 0 0)">
+              <span style="font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums">{{ m.lb.counter }} · {{ m.lb.name }}</span>
+              <button aria-label="Cerrar vista previa" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border:0;border-radius:999px;background:oklch(1 0 0 / .1);color:inherit;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:oklch(1 0 0 / .18)" style-active="transform:scale(0.9)"><mimi-icon name="x" size="18"></mimi-icon></button>
+            </div>
+            <div onWheel="{{ m.lb.wheel }}" style="position:absolute;inset:56px 64px 72px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:{{ m.lb.cursor }}">
+              <div data-fx="" style="position:relative;width:360px;height:250px;border-radius:8px;overflow:hidden;box-shadow:0 20px 50px -12px oklch(0 0 0 / .6);transition:transform .3s cubic-bezier(.2,.8,.2,1);transform:{{ m.lb.tf }}"><image-slot id="{{ m.lb.bigSlot }}" placeholder="Imagen ampliada" style="position:absolute;inset:0"></image-slot></div>
+            </div>
+            <button aria-label="Imagen anterior" onClick="{{ m.lb.prev }}" style="position:absolute;left:14px;top:50%;margin-top:-20px;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:0;border-radius:999px;background:oklch(1 0 0 / .1);color:oklch(0.97 0 0);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:oklch(1 0 0 / .18)" style-active="transform:scale(0.9)"><mimi-icon name="chevron-left" size="20"></mimi-icon></button>
+            <button aria-label="Imagen siguiente" onClick="{{ m.lb.next }}" style="position:absolute;right:14px;top:50%;margin-top:-20px;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:0;border-radius:999px;background:oklch(1 0 0 / .1);color:oklch(0.97 0 0);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:oklch(1 0 0 / .18)" style-active="transform:scale(0.9)"><mimi-icon name="chevron-right" size="20"></mimi-icon></button>
+            <div role="toolbar" aria-label="Zoom" style="position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;padding:5px;border-radius:999px;background:oklch(0.2 0 0 / .85);border:1px solid oklch(1 0 0 / .1);color:oklch(0.97 0 0)">
+              <sc-for list="{{ m.lb.tools }}" as="t" hint-placeholder-count="5">
+                <sc-if value="{{ t.isBtn }}"><button aria-label="{{ t.aria }}" disabled="{{ t.dis }}" onClick="{{ t.run }}" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border:0;border-radius:999px;background:transparent;color:inherit;cursor:pointer;transition:var(--mimi-transition);opacity:{{ t.op }}" style-hover="background:oklch(1 0 0 / .12)" style-active="transform:scale(0.88)"><mimi-icon name="{{ t.icon }}" size="17"></mimi-icon></button></sc-if>
+                <sc-if value="{{ t.isLabel }}"><span style="min-width:52px;text-align:center;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums">{{ t.text }}</span></sc-if>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start">
+          <section style="display:flex;flex-direction:column;gap:16px">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">4 · Timeline</h3>
+            <ol aria-label="Actividad de Café Altura" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+              <sc-for list="{{ timeline }}" as="t" hint-placeholder-count="5">
+                <li style="display:grid;grid-template-columns:32px 1fr;gap:12px">
+                  <div style="display:flex;flex-direction:column;align-items:center"><span style="width:32px;height:32px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:{{ t.bg }};color:{{ t.fg }};box-shadow:0 0 0 4px var(--mimi-background)"><mimi-icon name="{{ t.icon }}" size="15"></mimi-icon></span><span style="flex:1;width:2px;min-height:14px;background:var(--mimi-border);display:{{ t.line }}"></span></div>
+                  <div style="display:flex;flex-direction:column;gap:4px;padding:5px 0 20px;min-width:0">
+                    <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><span style="font-size:14px"><b>{{ t.who }}</b> <span style="color:var(--mimi-muted-foreground)">{{ t.what }}</span></span><time style="flex-shrink:0;font-size:12px;color:var(--mimi-muted-foreground)">{{ t.when }}</time></div>
+                    <sc-if value="{{ t.hasNote }}"><div style="padding:10px 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);font-size:13.5px;line-height:1.5;text-wrap:pretty">{{ t.note }}</div></sc-if>
+                    <sc-if value="{{ t.hasBadge }}"><span style="align-self:flex-start;display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:600;background:{{ t.bBg }};color:{{ t.bFg }}">{{ t.badge }}</span></sc-if>
+                  </div>
+                </li>
+              </sc-for>
+            </ol>
+          </section>
+          <section style="display:flex;flex-direction:column;gap:16px">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">7 · Rating</h3>
+            <div style="display:flex;flex-direction:column;gap:18px;padding:18px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card)">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <span id="{{ m.k }}-rt" style="font-size:13.5px;font-weight:600">¿Cómo fue tu experiencia?</span>
+                <div style="display:flex;align-items:center;gap:12px">
+                  <div role="radiogroup" aria-labelledby="{{ m.k }}-rt" onMouseLeave="{{ m.rate.leave }}" onKeyDown="{{ m.rate.key }}" style="display:flex;gap:2px">
+                    <sc-for list="{{ m.rate.stars }}" as="s" hint-placeholder-count="5"><button role="radio" aria-checked="{{ s.aria }}" aria-label="{{ s.label }}" tabIndex="{{ s.tab }}" onClick="{{ s.pick }}" onMouseEnter="{{ s.hover }}" data-fx="" style="display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;cursor:pointer;transition:transform .15s cubic-bezier(.2,.8,.2,1), color .15s ease;color:{{ s.color }};transform:{{ s.scale }}" style-active="transform:scale(0.85)"><span style="display:inline-flex;fill:{{ s.fill }}"><mimi-icon name="star" size="26" stroke="1.6"></mimi-icon></span></button></sc-for>
+                  </div>
+                  <span style="font-size:13.5px;font-weight:600;color:var(--mimi-muted-foreground)">{{ m.rate.text }}</span>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div role="img" aria-label="4.5 de 5 estrellas" style="display:flex;gap:2px">
+                  <sc-for list="{{ halfStars }}" as="s" hint-placeholder-count="5"><span style="position:relative;display:inline-flex;width:18px;height:18px;color:var(--mimi-warning)"><span style="display:inline-flex;color:var(--mimi-track);fill:var(--mimi-track)"><mimi-icon name="star" size="18" stroke="0"></mimi-icon></span><span style="position:absolute;inset:0;overflow:hidden;display:inline-flex;fill:var(--mimi-warning);width:{{ s.w }}"><mimi-icon name="star" size="18" stroke="0"></mimi-icon></span></span></sc-for>
+                </div>
+                <span style="font-size:14px;font-weight:700">4.5</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">· 128 reseñas · solo lectura</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:22px;flex-wrap:wrap">
+                <sc-for list="{{ sizes }}" as="z" hint-placeholder-count="3"><div style="display:flex;flex-direction:column;gap:4px"><div style="display:flex;gap:1px"><sc-for list="{{ z.stars }}" as="s"><span style="display:inline-flex;color:{{ s.c }};fill:{{ s.f }}"><mimi-icon name="star" size="{{ z.size }}" stroke="1.6"></mimi-icon></span></sc-for></div><span style="font-size:11.5px;color:var(--mimi-muted-foreground)">{{ z.label }}</span></div></sc-for>
+                <div aria-disabled="true" style="display:flex;flex-direction:column;gap:4px;opacity:.45"><div style="display:flex;gap:1px"><sc-for list="{{ disabledStars }}" as="s"><span style="display:inline-flex;color:var(--mimi-muted-foreground);fill:{{ s.f }}"><mimi-icon name="star" size="18" stroke="1.6"></mimi-icon></span></sc-for></div><span style="font-size:11.5px;color:var(--mimi-muted-foreground)">Deshabilitado</span></div>
+              </div>
+            </div>
+            <h3 style="margin:12px 0 0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">6 · Hover Card</h3>
+            <div style="position:relative;min-height:230px;padding:18px;border:1px dashed var(--mimi-border);border-radius:var(--mimi-radius-card)">
+              <p style="margin:0;font-size:14px;line-height:1.6">Revisado por <a href="#" onMouseEnter="{{ m.hc.enter }}" onMouseLeave="{{ m.hc.leave }}" onFocus="{{ m.hc.enter }}" onBlur="{{ m.hc.leave }}" aria-describedby="{{ m.k }}-hc" style="font-weight:600;color:var(--mimi-info-soft-foreground);text-decoration:underline;text-underline-offset:3px">@anatorres</a> el 28 de septiembre.</p>
+              <div id="{{ m.k }}-hc" role="tooltip" data-fx="" onMouseEnter="{{ m.hc.enter }}" onMouseLeave="{{ m.hc.leave }}" style="position:absolute;left:18px;top:52px;width:290px;box-sizing:border-box;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--mimi-popover);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);transform-origin:top left;transition:opacity .18s ease, transform .18s cubic-bezier(.2,.8,.2,1);opacity:{{ m.hc.op }};transform:{{ m.hc.tf }};pointer-events:{{ m.hc.pe }}">
+                <div style="display:flex;gap:12px;align-items:flex-start">
+                  <span style="width:44px;height:44px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:15px;font-weight:700">AT</span>
+                  <div style="flex:1;display:flex;flex-direction:column;line-height:1.35"><span style="font-size:14.5px;font-weight:700">Ana Torres</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">Diseño de producto · CDMX</span></div>
+                  <button style="height:30px;padding:0 12px;border:0;border-radius:999px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(0.94)">Seguir</button>
+                </div>
+                <p style="margin:0;font-size:13px;line-height:1.5;color:var(--mimi-muted-foreground)">Cuida los componentes de Mimi y el contraste de cada tema.</p>
+                <div style="display:flex;gap:16px;font-size:12.5px"><span><b>214</b> <span style="color:var(--mimi-muted-foreground)">revisiones</span></span><span><b>38</b> <span style="color:var(--mimi-muted-foreground)">componentes</span></span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">5 · Resizable · arrastra los divisores o usa ← → ↑ ↓</h3>
+          <div data-rz="" onPointerMove="{{ m.rz.move }}" onPointerUp="{{ m.rz.up }}" onPointerCancel="{{ m.rz.up }}" style="display:flex;height:340px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card);user-select:none">
+            <div style="min-width:0;display:flex;flex-direction:column;gap:2px;padding:12px;overflow:hidden;width:{{ m.rz.aW }}">
+              <span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground);padding:0 6px 6px">Archivos</span>
+              <sc-for list="{{ files }}" as="f"><span style="display:flex;align-items:center;gap:8px;height:30px;padding:0 6px;border-radius:var(--mimi-radius-sm);font-size:13px;white-space:nowrap;background:{{ f.bg }}"><mimi-icon name="{{ f.icon }}" size="14"></mimi-icon>{{ f.label }}</span></sc-for>
+            </div>
+            <div role="separator" aria-orientation="vertical" aria-label="Ancho del panel de archivos" aria-valuemin="15" aria-valuemax="60" aria-valuenow="{{ m.rz.a }}" tabIndex="0" onPointerDown="{{ m.rz.downA }}" onKeyDown="{{ m.rz.keyA }}" style="position:relative;flex:0 0 10px;margin:0 -5px;z-index:1;cursor:col-resize;display:flex;justify-content:center;outline:none;touch-action:none" style-focus="background:var(--mimi-ring-soft)">
+              <span style="width:1px;height:100%;transition:background-color .15s ease;background:{{ m.rz.lineA }}"></span>
+              <span style="position:absolute;top:50%;margin-top:-14px;width:6px;height:28px;border-radius:999px;border:1px solid var(--mimi-border);transition:background-color .15s ease;background:{{ m.rz.gripA }}"></span>
+            </div>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+              <div style="min-height:0;padding:14px 16px;overflow:hidden;font-family:var(--mimi-font-mono);font-size:12.5px;line-height:1.75;height:{{ m.rz.bH }}"><span style="color:var(--mimi-muted-foreground)">1</span>  &lt;button mimiBtn tone="success"&gt;<br><span style="color:var(--mimi-muted-foreground)">2</span>    Aprobar<br><span style="color:var(--mimi-muted-foreground)">3</span>  &lt;/button&gt;</div>
+              <div role="separator" aria-orientation="horizontal" aria-label="Alto del editor" aria-valuemin="25" aria-valuemax="85" aria-valuenow="{{ m.rz.b }}" tabIndex="0" onPointerDown="{{ m.rz.downB }}" onKeyDown="{{ m.rz.keyB }}" style="position:relative;flex:0 0 10px;margin:-5px 0;z-index:1;cursor:row-resize;display:flex;align-items:center;outline:none;touch-action:none" style-focus="background:var(--mimi-ring-soft)">
+                <span style="height:1px;width:100%;transition:background-color .15s ease;background:{{ m.rz.lineB }}"></span>
+                <span style="position:absolute;left:50%;margin-left:-14px;width:28px;height:6px;border-radius:999px;border:1px solid var(--mimi-border);transition:background-color .15s ease;background:{{ m.rz.gripB }}"></span>
+              </div>
+              <div style="flex:1;min-height:0;padding:12px 16px;overflow:hidden;background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:12px;line-height:1.7;color:var(--mimi-muted-foreground)"><span style="color:var(--mimi-success-soft-foreground)">✔</span> Compilado en 1.2 s<br>Panel izquierdo: {{ m.rz.a }}% · editor: {{ m.rz.b }}%</div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const NAV = [['General', [['home', 'Inicio', 'layout-dashboard'], ['clients', 'Clientes', 'users', '36'], ['billing', 'Facturación', 'receipt', '4', 'warning'], ['reports', 'Reportes', 'chart-line']]], ['Equipo', [['members', 'Miembros', 'user-round'], ['settings', 'Ajustes', 'settings']]]];
+const SLIDES = [['Abrigos de lana', 'Colección otoño · 24 piezas'], ['Botas de piel', 'Hechas en León, Guanajuato'], ['Bufandas tejidas', 'Edición limitada'], ['Accesorios', 'Nuevos esta semana']];
+const PHOTOS = ['portada.jpg', 'detalle-01.jpg', 'detalle-02.jpg', 'equipo.jpg'];
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const initMode = () => ({ sbOpen: true, nav: 'clients', slide: 0, img: 1, zoom: 1.5, rot: 0, rating: 4, hoverStar: 0, hc: true, a: 28, b: 58, drag: null });
+class Component extends DCLogic {
+  state = { l: initMode(), d: initMode() };
+  timers = {};
+  set(k, patch) { this.setState(s => ({ [k]: { ...s[k], ...(typeof patch === 'function' ? patch(s[k]) : patch) } })); }
+  renderVals() {
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+      const st = this.state[k];
+      const sidebar = (expanded, caption, canToggle) => ({
+        caption, expanded, collapsed: !expanded, canToggle, flex: expanded ? '1.45' : '1', w: expanded ? '232px' : '60px',
+        toggleIcon: 'panel-left-close', toggleLabel: 'Colapsar barra lateral', ariaExp: String(expanded),
+        toggle: () => this.set(k, s => ({ sbOpen: !s.sbOpen })),
+        groups: NAV.map(([g, items]) => ({ label: g, items: items.map(([id, l, ic, count, tone]) => { const on = st.nav === id; return {
+          label: l, icon: ic, current: on ? 'page' : undefined, count: count || '', showCount: expanded && !!count, dot: !expanded && !!tone, tip: !expanded && id === 'clients', hasTipCount: !!count,
+          cBg: tone ? 'var(--mimi-warning-soft)' : on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-muted)', cFg: tone ? 'var(--mimi-warning-soft-foreground)' : on ? 'var(--mimi-primary)' : 'var(--mimi-muted-foreground)',
+          bg: on ? 'var(--mimi-primary)' : 'transparent', fg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-muted-foreground)', fw: on ? '600' : '500', hbg: on ? 'var(--mimi-primary)' : 'var(--mimi-accent)', hfg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)',
+          pick: () => this.set(k, { nav: id })
+        }; }) }))
+      });
+      const n = SLIDES.length, go = i => this.set(k, { slide: (i + n) % n });
+      const shown = st.hoverStar || st.rating;
+      const lbGo = i => this.set(k, { img: (i + 4) % 4, zoom: 1, rot: 0 });
+      const z = st.zoom;
+      const rzMove = (e, axis) => { const box = e.currentTarget.closest('[data-rz]'); const R = box.getBoundingClientRect(); if (axis === 'a') this.set(k, { a: Math.round(clamp((e.clientX - R.left) / R.width * 100, 15, 60)) }); else { const right = box.lastElementChild.getBoundingClientRect(); this.set(k, { b: Math.round(clamp((e.clientY - right.top) / right.height * 100, 25, 85)) }); } };
+      return {
+        k, cls, label, icon,
+        sidebars: [sidebar(st.sbOpen, st.sbOpen ? 'Expandida · el botón la colapsa' : 'Colapsada · el botón la expande', true), sidebar(false, 'Colapsada · tooltip al pasar el mouse', false)].map((s, i) => i === 0 && !st.sbOpen ? { ...s, toggleIcon: 'panel-left-open', toggleLabel: 'Expandir barra lateral' } : s),
+        car: {
+          tf: 'translateX(-' + st.slide * 100 + '%)', prev: () => go(st.slide - 1), next: () => go(st.slide + 1),
+          key: e => { if (e.key === 'ArrowLeft') go(st.slide - 1); if (e.key === 'ArrowRight') go(st.slide + 1); },
+          slides: SLIDES.map(([t, s], i) => ({ title: t, sub: s, slot: 'car-' + k + '-' + i, ph: 'Foto · ' + t, aria: (i + 1) + ' de ' + n, hidden: String(i !== st.slide) })),
+          dots: SLIDES.map((_, i) => ({ aria: 'Ir a la diapositiva ' + (i + 1), current: i === st.slide ? 'true' : undefined, w: i === st.slide ? '22px' : '8px', bg: i === st.slide ? 'var(--mimi-foreground)' : 'color-mix(in oklab, var(--mimi-foreground) 30%, transparent)', pick: () => go(i) }))
+        },
+        lb: {
+          counter: (st.img + 1) + ' / 4', name: PHOTOS[st.img], bigSlot: 'lb-' + k + '-' + st.img,
+          tf: 'scale(' + z + ') rotate(' + st.rot + 'deg)', cursor: z > 1 ? 'zoom-out' : 'zoom-in',
+          prev: () => lbGo(st.img - 1), next: () => lbGo(st.img + 1),
+          wheel: e => this.set(k, s => ({ zoom: clamp(Math.round((s.zoom - Math.sign(e.deltaY) * 0.25) * 4) / 4, 0.5, 3) })),
+          thumbs: PHOTOS.map((p, i) => ({ slot: 'th-' + k + '-' + i, ph: p, aria: 'Abrir ' + p, ring: i === st.img ? '0 0 0 2px var(--mimi-background), 0 0 0 4px var(--mimi-foreground)' : 'var(--mimi-shadow-neutral)', open: () => lbGo(i) })),
+          tools: [
+            { isBtn: true, icon: 'zoom-out', aria: 'Alejar', dis: z <= 0.5, op: z <= 0.5 ? '.4' : '1', run: () => this.set(k, s => ({ zoom: clamp(s.zoom - 0.25, 0.5, 3) })) },
+            { isLabel: true, text: Math.round(z * 100) + '%' },
+            { isBtn: true, icon: 'zoom-in', aria: 'Acercar', dis: z >= 3, op: z >= 3 ? '.4' : '1', run: () => this.set(k, s => ({ zoom: clamp(s.zoom + 0.25, 0.5, 3) })) },
+            { isBtn: true, icon: 'rotate-cw', aria: 'Girar 90°', dis: false, op: '1', run: () => this.set(k, s => ({ rot: s.rot + 90 })) },
+            { isBtn: true, icon: 'scan', aria: 'Restablecer', dis: false, op: '1', run: () => this.set(k, { zoom: 1, rot: 0 }) }
+          ]
+        },
+        rate: {
+          text: ['Sin calificar', 'Mala', 'Regular', 'Buena', 'Muy buena', 'Excelente'][shown],
+          leave: () => this.set(k, { hoverStar: 0 }),
+          key: e => { const d = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 }[e.key]; if (d) { e.preventDefault(); this.set(k, s => ({ rating: clamp(s.rating + d, 1, 5) })); } },
+          stars: [1, 2, 3, 4, 5].map(i => ({ label: i + (i === 1 ? ' estrella' : ' estrellas'), aria: String(st.rating === i), tab: st.rating === i ? '0' : '-1',
+            color: i <= shown ? 'var(--mimi-warning)' : 'var(--mimi-muted-foreground)', fill: i <= shown ? 'var(--mimi-warning)' : 'transparent', scale: st.hoverStar === i ? 'scale(1.15)' : 'scale(1)',
+            pick: () => this.set(k, { rating: i }), hover: () => this.set(k, { hoverStar: i }) }))
+        },
+        hc: {
+          op: st.hc ? '1' : '0', tf: st.hc ? 'scale(1) translateY(0)' : 'scale(.96) translateY(-4px)', pe: st.hc ? 'auto' : 'none',
+          enter: () => { clearTimeout(this.timers[k]); this.timers[k] = setTimeout(() => this.set(k, { hc: true }), 250); },
+          leave: () => { clearTimeout(this.timers[k]); this.timers[k] = setTimeout(() => this.set(k, { hc: false }), 200); }
+        },
+        rz: {
+          a: String(st.a), b: String(st.b), aW: st.a + '%', bH: st.b + '%',
+          lineA: st.drag === 'a' ? 'var(--mimi-ring)' : 'var(--mimi-border)', gripA: st.drag === 'a' ? 'var(--mimi-ring)' : 'var(--mimi-card)',
+          lineB: st.drag === 'b' ? 'var(--mimi-ring)' : 'var(--mimi-border)', gripB: st.drag === 'b' ? 'var(--mimi-ring)' : 'var(--mimi-card)',
+          downA: e => { e.currentTarget.closest('[data-rz]').setPointerCapture(e.pointerId); this.set(k, { drag: 'a' }); },
+          downB: e => { e.currentTarget.closest('[data-rz]').setPointerCapture(e.pointerId); this.set(k, { drag: 'b' }); },
+          move: e => { if (st.drag) rzMove(e, st.drag); }, up: () => st.drag && this.set(k, { drag: null }),
+          keyA: e => { const d = { ArrowLeft: -2, ArrowRight: 2 }[e.key]; if (d) { e.preventDefault(); this.set(k, s => ({ a: clamp(s.a + d, 15, 60) })); } },
+          keyB: e => { const d = { ArrowUp: -2, ArrowDown: 2 }[e.key]; if (d) { e.preventDefault(); this.set(k, s => ({ b: clamp(s.b + d, 25, 85) })); } }
+        }
+      };
+    });
+    const tl = (who, what, when, icon, tone, extra = {}) => ({ who, what, when, icon, bg: tone ? 'var(--mimi-' + (tone === 'destructive' ? 'destructive-soft-bg' : tone + '-soft') + ')' : 'var(--mimi-muted)', fg: tone ? 'var(--mimi-' + tone + '-soft-foreground)' : 'var(--mimi-muted-foreground)', hasNote: !!extra.note, note: extra.note || '', hasBadge: !!extra.badge, badge: extra.badge || '', bBg: extra.bt ? 'var(--mimi-' + extra.bt + '-soft)' : '', bFg: extra.bt ? 'var(--mimi-' + extra.bt + '-soft-foreground)' : '' });
+    const timeline = [
+      tl('Pago recibido', '$4,560 · Visa •••• 4242', 'hace 2 h', 'circle-check', 'success'),
+      tl('Lucía Vera', 'comentó', 'ayer', 'message-square', 'info', { note: '¿Podemos pasar a facturación anual a partir de noviembre?' }),
+      tl('Plan', 'cambió de Inicial a Equipo', '24 sep', 'arrow-up-circle', null, { badge: 'Equipo · 25 asientos', bt: 'info' }),
+      tl('Pago fallido', 'tarjeta rechazada', '1 sep', 'circle-x', 'destructive'),
+      tl('Cuenta creada', 'por Ana Torres', '12 mar', 'sparkles', 'warning')
+    ].map((t, i, a) => ({ ...t, line: i < a.length - 1 ? 'block' : 'none' }));
+    return {
+      modes, timeline,
+      halfStars: [1, 2, 3, 4, 5].map(i => ({ w: i <= 4 ? '100%' : '50%' })),
+      sizes: [['14', 'Pequeño'], ['18', 'Mediano'], ['24', 'Grande']].map(([size, label]) => ({ size, label, stars: [1, 2, 3, 4, 5].map(i => ({ c: i <= 3 ? 'var(--mimi-warning)' : 'var(--mimi-muted-foreground)', f: i <= 3 ? 'var(--mimi-warning)' : 'transparent' })) })),
+      disabledStars: [1, 2, 3, 4, 5].map(i => ({ f: i <= 2 ? 'var(--mimi-muted-foreground)' : 'transparent' })),
+      files: [['app.config.ts', 'file-code'], ['button.ts', 'file-code', true], ['styles.css', 'file-type'], ['mimi.preset.ts', 'file-code'], ['package.json', 'file-json']].map(([l, ic, on]) => ({ label: l, icon: ic, bg: on ? 'var(--mimi-accent)' : 'transparent' }))
+    };
+  }
+}
+</script>
+</body>
+</html>

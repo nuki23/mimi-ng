@@ -1,0 +1,106 @@
+/* Mimi · Fase 2 — tokens nuevos.
+   Solo agrega: pégalo al final de mimi-variables.css (o cárgalo después de él).
+   Contraste AA verificado: sólido/foreground ≥ 4.5:1 y suave/soft-foreground ≥ 5.6:1 en claro y oscuro. */
+
+/* ── Tonos · claro ─────────────────────────────── */
+[data-mimi-style] {
+  --mimi-success: oklch(0.527 0.137 150);
+  --mimi-success-foreground: oklch(0.985 0 0);
+  --mimi-success-soft-foreground: oklch(0.42 0.115 150);
+  --mimi-warning: oklch(0.795 0.162 75);
+  --mimi-warning-foreground: oklch(0.28 0.07 55);
+  --mimi-warning-soft-foreground: oklch(0.45 0.11 60);
+  --mimi-info: oklch(0.546 0.19 255);
+  --mimi-info-foreground: oklch(0.985 0 0);
+  --mimi-info-soft-foreground: oklch(0.45 0.17 255);
+  --mimi-destructive-soft-foreground: oklch(0.5 0.2 27);
+
+  --mimi-popover: oklch(1 0 0);
+  --mimi-popover-foreground: oklch(0.145 0 0);
+  --mimi-tooltip: oklch(0.205 0 0);
+  --mimi-tooltip-foreground: oklch(0.985 0 0);
+  --mimi-overlay: oklch(0.145 0 0 / 0.38);
+  --mimi-overlay-blur: 6px;
+  --mimi-glass: oklch(1 0 0 / 0.72);
+  --mimi-glass-border: oklch(0 0 0 / 0.08);
+  --mimi-glass-blur: 16px;
+  --mimi-soft-mix: 12%;
+}
+
+/* ── Tonos · oscuro ────────────────────────────── */
+[data-mimi-style].dark {
+  --mimi-success: oklch(0.72 0.15 150);
+  --mimi-success-foreground: oklch(0.2 0.05 150);
+  --mimi-success-soft-foreground: oklch(0.84 0.12 150);
+  --mimi-warning: oklch(0.81 0.15 78);
+  --mimi-warning-foreground: oklch(0.22 0.05 60);
+  --mimi-warning-soft-foreground: oklch(0.87 0.12 80);
+  --mimi-info: oklch(0.72 0.14 250);
+  --mimi-info-foreground: oklch(0.2 0.05 250);
+  --mimi-info-soft-foreground: oklch(0.84 0.1 250);
+  --mimi-destructive-soft-foreground: oklch(0.82 0.12 22);
+
+  --mimi-popover: oklch(0.205 0 0);
+  --mimi-popover-foreground: oklch(0.985 0 0);
+  --mimi-tooltip: oklch(0.922 0 0);
+  --mimi-tooltip-foreground: oklch(0.205 0 0);
+  --mimi-overlay: oklch(0 0 0 / 0.6);
+  --mimi-glass: oklch(0.205 0 0 / 0.7);
+  --mimi-glass-border: oklch(1 0 0 / 0.09);
+  --mimi-soft-mix: 18%;
+}
+
+/* ── Derivados: fondos suaves, hover y anillos ─── */
+[data-mimi-style] {
+  --mimi-success-soft: color-mix(in oklab, var(--mimi-success) var(--mimi-soft-mix), var(--mimi-background));
+  --mimi-warning-soft: color-mix(in oklab, var(--mimi-warning) var(--mimi-soft-mix), var(--mimi-background));
+  --mimi-info-soft: color-mix(in oklab, var(--mimi-info) var(--mimi-soft-mix), var(--mimi-background));
+  --mimi-destructive-soft-bg: color-mix(in oklab, var(--mimi-destructive) var(--mimi-soft-mix), var(--mimi-background));
+  --mimi-success-hover: color-mix(in oklab, var(--mimi-success) 88%, var(--mimi-background));
+  --mimi-warning-hover: color-mix(in oklab, var(--mimi-warning) 88%, var(--mimi-background));
+  --mimi-info-hover: color-mix(in oklab, var(--mimi-info) 88%, var(--mimi-background));
+  --mimi-success-ring: color-mix(in oklch, var(--mimi-success) 30%, transparent);
+  --mimi-warning-ring: color-mix(in oklch, var(--mimi-warning) 34%, transparent);
+  --mimi-info-ring: color-mix(in oklch, var(--mimi-info) 30%, transparent);
+}
+
+/* ── Sombras de color · claro ──────────────────── */
+[data-mimi-style] {
+  --mimi-shadow-success: 0 1px 2px color-mix(in oklch, var(--mimi-success) 25%, transparent), 0 4px 12px -4px color-mix(in oklch, var(--mimi-success) 35%, transparent);
+  --mimi-shadow-success-hover: 0 1px 2px color-mix(in oklch, var(--mimi-success) 30%, transparent), 0 8px 18px -6px color-mix(in oklch, var(--mimi-success) 42%, transparent);
+  --mimi-shadow-warning: 0 1px 2px color-mix(in oklch, var(--mimi-warning) 30%, transparent), 0 4px 12px -4px color-mix(in oklch, var(--mimi-warning) 45%, transparent);
+  --mimi-shadow-warning-hover: 0 1px 2px color-mix(in oklch, var(--mimi-warning) 35%, transparent), 0 8px 18px -6px color-mix(in oklch, var(--mimi-warning) 52%, transparent);
+  --mimi-shadow-info: 0 1px 2px color-mix(in oklch, var(--mimi-info) 25%, transparent), 0 4px 12px -4px color-mix(in oklch, var(--mimi-info) 35%, transparent);
+  --mimi-shadow-info-hover: 0 1px 2px color-mix(in oklch, var(--mimi-info) 30%, transparent), 0 8px 18px -6px color-mix(in oklch, var(--mimi-info) 42%, transparent);
+  --mimi-shadow-popover: 0 0 0 1px oklch(0 0 0 / 0.04), 0 4px 8px -2px oklch(0 0 0 / 0.06), 0 16px 32px -8px oklch(0 0 0 / 0.16);
+
+  /* Glow: brillo de color alrededor del componente (opción "glow") */
+  --mimi-glow-primary: 0 0 0 1px color-mix(in oklch, var(--mimi-primary) 22%, transparent), 0 0 14px 0 color-mix(in oklch, var(--mimi-primary) 30%, transparent), 0 0 32px 4px color-mix(in oklch, var(--mimi-primary) 16%, transparent);
+  --mimi-glow-success: 0 0 0 1px color-mix(in oklch, var(--mimi-success) 30%, transparent), 0 0 14px 0 color-mix(in oklch, var(--mimi-success) 45%, transparent), 0 0 32px 4px color-mix(in oklch, var(--mimi-success) 25%, transparent);
+  --mimi-glow-warning: 0 0 0 1px color-mix(in oklch, var(--mimi-warning) 35%, transparent), 0 0 14px 0 color-mix(in oklch, var(--mimi-warning) 55%, transparent), 0 0 32px 4px color-mix(in oklch, var(--mimi-warning) 30%, transparent);
+  --mimi-glow-info: 0 0 0 1px color-mix(in oklch, var(--mimi-info) 30%, transparent), 0 0 14px 0 color-mix(in oklch, var(--mimi-info) 45%, transparent), 0 0 32px 4px color-mix(in oklch, var(--mimi-info) 25%, transparent);
+  --mimi-glow-destructive: 0 0 0 1px color-mix(in oklch, var(--mimi-destructive) 30%, transparent), 0 0 14px 0 color-mix(in oklch, var(--mimi-destructive) 45%, transparent), 0 0 32px 4px color-mix(in oklch, var(--mimi-destructive) 25%, transparent);
+  --mimi-glow: var(--mimi-glow-primary);
+}
+
+/* ── Sombras de color · oscuro ─────────────────── */
+[data-mimi-style].dark {
+  --mimi-shadow-success: 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 12px -4px color-mix(in oklch, var(--mimi-success) 30%, transparent);
+  --mimi-shadow-success-hover: 0 1px 2px oklch(0 0 0 / 0.5), 0 8px 18px -6px color-mix(in oklch, var(--mimi-success) 40%, transparent);
+  --mimi-shadow-warning: 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 12px -4px color-mix(in oklch, var(--mimi-warning) 30%, transparent);
+  --mimi-shadow-warning-hover: 0 1px 2px oklch(0 0 0 / 0.5), 0 8px 18px -6px color-mix(in oklch, var(--mimi-warning) 40%, transparent);
+  --mimi-shadow-info: 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 12px -4px color-mix(in oklch, var(--mimi-info) 30%, transparent);
+  --mimi-shadow-info-hover: 0 1px 2px oklch(0 0 0 / 0.5), 0 8px 18px -6px color-mix(in oklch, var(--mimi-info) 40%, transparent);
+  --mimi-shadow-popover: inset 0 1px 0 oklch(1 0 0 / 0.05), 0 0 0 1px oklch(0 0 0 / 0.6), 0 16px 40px -8px oklch(0 0 0 / 0.8);
+
+  --mimi-glow-primary: 0 0 0 1px color-mix(in oklch, var(--mimi-primary) 30%, transparent), 0 0 16px 0 color-mix(in oklch, var(--mimi-primary) 32%, transparent), 0 0 40px 6px color-mix(in oklch, var(--mimi-primary) 16%, transparent);
+  --mimi-glow-success: 0 0 0 1px color-mix(in oklch, var(--mimi-success) 40%, transparent), 0 0 16px 0 color-mix(in oklch, var(--mimi-success) 50%, transparent), 0 0 40px 6px color-mix(in oklch, var(--mimi-success) 26%, transparent);
+  --mimi-glow-warning: 0 0 0 1px color-mix(in oklch, var(--mimi-warning) 40%, transparent), 0 0 16px 0 color-mix(in oklch, var(--mimi-warning) 50%, transparent), 0 0 40px 6px color-mix(in oklch, var(--mimi-warning) 26%, transparent);
+  --mimi-glow-info: 0 0 0 1px color-mix(in oklch, var(--mimi-info) 40%, transparent), 0 0 16px 0 color-mix(in oklch, var(--mimi-info) 50%, transparent), 0 0 40px 6px color-mix(in oklch, var(--mimi-info) 26%, transparent);
+  --mimi-glow-destructive: 0 0 0 1px color-mix(in oklch, var(--mimi-destructive) 40%, transparent), 0 0 16px 0 color-mix(in oklch, var(--mimi-destructive) 50%, transparent), 0 0 40px 6px color-mix(in oklch, var(--mimi-destructive) 26%, transparent);
+  --mimi-glow: var(--mimi-glow-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-mimi-style] { --mimi-transition: none; --mimi-press-scale: 1; }
+}

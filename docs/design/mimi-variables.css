@@ -1,6 +1,6 @@
 /* Mimi — variables de tema.
-   Paleta neutra (al estilo spartan.ng) + estilo Vivid: radio 12px, sombras en capas, micro-animaciones.
-   Uso: <html data-mimi-style="vivid" class="dark?"> */
+   Paleta neutra (al estilo spartan.ng) + tema Mimi: radio 12px, sombras en capas, micro-animaciones.
+   Uso: <html data-mimi-style="mimi" class="dark?"> */
 
 /* ── PALETA · claro ────────────────────────────── */
 [data-mimi-style] {
@@ -48,8 +48,8 @@
   --mimi-ring: oklch(0.556 0 0);
 }
 
-/* ── VIVID · efectos (mismos colores, más forma y movimiento) ── */
-[data-mimi-style="vivid"] {
+/* ── Efectos: forma y movimiento ── */
+[data-mimi-style] {
   --mimi-radius: 12px;
   --mimi-badge-radius: 999px;
   --mimi-font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
@@ -64,7 +64,7 @@
   --mimi-shadow-neutral: 0 1px 2px oklch(0 0 0 / 0.06), 0 4px 10px -4px oklch(0 0 0 / 0.08);
   --mimi-shadow-neutral-hover: 0 2px 4px oklch(0 0 0 / 0.06), 0 10px 20px -8px oklch(0 0 0 / 0.14);
 }
-[data-mimi-style="vivid"].dark {
+[data-mimi-style].dark {
   --mimi-shadow-card: inset 0 1px 0 oklch(1 0 0 / 0.04), 0 1px 2px oklch(0 0 0 / 0.5), 0 20px 40px -16px oklch(0 0 0 / 0.7);
   --mimi-shadow-primary: 0 1px 2px oklch(0 0 0 / 0.5), 0 4px 12px -4px oklch(0 0 0 / 0.6);
   --mimi-shadow-primary-hover: 0 1px 2px oklch(0 0 0 / 0.5), 0 8px 18px -6px oklch(0 0 0 / 0.7);

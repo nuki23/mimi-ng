@@ -10,7 +10,7 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 2. **Un solo modelo mental.** Sin capas Brain/Helm: un prefijo y todo el código en tu proyecto.
 3. **Familiar para quien viene de PrimeNG o NG-ZORRO.** APIs como `showSearch` y `allowClear`, modales por servicio y presets tipados. Página de migración con equivalencias.
 4. **Formularios listos.** Errores en rojo y mensajes automáticos.
-5. **Estilo Vivid:** paleta neutra con radio amplio, sombras en capas y micro-animaciones (inspirado en Vuesax).
+5. **Un solo tema base, Mimi:** paleta neutra con radio amplio, sombras en capas y micro-animaciones (inspirado en Vuesax), que cada persona adapta (sección 11).
 6. **Documentación en español e inglés.**
 
 **Lema (fijo):** _"Los componentes son tuyos. Las actualizaciones también."_ Es el titular de la landing y no se cambia en rediseños.
@@ -154,6 +154,15 @@ Mimi solo agrega componentes **funcionales y difíciles de hacer bien a mano**: 
 
 **No serán componentes de la CLI:** el editor de texto enriquecido, los gráficos y el calendario de eventos. Dependerían de librerías externas grandes; si se hacen, serán recetas en la documentación.
 
+### Variante y tono
+
+Dos ejes separados en todos los componentes con color:
+
+- **Variante** (`variant`): cómo se ve. `solid`, `soft`, `outline`, `ghost`, `link`… (cada componente usa las que tengan sentido).
+- **Tono** (`tone`): de qué color. `primary`, `secondary`, `success`, `warning`, `info` y `danger`. El tono `danger` usa los tokens `destructive` (sección 13).
+
+`destructive` deja de ser una variante. Para no romper la 0.1.0, `variant="destructive"` se mantiene en Button y Badge como atajo de `variant="solid" tone="danger"` (tarea V.1). Regla para los componentes nuevos: variante y tono desde el principio, sin variantes de color. Los colores de cada combinación salen de los tokens del tono (`--mimi-<tono>`, `-foreground`, `-soft`, `-soft-foreground`, `-hover`, `-ring`, `--mimi-shadow-<tono>` y `--mimi-glow-<tono>`).
+
 ### Hoja de ruta
 
 Cada grupo es una versión menor y va precedido por su tarea de diseño en Claude Design (`docs/plan.md`, D1–D5). Antes del Grupo 1: la tarea 4.3 (`@angular/aria` frente a `@angular/cdk`, que decide la base de overlays, listbox, menús, tabs y toolbar) y los tokens nuevos (T.1: `success`, `warning`, `info` con sus `-foreground` y sombras de color, y `--mimi-glow` con `color-mix`; valores de D1). El orden de cada tabla es el orden en que conviene hacerlos. Cada componente registra sus tokens (sección 13).
@@ -187,7 +196,7 @@ Cada grupo es una versión menor y va precedido por su tarea de diseño en Claud
 - **Toast:** estilo Sonner + Vuesax; usa los tokens semánticos y `--mimi-glow` (T.1). El detalle sale de D1.
 - **Tabs:** indicador animado que se desliza a la pestaña activa, estilo HeroUI.
 - **mimi-toolbar:** horizontal o vertical. Píldora translúcida, ítem activo sobre un disco, anillo animado en hover y selección, tooltips, flechas, separadores, contadores, estado presionado y herramientas propias del usuario. Patrón toolbar de WAI-ARIA (una sola parada de Tab, flechas entre ítems).
-- **Pagination:** componente independiente en forma de píldora como mimi-toolbar: `[←] [input de página] / total [→] | select de registros por página`. Variantes flotante y en línea. La usa Data Table.
+- **Pagination:** componente independiente, en píldora flotante compacta como mimi-toolbar: `[←] [input de página] / total [→] | registros por página`. Tamaño SM por defecto (hereda la altura global de control SM) y MD opcional. Variantes flotante y en línea. En móvil, sin el selector de registros. La usa Data Table.
 
 **Grupo 2 → v0.3.0: entradas avanzadas**
 
@@ -240,17 +249,35 @@ Cada grupo es una versión menor y va precedido por su tarea de diseño en Claud
 
 ### Theme Studio
 
-Reemplaza a la página «Temas» (tarea 5.2). Va después del Grupo 2 y está construido con componentes de Mimi (mimi-toolbar, Toggle Group, Select, Color Picker, Switch, Input).
+Reemplaza a la página «Temas» (tarea 5.2). Va después del Grupo 2 y se construye **solo con componentes de Mimi** (mimi-toolbar, Toggle Group, Select, Color Picker, Switch, Input…); si necesita uno que no está en el plan, se agrega al plan. Diseño: `docs/design/Mimi Theme Studio.dc.html` (con las correcciones de la sección 13).
 
-- **Estructura:** sidebar con la lista de componentes y su número de variantes; lienzo con un solo componente; tira de variantes debajo; panel de propiedades a la derecha (variante, tamaño, tono, radio, texto, block, deshabilitado, cargando, solo ícono, glow…) con «Propiedades actuales» en JSON.
-- **Salida:** botón «Código» (el HTML generado, para copiar) y botón «Copiar prompt».
-- **Modo «Tema global»:** los tokens de todo Mimi (colores, radios, alturas, sombras, movimiento), con exportación de `mimi.preset.ts`.
-- **Controles:** opciones prediseñadas más «Personalizado» con un campo libre validado (por ejemplo, un radio de 14px). Presets propios con nombre, importar y exportar.
-- **Radio «Squircle»:** verificar el soporte actual de `corner-shape` y proponerlo como mejora progresiva, con respaldo a `border-radius`.
+**Para qué sirve:** solo para **editar los componentes de Mimi tal como existen**. No hay presets guardados, ni «Mis variantes», ni tonos propios: Mimi tiene un solo tema base, «Mimi» de fábrica, que pasa a ser «Mi tema» cuando el usuario cambia algo (sección 11). Lo que el usuario cambia se exporta como `mimi.preset.ts` para `provideMimiTheme()`. Todo valor cambiado por el usuario se etiqueta **«Mío»**.
+
+**El color y los tamaños son globales:** el color y los tamaños SM, MD y LG se editan solo en el modo Tema global. Los tamaños los comparten todos los controles (Button, Input, Select…).
+
+**Modo Componente** (estructura de Vuesax):
+
+- A la izquierda, la lista de componentes.
+- Arriba, una barra flotante (mimi-toolbar) con: Volver, Móvil / Tablet / Escritorio, Claro / Oscuro, fondo del lienzo, «Uno | Ver todos», «Código» y «Copiar prompt».
+- En el lienzo, un solo componente; «Ver todos» muestra la matriz tonos × variantes.
+- Abajo, la tira de variantes del componente.
+- A la derecha, el panel:
+  - **Vista previa** (no se guarda): tono, estado, tamaño y texto.
+  - **Estilo del componente** (se guarda): radio (Rounded, Squircle, Pill o un valor propio), borde y efectos (sombra, glow y escala al presionar).
+  - Cada propiedad muestra su origen: heredado de qué token, o «Mío».
+  - Pestaña **«Variables»**: todas las variables del componente con su cadena de herencia (sección 13).
+
+**Modo Tema global:**
+
+- **Simple:** color principal, radio, densidad y fuente.
+- **Avanzado:** Marca, Estados, Superficies, Texto, Bordes, Forma, Profundidad, Movimiento y Tipografía.
+- Los colores van en parejas con su texto (`-foreground`), con indicador de contraste AA, y la vista previa se actualiza en vivo.
+
+**Radio «Squircle»:** verificar el soporte actual de `corner-shape` (token `--mimi-corner-shape`) y usarlo como mejora progresiva, con respaldo a `border-radius`.
 
 ### Blocks
 
-Pantallas completas que la CLI copia como cualquier componente (`ng g mimi login-01`), con los componentes que usan: login, registro, configuración, dashboard, tabla con filtros y precios. Después del Grupo 2; la tabla con filtros espera a Data Table.
+Pantallas completas que la CLI copia como cualquier componente (`ng g mimi login-01`), con los componentes que usan. Diseñados (`docs/design/Block <nombre>.dc.html` y el índice `Mimi F6 Blocks.dc.html`): `login-01`, `login-02`, `signup-01`, `otp-01`, `settings-01`, `dashboard-01`, `table-01` y `pricing-01`. Después del Grupo 2; los que usan Data Table (`dashboard-01` y `table-01`) esperan al Grupo 3.
 
 ### Mimi Effects
 
@@ -280,6 +307,8 @@ pnpm mimi theme                     # crea mimi.preset.ts (5.1 y 5.3)
 pnpm mimi update button             # combina tus cambios con la versión nueva (5.4)
 ng g @mimi-ng/cli:theme --palette=violet --radius=lg   # (5.1)
 ```
+
+**Textos del sitio y de los diseños:** los ejemplos de comandos usan solo `ng add @mimi-ng/cli` y `ng g mimi <nombre>` (con la forma larga `ng g @mimi-ng/cli:ui <nombre>` donde se explique), siempre con componentes que ya existan en el registro, y las rutas reales: `src/app/components/ui/<nombre>/<nombre>.ts`, importado como `@/components/ui/<nombre>`. Vale también para los diseños de `docs/design/` cuando sus textos pasan al código.
 
 El sitio solo muestra comandos que funcionan hoy, salvo los marcados como versión futura: una prueba del showcase (`apps/docs/src/app/commands.spec.ts`) falla si aparece `mimi add`, `mimi list` o `mimi theme`, o `mimi update` sin marcarlo como futuro. La misma prueba falla si aparece `ng g ui` (sin el paquete): funciona, pero no se muestra; la forma larga `ng g @mimi-ng/cli:ui` sí. `InstallCommand` muestra `ng g mimi <nombre>` y la forma larga; la pestaña de pnpm vuelve con la tarea 5.3.
 
@@ -363,6 +392,8 @@ Idempotente: `ng g mimi button` dos veces no cambia nada ni vuelve a instalar.
 }
 ```
 
+`"style": "vivid"` es el valor que escribe la 0.1.0 (nombre anterior del tema); ver la sección 11.
+
 ### `registry.json` (dentro de la CLI)
 
 `packages/cli/src/registry.json`. Un ítem por componente, por util y para el tema. Los utils van por separado (`utils/cn`, `utils/control-styles`, `utils/field-state`): así Button no arrastra `@angular/forms`. El índice `utils/index.ts` no se entrega (el build lo excluye): arrastraría `@angular/forms` a quien use solo Button.
@@ -427,7 +458,7 @@ import { MimiFormFieldImports } from '@/components/ui/form-field';
 
 ### 6.1 Variables base (Tailwind 4)
 
-El tema vive en `packages/ui-core/src/lib/theme/theme-base.css` (valores de `docs/design/tokens-vivid.css`). Contiene, en este orden: `@custom-variant dark`, `:root` (claro), `.dark` (oscuro), el bloque `prefers-reduced-motion` (6.6), `@theme inline`, `@utility mimi-transition`, `@layer base` y los `@keyframes` `mimi-spin` y `mimi-pulse`. No importa Tailwind ni carga fuentes.
+El tema vive en `packages/ui-core/src/lib/theme/theme-base.css` (valores de `docs/design/tokens-mimi.css`). Contiene, en este orden: `@custom-variant dark`, `:root` (claro), `.dark` (oscuro), el bloque `prefers-reduced-motion` (6.6), `@theme inline`, `@utility mimi-transition`, `@layer base` y los `@keyframes` `mimi-spin` y `mimi-pulse`. No importa Tailwind ni carga fuentes.
 
 `ui-core` lo publica en `exports` como `./theme.css`. El showcase depende de `@mimi-ng/ui-core` (`workspace:*`) y su `styles.css` queda así:
 
@@ -720,7 +751,7 @@ export const controlPressStyles = 'mimi-transition active:scale-(--mimi-press-sc
 
 ### 6.6 Movimiento
 
-Tres variables controlan las micro-animaciones del estilo Vivid:
+Tres variables controlan las micro-animaciones del tema Mimi:
 
 | Variable                | Valor                                                                                                                                                                  | Uso                                                                                              |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
@@ -1001,12 +1032,12 @@ El showcase se publica en **https://ng.mimiworks.dev** con **Cloudflare Workers*
 - **Título y descripción:** la ruta tiene `title` y `index.html` trae el mismo `<title>` y un `<meta name="description">`: sin SSR, es lo que leen los buscadores y las vistas previas.
 - **Tamaños que el diseño no define:** el titular baja de 60px a 40px bajo `md`, el padding del hero de 96/72 a 64/48px, y la vitrina se apila bajo `lg`.
 
-## 11. Estilos visuales
+## 11. Tema
 
-- Mimi tiene un solo estilo: **Vivid**, que es el estilo por defecto. No hay estilo Default.
-- **Vivid:** paleta neutra (primario casi negro en claro, casi blanco en oscuro), radio 12px, sombras en capas (solo la de destructive va teñida de su color), fuente Outfit y micro-animaciones (escala al hacer clic, transiciones suaves de color y sombra). Inspirado en Vuesax sin copiarlo.
-- Los tokens están en `docs/design/tokens-vivid.css`. El primario se cambia con el preset (el personalizador del diseño trae violeta, esmeralda, azul y naranja).
-- `mimi.json` guarda `"style": "vivid"`; el campo queda para poder sumar estilos más adelante.
+- Mimi tiene **un solo tema base: Mimi**. Cada persona lo adapta: de fábrica se llama «Mimi»; cuando el usuario cambia algo (con el preset o en Theme Studio), es «Mi tema». No hay temas ni estilos alternativos.
+- **El tema Mimi:** paleta neutra (primario casi negro en claro, casi blanco en oscuro), radio 12px, sombras en capas (las de primary y destructive teñidas de su color), fuente Outfit y micro-animaciones (escala al hacer clic, transiciones suaves de color y sombra). Inspirado en Vuesax sin copiarlo.
+- Los tokens están en `docs/design/tokens-mimi.css` (catálogo completo en la sección 13). El primario se cambia con el preset.
+- **`mimi.json`:** la 0.1.0 escribe `"style": "vivid"` (nombre anterior del tema) y el código lo usa así; cambiarlo es la tarea V.2, aceptando `"vivid"` en los `mimi.json` existentes.
 
 ## 12. Política de versiones
 
@@ -1055,42 +1086,395 @@ Lo mismo para Tailwind CSS: probar la versión nueva en una rama, correr las pru
 
 ## 13. Tokens
 
-Catálogo de los tokens del tema en tres niveles (tarea T.0). Va al final para no renumerar las secciones que citan el código y los documentos; amplía las secciones 6.1 a 6.3.
+Catálogo de los tokens del tema Mimi en tres niveles (tarea T.0). Va al final para no renumerar las secciones que citan el código y los documentos; amplía las secciones 6.1 a 6.3.
 
-**Fuente:** la hoja de tokens por componente del diseño (Claude Design), que se guarda en `docs/design/` antes de T.0. Hoy `docs/design/` solo tiene los tokens globales (`tokens-vivid.css`, `mimi-variables.css`) y dos de componente que viven como globales (`--mimi-badge-radius`, `--mimi-switch-off`). Ningún valor de esta sección se inventa: lo que la hoja no defina, se pregunta.
+**Fuentes** (en `docs/design/`): `mimi-tokens-data.js`, la hoja de tokens en datos (se ve en `Mimi Tokens.dc.html`); `tokens-mimi.css`, con los globales y los compartidos en claro y oscuro; y `mimi-variables-componentes.css`, con los tokens por componente. Ningún valor de esta sección se inventa: lo que la hoja no defina, se pregunta.
+
+**Cobertura:** la hoja cubre 21 componentes: los 11 de la 0.1.0 y los del Grupo 1. Los Grupos 2 a 5 agregan sus tokens (y su tabla aquí) con cada tanda de diseño, antes de construirlos.
 
 ### Niveles
 
-1. **Globales:** colores, radios, sombras, fuentes y movimiento de todo Mimi (`--mimi-primary`, `--mimi-radius`, `--mimi-shadow-card`, `--mimi-transition`…). Sección 6.1; en el preset, `colors`, `radii`, `shadows`, `fonts` y `motion`.
-2. **Compartidos:** los que comparte una familia de componentes para quedar alineados (`--mimi-control-height`, `-sm` y `-lg`, de Button, Input, Textarea y Select). Sección 6.2; en el preset, `controls`.
-3. **Por componente:** `--mimi-<prefijo>-<propiedad>` (`--mimi-btn-font-weight`). Heredan de un compartido o de un global con la cascada de la sección 6.2 y se configuran con `components.<nombre>` del preset.
+1. **Globales:** colores, derivados, forma, profundidad, movimiento y tipografía de todo Mimi. En el preset, `colors`, `radii`, `shadows`, `fonts` y `motion`.
+2. **Compartidos:** los que comparte una familia de componentes para quedar alineados (alturas de control, foco, deshabilitado, íconos). En el preset, `controls`.
+3. **Por componente:** `--mimi-<prefijo>-<propiedad>` (`--mimi-btn-px`). Heredan de un compartido o de un global con la cascada de la sección 6.2 y se configuran con `components.<nombre>` del preset.
 
-### Tabla de cada componente
+### Nivel 1: globales
 
-Cada componente tiene su tabla con este formato (la fila es un ejemplo con un token que ya existe):
+#### Colores
 
-| Variable            | Qué controla              | Hereda de               | Valor por defecto |
-| ------------------- | ------------------------- | ----------------------- | ----------------- |
-| `--mimi-btn-height` | Alto con el tamaño normal | `--mimi-control-height` | `2.5rem`          |
+Cada color de superficie o de acción tiene su pareja de texto (`-foreground`). El Theme Studio los muestra juntos con el indicador de contraste AA.
+
+| Variable                        | Qué controla             | Claro                       | Oscuro                      | Texto encima                    |
+| ------------------------------- | ------------------------ | --------------------------- | --------------------------- | ------------------------------- |
+| `--mimi-background`             | Fondo de la página       | `oklch(1 0 0)`              | `oklch(0.145 0 0)`          | `--mimi-foreground`             |
+| `--mimi-foreground`             | Texto principal          | `oklch(0.145 0 0)`          | `oklch(0.985 0 0)`          | —                               |
+| `--mimi-card`                   | Superficie de tarjetas   | `oklch(1 0 0)`              | `oklch(0.175 0 0)`          | `--mimi-card-foreground`        |
+| `--mimi-card-foreground`        | Texto sobre tarjetas     | `oklch(0.145 0 0)`          | `oklch(0.985 0 0)`          | —                               |
+| `--mimi-popover`                | Menús, diálogos y toasts | `oklch(1 0 0)`              | `oklch(0.205 0 0)`          | `--mimi-popover-foreground`     |
+| `--mimi-popover-foreground`     | Texto sobre popover      | `oklch(0.145 0 0)`          | `oklch(0.985 0 0)`          | —                               |
+| `--mimi-primary`                | Acción principal         | `oklch(0.205 0 0)`          | `oklch(0.922 0 0)`          | `--mimi-primary-foreground`     |
+| `--mimi-primary-foreground`     | Texto sobre primary      | `oklch(0.985 0 0)`          | `oklch(0.205 0 0)`          | —                               |
+| `--mimi-secondary`              | Acción secundaria        | `oklch(0.97 0 0)`           | `oklch(0.269 0 0)`          | `--mimi-secondary-foreground`   |
+| `--mimi-secondary-foreground`   | Texto sobre secondary    | `oklch(0.205 0 0)`          | `oklch(0.985 0 0)`          | —                               |
+| `--mimi-muted`                  | Fondos apagados          | `oklch(0.97 0 0)`           | `oklch(0.225 0 0)`          | `--mimi-muted-foreground`       |
+| `--mimi-muted-foreground`       | Texto secundario         | `oklch(0.54 0 0)`           | `oklch(0.708 0 0)`          | —                               |
+| `--mimi-accent`                 | Hover de ítems           | `oklch(0.97 0 0)`           | `oklch(0.269 0 0)`          | `--mimi-accent-foreground`      |
+| `--mimi-accent-foreground`      | Texto sobre accent       | `oklch(0.205 0 0)`          | `oklch(0.985 0 0)`          | —                               |
+| `--mimi-destructive`            | Acciones peligrosas      | `oklch(0.577 0.245 27.325)` | `oklch(0.704 0.191 22.216)` | `--mimi-destructive-foreground` |
+| `--mimi-destructive-foreground` | Texto sobre destructive  | `oklch(0.985 0 0)`          | `oklch(0.2 0.04 25)`        | —                               |
+| `--mimi-success`                | Éxito                    | `oklch(0.527 0.137 150)`    | `oklch(0.72 0.15 150)`      | `--mimi-success-foreground`     |
+| `--mimi-success-foreground`     | Texto sobre success      | `oklch(0.985 0 0)`          | `oklch(0.2 0.05 150)`       | —                               |
+| `--mimi-warning`                | Advertencia              | `oklch(0.795 0.162 75)`     | `oklch(0.81 0.15 78)`       | `--mimi-warning-foreground`     |
+| `--mimi-warning-foreground`     | Texto sobre warning      | `oklch(0.28 0.07 55)`       | `oklch(0.22 0.05 60)`       | —                               |
+| `--mimi-info`                   | Información              | `oklch(0.546 0.19 255)`     | `oklch(0.72 0.14 250)`      | `--mimi-info-foreground`        |
+| `--mimi-info-foreground`        | Texto sobre info         | `oklch(0.985 0 0)`          | `oklch(0.2 0.05 250)`       | —                               |
+| `--mimi-border`                 | Bordes y separadores     | `oklch(0.922 0 0)`          | `oklch(1 0 0 / 10%)`        | —                               |
+| `--mimi-input`                  | Borde de campos          | `oklch(0.88 0 0)`           | `oklch(1 0 0 / 15%)`        | —                               |
+| `--mimi-ring`                   | Anillo de foco           | `oklch(0.708 0 0)`          | `oklch(0.556 0 0)`          | —                               |
+
+#### Derivados
+
+Se calculan con `color-mix` a partir de los colores, así que siguen al tema sin definirse a mano. Convención: `<tono>-soft` es el fondo suave, `<tono>-hover` el color en hover y `<tono>-ring` el anillo. Valores completos en `tokens-mimi.css`.
+
+| Variable                                                            | Cómo se calcula                                                                |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `--mimi-primary-hover`                                              | color-mix(in oklch, primary 88%, background)                                   |
+| `--mimi-secondary-hover`                                            | color-mix(in oklch, secondary 80%, foreground 6%)                              |
+| `--mimi-destructive-hover`                                          | color-mix(in oklch, destructive 88%, background)                               |
+| `--mimi-ring-soft`                                                  | color-mix(in oklch, ring 32%, transparent)                                     |
+| `--mimi-success-soft`                                               | color-mix(in oklab, success 12%, background)                                   |
+| `--mimi-warning-soft`                                               | color-mix(in oklab, warning 12%, background)                                   |
+| `--mimi-info-soft`                                                  | color-mix(in oklab, info 12%, background)                                      |
+| `--mimi-shadow-primary`                                             | sombra en capas a partir de primary                                            |
+| `--mimi-shadow-success`                                             | sombra teñida con success                                                      |
+| `--mimi-glow`                                                       | brillo con primary al 22 %, 30 % y 16 %                                        |
+| `--mimi-destructive-soft-bg`                                        | color-mix(in oklab, destructive 12 %, background) (fondo suave de destructive) |
+| `--mimi-success-ring`, `--mimi-warning-ring`, `--mimi-info-ring`    | color-mix(in oklch, <tono> 30–34 %, transparent)                               |
+| `--mimi-success-hover`, `--mimi-warning-hover`, `--mimi-info-hover` | color-mix(in oklab, <tono> 88 %, background)                                   |
+
+#### Forma, profundidad, movimiento y tipografía
+
+| Variable                                          | Qué controla        | Valor por defecto                                                           |
+| ------------------------------------------------- | ------------------- | --------------------------------------------------------------------------- |
+| `--mimi-radius`                                   | Radio base          | `12px`                                                                      |
+| `--mimi-radius-sm`                                | Radio pequeño       | `min(radius / 2, 6px)`                                                      |
+| `--mimi-radius-card`                              | Radio de tarjetas   | `min(radius + 4px, 24px)`                                                   |
+| `--mimi-badge-radius`                             | Radio de badges     | `999px`                                                                     |
+| `--mimi-shadow-card`                              | Tarjetas            | en `tokens-mimi.css` (claro y oscuro)                                       |
+| `--mimi-shadow-neutral`                           | Botones neutros     | en `tokens-mimi.css` (claro y oscuro)                                       |
+| `--mimi-shadow-neutral-hover`                     | Hover neutro        | en `tokens-mimi.css` (claro y oscuro)                                       |
+| `--mimi-shadow-primary`                           | Botón primary       | en `tokens-mimi.css` (claro y oscuro)                                       |
+| `--mimi-shadow-primary-hover`                     | Hover primary       | en `tokens-mimi.css` (claro y oscuro)                                       |
+| `--mimi-shadow-destructive`                       | Botón destructive   | en `tokens-mimi.css` (claro y oscuro)                                       |
+| `--mimi-shadow-popover`                           | Menús y diálogos    | en `tokens-mimi.css` (claro y oscuro)                                       |
+| `--mimi-glow`                                     | Opción glow         | en `tokens-mimi.css` (claro y oscuro)                                       |
+| `--mimi-glow-primary` … `--mimi-glow-destructive` | Glow por tono       | en `tokens-mimi.css`                                                        |
+| `--mimi-transition`                               | Transición base     | colores .2s, sombra .25s, `scale` .15s (Mimi anima `scale`, no `transform`) |
+| `--mimi-press-scale`                              | Escala al presionar | `0.975`                                                                     |
+| `--mimi-lift`                                     | Elevación en hover  | `0px`                                                                       |
+| `--mimi-font-sans`                                | Texto               | `"Outfit", ui-sans-serif, system-ui`                                        |
+| `--mimi-font-mono`                                | Código              | `"Geist Mono", ui-monospace`                                                |
+
+### Nivel 2: compartidos
+
+Los usan varios componentes para quedar alineados. Los tamaños (SM, MD y LG) los comparten todos los controles (Button, Input, Select…) y solo se cambian desde el modo Tema global.
+
+| Variable                   | Qué controla                     | Hereda de               | Valor por defecto                 |
+| -------------------------- | -------------------------------- | ----------------------- | --------------------------------- |
+| `--mimi-control-height`    | Altura de controles · default    | —                       | `2.5rem` (40px)                   |
+| `--mimi-control-height-sm` | Altura · sm                      | `--mimi-control-height` | `2rem` (control-height − 8px)     |
+| `--mimi-control-height-lg` | Altura · lg                      | `--mimi-control-height` | `3rem` (control-height + 8px)     |
+| `--mimi-focus-ring`        | Halo de foco en campos y botones | `--mimi-ring-soft`      | `0 0 0 3px var(--mimi-ring-soft)` |
+| `--mimi-focus-outline`     | Contorno de foco con teclado     | `--mimi-ring`           | `2px solid var(--mimi-ring)`      |
+| `--mimi-focus-offset`      | Separación del contorno          | —                       | `2px`                             |
+| `--mimi-disabled-opacity`  | Opacidad deshabilitado           | —                       | `0.5`                             |
+| `--mimi-icon-size`         | Ícono dentro de controles        | —                       | `1rem` (16px)                     |
+| `--mimi-icon-size-sm`      | Ícono pequeño                    | —                       | `0.875rem` (14px)                 |
+
+### Nivel 3: por componente
+
+Una tabla por componente (21: los de la 0.1.0 y los del Grupo 1). «Hereda de» indica el token del que toma su valor; si está vacío, el valor por defecto es propio. Los valores en px se pasan a rem al llevarlos a ui-core (16px = 1rem), como en `tokens-mimi.css`. Los Grupos 2 a 5 agregan sus tablas con cada tanda de diseño.
+
+#### Button (`btn`)
+
+| Variable                  | Qué controla          | Hereda de                     | Valor por defecto |
+| ------------------------- | --------------------- | ----------------------------- | ----------------- |
+| `--mimi-btn-bg`           | Fondo                 | `--mimi-primary`              | —                 |
+| `--mimi-btn-fg`           | Texto e ícono         | `--mimi-primary-foreground`   | —                 |
+| `--mimi-btn-bg-hover`     | Fondo en hover        | `--mimi-primary-hover`        | —                 |
+| `--mimi-btn-border`       | Borde                 | —                             | `transparent`     |
+| `--mimi-btn-radius`       | Radio                 | `--mimi-radius`               | —                 |
+| `--mimi-btn-height`       | Altura                | `--mimi-control-height`       | —                 |
+| `--mimi-btn-px`           | Relleno horizontal    | —                             | `16px`            |
+| `--mimi-btn-gap`          | Espacio ícono y texto | —                             | `8px`             |
+| `--mimi-btn-font-size`    | Tamaño de texto       | —                             | `14px`            |
+| `--mimi-btn-font-weight`  | Peso                  | —                             | `500`             |
+| `--mimi-btn-shadow`       | Sombra                | `--mimi-shadow-primary`       | —                 |
+| `--mimi-btn-shadow-hover` | Sombra en hover       | `--mimi-shadow-primary-hover` | —                 |
+| `--mimi-btn-ring`         | Halo al presionar     | `--mimi-focus-ring`           | —                 |
+| `--mimi-btn-press-scale`  | Escala al presionar   | `--mimi-press-scale`          | —                 |
+
+#### Input (`input`)
+
+| Variable                    | Qué controla       | Hereda de                 | Valor por defecto |
+| --------------------------- | ------------------ | ------------------------- | ----------------- |
+| `--mimi-input-bg`           | Fondo              | `--mimi-input-background` | —                 |
+| `--mimi-input-fg`           | Texto              | `--mimi-foreground`       | —                 |
+| `--mimi-input-border`       | Borde              | `--mimi-input`            | —                 |
+| `--mimi-input-border-hover` | Borde en hover     | `--mimi-input-hover`      | —                 |
+| `--mimi-input-border-focus` | Borde con foco     | `--mimi-ring`             | —                 |
+| `--mimi-input-ring`         | Halo con foco      | `--mimi-focus-ring`       | —                 |
+| `--mimi-input-radius`       | Radio              | `--mimi-radius`           | —                 |
+| `--mimi-input-height`       | Altura             | `--mimi-control-height`   | —                 |
+| `--mimi-input-px`           | Relleno horizontal | —                         | `12px`            |
+| `--mimi-input-placeholder`  | Placeholder        | `--mimi-muted-foreground` | —                 |
+| `--mimi-input-error`        | Borde con error    | `--mimi-destructive`      | —                 |
+
+#### Textarea (`textarea`)
+
+| Variable                      | Qué controla     | Hereda de                 | Valor por defecto                               |
+| ----------------------------- | ---------------- | ------------------------- | ----------------------------------------------- |
+| `--mimi-textarea-bg`          | Fondo            | `--mimi-input-background` | —                                               |
+| `--mimi-textarea-border`      | Borde            | `--mimi-input`            | —                                               |
+| `--mimi-textarea-radius`      | Radio            | `--mimi-radius`           | —                                               |
+| `--mimi-textarea-min-height`  | Alto mínimo      | `--mimi-control-height`   | —                                               |
+| `--mimi-textarea-line-height` | Interlineado     | —                         | `20px`                                          |
+| `--mimi-textarea-py`          | Relleno vertical | —                         | `calc((var(--mimi-control-height) - 22px) / 2)` |
+
+#### Badge (`badge`)
+
+| Variable                   | Qué controla       | Hereda de                   | Valor por defecto |
+| -------------------------- | ------------------ | --------------------------- | ----------------- |
+| `--mimi-badge-bg`          | Fondo              | `--mimi-primary`            | —                 |
+| `--mimi-badge-fg`          | Texto              | `--mimi-primary-foreground` | —                 |
+| `--mimi-badge-radius`      | Radio              | — (ver nota)                | `999px`           |
+| `--mimi-badge-height`      | Altura             | —                           | `22px`            |
+| `--mimi-badge-px`          | Relleno horizontal | —                           | `10px`            |
+| `--mimi-badge-font-size`   | Tamaño de texto    | —                           | `12px`            |
+| `--mimi-badge-font-weight` | Peso               | —                           | `600`             |
+
+> **Nota:** el token de componente `--mimi-badge-radius` se llama igual que el global de 0.1.0, y el diseño lo declaraba como `var(--mimi-badge-radius)` (una referencia a sí misma, que invalida la variable). Valor: `999px`. En T.0b se decide si el global se renombra.
+
+#### Card (`card`)
+
+| Variable              | Qué controla | Hereda de                | Valor por defecto |
+| --------------------- | ------------ | ------------------------ | ----------------- |
+| `--mimi-card-bg`      | Fondo        | `--mimi-card`            | —                 |
+| `--mimi-card-fg`      | Texto        | `--mimi-card-foreground` | —                 |
+| `--mimi-card-border`  | Borde        | `--mimi-border`          | —                 |
+| `--mimi-card-radius`  | Radio        | `--mimi-radius-card`     | —                 |
+| `--mimi-card-shadow`  | Sombra       | `--mimi-shadow-card`     | —                 |
+| `--mimi-card-padding` | Relleno      | —                        | `24px`            |
+
+#### Avatar (`avatar`)
+
+| Variable                | Qué controla       | Hereda de                     | Valor por defecto |
+| ----------------------- | ------------------ | ----------------------------- | ----------------- |
+| `--mimi-avatar-size`    | Tamaño default     | —                             | `40px`            |
+| `--mimi-avatar-size-sm` | Tamaño sm          | —                             | `32px`            |
+| `--mimi-avatar-size-lg` | Tamaño lg          | —                             | `56px`            |
+| `--mimi-avatar-bg`      | Fondo de iniciales | `--mimi-secondary`            | —                 |
+| `--mimi-avatar-fg`      | Iniciales          | `--mimi-secondary-foreground` | —                 |
+| `--mimi-avatar-radius`  | Radio              | —                             | `999px`           |
+
+#### Switch (`switch`)
+
+| Variable                  | Qué controla    | Hereda de           | Valor por defecto |
+| ------------------------- | --------------- | ------------------- | ----------------- |
+| `--mimi-switch-track-on`  | Pista encendida | `--mimi-primary`    | —                 |
+| `--mimi-switch-track-off` | Pista apagada   | `--mimi-switch-off` | —                 |
+| `--mimi-switch-thumb`     | Botón           | `--mimi-background` | —                 |
+| `--mimi-switch-width`     | Ancho           | —                   | `36px`            |
+| `--mimi-switch-height`    | Alto            | —                   | `20px`            |
+
+#### Checkbox (`checkbox`)
+
+| Variable                     | Qué controla  | Hereda de                   | Valor por defecto |
+| ---------------------------- | ------------- | --------------------------- | ----------------- |
+| `--mimi-checkbox-size`       | Tamaño        | —                           | `16px`            |
+| `--mimi-checkbox-radius`     | Radio         | `--mimi-radius-sm`          | —                 |
+| `--mimi-checkbox-border`     | Borde         | `--mimi-input`              | —                 |
+| `--mimi-checkbox-checked-bg` | Fondo marcado | `--mimi-primary`            | —                 |
+| `--mimi-checkbox-check`      | Marca         | `--mimi-primary-foreground` | —                 |
+
+#### FormField (`field`)
+
+| Variable                    | Qué controla         | Hereda de                            | Valor por defecto |
+| --------------------------- | -------------------- | ------------------------------------ | ----------------- |
+| `--mimi-field-gap`          | Espacio entre partes | —                                    | `6px`             |
+| `--mimi-field-label-size`   | Tamaño de etiqueta   | —                                    | `14px`            |
+| `--mimi-field-label-weight` | Peso de etiqueta     | —                                    | `500`             |
+| `--mimi-field-hint`         | Texto de ayuda       | `--mimi-muted-foreground`            | —                 |
+| `--mimi-field-error`        | Mensaje de error     | `--mimi-destructive-soft-foreground` | —                 |
+
+#### Separator (`separator`)
+
+| Variable                 | Qué controla | Hereda de       | Valor por defecto |
+| ------------------------ | ------------ | --------------- | ----------------- |
+| `--mimi-separator-color` | Color        | `--mimi-border` | —                 |
+| `--mimi-separator-size`  | Grosor       | —               | `1px`             |
+
+#### Skeleton (`skeleton`)
+
+| Variable                   | Qué controla       | Hereda de          | Valor por defecto |
+| -------------------------- | ------------------ | ------------------ | ----------------- |
+| `--mimi-skeleton-bg`       | Fondo              | `--mimi-muted`     | —                 |
+| `--mimi-skeleton-radius`   | Radio              | `--mimi-radius-sm` | —                 |
+| `--mimi-skeleton-duration` | Duración del pulso | —                  | `1.6s`            |
+
+#### Select (`select`)
+
+| Variable                      | Qué controla         | Hereda de                 | Valor por defecto |
+| ----------------------------- | -------------------- | ------------------------- | ----------------- |
+| `--mimi-select-trigger-bg`    | Fondo del disparador | `--mimi-input-background` | —                 |
+| `--mimi-select-border`        | Borde                | `--mimi-input`            | —                 |
+| `--mimi-select-radius`        | Radio                | `--mimi-radius`           | —                 |
+| `--mimi-select-height`        | Altura               | `--mimi-control-height`   | —                 |
+| `--mimi-select-menu-bg`       | Fondo de la lista    | `--mimi-popover`          | —                 |
+| `--mimi-select-menu-shadow`   | Sombra de la lista   | `--mimi-shadow-popover`   | —                 |
+| `--mimi-select-option-height` | Alto de opción       | —                         | `34px`            |
+| `--mimi-select-option-hover`  | Opción activa        | `--mimi-accent`           | —                 |
+| `--mimi-select-option-radius` | Radio de opción      | `--mimi-radius-sm`        | —                 |
+
+#### Dialog (`dialog`)
+
+| Variable                     | Qué controla         | Hereda de               | Valor por defecto |
+| ---------------------------- | -------------------- | ----------------------- | ----------------- |
+| `--mimi-dialog-overlay`      | Fondo oscurecido     | `--mimi-overlay`        | —                 |
+| `--mimi-dialog-overlay-blur` | Desenfoque del fondo | `--mimi-overlay-blur`   | —                 |
+| `--mimi-dialog-bg`           | Fondo del panel      | `--mimi-popover`        | —                 |
+| `--mimi-dialog-radius`       | Radio                | `--mimi-radius-card`    | —                 |
+| `--mimi-dialog-shadow`       | Sombra               | `--mimi-shadow-popover` | —                 |
+| `--mimi-dialog-width`        | Ancho                | —                       | `420px`           |
+| `--mimi-dialog-padding`      | Relleno              | —                       | `24px`            |
+| `--mimi-dialog-close-size`   | Tamaño de la X       | —                       | `32px`            |
+
+#### Confirm (`confirm`)
+
+| Variable                   | Qué controla    | Hereda de                            | Valor por defecto |
+| -------------------------- | --------------- | ------------------------------------ | ----------------- |
+| `--mimi-confirm-width`     | Ancho           | —                                    | `380px`           |
+| `--mimi-confirm-icon-bg`   | Fondo del ícono | `--mimi-destructive-soft-bg`         | —                 |
+| `--mimi-confirm-icon-fg`   | Ícono           | `--mimi-destructive-soft-foreground` | —                 |
+| `--mimi-confirm-action-bg` | Botón de acción | `--mimi-destructive`                 | —                 |
+
+#### Toast (`toast`)
+
+| Variable                 | Qué controla         | Hereda de               | Valor por defecto |
+| ------------------------ | -------------------- | ----------------------- | ----------------- |
+| `--mimi-toast-bg`        | Fondo                | `--mimi-popover`        | —                 |
+| `--mimi-toast-border`    | Borde                | `--mimi-border`         | —                 |
+| `--mimi-toast-radius`    | Radio                | `--mimi-radius`         | —                 |
+| `--mimi-toast-shadow`    | Sombra               | `--mimi-shadow-popover` | —                 |
+| `--mimi-toast-width`     | Ancho                | —                       | `340px`           |
+| `--mimi-toast-offset`    | Separación del borde | —                       | `16px`            |
+| `--mimi-toast-stack-gap` | Separación apilada   | —                       | `12px`            |
+
+#### Tooltip (`tooltip`)
+
+| Variable                   | Qué controla    | Hereda de                   | Valor por defecto |
+| -------------------------- | --------------- | --------------------------- | ----------------- |
+| `--mimi-tooltip-bg`        | Fondo           | `--mimi-tooltip`            | —                 |
+| `--mimi-tooltip-fg`        | Texto           | `--mimi-tooltip-foreground` | —                 |
+| `--mimi-tooltip-radius`    | Radio           | —                           | `8px`             |
+| `--mimi-tooltip-font-size` | Tamaño de texto | —                           | `12.5px`          |
+| `--mimi-tooltip-arrow`     | Flecha          | —                           | `8px`             |
+| `--mimi-tooltip-delay`     | Retraso         | —                           | `300ms`           |
+
+#### Popover (`popover`)
+
+| Variable                 | Qué controla | Hereda de               | Valor por defecto |
+| ------------------------ | ------------ | ----------------------- | ----------------- |
+| `--mimi-popover-bg`      | Fondo        | `--mimi-popover`        | —                 |
+| `--mimi-popover-border`  | Borde        | `--mimi-border`         | —                 |
+| `--mimi-popover-radius`  | Radio        | `--mimi-radius`         | —                 |
+| `--mimi-popover-shadow`  | Sombra       | `--mimi-shadow-popover` | —                 |
+| `--mimi-popover-padding` | Relleno      | —                       | `16px`            |
+| `--mimi-popover-arrow`   | Flecha       | —                       | `10px`            |
+
+#### Dropdown y Context Menu (`menu`)
+
+| Variable                   | Qué controla      | Hereda de                            | Valor por defecto |
+| -------------------------- | ----------------- | ------------------------------------ | ----------------- |
+| `--mimi-menu-bg`           | Fondo             | `--mimi-popover`                     | —                 |
+| `--mimi-menu-border`       | Borde             | `--mimi-border`                      | —                 |
+| `--mimi-menu-radius`       | Radio             | `--mimi-radius`                      | —                 |
+| `--mimi-menu-shadow`       | Sombra            | `--mimi-shadow-popover`              | —                 |
+| `--mimi-menu-width`        | Ancho             | —                                    | `240px`           |
+| `--mimi-menu-item-height`  | Alto de ítem      | —                                    | `32px`            |
+| `--mimi-menu-item-radius`  | Radio de ítem     | `--mimi-radius-sm`                   | —                 |
+| `--mimi-menu-item-hover`   | Ítem activo       | `--mimi-accent`                      | —                 |
+| `--mimi-menu-shortcut`     | Atajo de teclado  | `--mimi-muted-foreground`            | —                 |
+| `--mimi-menu-danger`       | Ítem destructivo  | `--mimi-destructive-soft-foreground` | —                 |
+| `--mimi-menu-danger-hover` | Hover destructivo | `--mimi-destructive-soft-bg`         | —                 |
+
+#### Tabs (`tabs`)
+
+| Variable                  | Qué controla        | Hereda de                 | Valor por defecto               |
+| ------------------------- | ------------------- | ------------------------- | ------------------------------- |
+| `--mimi-tabs-fg`          | Pestaña inactiva    | `--mimi-muted-foreground` | —                               |
+| `--mimi-tabs-active-fg`   | Pestaña activa      | `--mimi-foreground`       | —                               |
+| `--mimi-tabs-indicator`   | Subrayado           | `--mimi-foreground`       | —                               |
+| `--mimi-tabs-pill-bg`     | Fondo de píldora    | `--mimi-muted`            | —                               |
+| `--mimi-tabs-pill-active` | Píldora activa      | `--mimi-card`             | —                               |
+| `--mimi-tabs-height`      | Altura              | —                         | `44px`                          |
+| `--mimi-tabs-spring`      | Curva del indicador | —                         | `cubic-bezier(.3, 1.35, .5, 1)` |
+
+#### Toolbar (`toolbar`)
+
+| Variable                    | Qué controla           | Hereda de                   | Valor por defecto |
+| --------------------------- | ---------------------- | --------------------------- | ----------------- |
+| `--mimi-toolbar-bg`         | Fondo translúcido      | `--mimi-glass`              | —                 |
+| `--mimi-toolbar-border`     | Borde                  | `--mimi-glass-border`       | —                 |
+| `--mimi-toolbar-blur`       | Desenfoque             | `--mimi-glass-blur`         | —                 |
+| `--mimi-toolbar-shadow`     | Sombra                 | `--mimi-shadow-popover`     | —                 |
+| `--mimi-toolbar-item-size`  | Tamaño de ítem         | —                           | `40px`            |
+| `--mimi-toolbar-active-bg`  | Disco activo           | `--mimi-primary`            | —                 |
+| `--mimi-toolbar-active-fg`  | Ícono activo           | `--mimi-primary-foreground` | —                 |
+| `--mimi-toolbar-ring`       | Anillo de selección    | `--mimi-info`               | —                 |
+| `--mimi-toolbar-pressed-bg` | Interruptor presionado | `--mimi-accent`             | —                 |
+
+#### Pagination (`pagination`)
+
+| Variable                        | Qué controla        | Hereda de               | Valor por defecto |
+| ------------------------------- | ------------------- | ----------------------- | ----------------- |
+| `--mimi-pagination-bg`          | Fondo translúcido   | `--mimi-glass`          | —                 |
+| `--mimi-pagination-border`      | Borde               | `--mimi-glass-border`   | —                 |
+| `--mimi-pagination-blur`        | Desenfoque          | `--mimi-glass-blur`     | —                 |
+| `--mimi-pagination-shadow`      | Sombra flotante     | `--mimi-shadow-popover` | —                 |
+| `--mimi-pagination-item-size`   | Tamaño de botón     | —                       | `40px`            |
+| `--mimi-pagination-input-width` | Ancho del campo     | —                       | `56px`            |
+| `--mimi-pagination-error`       | Error de página     | `--mimi-destructive`    | —                 |
+| `--mimi-pagination-offset`      | Separación inferior | —                       | `20px`            |
+
+### Otros globales del diseño
+
+Están en `tokens-mimi.css` (valores en claro y oscuro) y no tienen fila propia en la hoja:
+
+- **Texto sobre fondos suaves:** `--mimi-success-soft-foreground`, `--mimi-warning-soft-foreground`, `--mimi-info-soft-foreground` y `--mimi-destructive-soft-foreground`.
+- **Superficies:** `--mimi-tooltip` y `--mimi-tooltip-foreground`; `--mimi-overlay` y `--mimi-overlay-blur` (fondo de Dialog y Sheet); `--mimi-glass`, `--mimi-glass-border` y `--mimi-glass-blur` (píldoras translúcidas de mimi-toolbar y Pagination); `--mimi-soft-mix` (cuánto tono lleva el fondo suave: 12 % en claro, 18 % en oscuro).
+- **Campos:** `--mimi-input-background`, `--mimi-input-hover`, `--mimi-ring-soft` y `--mimi-switch-off`.
+- **Entradas avanzadas:** `--mimi-range`, `--mimi-track`, `--mimi-track-fill`, `--mimi-thumb`, `--mimi-chip`, `--mimi-chip-foreground`, `--mimi-dropzone`, `--mimi-dropzone-active`, `--mimi-dropzone-active-border`, `--mimi-strength-weak`, `--mimi-strength-medium`, `--mimi-strength-strong`, `--mimi-selection` y `--mimi-corner-shape` (Squircle).
+- **Keyframes:** `mimi-spin`, `mimi-pulse`, `mimi-caret`, `mimi-bob`, `mimi-shake` y los de Mimi Effects (`mimi-beam`, `mimi-marquee`, `mimi-typing-*`, `mimi-blurfade-*`, `mimi-reveal`).
 
 ### Reglas
 
-- **Obligatorio en cada componente nuevo:** registrar sus tokens en `MimiComponentTokens` (`theme/types.ts`) y su prefijo en `COMPONENT_PREFIX` (`theme/provider.ts`), con prueba en `provider.spec.ts`, y agregar su tabla a esta sección. Es un paso del comando `/componente`.
-- Prefijos registrados hoy: `button` → `btn`, `input` → `input` (Textarea usa los mismos), `card` → `card`.
-- **Componentes existentes sin tokens propios:** Avatar, Switch, Checkbox, FormField, Separator, Skeleton y Badge (`--mimi-badge-radius` y `--mimi-switch-off` existen, pero como globales, fuera de `components`). Se completan según la hoja de tokens en la tarea T.0b.
+- **Obligatorio en cada componente nuevo:** registrar sus tokens en `MimiComponentTokens` (`theme/types.ts`) y su prefijo en `COMPONENT_PREFIX` (`theme/provider.ts`), con prueba en `provider.spec.ts`, y tener su tabla en esta sección. Es un paso del comando `/componente`.
+- **Prefijos:** los de la hoja son `btn`, `input`, `textarea`, `badge`, `card`, `avatar`, `switch`, `checkbox`, `field` (FormField), `separator`, `skeleton`, `select`, `dialog`, `confirm`, `toast`, `tooltip`, `popover`, `menu` (Dropdown y Context Menu comparten), `tabs`, `toolbar` y `pagination`. En el código de la 0.1.0 solo están registrados `btn`, `input` y `card`.
+- **Nombres de los derivados:** `<tono>-soft` es el fondo suave, `<tono>-ring` el anillo y `<tono>-hover` el hover. El `--mimi-destructive-soft` de ui-core (un anillo, anterior a la convención) pasa a `--mimi-destructive-ring` en la tarea T.1; el fondo suave de destructive es `--mimi-destructive-soft-bg`.
+- **Diferencias entre el código de la 0.1.0 y la hoja** (se resuelven en T.0b, cuidando los presets que ya usan los nombres viejos):
+  - Button: el código usa `--mimi-btn-padding-x`, `--mimi-btn-border-width`, `--mimi-btn-letter-spacing`, `--mimi-btn-focus-ring-width` y `--mimi-btn-height-sm`/`-lg`; la hoja usa `px`, `border` (color), `gap`, `bg`, `fg`, `bg-hover`, `shadow`, `shadow-hover`, `ring` y `press-scale`.
+  - Input: el código usa `--mimi-input-padding-x`, `--mimi-input-placeholder-color`, `--mimi-input-disabled-opacity`, `--mimi-input-border-width`, `--mimi-input-focus-ring-width`, `--mimi-input-font-size` y `--mimi-input-height-sm`/`-lg`; la hoja usa `px`, `placeholder`, `bg`, `fg`, `border`, `border-hover`, `border-focus`, `ring` y `error`.
+  - Textarea: en el código usa los tokens de Input; la hoja le da los suyos (`--mimi-textarea-*`).
+  - Card: el código usa `--mimi-card-padding-header`, `-content` y `-footer` y `--mimi-card-border-width`; la hoja usa un solo `--mimi-card-padding` y `bg`, `fg` y `border` (color).
+  - Badge: el token de componente `--mimi-badge-radius` se llama igual que el global (ver la nota de su tabla).
 
-### Theme Studio: variantes, propiedades y presets
+### Correcciones pendientes del diseño
 
-Modelo: **variante** (el estilo base: default, secondary, outline…) + **propiedades combinables** (tamaño, tono, radio, glow, block…) + **presets guardados**. Los valores heredan del tema global salvo que se personalicen, y el usuario puede crear **variantes propias**.
+Textos de los diseños que contradicen la spec. Se corrigen cuando ese texto pase al código; la spec manda.
 
-**Decisión pendiente para T.2: cómo se expresa una variante propia en `mimi.preset.ts`.** Evaluación:
-
-- **Hoy no es posible solo con el preset.** Los colores de cada variante son clases literales de `cva` (`bg-primary`, `shadow-primary`…), no tokens, y `variant` está tipado como unión cerrada (`ButtonVariant`). Con un nombre desconocido, `cva` no aplica clases de variante y el template no compila con plantillas estrictas. Tailwind genera las clases al compilar, así que un preset (que se aplica en tiempo de ejecución) no puede crear clases nuevas.
-- **Opción A (recomendada): variantes por tokens.** `components.button.variants.<nombre>` (con claro y oscuro) genera en `mimiThemeToCss` CSS para `[data-slot="button"][data-variant="<nombre>"]` que define tokens del componente (`--mimi-btn-bg`, `--mimi-btn-fg`, `--mimi-btn-shadow`, `--mimi-btn-bg-hover`…). Requisitos:
-  1. Las clases de las variantes del componente leen esos tokens (`bg-[color:var(--mimi-btn-bg,…)]`), con los valores actuales como respaldo, y las variantes de Mimi los definen igual: así una variante propia es un juego de tokens más.
-  2. El componente expone `data-slot` (para no depender del atributo del selector, `mimiBtn`) además de `data-variant`.
-  3. El tipo de `variant` acepta nombres propios sin perder el autocompletado (por ejemplo, `ButtonVariant | (string & {})`, o una interfaz que el usuario amplía).
-  4. El nombre se valida (`^[a-z][a-z0-9-]*$`) igual que hoy se rechazan los valores inseguros (`UNSAFE_VALUE`).
-  5. Una variante sin definición en el preset se ve como `default`.
-- **Opción B: solo código.** Como el código es del usuario, el botón «Código» de Theme Studio entrega el fragmento para agregar la variante en `button.variants.ts`. No exige cambios en los componentes, pero no se puede aplicar ni previsualizar en tiempo de ejecución, y una actualización de Mimi deja ese archivo como modificado.
-- La opción A depende del catálogo de tokens (T.0) y de que los componentes lean sus colores de tokens. Se decide en T.2, con una prueba de concepto en Button.
+- `Mimi Sitio.dc.html`: `pnpm add lucide-angular` → `@lucide/angular` (o `ng add @mimi-ng/cli --icons`).
+- `Mimi Sitio.dc.html` y `Mimi Theme Studio.dc.html`: `import { definePreset } from '@mimi-ng/theme'` no existe → `provideMimiTheme(preset)` con un `MimiThemePreset` (`colors` y `darkColors`, sección 6.3).
+- `Mimi Sitio.dc.html`: `import { MimiInput } from '@/app/components/ui/input/input'` → `@/components/ui/input`.
+- `Mimi Theme Studio.dc.html`: tiene «Mis variantes» y no tiene «Copiar prompt». Theme Studio no tiene variantes propias y su barra lleva «Copiar prompt» (sección 4, «Theme Studio»).
+- `mimi-variables-componentes.css`: `--mimi-badge-radius: var(--mimi-badge-radius)` (referencia a sí misma). **Corregido** en `docs/design/` con `999px`.

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<link rel="stylesheet" href="mimi-variables-componentes.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<script src="mimi-tokens-data.js"></script>
+<style>body{margin:0}a{color:inherit}a:hover{opacity:.8}</style>
+</helmet>
+<div data-mimi-style="mimi" class="{{ cls }}" style="min-height:100vh;background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans)">
+  <header style="position:sticky;top:0;z-index:20;border-bottom:1px solid var(--mimi-border);background:var(--mimi-glass);backdrop-filter:blur(var(--mimi-glass-blur));-webkit-backdrop-filter:blur(var(--mimi-glass-blur))">
+    <div style="max-width:1240px;margin:0 auto;height:60px;padding:0 24px;box-sizing:border-box;display:flex;align-items:center;gap:16px">
+      <span style="width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:17px;font-weight:800;line-height:1">m</span>
+      <span style="font-size:16px;font-weight:700">Tokens de Mimi</span>
+      <nav style="display:flex;gap:4px;margin-left:8px;flex:1;min-width:0;overflow:hidden">
+        <sc-for list="{{ nav }}" as="n" hint-placeholder-count="4"><a href="{{ n.href }}" style="display:inline-flex;align-items:center;height:32px;padding:0 12px;border-radius:999px;font-size:13.5px;font-weight:500;color:var(--mimi-muted-foreground);text-decoration:none;white-space:nowrap" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground);opacity:1">{{ n.label }}</a></sc-for>
+      </nav>
+      <a href="Mimi Theme Studio.dc.html" style="font-size:13.5px;font-weight:600;white-space:nowrap">Theme Studio →</a>
+      <div role="radiogroup" aria-label="Modo de la página" style="position:relative;display:grid;grid-template-columns:repeat(2,40px);padding:3px;border-radius:999px;background:var(--mimi-muted)">
+        <span aria-hidden="true" style="position:absolute;top:3px;bottom:3px;left:3px;width:40px;border-radius:999px;background:var(--mimi-card);box-shadow:var(--mimi-shadow-neutral);transition:transform .4s cubic-bezier(.3,1.35,.5,1);transform:{{ modeTf }}"></span>
+        <sc-for list="{{ modes }}" as="o" hint-placeholder-count="2"><button role="radio" aria-checked="{{ o.aria }}" aria-label="{{ o.label }}" onClick="{{ o.pick }}" style="position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;height:30px;border:0;background:transparent;cursor:pointer;color:{{ o.fg }}" style-active="transform:scale(0.9)"><mimi-icon name="{{ o.icon }}" size="15"></mimi-icon></button></sc-for>
+      </div>
+    </div>
+  </header>
+  <main style="max-width:1240px;margin:0 auto;padding:40px 24px 96px;box-sizing:border-box;display:flex;flex-direction:column;gap:56px">
+    <div style="display:flex;flex-direction:column;gap:12px;max-width:760px">
+      <h1 style="margin:0;font-size:clamp(32px, 4vw, 46px);line-height:1.08;font-weight:800;letter-spacing:-0.03em">Tokens en tres niveles</h1>
+      <p style="margin:0;font-size:16px;line-height:1.6;color:var(--mimi-muted-foreground);text-wrap:pretty">Los <b style="color:var(--mimi-foreground)">globales</b> definen la marca. Los <b style="color:var(--mimi-foreground)">compartidos</b> unifican alturas y foco. Los <b style="color:var(--mimi-foreground)">de componente</b> heredan de los dos anteriores: cambia --mimi-primary y cada botón, switch o toolbar que lo use cambia con él.</p>
+    </div>
+
+    <section id="globales" style="display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:13px;font-weight:800">1</span><h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.02em">Globales</h2></div>
+      <h3 style="margin:8px 0 0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Color</h3>
+      <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card)">
+        <div style="display:grid;grid-template-columns:minmax(220px,1.2fr) minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.1fr);gap:12px;padding:10px 16px;background:var(--mimi-muted);font-size:12px;font-weight:700;color:var(--mimi-muted-foreground)"><span>Variable</span><span>Uso</span><span>Claro</span><span>Oscuro</span></div>
+        <sc-for list="{{ colors }}" as="c" hint-placeholder-count="12">
+          <div style="display:grid;grid-template-columns:minmax(220px,1.2fr) minmax(0,1fr) minmax(0,1.1fr) minmax(0,1.1fr);gap:12px;align-items:center;padding:9px 16px;border-top:1px solid var(--mimi-border)">
+            <code style="font-family:var(--mimi-font-mono);font-size:12.5px;font-weight:500">{{ c.v }}</code>
+            <span style="font-size:13px;color:var(--mimi-muted-foreground)">{{ c.desc }}</span>
+            <span style="display:flex;align-items:center;gap:8px;min-width:0"><span style="width:26px;height:26px;flex-shrink:0;border-radius:7px;box-shadow:inset 0 0 0 1px oklch(0.5 0 0 / .25);background:{{ c.light }}"></span><code style="font-family:var(--mimi-font-mono);font-size:11px;color:var(--mimi-muted-foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.light }}</code><sc-if value="{{ c.hasPair }}"><span style="flex-shrink:0;display:inline-flex;align-items:center;height:20px;padding:0 6px;border-radius:999px;font-size:10.5px;font-weight:700;font-variant-numeric:tabular-nums;background:{{ c.lBg }};color:{{ c.lFg }}">{{ c.lRatio }}</span></sc-if></span>
+            <span style="display:flex;align-items:center;gap:8px;min-width:0"><span style="width:26px;height:26px;flex-shrink:0;border-radius:7px;box-shadow:inset 0 0 0 1px oklch(0.5 0 0 / .25);background:{{ c.dark }}"></span><code style="font-family:var(--mimi-font-mono);font-size:11px;color:var(--mimi-muted-foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.dark }}</code><sc-if value="{{ c.hasPair }}"><span style="flex-shrink:0;display:inline-flex;align-items:center;height:20px;padding:0 6px;border-radius:999px;font-size:10.5px;font-weight:700;font-variant-numeric:tabular-nums;background:{{ c.dBg }};color:{{ c.dFg }}">{{ c.dRatio }}</span></sc-if></span>
+          </div>
+        </sc-for>
+      </div>
+      <span style="font-size:12.5px;color:var(--mimi-muted-foreground)">La pastilla muestra el contraste de cada color con su -foreground. AA exige 4.5:1 para texto normal.</span>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:20px">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h3 style="margin:8px 0 0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Derivados · calculados</h3>
+          <div style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card)"><sc-for list="{{ derived }}" as="d" hint-placeholder-count="6"><div style="display:flex;align-items:center;gap:12px;padding:9px 14px;border-top:{{ d.bt }}"><span style="width:22px;height:22px;flex-shrink:0;border-radius:6px;box-shadow:inset 0 0 0 1px oklch(0.5 0 0 / .2);background:{{ d.sw }}"></span><code style="width:150px;flex-shrink:0;font-family:var(--mimi-font-mono);font-size:12px">{{ d.v }}</code><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">{{ d.f }}</span></div></sc-for></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <h3 style="margin:8px 0 0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Radio</h3>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px"><sc-for list="{{ radii }}" as="r" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:8px"><div style="height:64px;border:2px solid var(--mimi-foreground);border-right:0;border-bottom:0;background:var(--mimi-muted);border-top-left-radius:{{ r.css }}"></div><code style="font-family:var(--mimi-font-mono);font-size:11.5px;font-weight:500">{{ r.v }}</code><span style="font-size:11.5px;color:var(--mimi-muted-foreground)">{{ r.def }}</span></div></sc-for></div>
+          <h3 style="margin:8px 0 0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Movimiento y fuentes</h3>
+          <div style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card)"><sc-for list="{{ misc }}" as="d" hint-placeholder-count="5"><div style="display:flex;align-items:baseline;gap:12px;padding:9px 14px;border-top:{{ d.bt }}"><code style="width:150px;flex-shrink:0;font-family:var(--mimi-font-mono);font-size:12px">{{ d.v }}</code><span style="flex:1;font-size:12.5px;color:var(--mimi-muted-foreground)">{{ d.d }}</span><code style="font-family:var(--mimi-font-mono);font-size:11px;color:var(--mimi-muted-foreground);text-align:right">{{ d.def }}</code></div></sc-for></div>
+        </div>
+      </div>
+      <h3 style="margin:8px 0 0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Sombras</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:24px 18px;padding:8px 4px"><sc-for list="{{ shadows }}" as="s" hint-placeholder-count="8"><div style="display:flex;flex-direction:column;gap:10px"><div style="height:60px;border-radius:var(--mimi-radius);background:var(--mimi-card);box-shadow:{{ s.css }}"></div><code style="font-family:var(--mimi-font-mono);font-size:11.5px">{{ s.v }}</code><span style="margin-top:-6px;font-size:11.5px;color:var(--mimi-muted-foreground)">{{ s.d }}</span></div></sc-for></div>
+    </section>
+
+    <section id="compartidos" style="display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:13px;font-weight:800">2</span><h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.02em">Compartidos</h2></div>
+      <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card)">
+        <div style="display:grid;grid-template-columns:240px minmax(0,1fr) 160px minmax(0,1.2fr);gap:12px;padding:10px 16px;background:var(--mimi-muted);font-size:12px;font-weight:700;color:var(--mimi-muted-foreground)"><span>Variable</span><span>Qué controla</span><span>Hereda de</span><span>Valor por defecto</span></div>
+        <sc-for list="{{ shared }}" as="r" hint-placeholder-count="8"><div style="display:grid;grid-template-columns:240px minmax(0,1fr) 160px minmax(0,1.2fr);gap:12px;align-items:center;padding:9px 16px;border-top:1px solid var(--mimi-border)"><code style="font-family:var(--mimi-font-mono);font-size:12.5px;font-weight:500">{{ r.v }}</code><span style="font-size:13px">{{ r.d }}</span><span><sc-if value="{{ r.hasInh }}"><span style="display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-family:var(--mimi-font-mono);font-size:11px;font-weight:600"><mimi-icon name="corner-down-right" size="11"></mimi-icon>{{ r.inh }}</span></sc-if><sc-if value="{{ r.noInh }}"><span style="font-size:12px;color:var(--mimi-muted-foreground)">—</span></sc-if></span><code style="font-family:var(--mimi-font-mono);font-size:11.5px;color:var(--mimi-muted-foreground);word-break:break-all">{{ r.def }}</code></div></sc-for>
+      </div>
+    </section>
+
+    <section id="componentes" style="display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:999px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:13px;font-weight:800">3</span><h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.02em">Por componente</h2><span style="font-size:13.5px;color:var(--mimi-muted-foreground)">· {{ compCount }} componentes · --mimi-&lt;prefijo&gt;-&lt;propiedad&gt;</span></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,560px),1fr));gap:18px;align-items:start">
+        <sc-for list="{{ comps }}" as="c" hint-placeholder-count="6">
+          <div id="{{ c.id }}" style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-card);box-shadow:var(--mimi-shadow-card)">
+            <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--mimi-border)"><span style="font-size:15px;font-weight:700">{{ c.name }}</span><code style="display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:999px;background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:11.5px;font-weight:600">{{ c.prefix }}</code><span style="flex:1"></span><span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ c.n }} variables</span></div>
+            <div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);gap:10px;padding:8px 16px;background:var(--mimi-muted);font-size:11.5px;font-weight:700;color:var(--mimi-muted-foreground)"><span>Variable</span><span>Qué controla</span><span>Hereda de / valor</span></div>
+            <sc-for list="{{ c.rows }}" as="r"><div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center;padding:7px 16px;border-top:1px solid var(--mimi-border)"><code style="font-family:var(--mimi-font-mono);font-size:11.5px;font-weight:500;word-break:break-all">{{ r.v }}</code><span style="font-size:12.5px">{{ r.d }}</span><span style="min-width:0"><sc-if value="{{ r.hasInh }}"><span style="display:inline-flex;align-items:center;gap:4px;max-width:100%;height:22px;padding:0 8px;box-sizing:border-box;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-family:var(--mimi-font-mono);font-size:10.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"><mimi-icon name="corner-down-right" size="11"></mimi-icon>{{ r.inh }}</span></sc-if><sc-if value="{{ r.noInh }}"><code style="font-family:var(--mimi-font-mono);font-size:11px;color:var(--mimi-muted-foreground);word-break:break-all">{{ r.def }}</code></sc-if></span></div></sc-for>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section id="css" style="display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:10px"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="file-code" size="20"></mimi-icon></span><h2 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.02em">mimi-variables-componentes.css</h2></div><button onClick="{{ copy }}" style="display:inline-flex;align-items:center;gap:8px;height:var(--mimi-btn-height);padding:0 var(--mimi-btn-px);border:0;border-radius:var(--mimi-btn-radius);background:var(--mimi-btn-bg);color:var(--mimi-btn-fg);font-family:var(--mimi-font-sans);font-size:var(--mimi-btn-font-size);font-weight:var(--mimi-btn-font-weight);cursor:pointer;box-shadow:var(--mimi-btn-shadow);transition:var(--mimi-transition)" style-hover="background:var(--mimi-btn-bg-hover);box-shadow:var(--mimi-btn-shadow-hover)" style-active="transform:scale(var(--mimi-btn-press-scale));box-shadow:var(--mimi-btn-ring)"><mimi-icon name="{{ copyIcon }}" size="16"></mimi-icon>{{ copyLabel }}</button></div>
+      <p style="margin:0;font-size:14px;color:var(--mimi-muted-foreground)">Cárgalo después de los archivos de tokens globales. Este mismo botón ya usa --mimi-btn-*.</p>
+      <pre style="margin:0;max-height:520px;overflow:auto;padding:18px 20px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-muted);font-family:var(--mimi-font-mono);font-size:12px;line-height:1.7">{{ css }}</pre>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const parseOk = s => { const m = String(s).match(/oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)(?:\s*\/\s*([\d.]+)%?)?\s*\)/); return m ? [+m[1], +m[2], +m[3]] : null; };
+const lum = ([L, C, h]) => { const a = C * Math.cos(h * Math.PI / 180), b = C * Math.sin(h * Math.PI / 180); const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3, m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3, s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3; const cl = x => Math.min(1, Math.max(0, x)); return 0.2126 * cl(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s) + 0.7152 * cl(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s) + 0.0722 * cl(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s); };
+const ratio = (x, y) => { const a = parseOk(x), b = parseOk(y); if (!a || !b) return null; const A = lum(a), B = lum(b); return (Math.max(A, B) + 0.05) / (Math.min(A, B) + 0.05); };
+class Component extends DCLogic {
+  state = { dark: false, css: '', copied: false, ready: !!window.MIMI_TOKENS };
+  componentDidMount() {
+    if (!this.state.ready) this.iv = setInterval(() => { if (window.MIMI_TOKENS) { clearInterval(this.iv); this.setState({ ready: true }); } }, 50);
+    fetch('mimi-variables-componentes.css').then(r => r.text()).then(css => this.setState({ css })).catch(() => {});
+  }
+  componentWillUnmount() { clearInterval(this.iv); }
+  renderVals() {
+    const T = window.MIMI_TOKENS || { colors: [], derived: [], radii: [], shadows: [], motion: [], fonts: [], shared: [], components: [] };
+    const s = this.state;
+    const find = n => T.colors.find(c => c[0] === n);
+    const badge = r => r === null ? ['', 'transparent', 'transparent'] : [r.toFixed(1) + ':1', r >= 4.5 ? 'var(--mimi-success-soft)' : 'var(--mimi-destructive-soft-bg)', r >= 4.5 ? 'var(--mimi-success-soft-foreground)' : 'var(--mimi-destructive-soft-foreground)'];
+    return {
+      cls: s.dark ? 'dark' : '', modeTf: s.dark ? 'translateX(100%)' : 'translateX(0)',
+      modes: [[false, 'Claro', 'sun'], [true, 'Oscuro', 'moon']].map(([v, label, icon]) => ({ label, icon, aria: String(s.dark === v), fg: s.dark === v ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', pick: () => this.setState({ dark: v }) })),
+      nav: [['Globales', '#globales'], ['Compartidos', '#compartidos'], ['Por componente', '#componentes'], ['CSS', '#css']].map(([label, href]) => ({ label, href })),
+      colors: T.colors.map(([n, desc, l, d, pair]) => { const p = pair && find(pair); const lb = badge(p ? ratio(l, p[2]) : null), db = badge(p ? ratio(d, p[3]) : null); return { v: '--mimi-' + n, desc, light: l, dark: d, hasPair: !!p, lRatio: lb[0], lBg: lb[1], lFg: lb[2], dRatio: db[0], dBg: db[1], dFg: db[2] }; }),
+      derived: T.derived.map(([n, f], i) => ({ v: '--mimi-' + n, f, sw: n.startsWith('shadow') || n === 'glow' ? 'var(--mimi-card)' : 'var(--mimi-' + n + ')', bt: i ? '1px solid var(--mimi-border)' : '0' })),
+      radii: T.radii.map(([n, d, def]) => ({ v: '--mimi-' + n, def, css: 'var(--mimi-' + n + ')' })),
+      misc: T.motion.concat(T.fonts).map(([n, d, def], i) => ({ v: '--mimi-' + n, d, def, bt: i ? '1px solid var(--mimi-border)' : '0' })),
+      shadows: T.shadows.map(([n, d]) => ({ v: '--mimi-' + n, d, css: 'var(--mimi-' + n + ')' })),
+      shared: T.shared.map(([n, d, inh, def]) => ({ v: '--mimi-' + n, d, inh: inh ? '--mimi-' + inh : '', hasInh: !!inh, noInh: !inh, def })),
+      compCount: String(T.components.length),
+      comps: T.components.map(([name, p, rows]) => ({ name, prefix: p, id: 'c-' + p, n: String(rows.length), rows: rows.map(([prop, d, inh, def]) => ({ v: '--mimi-' + p + '-' + prop, d, inh: inh ? '--mimi-' + inh : '', hasInh: !!inh, noInh: !inh, def: def || '' })) })),
+      css: s.css || 'Cargando…',
+      copy: () => { try { navigator.clipboard.writeText(s.css); } catch (e) {} this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1500); },
+      copyIcon: s.copied ? 'check' : 'copy', copyLabel: s.copied ? 'Copiado' : 'Copiar CSS'
+    };
+  }
+}
+</script>
+</body>
+</html>

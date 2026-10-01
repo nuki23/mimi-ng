@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 3 · Combobox, fechas y hora</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F3 Combobox Fechas Hora.dc.html">Combobox · Fechas · Hora</a>
+      <a href="Mimi F3 Slider OTP Numero Mascara.dc.html">Slider · OTP · Número · Máscara · Contraseña</a>
+      <a href="Mimi F3 Archivos Tags Toggle Color.dc.html">Archivos · Tags · Toggle · Color</a>
+      <a href="Mimi F3 Editor de temas.dc.html">Editor de temas v2</a>
+      <a href="Mimi F2 Tokens y Tonos.dc.html">Fase 2</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,780px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:40px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Entradas avanzadas · 1</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">1 · Combobox / Autocomplete</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="{{ m.k }}-cb" style="font-size:14px;font-weight:500">Ciudad <span style="font-weight:400;color:var(--mimi-muted-foreground)">· simple</span></label>
+              <div style="display:flex;align-items:center;gap:8px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 10px 0 12px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);transition:var(--mimi-transition);border:1px solid {{ m.cb.border }};box-shadow:{{ m.cb.ring }}" style-hover="border-color:var(--mimi-input-hover)">
+                <span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="map-pin" size="16"></mimi-icon></span>
+                <input id="{{ m.k }}-cb" role="combobox" aria-expanded="{{ m.cb.ariaOpen }}" aria-autocomplete="list" autocomplete="off" placeholder="Busca una ciudad" value="{{ m.cb.text }}" onChange="{{ m.cb.onQ }}" onFocus="{{ m.cb.onFocus }}" onBlur="{{ m.cb.onBlur }}" onKeyDown="{{ m.cb.onKey }}" style="flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none">
+                <span style="display:inline-flex;color:var(--mimi-muted-foreground);transition:transform .2s ease;transform:{{ m.cb.chev }}"><mimi-icon name="chevron-down" size="16"></mimi-icon></span>
+              </div>
+              <sc-if value="{{ m.cb.open }}" hint-placeholder-val="{{ true }}">
+                <div role="listbox" style="margin-top:2px;max-height:228px;overflow:auto;padding:4px;display:flex;flex-direction:column;gap:1px;background:var(--mimi-popover);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover)">
+                  <sc-for list="{{ m.cb.options }}" as="o">
+                    <div role="option" aria-selected="{{ o.ariaSel }}" onMouseDown="{{ o.pick }}" onMouseEnter="{{ o.hover }}" style="display:flex;align-items:center;gap:8px;min-height:34px;padding:0 8px;border-radius:var(--mimi-radius-sm);font-size:14px;cursor:pointer;background:{{ o.bg }}" style-active="transform:scale(0.985)"><span style="flex:1;min-width:0">{{ o.pre }}<mark style="background:transparent;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px">{{ o.match }}</mark>{{ o.post }}</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ o.sub }}</span><sc-if value="{{ o.selected }}"><mimi-icon name="check" size="16"></mimi-icon></sc-if></div>
+                  </sc-for>
+                  <sc-if value="{{ m.cb.canCreate }}"><div role="option" aria-selected="false" onMouseDown="{{ m.cb.create }}" style="display:flex;align-items:center;gap:8px;min-height:34px;padding:0 8px;border-radius:var(--mimi-radius-sm);font-size:14px;cursor:pointer;border-top:1px solid var(--mimi-border);margin-top:3px;color:var(--mimi-info-soft-foreground)" style-hover="background:var(--mimi-info-soft)" style-active="transform:scale(0.985)"><mimi-icon name="plus" size="16"></mimi-icon>Crear «{{ m.cb.q }}»</div></sc-if>
+                  <sc-if value="{{ m.cb.empty }}"><div style="padding:10px 8px;font-size:13px;color:var(--mimi-muted-foreground)">Sin coincidencias.</div></sc-if>
+                </div>
+              </sc-if>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label for="{{ m.k }}-mc" style="font-size:14px;font-weight:500">Tecnologías <span style="font-weight:400;color:var(--mimi-muted-foreground)">· múltiple</span></label>
+              <div onClick="{{ m.mc.focusInput }}" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:var(--mimi-control-height);box-sizing:border-box;padding:5px 10px 5px 6px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);cursor:text;transition:var(--mimi-transition);border:1px solid {{ m.mc.border }};box-shadow:{{ m.mc.ring }}" style-hover="border-color:var(--mimi-input-hover)">
+                <sc-for list="{{ m.mc.chips }}" as="c">
+                  <span style="display:inline-flex;align-items:center;gap:4px;height:26px;padding:0 4px 0 10px;border-radius:var(--mimi-badge-radius);background:var(--mimi-chip);color:var(--mimi-chip-foreground);font-size:13px;font-weight:500">{{ c.label }}<button aria-label="{{ c.removeLabel }}" onMouseDown="{{ c.remove }}" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;border:0;border-radius:999px;background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:color-mix(in oklab, var(--mimi-foreground) 12%, transparent);color:var(--mimi-foreground)" style-active="transform:scale(0.85)"><mimi-icon name="x" size="12"></mimi-icon></button></span>
+                </sc-for>
+                <input id="{{ m.k }}-mc" role="combobox" aria-expanded="{{ m.mc.ariaOpen }}" autocomplete="off" placeholder="{{ m.mc.placeholder }}" value="{{ m.mc.q }}" onChange="{{ m.mc.onQ }}" onFocus="{{ m.mc.onFocus }}" onBlur="{{ m.mc.onBlur }}" onKeyDown="{{ m.mc.onKey }}" style="flex:1;min-width:80px;height:28px;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;padding:0 4px">
+              </div>
+              <sc-if value="{{ m.mc.open }}">
+                <div role="listbox" aria-multiselectable="true" style="margin-top:2px;max-height:228px;overflow:auto;padding:4px;display:flex;flex-direction:column;gap:1px;background:var(--mimi-popover);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover)">
+                  <sc-for list="{{ m.mc.options }}" as="o">
+                    <div role="option" aria-selected="{{ o.ariaSel }}" onMouseDown="{{ o.pick }}" onMouseEnter="{{ o.hover }}" style="display:flex;align-items:center;gap:10px;min-height:34px;padding:0 8px;border-radius:var(--mimi-radius-sm);font-size:14px;cursor:pointer;background:{{ o.bg }}" style-active="transform:scale(0.985)"><span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;box-sizing:border-box;border-radius:var(--mimi-radius-sm);color:var(--mimi-primary-foreground);border:1px solid {{ o.boxBorder }};background:{{ o.boxBg }}"><sc-if value="{{ o.selected }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if></span><span style="flex:1">{{ o.pre }}<mark style="background:transparent;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px">{{ o.match }}</mark>{{ o.post }}</span></div>
+                  </sc-for>
+                  <sc-if value="{{ m.mc.canCreate }}"><div role="option" aria-selected="false" onMouseDown="{{ m.mc.create }}" style="display:flex;align-items:center;gap:8px;min-height:34px;padding:0 8px;border-radius:var(--mimi-radius-sm);font-size:14px;cursor:pointer;border-top:1px solid var(--mimi-border);margin-top:3px;color:var(--mimi-info-soft-foreground)" style-hover="background:var(--mimi-info-soft)" style-active="transform:scale(0.985)"><mimi-icon name="plus" size="16"></mimi-icon>Crear «{{ m.mc.q }}»</div></sc-if>
+                </div>
+              </sc-if>
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Enter agrega · Backspace quita el último chip</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Cargando</span>
+              <div style="display:flex;align-items:center;gap:8px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft);border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:14px"><mimi-icon name="map-pin" size="16"></mimi-icon><span style="flex:1">Mon</span><span style="display:inline-flex;color:var(--mimi-muted-foreground);animation:mimi-spin .8s linear infinite"><mimi-icon name="loader-circle" size="16"></mimi-icon></span></div>
+              <div aria-busy="true" style="padding:8px;display:flex;flex-direction:column;gap:8px;background:var(--mimi-popover);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover)">
+                <span style="font-size:13px;color:var(--mimi-muted-foreground);padding:2px 4px">Buscando ciudades…</span>
+                <div style="height:26px;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+                <div style="height:26px;width:72%;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Sin resultados</span>
+              <div style="display:flex;align-items:center;gap:8px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft);border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:14px"><mimi-icon name="map-pin" size="16"></mimi-icon><span style="flex:1">Tokio</span><mimi-icon name="chevron-up" size="16"></mimi-icon></div>
+              <div role="status" style="padding:18px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;background:var(--mimi-popover);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover)">
+                <span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="search-x" size="20"></mimi-icon></span>
+                <span style="font-size:14px;font-weight:600">Sin resultados para «Tokio»</span>
+                <span style="font-size:13px;color:var(--mimi-muted-foreground)">Revisa la ortografía o crea la ciudad.</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
+            <sc-for list="{{ m.states }}" as="s" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ s.caption }}</span>
+                <div aria-invalid="{{ s.inv }}" aria-disabled="{{ s.dis }}" style="display:flex;align-items:center;gap:4px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 6px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:13px;border:1px solid {{ s.border }};box-shadow:{{ s.ring }};opacity:{{ s.op }}"><span style="display:inline-flex;align-items:center;height:24px;padding:0 8px;border-radius:999px;background:var(--mimi-chip);color:var(--mimi-chip-foreground);font-weight:500">Angular</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">+2</span></div>
+                <sc-if value="{{ s.hasMsg }}"><span style="font-size:12px;line-height:1.35;color:var(--mimi-destructive-soft-foreground)">Elige al menos una más.</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">2 · Date Picker y Date Range</h3>
+          <div style="display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:14px;font-weight:500">Fecha de entrega <span style="font-weight:400;color:var(--mimi-muted-foreground)">· solo días hábiles</span></span>
+              <button aria-haspopup="dialog" aria-expanded="{{ m.dp.ariaOpen }}" onClick="{{ m.dp.toggle }}" style="display:flex;align-items:center;gap:8px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;text-align:left;cursor:pointer;transition:var(--mimi-transition);border:1px solid {{ m.dp.border }};box-shadow:{{ m.dp.ring }}" style-hover="border-color:var(--mimi-input-hover)" style-active="transform:scale(var(--mimi-press-scale))"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="calendar" size="16"></mimi-icon></span><span style="flex:1">{{ m.dp.label }}</span></button>
+              <sc-if value="{{ m.dp.open }}" hint-placeholder-val="{{ true }}">
+                <div role="dialog" aria-label="Elegir fecha" style="margin-top:2px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--mimi-popover);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover)">
+                  <div style="display:flex;align-items:center;justify-content:space-between">
+                    <button aria-label="Anterior" onClick="{{ m.dp.cal.prev }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.9)"><mimi-icon name="chevron-left" size="16"></mimi-icon></button>
+                    <button aria-label="{{ m.dp.cal.titleAria }}" onClick="{{ m.dp.cal.cycleView }}" style="display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:600;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.96)">{{ m.dp.cal.title }}<mimi-icon name="chevron-down" size="14"></mimi-icon></button>
+                    <button aria-label="Siguiente" onClick="{{ m.dp.cal.next }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.9)"><mimi-icon name="chevron-right" size="16"></mimi-icon></button>
+                  </div>
+                  <sc-if value="{{ m.dp.cal.isDays }}">
+                    <div role="grid" style="display:grid;grid-template-columns:repeat(7,36px);row-gap:2px">
+                      <sc-for list="{{ weekdays }}" as="w"><span style="height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--mimi-muted-foreground)">{{ w }}</span></sc-for>
+                      <sc-for list="{{ m.dp.cal.cells }}" as="d">
+                        <div style="height:36px;display:flex;justify-content:center;background:{{ d.band }};border-radius:{{ d.bandR }}">
+                          <button aria-label="{{ d.aria }}" aria-selected="{{ d.sel }}" aria-current="{{ d.cur }}" disabled="{{ d.disabled }}" onClick="{{ d.pick }}" style="--hbg:{{ d.hbg }};position:relative;width:36px;height:36px;padding:0;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:13.5px;font-variant-numeric:tabular-nums;transition:var(--mimi-transition);background:{{ d.bg }};color:{{ d.fg }};font-weight:{{ d.fw }};opacity:{{ d.op }};cursor:{{ d.cursor }};text-decoration:{{ d.td }};box-shadow:{{ d.ring }}" style-hover="background:var(--hbg)" style-active="transform:scale(0.9)">{{ d.n }}<sc-if value="{{ d.today }}"><span aria-hidden="true" style="position:absolute;bottom:4px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:999px;background:currentColor"></span></sc-if></button>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ m.dp.cal.isMonths }}">
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:252px">
+                      <sc-for list="{{ m.dp.cal.months }}" as="mo"><button aria-pressed="{{ mo.aria }}" onClick="{{ mo.pick }}" style="height:44px;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:14px;cursor:pointer;transition:var(--mimi-transition);background:{{ mo.bg }};color:{{ mo.fg }};font-weight:{{ mo.fw }}" style-hover="box-shadow:inset 0 0 0 1px var(--mimi-border)" style-active="transform:scale(0.94)">{{ mo.label }}</button></sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ m.dp.cal.isYears }}">
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;width:252px">
+                      <sc-for list="{{ m.dp.cal.years }}" as="mo"><button aria-pressed="{{ mo.aria }}" onClick="{{ mo.pick }}" style="height:44px;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:14px;font-variant-numeric:tabular-nums;cursor:pointer;transition:var(--mimi-transition);background:{{ mo.bg }};color:{{ mo.fg }};font-weight:{{ mo.fw }}" style-hover="box-shadow:inset 0 0 0 1px var(--mimi-border)" style-active="transform:scale(0.94)">{{ mo.label }}</button></sc-for>
+                    </div>
+                  </sc-if>
+                  <div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px solid var(--mimi-border)">
+                    <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mimi-muted-foreground)"><span style="width:4px;height:4px;border-radius:999px;background:currentColor"></span>Hoy</span>
+                    <button onClick="{{ m.dp.goToday }}" style="height:28px;padding:0 10px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.94)">Ir a hoy</button>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+              <span style="font-size:14px;font-weight:500">Periodo del informe <span style="font-weight:400;color:var(--mimi-muted-foreground)">· sin fechas futuras</span></span>
+              <div style="display:flex;align-items:center;gap:8px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft);border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:14px"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="calendar-range" size="16"></mimi-icon></span><span style="flex:1">{{ m.dr.label }}</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ m.dr.days }}</span></div>
+              <div role="dialog" aria-label="Elegir periodo" style="margin-top:2px;display:flex;background:var(--mimi-popover);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);overflow:hidden">
+                <div style="width:130px;flex-shrink:0;padding:8px;display:flex;flex-direction:column;gap:2px;border-right:1px solid var(--mimi-border)">
+                  <sc-for list="{{ m.dr.presets }}" as="p" hint-placeholder-count="6">
+                    <button aria-pressed="{{ p.aria }}" onClick="{{ p.pick }}" style="height:32px;padding:0 8px;border:0;border-radius:var(--mimi-radius-sm);text-align:left;font-family:var(--mimi-font-sans);font-size:13px;cursor:pointer;transition:var(--mimi-transition);background:{{ p.bg }};color:{{ p.fg }};font-weight:{{ p.fw }}" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.96)">{{ p.label }}</button>
+                  </sc-for>
+                </div>
+                <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
+                  <div style="display:flex;align-items:center;justify-content:space-between">
+                    <button aria-label="Mes anterior" onClick="{{ m.dr.cal.prev }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.9)"><mimi-icon name="chevron-left" size="16"></mimi-icon></button>
+                    <span style="font-size:14px;font-weight:600">{{ m.dr.cal.title }}</span>
+                    <button aria-label="Mes siguiente" onClick="{{ m.dr.cal.next }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.9)"><mimi-icon name="chevron-right" size="16"></mimi-icon></button>
+                  </div>
+                  <div role="grid" style="display:grid;grid-template-columns:repeat(7,36px);row-gap:2px">
+                    <sc-for list="{{ weekdays }}" as="w"><span style="height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--mimi-muted-foreground)">{{ w }}</span></sc-for>
+                    <sc-for list="{{ m.dr.cal.cells }}" as="d">
+                      <div style="height:36px;display:flex;justify-content:center;background:{{ d.band }};border-radius:{{ d.bandR }}">
+                        <button aria-label="{{ d.aria }}" aria-selected="{{ d.sel }}" aria-current="{{ d.cur }}" disabled="{{ d.disabled }}" onClick="{{ d.pick }}" style="--hbg:{{ d.hbg }};position:relative;width:36px;height:36px;padding:0;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:13.5px;font-variant-numeric:tabular-nums;transition:var(--mimi-transition);background:{{ d.bg }};color:{{ d.fg }};font-weight:{{ d.fw }};opacity:{{ d.op }};cursor:{{ d.cursor }};text-decoration:{{ d.td }};box-shadow:{{ d.ring }}" style-hover="background:var(--hbg)" style-active="transform:scale(0.9)">{{ d.n }}<sc-if value="{{ d.today }}"><span aria-hidden="true" style="position:absolute;bottom:4px;left:50%;width:4px;height:4px;margin-left:-2px;border-radius:999px;background:currentColor"></span></sc-if></button>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ m.dr.hint }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
+            <sc-for list="{{ m.states }}" as="s" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ s.caption }}</span>
+                <div aria-invalid="{{ s.inv }}" aria-disabled="{{ s.dis }}" style="display:flex;align-items:center;gap:6px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 10px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap;border:1px solid {{ s.border }};box-shadow:{{ s.ring }};opacity:{{ s.op }}"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="calendar" size="14"></mimi-icon></span>30/09/2026</div>
+                <sc-if value="{{ s.hasMsg }}"><span style="font-size:12px;line-height:1.35;color:var(--mimi-destructive-soft-foreground)">Debe ser un día hábil.</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">3 · Time Picker</h3>
+            <div role="radiogroup" aria-label="Formato de hora" style="position:relative;display:grid;grid-template-columns:repeat(2,64px);padding:3px;border-radius:calc(var(--mimi-radius) + 3px);background:var(--mimi-muted)">
+              <span aria-hidden="true" style="position:absolute;top:3px;bottom:3px;left:3px;width:64px;border-radius:var(--mimi-radius);background:var(--mimi-card);box-shadow:var(--mimi-shadow-neutral);transition:transform .4s cubic-bezier(.3,1.35,.5,1);transform:{{ m.tp.fmtTf }}"></span>
+              <sc-for list="{{ m.tp.fmts }}" as="f" hint-placeholder-count="2"><button role="radio" aria-checked="{{ f.aria }}" onClick="{{ f.pick }}" style="position:relative;z-index:1;height:28px;border:0;background:transparent;font-family:var(--mimi-font-sans);font-size:13px;cursor:pointer;transition:color .2s ease, transform .15s ease;color:{{ f.fg }};font-weight:{{ f.fw }}" style-active="transform:scale(0.94)">{{ f.label }}</button></sc-for>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <label style="font-size:14px;font-weight:500">Hora de la reunión</label>
+              <button aria-haspopup="dialog" aria-expanded="true" style="display:flex;align-items:center;gap:8px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-variant-numeric:tabular-nums;text-align:left;cursor:pointer" style-active="transform:scale(var(--mimi-press-scale))"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="clock" size="16"></mimi-icon></span><span style="flex:1">{{ m.tp.label }}</span></button>
+              <div role="dialog" aria-label="Elegir hora" style="margin-top:2px;display:flex;background:var(--mimi-popover);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);overflow:hidden">
+                <sc-for list="{{ m.tp.cols }}" as="col" hint-placeholder-count="3">
+                  <div role="listbox" aria-label="{{ col.label }}" style="flex:1;height:216px;overflow-y:auto;padding:4px;display:flex;flex-direction:column;gap:2px;border-right:1px solid var(--mimi-border);scrollbar-width:thin">
+                    <span style="position:sticky;top:-4px;padding:6px 0 4px;text-align:center;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground);background:var(--mimi-popover)">{{ col.label }}</span>
+                    <sc-for list="{{ col.items }}" as="it">
+                      <button role="option" aria-selected="{{ it.aria }}" onClick="{{ it.pick }}" style="--hbg:{{ it.hbg }};flex-shrink:0;height:32px;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:14px;font-variant-numeric:tabular-nums;cursor:pointer;transition:var(--mimi-transition);background:{{ it.bg }};color:{{ it.fg }};font-weight:{{ it.fw }}" style-hover="background:var(--hbg)" style-active="transform:scale(0.92)">{{ it.label }}</button>
+                    </sc-for>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px;align-content:start;padding-top:26px">
+              <sc-for list="{{ m.states }}" as="s" hint-placeholder-count="5">
+                <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                  <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ s.caption }}</span>
+                  <div aria-invalid="{{ s.inv }}" aria-disabled="{{ s.dis }}" style="display:flex;align-items:center;gap:8px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:14px;font-variant-numeric:tabular-nums;border:1px solid {{ s.border }};box-shadow:{{ s.ring }};opacity:{{ s.op }}"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="clock" size="16"></mimi-icon></span>{{ m.tp.sample }}</div>
+                  <sc-if value="{{ s.hasMsg }}"><span style="font-size:12px;color:var(--mimi-destructive-soft-foreground)">Fuera del horario (8:00–18:00).</span></sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const MONTHS = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+const MSHORT = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const TODAY = '2026-09-30';
+const iso = (y, m, d) => { const dt = new Date(y, m, d); return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0'); };
+const parts = s => s.split('-').map(Number);
+const fmt = s => { const [y, m, d] = parts(s); return d + ' ' + MSHORT[m - 1] + ' ' + y; };
+const addDays = (s, n) => { const [y, m, d] = parts(s); return iso(y, m - 1, d + n); };
+const diff = (a, b) => { const [y1, m1, d1] = parts(a), [y2, m2, d2] = parts(b); return Math.round((new Date(y2, m2 - 1, d2) - new Date(y1, m1 - 1, d1)) / 864e5); };
+const cap = s => s[0].toUpperCase() + s.slice(1);
+const CITIES = [['Barcelona', 'España'], ['Bogotá', 'Colombia'], ['Buenos Aires', 'Argentina'], ['Ciudad de México', 'México'], ['Lima', 'Perú'], ['Madrid', 'España'], ['Medellín', 'Colombia'], ['Montevideo', 'Uruguay'], ['Santiago', 'Chile']];
+const TECH = ['Angular', 'Tailwind CSS', 'TypeScript', 'RxJS', 'Signals', 'Vitest', 'Playwright', 'Storybook'];
+const norm = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const split = (label, q) => { const i = q ? norm(label).indexOf(norm(q)) : -1; return i < 0 ? { pre: label, match: '', post: '' } : { pre: label.slice(0, i), match: label.slice(i, i + q.length), post: label.slice(i + q.length) }; };
+const noop = () => {};
+const initMode = () => ({
+  cb: { open: true, focus: false, q: null, value: 'Medellín', active: 'Medellín', extra: [] },
+  mc: { open: false, focus: false, q: '', values: ['Angular', 'Signals', 'Tailwind CSS'], active: null, extra: [] },
+  dp: { open: true, view: 'days', y: 2026, m: 8, sel: '2026-09-30' },
+  dr: { y: 2026, m: 8, start: '2026-09-24', end: '2026-09-30', preset: '7d' },
+  tp: { fmt: '12', h: 9, min: 30 }
+});
+
+class Component extends DCLogic {
+  state = { l: initMode(), d: initMode() };
+  set(k, key, patch) { this.setState(s => ({ [k]: { ...s[k], [key]: { ...s[k][key], ...(typeof patch === 'function' ? patch(s[k][key]) : patch) } } })); }
+
+  fieldState(o) { return { border: o.err ? 'var(--mimi-destructive)' : o.focus ? 'var(--mimi-ring)' : 'var(--mimi-input)', ring: o.err ? '0 0 0 3px var(--mimi-destructive-soft)' : o.focus ? '0 0 0 3px var(--mimi-ring-soft)' : 'none' }; }
+
+  combobox(k) {
+    const c = this.state[k].cb;
+    const all = CITIES.concat(c.extra.map(x => [x, 'Nueva']));
+    const q = c.q === null ? '' : c.q;
+    const list = all.filter(([n]) => !q || norm(n).includes(norm(q)));
+    const pick = n => this.set(k, 'cb', { value: n, q: null, open: false, active: n });
+    const exact = all.some(([n]) => norm(n) === norm(q));
+    const ids = list.map(x => x[0]);
+    const move = d => { const i = ids.indexOf(c.active); const n = ids[(i + d + ids.length) % ids.length]; n && this.set(k, 'cb', { active: n }); };
+    return {
+      ...this.fieldState({ focus: c.focus || c.open }), open: c.open, ariaOpen: String(c.open), chev: c.open ? 'rotate(180deg)' : 'none', q,
+      text: c.q === null ? c.value || '' : c.q,
+      options: list.map(([n, sub]) => ({ ...split(n, q), sub, selected: n === c.value, ariaSel: String(n === c.value), bg: n === c.active ? 'var(--mimi-accent)' : 'transparent', pick: e => { e.preventDefault(); pick(n); }, hover: () => this.set(k, 'cb', { active: n }) })),
+      canCreate: !!q.trim() && !exact, empty: list.length === 0 && !q.trim(),
+      create: e => { e.preventDefault(); const n = q.trim(); this.set(k, 'cb', s => ({ extra: [...s.extra, n], value: n, q: null, open: false, active: n })); },
+      onQ: e => { const v = e.target.value; const f = all.find(([n]) => norm(n).includes(norm(v))); this.set(k, 'cb', { q: v, open: true, active: f ? f[0] : null }); },
+      onFocus: () => this.set(k, 'cb', { focus: true, open: true }),
+      onBlur: () => this.set(k, 'cb', { focus: false, open: false, q: null }),
+      onKey: e => {
+        if (e.key === 'ArrowDown') { e.preventDefault(); c.open ? move(1) : this.set(k, 'cb', { open: true }); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+        else if (e.key === 'Enter') { e.preventDefault(); if (c.active && ids.includes(c.active)) pick(c.active); else if (q.trim() && !exact) { const n = q.trim(); this.set(k, 'cb', s => ({ extra: [...s.extra, n], value: n, q: null, open: false })); } }
+        else if (e.key === 'Escape') this.set(k, 'cb', { open: false, q: null });
+      }
+    };
+  }
+
+  multi(k) {
+    const c = this.state[k].mc;
+    const all = TECH.concat(c.extra);
+    const q = c.q;
+    const list = all.filter(n => !q || norm(n).includes(norm(q)));
+    const toggle = n => this.set(k, 'mc', s => ({ values: s.values.includes(n) ? s.values.filter(x => x !== n) : [...s.values, n], q: '' }));
+    const exact = all.some(n => norm(n) === norm(q));
+    const add = () => { const n = q.trim(); if (!n) return; if (exact) { const f = all.find(x => norm(x) === norm(n)); if (!c.values.includes(f)) toggle(f); else this.set(k, 'mc', { q: '' }); return; } this.set(k, 'mc', s => ({ extra: [...s.extra, n], values: [...s.values, n], q: '' })); };
+    return {
+      ...this.fieldState({ focus: c.focus }), open: c.open, ariaOpen: String(c.open), q, placeholder: c.values.length ? '' : 'Elige tecnologías',
+      chips: c.values.map(v => ({ label: v, removeLabel: 'Quitar ' + v, remove: e => { e.preventDefault(); e.stopPropagation(); toggle(v); } })),
+      options: list.map(n => { const sel = c.values.includes(n); return { ...split(n, q), selected: sel, ariaSel: String(sel), bg: n === c.active ? 'var(--mimi-accent)' : 'transparent', boxBorder: sel ? 'var(--mimi-primary)' : 'var(--mimi-input)', boxBg: sel ? 'var(--mimi-primary)' : 'var(--mimi-input-background)', pick: e => { e.preventDefault(); toggle(n); }, hover: () => this.set(k, 'mc', { active: n }) }; }),
+      canCreate: !!q.trim() && !exact, create: e => { e.preventDefault(); add(); },
+      focusInput: e => { const i = e.currentTarget.querySelector('input'); i && i.focus(); },
+      onQ: e => this.set(k, 'mc', { q: e.target.value, open: true }),
+      onFocus: () => this.set(k, 'mc', { focus: true, open: true }),
+      onBlur: () => this.set(k, 'mc', { focus: false, open: false }),
+      onKey: e => {
+        if (e.key === 'Enter') { e.preventDefault(); if (c.active && !q) toggle(c.active); else add(); }
+        else if (e.key === 'Backspace' && !q && c.values.length) this.set(k, 'mc', s => ({ values: s.values.slice(0, -1) }));
+        else if (e.key === 'Escape') this.set(k, 'mc', { open: false });
+      }
+    };
+  }
+
+  cells(y, m, o) {
+    const first = (new Date(y, m, 1).getDay() + 6) % 7;
+    const out = [];
+    for (let i = 0; i < 42; i++) {
+      const s = iso(y, m, 1 - first + i);
+      const [yy, mm, dd] = parts(s);
+      const inMonth = mm - 1 === m;
+      const dis = o.isDisabled(s);
+      const isStart = o.start === s, isEnd = o.end === s, sel = o.sel === s || isStart || isEnd;
+      const inRange = o.start && o.end && s > o.start && s < o.end;
+      const band = (inRange || (o.start && o.end && o.start !== o.end && (isStart || isEnd))) ? 'var(--mimi-range)' : 'transparent';
+      const R = 'var(--mimi-radius-sm)';
+      out.push({
+        n: dd, today: s === TODAY, sel: String(sel), cur: s === TODAY ? 'date' : undefined, disabled: dis,
+        aria: dd + ' de ' + MONTHS[mm - 1] + ' de ' + yy + (dis ? ', no disponible' : ''),
+        band, bandR: isStart && isEnd ? R : isStart ? R + ' 0 0 ' + R : isEnd ? '0 ' + R + ' ' + R + ' 0' : '0',
+        bg: sel ? 'var(--mimi-primary)' : 'transparent', fg: sel ? 'var(--mimi-primary-foreground)' : inMonth ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)',
+        hbg: sel ? 'var(--mimi-primary)' : dis ? 'transparent' : 'var(--mimi-accent)',
+        fw: sel || s === TODAY ? '600' : '400', op: dis ? '.38' : inMonth ? '1' : '.55', cursor: dis ? 'not-allowed' : 'pointer', td: dis && inMonth ? 'line-through' : 'none',
+        ring: s === TODAY && !sel ? 'inset 0 0 0 1px var(--mimi-border)' : 'none',
+        pick: dis ? noop : () => o.pick(s)
+      });
+    }
+    return out;
+  }
+  nav(k, key, d) {
+    return () => this.set(k, key, s => {
+      if (s.view === 'years') return { y: s.y + d * 12 };
+      if (s.view === 'months') return { y: s.y + d };
+      const nm = s.m + d; return { m: (nm + 12) % 12, y: s.y + Math.floor(nm / 12) };
+    });
+  }
+
+  datePicker(k) {
+    const p = this.state[k].dp;
+    const weekend = s => { const [y, m, d] = parts(s); const w = new Date(y, m - 1, d).getDay(); return w === 0 || w === 6; };
+    const yStart = p.y - (p.y % 12);
+    return {
+      open: p.open, ariaOpen: String(p.open), label: fmt(p.sel), ...this.fieldState({ focus: p.open }),
+      toggle: () => this.set(k, 'dp', { open: !p.open }),
+      goToday: () => this.set(k, 'dp', { y: 2026, m: 8, view: 'days' }),
+      cal: {
+        isDays: p.view === 'days', isMonths: p.view === 'months', isYears: p.view === 'years',
+        title: p.view === 'days' ? cap(MONTHS[p.m]) + ' ' + p.y : p.view === 'months' ? String(p.y) : yStart + '–' + (yStart + 11),
+        titleAria: 'Cambiar vista',
+        cycleView: () => this.set(k, 'dp', { view: p.view === 'days' ? 'months' : p.view === 'months' ? 'years' : 'days' }),
+        prev: this.nav(k, 'dp', -1), next: this.nav(k, 'dp', 1),
+        cells: this.cells(p.y, p.m, { sel: p.sel, isDisabled: weekend, pick: s => this.set(k, 'dp', { sel: s }) }),
+        months: MSHORT.map((l, i) => { const on = i === p.m; return { label: cap(l), aria: String(on), bg: on ? 'var(--mimi-primary)' : 'transparent', fg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)', fw: on ? '600' : '400', pick: () => this.set(k, 'dp', { m: i, view: 'days' }) }; }),
+        years: Array.from({ length: 12 }, (_, i) => yStart + i).map(yv => { const on = yv === p.y; return { label: String(yv), aria: String(on), bg: on ? 'var(--mimi-primary)' : 'transparent', fg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)', fw: on ? '600' : '400', pick: () => this.set(k, 'dp', { y: yv, view: 'months' }) }; })
+      }
+    };
+  }
+
+  dateRange(k) {
+    const r = this.state[k].dr;
+    const presets = [
+      ['today', 'Hoy', [TODAY, TODAY]], ['yesterday', 'Ayer', [addDays(TODAY, -1), addDays(TODAY, -1)]],
+      ['7d', 'Últimos 7 días', [addDays(TODAY, -6), TODAY]], ['30d', 'Últimos 30 días', [addDays(TODAY, -29), TODAY]],
+      ['month', 'Este mes', ['2026-09-01', TODAY]], ['last', 'Mes pasado', ['2026-08-01', '2026-08-31']]
+    ];
+    const pick = s => this.set(k, 'dr', x => (!x.start || x.end) ? { start: s, end: null, preset: null } : s < x.start ? { start: s, end: x.start, preset: null } : { end: s, preset: null });
+    return {
+      label: r.end ? fmt(r.start) + ' – ' + fmt(r.end) : fmt(r.start) + ' – …',
+      days: r.end ? (diff(r.start, r.end) + 1) + ' días' : '',
+      hint: r.end ? 'Haz clic en un día para empezar un periodo nuevo.' : 'Elige el día final.',
+      presets: presets.map(([id, label, [a, b]]) => { const on = r.preset === id; const [y, m] = parts(b); return { label, aria: String(on), bg: on ? 'var(--mimi-accent)' : 'transparent', fg: on ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', fw: on ? '600' : '500', pick: () => this.set(k, 'dr', { start: a, end: b, preset: id, y, m: m - 1 }) }; }),
+      cal: { title: cap(MONTHS[r.m]) + ' ' + r.y, prev: this.nav(k, 'dr', -1), next: this.nav(k, 'dr', 1), cells: this.cells(r.y, r.m, { start: r.start, end: r.end, isDisabled: s => s > TODAY, pick }) }
+    };
+  }
+
+  timePicker(k) {
+    const t = this.state[k].tp;
+    const is12 = t.fmt === '12';
+    const pad = n => String(n).padStart(2, '0');
+    const h12 = t.h % 12 || 12, pm = t.h >= 12;
+    const label = is12 ? pad(h12) + ':' + pad(t.min) + (pm ? ' p. m.' : ' a. m.') : pad(t.h) + ':' + pad(t.min);
+    const item = (lab, on, pick) => ({ label: lab, aria: String(on), pick, bg: on ? 'var(--mimi-primary)' : 'transparent', fg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)', fw: on ? '600' : '400', hbg: on ? 'var(--mimi-primary)' : 'var(--mimi-accent)' });
+    const hours = is12 ? Array.from({ length: 12 }, (_, i) => i + 1).map(h => item(pad(h), h === h12, () => this.set(k, 'tp', s => ({ h: (h % 12) + (s.h >= 12 ? 12 : 0) }))))
+      : Array.from({ length: 24 }, (_, h) => item(pad(h), h === t.h, () => this.set(k, 'tp', { h })));
+    const mins = Array.from({ length: 12 }, (_, i) => i * 5).map(mn => item(pad(mn), mn === t.min, () => this.set(k, 'tp', { min: mn })));
+    const cols = [{ label: 'Hora', items: hours }, { label: 'Min', items: mins }];
+    if (is12) cols.push({ label: '', items: [item('a. m.', !pm, () => this.set(k, 'tp', s => ({ h: s.h % 12 }))), item('p. m.', pm, () => this.set(k, 'tp', s => ({ h: (s.h % 12) + 12 })))] });
+    return {
+      label, sample: is12 ? '07:15 p. m.' : '19:15',
+      fmtTf: is12 ? 'translateX(0)' : 'translateX(100%)',
+      fmts: [['12', '12 h'], ['24', '24 h']].map(([v, l]) => ({ label: l, aria: String(t.fmt === v), fg: t.fmt === v ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', fw: t.fmt === v ? '600' : '500', pick: () => this.set(k, 'tp', { fmt: v }) })),
+      cols
+    };
+  }
+
+  renderVals() {
+    const states = [
+      ['Normal', 'var(--mimi-input)', 'none', '1'],
+      ['Hover', 'var(--mimi-input-hover)', 'none', '1'],
+      ['Foco', 'var(--mimi-ring)', '0 0 0 3px var(--mimi-ring-soft)', '1'],
+      ['Deshabilitado', 'var(--mimi-input)', 'none', '.5'],
+      ['Con error', 'var(--mimi-destructive)', '0 0 0 3px var(--mimi-destructive-soft)', '1']
+    ].map(([caption, border, ring, op]) => ({ caption, border, ring, op, hasMsg: caption === 'Con error', inv: String(caption === 'Con error'), dis: String(caption === 'Deshabilitado') }));
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => ({
+      k, cls, label, icon, states,
+      cb: this.combobox(k), mc: this.multi(k), dp: this.datePicker(k), dr: this.dateRange(k), tp: this.timePicker(k)
+    }));
+    return { modes, weekdays: ['L', 'M', 'X', 'J', 'V', 'S', 'D'] };
+  }
+}
+</script>
+</body>
+</html>

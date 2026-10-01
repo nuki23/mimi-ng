@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 2 · Tokens y tonos</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F2 Tokens y Tonos.dc.html">Tokens y tonos</a>
+      <a href="Mimi F2 Select.dc.html">Select</a>
+      <a href="Mimi F2 Overlays.dc.html">Dialog · Confirm · Popover · Tooltip · Menús</a>
+      <a href="Mimi F2 Toast Tabs Toolbar.dc.html">Toast · Tabs · Toolbar</a>
+      <a href="Mimi Componentes.dc.html">Fase 1</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,780px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:40px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Tokens</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Colores · existentes</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:14px">
+            <sc-for list="{{ colorsOld }}" as="t" hint-placeholder-count="10">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <div style="height:56px;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;background:{{ t.bg }};color:{{ t.fg }}">{{ t.sample }}</div>
+                <span style="font-family:var(--mimi-font-mono);font-size:11px;line-height:1.35;word-break:break-all">{{ t.name }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;gap:10px"><h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Colores · nuevos</h3><span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11px;font-weight:700">Fase 2</span></div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:14px">
+            <sc-for list="{{ colorsNew }}" as="t" hint-placeholder-count="12">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <div style="height:56px;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;background:{{ t.bg }};color:{{ t.fg }}">{{ t.sample }}</div>
+                <span style="font-family:var(--mimi-font-mono);font-size:11px;line-height:1.35;word-break:break-all">{{ t.name }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Contraste AA · sólido / foreground · suave / soft-foreground</h3>
+          <div style="border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden">
+            <sc-for list="{{ m.contrast }}" as="c" hint-placeholder-count="4">
+              <div style="display:grid;grid-template-columns:110px 1fr 1fr;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--mimi-border);font-size:13px">
+                <span style="font-weight:600">{{ c.name }}</span>
+                <span style="display:flex;align-items:center;gap:8px"><span style="display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;font-weight:600;background:{{ c.bg }};color:{{ c.fg }}">Aa</span><span style="font-family:var(--mimi-font-mono)">{{ c.solid }}:1</span></span>
+                <span style="display:flex;align-items:center;gap:8px"><span style="display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;font-weight:600;background:{{ c.sbg }};color:{{ c.sfg }}">Aa</span><span style="font-family:var(--mimi-font-mono)">{{ c.soft }}:1</span></span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Sombras · existentes y nuevas</h3>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:28px 20px;padding:12px 4px">
+            <sc-for list="{{ shadows }}" as="t" hint-placeholder-count="10">
+              <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+                <div style="height:64px;border-radius:var(--mimi-radius);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.sh }}">{{ t.sample }}</div>
+                <span style="display:flex;align-items:center;gap:6px;font-family:var(--mimi-font-mono);font-size:11px;word-break:break-all">{{ t.name }}<sc-if value="{{ t.isNew }}"><span style="width:6px;height:6px;flex-shrink:0;border-radius:999px;background:var(--mimi-info)"></span></sc-if></span>
+              </div>
+            </sc-for>
+          </div>
+          <span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mimi-muted-foreground)"><span style="width:6px;height:6px;border-radius:999px;background:var(--mimi-info)"></span>Token nuevo</span>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Tonos en Button</h3>
+            <label style="display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;cursor:pointer">
+              Glow en todos
+              <button role="switch" aria-checked="{{ m.glowAria }}" aria-label="Activar glow" onClick="{{ m.toggleGlow }}" style="display:inline-flex;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border:0;border-radius:999px;cursor:pointer;transition:var(--mimi-transition);background:{{ m.glowTrack }}" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-background);box-shadow:0 1px 3px oklch(0 0 0 / .2);transition:transform .2s cubic-bezier(.2,.8,.2,1);transform:{{ m.glowThumb }}"></span></button>
+            </label>
+          </div>
+          <div style="display:grid;grid-template-columns:96px repeat(4,max-content);gap:14px 14px;align-items:center">
+            <span></span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Sólido</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Suave</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Outline</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Glow</span>
+            <sc-for list="{{ m.tones }}" as="t" hint-placeholder-count="5">
+              <span style="font-size:14px;font-weight:600">{{ t.label }}</span>
+              <button style="--t:{{ t.bg }};--tf:{{ t.fg }};--tsh:{{ t.solidShadow }};--tsh2:{{ t.solidShadowH }};display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--t);color:var(--tf);box-shadow:var(--tsh)" style-hover="background:color-mix(in oklab, var(--t) 88%, var(--mimi-background));box-shadow:var(--tsh2)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ t.icon }}" size="16"></mimi-icon>{{ t.action }}</button>
+              <button style="--ts:{{ t.soft }};--tsf:{{ t.softFg }};--t:{{ t.bg }};display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--ts);color:var(--tsf);box-shadow:{{ t.softShadow }}" style-hover="background:color-mix(in oklab, var(--t) 22%, var(--mimi-background))" style-active="transform:scale(var(--mimi-press-scale))">{{ t.action }}</button>
+              <button style="--tsf:{{ t.softFg }};--t:{{ t.bg }};display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid color-mix(in oklch, var(--t) 55%, transparent);border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:transparent;color:var(--tsf);box-shadow:{{ t.softShadow }}" style-hover="background:color-mix(in oklch, var(--t) 10%, transparent)" style-active="transform:scale(var(--mimi-press-scale))">{{ t.action }}</button>
+              <button style="--t:{{ t.bg }};--tf:{{ t.fg }};--tg:{{ t.glow }};display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;line-height:1;cursor:pointer;transition:var(--mimi-transition);background:var(--t);color:var(--tf);box-shadow:var(--tg)" style-hover="background:color-mix(in oklab, var(--t) 88%, var(--mimi-background))" style-active="transform:scale(var(--mimi-press-scale))">{{ t.action }}</button>
+            </sc-for>
+          </div>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Tonos en Badge</h3>
+          <div style="display:grid;grid-template-columns:96px repeat(4,max-content);gap:14px 18px;align-items:center">
+            <span></span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Sólido</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Suave</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Outline + punto</span>
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Glow</span>
+            <sc-for list="{{ m.tones }}" as="t" hint-placeholder-count="5">
+              <span style="font-size:14px;font-weight:600">{{ t.label }}</span>
+              <span style="display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.badgeGlow }}"><mimi-icon name="{{ t.icon }}" size="12"></mimi-icon>{{ t.badge }}</span>
+              <span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:{{ t.soft }};color:{{ t.softFg }};box-shadow:{{ t.badgeGlow }}">{{ t.badge }}</span>
+              <span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;border:1px solid var(--mimi-border);color:var(--mimi-foreground);box-shadow:{{ t.badgeGlow }}"><span style="width:6px;height:6px;border-radius:999px;background:{{ t.bg }}"></span>{{ t.badge }}</span>
+              <span style="display:inline-flex;align-items:center;height:22px;padding:0 10px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.glow }}">{{ t.badge }}</span>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const TONES = [
+  ['primary', 'Primary', 'check', 'Guardar', 'Nuevo'],
+  ['success', 'Success', 'circle-check', 'Aprobar', 'Activo'],
+  ['warning', 'Warning', 'triangle-alert', 'Revisar', 'Pendiente'],
+  ['info', 'Info', 'info', 'Ver detalles', 'Beta'],
+  ['destructive', 'Destructive', 'trash-2', 'Eliminar', 'Error']
+];
+const CONTRAST = {
+  l: [['Success', '4.81', '6.83'], ['Warning', '7.64', '7.16'], ['Info', '4.79', '6.39'], ['Destructive', '4.56', '5.66']],
+  d: [['Success', '7.66', '10.19'], ['Warning', '9.51', '10.26'], ['Info', '7.33', '9.77'], ['Destructive', '6.32', '8.65']]
+};
+const v = n => 'var(--mimi-' + n + ')';
+class Component extends DCLogic {
+  state = { glow: { l: false, d: false } };
+  renderVals() {
+    const pair = (n, fgName, sample) => ({ name: '--mimi-' + n, bg: v(n), fg: fgName ? v(fgName) : 'var(--mimi-foreground)', sample: sample || 'Aa' });
+    const colorsOld = [
+      pair('background', 'foreground'), pair('card', 'card-foreground'), pair('primary', 'primary-foreground'), pair('secondary', 'secondary-foreground'),
+      pair('muted', 'muted-foreground'), pair('accent', 'accent-foreground'), pair('destructive', 'destructive-foreground'),
+      pair('border', null, ''), pair('input', null, ''), pair('ring', 'background')
+    ];
+    const colorsNew = [
+      pair('success', 'success-foreground'), pair('success-soft', 'success-soft-foreground'),
+      pair('warning', 'warning-foreground'), pair('warning-soft', 'warning-soft-foreground'),
+      pair('info', 'info-foreground'), pair('info-soft', 'info-soft-foreground'),
+      pair('destructive-soft-bg', 'destructive-soft-foreground'),
+      pair('popover', 'popover-foreground'), pair('tooltip', 'tooltip-foreground'),
+      pair('overlay', 'background'), pair('glass', 'foreground')
+    ];
+    const sh = (name, bg, fg, isNew, sample) => ({ name: '--mimi-' + name, sh: v(name), bg: v(bg), fg: v(fg), isNew, sample: sample || '' });
+    const shadows = [
+      sh('shadow-card', 'card', 'foreground', false, 'Card'), sh('shadow-neutral', 'card', 'foreground', false, 'Neutral'),
+      sh('shadow-primary', 'primary', 'primary-foreground', false, 'Primary'), sh('shadow-destructive', 'destructive', 'destructive-foreground', false, 'Destructive'),
+      sh('shadow-success', 'success', 'success-foreground', true, 'Success'), sh('shadow-warning', 'warning', 'warning-foreground', true, 'Warning'),
+      sh('shadow-info', 'info', 'info-foreground', true, 'Info'), sh('shadow-popover', 'popover', 'popover-foreground', true, 'Popover'),
+      sh('glow', 'primary', 'primary-foreground', true, 'Glow'), sh('glow-success', 'success', 'success-foreground', true, 'Glow'),
+      sh('glow-warning', 'warning', 'warning-foreground', true, 'Glow'), sh('glow-info', 'info', 'info-foreground', true, 'Glow'),
+      sh('glow-destructive', 'destructive', 'destructive-foreground', true, 'Glow')
+    ];
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+      const g = this.state.glow[k];
+      const tones = TONES.map(([n, lab, ic, action, badge]) => {
+        const softName = n === 'destructive' ? 'destructive-soft-bg' : n === 'primary' ? 'secondary' : n + '-soft';
+        const softFg = n === 'primary' ? 'secondary-foreground' : n + '-soft-foreground';
+        const glowV = n === 'primary' ? v('glow') : v('glow-' + n);
+        return {
+          label: lab, icon: ic, action, badge,
+          bg: v(n), fg: v(n + '-foreground'), soft: v(softName), softFg: v(softFg), glow: glowV,
+          solidShadow: g ? glowV : v('shadow-' + n), solidShadowH: g ? glowV : v('shadow-' + n + '-hover'),
+          softShadow: g ? glowV : 'none', badgeGlow: g ? glowV : 'none'
+        };
+      });
+      return {
+        key: k, cls, label, icon, tones,
+        contrast: CONTRAST[k].map(([name, solid, soft]) => {
+          const n = name.toLowerCase();
+          return { name, solid, soft, bg: v(n), fg: v(n + '-foreground'), sbg: v(n === 'destructive' ? 'destructive-soft-bg' : n + '-soft'), sfg: v(n + '-soft-foreground') };
+        }),
+        glowAria: g ? 'true' : 'false',
+        glowTrack: g ? 'var(--mimi-primary)' : 'var(--mimi-switch-off)',
+        glowThumb: g ? 'translateX(16px)' : 'translateX(0)',
+        toggleGlow: () => this.setState(s => ({ glow: { ...s.glow, [k]: !s.glow[k] } }))
+      };
+    });
+    return { modes, colorsOld, colorsNew, shadows };
+  }
+}
+</script>
+</body>
+</html>

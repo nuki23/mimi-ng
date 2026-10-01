@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<script src="image-slot.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}
+@property --mimi-beam-a{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes mimi-beam{to{--mimi-beam-a:360deg}}
+@keyframes mimi-shine{from{background-position:200% 0}to{background-position:-100% 0}}
+@keyframes mimi-marquee{to{transform:translateX(-50%)}}
+@keyframes mimi-typing-a{from{width:0}}
+@keyframes mimi-typing-b{from{width:0}}
+@keyframes mimi-show-a{from,to{opacity:1}}
+@keyframes mimi-blurfade-a{from{opacity:0;filter:blur(6px);transform:translateY(10px)}}
+@keyframes mimi-blurfade-b{from{opacity:0;filter:blur(6px);transform:translateY(10px)}}
+@keyframes mimi-list-in{from{opacity:0;transform:translateY(-12px) scale(.94)}}
+@keyframes mimi-confetti-a{0%{transform:translate(0,0) rotate(0);opacity:1}60%{opacity:1}100%{transform:translate(var(--dx),calc(var(--dy) + 70px)) rotate(var(--r));opacity:0}}
+@keyframes mimi-confetti-b{0%{transform:translate(0,0) rotate(0);opacity:1}60%{opacity:1}100%{transform:translate(var(--dx),calc(var(--dy) + 70px)) rotate(var(--r));opacity:0}}
+@keyframes mimi-ripple{from{transform:translate(-50%,-50%) scale(0);opacity:.4}to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+@media (prefers-reduced-motion: reduce){[data-fx]{animation:none !important;transition:none !important}}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi Effects</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F5 Estructura.dc.html">Sheet · Accordion · Stepper · Progress</a>
+      <a href="Mimi F5 Dashboard y Media.dc.html">Sidebar · Carousel · Preview · Timeline · Resizable · Hover Card · Rating</a>
+      <a href="Mimi F5 Effects.dc.html">Mimi Effects</a>
+    </nav>
+    <span style="max-width:860px;font-size:14px;line-height:1.55;color:oklch(0.4 0 0)">Cada tarjeta muestra el efecto en un fotograma clave y una nota de cómo se anima. Las marcadas «En vivo» se reproducen. El interruptor «Reducir movimiento» de cada panel, igual que la preferencia del sistema, deja cada efecto en su estado final sin animar.</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,820px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:36px;display:flex;flex-direction:column;gap:24px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Efectos</span>
+          <div style="display:flex;align-items:center;gap:12px">
+            <label style="display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:500;cursor:pointer">Reducir movimiento<button role="switch" aria-checked="{{ m.rmAria }}" aria-label="Reducir movimiento" onClick="{{ m.toggleRm }}" style="display:inline-flex;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border:0;border-radius:999px;cursor:pointer;transition:var(--mimi-transition);background:{{ m.rmTrack }}" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-background);box-shadow:0 1px 3px oklch(0 0 0 / .2);transition:transform .2s ease;transform:{{ m.rmThumb }}"></span></button></label>
+            <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px">
+
+          <article style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Animated Theme Toggler</span><span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11px;font-weight:700">En vivo</span></div>
+            <div style="padding:12px 14px">
+              <div style="position:relative;height:168px;border-radius:var(--mimi-radius);overflow:hidden;border:1px solid var(--mimi-border)">
+                <div style="position:absolute;inset:0;padding:14px;background:oklch(1 0 0);color:oklch(0.145 0 0);display:flex;flex-direction:column;gap:8px"><span style="font-size:14px;font-weight:700">Ventas</span><div style="height:10px;width:60%;border-radius:4px;background:oklch(0.92 0 0)"></div><div style="flex:1;border-radius:10px;background:oklch(0.96 0 0)"></div></div>
+                <div data-fx="" style="position:absolute;inset:0;padding:14px;background:oklch(0.145 0 0);color:oklch(0.985 0 0);display:flex;flex-direction:column;gap:8px;transition:clip-path .7s cubic-bezier(.65,0,.35,1);clip-path:{{ m.theme.clip }}"><span style="font-size:14px;font-weight:700">Ventas</span><div style="height:10px;width:60%;border-radius:4px;background:oklch(0.3 0 0)"></div><div style="flex:1;border-radius:10px;background:oklch(0.2 0 0)"></div></div>
+                <button aria-label="{{ m.theme.aria }}" onClick="{{ m.theme.toggle }}" style="position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;border:0;border-radius:999px;cursor:pointer;background:{{ m.theme.btnBg }};color:{{ m.theme.btnFg }};box-shadow:0 2px 8px oklch(0 0 0 / .2);transition:transform .15s ease" style-active="transform:scale(0.88)"><span data-fx="" style="display:inline-flex;transition:transform .5s cubic-bezier(.2,.8,.2,1);transform:{{ m.theme.rot }}"><mimi-icon name="{{ m.theme.icon }}" size="17"></mimi-icon></span></button>
+                <span style="position:absolute;left:10px;bottom:10px;display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;background:oklch(0 0 0 / .55);color:#fff;font-size:11px;font-weight:600">{{ m.theme.frame }}</span>
+              </div>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Al tocar, el tema nuevo crece como un círculo desde el botón (clip-path, 700 ms, ease-in-out) y el ícono gira 180°. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> cambio instantáneo.</p>
+          </article>
+
+          <article style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Terminal</span><button onClick="{{ m.replay.terminal }}" style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border:1px solid var(--mimi-border);border-radius:999px;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:11.5px;font-weight:600;cursor:pointer" style-active="transform:scale(0.94)"><mimi-icon name="rotate-ccw" size="12"></mimi-icon>Repetir</button></div>
+            <div style="padding:12px 14px">
+              <div role="img" aria-label="Terminal instalando Mimi" style="height:168px;box-sizing:border-box;border-radius:var(--mimi-radius);background:oklch(0.17 0 0);border:1px solid oklch(1 0 0 / .08);overflow:hidden;display:flex;flex-direction:column">
+                <div style="display:flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-bottom:1px solid oklch(1 0 0 / .08)"><span style="width:9px;height:9px;border-radius:999px;background:oklch(0.65 0.2 25)"></span><span style="width:9px;height:9px;border-radius:999px;background:oklch(0.8 0.15 85)"></span><span style="width:9px;height:9px;border-radius:999px;background:oklch(0.72 0.17 150)"></span><span style="flex:1;text-align:center;font-family:var(--mimi-font-mono);font-size:11px;color:oklch(0.7 0 0)">~/panel-ventas</span></div>
+                <div style="padding:10px 12px;display:flex;flex-direction:column;gap:4px;font-family:var(--mimi-font-mono);font-size:12px;line-height:1.45;color:oklch(0.9 0 0)">
+                  <sc-for list="{{ m.term }}" as="t" hint-placeholder-count="5">
+                    <div style="display:flex;gap:8px;white-space:nowrap"><span style="color:{{ t.pc }}">{{ t.prompt }}</span><span data-fx="" style="display:inline-block;overflow:hidden;vertical-align:top;width:{{ t.w }};color:{{ t.color }};animation:{{ t.anim }}">{{ t.text }}</span><sc-if value="{{ t.caret }}"><span data-fx="" style="width:7px;height:14px;margin-top:2px;background:oklch(0.9 0 0);animation:{{ m.caretAnim }}"></span></sc-if></div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Los comandos se escriben carácter por carácter (steps, 40 ms por letra). Las respuestas aparecen de golpe, cada línea tras la anterior, y el cursor parpadea al final. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> todo el texto visible y cursor fijo.</p>
+          </article>
+
+          <article style="grid-column:1 / -1;display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Marquee</span><span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11px;font-weight:700">En vivo</span></div>
+            <div style="display:flex;flex-direction:column;gap:10px;padding:14px 0;-webkit-mask-image:linear-gradient(to right, transparent, #000 12%, #000 88%, transparent);mask-image:linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)">
+              <sc-for list="{{ m.marquee }}" as="row" hint-placeholder-count="2">
+                <div style="overflow:hidden"><div data-fx="" style="display:flex;gap:10px;width:max-content;animation:{{ row.anim }}" style-hover="animation-play-state:paused">
+                  <sc-for list="{{ row.items }}" as="it"><span style="display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border:1px solid var(--mimi-border);border-radius:999px;background:var(--mimi-background);font-size:14px;font-weight:600;white-space:nowrap"><span style="display:inline-flex;color:{{ it.c }}"><mimi-icon name="{{ it.icon }}" size="16"></mimi-icon></span>{{ it.label }}</span></sc-for>
+                </div></div>
+              </sc-for>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground)">Dos filas en direcciones opuestas que se desplazan sin fin (translateX −50 %, 30 s lineal) con los bordes desvanecidos. Se pausa al pasar el mouse. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> fila estática que se puede desplazar a mano.</p>
+          </article>
+
+          <article style="grid-column:1 / -1;display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Bento Grid</span><span style="font-size:11.5px;font-weight:600;color:var(--mimi-muted-foreground)">Fotograma · celda «Sincronización» en hover</span></div>
+            <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;grid-template-rows:118px 118px;gap:10px;padding:12px 14px">
+              <div style="grid-row:1 / 3;position:relative;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:16px;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);background:var(--mimi-background);overflow:hidden;box-shadow:var(--mimi-shadow-card);transform:translateY(-2px)">
+                <div style="position:absolute;inset:0;background-image:radial-gradient(color-mix(in oklab, var(--mimi-foreground) 16%, transparent) 1px, transparent 1px);background-size:14px 14px;-webkit-mask-image:linear-gradient(to bottom, #000, transparent 70%);mask-image:linear-gradient(to bottom, #000, transparent 70%)"></div>
+                <span style="position:relative;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:var(--mimi-info);color:var(--mimi-info-foreground)"><mimi-icon name="terminal" size="18"></mimi-icon></span>
+                <span style="position:relative;font-size:16px;font-weight:700">El código es tuyo</span><span style="position:relative;font-size:13px;color:var(--mimi-muted-foreground)">ng g mimi lo copia a tu proyecto.</span>
+                <span style="position:relative;display:inline-flex;align-items:center;gap:4px;margin-top:4px;font-size:13px;font-weight:600">Ver cómo funciona <mimi-icon name="arrow-right" size="14"></mimi-icon></span>
+              </div>
+              <div style="display:flex;flex-direction:column;justify-content:space-between;padding:14px;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);background:var(--mimi-background)"><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">Componentes</span><span style="font-size:28px;font-weight:800;letter-spacing:-0.02em">58</span></div>
+              <div style="display:flex;flex-direction:column;justify-content:space-between;padding:14px;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);background:var(--mimi-background)"><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">Descargas / semana</span><div style="display:flex;align-items:flex-end;gap:4px;height:44px"><sc-for list="{{ bars }}" as="b"><span style="flex:1;border-radius:3px 3px 0 0;height:{{ b.h }};background:{{ b.c }}"></span></sc-for></div></div>
+              <div style="grid-column:2 / 4;display:flex;align-items:center;gap:12px;padding:14px;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);background:var(--mimi-background)"><span style="width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:var(--mimi-success-soft);color:var(--mimi-success-soft-foreground)"><mimi-icon name="shield-check" size="18"></mimi-icon></span><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:700">Accesible por defecto</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">Contraste AA y foco visible en todo.</span></div></div>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground)">Las celdas entran con Blur Fade escalonado (80 ms entre cada una). En hover, la celda sube 2 px, gana sombra y muestra su enlace. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> sin entrada ni elevación; el enlace siempre visible.</p>
+          </article>
+
+          <article style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Number Ticker</span><button onClick="{{ m.ticker.play }}" style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border:1px solid var(--mimi-border);border-radius:999px;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:11.5px;font-weight:600;cursor:pointer" style-active="transform:scale(0.94)"><mimi-icon name="play" size="12"></mimi-icon>Reproducir</button></div>
+            <div style="height:168px;margin:12px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border-radius:var(--mimi-radius);background:var(--mimi-background);border:1px solid var(--mimi-border)">
+              <span aria-live="polite" style="font-size:52px;font-weight:800;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;line-height:1">{{ m.ticker.text }}</span>
+              <span style="font-size:13px;color:var(--mimi-muted-foreground)">proyectos usan Mimi</span>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Cuenta desde 0 hasta el valor en 1.6 s con desaceleración exponencial, con cifras tabulares para que no salte el ancho. Se inicia al entrar en pantalla. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> muestra el valor final.</p>
+          </article>
+
+          <article style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Border Beam · Shine Border</span><span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11px;font-weight:700">En vivo</span></div>
+            <div style="height:168px;margin:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center">
+              <div data-fx="" style="padding:1.5px;border-radius:var(--mimi-radius-card);background:conic-gradient(from var(--mimi-beam-a), transparent 0deg 250deg, var(--mimi-info) 310deg, var(--mimi-success) 345deg, transparent 360deg), var(--mimi-border);animation:{{ m.anims.beam }}"><div style="height:118px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:14px;border-radius:calc(var(--mimi-radius-card) - 1.5px);background:var(--mimi-card)"><span style="font-size:14px;font-weight:700">Border Beam</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">Un haz recorre el borde.</span></div></div>
+              <div data-fx="" style="padding:1.5px;border-radius:var(--mimi-radius-card);background:linear-gradient(110deg, var(--mimi-border) 35%, var(--mimi-warning) 48%, var(--mimi-destructive) 52%, var(--mimi-border) 65%);background-size:250% 100%;animation:{{ m.anims.shine }}"><div style="height:118px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;gap:4px;padding:14px;border-radius:calc(var(--mimi-radius-card) - 1.5px);background:var(--mimi-card)"><span style="font-size:14px;font-weight:700">Shine Border</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">Un brillo cruza el borde.</span></div></div>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Beam: un gradiente cónico gira 360° cada 4 s y deja un haz de luz sobre el borde. Shine: un gradiente lineal cruza el borde cada 3 s. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> borde estático con el color de acento.</p>
+          </article>
+
+          <article style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Magic Card</span><span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11px;font-weight:700">Mueve el mouse</span></div>
+            <div onPointerMove="{{ m.magic.move }}" onPointerLeave="{{ m.magic.leave }}" style="margin:12px 14px;padding:1px;border-radius:var(--mimi-radius-card);background:radial-gradient(180px circle at {{ m.magic.x }} {{ m.magic.y }}, color-mix(in oklab, var(--mimi-info) 70%, transparent), var(--mimi-border) 70%)">
+              <div style="height:166px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;padding:16px;border-radius:calc(var(--mimi-radius-card) - 1px);background:radial-gradient(260px circle at {{ m.magic.x }} {{ m.magic.y }}, color-mix(in oklab, var(--mimi-info) 12%, transparent), transparent 70%), var(--mimi-card)">
+                <span style="width:34px;height:34px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:var(--mimi-muted)"><mimi-icon name="wand-sparkles" size="17"></mimi-icon></span>
+                <span style="font-size:15px;font-weight:700">Temas con un clic</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">El foco de luz sigue al cursor.</span>
+              </div>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Un gradiente radial sigue al puntero sobre el fondo y otro más intenso ilumina el borde. Al salir, la luz vuelve al centro. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> la luz queda fija en el centro.</p>
+          </article>
+
+          <article style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Blur Fade</span><button onClick="{{ m.replay.blur }}" style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border:1px solid var(--mimi-border);border-radius:999px;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:11.5px;font-weight:600;cursor:pointer" style-active="transform:scale(0.94)"><mimi-icon name="rotate-ccw" size="12"></mimi-icon>Repetir</button></div>
+            <div style="height:168px;margin:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:600;color:var(--mimi-muted-foreground)">FOTOGRAMA 50 %</span>
+                <sc-for list="{{ blurFrame }}" as="b"><div style="display:flex;align-items:center;gap:8px;height:38px;padding:0 10px;border-radius:var(--mimi-radius-sm);border:1px solid var(--mimi-border);background:var(--mimi-background);opacity:{{ b.op }};filter:{{ b.blur }};transform:{{ b.tf }}"><span style="width:18px;height:18px;border-radius:999px;background:var(--mimi-muted)"></span><span style="font-size:13px;font-weight:600">{{ b.label }}</span></div></sc-for>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:600;color:var(--mimi-muted-foreground)">EN VIVO</span>
+                <sc-for list="{{ m.blurLive }}" as="b"><div data-fx="" style="display:flex;align-items:center;gap:8px;height:38px;padding:0 10px;border-radius:var(--mimi-radius-sm);border:1px solid var(--mimi-border);background:var(--mimi-background);animation:{{ b.anim }}"><span style="width:18px;height:18px;border-radius:999px;background:var(--mimi-muted)"></span><span style="font-size:13px;font-weight:600">{{ b.label }}</span></div></sc-for>
+              </div>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Cada elemento pasa de opacidad 0, desenfoque 6 px y 10 px más abajo a su estado final en 500 ms, con 120 ms de retraso entre uno y otro. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> solo un fundido corto, sin desenfoque ni desplazamiento.</p>
+          </article>
+
+          <article style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Text Animate</span><button onClick="{{ m.replay.text }}" style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border:1px solid var(--mimi-border);border-radius:999px;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:11.5px;font-weight:600;cursor:pointer" style-active="transform:scale(0.94)"><mimi-icon name="rotate-ccw" size="12"></mimi-icon>Repetir</button></div>
+            <div style="height:168px;margin:12px 14px;display:flex;flex-direction:column;justify-content:center;gap:16px">
+              <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;color:var(--mimi-muted-foreground)">FOTOGRAMA 60 %</span><div style="display:flex;flex-wrap:wrap;gap:0 8px;font-size:26px;font-weight:800;letter-spacing:-0.02em"><sc-for list="{{ textFrame }}" as="w"><span style="display:inline-block;opacity:{{ w.op }};filter:{{ w.blur }};transform:{{ w.tf }}">{{ w.t }}</span></sc-for></div></div>
+              <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:11px;font-weight:600;color:var(--mimi-muted-foreground)">EN VIVO</span><div style="display:flex;flex-wrap:wrap;gap:0 8px;font-size:26px;font-weight:800;letter-spacing:-0.02em"><sc-for list="{{ m.textLive }}" as="w"><span data-fx="" style="display:inline-block;animation:{{ w.anim }}">{{ w.t }}</span></sc-for></div></div>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">El texto entra palabra por palabra con desenfoque y subida (80 ms entre palabras). También admite letra por letra o línea por línea. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> la frase aparece completa.</p>
+          </article>
+
+          <article style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Animated List</span><span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11px;font-weight:700">En vivo</span></div>
+            <div style="height:168px;margin:12px 14px;overflow:hidden;display:flex;flex-direction:column-reverse;justify-content:flex-end;gap:8px;-webkit-mask-image:linear-gradient(to bottom, #000 70%, transparent);mask-image:linear-gradient(to bottom, #000 70%, transparent)">
+              <sc-for list="{{ m.list }}" as="it">
+                <div data-fx="" style="display:flex;align-items:center;gap:10px;flex-shrink:0;height:48px;padding:0 12px;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);background:var(--mimi-background);box-shadow:var(--mimi-shadow-neutral);animation:{{ it.anim }}">
+                  <span style="width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;background:{{ it.bg }};color:{{ it.fg }}"><mimi-icon name="{{ it.icon }}" size="15"></mimi-icon></span>
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3"><span style="font-size:13px;font-weight:600">{{ it.title }}</span><span style="font-size:11.5px;color:var(--mimi-muted-foreground)">{{ it.sub }}</span></div>
+                  <span style="font-size:11px;color:var(--mimi-muted-foreground)">ahora</span>
+                </div>
+              </sc-for>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Cada 2.2 s llega un aviso arriba: crece desde 94 % con fundido, y los anteriores bajan con un resorte. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> los avisos se agregan sin animación.</p>
+          </article>
+
+          <article style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Confetti · Ripple</span><span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11px;font-weight:700">Haz clic</span></div>
+            <div style="height:168px;margin:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="position:relative;display:flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius);background:var(--mimi-background);border:1px solid var(--mimi-border);overflow:hidden">
+                <div style="position:absolute;left:50%;top:58%;width:0;height:0">
+                  <sc-for list="{{ m.confetti }}" as="p"><span data-fx="" style="position:absolute;left:-4px;top:-4px;--dx:{{ p.dx }};--dy:{{ p.dy }};--r:{{ p.r }};width:{{ p.w }};height:{{ p.h }};border-radius:{{ p.br }};background:{{ p.c }};transform:{{ p.tf }};opacity:{{ p.op }};animation:{{ p.anim }}"></span></sc-for>
+                </div>
+                <button onClick="{{ m.fire }}" style="position:relative;display:inline-flex;align-items:center;gap:6px;height:36px;margin-top:40px;padding:0 14px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="party-popper" size="15"></mimi-icon>Celebrar</button>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;border-radius:var(--mimi-radius);background:var(--mimi-background);border:1px solid var(--mimi-border)">
+                <button onPointerDown="{{ m.ripple.down }}" style="position:relative;overflow:hidden;height:40px;padding:0 18px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-info);color:var(--mimi-info-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-info)">
+                  <sc-for list="{{ m.ripple.items }}" as="r"><span data-fx="" aria-hidden="true" style="position:absolute;width:220px;height:220px;border-radius:999px;background:currentColor;pointer-events:none;left:{{ r.x }};top:{{ r.y }};animation:{{ r.anim }}"></span></sc-for>
+                  <span style="position:relative">Toca aquí</span>
+                </button>
+                <div aria-hidden="true" style="position:relative;overflow:hidden;height:40px;padding:0 18px;display:inline-flex;align-items:center;border-radius:var(--mimi-radius);background:var(--mimi-info);color:var(--mimi-info-foreground);font-size:13.5px;font-weight:600"><span style="position:absolute;left:30%;top:50%;width:220px;height:220px;border-radius:999px;background:currentColor;transform:translate(-50%,-50%) scale(.45);opacity:.22"></span><span style="position:relative">Fotograma 40 %</span></div>
+              </div>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Confetti: 28 piezas salen del botón en abanico y caen con gravedad en 1.3 s. Ripple: una onda crece desde el punto tocado y se desvanece en 600 ms. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> sin partículas; el botón solo cambia de color al presionarlo.</p>
+          </article>
+
+          
+
+          <article style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">File Tree</span><span style="font-size:11.5px;font-weight:600;color:var(--mimi-muted-foreground)">Fotograma · abriendo «ui»</span></div>
+            <div role="tree" aria-label="Estructura del proyecto" style="margin:12px 14px;padding:10px;border-radius:var(--mimi-radius);background:var(--mimi-background);border:1px solid var(--mimi-border);font-family:var(--mimi-font-mono);font-size:12.5px;display:flex;flex-direction:column;gap:1px">
+              <sc-for list="{{ fileTree }}" as="f" hint-placeholder-count="8"><div role="treeitem" aria-level="{{ f.level }}" style="display:flex;align-items:center;gap:6px;height:26px;padding-left:{{ f.pad }};border-radius:6px;opacity:{{ f.op }};filter:{{ f.blur }};transform:{{ f.tf }};background:{{ f.bg }};color:{{ f.fg }};box-shadow:{{ f.guide }}"><span style="display:inline-flex;color:{{ f.ic }}"><mimi-icon name="{{ f.icon }}" size="14"></mimi-icon></span>{{ f.label }}</div></sc-for>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Al abrir una carpeta, sus hijos entran escalonados con Blur Fade (50 ms entre cada uno) y las guías verticales se dibujan de arriba abajo. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> se abre sin transición.</p>
+          </article>
+
+          <article style="grid-column:1 / -1;display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Fondos · Grid y Dot Pattern</span><span style="font-size:11.5px;font-weight:600;color:var(--mimi-muted-foreground)">Fotograma</span></div>
+            <div style="height:168px;margin:12px 14px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div style="position:relative;display:flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);background:var(--mimi-background);overflow:hidden">
+                <div style="position:absolute;inset:0;background-image:linear-gradient(color-mix(in oklab, var(--mimi-foreground) 10%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in oklab, var(--mimi-foreground) 10%, transparent) 1px, transparent 1px);background-size:24px 24px;-webkit-mask-image:radial-gradient(circle at 50% 50%, #000 20%, transparent 75%);mask-image:radial-gradient(circle at 50% 50%, #000 20%, transparent 75%)"></div>
+                <span style="position:absolute;left:72px;top:48px;width:23px;height:23px;background:color-mix(in oklab, var(--mimi-info) 35%, transparent)"></span><span style="position:absolute;left:144px;top:96px;width:23px;height:23px;background:color-mix(in oklab, var(--mimi-info) 20%, transparent)"></span>
+                <span style="position:relative;font-size:14px;font-weight:700">Grid</span>
+              </div>
+              <div style="position:relative;display:flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);background:var(--mimi-background);overflow:hidden">
+                <div style="position:absolute;inset:0;background-image:radial-gradient(color-mix(in oklab, var(--mimi-foreground) 28%, transparent) 1.2px, transparent 1.4px);background-size:14px 14px;-webkit-mask-image:radial-gradient(circle at 50% 50%, #000 25%, transparent 75%);mask-image:radial-gradient(circle at 50% 50%, #000 25%, transparent 75%)"></div>
+                <span style="position:relative;font-size:14px;font-weight:700">Dot Pattern</span>
+              </div>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Patrones con CSS y desvanecido radial. En la versión animada, algunas celdas del grid parpadean al azar (opacidad 0 → 0.35, 2 s). <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> patrón fijo.</p>
+          </article>
+
+          <article style="grid-column:1 / -1;display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Marcos · Safari e iPhone</span><span style="font-size:11.5px;font-weight:600;color:var(--mimi-muted-foreground)">Arrastra una captura dentro de cada marco</span></div>
+            <div style="display:flex;gap:24px;align-items:center;justify-content:center;padding:18px 14px;background-image:radial-gradient(color-mix(in oklab, var(--mimi-foreground) 12%, transparent) 1px, transparent 1px);background-size:16px 16px">
+              <div style="width:470px;border-radius:12px;overflow:hidden;border:1px solid var(--mimi-border);background:var(--mimi-background);box-shadow:var(--mimi-shadow-popover)">
+                <div style="display:flex;align-items:center;gap:10px;height:38px;padding:0 12px;background:var(--mimi-muted);border-bottom:1px solid var(--mimi-border)">
+                  <span style="display:flex;gap:6px"><span style="width:11px;height:11px;border-radius:999px;background:oklch(0.68 0.2 25)"></span><span style="width:11px;height:11px;border-radius:999px;background:oklch(0.82 0.15 85)"></span><span style="width:11px;height:11px;border-radius:999px;background:oklch(0.72 0.17 150)"></span></span>
+                  <span style="display:flex;gap:2px;color:var(--mimi-muted-foreground)"><mimi-icon name="chevron-left" size="16"></mimi-icon><mimi-icon name="chevron-right" size="16"></mimi-icon></span>
+                  <span style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:24px;border-radius:7px;background:var(--mimi-background);font-size:12px;color:var(--mimi-muted-foreground)"><mimi-icon name="lock" size="11"></mimi-icon>mimi.dev/componentes</span>
+                  <span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="share" size="15"></mimi-icon></span>
+                </div>
+                <div style="position:relative;height:250px"><image-slot id="{{ m.safariSlot }}" placeholder="Captura de escritorio" style="position:absolute;inset:0"></image-slot></div>
+              </div>
+              <div style="position:relative;width:170px;height:350px;box-sizing:border-box;padding:7px;border-radius:38px;background:oklch(0.2 0 0);box-shadow:var(--mimi-shadow-popover), inset 0 0 0 1.5px oklch(0.4 0 0)">
+                <div style="position:relative;width:100%;height:100%;border-radius:31px;overflow:hidden;background:var(--mimi-background)"><image-slot id="{{ m.phoneSlot }}" placeholder="Captura móvil" style="position:absolute;inset:0"></image-slot><span style="position:absolute;left:50%;top:9px;width:62px;height:18px;margin-left:-31px;border-radius:999px;background:oklch(0.12 0 0)"></span></div>
+              </div>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground)">Marcos estáticos hechos con CSS para presentar capturas; el contenido puede desplazarse dentro de la pantalla. Se pueden combinar con Blur Fade al entrar. <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> sin entrada.</p>
+          </article>
+
+          
+
+          <article style="grid-column:1 / -1;display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px 0"><span style="font-size:14px;font-weight:700">Code Comparison</span><span style="font-size:11.5px;font-weight:600;color:var(--mimi-muted-foreground)">Fotograma</span></div>
+            <div style="margin:12px 14px;display:grid;grid-template-columns:1fr 1fr;border-radius:var(--mimi-radius);border:1px solid var(--mimi-border);overflow:hidden;font-family:var(--mimi-font-mono);font-size:11.5px;line-height:1.75">
+              <sc-for list="{{ diff }}" as="pane" hint-placeholder-count="2">
+                <div style="min-width:0;background:var(--mimi-background);border-left:{{ pane.bl }}">
+                  <div style="display:flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-bottom:1px solid var(--mimi-border);font-family:var(--mimi-font-sans);font-size:12px;font-weight:600;background:var(--mimi-muted)"><span style="display:inline-flex;color:{{ pane.ic }}"><mimi-icon name="{{ pane.icon }}" size="13"></mimi-icon></span>{{ pane.name }}</div>
+                  <div style="padding:6px 0"><sc-for list="{{ pane.lines }}" as="l"><div style="display:flex;gap:8px;padding:0 10px;white-space:pre;overflow:hidden;background:{{ l.bg }};color:{{ l.fg }};opacity:{{ l.op }}"><span style="width:12px;color:var(--mimi-muted-foreground)">{{ l.n }}</span><span style="width:8px">{{ l.mark }}</span>{{ l.code }}</div></sc-for></div>
+                </div>
+              </sc-for>
+            </div>
+            <p style="margin:0;padding:0 14px 14px;font-size:12.5px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">Las líneas sin cambios se atenúan al 50 % y las cambiadas se resaltan con un barrido de color de izquierda a derecha (400 ms). <b style="color:var(--mimi-foreground)">Reducir movimiento:</b> el resaltado aparece sin barrido.</p>
+          </article>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const rnd = i => { const x = Math.sin(i * 91.17 + 7.3) * 43758.5453; return x - Math.floor(x); };
+const COLORS = ['var(--mimi-info)', 'var(--mimi-success)', 'var(--mimi-warning)', 'var(--mimi-destructive)', 'var(--mimi-primary)'];
+const PARTS = Array.from({ length: 28 }, (_, i) => { const a = (-160 + rnd(i) * 140) * Math.PI / 180, d = 70 + rnd(i + 50) * 80; return { dx: Math.cos(a) * d, dy: Math.sin(a) * d, r: Math.round((rnd(i + 9) - 0.5) * 720), c: COLORS[i % 5], sq: i % 3 !== 0 }; });
+const TERM = [['$', 'ng add @mimi-ng/cli', 'oklch(0.72 0.17 150)', 'oklch(0.95 0 0)', true], ['', '✓ Angular 22 y Tailwind CSS 4 detectados', '', 'oklch(0.75 0.15 150)', false], ['', '✓ mimi.json creado', '', 'oklch(0.75 0.15 150)', false], ['$', 'ng g mimi button', 'oklch(0.72 0.17 150)', 'oklch(0.95 0 0)', true], ['', '+ src/app/components/ui/button/button.ts', '', 'oklch(0.75 0.12 250)', false]];
+const NOTES = [['Nuevo cliente', 'Café Altura se registró', 'user-plus', 'success'], ['Pago recibido', '$4,560 de Hotel Brisa', 'banknote', 'info'], ['Comentario', 'Lucía mencionó a @ana', 'message-square', 'warning'], ['Error de pago', 'Tarjeta rechazada', 'circle-x', 'destructive']];
+const MARQ = [['Angular', 'triangle'], ['Tailwind', 'wind'], ['TypeScript', 'file-code'], ['Signals', 'radio'], ['Vitest', 'flask-conical'], ['Lucide', 'shapes'], ['RxJS', 'waves'], ['Storybook', 'book-open']];
+const WORDS = ['Diseña', 'rápido,', 'entrega', 'mejor.'];
+const initMode = () => ({ rm: false, dark: null, tick: 12480, rep: { terminal: 0, blur: 0, text: 0 }, magic: null, list: [0, 1], burst: 0, ripples: [] });
+
+class Component extends DCLogic {
+  state = { l: initMode(), d: initMode() };
+  uid = 0; timers = [];
+  componentDidMount() {
+    ['l', 'd'].forEach(k => this.playTicker(k));
+    this.iv = setInterval(() => ['l', 'd'].forEach(k => this.set(k, s => ({ list: s.list.length >= 9 ? [s.list[s.list.length - 1] + 1] : [...s.list, s.list[s.list.length - 1] + 1] }))), 2200);
+  }
+  componentWillUnmount() { clearInterval(this.iv); this.timers.forEach(clearTimeout); cancelAnimationFrame(this.raf); }
+  set(k, patch) { this.setState(s => ({ [k]: { ...s[k], ...(typeof patch === 'function' ? patch(s[k]) : patch) } })); }
+  playTicker(k) {
+    if (this.state[k].rm) { this.set(k, { tick: 12480 }); return; }
+    const t0 = performance.now(), D = 1600;
+    const step = now => { const p = Math.min(1, (now - t0) / D), e = p === 1 ? 1 : 1 - Math.pow(2, -10 * p); this.set(k, { tick: Math.round(12480 * e) }); if (p < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  renderVals() {
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+      const st = this.state[k], rm = st.rm;
+      const A = s => rm ? 'none' : s;
+      const ab = n => (st.rep[n] % 2 ? 'b' : 'a');
+      const replay = n => () => this.set(k, s => ({ rep: { ...s.rep, [n]: s.rep[n] + 1 } }));
+      const dk = st.dark;
+      let delay = 0;
+      return {
+        k, cls, label, icon,
+        rmAria: String(rm), rmTrack: rm ? 'var(--mimi-primary)' : 'var(--mimi-switch-off)', rmThumb: rm ? 'translateX(16px)' : 'translateX(0)',
+        toggleRm: () => this.set(k, s => ({ rm: !s.rm })),
+        theme: {
+          clip: dk === null ? 'circle(58% at 92% 12%)' : dk ? 'circle(150% at 92% 12%)' : 'circle(0% at 92% 12%)',
+          frame: dk === null ? 'Fotograma 55 %' : dk ? 'Oscuro' : 'Claro', icon: dk === false ? 'moon' : 'sun', rot: dk ? 'rotate(180deg)' : 'rotate(0deg)',
+          btnBg: dk === false ? 'oklch(0.145 0 0)' : 'oklch(0.985 0 0)', btnFg: dk === false ? 'oklch(0.985 0 0)' : 'oklch(0.145 0 0)', aria: dk === false ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro',
+          toggle: () => this.set(k, s => ({ dark: s.dark === null ? false : !s.dark }))
+        },
+        caretAnim: A('mimi-caret 1s steps(1) infinite'),
+        term: TERM.map(([prompt, text, pc, color, typed], i) => {
+          const n = text.length, dur = typed ? n * 0.04 : 0.01;
+          const anim = A(typed ? 'mimi-typing-' + ab('terminal') + ' ' + dur.toFixed(2) + 's steps(' + n + ') ' + delay.toFixed(2) + 's both' : 'mimi-blurfade-' + ab('terminal') + ' .25s ease ' + delay.toFixed(2) + 's both');
+          delay += dur + (typed ? 0.35 : 0.25);
+          return { prompt, text, pc, color, w: typed ? n + 'ch' : 'auto', anim, caret: i === TERM.length - 1 };
+        }),
+        replay: { terminal: replay('terminal'), blur: replay('blur'), text: replay('text') },
+        marquee: [0, 1].map(r => ({ anim: A('mimi-marquee 30s linear infinite' + (r ? ' reverse' : '')), items: [...MARQ, ...MARQ].map((x, i) => ({ label: x[0], icon: x[1], c: COLORS[(i + r) % 5] })) })),
+        anims: { beam: A('mimi-beam 4s linear infinite'), shine: A('mimi-shine 3s linear infinite') },
+        ticker: { text: st.tick.toLocaleString('es-MX'), play: () => this.playTicker(k) },
+        magic: { x: st.magic && !rm ? st.magic[0] + 'px' : '50%', y: st.magic && !rm ? st.magic[1] + 'px' : '45%',
+          move: e => { if (rm) return; const r = e.currentTarget.getBoundingClientRect(), sc = r.width / e.currentTarget.offsetWidth || 1; this.set(k, { magic: [(e.clientX - r.left) / sc, (e.clientY - r.top) / sc] }); },
+          leave: () => this.set(k, { magic: null }) },
+        blurLive: ['Cuenta creada', 'Equipo invitado', 'Tema listo'].map((label, i) => ({ label, anim: rm ? 'mimi-show-a .2s ease both' : 'mimi-blurfade-' + ab('blur') + ' .5s cubic-bezier(.2,.8,.2,1) ' + (i * 0.12) + 's both' })),
+        textLive: WORDS.map((t, i) => ({ t, anim: A('mimi-blurfade-' + ab('text') + ' .45s cubic-bezier(.2,.8,.2,1) ' + (i * 0.08) + 's both') })),
+        list: st.list.map((id, i) => { const n = NOTES[id % NOTES.length]; const tone = n[3]; return { title: n[0], sub: n[1], icon: n[2], bg: 'var(--mimi-' + (tone === 'destructive' ? 'destructive-soft-bg' : tone + '-soft') + ')', fg: 'var(--mimi-' + tone + '-soft-foreground)', anim: A('mimi-list-in .45s cubic-bezier(.34,1.56,.64,1) both') }; }),
+        confetti: PARTS.map(p => {
+          const playing = st.burst > 0 && !rm;
+          return { dx: p.dx.toFixed(0) + 'px', dy: p.dy.toFixed(0) + 'px', r: p.r + 'deg', c: p.c, w: p.sq ? '8px' : '6px', h: p.sq ? '5px' : '6px', br: p.sq ? '1px' : '999px',
+            tf: rm ? 'none' : 'translate(' + (p.dx * 0.75).toFixed(0) + 'px,' + (p.dy * 0.75 + 12).toFixed(0) + 'px) rotate(' + Math.round(p.r * 0.5) + 'deg)', op: rm ? '0' : '1',
+            anim: playing ? 'mimi-confetti-' + (st.burst % 2 ? 'a' : 'b') + ' 1.3s cubic-bezier(.15,.6,.4,1) forwards' : 'none' };
+        }),
+        fire: () => { if (rm) return; this.set(k, s => ({ burst: s.burst + 1 })); this.timers.push(setTimeout(() => this.set(k, { burst: 0 }), 1500)); },
+        ripple: {
+          items: st.ripples.map(r => ({ x: r.x + 'px', y: r.y + 'px', anim: 'mimi-ripple .6s ease-out forwards' })),
+          down: e => { if (rm) return; const b = e.currentTarget.getBoundingClientRect(), sc = b.width / e.currentTarget.offsetWidth || 1; const id = ++this.uid; this.set(k, s => ({ ripples: [...s.ripples, { id, x: (e.clientX - b.left) / sc, y: (e.clientY - b.top) / sc }] })); this.timers.push(setTimeout(() => this.set(k, s => ({ ripples: s.ripples.filter(r => r.id !== id) })), 650)); }
+        },
+        safariSlot: 'fx-safari-' + k, phoneSlot: 'fx-phone-' + k
+      };
+    });
+    const tree = [['src', 'folder-open', 1, 1, 'dir'], ['app', 'folder-open', 2, 1, 'dir'], ['ui', 'folder-open', 3, 1, 'dir', true], ['button.ts', 'file-code', 4, 1], ['input.ts', 'file-code', 4, 0.75], ['select.ts', 'file-code', 4, 0.4], ['dialog.ts', 'file-code', 4, 0.1], ['styles.css', 'file-type', 2, 1], ['mimi.json', 'file-json', 1, 1]];
+    return {
+      modes,
+      bars: [40, 55, 48, 70, 62, 88, 100].map((h, i) => ({ h: h + '%', c: i === 6 ? 'var(--mimi-info)' : 'color-mix(in oklab, var(--mimi-info) 35%, transparent)' })),
+      blurFrame: [['Cuenta creada', 1], ['Equipo invitado', 0.5], ['Tema listo', 0.05]].map(([label, p]) => ({ label, op: String(p), blur: 'blur(' + ((1 - p) * 6).toFixed(1) + 'px)', tf: 'translateY(' + ((1 - p) * 10).toFixed(0) + 'px)' })),
+      textFrame: WORDS.map((t, i) => { const p = [1, 1, 0.55, 0.08][i]; return { t, op: String(p), blur: 'blur(' + ((1 - p) * 6).toFixed(1) + 'px)', tf: 'translateY(' + ((1 - p) * 10).toFixed(0) + 'px)' }; }),
+      fileTree: tree.map(([label, ic, level, p, kind, sel]) => ({ label, icon: ic, level: String(level), pad: (6 + (level - 1) * 16) + 'px', op: String(p), blur: p < 1 ? 'blur(' + ((1 - p) * 5).toFixed(1) + 'px)' : 'none', tf: p < 1 ? 'translateY(' + ((1 - p) * 8).toFixed(0) + 'px)' : 'none',
+        bg: sel ? 'var(--mimi-accent)' : 'transparent', fg: 'var(--mimi-foreground)', ic: kind === 'dir' ? 'var(--mimi-warning-soft-foreground)' : 'var(--mimi-info-soft-foreground)', guide: level > 1 ? 'inset ' + (6 + (level - 2) * 16 + 7) + 'px 0 0 -' + (6 + (level - 2) * 16 + 6) + 'px var(--mimi-border)' : 'none' })),
+      diff: [
+        { name: 'antes.html', icon: 'file-minus', ic: 'var(--mimi-destructive-soft-foreground)', bl: '0', lines: [['1', ' ', '<p-button', 0], ['2', '−', '  label="Guardar"', -1], ['3', '−', '  styleClass="p-button-success"', -1], ['4', ' ', '  (onClick)="save()"', 0], ['5', ' ', '/>', 0]] },
+        { name: 'después.html', icon: 'file-plus', ic: 'var(--mimi-success-soft-foreground)', bl: '1px solid var(--mimi-border)', lines: [['1', '+', '<button mimiBtn tone="success"', 1], ['2', ' ', '  (click)="save()">', 0], ['3', '+', '  Guardar', 1], ['4', ' ', '</button>', 0], ['5', ' ', '', 0]] }
+      ].map(p => ({ ...p, lines: p.lines.map(([n, mark, code, t]) => ({ n, mark, code, op: t === 0 ? '.55' : '1', bg: t < 0 ? 'var(--mimi-destructive-soft-bg)' : t > 0 ? 'var(--mimi-success-soft)' : 'transparent', fg: t < 0 ? 'var(--mimi-destructive-soft-foreground)' : t > 0 ? 'var(--mimi-success-soft-foreground)' : 'var(--mimi-foreground)' })) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

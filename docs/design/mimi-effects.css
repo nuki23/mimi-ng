@@ -1,0 +1,10 @@
+/* Mimi Effects — keyframes compartidos (blocks y landing). Solo agrega. */
+@property --mimi-beam-a { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes mimi-beam { to { --mimi-beam-a: 360deg; } }
+@keyframes mimi-marquee { to { transform: translateX(-50%); } }
+@keyframes mimi-typing-a { from { width: 0; } }
+@keyframes mimi-typing-b { from { width: 0; } }
+@keyframes mimi-blurfade-a { from { opacity: 0; filter: blur(6px); transform: translateY(10px); } }
+@keyframes mimi-blurfade-b { from { opacity: 0; filter: blur(6px); transform: translateY(10px); } }
+@keyframes mimi-reveal { from { clip-path: circle(0 at var(--mimi-reveal-x, 90%) var(--mimi-reveal-y, 4%)); } to { clip-path: circle(150% at var(--mimi-reveal-x, 90%) var(--mimi-reveal-y, 4%)); } }
+@media (prefers-reduced-motion: reduce) { [data-fx] { animation: none !important; transition: none !important; } }

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 3 · Slider, OTP, número, máscara y contraseña</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F3 Combobox Fechas Hora.dc.html">Combobox · Fechas · Hora</a>
+      <a href="Mimi F3 Slider OTP Numero Mascara.dc.html">Slider · OTP · Número · Máscara · Contraseña</a>
+      <a href="Mimi F3 Archivos Tags Toggle Color.dc.html">Archivos · Tags · Toggle · Color</a>
+      <a href="Mimi F3 Editor de temas.dc.html">Editor de temas v2</a>
+      <a href="Mimi F2 Tokens y Tonos.dc.html">Fase 2</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,780px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:40px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Entradas avanzadas · 2</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">4 · Slider</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px 32px">
+            <sc-for list="{{ m.sliders }}" as="s" hint-placeholder-count="10">
+              <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                  <span id="{{ s.id }}-l" style="font-size:14px;font-weight:500;color:{{ s.labelColor }}">{{ s.label }}</span>
+                  <span style="font-size:13px;font-variant-numeric:tabular-nums;color:var(--mimi-muted-foreground)">{{ s.valueText }}</span>
+                </div>
+                <div onPointerDown="{{ s.onDown }}" onPointerMove="{{ s.onMove }}" onPointerUp="{{ s.onUp }}" onPointerCancel="{{ s.onUp }}" style="position:relative;height:20px;display:flex;align-items:center;touch-action:none;margin-bottom:{{ s.mb }};cursor:{{ s.cursor }};opacity:{{ s.op }}">
+                  <div style="position:absolute;left:0;right:0;height:6px;border-radius:999px;background:var(--mimi-track)"></div>
+                  <div style="position:absolute;height:6px;border-radius:999px;transition:background-color .2s ease;left:{{ s.fillL }};width:{{ s.fillW }};background:{{ s.fill }}"></div>
+                  <sc-for list="{{ s.marks }}" as="mk">
+                    <span aria-hidden="true" style="position:absolute;width:6px;height:6px;margin-left:-3px;border-radius:999px;left:{{ mk.pos }};background:{{ mk.dot }}"></span>
+                    <span aria-hidden="true" style="position:absolute;top:26px;transform:translateX(-50%);font-size:12px;font-variant-numeric:tabular-nums;left:{{ mk.pos }};color:{{ mk.fg }};font-weight:{{ mk.fw }}">{{ mk.label }}</span>
+                  </sc-for>
+                  <sc-for list="{{ s.thumbs }}" as="t">
+                    <div role="slider" tabIndex="{{ t.tab }}" aria-labelledby="{{ s.id }}-l" aria-label="{{ t.aria }}" aria-valuemin="{{ t.min }}" aria-valuemax="{{ t.max }}" aria-valuenow="{{ t.now }}" aria-valuetext="{{ t.text }}" aria-disabled="{{ s.ariaDisabled }}" aria-invalid="{{ s.ariaInvalid }}" onKeyDown="{{ t.onKey }}" onFocus="{{ t.onFocus }}" onBlur="{{ t.onBlur }}" style="position:absolute;width:20px;height:20px;box-sizing:border-box;margin-left:-10px;border-radius:999px;background:var(--mimi-thumb);outline:none;transition:box-shadow .2s ease, transform .15s cubic-bezier(.2,.8,.2,1);left:{{ t.pos }};border:2px solid {{ s.fill }};box-shadow:{{ t.ring }};transform:{{ t.scale }}" style-hover="box-shadow:0 0 0 6px var(--mimi-ring-soft), var(--mimi-shadow-neutral)">
+                      <sc-if value="{{ t.tip }}"><span role="presentation" style="position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);padding:4px 8px;border-radius:7px;background:var(--mimi-tooltip);color:var(--mimi-tooltip-foreground);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none">{{ t.text }}<span style="position:absolute;left:50%;bottom:-3px;width:7px;height:7px;margin-left:-3.5px;background:var(--mimi-tooltip);transform:rotate(45deg)"></span></span></sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ s.hasMsg }}"><span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mimi-destructive-soft-foreground)"><mimi-icon name="circle-alert" size="14"></mimi-icon>{{ s.msg }}</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">5 · Input OTP</h3>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label for="{{ m.k }}-otp" style="font-size:14px;font-weight:500">Código de verificación <span style="font-weight:400;color:var(--mimi-muted-foreground)">· prueba con 246810</span></label>
+            <div style="position:relative;display:inline-flex;align-self:flex-start;align-items:center;gap:8px;animation:{{ m.otp.shake }}">
+              <sc-for list="{{ m.otp.boxes }}" as="b" hint-placeholder-count="7">
+                <sc-if value="{{ b.isSep }}"><span aria-hidden="true" style="width:12px;height:2px;border-radius:2px;background:var(--mimi-border)"></span></sc-if>
+                <sc-if value="{{ b.isBox }}"><div aria-hidden="true" style="position:relative;width:46px;height:54px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;transition:var(--mimi-transition);border:1px solid {{ b.border }};box-shadow:{{ b.ring }};color:{{ b.fg }}">{{ b.ch }}<sc-if value="{{ b.caret }}"><span style="width:2px;height:22px;border-radius:1px;background:var(--mimi-foreground);animation:mimi-caret 1s steps(1) infinite"></span></sc-if></div></sc-if>
+              </sc-for>
+              <input id="{{ m.k }}-otp" inputmode="numeric" autocomplete="one-time-code" maxLength="6" aria-invalid="{{ m.otp.ariaInvalid }}" aria-describedby="{{ m.k }}-otp-msg" value="{{ m.otp.code }}" onChange="{{ m.otp.onChange }}" onFocus="{{ m.otp.onFocus }}" onBlur="{{ m.otp.onBlur }}" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;border:0;padding:0;font-size:16px;cursor:text">
+            </div>
+            <span id="{{ m.k }}-otp-msg" role="status" style="display:flex;align-items:center;gap:6px;min-height:20px;font-size:13px;color:{{ m.otp.msgColor }}"><sc-if value="{{ m.otp.hasMsgIcon }}"><mimi-icon name="{{ m.otp.msgIcon }}" size="14"></mimi-icon></sc-if>{{ m.otp.msg }}</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px">
+            <sc-for list="{{ m.otpStates }}" as="o" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ o.caption }}</span>
+                <div aria-disabled="{{ o.ariaDisabled }}" style="display:flex;align-items:center;gap:6px;opacity:{{ o.op }}">
+                  <sc-for list="{{ o.boxes }}" as="b">
+                    <sc-if value="{{ b.isSep }}"><span aria-hidden="true" style="width:8px;height:2px;border-radius:2px;background:var(--mimi-border)"></span></sc-if>
+                    <sc-if value="{{ b.isBox }}"><div style="width:38px;height:46px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:19px;font-weight:600;font-variant-numeric:tabular-nums;border:1px solid {{ b.border }};box-shadow:{{ b.ring }};color:{{ b.fg }}">{{ b.ch }}<sc-if value="{{ b.caret }}"><span style="width:2px;height:18px;border-radius:1px;background:var(--mimi-foreground);animation:mimi-caret 1s steps(1) infinite"></span></sc-if></div></sc-if>
+                  </sc-for>
+                </div>
+                <sc-if value="{{ o.hasMsg }}"><span style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:{{ o.msgColor }}"><mimi-icon name="{{ o.msgIcon }}" size="13"></mimi-icon>{{ o.msg }}</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">6 · Number Input</h3>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+            <sc-for list="{{ m.nums }}" as="n" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <label for="{{ n.id }}" style="font-size:14px;font-weight:500">{{ n.label }}</label>
+                <div style="display:flex;align-items:center;height:var(--mimi-control-height);box-sizing:border-box;padding:0 4px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);transition:var(--mimi-transition);border:1px solid {{ n.border }};box-shadow:{{ n.ring }}" style-hover="border-color:var(--mimi-input-hover)">
+                  <button aria-label="{{ n.decLabel }}" disabled="{{ n.decDis }}" onClick="{{ n.dec }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex-shrink:0;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);transition:var(--mimi-transition);opacity:{{ n.decOp }};cursor:{{ n.decCur }}" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.88)"><mimi-icon name="minus" size="15"></mimi-icon></button>
+                  <input id="{{ n.id }}" inputmode="decimal" role="spinbutton" aria-valuemin="{{ n.min }}" aria-valuemax="{{ n.max }}" aria-valuenow="{{ n.now }}" value="{{ n.text }}" onChange="{{ n.onChange }}" onFocus="{{ n.onFocus }}" onBlur="{{ n.onBlur }}" onKeyDown="{{ n.onKey }}" style="flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;font-variant-numeric:tabular-nums;text-align:center;outline:none">
+                  <button aria-label="{{ n.incLabel }}" disabled="{{ n.incDis }}" onClick="{{ n.inc }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex-shrink:0;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);transition:var(--mimi-transition);opacity:{{ n.incOp }};cursor:{{ n.incCur }}" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.88)"><mimi-icon name="plus" size="15"></mimi-icon></button>
+                </div>
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ n.hint }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
+            <sc-for list="{{ m.states }}" as="s" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ s.caption }}</span>
+                <div aria-invalid="{{ s.inv }}" aria-disabled="{{ s.dis }}" style="display:flex;align-items:center;justify-content:space-between;height:var(--mimi-control-height);box-sizing:border-box;padding:0 8px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:14px;font-weight:500;font-variant-numeric:tabular-nums;border:1px solid {{ s.border }};box-shadow:{{ s.ring }};opacity:{{ s.op }}"><mimi-icon name="minus" size="14"></mimi-icon>{{ s.numSample }}<mimi-icon name="plus" size="14"></mimi-icon></div>
+                <sc-if value="{{ s.hasMsg }}"><span style="font-size:12px;color:var(--mimi-destructive-soft-foreground)">Máximo 10.</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">7 · Input Mask</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 24px">
+            <sc-for list="{{ m.masks }}" as="x" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0;grid-column:{{ x.span }}">
+                <label for="{{ x.id }}" style="font-size:14px;font-weight:500;color:{{ x.labelColor }}">{{ x.label }}</label>
+                <div style="display:flex;align-items:center;gap:8px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);transition:var(--mimi-transition);border:1px solid {{ x.border }};box-shadow:{{ x.ring }}" style-hover="border-color:var(--mimi-input-hover)">
+                  <sc-if value="{{ x.hasPrefix }}"><span style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 8px;margin-left:-6px;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);font-size:13px;font-weight:600">{{ x.prefix }}</span></sc-if>
+                  <sc-if value="{{ x.hasIcon }}"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ x.icon }}" size="16"></mimi-icon></span></sc-if>
+                  <div style="position:relative;flex:1;min-width:0;height:100%">
+                    <div aria-hidden="true" style="position:absolute;inset:0;display:flex;align-items:center;font-size:14px;font-variant-numeric:tabular-nums;letter-spacing:.02em;white-space:pre;pointer-events:none"><span style="color:transparent">{{ x.typed }}</span><span style="color:var(--mimi-muted-foreground)">{{ x.rest }}</span></div>
+                    <input id="{{ x.id }}" inputmode="numeric" autocomplete="{{ x.ac }}" aria-invalid="{{ x.ariaInvalid }}" aria-describedby="{{ x.id }}-h" value="{{ x.typed }}" onChange="{{ x.onChange }}" onFocus="{{ x.onFocus }}" onBlur="{{ x.onBlur }}" style="position:relative;width:100%;height:100%;padding:0;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-variant-numeric:tabular-nums;letter-spacing:.02em;outline:none">
+                  </div>
+                  <sc-if value="{{ x.hasBrand }}"><span style="display:inline-flex;align-items:center;height:22px;padding:0 7px;border-radius:5px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:10.5px;font-weight:800;letter-spacing:.06em">{{ x.brand }}</span></sc-if>
+                  <sc-if value="{{ x.valid }}"><span style="display:inline-flex;color:var(--mimi-success-soft-foreground)"><mimi-icon name="circle-check" size="16"></mimi-icon></span></sc-if>
+                </div>
+                <span id="{{ x.id }}-h" style="display:flex;align-items:center;gap:6px;font-size:12px;color:{{ x.hintColor }}"><sc-if value="{{ x.err }}"><mimi-icon name="circle-alert" size="13"></mimi-icon></sc-if>{{ x.hint }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
+            <sc-for list="{{ m.states }}" as="s" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ s.caption }}</span>
+                <div aria-invalid="{{ s.inv }}" aria-disabled="{{ s.dis }}" style="display:flex;align-items:center;height:var(--mimi-control-height);box-sizing:border-box;padding:0 10px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:13.5px;font-variant-numeric:tabular-nums;white-space:nowrap;border:1px solid {{ s.border }};box-shadow:{{ s.ring }};opacity:{{ s.op }}">{{ s.maskSample }}<span style="color:var(--mimi-muted-foreground)">{{ s.maskRest }}</span></div>
+                <sc-if value="{{ s.hasMsg }}"><span style="font-size:12px;color:var(--mimi-destructive-soft-foreground)">31/02 no existe.</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">8 · Password</h3>
+          <div style="display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <label for="{{ m.k }}-pw" style="font-size:14px;font-weight:500">Contraseña nueva</label>
+              <div style="display:flex;align-items:center;gap:6px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 4px 0 12px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);transition:var(--mimi-transition);border:1px solid {{ m.pw.border }};box-shadow:{{ m.pw.ring }}" style-hover="border-color:var(--mimi-input-hover)">
+                <input id="{{ m.k }}-pw" type="{{ m.pw.type }}" autocomplete="new-password" aria-describedby="{{ m.k }}-pw-s" value="{{ m.pw.value }}" onChange="{{ m.pw.onChange }}" onFocus="{{ m.pw.onFocus }}" onBlur="{{ m.pw.onBlur }}" placeholder="Al menos 8 caracteres" style="flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none">
+                <button aria-label="{{ m.pw.eyeLabel }}" aria-pressed="{{ m.pw.showAria }}" onClick="{{ m.pw.toggle }}" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.88)"><mimi-icon name="{{ m.pw.eye }}" size="16"></mimi-icon></button>
+              </div>
+              <div id="{{ m.k }}-pw-s" style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div aria-hidden="true" style="flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:4px">
+                    <sc-for list="{{ m.pw.bars }}" as="b" hint-placeholder-count="4"><span style="height:6px;border-radius:999px;transition:background-color .3s ease;background:{{ b.bg }}"></span></sc-for>
+                  </div>
+                  <span style="min-width:48px;text-align:right;font-size:13px;font-weight:600;color:{{ m.pw.levelFg }}">{{ m.pw.level }}</span>
+                </div>
+                <ul style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px">
+                  <sc-for list="{{ m.pw.rules }}" as="r" hint-placeholder-count="4"><li style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:{{ r.fg }}"><mimi-icon name="{{ r.icon }}" size="14"></mimi-icon>{{ r.label }}</li></sc-for>
+                </ul>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <sc-for list="{{ m.pwExamples }}" as="p" hint-placeholder-count="3">
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <div style="display:flex;align-items:center;justify-content:space-between;height:36px;box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:14px;letter-spacing:.1em">{{ p.dots }}<mimi-icon name="eye" size="15"></mimi-icon></div>
+                  <div style="display:flex;align-items:center;gap:10px"><div aria-hidden="true" style="flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:4px"><sc-for list="{{ p.bars }}" as="b"><span style="height:5px;border-radius:999px;background:{{ b.bg }}"></span></sc-for></div><span style="min-width:48px;text-align:right;font-size:12.5px;font-weight:600;color:{{ p.fg }}">{{ p.level }}</span></div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px">
+            <sc-for list="{{ m.states }}" as="s" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ s.caption }}</span>
+                <div aria-invalid="{{ s.inv }}" aria-disabled="{{ s.dis }}" style="display:flex;align-items:center;justify-content:space-between;height:var(--mimi-control-height);box-sizing:border-box;padding:0 10px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:14px;letter-spacing:.1em;border:1px solid {{ s.border }};box-shadow:{{ s.ring }};opacity:{{ s.op }}">••••••<span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="eye-off" size="14"></mimi-icon></span></div>
+                <sc-if value="{{ s.hasMsg }}"><span style="font-size:12px;color:var(--mimi-destructive-soft-foreground)">No coinciden.</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const MXN = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+const DEC = new Intl.NumberFormat('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const TEAM = ['1', '5', '10', '25', '50+'];
+const initMode = () => ({
+  sl: { vol: 64, price: [200, 750], team: 2, opa: 80 }, drag: null, focusThumb: null,
+  otp: '', otpFocus: false,
+  num: { qty: 10, kg: 2.5, mxn: 1250 }, numText: {}, numFocus: null,
+  mask: { phone: '5512345678', date: '3102', card: '4242424242424242' }, maskFocus: null,
+  pw: 'Mimi2026', pwShow: false, pwFocus: false
+});
+const strength = v => { const rules = [v.length >= 8, /[A-ZÁÉÍÓÚÑ]/.test(v), /\d/.test(v), /[^A-Za-z0-9]/.test(v)]; const n = rules.filter(Boolean).length; return { rules, n, level: !v ? 0 : n <= 1 ? 1 : n <= 3 ? 2 : 3 }; };
+const LEVELS = [['', 'var(--mimi-muted-foreground)', 'var(--mimi-track)'], ['Débil', 'var(--mimi-destructive-soft-foreground)', 'var(--mimi-strength-weak)'], ['Media', 'var(--mimi-warning-soft-foreground)', 'var(--mimi-strength-medium)'], ['Fuerte', 'var(--mimi-success-soft-foreground)', 'var(--mimi-strength-strong)']];
+const bars = (level, n) => [0, 1, 2, 3].map(i => ({ bg: i < (level === 3 ? 4 : level === 2 ? Math.max(2, Math.min(n, 3)) : level) ? LEVELS[level][2] : 'var(--mimi-track)' }));
+const applyMask = (digits, mask) => { let out = '', j = 0; for (const c of mask) { if (j >= digits.length) break; if (c === '0') out += digits[j++]; else out += c; } return out; };
+const luhn = n => { let s = 0; n.split('').reverse().forEach((d, i) => { let x = +d; if (i % 2) { x *= 2; if (x > 9) x -= 9; } s += x; }); return s % 10 === 0; };
+
+class Component extends DCLogic {
+  state = { l: initMode(), d: initMode() };
+  set(k, patch) { this.setState(s => ({ [k]: { ...s[k], ...(typeof patch === 'function' ? patch(s[k]) : patch) } })); }
+  ring(focus, err) { return { border: err ? 'var(--mimi-destructive)' : focus ? 'var(--mimi-ring)' : 'var(--mimi-input)', ring: err ? '0 0 0 3px var(--mimi-destructive-soft)' : focus ? '0 0 0 3px var(--mimi-ring-soft)' : 'none' }; }
+
+  slider(k, cfg) {
+    const st = this.state[k];
+    const { id, label, min = 0, max = 100, step = 1, get, put, fmt = v => String(v), range = false, marks = null, alwaysTip = false, disabled = false, error = null, forceRing = null, mb = '0px' } = cfg;
+    const raw = get(st);
+    const vals = range ? raw : [raw];
+    const pct = v => ((v - min) / (max - min)) * 100;
+    const snap = v => clamp(Math.round((v - min) / step) * step + min, min, max);
+    const setIdx = (i, v) => { if (disabled) return; const nv = [...vals]; nv[i] = snap(v); if (range) { if (i === 0) nv[0] = Math.min(nv[0], nv[1]); else nv[1] = Math.max(nv[1], nv[0]); } this.set(k, s => ({ sl: { ...s.sl, ...put(range ? nv : nv[0]) } })); };
+    const fromEvt = e => { const r = e.currentTarget.getBoundingClientRect(); return min + clamp((e.clientX - r.left) / r.width, 0, 1) * (max - min); };
+    const dragging = st.drag && st.drag.id === id;
+    const fill = error ? 'var(--mimi-destructive)' : 'var(--mimi-track-fill)';
+    return {
+      id: k + '-' + id, label, mb, valueText: range ? fmt(vals[0]) + ' – ' + fmt(vals[1]) : fmt(vals[0]),
+      labelColor: error ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-foreground)',
+      fill, fillL: range ? pct(vals[0]) + '%' : '0%', fillW: (range ? pct(vals[1]) - pct(vals[0]) : pct(vals[0])) + '%',
+      op: disabled ? '.5' : '1', cursor: disabled ? 'not-allowed' : 'pointer', ariaDisabled: String(disabled), ariaInvalid: String(!!error),
+      hasMsg: !!error, msg: error || '',
+      marks: marks ? marks.map((lab, i) => { const v = min + i * step; const on = range ? v >= vals[0] && v <= vals[1] : v <= vals[0]; return { label: lab, pos: pct(v) + '%', dot: on ? 'var(--mimi-primary-foreground)' : 'color-mix(in oklab, var(--mimi-foreground) 30%, transparent)', fg: v === vals[0] ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', fw: v === vals[0] ? '600' : '400' }; }) : [],
+      thumbs: vals.map((v, i) => {
+        const focused = st.focusThumb === id + i, drg = dragging && st.drag.idx === i;
+        const forced = forceRing === 'hover' ? '0 0 0 6px var(--mimi-ring-soft), var(--mimi-shadow-neutral)' : forceRing === 'focus' ? '0 0 0 2px var(--mimi-background), 0 0 0 4px var(--mimi-ring), var(--mimi-shadow-neutral)' : null;
+        return {
+          pos: pct(v) + '%', now: String(v), min: String(min), max: String(max), text: fmt(v), tab: disabled ? '-1' : '0',
+          aria: range ? (i ? 'Máximo' : 'Mínimo') : undefined,
+          tip: alwaysTip || drg || focused || forceRing === 'focus',
+          ring: forced || (focused ? '0 0 0 2px var(--mimi-background), 0 0 0 4px var(--mimi-ring), var(--mimi-shadow-neutral)' : drg ? '0 0 0 8px var(--mimi-ring-soft), var(--mimi-shadow-neutral)' : 'var(--mimi-shadow-neutral)'),
+          scale: drg ? 'scale(1.12)' : 'scale(1)',
+          onFocus: () => this.set(k, { focusThumb: id + i }), onBlur: () => this.set(k, { focusThumb: null }),
+          onKey: e => { const d = { ArrowRight: step, ArrowUp: step, ArrowLeft: -step, ArrowDown: -step, PageUp: step * 10, PageDown: -step * 10 }[e.key]; if (d !== undefined) { e.preventDefault(); setIdx(i, v + d); } else if (e.key === 'Home') { e.preventDefault(); setIdx(i, min); } else if (e.key === 'End') { e.preventDefault(); setIdx(i, max); } }
+        };
+      }),
+      onDown: e => { if (disabled) return; const v = fromEvt(e); const idx = range ? (Math.abs(v - vals[0]) <= Math.abs(v - vals[1]) ? 0 : 1) : 0; e.currentTarget.setPointerCapture(e.pointerId); this.set(k, { drag: { id, idx } }); setIdx(idx, v); },
+      onMove: e => { if (dragging) setIdx(st.drag.idx, fromEvt(e)); },
+      onUp: () => { if (dragging) this.set(k, { drag: null }); }
+    };
+  }
+
+  otpBoxes(code, { focus, status }) {
+    const out = [];
+    for (let i = 0; i < 6; i++) {
+      if (i === 3) out.push({ isSep: true });
+      const active = focus && (i === Math.min(code.length, 5));
+      const ch = code[i] || '';
+      const err = status === 'error', ok = status === 'ok';
+      out.push({ isBox: true, ch, caret: active && !ch, fg: 'var(--mimi-foreground)',
+        border: err ? 'var(--mimi-destructive)' : ok ? 'var(--mimi-success)' : active ? 'var(--mimi-ring)' : 'var(--mimi-input)',
+        ring: err ? '0 0 0 3px var(--mimi-destructive-soft)' : ok ? '0 0 0 3px var(--mimi-success-ring)' : active ? '0 0 0 3px var(--mimi-ring-soft)' : 'none' });
+    }
+    return out;
+  }
+
+  num(k, key, cfg) {
+    const st = this.state[k];
+    const v = st.num[key];
+    const { label, min, max, step, show, hint } = cfg;
+    const put = nv => this.set(k, s => ({ num: { ...s.num, [key]: clamp(Math.round(nv / step) * step, min, max) }, numText: { ...s.numText, [key]: undefined } }));
+    const focused = st.numFocus === key;
+    const text = st.numText[key] !== undefined ? st.numText[key] : focused ? String(v) : show(v);
+    return {
+      id: k + '-n-' + key, label, hint, min: String(min), max: String(max), now: String(v), text, ...this.ring(focused, false),
+      decLabel: 'Disminuir ' + label.toLowerCase(), incLabel: 'Aumentar ' + label.toLowerCase(),
+      decDis: v <= min, incDis: v >= max, decOp: v <= min ? '.35' : '1', incOp: v >= max ? '.35' : '1', decCur: v <= min ? 'not-allowed' : 'pointer', incCur: v >= max ? 'not-allowed' : 'pointer',
+      dec: () => put(v - step), inc: () => put(v + step),
+      onChange: e => this.set(k, s => ({ numText: { ...s.numText, [key]: e.target.value } })),
+      onFocus: () => this.set(k, { numFocus: key }),
+      onBlur: () => { const t = st.numText[key]; const p = t !== undefined ? parseFloat(String(t).replace(/[^\d.-]/g, '')) : v; this.set(k, { numFocus: null }); put(isNaN(p) ? v : p); },
+      onKey: e => { if (e.key === 'ArrowUp') { e.preventDefault(); put(v + step); } if (e.key === 'ArrowDown') { e.preventDefault(); put(v - step); } if (e.key === 'Enter') e.currentTarget.blur(); }
+    };
+  }
+
+  mask(k, key, cfg) {
+    const st = this.state[k];
+    const digits = st.mask[key];
+    const typed = applyMask(digits, cfg.mask);
+    const rest = cfg.ghost.slice(typed.length);
+    const focused = st.maskFocus === key;
+    const full = digits.length === cfg.mask.split('0').length - 1;
+    const err = full && cfg.validate ? cfg.validate(digits) : null;
+    const brand = cfg.brand ? cfg.brand(digits) : '';
+    return {
+      id: k + '-m-' + key, label: cfg.label, span: cfg.span || 'auto', typed, rest, ac: cfg.ac || 'off',
+      hasPrefix: !!cfg.prefix, prefix: cfg.prefix || '', hasIcon: !!cfg.icon, icon: cfg.icon || '',
+      hasBrand: !!brand, brand, valid: full && !err, err: !!err, ariaInvalid: String(!!err),
+      ...this.ring(focused, !!err), labelColor: err ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-foreground)',
+      hint: err || cfg.hint, hintColor: err ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-muted-foreground)',
+      onChange: e => { const d = e.target.value.replace(/\D/g, '').slice(0, cfg.mask.split('0').length - 1); this.set(k, s => ({ mask: { ...s.mask, [key]: d } })); },
+      onFocus: () => this.set(k, { maskFocus: key }), onBlur: () => this.set(k, { maskFocus: null })
+    };
+  }
+
+  renderVals() {
+    const states = [
+      ['Normal', 'var(--mimi-input)', 'none', '1'], ['Hover', 'var(--mimi-input-hover)', 'none', '1'], ['Foco', 'var(--mimi-ring)', '0 0 0 3px var(--mimi-ring-soft)', '1'],
+      ['Deshabilitado', 'var(--mimi-input)', 'none', '.5'], ['Con error', 'var(--mimi-destructive)', '0 0 0 3px var(--mimi-destructive-soft)', '1']
+    ].map(([caption, border, ring, op]) => ({ caption, border, ring, op, hasMsg: caption === 'Con error', inv: String(caption === 'Con error'), dis: String(caption === 'Deshabilitado'),
+      numSample: caption === 'Con error' ? '12' : '4', maskSample: caption === 'Con error' ? '31/02/2026' : '15/09/', maskRest: caption === 'Con error' ? '' : 'AAAA' }));
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+      const st = this.state[k];
+      const sl = c => this.slider(k, c);
+      const code = st.otp;
+      const otpStatus = code.length === 6 ? (code === '246810' ? 'ok' : 'error') : null;
+      const pw = strength(st.pw);
+      const ex = v => { const s = strength(v); return { dots: '•'.repeat(v.length), bars: bars(s.level, s.n), level: LEVELS[s.level][0], fg: LEVELS[s.level][1] }; };
+      return {
+        k, cls, label, icon, states,
+        sliders: [
+          sl({ id: 'vol', label: 'Volumen', get: s => s.sl.vol, put: v => ({ vol: v }), fmt: v => v + '%' }),
+          sl({ id: 'price', label: 'Precio por noche', min: 0, max: 1000, step: 10, range: true, get: s => s.sl.price, put: v => ({ price: v }), fmt: v => '$' + v }),
+          sl({ id: 'team', label: 'Tamaño del equipo', min: 0, max: 4, step: 1, marks: TEAM, get: s => s.sl.team, put: v => ({ team: v }), fmt: v => TEAM[v] + ' personas', mb: '22px' }),
+          sl({ id: 'opa', label: 'Opacidad · tooltip fijo', alwaysTip: true, get: s => s.sl.opa, put: v => ({ opa: v }), fmt: v => v + '%' }),
+          sl({ id: 'h', label: 'Hover', forceRing: 'hover', get: () => 40, put: () => ({}), fmt: v => v + '%' }),
+          sl({ id: 'f', label: 'Foco', forceRing: 'focus', get: () => 55, put: () => ({}), fmt: v => v + '%' }),
+          sl({ id: 'dis', label: 'Deshabilitado', disabled: true, get: () => 30, put: () => ({}), fmt: v => v + '%' }),
+          sl({ id: 'err', label: 'Rango de edad', min: 18, max: 80, range: true, error: 'El rango debe abarcar al menos 5 años.', get: () => [30, 32], put: () => ({}), fmt: v => v + ' años' })
+        ],
+        otp: {
+          code, boxes: this.otpBoxes(code, { focus: st.otpFocus, status: otpStatus }), ariaInvalid: String(otpStatus === 'error'),
+          shake: otpStatus === 'error' ? 'mimi-shake .4s ease' : 'none',
+          msg: otpStatus === 'ok' ? 'Código verificado.' : otpStatus === 'error' ? 'Código incorrecto. Te quedan 2 intentos.' : 'Te lo enviamos por SMS al ••• 5678.',
+          msgColor: otpStatus === 'ok' ? 'var(--mimi-success-soft-foreground)' : otpStatus === 'error' ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-muted-foreground)',
+          hasMsgIcon: !!otpStatus, msgIcon: otpStatus === 'ok' ? 'circle-check' : 'circle-alert',
+          onChange: e => this.set(k, { otp: e.target.value.replace(/\D/g, '').slice(0, 6) }),
+          onFocus: () => this.set(k, { otpFocus: true }), onBlur: () => this.set(k, { otpFocus: false })
+        },
+        otpStates: [
+          ['Vacío · foco en la primera', '', { focus: true }, null],
+          ['Escribiendo · foco en la cuarta', '246', { focus: true }, null],
+          ['Completo', '246810', { status: 'ok' }, ['Código verificado.', 'var(--mimi-success-soft-foreground)', 'circle-check']],
+          ['Con error', '135790', { status: 'error' }, ['Código incorrecto.', 'var(--mimi-destructive-soft-foreground)', 'circle-alert']],
+          ['Deshabilitado', '', {}, ['Espera 0:42 para pedir otro.', 'var(--mimi-muted-foreground)', 'clock']]
+        ].map(([caption, c, o, msg]) => ({ caption, boxes: this.otpBoxes(c, o), op: caption === 'Deshabilitado' ? '.5' : '1', ariaDisabled: String(caption === 'Deshabilitado'), hasMsg: !!msg, msg: msg ? msg[0] : '', msgColor: msg ? msg[1] : '', msgIcon: msg ? msg[2] : 'info' })),
+        nums: [
+          this.num(k, 'qty', { label: 'Cantidad', min: 0, max: 10, step: 1, show: v => String(v), hint: 'Entre 0 y 10 · máximo alcanzado' }),
+          this.num(k, 'kg', { label: 'Peso', min: 0, max: 50, step: 0.25, show: v => DEC.format(v) + ' kg', hint: 'Pasos de 0.25 kg' }),
+          this.num(k, 'mxn', { label: 'Precio', min: 0, max: 100000, step: 50, show: v => MXN.format(v), hint: 'Pesos mexicanos · pasos de $50' })
+        ],
+        masks: [
+          this.mask(k, 'phone', { label: 'Teléfono', prefix: '+52', mask: '(00) 0000 0000', ghost: '(55) 0000 0000', hint: 'Celular a 10 dígitos.', ac: 'tel-national' }),
+          this.mask(k, 'date', { label: 'Fecha de nacimiento', icon: 'calendar', mask: '00/00/0000', ghost: 'DD/MM/AAAA', hint: 'Formato DD/MM/AAAA.', validate: d => { const dd = +d.slice(0, 2), mm = +d.slice(2, 4), yy = +d.slice(4); if (mm < 1 || mm > 12) return 'El mes debe estar entre 01 y 12.'; if (dd < 1 || dd > new Date(yy, mm, 0).getDate()) return d.slice(0, 2) + '/' + d.slice(2, 4) + ' no existe en ' + yy + '.'; return null; } }),
+          this.mask(k, 'card', { label: 'Tarjeta de crédito', icon: 'credit-card', span: '1 / -1', mask: '0000 0000 0000 0000', ghost: '0000 0000 0000 0000', hint: 'Prueba 4242 4242 4242 4242.', ac: 'cc-number', brand: d => d[0] === '4' ? 'VISA' : d[0] === '5' ? 'MASTERCARD' : d[0] === '3' ? 'AMEX' : '', validate: d => luhn(d) ? null : 'El número de tarjeta no es válido.' })
+        ],
+        pw: {
+          value: st.pw, type: st.pwShow ? 'text' : 'password', eye: st.pwShow ? 'eye-off' : 'eye', eyeLabel: st.pwShow ? 'Ocultar contraseña' : 'Mostrar contraseña', showAria: String(st.pwShow),
+          toggle: () => this.set(k, { pwShow: !st.pwShow }), ...this.ring(st.pwFocus, false),
+          onChange: e => this.set(k, { pw: e.target.value }), onFocus: () => this.set(k, { pwFocus: true }), onBlur: () => this.set(k, { pwFocus: false }),
+          bars: bars(pw.level, pw.n), level: LEVELS[pw.level][0], levelFg: LEVELS[pw.level][1],
+          rules: ['8 caracteres o más', 'Una mayúscula', 'Un número', 'Un símbolo'].map((l, i) => ({ label: l, icon: pw.rules[i] ? 'circle-check' : 'circle', fg: pw.rules[i] ? 'var(--mimi-success-soft-foreground)' : 'var(--mimi-muted-foreground)' }))
+        },
+        pwExamples: [ex('abc123'), ex('Mimi2026'), ex('M1mi-Mimi!2026')]
+      };
+    });
+    return { modes };
+  }
+}
+</script>
+</body>
+</html>

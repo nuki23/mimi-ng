@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 3 · Archivos, tags, toggle group y color</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F3 Combobox Fechas Hora.dc.html">Combobox · Fechas · Hora</a>
+      <a href="Mimi F3 Slider OTP Numero Mascara.dc.html">Slider · OTP · Número · Máscara · Contraseña</a>
+      <a href="Mimi F3 Archivos Tags Toggle Color.dc.html">Archivos · Tags · Toggle · Color</a>
+      <a href="Mimi F3 Editor de temas.dc.html">Editor de temas v2</a>
+      <a href="Mimi F2 Tokens y Tonos.dc.html">Fase 2</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,780px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:40px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Entradas avanzadas · 3</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">9 · File Upload</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Normal · arrastra o haz clic</span>
+              <div role="button" tabIndex="0" aria-label="Subir archivos" onClick="{{ m.fu.pick }}" onKeyDown="{{ m.fu.key }}" onDragOver="{{ m.fu.over }}" onDragLeave="{{ m.fu.leave }}" onDrop="{{ m.fu.drop }}" style="height:176px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;border-radius:var(--mimi-radius-card);cursor:pointer;transition:var(--mimi-transition);border:{{ m.fu.border }};background:{{ m.fu.bg }};transform:{{ m.fu.scale }}" style-hover="border-color:var(--mimi-input-hover)" style-active="transform:scale(0.985)">
+                <span style="width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;transition:var(--mimi-transition);background:{{ m.fu.iconBg }};color:{{ m.fu.iconFg }};animation:{{ m.fu.bob }}"><mimi-icon name="cloud-upload" size="22"></mimi-icon></span>
+                <span style="font-size:14px;font-weight:600">{{ m.fu.title }}</span>
+                <span style="font-size:12.5px;color:var(--mimi-muted-foreground)">PNG, JPG o PDF · hasta 10 MB</span>
+                <input type="file" multiple="" aria-hidden="true" tabIndex="-1" onChange="{{ m.fu.onFiles }}" style="display:none">
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Con archivo encima</span>
+              <div aria-hidden="true" style="height:176px;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px;text-align:center;border-radius:var(--mimi-radius-card);border:2px solid var(--mimi-dropzone-active-border);background:var(--mimi-dropzone-active);box-shadow:var(--mimi-glow-info);transform:scale(1.01)">
+                <span style="width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info);color:var(--mimi-info-foreground);animation:mimi-bob 1s ease-in-out infinite"><mimi-icon name="cloud-upload" size="22"></mimi-icon></span>
+                <span style="font-size:14px;font-weight:600;color:var(--mimi-info-soft-foreground)">Suelta para subir 3 archivos</span>
+                <span style="font-size:12.5px;color:var(--mimi-info-soft-foreground)">portada.jpg, contrato.pdf y 1 más</span>
+              </div>
+            </div>
+          </div>
+          <ul aria-label="Archivos" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px">
+            <sc-for list="{{ m.fu.files }}" as="f" hint-placeholder-count="3">
+              <li style="display:flex;align-items:center;gap:12px;padding:10px 10px 10px 10px;border-radius:var(--mimi-radius);background:var(--mimi-card);border:1px solid {{ f.border }};box-shadow:var(--mimi-shadow-neutral)">
+                <sc-if value="{{ f.hasPreview }}"><img src="{{ f.preview }}" alt="" style="width:44px;height:44px;flex-shrink:0;border-radius:var(--mimi-radius-sm);object-fit:cover"></sc-if>
+                <sc-if value="{{ f.noPreview }}"><span style="width:44px;height:44px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius-sm);background:{{ f.tileBg }};color:{{ f.tileFg }}"><mimi-icon name="{{ f.icon }}" size="20"></mimi-icon></span></sc-if>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+                  <div style="display:flex;align-items:baseline;gap:8px"><span style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.name }}</span><span style="flex-shrink:0;font-size:12px;color:var(--mimi-muted-foreground)">{{ f.size }}</span></div>
+                  <sc-if value="{{ f.uploading }}"><div role="progressbar" aria-label="{{ f.progressLabel }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ f.pct }}" style="display:flex;align-items:center;gap:10px"><div style="flex:1;height:5px;border-radius:999px;background:var(--mimi-track);overflow:hidden"><div style="height:100%;border-radius:999px;background:var(--mimi-primary);transition:width .25s ease;width:{{ f.pctW }}"></div></div><span style="font-size:12px;font-variant-numeric:tabular-nums;color:var(--mimi-muted-foreground)">{{ f.pctText }}</span></div></sc-if>
+                  <sc-if value="{{ f.done }}"><span style="display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--mimi-success-soft-foreground)"><mimi-icon name="circle-check" size="13"></mimi-icon>Subido</span></sc-if>
+                  <sc-if value="{{ f.error }}"><span style="display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--mimi-destructive-soft-foreground)"><mimi-icon name="circle-alert" size="13"></mimi-icon>{{ f.errorMsg }}</span></sc-if>
+                </div>
+                <sc-if value="{{ f.error }}"><button onClick="{{ f.retry }}" style="display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.94)"><mimi-icon name="rotate-cw" size="13"></mimi-icon>Reintentar</button></sc-if>
+                <button aria-label="{{ f.removeLabel }}" onClick="{{ f.remove }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-destructive-soft-bg);color:var(--mimi-destructive-soft-foreground)" style-active="transform:scale(0.88)"><mimi-icon name="trash-2" size="15"></mimi-icon></button>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">10 · Tags Input</h3>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><label for="{{ m.k }}-tags" style="font-size:14px;font-weight:500">Etiquetas del proyecto</label><span style="font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums;color:{{ m.tg.countFg }}">{{ m.tg.count }}</span></div>
+            <div onClick="{{ m.tg.focusInput }}" style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-height:var(--mimi-control-height);box-sizing:border-box;padding:5px 10px 5px 6px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);cursor:text;transition:var(--mimi-transition);border:1px solid {{ m.tg.border }};box-shadow:{{ m.tg.ring }}" style-hover="border-color:var(--mimi-input-hover)">
+              <sc-for list="{{ m.tg.chips }}" as="c">
+                <span style="display:inline-flex;align-items:center;gap:4px;height:26px;padding:0 4px 0 10px;border-radius:var(--mimi-badge-radius);font-size:13px;font-weight:500;transition:var(--mimi-transition);background:{{ c.bg }};color:{{ c.fg }}">#{{ c.label }}<button aria-label="{{ c.removeLabel }}" onClick="{{ c.remove }}" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;border:0;border-radius:999px;background:transparent;color:inherit;opacity:.7;cursor:pointer;transition:var(--mimi-transition)" style-hover="opacity:1;background:color-mix(in oklab, var(--mimi-foreground) 12%, transparent)" style-active="transform:scale(0.85)"><mimi-icon name="x" size="12"></mimi-icon></button></span>
+              </sc-for>
+              <input id="{{ m.k }}-tags" aria-describedby="{{ m.k }}-tags-h" aria-invalid="{{ m.tg.ariaInvalid }}" disabled="{{ m.tg.full }}" placeholder="{{ m.tg.placeholder }}" value="{{ m.tg.q }}" onChange="{{ m.tg.onQ }}" onKeyDown="{{ m.tg.onKey }}" onFocus="{{ m.tg.onFocus }}" onBlur="{{ m.tg.onBlur }}" style="flex:1;min-width:120px;height:28px;padding:0 4px;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none">
+            </div>
+            <span id="{{ m.k }}-tags-h" role="status" style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:{{ m.tg.hintFg }}"><sc-if value="{{ m.tg.hasHintIcon }}"><mimi-icon name="{{ m.tg.hintIcon }}" size="13"></mimi-icon></sc-if>{{ m.tg.hint }}</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 12px">
+            <sc-for list="{{ m.tagStates }}" as="s" hint-placeholder-count="6">
+              <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ s.caption }}</span>
+                <div aria-invalid="{{ s.inv }}" aria-disabled="{{ s.dis }}" style="display:flex;flex-wrap:wrap;align-items:center;gap:5px;min-height:var(--mimi-control-height);box-sizing:border-box;padding:5px 6px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:12.5px;border:1px solid {{ s.border }};box-shadow:{{ s.ring }};opacity:{{ s.op }}">
+                  <sc-for list="{{ s.chips }}" as="c"><span style="display:inline-flex;align-items:center;gap:3px;height:24px;padding:0 6px 0 8px;border-radius:var(--mimi-badge-radius);font-weight:500;background:{{ c.bg }};color:{{ c.fg }}">#{{ c.label }}<mimi-icon name="x" size="11"></mimi-icon></span></sc-for>
+                  <sc-if value="{{ s.hasGhost }}"><span style="color:var(--mimi-muted-foreground);padding-left:2px">{{ s.ghost }}</span></sc-if>
+                </div>
+                <sc-if value="{{ s.hasMsg }}"><span style="font-size:12px;color:{{ s.msgFg }}">{{ s.msg }}</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">11 · Toggle Group · control segmentado</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px 28px">
+            <sc-for list="{{ m.groups }}" as="g" hint-placeholder-count="6">
+              <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ g.caption }}</span>
+                <div role="{{ g.role }}" aria-label="{{ g.caption }}" aria-disabled="{{ g.ariaDisabled }}" onKeyDown="{{ g.onKey }}" style="position:relative;display:grid;align-self:flex-start;padding:3px;gap:2px;border-radius:calc(var(--mimi-radius) + 3px);background:var(--mimi-muted);grid-template-columns:repeat({{ g.n }}, {{ g.col }});opacity:{{ g.op }}">
+                  <sc-if value="{{ g.slide }}"><span aria-hidden="true" style="position:absolute;top:3px;bottom:3px;left:3px;border-radius:var(--mimi-radius);background:var(--mimi-card);box-shadow:var(--mimi-shadow-neutral);transition:transform .45s cubic-bezier(.3,1.35,.5,1);width:{{ g.indW }};transform:{{ g.indTf }}"></span></sc-if>
+                  <sc-for list="{{ g.items }}" as="it">
+                    <button role="{{ g.itemRole }}" aria-checked="{{ it.checked }}" aria-pressed="{{ it.pressed }}" aria-label="{{ it.aria }}" tabIndex="{{ it.tab }}" disabled="{{ g.disabled }}" onClick="{{ it.pick }}" style="position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 12px;border:0;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:13.5px;white-space:nowrap;transition:background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .15s cubic-bezier(.2,.8,.2,1);background:{{ it.bg }};color:{{ it.fg }};font-weight:{{ it.fw }};box-shadow:{{ it.sh }};cursor:{{ g.cursor }}" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(0.93)"><sc-if value="{{ it.hasIcon }}"><mimi-icon name="{{ it.icon }}" size="16"></mimi-icon></sc-if>{{ it.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">12 · Color Picker</h3>
+          <div style="display:flex;gap:28px;align-items:flex-start">
+            <dc-import name="Mimi Color Picker" value="{{ m.color }}" on-change="{{ m.setColor }}" hint-size="280px,420px"></dc-import>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+              <span style="font-size:14px;font-weight:600">Vista previa</span>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="width:56px;height:56px;border-radius:var(--mimi-radius);box-shadow:inset 0 0 0 1px oklch(0 0 0 / .1);background:{{ m.color }}"></span>
+                <div style="display:flex;flex-direction:column;gap:2px;font-family:var(--mimi-font-mono);font-size:12.5px"><span style="font-weight:600">{{ m.colorHex }}</span><span style="color:var(--mimi-muted-foreground)">{{ m.colorOk }}</span></div>
+              </div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <button style="display:inline-flex;align-items:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;border:0;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:{{ m.color }};color:{{ m.colorFg }};box-shadow:0 4px 12px -4px {{ m.color }}" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="check" size="16"></mimi-icon>Botón</button>
+                <span style="display:inline-flex;align-items:center;height:24px;padding:0 10px;align-self:center;border-radius:999px;font-size:12px;font-weight:600;background:{{ m.color }};color:{{ m.colorFg }}">Badge</span>
+              </div>
+              <span style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:{{ m.contrastFg }}"><mimi-icon name="{{ m.contrastIcon }}" size="14"></mimi-icon>{{ m.contrastText }}</span>
+            </div>
+          </div>
+        </section>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const lin = c => c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+const hexRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
+const lum = h => { const [r, g, b] = hexRgb(h).map(lin); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+const ratio = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+const oklch = h => { const [r, g, b] = hexRgb(h).map(lin); const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b), m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b), s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b); const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, A = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, B = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s; let H = Math.atan2(B, A) * 180 / Math.PI; if (H < 0) H += 360; const C = Math.hypot(A, B); return 'oklch(' + L.toFixed(3) + ' ' + C.toFixed(3) + ' ' + (C < 0.002 ? 0 : H.toFixed(1)) + ')'; };
+const fmtSize = b => b > 1e6 ? (b / 1e6).toFixed(1) + ' MB' : Math.max(1, Math.round(b / 1e3)) + ' KB';
+const kindOf = n => /\.(png|jpe?g|gif|webp|svg)$/i.test(n) ? 'image' : /\.pdf$/i.test(n) ? 'pdf' : /\.(mov|mp4|webm)$/i.test(n) ? 'video' : 'file';
+const KIND = { image: ['image', 'var(--mimi-info-soft)', 'var(--mimi-info-soft-foreground)'], pdf: ['file-text', 'var(--mimi-destructive-soft-bg)', 'var(--mimi-destructive-soft-foreground)'], video: ['film', 'var(--mimi-warning-soft)', 'var(--mimi-warning-soft-foreground)'], file: ['file', 'var(--mimi-muted)', 'var(--mimi-muted-foreground)'] };
+const seedFiles = () => [
+  { id: 1, name: 'portada-campaña.jpg', bytes: 842000, status: 'done', pct: 100 },
+  { id: 2, name: 'contrato-servicios.pdf', bytes: 2400000, status: 'uploading', pct: 64, paused: true },
+  { id: 3, name: 'video-demo.mov', bytes: 48200000, status: 'error', pct: 0, error: 'Supera el máximo de 10 MB.' }
+];
+const initMode = () => ({ files: seedFiles(), over: false, tags: ['angular', 'diseño', 'ventas'], tq: '', tFocus: false, tErr: null, groups: { period: 1, align: 0, format: ['bold'], net: ['wifi', 'ubicacion'] }, color: '#4f46e5' });
+const MAX_TAGS = 5;
+
+class Component extends DCLogic {
+  state = { l: initMode(), d: initMode() };
+  uid = 100;
+  componentDidMount() {
+    this.iv = setInterval(() => {
+      ['l', 'd'].forEach(k => {
+        if (!this.state[k].files.some(f => f.status === 'uploading' && !f.paused)) return;
+        this.set(k, s => ({ files: s.files.map(f => f.status !== 'uploading' || f.paused ? f : f.pct + 9 >= 100 ? { ...f, pct: 100, status: 'done' } : { ...f, pct: f.pct + 5 + Math.round(Math.random() * 8) }) }));
+      });
+    }, 220);
+  }
+  componentWillUnmount() { clearInterval(this.iv); }
+  set(k, patch) { this.setState(s => ({ [k]: { ...s[k], ...(typeof patch === 'function' ? patch(s[k]) : patch) } })); }
+
+  addFiles(k, list) {
+    const items = Array.from(list || []).map(f => {
+      const tooBig = f.size > 10e6;
+      return { id: ++this.uid, name: f.name, bytes: f.size, status: tooBig ? 'error' : 'uploading', pct: 0, error: tooBig ? 'Supera el máximo de 10 MB.' : null, preview: kindOf(f.name) === 'image' ? URL.createObjectURL(f) : null };
+    });
+    this.set(k, s => ({ files: [...items, ...s.files], over: false }));
+  }
+
+  upload(k) {
+    const st = this.state[k];
+    return {
+      title: st.over ? 'Suelta para subir' : 'Arrastra archivos o haz clic',
+      border: st.over ? '2px solid var(--mimi-dropzone-active-border)' : '2px dashed var(--mimi-input)',
+      bg: st.over ? 'var(--mimi-dropzone-active)' : 'var(--mimi-dropzone)', scale: st.over ? 'scale(1.01)' : 'none',
+      iconBg: st.over ? 'var(--mimi-info)' : 'var(--mimi-muted)', iconFg: st.over ? 'var(--mimi-info-foreground)' : 'var(--mimi-foreground)', bob: st.over ? 'mimi-bob 1s ease-in-out infinite' : 'none',
+      pick: e => { const i = e.currentTarget.querySelector('input[type=file]'); i && i.click(); },
+      key: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); const i = e.currentTarget.querySelector('input[type=file]'); i && i.click(); } },
+      over: e => { e.preventDefault(); if (!st.over) this.set(k, { over: true }); },
+      leave: () => this.set(k, { over: false }),
+      drop: e => { e.preventDefault(); this.addFiles(k, e.dataTransfer.files); },
+      onFiles: e => { this.addFiles(k, e.target.files); e.target.value = ''; },
+      files: st.files.map(f => {
+        const [icon, tileBg, tileFg] = KIND[kindOf(f.name)];
+        return {
+          name: f.name, size: fmtSize(f.bytes), icon, tileBg, tileFg, hasPreview: !!f.preview, noPreview: !f.preview, preview: f.preview || '',
+          uploading: f.status === 'uploading', done: f.status === 'done', error: f.status === 'error', errorMsg: f.error || '',
+          pct: String(f.pct), pctW: f.pct + '%', pctText: f.pct + '%', progressLabel: 'Subiendo ' + f.name,
+          border: f.status === 'error' ? 'color-mix(in oklab, var(--mimi-destructive) 45%, var(--mimi-border))' : 'var(--mimi-border)',
+          removeLabel: 'Quitar ' + f.name,
+          remove: () => this.set(k, s => ({ files: s.files.filter(x => x.id !== f.id) })),
+          retry: () => this.set(k, s => ({ files: s.files.map(x => x.id === f.id ? { ...x, status: 'uploading', pct: 0, error: null, bytes: Math.min(x.bytes, 9.4e6), name: x.name.replace('.mov', '-comprimido.mp4') } : x) }))
+        };
+      })
+    };
+  }
+
+  tags(k) {
+    const st = this.state[k];
+    const full = st.tags.length >= MAX_TAGS;
+    const add = () => {
+      const t = st.tq.trim().toLowerCase().replace(/^#/, '').replace(/,$/, '');
+      if (!t) return;
+      if (st.tags.includes(t)) { this.set(k, { tErr: '«' + t + '» ya está en la lista.' }); return; }
+      this.set(k, s => ({ tags: [...s.tags, t], tq: '', tErr: null }));
+    };
+    const err = !!st.tErr;
+    return {
+      full, q: st.tq, placeholder: full ? 'Límite alcanzado' : st.tags.length ? 'Agregar otra…' : 'Escribe y pulsa Enter',
+      count: st.tags.length + '/' + MAX_TAGS, countFg: full ? 'var(--mimi-warning-soft-foreground)' : 'var(--mimi-muted-foreground)',
+      border: err ? 'var(--mimi-destructive)' : st.tFocus ? 'var(--mimi-ring)' : full ? 'color-mix(in oklab, var(--mimi-warning) 70%, var(--mimi-input))' : 'var(--mimi-input)',
+      ring: err ? '0 0 0 3px var(--mimi-destructive-soft)' : st.tFocus ? '0 0 0 3px var(--mimi-ring-soft)' : 'none', ariaInvalid: String(err),
+      hint: err ? st.tErr : full ? 'Llegaste al límite de ' + MAX_TAGS + ' etiquetas. Quita una para agregar otra.' : 'Enter o coma para agregar · Backspace quita la última',
+      hintFg: err ? 'var(--mimi-destructive-soft-foreground)' : full ? 'var(--mimi-warning-soft-foreground)' : 'var(--mimi-muted-foreground)',
+      hasHintIcon: err || full, hintIcon: err ? 'circle-alert' : 'triangle-alert',
+      chips: st.tags.map(t => ({ label: t, bg: 'var(--mimi-chip)', fg: 'var(--mimi-chip-foreground)', removeLabel: 'Quitar ' + t, remove: e => { e.stopPropagation(); this.set(k, s => ({ tags: s.tags.filter(x => x !== t), tErr: null })); } })),
+      focusInput: e => { const i = e.currentTarget.querySelector('input'); i && !i.disabled && i.focus(); },
+      onQ: e => { const v = e.target.value; if (v.endsWith(',')) { this.set(k, { tq: v }); setTimeout(add, 0); return; } this.set(k, { tq: v, tErr: null }); },
+      onKey: e => { if (e.key === 'Enter') { e.preventDefault(); add(); } else if (e.key === 'Backspace' && !st.tq && st.tags.length) this.set(k, s => ({ tags: s.tags.slice(0, -1) })); },
+      onFocus: () => this.set(k, { tFocus: true }), onBlur: () => this.set(k, { tFocus: false })
+    };
+  }
+
+  group(k, cfg) {
+    const st = this.state[k].groups;
+    const { id, caption, items, multi = false, disabled = false, col = '1fr' } = cfg;
+    const cur = st[id];
+    const n = items.length;
+    const idx = multi ? -1 : items.findIndex(i => i[0] === cur);
+    const pick = v => { if (disabled) return; this.set(k, s => ({ groups: { ...s.groups, [id]: multi ? (s.groups[id].includes(v) ? s.groups[id].filter(x => x !== v) : [...s.groups[id], v]) : v } })); };
+    return {
+      caption, n, col, slide: !multi, role: multi ? 'group' : 'radiogroup', itemRole: multi ? undefined : 'radio', disabled, ariaDisabled: String(disabled),
+      op: disabled ? '.5' : '1', cursor: disabled ? 'not-allowed' : 'pointer',
+      indW: 'calc((100% - 6px - ' + (n - 1) * 2 + 'px) / ' + n + ')', indTf: 'translateX(calc(' + idx * 100 + '% + ' + idx * 2 + 'px))',
+      onKey: e => { if (multi) return; const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key]; if (!d) return; e.preventDefault(); const ni = (idx + d + n) % n; pick(items[ni][0]); const g = e.currentTarget; requestAnimationFrame(() => { const b = g.querySelectorAll('button')[ni]; b && b.focus(); }); },
+      items: items.map(([v, label, icon, aria]) => {
+        const on = multi ? cur.includes(v) : cur === v;
+        return {
+          label: label || '', icon: icon || '', hasIcon: !!icon, aria: aria || undefined, pick: () => pick(v),
+          checked: multi ? undefined : String(on), pressed: multi ? String(on) : undefined, tab: multi || on ? '0' : '-1',
+          bg: multi && on ? (cfg.solid ? 'var(--mimi-primary)' : 'var(--mimi-card)') : 'transparent',
+          fg: multi && on && cfg.solid ? 'var(--mimi-primary-foreground)' : on ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)',
+          fw: on ? '600' : '500', sh: multi && on ? (cfg.solid ? 'var(--mimi-shadow-primary)' : 'var(--mimi-shadow-neutral)') : 'none'
+        };
+      })
+    };
+  }
+
+  renderVals() {
+    const chip = (t, tone) => ({ label: t, bg: tone ? 'var(--mimi-' + tone + '-soft)' : 'var(--mimi-chip)', fg: tone ? 'var(--mimi-' + tone + '-soft-foreground)' : 'var(--mimi-chip-foreground)' });
+    const tagStates = [
+      ['Normal', 'var(--mimi-input)', 'none', '1', [chip('angular'), chip('diseño')], 'Agregar…', null],
+      ['Hover', 'var(--mimi-input-hover)', 'none', '1', [chip('angular'), chip('diseño')], 'Agregar…', null],
+      ['Foco', 'var(--mimi-ring)', '0 0 0 3px var(--mimi-ring-soft)', '1', [chip('angular'), chip('diseño')], 'ventas|', null],
+      ['Deshabilitado', 'var(--mimi-input)', 'none', '.5', [chip('angular'), chip('diseño')], '', null],
+      ['Con error', 'var(--mimi-destructive)', '0 0 0 3px var(--mimi-destructive-soft)', '1', [chip('angular'), chip('diseño', 'destructive')], 'diseño', ['«diseño» ya está en la lista.', 'var(--mimi-destructive-soft-foreground)']],
+      ['Límite alcanzado', 'color-mix(in oklab, var(--mimi-warning) 70%, var(--mimi-input))', 'none', '1', [chip('angular'), chip('ui'), chip('ventas'), chip('q4'), chip('beta')], '', ['5/5 · quita una para agregar otra.', 'var(--mimi-warning-soft-foreground)']]
+    ].map(([caption, border, ring, op, chips, ghost, msg]) => ({ caption, border, ring, op, chips, ghost, hasGhost: !!ghost, hasMsg: !!msg, msg: msg ? msg[0] : '', msgFg: msg ? msg[1] : '', inv: String(caption === 'Con error'), dis: String(caption === 'Deshabilitado') }));
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+      const st = this.state[k];
+      const c = st.color;
+      const wl = ratio(lum(c), 1), bl = ratio(lum(c), lum('#171717'));
+      const useWhite = wl >= bl;
+      const cr = Math.max(wl, bl);
+      return {
+        k, cls, label, icon,
+        fu: this.upload(k), tg: this.tags(k), tagStates,
+        groups: [
+          this.group(k, { id: 'period', caption: 'Texto · selección simple', items: [['d', 'Diario'], ['s', 'Semanal'], ['m', 'Mensual'], ['a', 'Anual']] }),
+          this.group(k, { id: 'align', caption: 'Íconos · selección simple', col: '44px', items: [['l', '', 'align-left', 'Alinear a la izquierda'], ['c', '', 'align-center', 'Centrar'], ['r', '', 'align-right', 'Alinear a la derecha'], ['j', '', 'align-justify', 'Justificar']] }),
+          this.group(k, { id: 'format', caption: 'Íconos · selección múltiple', col: '44px', multi: true, items: [['bold', '', 'bold', 'Negrita'], ['italic', '', 'italic', 'Cursiva'], ['underline', '', 'underline', 'Subrayado'], ['strike', '', 'strikethrough', 'Tachado']] }),
+          this.group(k, { id: 'net', caption: 'Texto e ícono · múltiple', multi: true, solid: true, col: 'auto', items: [['wifi', 'Wi-Fi', 'wifi'], ['bt', 'Bluetooth', 'bluetooth'], ['ubicacion', 'Ubicación', 'map-pin']] }),
+          this.group(k, { id: 'period', caption: 'Deshabilitado', disabled: true, items: [['d', 'Diario'], ['s', 'Semanal'], ['m', 'Mensual'], ['a', 'Anual']] })
+        ],
+        color: c, colorHex: c.toUpperCase(), colorOk: oklch(c), colorFg: useWhite ? '#ffffff' : '#171717',
+        contrastText: 'Contraste con su texto: ' + cr.toFixed(2) + ':1 · ' + (cr >= 4.5 ? 'AA' : cr >= 3 ? 'AA solo texto grande' : 'no cumple AA'), contrastLabel: cr >= 4.5 ? 'AA' : cr >= 3 ? 'AA solo texto grande' : 'no cumple AA',
+        contrastFg: cr >= 4.5 ? 'var(--mimi-success-soft-foreground)' : cr >= 3 ? 'var(--mimi-warning-soft-foreground)' : 'var(--mimi-destructive-soft-foreground)',
+        contrastIcon: cr >= 4.5 ? 'circle-check' : 'triangle-alert',
+        setColor: hex => this.set(k, { color: hex })
+      };
+    });
+    return { modes };
+  }
+}
+</script>
+</body>
+</html>

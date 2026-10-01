@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 4 · Panel administrativo</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F4 Data Table y Pagination.dc.html">Data Table · Pagination</a>
+      <a href="Mimi F4 Command Tree Sortable.dc.html">Command · Tree · Sortable</a>
+      <a href="Mimi F4 Panel admin.dc.html">Panel administrativo</a>
+    </nav>
+  </div>
+  <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+    <div data-mimi-style="mimi" class="{{ m.cls }}" style="width:1440px;display:grid;grid-template-columns:248px minmax(0,1fr);background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:16px;overflow:hidden;box-shadow:0 1px 3px oklch(0 0 0 / .12), 0 24px 60px -24px oklch(0 0 0 / .3)">
+      <aside aria-label="Navegación principal" style="display:flex;flex-direction:column;gap:20px;padding:16px 12px;border-right:1px solid var(--mimi-border);background:var(--mimi-card)">
+        <button style="display:flex;align-items:center;gap:10px;height:44px;padding:0 10px;border:0;border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);text-align:left;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))">
+          <span style="width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:17px;font-weight:800;line-height:1">m</span>
+          <span style="flex:1;display:flex;flex-direction:column;line-height:1.25"><span style="font-size:14px;font-weight:700">Mimi Ventas</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">Plan Equipo</span></span>
+          <mimi-icon name="chevrons-up-down" size="15"></mimi-icon>
+        </button>
+        <sc-for list="{{ m.nav }}" as="g" hint-placeholder-count="2">
+          <nav style="display:flex;flex-direction:column;gap:2px">
+            <span style="padding:0 10px 6px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">{{ g.label }}</span>
+            <sc-for list="{{ g.items }}" as="it">
+              <button aria-current="{{ it.current }}" onClick="{{ it.pick }}" style="--hbg:{{ it.hbg }};--hfg:{{ it.hfg }};display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:14px;text-align:left;cursor:pointer;transition:var(--mimi-transition);background:{{ it.bg }};color:{{ it.fg }};font-weight:{{ it.fw }}" style-hover="background:var(--hbg);color:var(--hfg)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ it.icon }}" size="17"></mimi-icon><span style="flex:1">{{ it.label }}</span><sc-if value="{{ it.hasCount }}"><span style="display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:999px;background:{{ it.cBg }};color:{{ it.cFg }};font-size:11px;font-weight:700;font-variant-numeric:tabular-nums">{{ it.count }}</span></sc-if></button>
+            </sc-for>
+          </nav>
+        </sc-for>
+        <div style="flex:1"></div>
+        <div style="display:flex;flex-direction:column;gap:8px;padding:12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-background)">
+          <div style="display:flex;justify-content:space-between;font-size:12.5px"><span style="font-weight:600">Asientos</span><span style="color:var(--mimi-muted-foreground);font-variant-numeric:tabular-nums">18 de 25</span></div>
+          <div role="progressbar" aria-label="Asientos usados" aria-valuemin="0" aria-valuemax="25" aria-valuenow="18" style="height:6px;border-radius:999px;background:var(--mimi-track);overflow:hidden"><div style="width:72%;height:100%;border-radius:999px;background:var(--mimi-primary)"></div></div>
+          <button style="height:30px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))">Mejorar plan</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 6px">
+          <span style="width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:12px;font-weight:700">AT</span>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3"><span style="font-size:13.5px;font-weight:600">Ana Torres</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">ana@mimi.dev</span></div>
+          <button aria-label="Cerrar sesión" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.9)"><mimi-icon name="log-out" size="15"></mimi-icon></button>
+        </div>
+      </aside>
+
+      <div style="display:flex;flex-direction:column;min-width:0">
+        <header style="display:flex;align-items:center;gap:12px;height:60px;padding:0 28px;border-bottom:1px solid var(--mimi-border)">
+          <nav aria-label="Ruta" style="display:flex;align-items:center;gap:6px;font-size:14px;color:var(--mimi-muted-foreground)"><span>Panel</span><mimi-icon name="chevron-right" size="14"></mimi-icon><span aria-current="page" style="color:var(--mimi-foreground);font-weight:600">Clientes</span></nav>
+          <div style="flex:1"></div>
+          <button style="display:flex;align-items:center;gap:8px;width:260px;height:36px;box-sizing:border-box;padding:0 6px 0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-muted-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;cursor:pointer;transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-input-hover)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="search" size="15"></mimi-icon><span style="flex:1;text-align:left">Buscar o ejecutar…</span><kbd style="height:22px;padding:0 6px;display:inline-flex;align-items:center;border:1px solid var(--mimi-border);border-radius:5px;background:var(--mimi-background);font-family:var(--mimi-font-mono);font-size:11px">⌘K</kbd></button>
+          <button aria-label="Notificaciones, 3 sin leer" style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border:0;border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.9)"><mimi-icon name="bell" size="18"></mimi-icon><span style="position:absolute;top:7px;right:8px;width:8px;height:8px;border-radius:999px;background:var(--mimi-destructive);box-shadow:0 0 0 2px var(--mimi-background)"></span></button>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </header>
+
+        <main style="display:flex;flex-direction:column;gap:24px;padding:28px">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px">
+            <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font-size:28px;font-weight:800;letter-spacing:-0.025em">Clientes</h1><span style="font-size:14px;color:var(--mimi-muted-foreground)">36 cuentas · datos al 30 de septiembre de 2026</span></div>
+            <div style="display:flex;gap:8px">
+              <button style="display:inline-flex;align-items:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);box-shadow:var(--mimi-shadow-neutral-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="download" size="16"></mimi-icon>Exportar CSV</button>
+              <button style="display:inline-flex;align-items:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;border:1px solid transparent;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="plus" size="16"></mimi-icon>Nuevo cliente</button>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px">
+            <sc-for list="{{ kpis }}" as="c" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:10px;padding:18px;background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card)">
+                <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:13.5px;font-weight:500;color:var(--mimi-muted-foreground)">{{ c.label }}</span><span style="width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted);color:var(--mimi-muted-foreground)"><mimi-icon name="{{ c.icon }}" size="16"></mimi-icon></span></div>
+                <span style="font-size:28px;font-weight:800;letter-spacing:-0.02em;font-variant-numeric:tabular-nums">{{ c.value }}</span>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12.5px"><span style="display:inline-flex;align-items:center;gap:3px;height:22px;padding:0 8px;border-radius:999px;font-weight:700;font-variant-numeric:tabular-nums;background:{{ c.bg }};color:{{ c.fg }}"><mimi-icon name="{{ c.trend }}" size="12"></mimi-icon>{{ c.delta }}</span><span style="color:var(--mimi-muted-foreground)">{{ c.caption }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+          <dc-import name="Mimi Data Table" density="compact" page-size="10" title="Clientes" hint-size="100%,640px"></dc-import>
+        </main>
+      </div>
+    </div>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const NAV = [
+  ['General', [['home', 'Inicio', 'layout-dashboard'], ['clients', 'Clientes', 'users', '36'], ['billing', 'Facturación', 'receipt', '4', 'warning'], ['products', 'Productos', 'package']]],
+  ['Equipo', [['members', 'Miembros', 'user-round'], ['settings', 'Ajustes', 'settings']]]
+];
+class Component extends DCLogic {
+  state = { nav: { l: 'clients', d: 'clients' } };
+  renderVals() {
+    return {
+      kpis: [
+        { label: 'MRR', icon: 'banknote', value: '$412,380', delta: '8.2%', trend: 'trending-up', caption: 'vs. agosto', bg: 'var(--mimi-success-soft)', fg: 'var(--mimi-success-soft-foreground)' },
+        { label: 'Clientes activos', icon: 'users', value: '24', delta: '+3', trend: 'trending-up', caption: 'este mes', bg: 'var(--mimi-success-soft)', fg: 'var(--mimi-success-soft-foreground)' },
+        { label: 'Pagos atrasados', icon: 'clock-alert', value: '4', delta: '+1', trend: 'trending-up', caption: '$38,900 pendientes', bg: 'var(--mimi-warning-soft)', fg: 'var(--mimi-warning-soft-foreground)' },
+        { label: 'Cancelación', icon: 'user-minus', value: '2.1%', delta: '−0.4 pts', trend: 'trending-down', caption: 'últimos 30 días', bg: 'var(--mimi-success-soft)', fg: 'var(--mimi-success-soft-foreground)' }
+      ],
+      modes: [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => ({
+        cls, label, icon,
+        nav: NAV.map(([g, items]) => ({ label: g, items: items.map(([id, l, ic, count, tone]) => { const on = this.state.nav[k] === id; return {
+          label: l, icon: ic, current: on ? 'page' : undefined, hasCount: !!count, count,
+          cBg: tone ? 'var(--mimi-' + tone + '-soft)' : on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-muted)', cFg: tone ? 'var(--mimi-' + tone + '-soft-foreground)' : on ? 'var(--mimi-primary)' : 'var(--mimi-muted-foreground)',
+          bg: on ? 'var(--mimi-primary)' : 'transparent', fg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-muted-foreground)', fw: on ? '600' : '500', hbg: on ? 'var(--mimi-primary)' : 'var(--mimi-accent)', hfg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)',
+          pick: () => this.setState(s => ({ nav: { ...s.nav, [k]: id } }))
+        }; }) }))
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

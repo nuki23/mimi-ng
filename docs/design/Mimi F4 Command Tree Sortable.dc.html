@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 4 · Command, Tree y Sortable List</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F4 Data Table y Pagination.dc.html">Data Table · Pagination</a>
+      <a href="Mimi F4 Command Tree Sortable.dc.html">Command · Tree · Sortable</a>
+      <a href="Mimi F4 Panel admin.dc.html">Panel administrativo</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,780px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:40px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Navegación y organización</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">1 · Command ⌘K</h3>
+            <button onClick="{{ m.cmd.focus }}" style="display:flex;align-items:center;gap:8px;width:220px;height:34px;box-sizing:border-box;padding:0 6px 0 10px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-muted-foreground);font-family:var(--mimi-font-sans);font-size:13px;cursor:pointer;transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-input-hover)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="search" size="14"></mimi-icon><span style="flex:1;text-align:left">Buscar…</span><kbd style="height:20px;padding:0 6px;display:inline-flex;align-items:center;border:1px solid var(--mimi-border);border-radius:5px;background:var(--mimi-background);font-family:var(--mimi-font-mono);font-size:11px">⌘K</kbd></button>
+          </div>
+          <div style="position:relative;height:500px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-muted)">
+            <div style="position:absolute;inset:16px;display:grid;grid-template-columns:160px 1fr;gap:12px"><div style="border-radius:var(--mimi-radius);background:var(--mimi-card)"></div><div style="display:flex;flex-direction:column;gap:12px"><div style="height:44px;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div><div style="flex:1;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div></div></div>
+            <div style="position:absolute;inset:0;background:var(--mimi-overlay);backdrop-filter:blur(var(--mimi-overlay-blur));-webkit-backdrop-filter:blur(var(--mimi-overlay-blur))"></div>
+            <div role="dialog" aria-modal="true" aria-label="Paleta de comandos" style="position:absolute;left:50%;top:36px;transform:translateX(-50%);width:560px;display:flex;flex-direction:column;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-popover);overflow:hidden">
+              <div style="display:flex;align-items:center;gap:10px;height:52px;padding:0 14px 0 16px;border-bottom:1px solid var(--mimi-border)">
+                <span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="search" size="18"></mimi-icon></span>
+                <input id="{{ m.k }}-cmd" role="combobox" aria-expanded="true" aria-controls="{{ m.k }}-cmd-list" aria-activedescendant="{{ m.cmd.activeId }}" placeholder="Escribe un comando o busca…" value="{{ m.cmd.q }}" onChange="{{ m.cmd.onQ }}" onKeyDown="{{ m.cmd.onKey }}" autocomplete="off" style="flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:15px;outline:none">
+                <kbd style="height:22px;padding:0 7px;display:inline-flex;align-items:center;border:1px solid var(--mimi-border);border-radius:5px;background:var(--mimi-background);font-family:var(--mimi-font-mono);font-size:11px;color:var(--mimi-muted-foreground)">esc</kbd>
+              </div>
+              <div id="{{ m.k }}-cmd-list" role="listbox" style="height:332px;overflow-y:auto;padding:6px">
+                <sc-for list="{{ m.cmd.groups }}" as="g">
+                  <div role="group" aria-label="{{ g.label }}" style="display:flex;flex-direction:column;gap:1px;padding-bottom:4px">
+                    <span style="padding:8px 10px 4px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground)">{{ g.label }}</span>
+                    <sc-for list="{{ g.items }}" as="it">
+                      <div id="{{ it.id }}" role="option" aria-selected="{{ it.aria }}" onMouseEnter="{{ it.hover }}" onClick="{{ it.run }}" style="display:flex;align-items:center;gap:10px;height:40px;padding:0 10px;border-radius:var(--mimi-radius-sm);font-size:14px;cursor:pointer;transition:background-color .1s ease;background:{{ it.bg }}" style-active="transform:scale(0.99)">
+                        <span style="width:26px;height:26px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:7px;transition:var(--mimi-transition);background:{{ it.iconBg }};color:{{ it.iconFg }}"><mimi-icon name="{{ it.icon }}" size="15"></mimi-icon></span>
+                        <span style="flex:1;min-width:0">{{ it.pre }}<mark style="background:transparent;color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px">{{ it.match }}</mark>{{ it.post }}</span>
+                        <span style="display:flex;gap:3px"><sc-for list="{{ it.keys }}" as="kk"><kbd style="min-width:20px;height:20px;padding:0 5px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--mimi-border);border-radius:5px;background:var(--mimi-background);font-family:var(--mimi-font-mono);font-size:11px;color:var(--mimi-muted-foreground)">{{ kk }}</kbd></sc-for></span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-for>
+                <sc-if value="{{ m.cmd.empty }}">
+                  <div role="status" style="padding:40px 20px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+                    <span style="width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-muted);color:var(--mimi-muted-foreground)"><mimi-icon name="search-x" size="20"></mimi-icon></span>
+                    <span style="font-size:15px;font-weight:700">Sin resultados para «{{ m.cmd.q }}»</span>
+                    <span style="font-size:13px;color:var(--mimi-muted-foreground)">Revisa la ortografía o busca en la documentación.</span>
+                    <button style="display:inline-flex;align-items:center;gap:6px;height:32px;margin-top:4px;padding:0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="book-open" size="14"></mimi-icon>Buscar en la documentación</button>
+                  </div>
+                </sc-if>
+              </div>
+              <div style="display:flex;align-items:center;gap:16px;height:40px;padding:0 16px;border-top:1px solid var(--mimi-border);font-size:12px;color:var(--mimi-muted-foreground)">
+                <span style="display:flex;align-items:center;gap:6px"><kbd style="height:18px;padding:0 5px;display:inline-flex;align-items:center;border:1px solid var(--mimi-border);border-radius:4px;font-family:var(--mimi-font-mono);font-size:10.5px">↑↓</kbd>Navegar</span>
+                <span style="display:flex;align-items:center;gap:6px"><kbd style="height:18px;padding:0 5px;display:inline-flex;align-items:center;border:1px solid var(--mimi-border);border-radius:4px;font-family:var(--mimi-font-mono);font-size:10.5px">↵</kbd>Abrir</span>
+                <div style="flex:1"></div>
+                <span>{{ m.cmd.status }}</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12.5px;color:var(--mimi-muted-foreground)">Prueba:<sc-for list="{{ m.cmd.tries }}" as="t"><button onClick="{{ t.pick }}" style="height:26px;padding:0 10px;border:1px solid var(--mimi-border);border-radius:999px;background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.94)">{{ t.label }}</button></sc-for></div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">2 · Tree</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Selección simple · carga diferida en «assets»</span>
+              <div role="tree" aria-label="Archivos del proyecto" onKeyDown="{{ m.tree.onKey }}" style="display:flex;flex-direction:column;gap:1px;padding:6px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);box-shadow:var(--mimi-shadow-neutral);min-height:380px">
+                <sc-for list="{{ m.tree.rows }}" as="n">
+                  <sc-if value="{{ n.isNode }}">
+                    <div role="treeitem" id="{{ n.id }}" aria-level="{{ n.level }}" aria-expanded="{{ n.ariaExp }}" aria-selected="{{ n.ariaSel }}" aria-busy="{{ n.ariaBusy }}" tabIndex="{{ n.tab }}" onClick="{{ n.click }}" onFocus="{{ n.focus }}" style="--hbg:{{ n.hbg }};display:flex;align-items:center;gap:6px;height:32px;padding-right:8px;border-radius:var(--mimi-radius-sm);font-size:13.5px;cursor:pointer;outline:none;transition:background-color .12s ease, box-shadow .15s ease;padding-left:{{ n.indent }};background:{{ n.bg }};color:{{ n.fg }};font-weight:{{ n.fw }};box-shadow:{{ n.ring }}" style-hover="background:var(--hbg)" style-active="transform:scale(0.99)">
+                      <span style="width:16px;display:inline-flex;justify-content:center;color:var(--mimi-muted-foreground);transition:transform .2s cubic-bezier(.2,.8,.2,1);transform:{{ n.chev }};opacity:{{ n.chevOp }}"><sc-if value="{{ n.spin }}"><span style="display:inline-flex;animation:mimi-spin .8s linear infinite"><mimi-icon name="loader-circle" size="14"></mimi-icon></span></sc-if><sc-if value="{{ n.noSpin }}"><mimi-icon name="chevron-right" size="14"></mimi-icon></sc-if></span>
+                      <span style="display:inline-flex;color:{{ n.iconFg }}"><mimi-icon name="{{ n.icon }}" size="16"></mimi-icon></span>
+                      <span style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ n.label }}</span>
+                      <span style="font-family:var(--mimi-font-mono);font-size:11px;color:var(--mimi-muted-foreground)">{{ n.meta }}</span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ n.isLoading }}"><div role="status" style="display:flex;align-items:center;gap:8px;height:28px;font-size:12.5px;color:var(--mimi-muted-foreground);padding-left:{{ n.indent }}"><div style="width:120px;height:9px;border-radius:4px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div>Cargando…</div></sc-if>
+                </sc-for>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Selección múltiple · permisos con estado parcial</span>
+              <div role="tree" aria-label="Permisos" aria-multiselectable="true" style="display:flex;flex-direction:column;gap:1px;padding:6px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);box-shadow:var(--mimi-shadow-neutral);min-height:380px">
+                <sc-for list="{{ m.perm.rows }}" as="n">
+                  <div role="treeitem" aria-level="{{ n.level }}" aria-expanded="{{ n.ariaExp }}" aria-checked="{{ n.ariaChk }}" style="display:flex;align-items:center;gap:8px;height:32px;padding-right:8px;border-radius:var(--mimi-radius-sm);font-size:13.5px;transition:background-color .12s ease;padding-left:{{ n.indent }}" style-hover="background:var(--mimi-accent)">
+                    <button aria-label="{{ n.expLabel }}" tabIndex="-1" onClick="{{ n.toggleExp }}" style="width:18px;height:18px;padding:0;border:0;background:transparent;display:inline-flex;align-items:center;justify-content:center;color:var(--mimi-muted-foreground);cursor:pointer;transition:transform .2s cubic-bezier(.2,.8,.2,1);transform:{{ n.chev }};visibility:{{ n.chevVis }}"><mimi-icon name="chevron-right" size="14"></mimi-icon></button>
+                    <button role="checkbox" aria-checked="{{ n.ariaChk }}" aria-label="{{ n.label }}" onClick="{{ n.toggle }}" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;box-sizing:border-box;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);color:var(--mimi-primary-foreground);border:1px solid {{ n.boxBorder }};background:{{ n.boxBg }}" style-active="transform:scale(0.88)"><sc-if value="{{ n.checked }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if><sc-if value="{{ n.mixed }}"><mimi-icon name="minus" size="12" stroke="3"></mimi-icon></sc-if></button>
+                    <span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ n.icon }}" size="15"></mimi-icon></span>
+                    <span style="flex:1;min-width:0;font-weight:{{ n.fw }}">{{ n.label }}</span>
+                    <span style="font-size:11.5px;font-variant-numeric:tabular-nums;color:var(--mimi-muted-foreground)">{{ n.count }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">3 · Sortable List</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Interactiva · arrastra desde ⋮⋮ o usa Espacio y ↑ ↓</span>
+              <ul aria-label="Prioridades del sprint" onPointerMove="{{ m.sort.move }}" onPointerUp="{{ m.sort.up }}" onPointerCancel="{{ m.sort.up }}" style="position:relative;list-style:none;margin:0;padding:0;height:{{ m.sort.h }}">
+                <sc-if value="{{ m.sort.showDrop }}"><li aria-hidden="true" style="position:absolute;left:0;right:0;height:56px;box-sizing:border-box;border:2px dashed var(--mimi-info);border-radius:var(--mimi-radius);background:var(--mimi-info-soft);transition:top .18s cubic-bezier(.2,.8,.2,1);top:{{ m.sort.dropTop }}"></li></sc-if>
+                <sc-for list="{{ m.sort.items }}" as="it">
+                  <li aria-roledescription="elemento ordenable" aria-grabbed="{{ it.grabbed }}" style="position:absolute;left:0;right:0;top:0;height:56px;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:0 12px 0 6px;border-radius:var(--mimi-radius);background:var(--mimi-card);border:1px solid var(--mimi-border);user-select:none;transform:{{ it.tf }};transition:{{ it.tr }};box-shadow:{{ it.sh }};z-index:{{ it.z }}">
+                    <button aria-label="{{ it.handleLabel }}" aria-pressed="{{ it.grabbed }}" onPointerDown="{{ it.down }}" onKeyDown="{{ it.key }}" style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:36px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);touch-action:none;transition:var(--mimi-transition);cursor:{{ it.cursor }}" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)"><mimi-icon name="grip-vertical" size="16"></mimi-icon></button>
+                    <span style="width:22px;height:22px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-muted);font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums">{{ it.n }}</span>
+                    <div style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3"><span style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ it.title }}</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ it.meta }}</span></div>
+                    <span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font-size:11.5px;font-weight:600;background:{{ it.tagBg }};color:{{ it.tagFg }}">{{ it.tag }}</span>
+                  </li>
+                </sc-for>
+              </ul>
+              <span role="status" aria-live="assertive" style="min-height:18px;font-size:12.5px;color:var(--mimi-muted-foreground)">{{ m.sort.announce }}</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Mientras se arrastra · «Diseñar Tabs» va al lugar 2</span>
+              <ul aria-hidden="true" style="position:relative;list-style:none;margin:0;padding:0;height:312px">
+                <li style="position:absolute;left:0;right:0;top:0;height:56px;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:0 12px 0 6px;border-radius:var(--mimi-radius);background:var(--mimi-card);border:1px solid var(--mimi-border)"><span style="width:28px;display:inline-flex;justify-content:center;color:var(--mimi-muted-foreground)"><mimi-icon name="grip-vertical" size="16"></mimi-icon></span><span style="font-size:14px;font-weight:600">Revisar contraste AA</span></li>
+                <li style="position:absolute;left:0;right:0;top:64px;height:56px;box-sizing:border-box;border:2px dashed var(--mimi-info);border-radius:var(--mimi-radius);background:var(--mimi-info-soft)"></li>
+                <li style="position:absolute;left:0;right:0;top:128px;height:56px;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:0 12px 0 6px;border-radius:var(--mimi-radius);background:var(--mimi-card);border:1px solid var(--mimi-border)"><span style="width:28px;display:inline-flex;justify-content:center;color:var(--mimi-muted-foreground)"><mimi-icon name="grip-vertical" size="16"></mimi-icon></span><span style="font-size:14px;font-weight:600">Migrar Select a signals</span></li>
+                <li style="position:absolute;left:0;right:0;top:192px;height:56px;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:0 12px 0 6px;border-radius:var(--mimi-radius);background:var(--mimi-card);border:1px solid var(--mimi-border)"><span style="width:28px;display:inline-flex;justify-content:center;color:var(--mimi-muted-foreground)"><mimi-icon name="grip-vertical" size="16"></mimi-icon></span><span style="font-size:14px;font-weight:600">Escribir documentación</span></li>
+                <li style="position:absolute;left:10px;right:-10px;top:84px;height:56px;box-sizing:border-box;display:flex;align-items:center;gap:10px;padding:0 12px 0 6px;border-radius:var(--mimi-radius);background:var(--mimi-card);border:1px solid var(--mimi-border);box-shadow:var(--mimi-shadow-popover), 0 0 0 2px var(--mimi-info);transform:rotate(-1.5deg) scale(1.03);z-index:2"><span style="width:28px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius-sm);background:var(--mimi-accent)"><mimi-icon name="grip-vertical" size="16"></mimi-icon></span><span style="font-size:14px;font-weight:600">Diseñar Tabs</span><span style="flex:1"></span><span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font-size:11.5px;font-weight:600;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground)">Diseño</span></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const norm = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const CMDS = [
+  ['Sugerencias', [['new', 'Nuevo proyecto', 'folder-plus', ['⌘', 'N'], 'info'], ['invite', 'Invitar al equipo', 'user-plus', ['⌘', 'I'], 'success'], ['docs', 'Buscar en la documentación', 'book-open', ['⌘', '/']]]],
+  ['Navegación', [['nav-home', 'Ir al panel', 'layout-dashboard', ['G', 'P']], ['nav-clients', 'Ir a clientes', 'users', ['G', 'C']], ['nav-billing', 'Ir a facturación', 'receipt', ['G', 'F']], ['nav-settings', 'Ir a ajustes', 'settings', ['G', 'A']]]],
+  ['Tema', [['dark', 'Cambiar a modo oscuro', 'moon', ['⇧', '⌘', 'L']], ['color', 'Cambiar color primario', 'palette', []], ['density', 'Densidad compacta', 'rows-4', []]]],
+  ['Cuenta', [['profile', 'Ver perfil', 'user', ['⌘', 'P']], ['logout', 'Cerrar sesión', 'log-out', ['⇧', '⌘', 'Q'], 'destructive']]]
+];
+const TREE = [
+  { id: 'src', label: 'src', kind: 'dir', children: [
+    { id: 'app', label: 'app', kind: 'dir', children: [
+      { id: 'ui', label: 'components/ui', kind: 'dir', children: [{ id: 'btn', label: 'button.ts', kind: 'ts', meta: '2 KB' }, { id: 'inp', label: 'input.ts', kind: 'ts', meta: '3 KB' }, { id: 'sel', label: 'select.ts', kind: 'ts', meta: '9 KB' }, { id: 'tbl', label: 'data-table.ts', kind: 'ts', meta: '18 KB' }] },
+      { id: 'pages', label: 'pages', kind: 'dir', children: [{ id: 'clients', label: 'clientes.page.ts', kind: 'ts', meta: '6 KB' }] },
+      { id: 'cfg', label: 'app.config.ts', kind: 'ts', meta: '1 KB' }
+    ] },
+    { id: 'styles', label: 'styles.css', kind: 'css', meta: '4 KB' },
+    { id: 'preset', label: 'mimi.preset.ts', kind: 'ts', meta: '1 KB' }
+  ] },
+  { id: 'assets', label: 'assets', kind: 'dir', lazy: true },
+  { id: 'mimi', label: 'mimi.json', kind: 'json', meta: '412 B' },
+  { id: 'pkg', label: 'package.json', kind: 'json', meta: '2 KB' }
+];
+const LAZY = [{ id: 'logo', label: 'logo.svg', kind: 'img', meta: '3 KB' }, { id: 'hero', label: 'hero.webp', kind: 'img', meta: '214 KB' }, { id: 'fonts', label: 'fonts', kind: 'dir', children: [{ id: 'outfit', label: 'outfit.woff2', kind: 'file', meta: '38 KB' }] }];
+const ICON = { dir: ['folder', 'folder-open', 'var(--mimi-warning-soft-foreground)'], ts: ['file-code', 'file-code', 'var(--mimi-info-soft-foreground)'], css: ['file-type', 'file-type', 'var(--mimi-success-soft-foreground)'], json: ['file-json', 'file-json', 'var(--mimi-muted-foreground)'], img: ['file-image', 'file-image', 'var(--mimi-destructive-soft-foreground)'], file: ['file', 'file', 'var(--mimi-muted-foreground)'] };
+const PERMS = [
+  { id: 'proj', label: 'Proyectos', icon: 'folder-kanban', children: [{ id: 'p-ver', label: 'Ver' }, { id: 'p-crear', label: 'Crear' }, { id: 'p-editar', label: 'Editar' }, { id: 'p-borrar', label: 'Eliminar' }] },
+  { id: 'fact', label: 'Facturación', icon: 'receipt', children: [{ id: 'f-ver', label: 'Ver facturas' }, { id: 'f-pagar', label: 'Registrar pagos' }] },
+  { id: 'team', label: 'Equipo', icon: 'users', children: [{ id: 't-ver', label: 'Ver miembros' }, { id: 't-inv', label: 'Invitar' }, { id: 't-roles', label: 'Cambiar roles' }] }
+];
+const TASKS = [
+  ['a', 'Revisar contraste AA', 'Accesibilidad · 2 h', 'A11y', 'success'], ['b', 'Diseñar Tabs', 'Componentes · 5 h', 'Diseño', 'info'], ['c', 'Migrar Select a signals', 'Código · 1 día', 'Código', 'warning'],
+  ['d', 'Escribir documentación', 'Docs · 3 h', 'Docs', null], ['e', 'Probar en Safari', 'QA · 1 h', 'QA', 'destructive']
+];
+const STEP = 64;
+const initMode = () => ({ q: '', active: 'new', ran: null, open: ['src', 'app', 'ui'], sel: 'tbl', focus: 'tbl', lazy: 'idle', permOpen: ['proj', 'fact'], perms: ['p-ver', 'p-crear', 'f-ver', 'f-pagar'], order: TASKS.map(t => t[0]), drag: null, kbd: null, announce: '' });
+
+class Component extends DCLogic {
+  state = { l: initMode(), d: initMode() };
+  timers = [];
+  componentWillUnmount() { this.timers.forEach(clearTimeout); }
+  set(k, patch) { this.setState(s => ({ [k]: { ...s[k], ...(typeof patch === 'function' ? patch(s[k]) : patch) } })); }
+
+  command(k) {
+    const st = this.state[k];
+    const q = norm(st.q.trim());
+    const groups = CMDS.map(([label, items]) => ({ label, items: items.filter(i => !q || norm(i[1]).includes(q)) })).filter(g => g.items.length);
+    const flat = groups.flatMap(g => g.items.map(i => i[0]));
+    const active = flat.includes(st.active) ? st.active : flat[0];
+    const run = id => { const it = CMDS.flatMap(g => g[1]).find(i => i[0] === id); this.set(k, { ran: it ? it[1] : null }); };
+    return {
+      q: st.q, empty: groups.length === 0, activeId: active ? k + '-c-' + active : undefined,
+      status: st.ran ? 'Ejecutado: ' + st.ran : flat.length + (flat.length === 1 ? ' resultado' : ' resultados'),
+      focus: () => { const el = document.getElementById(k + '-cmd'); el && el.focus(); },
+      onQ: e => this.set(k, { q: e.target.value, ran: null }),
+      onKey: e => {
+        const i = flat.indexOf(active);
+        if (e.key === 'ArrowDown') { e.preventDefault(); this.set(k, { active: flat[(i + 1) % flat.length] }); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); this.set(k, { active: flat[(i - 1 + flat.length) % flat.length] }); }
+        else if (e.key === 'Enter' && active) { e.preventDefault(); run(active); }
+        else if (e.key === 'Escape') this.set(k, { q: '' });
+      },
+      tries: ['', 'ir', 'tema', 'facturaz'].map(t => ({ label: t ? '«' + t + '»' : 'Todo', pick: () => this.set(k, { q: t, ran: null }) })),
+      groups: groups.map(g => ({ label: g.label, items: g.items.map(([id, label, icon, keys, tone]) => {
+        const i = q ? norm(label).indexOf(q) : -1, on = id === active;
+        return {
+          id: k + '-c-' + id, pre: i < 0 ? label : label.slice(0, i), match: i < 0 ? '' : label.slice(i, i + q.length), post: i < 0 ? '' : label.slice(i + q.length),
+          icon, keys, aria: String(on), bg: on ? 'var(--mimi-accent)' : 'transparent',
+          iconBg: on ? (tone ? 'var(--mimi-' + tone + ')' : 'var(--mimi-primary)') : (tone ? 'var(--mimi-' + (tone === 'destructive' ? 'destructive-soft-bg' : tone + '-soft') + ')' : 'var(--mimi-muted)'),
+          iconFg: on ? (tone ? 'var(--mimi-' + tone + '-foreground)' : 'var(--mimi-primary-foreground)') : (tone ? 'var(--mimi-' + tone + '-soft-foreground)' : 'var(--mimi-muted-foreground)'),
+          hover: () => this.set(k, { active: id }), run: () => run(id)
+        };
+      }) }))
+    };
+  }
+
+  tree(k) {
+    const st = this.state[k];
+    const rows = [];
+    const walk = (nodes, level) => nodes.forEach(n => {
+      const isDir = n.kind === 'dir', open = st.open.includes(n.id);
+      const kids = n.lazy ? (st.lazy === 'done' ? LAZY : null) : n.children;
+      const loading = n.lazy && st.lazy === 'loading';
+      rows.push({ n, level, isDir, open, loading });
+      if (isDir && open) { if (loading) rows.push({ loadingRow: true, level: level + 1 }); else if (kids) walk(kids, level + 1); }
+    });
+    walk(TREE, 1);
+    const visible = rows.filter(r => r.n).map(r => r.n.id);
+    const toggle = n => {
+      if (n.kind !== 'dir') return;
+      const open = st.open.includes(n.id);
+      if (!open && n.lazy && st.lazy === 'idle') { this.set(k, s => ({ open: [...s.open, n.id], lazy: 'loading' })); this.timers.push(setTimeout(() => this.set(k, { lazy: 'done' }), 1400)); return; }
+      this.set(k, s => ({ open: open ? s.open.filter(x => x !== n.id) : [...s.open, n.id] }));
+    };
+    const focusId = id => { this.set(k, { focus: id }); requestAnimationFrame(() => { const el = document.getElementById(k + '-t-' + id); el && el.focus(); }); };
+    return {
+      onKey: e => {
+        const i = visible.indexOf(st.focus); const row = rows.find(r => r.n && r.n.id === st.focus);
+        if (e.key === 'ArrowDown') { e.preventDefault(); focusId(visible[Math.min(i + 1, visible.length - 1)]); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); focusId(visible[Math.max(i - 1, 0)]); }
+        else if (e.key === 'ArrowRight' && row && row.isDir && !row.open) { e.preventDefault(); toggle(row.n); }
+        else if (e.key === 'ArrowLeft' && row && row.isDir && row.open) { e.preventDefault(); toggle(row.n); }
+        else if ((e.key === 'Enter' || e.key === ' ') && row) { e.preventDefault(); row.isDir ? toggle(row.n) : this.set(k, { sel: row.n.id }); }
+      },
+      rows: rows.map(r => {
+        if (r.loadingRow) return { isLoading: true, indent: (8 + (r.level - 1) * 18 + 22) + 'px' };
+        const n = r.n, sel = st.sel === n.id, foc = st.focus === n.id;
+        const ic = ICON[n.kind];
+        return {
+          isNode: true, id: k + '-t-' + n.id, level: String(r.level), label: n.label, meta: n.meta || '',
+          ariaExp: r.isDir ? String(r.open) : undefined, ariaSel: String(sel), ariaBusy: r.loading ? 'true' : undefined, tab: foc ? '0' : '-1',
+          indent: (6 + (r.level - 1) * 18) + 'px', chev: r.open ? 'rotate(90deg)' : 'none', chevOp: r.isDir ? '1' : '0', spin: r.loading, noSpin: !r.loading,
+          icon: r.isDir && r.open ? ic[1] : ic[0], iconFg: sel ? 'var(--mimi-primary-foreground)' : ic[2],
+          bg: sel ? 'var(--mimi-primary)' : 'transparent', fg: sel ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)', fw: sel ? '600' : '400',
+          ring: foc ? 'inset 0 0 0 2px var(--mimi-ring)' : 'none', hbg: sel ? 'var(--mimi-primary)' : 'var(--mimi-accent)',
+          click: () => { this.set(k, { focus: n.id }); r.isDir ? toggle(n) : this.set(k, { sel: n.id }); }, focus: () => st.focus !== n.id && this.set(k, { focus: n.id })
+        };
+      })
+    };
+  }
+
+  perms(k) {
+    const st = this.state[k];
+    const rows = [];
+    PERMS.forEach(g => {
+      const ids = g.children.map(c => c.id), n = ids.filter(id => st.perms.includes(id)).length;
+      const state = n === 0 ? 'none' : n === ids.length ? 'all' : 'mixed', open = st.permOpen.includes(g.id);
+      rows.push({ level: '1', label: g.label, icon: g.icon, fw: '600', count: n + '/' + ids.length, indent: '6px', chevVis: 'visible', chev: open ? 'rotate(90deg)' : 'none', ariaExp: String(open), expLabel: (open ? 'Contraer ' : 'Expandir ') + g.label,
+        toggleExp: () => this.set(k, s => ({ permOpen: open ? s.permOpen.filter(x => x !== g.id) : [...s.permOpen, g.id] })),
+        state, toggle: () => this.set(k, s => ({ perms: state === 'all' ? s.perms.filter(x => !ids.includes(x)) : [...new Set([...s.perms, ...ids])] })) });
+      if (open) g.children.forEach(c => { const on = st.perms.includes(c.id); rows.push({ level: '2', label: c.label, icon: 'key-round', fw: '400', count: '', indent: '30px', chevVis: 'hidden', chev: 'none', ariaExp: undefined, expLabel: '', toggleExp: () => {}, state: on ? 'all' : 'none', toggle: () => this.set(k, s => ({ perms: on ? s.perms.filter(x => x !== c.id) : [...s.perms, c.id] })) }); });
+    });
+    return { rows: rows.map(r => ({ ...r, ariaChk: r.state === 'all' ? 'true' : r.state === 'mixed' ? 'mixed' : 'false', checked: r.state === 'all', mixed: r.state === 'mixed', boxBorder: r.state === 'none' ? 'var(--mimi-input)' : 'var(--mimi-primary)', boxBg: r.state === 'none' ? 'var(--mimi-input-background)' : 'var(--mimi-primary)' })) };
+  }
+
+  sortable(k) {
+    const st = this.state[k];
+    const ord = st.order, d = st.drag;
+    const n = ord.length;
+    let target = null;
+    if (d) target = Math.max(0, Math.min(n - 1, Math.round((d.from * STEP + d.dy) / STEP)));
+    const kb = st.kbd;
+    const title = id => TASKS.find(t => t[0] === id)[1];
+    const items = ord.map((id, i) => {
+      const t = TASKS.find(x => x[0] === id);
+      let y = i * STEP, tr = 'transform .22s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease', sh = 'var(--mimi-shadow-neutral)', z = '1', grabbed = false;
+      if (d) {
+        if (id === d.id) { y = d.from * STEP + d.dy; tr = 'box-shadow .2s ease'; sh = 'var(--mimi-shadow-popover), 0 0 0 2px var(--mimi-info)'; z = '5'; grabbed = true; }
+        else if (d.from < target && i > d.from && i <= target) y = (i - 1) * STEP;
+        else if (d.from > target && i < d.from && i >= target) y = (i + 1) * STEP;
+      }
+      if (kb === id) { sh = 'var(--mimi-shadow-popover), 0 0 0 2px var(--mimi-info)'; z = '5'; grabbed = true; }
+      const scale = grabbed ? ' scale(1.02) rotate(' + (d ? '-1deg' : '0deg') + ')' : '';
+      return {
+        n: String(i + 1), title: t[1], meta: t[2], tag: t[3], tagBg: t[4] ? 'var(--mimi-' + (t[4] === 'destructive' ? 'destructive-soft-bg' : t[4] + '-soft') + ')' : 'var(--mimi-muted)', tagFg: t[4] ? 'var(--mimi-' + t[4] + '-soft-foreground)' : 'var(--mimi-muted-foreground)',
+        tf: 'translateY(' + y + 'px)' + scale, tr, sh, z, grabbed: String(grabbed), cursor: d ? 'grabbing' : 'grab',
+        handleLabel: 'Mover «' + t[1] + '», posición ' + (i + 1) + ' de ' + n,
+        down: e => { e.preventDefault(); e.currentTarget.closest('ul').setPointerCapture(e.pointerId); const ul = e.currentTarget.closest('ul'); const R = ul.getBoundingClientRect(); this.sc = R.height / ul.offsetHeight || 1; this.set(k, { drag: { id, from: i, startY: e.clientY, dy: 0 }, kbd: null }); },
+        key: e => {
+          if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); this.set(k, s => ({ kbd: s.kbd === id ? null : id, announce: s.kbd === id ? '«' + t[1] + '» soltado en la posición ' + (i + 1) + '.' : '«' + t[1] + '» tomado. Usa ↑ ↓ para moverlo y Espacio para soltarlo.' })); }
+          else if (kb === id && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+            e.preventDefault(); const j = i + (e.key === 'ArrowUp' ? -1 : 1); if (j < 0 || j >= n) return;
+            const no = [...ord]; no.splice(i, 1); no.splice(j, 0, id); this.set(k, { order: no, announce: '«' + t[1] + '» en la posición ' + (j + 1) + ' de ' + n + '.' });
+            const btn = e.currentTarget; requestAnimationFrame(() => btn.focus());
+          } else if (e.key === 'Escape') this.set(k, { kbd: null });
+        }
+      };
+    });
+    return {
+      items, h: (n * STEP - 8) + 'px', showDrop: !!d, dropTop: (target === null ? 0 : target * STEP) + 'px', announce: st.announce,
+      move: e => { if (!d) return; this.set(k, s => ({ drag: { ...s.drag, dy: (e.clientY - s.drag.startY) / (this.sc || 1) } })); },
+      up: () => { if (!d) return; const no = [...ord]; no.splice(d.from, 1); no.splice(target, 0, d.id); this.set(k, { order: no, drag: null, announce: '«' + title(d.id) + '» movido a la posición ' + (target + 1) + '.' }); }
+    };
+  }
+
+  renderVals() {
+    return { modes: [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => ({ k, cls, label, icon, cmd: this.command(k), tree: this.tree(k), perm: this.perms(k), sort: this.sortable(k) })) };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 2 · Toast, Tabs y Toolbar</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F2 Tokens y Tonos.dc.html">Tokens y tonos</a>
+      <a href="Mimi F2 Select.dc.html">Select</a>
+      <a href="Mimi F2 Overlays.dc.html">Dialog · Confirm · Popover · Tooltip · Menús</a>
+      <a href="Mimi F2 Toast Tabs Toolbar.dc.html">Toast · Tabs · Toolbar</a>
+      <a href="Mimi Componentes.dc.html">Fase 1</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,780px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:40px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Feedback y navegación</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">1 · Toast · tonos</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <sc-for list="{{ m.gallery }}" as="t" hint-placeholder-count="6">
+              <div role="status" style="position:relative;display:flex;gap:12px;align-items:flex-start;padding:14px 40px 14px 14px;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover)">
+                <span style="display:inline-flex;margin-top:1px;color:{{ t.iconColor }}"><mimi-icon name="{{ t.icon }}" size="18"></mimi-icon></span>
+                <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+                  <span style="font-size:14px;font-weight:600">{{ t.title }}</span>
+                  <span style="font-size:13px;line-height:1.45;color:var(--mimi-muted-foreground)">{{ t.desc }}</span>
+                  <sc-if value="{{ t.hasAction }}"><div style="display:flex;gap:8px;margin-top:8px"><button style="height:28px;padding:0 10px;border:0;border-radius:var(--mimi-radius-sm);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale))">{{ t.action }}</button></div></sc-if>
+                </div>
+                <button aria-label="Cerrar notificación" style="position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.9)"><mimi-icon name="x" size="14"></mimi-icon></button>
+              </div>
+            </sc-for>
+          </div>
+          <span style="font-size:12px;color:var(--mimi-muted-foreground)">Sólidos · notificaciones de color</span>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <sc-for list="{{ m.solid }}" as="t" hint-placeholder-count="4">
+              <div role="status" style="position:relative;display:flex;gap:12px;align-items:center;padding:14px 40px 14px 14px;border-radius:var(--mimi-radius);background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.sh }}">
+                <span style="width:34px;height:34px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:color-mix(in oklch, currentColor 16%, transparent)"><mimi-icon name="{{ t.icon }}" size="18"></mimi-icon></span>
+                <div style="display:flex;flex-direction:column;min-width:0"><span style="font-size:14px;font-weight:700">{{ t.title }}</span><span style="font-size:13px;line-height:1.4">{{ t.desc }}</span></div>
+                <button aria-label="Cerrar notificación" style="position:absolute;top:10px;right:10px;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:inherit;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:color-mix(in oklch, currentColor 16%, transparent)" style-active="transform:scale(0.9)"><mimi-icon name="x" size="14"></mimi-icon></button>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">2 · Toast · apilados (pasa el mouse para expandir)</h3>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ m.triggers }}" as="b" hint-placeholder-count="6">
+              <button onClick="{{ b.fire }}" style="display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><span style="display:inline-flex;color:{{ b.color }}"><mimi-icon name="{{ b.icon }}" size="14"></mimi-icon></span>{{ b.label }}</button>
+            </sc-for>
+          </div>
+          <div style="position:relative;height:340px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-muted);overflow:hidden">
+            <div style="position:absolute;inset:16px;display:flex;flex-direction:column;gap:10px;pointer-events:none"><div style="height:40px;width:55%;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div><div style="flex:1;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div></div>
+            <section role="region" aria-label="Notificaciones" aria-live="polite" onMouseEnter="{{ m.expand }}" onMouseLeave="{{ m.collapse }}" style="position:absolute;right:16px;bottom:16px;width:340px;height:{{ m.stackH }}">
+              <sc-for list="{{ m.toasts }}" as="t">
+                <div role="status" style="position:absolute;left:0;right:0;bottom:0;height:68px;box-sizing:border-box;display:flex;gap:12px;align-items:center;padding:0 40px 0 14px;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);transform-origin:center bottom;transition:transform .4s cubic-bezier(.2,.8,.2,1), opacity .3s ease;transform:{{ t.tf }};opacity:{{ t.op }};z-index:{{ t.z }}">
+                  <sc-if value="{{ t.loading }}"><span style="display:inline-flex;color:var(--mimi-muted-foreground);animation:mimi-spin .8s linear infinite"><mimi-icon name="loader-circle" size="18"></mimi-icon></span></sc-if>
+                  <sc-if value="{{ t.notLoading }}"><span style="display:inline-flex;color:{{ t.iconColor }}"><mimi-icon name="{{ t.icon }}" size="18"></mimi-icon></span></sc-if>
+                  <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px">
+                    <span style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.title }}</span>
+                    <span style="font-size:12.5px;color:var(--mimi-muted-foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.desc }}</span>
+                  </div>
+                  <sc-if value="{{ t.hasAction }}"><button onClick="{{ t.onAction }}" style="flex-shrink:0;height:28px;padding:0 10px;border:0;border-radius:var(--mimi-radius-sm);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale))">{{ t.action }}</button></sc-if>
+                  <button aria-label="Cerrar notificación" onClick="{{ t.close }}" style="position:absolute;top:8px;right:8px;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.9)"><mimi-icon name="x" size="14"></mimi-icon></button>
+                </div>
+              </sc-for>
+            </section>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">3 · Tabs · indicador deslizante</h3>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Subrayada</span>
+            <div role="tablist" aria-label="Secciones de la cuenta" onKeyDown="{{ m.uKey }}" style="position:relative;display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--mimi-border)">
+              <sc-for list="{{ m.tabsU }}" as="t" hint-placeholder-count="4">
+                <button role="tab" id="{{ t.id }}" aria-selected="{{ t.aria }}" tabIndex="{{ t.tab }}" onClick="{{ t.pick }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;border:0;background:transparent;font-family:var(--mimi-font-sans);font-size:14px;cursor:pointer;transition:color .2s ease, transform .15s cubic-bezier(.2,.8,.2,1);color:{{ t.fg }};font-weight:{{ t.fw }}" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(0.96)">{{ t.label }}<sc-if value="{{ t.hasCount }}"><span style="display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:20px;padding:0 6px;box-sizing:border-box;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11px;font-weight:700">{{ t.count }}</span></sc-if></button>
+              </sc-for>
+              <span aria-hidden="true" style="position:absolute;left:0;bottom:-1px;width:25%;height:2px;border-radius:2px;background:var(--mimi-foreground);transition:transform .45s cubic-bezier(.3,1.35,.5,1);transform:{{ m.uTf }}"></span>
+            </div>
+            <div role="tabpanel" aria-labelledby="{{ m.uLabelledBy }}" style="padding:4px 2px;font-size:14px;color:var(--mimi-muted-foreground)">{{ m.uPanel }}</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Píldora</span>
+            <div role="tablist" aria-label="Periodo" onKeyDown="{{ m.pKey }}" style="position:relative;display:grid;grid-template-columns:repeat(4,1fr);padding:4px;border-radius:calc(var(--mimi-radius) + 4px);background:var(--mimi-muted);max-width:520px">
+              <span aria-hidden="true" style="position:absolute;top:4px;bottom:4px;left:4px;width:calc((100% - 8px) / 4);border-radius:var(--mimi-radius);background:var(--mimi-card);box-shadow:var(--mimi-shadow-neutral);transition:transform .45s cubic-bezier(.3,1.35,.5,1);transform:{{ m.pTf }}"></span>
+              <sc-for list="{{ m.tabsP }}" as="t" hint-placeholder-count="4">
+                <button role="tab" id="{{ t.id }}" aria-selected="{{ t.aria }}" tabIndex="{{ t.tab }}" onClick="{{ t.pick }}" style="position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;border:0;border-radius:var(--mimi-radius);background:transparent;font-family:var(--mimi-font-sans);font-size:13.5px;cursor:pointer;transition:color .2s ease, transform .15s cubic-bezier(.2,.8,.2,1);color:{{ t.fg }};font-weight:{{ t.fw }}" style-hover="color:var(--mimi-foreground)" style-active="transform:scale(0.95)"><mimi-icon name="{{ t.icon }}" size="15"></mimi-icon>{{ t.label }}</button>
+              </sc-for>
+            </div>
+            <div role="tabpanel" aria-labelledby="{{ m.pLabelledBy }}" style="display:flex;align-items:baseline;gap:10px;padding:4px 2px"><span style="font-size:28px;font-weight:700;letter-spacing:-0.02em">{{ m.pValue }}</span><span style="font-size:14px;color:var(--mimi-muted-foreground)">{{ m.pCaption }}</span></div>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">4 · Toolbar · mimi-toolbar</h3>
+          <div style="position:relative;height:620px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background-color:var(--mimi-muted);background-image:radial-gradient(color-mix(in oklch, var(--mimi-foreground) 16%, transparent) 1px, transparent 1px);background-size:16px 16px">
+            <div aria-hidden="true" style="position:absolute;left:40px;top:60px;width:150px;height:110px;border-radius:18px;background:var(--mimi-info)"></div>
+            <div aria-hidden="true" style="position:absolute;left:120px;top:140px;width:120px;height:120px;border-radius:999px;background:var(--mimi-warning)"></div>
+            <div aria-hidden="true" style="position:absolute;right:120px;top:70px;width:220px;height:140px;border-radius:var(--mimi-radius-card);background:var(--mimi-card);box-shadow:var(--mimi-shadow-card);border:2px solid var(--mimi-info)"></div>
+            <div aria-hidden="true" style="position:absolute;right:300px;top:250px;width:90px;height:90px;border-radius:22px;background:var(--mimi-success)"></div>
+
+            <div role="toolbar" aria-label="Herramientas" aria-orientation="vertical" style="position:absolute;left:20px;top:24px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px;border-radius:999px;background:var(--mimi-glass);border:1px solid var(--mimi-glass-border);backdrop-filter:blur(var(--mimi-glass-blur)) saturate(1.4);-webkit-backdrop-filter:blur(var(--mimi-glass-blur)) saturate(1.4);box-shadow:var(--mimi-shadow-popover)">
+              <sc-for list="{{ m.toolsV }}" as="t" hint-placeholder-count="10">
+                <sc-if value="{{ t.isSep }}"><div role="separator" aria-orientation="horizontal" style="width:22px;height:1px;margin:2px 0;background:var(--mimi-border)"></div></sc-if>
+                <sc-if value="{{ t.isTool }}">
+                  <div style="position:relative;display:flex">
+                    <button aria-label="{{ t.label }}" aria-pressed="{{ t.pressedAria }}" onClick="{{ t.pick }}" onMouseEnter="{{ t.enter }}" onMouseLeave="{{ t.leave }}" onFocus="{{ t.enter }}" onBlur="{{ t.leave }}" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:0;border-radius:999px;cursor:pointer;transition:background-color .2s ease, color .2s ease, box-shadow .35s cubic-bezier(.2,.8,.2,1), transform .15s cubic-bezier(.2,.8,.2,1);background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.ring }}" style-active="transform:scale(0.88)"><mimi-icon name="{{ t.icon }}" size="18"></mimi-icon></button>
+                    <sc-if value="{{ t.hasCount }}"><span aria-label="{{ t.countLabel }}" style="position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info);color:var(--mimi-info-foreground);font-size:10.5px;font-weight:700;box-shadow:0 0 0 2px var(--mimi-background);pointer-events:none">{{ t.count }}</span></sc-if>
+                    <sc-if value="{{ t.tip }}"><div role="tooltip" style="position:absolute;left:calc(100% + 14px);top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;background:var(--mimi-tooltip);color:var(--mimi-tooltip-foreground);font-size:12.5px;font-weight:500;white-space:nowrap;box-shadow:var(--mimi-shadow-neutral);pointer-events:none;z-index:5">{{ t.label }}<span style="font-family:var(--mimi-font-mono);font-size:11px;opacity:.75">{{ t.kbd }}</span><span aria-hidden="true" style="position:absolute;top:50%;left:-4px;width:8px;height:8px;margin-top:-4px;background:var(--mimi-tooltip);transform:rotate(45deg);border-radius:1px"></span></div></sc-if>
+                  </div>
+                </sc-if>
+              </sc-for>
+            </div>
+
+            <div role="toolbar" aria-label="Formato" aria-orientation="horizontal" style="position:absolute;left:50%;bottom:20px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:6px;border-radius:999px;background:var(--mimi-glass);border:1px solid var(--mimi-glass-border);backdrop-filter:blur(var(--mimi-glass-blur)) saturate(1.4);-webkit-backdrop-filter:blur(var(--mimi-glass-blur)) saturate(1.4);box-shadow:var(--mimi-shadow-popover)">
+              <sc-for list="{{ m.toolsH }}" as="t" hint-placeholder-count="10">
+                <sc-if value="{{ t.isSep }}"><div role="separator" aria-orientation="vertical" style="width:1px;height:22px;margin:0 2px;background:var(--mimi-border)"></div></sc-if>
+                <sc-if value="{{ t.isTool }}">
+                  <div style="position:relative;display:flex">
+                    <button aria-label="{{ t.label }}" aria-pressed="{{ t.pressedAria }}" onClick="{{ t.pick }}" onMouseEnter="{{ t.enter }}" onMouseLeave="{{ t.leave }}" onFocus="{{ t.enter }}" onBlur="{{ t.leave }}" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:0;border-radius:999px;cursor:pointer;transition:background-color .2s ease, color .2s ease, box-shadow .35s cubic-bezier(.2,.8,.2,1), transform .15s cubic-bezier(.2,.8,.2,1);background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.ring }}" style-active="transform:scale(0.88)"><mimi-icon name="{{ t.icon }}" size="18"></mimi-icon></button>
+                    <sc-if value="{{ t.hasCount }}"><span aria-label="{{ t.countLabel }}" style="position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info);color:var(--mimi-info-foreground);font-size:10.5px;font-weight:700;box-shadow:0 0 0 2px var(--mimi-background);pointer-events:none">{{ t.count }}</span></sc-if>
+                    <sc-if value="{{ t.tip }}"><div role="tooltip" style="position:absolute;bottom:calc(100% + 14px);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;background:var(--mimi-tooltip);color:var(--mimi-tooltip-foreground);font-size:12.5px;font-weight:500;white-space:nowrap;box-shadow:var(--mimi-shadow-neutral);pointer-events:none;z-index:5">{{ t.label }}<span style="font-family:var(--mimi-font-mono);font-size:11px;opacity:.75">{{ t.kbd }}</span><span aria-hidden="true" style="position:absolute;left:50%;bottom:-4px;width:8px;height:8px;margin-left:-4px;background:var(--mimi-tooltip);transform:rotate(45deg);border-radius:1px"></span></div></sc-if>
+                  </div>
+                </sc-if>
+              </sc-for>
+            </div>
+          </div>
+          <span style="font-size:12px;color:var(--mimi-muted-foreground)">Disco = herramienta activa · anillo de color en hover y selección · fondo gris = interruptor presionado (Cuadrícula, Bloquear) · contador en Comentarios.</span>
+        </section>
+
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const TONE = {
+  default: { icon: 'bell', color: 'var(--mimi-foreground)' },
+  success: { icon: 'circle-check', color: 'var(--mimi-success-soft-foreground)' },
+  warning: { icon: 'triangle-alert', color: 'var(--mimi-warning-soft-foreground)' },
+  info: { icon: 'info', color: 'var(--mimi-info-soft-foreground)' },
+  destructive: { icon: 'circle-x', color: 'var(--mimi-destructive-soft-foreground)' }
+};
+const SAMPLES = {
+  default: ['Evento creado', 'Viernes 3 de octubre, 10:00'],
+  success: ['Cambios guardados', 'panel-ventas se publicó correctamente.'],
+  warning: ['Tu prueba termina pronto', 'Quedan 3 días del plan Equipo.'],
+  info: ['Nueva versión disponible', 'Mimi 0.2.0 trae Select y Dialog.'],
+  destructive: ['No se pudo guardar', 'Revisa tu conexión e inténtalo de nuevo.']
+};
+const TOOLS = [
+  ['select', 'mouse-pointer-2', 'Seleccionar', 'V'], ['hand', 'hand', 'Mover lienzo', 'H'], '-',
+  ['rect', 'square', 'Rectángulo', 'R'], ['ellipse', 'circle', 'Elipse', 'O'], ['pen', 'pen-tool', 'Pluma', 'P'], ['text', 'type', 'Texto', 'T'], '-',
+  ['comments', 'message-circle', 'Comentarios', 'C', 3], '-',
+  ['grid', 'grid-3x3', 'Cuadrícula', '⇧G', 0, true], ['lock', 'lock', 'Bloquear', '⇧L', 0, true]
+];
+const TOOLS_H = [
+  ['bold', 'bold', 'Negrita', '⌘B', 0, true], ['italic', 'italic', 'Cursiva', '⌘I', 0, true], ['underline', 'underline', 'Subrayado', '⌘U', 0, true], '-',
+  ['left', 'align-left', 'Alinear a la izquierda', '⇧⌘L'], ['center', 'align-center', 'Centrar', '⇧⌘E'], ['right', 'align-right', 'Alinear a la derecha', '⇧⌘R'], '-',
+  ['link', 'link', 'Enlace', '⌘K'], ['mentions', 'at-sign', 'Menciones', '@', 2]
+];
+const TABS_U = [['Cuenta'], ['Seguridad'], ['Notificaciones', 3], ['Facturación']];
+const PANELS_U = ['Nombre, correo y foto de perfil.', 'Contraseña, verificación en dos pasos y sesiones activas.', 'Tienes 3 avisos sin leer de este proyecto.', 'Plan Equipo · próxima factura el 1 de noviembre.'];
+const TABS_P = [['Día', 'sun', '1.284', 'visitas hoy'], ['Semana', 'calendar-days', '8.902', 'visitas esta semana'], ['Mes', 'calendar', '36.410', 'visitas en septiembre'], ['Año', 'chart-no-axes-column', '412.077', 'visitas en 2026']];
+
+const mkToast = (id, tone, extra) => ({ id, tone, title: SAMPLES[tone][0], desc: SAMPLES[tone][1], ...extra });
+const initToasts = () => [mkToast(3, 'success', {}), mkToast(2, 'info', { action: 'Ver' }), mkToast(1, 'warning', {})];
+const initMode = () => ({ toasts: initToasts(), expanded: false, uTab: 0, pTab: 1, tool: 'select', hover: null, hoverH: null, pressed: { grid: true, lock: false, bold: true, italic: false, underline: false }, align: 'left' });
+
+class Component extends DCLogic {
+  state = { l: initMode(), d: initMode() };
+  uid = 10;
+  timers = [];
+  componentWillUnmount() { this.timers.forEach(clearTimeout); }
+  set(k, patch) { this.setState(s => ({ [k]: { ...s[k], ...(typeof patch === 'function' ? patch(s[k]) : patch) } })); }
+  later(fn, ms) { this.timers.push(setTimeout(fn, ms)); }
+
+  push(k, toast, ttl) {
+    this.set(k, st => ({ toasts: [toast, ...st.toasts].slice(0, 5) }));
+    if (ttl) this.later(() => this.remove(k, toast.id), ttl);
+  }
+  remove(k, id) { this.set(k, st => ({ toasts: st.toasts.filter(t => t.id !== id) })); }
+
+  fire(k, tone) {
+    const id = ++this.uid;
+    if (tone === 'promise') {
+      this.push(k, { id, tone: 'default', loading: true, title: 'Guardando…', desc: 'Subiendo 3 archivos a panel-ventas.' });
+      this.later(() => this.set(k, st => ({ toasts: st.toasts.map(t => t.id === id ? { ...t, loading: false, tone: 'success', title: 'Guardado', desc: 'Los 3 archivos están al día.' } : t) })), 1800);
+      this.later(() => this.remove(k, id), 6500);
+      return;
+    }
+    this.push(k, mkToast(id, tone, tone === 'destructive' ? { action: 'Reintentar' } : {}), 6000);
+  }
+
+  tabs(k, list, key, idPrefix, extra) {
+    const cur = this.state[k][key];
+    return list.map((t, i) => ({
+      id: k + idPrefix + i, label: t[0], aria: cur === i ? 'true' : 'false', tab: cur === i ? '0' : '-1',
+      fg: cur === i ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', fw: cur === i ? '600' : '500',
+      pick: () => this.set(k, { [key]: i }), ...extra(t, i)
+    }));
+  }
+  tabKey(k, key, n) {
+    return e => {
+      const cur = this.state[k][key];
+      let nx = null;
+      if (e.key === 'ArrowRight') nx = (cur + 1) % n;
+      if (e.key === 'ArrowLeft') nx = (cur - 1 + n) % n;
+      if (e.key === 'Home') nx = 0;
+      if (e.key === 'End') nx = n - 1;
+      if (nx === null) return;
+      e.preventDefault();
+      this.set(k, { [key]: nx });
+      const tl = e.currentTarget;
+      requestAnimationFrame(() => { const b = tl.querySelectorAll('[role=tab]')[nx]; b && b.focus(); });
+    };
+  }
+
+  tools(k, list, hoverKey, activeKey) {
+    const st = this.state[k];
+    return list.map(t => {
+      if (t === '-') return { isSep: true };
+      const [key, icon, label, kbd, count, toggle] = t;
+      const active = !toggle && st[activeKey] === key;
+      const pressed = toggle && !!st.pressed[key];
+      const hov = st[hoverKey] === key;
+      return {
+        isTool: true, icon, label, kbd, hasCount: !!count, count, countLabel: count + ' sin leer', tip: hov,
+        pressedAria: toggle ? String(pressed) : (active ? 'true' : 'false'),
+        bg: active ? 'var(--mimi-primary)' : pressed ? 'var(--mimi-accent)' : 'transparent',
+        fg: active ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)',
+        ring: active ? '0 0 0 2px var(--mimi-background), 0 0 0 4px var(--mimi-info)' : hov ? '0 0 0 2px color-mix(in oklch, var(--mimi-info) 60%, transparent)' : '0 0 0 0 transparent',
+        pick: () => toggle ? this.set(k, s => ({ pressed: { ...s.pressed, [key]: !s.pressed[key] } })) : this.set(k, { [activeKey]: key }),
+        enter: () => this.set(k, { [hoverKey]: key }),
+        leave: () => this.set(k, s => (s[hoverKey] === key ? { [hoverKey]: null } : {}))
+      };
+    });
+  }
+
+  renderVals() {
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+      const st = this.state[k];
+      const n = st.toasts.length;
+      const toasts = st.toasts.map((t, i) => {
+        const tone = TONE[t.tone];
+        const y = st.expanded ? -i * 76 : -i * 12;
+        const sc = st.expanded ? 1 : 1 - i * 0.05;
+        return {
+          ...t, icon: tone.icon, iconColor: tone.color, loading: !!t.loading, notLoading: !t.loading,
+          hasAction: !!t.action, onAction: () => this.remove(k, t.id), close: () => this.remove(k, t.id),
+          tf: 'translateY(' + y + 'px) scale(' + sc + ')', op: !st.expanded && i > 2 ? '0' : '1', z: String(n - i)
+        };
+      });
+      return {
+        k, cls, label, icon,
+        gallery: [
+          { ...TONE.default, iconColor: TONE.default.color, title: SAMPLES.default[0], desc: SAMPLES.default[1] },
+          { ...TONE.success, iconColor: TONE.success.color, title: SAMPLES.success[0], desc: SAMPLES.success[1] },
+          { ...TONE.warning, iconColor: TONE.warning.color, title: SAMPLES.warning[0], desc: SAMPLES.warning[1] },
+          { ...TONE.info, iconColor: TONE.info.color, title: SAMPLES.info[0], desc: SAMPLES.info[1] },
+          { ...TONE.destructive, iconColor: TONE.destructive.color, title: SAMPLES.destructive[0], desc: SAMPLES.destructive[1], hasAction: true, action: 'Reintentar' },
+          { icon: 'archive', iconColor: 'var(--mimi-foreground)', title: 'Conversación archivada', desc: 'Se movió a Archivados.', hasAction: true, action: 'Deshacer' }
+        ],
+        solid: ['success', 'warning', 'info', 'destructive'].map(t => ({
+          icon: TONE[t].icon, title: SAMPLES[t][0], desc: SAMPLES[t][1],
+          bg: 'var(--mimi-' + t + ')', fg: 'var(--mimi-' + t + '-foreground)', sh: 'var(--mimi-shadow-' + t + '-hover)'
+        })),
+        triggers: [
+          ['default', 'Default'], ['success', 'Success'], ['warning', 'Warning'], ['info', 'Info'], ['destructive', 'Destructive']
+        ].map(([t, l]) => ({ label: l, icon: TONE[t].icon, color: TONE[t].color, fire: () => this.fire(k, t) }))
+          .concat([{ label: 'Promesa', icon: 'loader-circle', color: 'var(--mimi-foreground)', fire: () => this.fire(k, 'promise') }]),
+        toasts, stackH: (st.expanded ? Math.max(n, 1) * 76 : 68 + Math.min(n - 1, 2) * 12) + 'px',
+        expand: () => this.set(k, { expanded: true }), collapse: () => this.set(k, { expanded: false }),
+        tabsU: this.tabs(k, TABS_U, 'uTab', '-tu', t => ({ hasCount: !!t[1], count: t[1] })),
+        uTf: 'translateX(' + st.uTab * 100 + '%)', uPanel: PANELS_U[st.uTab], uLabelledBy: k + '-tu' + st.uTab, uKey: this.tabKey(k, 'uTab', 4),
+        tabsP: this.tabs(k, TABS_P, 'pTab', '-tp', t => ({ icon: t[1] })),
+        pTf: 'translateX(' + st.pTab * 100 + '%)', pValue: TABS_P[st.pTab][2], pCaption: TABS_P[st.pTab][3], pLabelledBy: k + '-tp' + st.pTab, pKey: this.tabKey(k, 'pTab', 4),
+        toolsV: this.tools(k, TOOLS, 'hover', 'tool'),
+        toolsH: this.tools(k, TOOLS_H, 'hoverH', 'align'),
+      };
+    });
+    return { modes };
+  }
+}
+</script>
+</body>
+</html>

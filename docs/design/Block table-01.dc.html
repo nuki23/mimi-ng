@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="position:relative;width:100%;min-height:100%;box-sizing:border-box;display:flex;flex-direction:column;background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans)">
+  <header style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:{{ headPad }}">
+    <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font-weight:800;letter-spacing:-0.025em;font-size:{{ h1 }}">Clientes</h1><p style="margin:0;font-size:14px;color:var(--mimi-muted-foreground)">36 cuentas · $412,380 de MRR</p></div>
+    <div style="display:flex;gap:8px">
+      <sc-if value="{{ desktop }}"><button style="display:inline-flex;align-items:center;gap:8px;height:var(--mimi-control-height);padding:0 14px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="upload" size="16"></mimi-icon>Importar CSV</button></sc-if>
+      <button aria-label="Nuevo cliente" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition);padding:{{ newPad }}" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="plus" size="16"></mimi-icon><sc-if value="{{ desktop }}"><span>Nuevo cliente</span></sc-if></button>
+    </div>
+  </header>
+  <sc-if value="{{ desktop }}">
+    <div style="display:flex;flex-direction:column;gap:16px;padding:0 32px 32px">
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+        <sc-for list="{{ summary }}" as="s" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card)"><span style="width:10px;height:10px;border-radius:999px;background:{{ s.c }}"></span><span style="flex:1;font-size:13.5px;color:var(--mimi-muted-foreground)">{{ s.label }}</span><span style="font-size:18px;font-weight:800;font-variant-numeric:tabular-nums">{{ s.n }}</span></div></sc-for>
+      </div>
+      <dc-import name="Mimi Data Table" density="compact" page-size="10" title="Clientes" hint-size="100%,620px"></dc-import>
+      <span style="font-size:12.5px;color:var(--mimi-muted-foreground)">Selecciona filas para ver las acciones masivas (Exportar, Eliminar). Filtra por Estado o Plan desde el encabezado.</span>
+    </div>
+  </sc-if>
+  <sc-if value="{{ mobile }}">
+    <div style="display:flex;flex-direction:column;gap:12px;padding:0 16px 96px">
+      <div style="display:flex;align-items:center;gap:8px;height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background)"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="search" size="16"></mimi-icon></span><input aria-label="Buscar clientes" placeholder="Buscar cliente…" value="{{ q }}" onChange="{{ onQ }}" style="flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none"></div>
+      <div role="group" aria-label="Filtrar por estado" style="display:flex;gap:6px;overflow-x:auto;scrollbar-width:none">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4"><button aria-pressed="{{ c.aria }}" onClick="{{ c.pick }}" style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;font-family:var(--mimi-font-sans);font-size:13px;cursor:pointer;transition:var(--mimi-transition);border:1px solid {{ c.border }};background:{{ c.bg }};color:{{ c.fg }};font-weight:{{ c.fw }}" style-active="transform:scale(0.94)">{{ c.label }}<span style="font-size:11.5px;opacity:.75">{{ c.n }}</span></button></sc-for>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--mimi-muted-foreground)"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><button role="checkbox" aria-checked="{{ all.aria }}" aria-label="Seleccionar todos" onClick="{{ all.toggle }}" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;box-sizing:border-box;border-radius:var(--mimi-radius-sm);cursor:pointer;color:var(--mimi-primary-foreground);border:1px solid {{ all.border }};background:{{ all.bg }}"><sc-if value="{{ all.checked }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if><sc-if value="{{ all.mixed }}"><mimi-icon name="minus" size="12" stroke="3"></mimi-icon></sc-if></button>Seleccionar todos</label><span>{{ countText }}</span></div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{ rows }}" as="r"><li style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--mimi-radius);transition:var(--mimi-transition);border:1px solid {{ r.border }};background:{{ r.bg }}">
+          <button role="checkbox" aria-checked="{{ r.aria }}" aria-label="{{ r.selLabel }}" onClick="{{ r.toggle }}" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;flex-shrink:0;padding:0;box-sizing:border-box;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);color:var(--mimi-primary-foreground);border:1px solid {{ r.boxBorder }};background:{{ r.boxBg }}" style-active="transform:scale(0.88)"><sc-if value="{{ r.sel }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if></button>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.name }}</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">{{ r.plan }} · {{ r.mrr }}</span></div>
+          <span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font-size:11.5px;font-weight:600;background:{{ r.stBg }};color:{{ r.stFg }}">{{ r.status }}</span>
+          <button aria-label="{{ r.menuLabel }}" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer" style-active="transform:scale(0.88)"><mimi-icon name="ellipsis-vertical" size="16"></mimi-icon></button>
+        </li></sc-for>
+      </ul>
+      <sc-if value="{{ empty }}"><div role="status" style="padding:32px 12px;text-align:center;font-size:14px;color:var(--mimi-muted-foreground)">Sin clientes que coincidan.</div></sc-if>
+    </div>
+    <sc-if value="{{ hasSel }}">
+      <div role="toolbar" aria-label="Acciones masivas" style="position:sticky;bottom:12px;margin:-84px 12px 12px;display:flex;align-items:center;gap:8px;padding:10px 10px 10px 16px;border-radius:999px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-popover)">
+        <span style="flex:1;font-size:14px;font-weight:700">{{ selText }}</span>
+        <button aria-label="Exportar" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:0;border-radius:999px;background:color-mix(in oklab, var(--mimi-primary-foreground) 14%, transparent);color:inherit;cursor:pointer" style-active="transform:scale(0.9)"><mimi-icon name="download" size="17"></mimi-icon></button>
+        <button aria-label="Eliminar seleccionados" onClick="{{ del }}" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:0;border-radius:999px;background:var(--mimi-destructive);color:var(--mimi-destructive-foreground);cursor:pointer" style-active="transform:scale(0.9)"><mimi-icon name="trash-2" size="17"></mimi-icon></button>
+        <button aria-label="Quitar selección" onClick="{{ clear }}" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:0;border-radius:999px;background:transparent;color:inherit;cursor:pointer" style-active="transform:scale(0.9)"><mimi-icon name="x" size="17"></mimi-icon></button>
+      </div>
+    </sc-if>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1280px&quot;,&quot;height&quot;:&quot;800px&quot;},&quot;mobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const ROWS = [['Hotel Brisa', 'Equipo', 5520, 'Activo'], ['Café Altura', 'Inicial', 950, 'Prueba'], ['Taller Motor', 'Equipo', 3840, 'Moroso'], ['Grupo Talento', 'Empresa', 18600, 'Activo'], ['Óptica Clara', 'Inicial', 760, 'Activo'], ['Editorial Faro', 'Equipo', 0, 'Cancelado'], ['Clínica Sol', 'Empresa', 9300, 'Activo'], ['Viajes Rumbo', 'Equipo', 2880, 'Prueba'], ['Radio Ola', 'Inicial', 570, 'Moroso']].map(([name, plan, mrr, status], i) => ({ id: i, name, plan, mrr, status }));
+const TONE = { Activo: 'success', Prueba: 'info', Moroso: 'warning', Cancelado: 'destructive' };
+const norm = t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+class Component extends DCLogic {
+  state = { q: '', status: null, sel: [2, 8], rows: ROWS };
+  renderVals() {
+    const m = this.props.mobile === true || this.props.mobile === 'true', s = this.state;
+    const tone = t => ({ bg: 'var(--mimi-' + (t === 'destructive' ? 'destructive-soft-bg' : t + '-soft') + ')', fg: 'var(--mimi-' + t + '-soft-foreground)' });
+    const list = s.rows.filter(r => (!s.status || r.status === s.status) && (!s.q || norm(r.name).includes(norm(s.q))));
+    const ids = list.map(r => r.id), selIn = ids.filter(id => s.sel.includes(id));
+    const all = selIn.length === 0 ? 'none' : selIn.length === ids.length ? 'all' : 'mixed';
+    return {
+      mobile: m, desktop: !m, headPad: m ? '20px 16px 14px' : '28px 32px 20px', h1: m ? '24px' : '28px', newPad: m ? '0 12px' : '0 16px',
+      summary: [['Activos', 24, 'var(--mimi-success)'], ['En prueba', 6, 'var(--mimi-info)'], ['Morosos', 4, 'var(--mimi-warning)'], ['Cancelados', 2, 'var(--mimi-destructive)']].map(([label, n, c]) => ({ label, n: String(n), c })),
+      q: s.q, onQ: e => this.setState({ q: e.target.value }),
+      chips: [[null, 'Todos'], ['Activo', 'Activos'], ['Prueba', 'Prueba'], ['Moroso', 'Morosos'], ['Cancelado', 'Cancelados']].map(([v, l]) => { const on = s.status === v; return { label: l, n: String(s.rows.filter(r => !v || r.status === v).length), aria: String(on), border: on ? 'var(--mimi-primary)' : 'var(--mimi-border)', bg: on ? 'var(--mimi-primary)' : 'var(--mimi-card)', fg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)', fw: on ? '600' : '500', pick: () => this.setState({ status: v }) }; }),
+      all: { aria: all === 'all' ? 'true' : all === 'mixed' ? 'mixed' : 'false', checked: all === 'all', mixed: all === 'mixed', border: all === 'none' ? 'var(--mimi-input)' : 'var(--mimi-primary)', bg: all === 'none' ? 'var(--mimi-input-background)' : 'var(--mimi-primary)', toggle: () => this.setState({ sel: all === 'all' ? [] : ids }) },
+      countText: list.length + ' resultados', empty: list.length === 0,
+      rows: list.map(r => { const sel = s.sel.includes(r.id), t = tone(TONE[r.status]); return { name: r.name, plan: r.plan, mrr: '$' + r.mrr.toLocaleString('es-MX'), status: r.status, stBg: t.bg, stFg: t.fg, sel, aria: String(sel), selLabel: 'Seleccionar ' + r.name, menuLabel: 'Acciones para ' + r.name,
+        border: sel ? 'color-mix(in oklab, var(--mimi-info) 45%, var(--mimi-border))' : 'var(--mimi-border)', bg: sel ? 'color-mix(in oklab, var(--mimi-info) 8%, var(--mimi-card))' : 'var(--mimi-card)', boxBorder: sel ? 'var(--mimi-primary)' : 'var(--mimi-input)', boxBg: sel ? 'var(--mimi-primary)' : 'var(--mimi-input-background)',
+        toggle: () => this.setState(st => ({ sel: sel ? st.sel.filter(x => x !== r.id) : [...st.sel, r.id] })) }; }),
+      hasSel: s.sel.length > 0, selText: s.sel.length + (s.sel.length === 1 ? ' seleccionado' : ' seleccionados'),
+      clear: () => this.setState({ sel: [] }), del: () => this.setState(st => ({ rows: st.rows.filter(r => !st.sel.includes(r.id)), sel: [] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

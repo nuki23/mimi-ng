@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:8px"><h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Pagination</h1><span style="max-width:860px;font-size:14px;line-height:1.55;color:oklch(0.4 0 0)">Control secundario y compacto. Por defecto usa la altura SM del tema (32 px) y la píldora mide 40 px de alto, nunca más que una fila de la tabla. Propiedad size: sm (por defecto) y md.</span></div>
+  <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+    <div style="display:flex;gap:32px;align-items:flex-start;width:max-content">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="flex-shrink:0;width:1040px;background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:36px;display:flex;flex-direction:column;gap:32px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:22px;font-weight:700;letter-spacing:-0.02em">Escritorio</span><span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span></div>
+        <section style="display:grid;grid-template-columns:repeat(4,max-content);gap:18px 32px;align-items:end">
+          <sc-for list="{{ states }}" as="st"><div style="display:flex;flex-direction:column;gap:{{ st.gap }}"><span style="font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)">{{ st.caption }}</span><sc-if value="{{ st.a }}"><dc-import name="Mimi Pagination" page="1" total="24" hint-size="250px,40px"></dc-import></sc-if><sc-if value="{{ st.b }}"><dc-import name="Mimi Pagination" page="12" total="24" hint-size="250px,40px"></dc-import></sc-if><sc-if value="{{ st.c }}"><dc-import name="Mimi Pagination" page="24" total="24" page-size="25" hint-size="250px,40px"></dc-import></sc-if><sc-if value="{{ st.d }}"><dc-import name="Mimi Pagination" page="12" total="24" invalid-text="31" hint-size="250px,40px"></dc-import></sc-if></div></sc-for>
+        </section>
+        <section style="display:flex;align-items:flex-end;gap:32px">
+          <div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)">SM · por defecto · 40 px de alto</span><dc-import name="Mimi Pagination" page="3" total="24" hint-size="250px,40px"></dc-import></div>
+          <div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)">MD · size="md" · 50 px de alto</span><dc-import name="Mimi Pagination" page="3" total="24" size="md" hint-size="290px,50px"></dc-import></div>
+        </section>
+        <section style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)">En línea · a la derecha, debajo de la tabla</span>
+          <div style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:12px;align-items:center;height:40px;padding:0 16px;background:var(--mimi-muted);font-size:12.5px;font-weight:600;color:var(--mimi-muted-foreground)"><span>Cliente</span><span>Estado</span><span style="text-align:right">MRR</span></div>
+            <sc-for list="{{ m.rows }}" as="r"><div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:12px;align-items:center;height:44px;padding:0 16px;border-top:1px solid var(--mimi-border);font-size:13.5px"><span style="font-weight:600">{{ r.name }}</span><span><span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:600;background:{{ r.bg }};color:{{ r.fg }}">{{ r.status }}</span></span><span style="text-align:right;font-variant-numeric:tabular-nums">{{ r.mrr }}</span></div></sc-for>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><span style="font-size:13px;font-variant-numeric:tabular-nums;color:var(--mimi-muted-foreground)">{{ m.range }}</span><dc-import name="Mimi Pagination" page="{{ m.page }}" total="24" on-page-change="{{ m.setPage }}" hint-size="250px,40px"></dc-import></div>
+        </section>
+        <section style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)">Flotante · centrada abajo, 16 px sobre el borde; la tabla deja libre el espacio final</span>
+          <div style="position:relative;height:330px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+            <div style="position:absolute;inset:0;overflow:auto;padding-bottom:72px">
+              <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:12px;align-items:center;height:40px;padding:0 16px;background:var(--mimi-muted);font-size:12.5px;font-weight:600;color:var(--mimi-muted-foreground)"><span>Cliente</span><span>Estado</span><span style="text-align:right">MRR</span></div>
+              <sc-for list="{{ m.rows }}" as="r"><div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:12px;align-items:center;height:44px;padding:0 16px;border-top:1px solid var(--mimi-border);font-size:13.5px"><span style="font-weight:600">{{ r.name }}</span><span><span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:600;background:{{ r.bg }};color:{{ r.fg }}">{{ r.status }}</span></span><span style="text-align:right;font-variant-numeric:tabular-nums">{{ r.mrr }}</span></div></sc-for>
+            </div>
+            <dc-import name="Mimi Pagination" variant="floating" page="{{ m.page }}" total="24" on-page-change="{{ m.setPage }}" hint-size="250px,40px"></dc-import>
+          </div>
+        </section>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <span style="font-size:13px;font-weight:600;color:oklch(0.35 0 0)">Móvil · {{ m.label }}</span>
+        <div style="padding:10px;border-radius:48px;background:oklch(0.18 0 0)">
+          <div data-mimi-style="mimi" class="{{ m.cls }}" style="position:relative;width:375px;height:720px;border-radius:38px;overflow:hidden;background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans)">
+            <div style="padding:52px 16px 0;display:flex;flex-direction:column;gap:12px"><span style="font-size:22px;font-weight:800">Clientes</span>
+              <sc-for list="{{ m.rows }}" as="r"><div style="display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card)"><span style="flex:1;font-size:14px;font-weight:600">{{ r.name }}</span><span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:600;background:{{ r.bg }};color:{{ r.fg }}">{{ r.status }}</span></div></sc-for>
+            </div>
+            <dc-import name="Mimi Pagination" variant="floating" mobile="true" page="{{ m.page }}" total="24" on-page-change="{{ m.setPage }}" hint-size="170px,40px"></dc-import>
+          </div>
+        </div>
+        <span style="max-width:395px;font-size:12.5px;color:oklch(0.42 0 0)">En móvil se oculta el selector de registros por página: queda ← página / total →.</span>
+      </div>
+    </div>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const ROWS = [['Hotel Brisa', 'Activo', 'success', '$5,520'], ['Café Altura', 'Prueba', 'info', '$950'], ['Taller Motor', 'Moroso', 'warning', '$3,840'], ['Grupo Talento', 'Activo', 'success', '$18,600'], ['Editorial Faro', 'Cancelado', 'destructive', '$0']];
+class Component extends DCLogic {
+  state = { l: 3, d: 3 };
+  renderVals() {
+    return {
+      states: [['Primera página', 'a'], ['Página intermedia', 'b'], ['Última página', 'c'], ['Número inválido', 'd']].map(([caption, k]) => ({ caption, a: k === 'a', b: k === 'b', c: k === 'c', d: k === 'd', gap: k === 'd' ? '50px' : '10px' })),
+      modes: [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+        const p = this.state[k];
+        return { cls, label, icon, page: String(p), range: 'Mostrando ' + ((p - 1) * 10 + 1) + '–' + (p * 10) + ' de 240', setPage: n => this.setState({ [k]: n }),
+          rows: ROWS.map(([name, status, t, mrr]) => ({ name, status, mrr, bg: 'var(--mimi-' + (t === 'destructive' ? 'destructive-soft-bg' : t + '-soft') + ')', fg: 'var(--mimi-' + t + '-soft-foreground)' })) };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

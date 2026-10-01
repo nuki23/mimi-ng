@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:100%;min-height:100%;box-sizing:border-box;display:flex;flex-direction:column;background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans)">
+  <header style="display:flex;flex-direction:column;gap:4px;border-bottom:1px solid var(--mimi-border);padding:{{ headPad }}">
+    <h1 style="margin:0;font-size:{{ h1 }};font-weight:800;letter-spacing:-0.025em">Configuración</h1>
+    <p style="margin:0;font-size:14px;color:var(--mimi-muted-foreground)">Administra tu perfil, avisos y seguridad.</p>
+  </header>
+  <sc-if value="{{ mobile }}">
+    <div role="tablist" aria-label="Secciones" style="display:flex;gap:6px;padding:12px 16px;overflow-x:auto;border-bottom:1px solid var(--mimi-border);scrollbar-width:none">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4"><button role="tab" aria-selected="{{ t.aria }}" onClick="{{ t.pick }}" style="flex-shrink:0;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;font-family:var(--mimi-font-sans);font-size:13.5px;cursor:pointer;transition:var(--mimi-transition);border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};font-weight:{{ t.fw }}" style-active="transform:scale(0.95)"><mimi-icon name="{{ t.icon }}" size="15"></mimi-icon>{{ t.label }}</button></sc-for>
+    </div>
+  </sc-if>
+  <div style="flex:1;display:flex;gap:40px;padding:{{ bodyPad }}">
+    <sc-if value="{{ desktop }}">
+      <nav aria-label="Secciones" role="tablist" aria-orientation="vertical" style="width:200px;flex-shrink:0;display:flex;flex-direction:column;gap:2px">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4"><button role="tab" aria-selected="{{ t.aria }}" onClick="{{ t.pick }}" style="--hbg:{{ t.hbg }};display:flex;align-items:center;gap:10px;height:38px;padding:0 12px;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:14px;text-align:left;cursor:pointer;transition:var(--mimi-transition);background:{{ t.navBg }};color:{{ t.navFg }};font-weight:{{ t.fw }}" style-hover="background:var(--hbg)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ t.icon }}" size="17"></mimi-icon>{{ t.label }}</button></sc-for>
+      </nav>
+    </sc-if>
+    <div role="tabpanel" style="flex:1;min-width:0;max-width:680px;display:flex;flex-direction:column;gap:20px">
+      <sc-if value="{{ isProfile }}">
+        <section style="display:flex;flex-direction:column;background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card)">
+          <div style="padding:20px 20px 4px;display:flex;flex-direction:column;gap:2px"><h2 style="margin:0;font-size:16px;font-weight:700">Perfil público</h2><p style="margin:0;font-size:13.5px;color:var(--mimi-muted-foreground)">Lo ven las personas de tu equipo.</p></div>
+          <div style="padding:16px 20px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><span style="width:56px;height:56px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:18px;font-weight:700">AT</span><button style="display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="upload" size="14"></mimi-icon>Cambiar foto</button><button style="height:34px;padding:0 10px;border:0;border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-destructive-soft-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-destructive-soft-bg)" style-active="transform:scale(var(--mimi-press-scale))">Quitar</button></div>
+            <div style="display:grid;gap:14px;grid-template-columns:{{ cols }}">
+              <div style="display:flex;flex-direction:column;gap:6px"><label for="{{ uid }}-n" style="font-size:14px;font-weight:500">Nombre</label><input id="{{ uid }}-n" value="{{ name }}" onChange="{{ onName }}" style="height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-input-hover)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><label for="{{ uid }}-u" style="font-size:14px;font-weight:500">Usuario</label><div style="display:flex;align-items:center;height:var(--mimi-control-height);box-sizing:border-box;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);overflow:hidden"><span style="display:flex;align-items:center;height:100%;padding:0 10px;background:var(--mimi-muted);border-right:1px solid var(--mimi-input);font-size:13px;color:var(--mimi-muted-foreground)">mimi.dev/</span><input id="{{ uid }}-u" value="anatorres" onChange="{{ dirty }}" style="flex:1;min-width:0;height:100%;padding:0 10px;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none"></div></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between"><label for="{{ uid }}-b" style="font-size:14px;font-weight:500">Biografía</label><span style="font-size:12px;font-variant-numeric:tabular-nums;color:var(--mimi-muted-foreground)">{{ bioCount }}/160</span></div><textarea id="{{ uid }}-b" rows="3" maxLength="160" onChange="{{ onBio }}" style="box-sizing:border-box;padding:10px 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;line-height:1.5;resize:vertical;outline:none;transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-input-hover)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)">{{ bio }}</textarea></div>
+          </div>
+        </section>
+        <section style="display:flex;flex-direction:column;background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card)">
+          <div style="padding:20px 20px 8px"><h2 style="margin:0;font-size:16px;font-weight:700">Preferencias</h2></div>
+          <sc-for list="{{ prefs }}" as="p" hint-placeholder-count="2">
+            <label style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 20px;border-top:1px solid var(--mimi-border);cursor:pointer"><span style="display:flex;flex-direction:column;line-height:1.4"><span style="font-size:14px;font-weight:500">{{ p.label }}</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">{{ p.desc }}</span></span><button role="switch" aria-checked="{{ p.aria }}" aria-label="{{ p.label }}" onClick="{{ p.toggle }}" style="display:inline-flex;flex-shrink:0;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border:0;border-radius:999px;cursor:pointer;transition:var(--mimi-transition);background:{{ p.track }}" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-background);box-shadow:0 1px 3px oklch(0 0 0 / .2);transition:transform .2s ease;transform:{{ p.thumb }}"></span></button></label>
+          </sc-for>
+        </section>
+      </sc-if>
+      <sc-if value="{{ isNotif }}">
+        <sc-for list="{{ notifGroups }}" as="g" hint-placeholder-count="2">
+          <section style="display:flex;flex-direction:column;background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card)">
+            <div style="display:flex;align-items:center;gap:10px;padding:18px 20px 10px"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ g.icon }}" size="17"></mimi-icon></span><h2 style="margin:0;font-size:16px;font-weight:700">{{ g.title }}</h2></div>
+            <sc-for list="{{ g.items }}" as="p">
+              <label style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 20px;border-top:1px solid var(--mimi-border);cursor:pointer"><span style="display:flex;flex-direction:column;line-height:1.4"><span style="font-size:14px;font-weight:500">{{ p.label }}</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">{{ p.desc }}</span></span><button role="switch" aria-checked="{{ p.aria }}" aria-label="{{ p.label }}" onClick="{{ p.toggle }}" style="display:inline-flex;flex-shrink:0;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border:0;border-radius:999px;cursor:pointer;transition:var(--mimi-transition);background:{{ p.track }}" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-background);box-shadow:0 1px 3px oklch(0 0 0 / .2);transition:transform .2s ease;transform:{{ p.thumb }}"></span></button></label>
+            </sc-for>
+          </section>
+        </sc-for>
+      </sc-if>
+      <sc-if value="{{ isSecurity }}">
+        <section style="display:flex;flex-direction:column;gap:14px;padding:20px;background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card)">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="display:flex;flex-direction:column;gap:2px"><h2 style="margin:0;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px">Verificación en dos pasos<span style="display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:999px;background:var(--mimi-success-soft);color:var(--mimi-success-soft-foreground);font-size:11px;font-weight:700">Recomendado</span></h2><p style="margin:0;font-size:13.5px;color:var(--mimi-muted-foreground)">Pide un código de tu app al entrar.</p></div><button role="switch" aria-checked="{{ tfa.aria }}" aria-label="Verificación en dos pasos" onClick="{{ tfa.toggle }}" style="display:inline-flex;flex-shrink:0;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border:0;border-radius:999px;cursor:pointer;transition:var(--mimi-transition);background:{{ tfa.track }}" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-background);box-shadow:0 1px 3px oklch(0 0 0 / .2);transition:transform .2s ease;transform:{{ tfa.thumb }}"></span></button></div>
+          <div style="height:1px;background:var(--mimi-border)"></div>
+          <h3 style="margin:0;font-size:14px;font-weight:700">Sesiones activas</h3>
+          <sc-for list="{{ sessions }}" as="s" hint-placeholder-count="2"><div style="display:flex;align-items:center;gap:12px"><span style="width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:var(--mimi-radius-sm);background:var(--mimi-muted)"><mimi-icon name="{{ s.icon }}" size="17"></mimi-icon></span><div style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35"><span style="font-size:14px;font-weight:500">{{ s.device }}</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">{{ s.meta }}</span></div><sc-if value="{{ s.current }}"><span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11.5px;font-weight:700">Esta sesión</span></sc-if><sc-if value="{{ s.other }}"><button style="height:30px;padding:0 10px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.94)">Cerrar</button></sc-if></div></sc-for>
+        </section>
+        <section style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px;border:1px solid color-mix(in oklab, var(--mimi-destructive) 40%, var(--mimi-border));border-radius:var(--mimi-radius-card);background:var(--mimi-destructive-soft-bg)">
+          <div style="display:flex;flex-direction:column;gap:2px"><h2 style="margin:0;font-size:16px;font-weight:700;color:var(--mimi-destructive-soft-foreground)">Eliminar cuenta</h2><p style="margin:0;font-size:13.5px;color:var(--mimi-destructive-soft-foreground)">Se borran tus datos tras 30 días. No se puede deshacer.</p></div>
+          <button style="display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-destructive);color:var(--mimi-destructive-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-destructive);transition:var(--mimi-transition)" style-hover="background:var(--mimi-destructive-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-destructive-soft)"><mimi-icon name="trash-2" size="15"></mimi-icon>Eliminar cuenta</button>
+        </section>
+      </sc-if>
+      <sc-if value="{{ isBilling }}">
+        <section style="display:flex;flex-direction:column;gap:14px;padding:20px;background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card)">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:var(--mimi-muted-foreground)">Plan actual</span><span style="font-size:22px;font-weight:800">Equipo · $240 por persona</span></div><button style="height:36px;padding:0 14px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale))">Cambiar plan</button></div>
+          <div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>Asientos</span><span style="color:var(--mimi-muted-foreground)">18 de 25</span></div><div style="height:6px;border-radius:999px;background:var(--mimi-track);overflow:hidden"><div style="width:72%;height:100%;border-radius:999px;background:var(--mimi-primary)"></div></div></div>
+          <span style="display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--mimi-muted-foreground)"><mimi-icon name="credit-card" size="15"></mimi-icon>Visa •••• 4242 · próxima factura el 1 de noviembre</span>
+        </section>
+      </sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ isDirty }}">
+    <div role="status" style="position:sticky;bottom:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 20px;border-top:1px solid var(--mimi-border);background:var(--mimi-glass);backdrop-filter:blur(var(--mimi-glass-blur));-webkit-backdrop-filter:blur(var(--mimi-glass-blur))">
+      <span style="font-size:13.5px;font-weight:500">Tienes cambios sin guardar</span>
+      <div style="display:flex;gap:8px"><button onClick="{{ reset }}" style="height:34px;padding:0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))">Descartar</button><button onClick="{{ save }}" style="height:34px;padding:0 14px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale))">Guardar</button></div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1280px&quot;,&quot;height&quot;:&quot;800px&quot;},&quot;mobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;tab&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;profile&quot;,&quot;notif&quot;,&quot;security&quot;,&quot;billing&quot;],&quot;default&quot;:&quot;profile&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const TABS = [['profile', 'Perfil', 'user-round'], ['notif', 'Notificaciones', 'bell'], ['security', 'Seguridad', 'shield'], ['billing', 'Facturación', 'credit-card']];
+const SW = { compact: true, sounds: false, weekly: true, mentions: true, failed: true, newClients: false, comments: true, tfa: false };
+class Component extends DCLogic {
+  state = { tab: this.props.tab || 'profile', name: 'Ana Torres', bio: 'Diseño de producto en Mimi. Me encargo de los temas y del contraste.', sw: { ...SW }, dirty: true };
+  uid = 'st' + Math.random().toString(36).slice(2, 6);
+  sw(key, label, desc) { const on = this.state.sw[key]; return { label, desc, aria: String(on), track: on ? 'var(--mimi-primary)' : 'var(--mimi-switch-off)', thumb: on ? 'translateX(16px)' : 'translateX(0)', toggle: e => { e.preventDefault(); this.setState(s => ({ sw: { ...s.sw, [key]: !s.sw[key] }, dirty: true })); } }; }
+  renderVals() {
+    const m = this.props.mobile === true || this.props.mobile === 'true', s = this.state;
+    return {
+      uid: this.uid, mobile: m, desktop: !m, h1: m ? '24px' : '28px', headPad: m ? '20px 16px 14px' : '28px 40px 20px', bodyPad: m ? '16px 16px 24px' : '28px 40px 40px', cols: m ? '1fr' : '1fr 1fr',
+      tabs: TABS.map(([id, label, icon]) => { const on = s.tab === id; return { label, icon, aria: String(on), pick: () => this.setState({ tab: id }), border: on ? 'var(--mimi-primary)' : 'var(--mimi-border)', bg: on ? 'var(--mimi-primary)' : 'var(--mimi-card)', fg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)', fw: on ? '600' : '500', navBg: on ? 'var(--mimi-accent)' : 'transparent', navFg: on ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', hbg: 'var(--mimi-accent)' }; }),
+      isProfile: s.tab === 'profile', isNotif: s.tab === 'notif', isSecurity: s.tab === 'security', isBilling: s.tab === 'billing',
+      name: s.name, onName: e => this.setState({ name: e.target.value, dirty: true }), dirty: () => this.setState({ dirty: true }),
+      bio: s.bio, bioCount: String(s.bio.length), onBio: e => this.setState({ bio: e.target.value, dirty: true }),
+      prefs: [this.sw('compact', 'Modo compacto', 'Tablas y listas más densas.'), this.sw('sounds', 'Sonidos', 'Reproduce un sonido con cada aviso.')],
+      notifGroups: [{ title: 'Correo', icon: 'mail', items: [this.sw('weekly', 'Resumen semanal', 'Cada lunes a las 9:00.'), this.sw('mentions', 'Menciones', 'Cuando alguien te menciona.'), this.sw('failed', 'Pagos fallidos', 'Te avisamos al instante.')] }, { title: 'Push', icon: 'smartphone', items: [this.sw('newClients', 'Nuevos clientes', 'Al registrarse una cuenta.'), this.sw('comments', 'Comentarios', 'En proyectos que sigues.')] }],
+      tfa: this.sw('tfa', '', ''),
+      sessions: [['monitor', 'Chrome · macOS', 'Ciudad de México · ahora', true], ['smartphone', 'Safari · iPhone', 'Guadalajara · hace 2 días', false]].map(([icon, device, meta, cur]) => ({ icon, device, meta, current: cur, other: !cur })),
+      isDirty: s.dirty, reset: () => this.setState({ name: 'Ana Torres', sw: { ...SW }, dirty: false }), save: () => this.setState({ dirty: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

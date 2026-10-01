@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="position:relative;width:100%;min-height:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:center;background:{{ bg }};color:var(--mimi-foreground);font-family:var(--mimi-font-sans);padding:{{ pad }}">
+  <sc-if value="{{ desktop }}"><div aria-hidden="true" style="position:absolute;inset:0;background-image:radial-gradient(color-mix(in oklab, var(--mimi-foreground) 14%, transparent) 1px, transparent 1px);background-size:18px 18px;-webkit-mask-image:radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%);mask-image:radial-gradient(ellipse at 50% 40%, #000 30%, transparent 75%)"></div></sc-if>
+  <form onSubmit="{{ submit }}" style="position:relative;width:100%;box-sizing:border-box;display:flex;flex-direction:column;gap:18px;max-width:{{ maxW }};padding:{{ cardPad }};background:{{ cardBg }};border:{{ cardBorder }};border-radius:var(--mimi-radius-card);box-shadow:{{ cardSh }}">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+      <span style="width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;border-radius:12px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:22px;font-weight:800;line-height:1;box-shadow:var(--mimi-shadow-primary)">m</span>
+      <h1 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.02em">Inicia sesión</h1>
+      <p style="margin:0;font-size:14px;color:var(--mimi-muted-foreground)">Bienvenida de nuevo a Mimi Ventas.</p>
+    </div>
+    <div style="display:grid;gap:10px;grid-template-columns:{{ socialCols }}">
+      <button type="button" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;height:var(--mimi-control-height);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><span aria-hidden="true" style="width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;border:1.5px solid currentColor;font-size:11px;font-weight:800">G</span>Google</button>
+      <button type="button" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;height:var(--mimi-control-height);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="github" size="17"></mimi-icon>GitHub</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;font-size:12px;color:var(--mimi-muted-foreground)"><span style="flex:1;height:1px;background:var(--mimi-border)"></span>o con tu correo<span style="flex:1;height:1px;background:var(--mimi-border)"></span></div>
+    <div style="display:flex;flex-direction:column;gap:6px"><label for="{{ uid }}-e" style="font-size:14px;font-weight:500">Correo</label><input id="{{ uid }}-e" type="email" autocomplete="email" value="{{ email }}" onChange="{{ onEmail }}" style="height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-input-hover)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><label for="{{ uid }}-p" style="font-size:14px;font-weight:500">Contraseña</label><a href="#" style="font-size:13px;font-weight:500;color:var(--mimi-muted-foreground);text-decoration:underline;text-underline-offset:3px">¿La olvidaste?</a></div>
+      <div style="display:flex;align-items:center;height:var(--mimi-control-height);box-sizing:border-box;padding:0 4px 0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-input-hover)"><input id="{{ uid }}-p" type="{{ pwType }}" autocomplete="current-password" value="••••••••••" readOnly="" style="flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none"><button type="button" aria-label="{{ eyeLabel }}" onClick="{{ toggleEye }}" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.88)"><mimi-icon name="{{ eye }}" size="16"></mimi-icon></button></div>
+    </div>
+    <label style="display:flex;align-items:center;gap:10px;font-size:14px;cursor:pointer"><button type="button" role="checkbox" aria-checked="{{ rememberAria }}" onClick="{{ toggleRemember }}" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;box-sizing:border-box;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);color:var(--mimi-primary-foreground);border:1px solid {{ boxBorder }};background:{{ boxBg }}" style-active="transform:scale(0.88)"><sc-if value="{{ remember }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if></button>Recordarme 30 días</label>
+    <button type="submit" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:calc(var(--mimi-control-height) + 4px);border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:15px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><sc-if value="{{ loading }}"><span style="display:inline-flex;animation:mimi-spin .8s linear infinite"><mimi-icon name="loader-circle" size="16"></mimi-icon></span></sc-if>{{ submitLabel }}</button>
+    <p style="margin:0;text-align:center;font-size:14px;color:var(--mimi-muted-foreground)">¿No tienes cuenta? <a href="#" style="font-weight:600;color:var(--mimi-foreground);text-decoration:underline;text-underline-offset:3px">Regístrate</a></p>
+  </form>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1280px&quot;,&quot;height&quot;:&quot;800px&quot;},&quot;mobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { email: 'ana@empresa.com', show: false, remember: true, loading: false };
+  uid = 'l1' + Math.random().toString(36).slice(2, 6);
+  renderVals() {
+    const m = this.props.mobile === true || this.props.mobile === 'true', s = this.state;
+    return {
+      uid: this.uid, desktop: !m, bg: m ? 'var(--mimi-background)' : 'var(--mimi-muted)', pad: m ? '32px 22px' : '40px',
+      maxW: m ? '100%' : '400px', cardPad: m ? '0' : '32px', cardBg: m ? 'transparent' : 'var(--mimi-card)', cardBorder: m ? '0' : '1px solid var(--mimi-border)', cardSh: m ? 'none' : 'var(--mimi-shadow-card)',
+      socialCols: m ? '1fr' : '1fr 1fr', email: s.email, onEmail: e => this.setState({ email: e.target.value }),
+      pwType: s.show ? 'text' : 'password', eye: s.show ? 'eye-off' : 'eye', eyeLabel: s.show ? 'Ocultar contraseña' : 'Mostrar contraseña', toggleEye: () => this.setState({ show: !s.show }),
+      remember: s.remember, rememberAria: String(s.remember), toggleRemember: () => this.setState({ remember: !s.remember }), boxBorder: s.remember ? 'var(--mimi-primary)' : 'var(--mimi-input)', boxBg: s.remember ? 'var(--mimi-primary)' : 'var(--mimi-input-background)',
+      loading: s.loading, submitLabel: s.loading ? 'Entrando…' : 'Entrar',
+      submit: e => { e.preventDefault(); this.setState({ loading: true }); setTimeout(() => this.setState({ loading: false }), 1400); }
+    };
+  }
+}
+</script>
+</body>
+</html>

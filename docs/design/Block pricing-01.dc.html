@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:100%;min-height:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;gap:28px;background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);padding:{{ pad }}">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;max-width:620px">
+    <span style="display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 12px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:12.5px;font-weight:700"><mimi-icon name="sparkles" size="13"></mimi-icon>14 días gratis en cualquier plan</span>
+    <h1 style="margin:0;font-weight:800;letter-spacing:-0.03em;line-height:1.08;text-wrap:balance;font-size:{{ h1 }}">Planes que crecen contigo</h1>
+    <p style="margin:0;font-size:16px;line-height:1.55;color:var(--mimi-muted-foreground);text-wrap:pretty">Paga solo por las personas que usan Mimi. Cambia o cancela cuando quieras.</p>
+    <div role="radiogroup" aria-label="Periodo de facturación" style="position:relative;display:grid;grid-template-columns:repeat(2,140px);padding:4px;margin-top:6px;border-radius:999px;background:var(--mimi-muted)">
+      <span aria-hidden="true" data-fx="" style="position:absolute;top:4px;bottom:4px;left:4px;width:140px;border-radius:999px;background:var(--mimi-card);box-shadow:var(--mimi-shadow-neutral);transition:transform .45s cubic-bezier(.3,1.35,.5,1);transform:{{ tf }}"></span>
+      <sc-for list="{{ periods }}" as="p" hint-placeholder-count="2"><button role="radio" aria-checked="{{ p.aria }}" onClick="{{ p.pick }}" style="position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;border:0;background:transparent;font-family:var(--mimi-font-sans);font-size:14px;cursor:pointer;transition:color .2s ease, transform .15s ease;color:{{ p.fg }};font-weight:{{ p.fw }}" style-active="transform:scale(0.95)">{{ p.label }}<sc-if value="{{ p.hasBadge }}"><span style="display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:999px;background:var(--mimi-success-soft);color:var(--mimi-success-soft-foreground);font-size:11px;font-weight:700">−17%</span></sc-if></button></sc-for>
+    </div>
+  </div>
+  <div style="width:100%;max-width:1080px;display:grid;gap:18px;align-items:stretch;grid-template-columns:{{ cols }}">
+    <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+      <div data-fx="" style="position:relative;display:flex;border-radius:var(--mimi-radius-card);padding:{{ p.ringPad }};background:{{ p.ringBg }};animation:{{ p.anim }};box-shadow:{{ p.sh }}">
+        <sc-if value="{{ p.featured }}"><span style="position:absolute;top:-13px;left:50%;transform:translateX(-50%);z-index:2;display:inline-flex;align-items:center;gap:5px;height:26px;padding:0 12px;border-radius:999px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:12px;font-weight:700;white-space:nowrap;box-shadow:var(--mimi-shadow-primary)"><mimi-icon name="star" size="12"></mimi-icon>Más popular</span></sc-if>
+        <div style="flex:1;display:flex;flex-direction:column;gap:18px;padding:26px 24px;border-radius:calc(var(--mimi-radius-card) - 1.5px);background:var(--mimi-card);border:{{ p.border }}">
+          <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:16px;font-weight:700">{{ p.name }}</span><span style="font-size:13.5px;line-height:1.45;color:var(--mimi-muted-foreground)">{{ p.desc }}</span></div>
+          <div style="display:flex;align-items:baseline;gap:6px"><span style="font-size:40px;font-weight:800;letter-spacing:-0.03em;font-variant-numeric:tabular-nums">{{ p.price }}</span><span style="font-size:13.5px;color:var(--mimi-muted-foreground)">{{ p.unit }}</span></div>
+          <span style="margin-top:-12px;min-height:18px;font-size:12.5px;color:var(--mimi-success-soft-foreground)">{{ p.note }}</span>
+          <button style="--b:{{ p.btnBg }};--bh:{{ p.btnBgH }};display:inline-flex;align-items:center;justify-content:center;gap:8px;height:calc(var(--mimi-control-height) + 4px);border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14.5px;font-weight:600;cursor:pointer;transition:var(--mimi-transition);background:var(--b);color:{{ p.btnFg }};border:{{ p.btnBorder }};box-shadow:{{ p.btnSh }}" style-hover="background:var(--bh)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)">{{ p.cta }}</button>
+          <div style="height:1px;background:var(--mimi-border)"></div>
+          <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ p.features }}" as="f"><li style="display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.4"><span style="display:inline-flex;margin-top:1px;color:{{ f.c }}"><mimi-icon name="{{ f.icon }}" size="16"></mimi-icon></span><span style="color:{{ f.fg }}">{{ f.t }}</span></li></sc-for>
+          </ul>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <p style="margin:0;font-size:13.5px;text-align:center;color:var(--mimi-muted-foreground)">Precios en pesos mexicanos más IVA · Factura CFDI 4.0 incluida · <a href="#" style="font-weight:600;color:var(--mimi-foreground);text-decoration:underline;text-underline-offset:3px">Preguntas frecuentes</a></p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1280px&quot;,&quot;height&quot;:&quot;800px&quot;},&quot;mobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const PLANS = [
+  { name: 'Inicial', desc: 'Para empezar a ordenar tus ventas.', m: 190, y: 158, cta: 'Empezar gratis', feats: [['Hasta 5 personas', 1], ['Clientes ilimitados', 1], ['Reportes básicos', 1], ['Integraciones', 0], ['Soporte prioritario', 0]] },
+  { name: 'Equipo', desc: 'Para equipos que venden todos los días.', m: 240, y: 199, cta: 'Probar 14 días', featured: true, feats: [['Hasta 25 personas', 1], ['Clientes ilimitados', 1], ['Reportes avanzados', 1], ['Integraciones con CRM y ERP', 1], ['Soporte prioritario', 0]] },
+  { name: 'Empresa', desc: 'Seguridad y control para grandes equipos.', m: null, y: null, cta: 'Hablar con ventas', feats: [['Personas ilimitadas', 1], ['SSO y auditoría', 1], ['Reportes a la medida', 1], ['Integraciones a la medida', 1], ['Gerente de cuenta', 1]] }
+];
+class Component extends DCLogic {
+  state = { yearly: false };
+  renderVals() {
+    const m = this.props.mobile === true || this.props.mobile === 'true', y = this.state.yearly;
+    return {
+      pad: m ? '36px 18px 32px' : '56px 40px', h1: m ? '32px' : '48px', cols: m ? '1fr' : 'repeat(3, minmax(0, 1fr))',
+      tf: y ? 'translateX(100%)' : 'translateX(0)',
+      periods: [[false, 'Mensual'], [true, 'Anual']].map(([v, l]) => ({ label: l, hasBadge: v, aria: String(y === v), fg: y === v ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', fw: y === v ? '700' : '500', pick: () => this.setState({ yearly: v }) })),
+      plans: PLANS.map(p => {
+        const f = !!p.featured, price = p.m === null ? 'A medida' : '$' + (y ? p.y : p.m);
+        return {
+          name: p.name, desc: p.desc, featured: f, price, unit: p.m === null ? '' : 'por persona / mes', note: p.m !== null && y ? 'Facturado anual: $' + (p.y * 12).toLocaleString('es-MX') + ' por persona' : '',
+          ringPad: f ? '1.5px' : '0', ringBg: f ? 'conic-gradient(from var(--mimi-beam-a), transparent 0deg 250deg, var(--mimi-info) 310deg, var(--mimi-success) 345deg, transparent 360deg), var(--mimi-border)' : 'transparent',
+          anim: f ? 'mimi-beam 4s linear infinite' : 'none', sh: f ? 'var(--mimi-shadow-popover)' : 'var(--mimi-shadow-card)', border: f ? '0' : '1px solid var(--mimi-border)',
+          cta: p.cta, btnBg: f ? 'var(--mimi-primary)' : 'var(--mimi-card)', btnBgH: f ? 'var(--mimi-primary-hover)' : 'var(--mimi-accent)', btnFg: f ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)', btnBorder: f ? '1px solid transparent' : '1px solid var(--mimi-border)', btnSh: f ? 'var(--mimi-shadow-primary)' : 'var(--mimi-shadow-neutral)',
+          features: p.feats.map(([t, on]) => ({ t, icon: on ? 'check' : 'minus', c: on ? 'var(--mimi-success-soft-foreground)' : 'var(--mimi-muted-foreground)', fg: on ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)' }))
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

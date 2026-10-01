@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:100%;min-height:100%;box-sizing:border-box;display:flex;background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);flex-direction:{{ dir }}">
+  <div style="position:relative;flex-shrink:0;overflow:hidden;background:var(--mimi-muted);order:{{ imgOrder }};width:{{ imgW }};height:{{ imgH }};border-radius:{{ imgR }}">
+    <image-slot id="{{ slot }}" placeholder="Foto o ilustración" style="position:absolute;inset:0"></image-slot>
+    <sc-if value="{{ desktop }}">
+      <figure style="position:absolute;left:28px;right:28px;bottom:28px;margin:0;padding:20px;display:flex;flex-direction:column;gap:12px;border-radius:var(--mimi-radius-card);background:var(--mimi-glass);border:1px solid var(--mimi-glass-border);backdrop-filter:blur(var(--mimi-glass-blur));-webkit-backdrop-filter:blur(var(--mimi-glass-blur));pointer-events:none">
+        <blockquote style="margin:0;font-size:17px;font-weight:600;line-height:1.45;text-wrap:pretty">“Pasamos de PrimeNG a Mimi en dos semanas y el equipo de diseño por fin controla el tema.”</blockquote>
+        <figcaption style="display:flex;align-items:center;gap:10px"><span style="width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:12px;font-weight:700">DP</span><span style="display:flex;flex-direction:column;line-height:1.3"><span style="font-size:13.5px;font-weight:700">Diego Paz</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">CTO · Andes Logística</span></span></figcaption>
+      </figure>
+    </sc-if>
+  </div>
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;padding:{{ pad }}">
+    <div style="display:flex;align-items:center;gap:10px"><span style="width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:18px;font-weight:800;line-height:1">m</span><span style="font-size:16px;font-weight:700">Mimi Ventas</span></div>
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:{{ formPad }}">
+      <form onSubmit="{{ submit }}" style="width:100%;max-width:360px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;flex-direction:column;gap:6px"><h1 style="margin:0;font-size:{{ h1 }};font-weight:800;letter-spacing:-0.025em">Hola de nuevo</h1><p style="margin:0;font-size:14.5px;color:var(--mimi-muted-foreground)">Entra con tu correo de trabajo.</p></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><label for="{{ uid }}-e" style="font-size:14px;font-weight:500">Correo</label><input id="{{ uid }}-e" type="email" placeholder="nombre@empresa.com" style="height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-input-hover)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></div>
+        <div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;align-items:baseline"><label for="{{ uid }}-p" style="font-size:14px;font-weight:500">Contraseña</label><a href="#" style="font-size:13px;color:var(--mimi-muted-foreground);text-decoration:underline;text-underline-offset:3px">¿La olvidaste?</a></div><input id="{{ uid }}-p" type="password" placeholder="••••••••" style="height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-input-hover)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></div>
+        <button type="submit" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:calc(var(--mimi-control-height) + 4px);border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:15px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><sc-if value="{{ loading }}"><span style="display:inline-flex;animation:mimi-spin .8s linear infinite"><mimi-icon name="loader-circle" size="16"></mimi-icon></span></sc-if>{{ label }}</button>
+        <button type="button" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:var(--mimi-control-height);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="key-round" size="16"></mimi-icon>Entrar con SSO</button>
+        <p style="margin:0;font-size:14px;color:var(--mimi-muted-foreground)">¿Primera vez? <a href="#" style="font-weight:600;color:var(--mimi-foreground);text-decoration:underline;text-underline-offset:3px">Crea una cuenta</a></p>
+      </form>
+    </div>
+    <p style="margin:0;font-size:12px;color:var(--mimi-muted-foreground)">Al continuar aceptas los Términos y el Aviso de privacidad.</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1280px&quot;,&quot;height&quot;:&quot;800px&quot;},&quot;mobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;slotKey&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;a&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { loading: false };
+  uid = 'l2' + Math.random().toString(36).slice(2, 6);
+  renderVals() {
+    const m = this.props.mobile === true || this.props.mobile === 'true';
+    return {
+      uid: this.uid, desktop: !m, dir: m ? 'column' : 'row', imgOrder: m ? '0' : '2', imgW: m ? 'auto' : '50%', imgH: m ? '200px' : 'auto', imgR: m ? '0 0 24px 24px' : '0',
+      slot: 'login02-' + (m ? 'm' : 'd') + '-' + (this.props.slotKey || 'a'),
+      pad: m ? '20px 22px 24px' : '32px 40px', formPad: m ? '24px 0' : '0', h1: m ? '26px' : '32px',
+      loading: this.state.loading, label: this.state.loading ? 'Entrando…' : 'Entrar',
+      submit: e => { e.preventDefault(); this.setState({ loading: true }); setTimeout(() => this.setState({ loading: false }), 1400); }
+    };
+  }
+}
+</script>
+</body>
+</html>

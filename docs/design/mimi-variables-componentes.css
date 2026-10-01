@@ -1,0 +1,200 @@
+/* Mimi · tokens compartidos y por componente.
+   Cada variable hereda de un token global; sobrescríbela en :root, en [data-mimi-style] o en un contenedor. */
+[data-mimi-style] {
+  /* Compartidos */
+  --mimi-control-height-sm: calc(var(--mimi-control-height) - 8px); /* Altura · sm */
+  --mimi-control-height-lg: calc(var(--mimi-control-height) + 8px); /* Altura · lg */
+  --mimi-focus-ring: 0 0 0 3px var(--mimi-ring-soft); /* Halo de foco en campos y botones */
+  --mimi-focus-outline: 2px solid var(--mimi-ring); /* Contorno de foco con teclado */
+  --mimi-focus-offset: 2px; /* Separación del contorno */
+  --mimi-disabled-opacity: 0.5; /* Opacidad deshabilitado */
+  --mimi-icon-size: 16px; /* Ícono dentro de controles */
+  --mimi-icon-size-sm: 14px; /* Ícono pequeño */
+
+  /* Button */
+  --mimi-btn-bg: var(--mimi-primary);
+  --mimi-btn-fg: var(--mimi-primary-foreground);
+  --mimi-btn-bg-hover: var(--mimi-primary-hover);
+  --mimi-btn-border: transparent;
+  --mimi-btn-radius: var(--mimi-radius);
+  --mimi-btn-height: var(--mimi-control-height);
+  --mimi-btn-px: 16px;
+  --mimi-btn-gap: 8px;
+  --mimi-btn-font-size: 14px;
+  --mimi-btn-font-weight: 500;
+  --mimi-btn-shadow: var(--mimi-shadow-primary);
+  --mimi-btn-shadow-hover: var(--mimi-shadow-primary-hover);
+  --mimi-btn-ring: var(--mimi-focus-ring);
+  --mimi-btn-press-scale: var(--mimi-press-scale);
+
+  /* Input */
+  --mimi-input-bg: var(--mimi-input-background);
+  --mimi-input-fg: var(--mimi-foreground);
+  --mimi-input-border: var(--mimi-input);
+  --mimi-input-border-hover: var(--mimi-input-hover);
+  --mimi-input-border-focus: var(--mimi-ring);
+  --mimi-input-ring: var(--mimi-focus-ring);
+  --mimi-input-radius: var(--mimi-radius);
+  --mimi-input-height: var(--mimi-control-height);
+  --mimi-input-px: 12px;
+  --mimi-input-placeholder: var(--mimi-muted-foreground);
+  --mimi-input-error: var(--mimi-destructive);
+
+  /* Textarea */
+  --mimi-textarea-bg: var(--mimi-input-background);
+  --mimi-textarea-border: var(--mimi-input);
+  --mimi-textarea-radius: var(--mimi-radius);
+  --mimi-textarea-min-height: var(--mimi-control-height);
+  --mimi-textarea-line-height: 20px;
+  --mimi-textarea-py: calc((var(--mimi-control-height) - 22px) / 2);
+
+  /* Badge */
+  --mimi-badge-bg: var(--mimi-primary);
+  --mimi-badge-fg: var(--mimi-primary-foreground);
+  --mimi-badge-radius: 999px; /* Corrección (Mimi): el diseño decía var(--mimi-badge-radius), una referencia a sí misma que invalida la variable; se usa el valor de mimi-variables.css */
+  --mimi-badge-height: 22px;
+  --mimi-badge-px: 10px;
+  --mimi-badge-font-size: 12px;
+  --mimi-badge-font-weight: 600;
+
+  /* Card */
+  --mimi-card-bg: var(--mimi-card);
+  --mimi-card-fg: var(--mimi-card-foreground);
+  --mimi-card-border: var(--mimi-border);
+  --mimi-card-radius: var(--mimi-radius-card);
+  --mimi-card-shadow: var(--mimi-shadow-card);
+  --mimi-card-padding: 24px;
+
+  /* Avatar */
+  --mimi-avatar-size: 40px;
+  --mimi-avatar-size-sm: 32px;
+  --mimi-avatar-size-lg: 56px;
+  --mimi-avatar-bg: var(--mimi-secondary);
+  --mimi-avatar-fg: var(--mimi-secondary-foreground);
+  --mimi-avatar-radius: 999px;
+
+  /* Switch */
+  --mimi-switch-track-on: var(--mimi-primary);
+  --mimi-switch-track-off: var(--mimi-switch-off);
+  --mimi-switch-thumb: var(--mimi-background);
+  --mimi-switch-width: 36px;
+  --mimi-switch-height: 20px;
+
+  /* Checkbox */
+  --mimi-checkbox-size: 16px;
+  --mimi-checkbox-radius: var(--mimi-radius-sm);
+  --mimi-checkbox-border: var(--mimi-input);
+  --mimi-checkbox-checked-bg: var(--mimi-primary);
+  --mimi-checkbox-check: var(--mimi-primary-foreground);
+
+  /* FormField */
+  --mimi-field-gap: 6px;
+  --mimi-field-label-size: 14px;
+  --mimi-field-label-weight: 500;
+  --mimi-field-hint: var(--mimi-muted-foreground);
+  --mimi-field-error: var(--mimi-destructive-soft-foreground);
+
+  /* Separator */
+  --mimi-separator-color: var(--mimi-border);
+  --mimi-separator-size: 1px;
+
+  /* Skeleton */
+  --mimi-skeleton-bg: var(--mimi-muted);
+  --mimi-skeleton-radius: var(--mimi-radius-sm);
+  --mimi-skeleton-duration: 1.6s;
+
+  /* Select */
+  --mimi-select-trigger-bg: var(--mimi-input-background);
+  --mimi-select-border: var(--mimi-input);
+  --mimi-select-radius: var(--mimi-radius);
+  --mimi-select-height: var(--mimi-control-height);
+  --mimi-select-menu-bg: var(--mimi-popover);
+  --mimi-select-menu-shadow: var(--mimi-shadow-popover);
+  --mimi-select-option-height: 34px;
+  --mimi-select-option-hover: var(--mimi-accent);
+  --mimi-select-option-radius: var(--mimi-radius-sm);
+
+  /* Dialog */
+  --mimi-dialog-overlay: var(--mimi-overlay);
+  --mimi-dialog-overlay-blur: var(--mimi-overlay-blur);
+  --mimi-dialog-bg: var(--mimi-popover);
+  --mimi-dialog-radius: var(--mimi-radius-card);
+  --mimi-dialog-shadow: var(--mimi-shadow-popover);
+  --mimi-dialog-width: 420px;
+  --mimi-dialog-padding: 24px;
+  --mimi-dialog-close-size: 32px;
+
+  /* Confirm */
+  --mimi-confirm-width: 380px;
+  --mimi-confirm-icon-bg: var(--mimi-destructive-soft-bg);
+  --mimi-confirm-icon-fg: var(--mimi-destructive-soft-foreground);
+  --mimi-confirm-action-bg: var(--mimi-destructive);
+
+  /* Toast */
+  --mimi-toast-bg: var(--mimi-popover);
+  --mimi-toast-border: var(--mimi-border);
+  --mimi-toast-radius: var(--mimi-radius);
+  --mimi-toast-shadow: var(--mimi-shadow-popover);
+  --mimi-toast-width: 340px;
+  --mimi-toast-offset: 16px;
+  --mimi-toast-stack-gap: 12px;
+
+  /* Tooltip */
+  --mimi-tooltip-bg: var(--mimi-tooltip);
+  --mimi-tooltip-fg: var(--mimi-tooltip-foreground);
+  --mimi-tooltip-radius: 8px;
+  --mimi-tooltip-font-size: 12.5px;
+  --mimi-tooltip-arrow: 8px;
+  --mimi-tooltip-delay: 300ms;
+
+  /* Popover */
+  --mimi-popover-bg: var(--mimi-popover);
+  --mimi-popover-border: var(--mimi-border);
+  --mimi-popover-radius: var(--mimi-radius);
+  --mimi-popover-shadow: var(--mimi-shadow-popover);
+  --mimi-popover-padding: 16px;
+  --mimi-popover-arrow: 10px;
+
+  /* Dropdown y Context Menu */
+  --mimi-menu-bg: var(--mimi-popover);
+  --mimi-menu-border: var(--mimi-border);
+  --mimi-menu-radius: var(--mimi-radius);
+  --mimi-menu-shadow: var(--mimi-shadow-popover);
+  --mimi-menu-width: 240px;
+  --mimi-menu-item-height: 32px;
+  --mimi-menu-item-radius: var(--mimi-radius-sm);
+  --mimi-menu-item-hover: var(--mimi-accent);
+  --mimi-menu-shortcut: var(--mimi-muted-foreground);
+  --mimi-menu-danger: var(--mimi-destructive-soft-foreground);
+  --mimi-menu-danger-hover: var(--mimi-destructive-soft-bg);
+
+  /* Tabs */
+  --mimi-tabs-fg: var(--mimi-muted-foreground);
+  --mimi-tabs-active-fg: var(--mimi-foreground);
+  --mimi-tabs-indicator: var(--mimi-foreground);
+  --mimi-tabs-pill-bg: var(--mimi-muted);
+  --mimi-tabs-pill-active: var(--mimi-card);
+  --mimi-tabs-height: 44px;
+  --mimi-tabs-spring: cubic-bezier(.3, 1.35, .5, 1);
+
+  /* Toolbar */
+  --mimi-toolbar-bg: var(--mimi-glass);
+  --mimi-toolbar-border: var(--mimi-glass-border);
+  --mimi-toolbar-blur: var(--mimi-glass-blur);
+  --mimi-toolbar-shadow: var(--mimi-shadow-popover);
+  --mimi-toolbar-item-size: 40px;
+  --mimi-toolbar-active-bg: var(--mimi-primary);
+  --mimi-toolbar-active-fg: var(--mimi-primary-foreground);
+  --mimi-toolbar-ring: var(--mimi-info);
+  --mimi-toolbar-pressed-bg: var(--mimi-accent);
+
+  /* Pagination */
+  --mimi-pagination-bg: var(--mimi-glass);
+  --mimi-pagination-border: var(--mimi-glass-border);
+  --mimi-pagination-blur: var(--mimi-glass-blur);
+  --mimi-pagination-shadow: var(--mimi-shadow-popover);
+  --mimi-pagination-item-size: 40px;
+  --mimi-pagination-input-width: 56px;
+  --mimi-pagination-error: var(--mimi-destructive);
+  --mimi-pagination-offset: 20px;
+}

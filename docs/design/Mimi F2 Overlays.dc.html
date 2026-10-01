@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 2 · Dialog, Confirm, Popover, Tooltip y Menús</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F2 Tokens y Tonos.dc.html">Tokens y tonos</a>
+      <a href="Mimi F2 Select.dc.html">Select</a>
+      <a href="Mimi F2 Overlays.dc.html">Dialog · Confirm · Popover · Tooltip · Menús</a>
+      <a href="Mimi F2 Toast Tabs Toolbar.dc.html">Toast · Tabs · Toolbar</a>
+      <a href="Mimi Componentes.dc.html">Fase 1</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,780px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:40px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Overlays</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">1 · Dialog</h3>
+          <div style="position:relative;height:580px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-muted)">
+            <div style="position:absolute;inset:0;padding:20px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="display:flex;align-items:center;gap:10px"><span style="width:28px;height:28px;border-radius:9px;background:var(--mimi-primary)"></span><span style="font-size:15px;font-weight:700">Equipo</span></div>
+                <button onClick="{{ m.openDialog }}" style="display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="pencil" size="15"></mimi-icon>Editar usuario</button>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+                <div style="height:96px;border-radius:var(--mimi-radius);background:var(--mimi-card);border:1px solid var(--mimi-border)"></div>
+                <div style="height:96px;border-radius:var(--mimi-radius);background:var(--mimi-card);border:1px solid var(--mimi-border)"></div>
+                <div style="height:96px;border-radius:var(--mimi-radius);background:var(--mimi-card);border:1px solid var(--mimi-border)"></div>
+              </div>
+              <div style="flex:1;border-radius:var(--mimi-radius);background:var(--mimi-card);border:1px solid var(--mimi-border)"></div>
+            </div>
+            <sc-if value="{{ m.dialogOpen }}" hint-placeholder-val="{{ true }}">
+              <div onClick="{{ m.closeDialog }}" style="position:absolute;inset:0;background:var(--mimi-overlay);backdrop-filter:blur(var(--mimi-overlay-blur));-webkit-backdrop-filter:blur(var(--mimi-overlay-blur))"></div>
+              <div role="dialog" aria-modal="true" aria-labelledby="{{ m.k }}-dlg-t" aria-describedby="{{ m.k }}-dlg-d" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:420px;box-sizing:border-box;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-popover);display:flex;flex-direction:column">
+                <button aria-label="Cerrar" onClick="{{ m.closeDialog }}" style="position:absolute;top:12px;right:12px;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.9)"><mimi-icon name="x" size="18"></mimi-icon></button>
+                <div style="padding:24px 56px 4px 24px;display:flex;flex-direction:column;gap:4px">
+                  <h2 id="{{ m.k }}-dlg-t" style="margin:0;font-size:18px;font-weight:700;letter-spacing:-0.01em">Editar usuario</h2>
+                  <p id="{{ m.k }}-dlg-d" style="margin:0;font-size:14px;color:var(--mimi-muted-foreground)">Los cambios se aplican al guardar.</p>
+                </div>
+                <div style="padding:16px 24px;display:flex;flex-direction:column;gap:14px">
+                  <div style="display:flex;align-items:center;gap:12px">
+                    <span style="width:44px;height:44px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font-size:15px;font-weight:600">AT</span>
+                    <button style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="image" size="14"></mimi-icon>Cambiar foto</button>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+                    <div style="display:flex;flex-direction:column;gap:6px"><label for="{{ m.k }}-n" style="font-size:14px;font-weight:500">Nombre</label><input id="{{ m.k }}-n" value="Ana" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></div>
+                    <div style="display:flex;flex-direction:column;gap:6px"><label for="{{ m.k }}-a" style="font-size:14px;font-weight:500">Apellido</label><input id="{{ m.k }}-a" value="Torres" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></div>
+                  </div>
+                  <div style="display:flex;flex-direction:column;gap:6px"><label for="{{ m.k }}-e" style="font-size:14px;font-weight:500">Correo</label><input id="{{ m.k }}-e" type="email" value="ana@empresa.com" style="height:var(--mimi-control-height);box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></div>
+                  <div style="display:flex;flex-direction:column;gap:6px">
+                    <span style="font-size:14px;font-weight:500">Rol</span>
+                    <div role="radiogroup" aria-label="Rol" style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:3px;border-radius:calc(var(--mimi-radius) + 2px);background:var(--mimi-muted)">
+                      <sc-for list="{{ m.roles }}" as="r" hint-placeholder-count="3">
+                        <button role="radio" aria-checked="{{ r.aria }}" onClick="{{ r.pick }}" style="height:32px;border:0;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:13px;cursor:pointer;transition:var(--mimi-transition);background:{{ r.bg }};color:{{ r.fg }};font-weight:{{ r.fw }};box-shadow:{{ r.sh }}" style-active="transform:scale(var(--mimi-press-scale))">{{ r.label }}</button>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <label style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);cursor:pointer">
+                    <span style="display:flex;flex-direction:column;line-height:1.35"><span style="font-size:14px;font-weight:500">Puede publicar</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">Publica cambios sin revisión.</span></span>
+                    <button role="switch" aria-checked="{{ m.pubAria }}" aria-label="Puede publicar" onClick="{{ m.togglePub }}" style="display:inline-flex;flex-shrink:0;align-items:center;width:36px;height:20px;padding:2px;box-sizing:border-box;border:0;border-radius:999px;cursor:pointer;transition:var(--mimi-transition);background:{{ m.pubTrack }}" style-active="transform:scale(0.9)"><span style="width:16px;height:16px;border-radius:999px;background:var(--mimi-background);box-shadow:0 1px 3px oklch(0 0 0 / .2);transition:transform .2s cubic-bezier(.2,.8,.2,1);transform:{{ m.pubThumb }}"></span></button>
+                  </label>
+                </div>
+                <div style="padding:8px 24px 24px;display:flex;justify-content:flex-end;gap:8px">
+                  <button onClick="{{ m.closeDialog }}" style="display:inline-flex;align-items:center;justify-content:center;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-card);color:var(--mimi-foreground);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-accent);box-shadow:var(--mimi-shadow-neutral-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)">Cancelar</button>
+                  <button onClick="{{ m.closeDialog }}" style="display:inline-flex;align-items:center;justify-content:center;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)">Guardar cambios</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">2 · Confirm</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <sc-for list="{{ m.confirms }}" as="c" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ c.caption }}</span>
+                <div style="position:relative;height:290px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-muted)">
+                  <div style="position:absolute;inset:16px;display:flex;flex-direction:column;gap:10px"><div style="height:40px;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div><div style="flex:1;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div></div>
+                  <div style="position:absolute;inset:0;background:var(--mimi-overlay);backdrop-filter:blur(var(--mimi-overlay-blur));-webkit-backdrop-filter:blur(var(--mimi-overlay-blur))"></div>
+                  <div role="alertdialog" aria-modal="true" aria-labelledby="{{ c.id }}-t" aria-describedby="{{ c.id }}-d" style="position:absolute;left:16px;right:16px;top:50%;transform:translateY(-50%);background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-popover);padding:20px;display:flex;flex-direction:column;gap:14px">
+                    <div style="display:flex;gap:14px;align-items:flex-start">
+                      <span style="width:40px;height:40px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:{{ c.iconBg }};color:{{ c.iconFg }}"><mimi-icon name="{{ c.icon }}" size="20"></mimi-icon></span>
+                      <div style="display:flex;flex-direction:column;gap:4px;min-width:0">
+                        <h2 id="{{ c.id }}-t" style="margin:0;font-size:16px;font-weight:700;line-height:1.3">{{ c.title }}</h2>
+                        <p id="{{ c.id }}-d" style="margin:0;font-size:13px;line-height:1.5;color:var(--mimi-muted-foreground);text-wrap:pretty">{{ c.desc }}</p>
+                      </div>
+                    </div>
+                    <div style="display:flex;justify-content:flex-end;gap:8px">
+                      <button style="display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 14px;box-sizing:border-box;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-card);color:var(--mimi-foreground);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)">Cancelar</button>
+                      <button style="--t:{{ c.btnBg }};--tf:{{ c.btnFg }};--tsh:{{ c.btnSh }};--tr:{{ c.btnRing }};display:inline-flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 14px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:var(--t);color:var(--tf);box-shadow:var(--tsh)" style-hover="background:color-mix(in oklab, var(--t) 88%, var(--mimi-background))" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--tr)">{{ c.action }}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <section style="display:flex;flex-direction:column;gap:16px">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">3 · Popover</h3>
+            <div style="height:380px;border:1px dashed var(--mimi-border);border-radius:var(--mimi-radius-card);display:flex;flex-direction:column;align-items:center;padding-top:28px;box-sizing:border-box">
+              <button aria-expanded="true" aria-haspopup="dialog" style="display:inline-flex;align-items:center;gap:8px;height:var(--mimi-control-height);padding:0 16px;box-sizing:border-box;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);box-shadow:var(--mimi-shadow-neutral)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="user-plus" size="16"></mimi-icon>Invitar</button>
+              <div role="dialog" aria-label="Invitar al proyecto" style="position:relative;margin-top:12px;width:300px;box-sizing:border-box;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);padding:16px;display:flex;flex-direction:column;gap:12px">
+                <span aria-hidden="true" style="position:absolute;top:-6px;left:50%;width:10px;height:10px;margin-left:-5px;background:var(--mimi-popover);border-left:1px solid var(--mimi-border);border-top:1px solid var(--mimi-border);transform:rotate(45deg);border-top-left-radius:2px"></span>
+                <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:15px;font-weight:700">Invitar al proyecto</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">Recibirá un enlace por correo.</span></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><label for="{{ m.k }}-pe" style="font-size:13px;font-weight:500">Correo</label><input id="{{ m.k }}-pe" type="email" placeholder="nombre@empresa.com" style="height:36px;box-sizing:border-box;width:100%;padding:0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></div>
+                <div style="display:flex;flex-direction:column;gap:6px">
+                  <span style="font-size:13px;font-weight:500">Permiso</span>
+                  <div role="radiogroup" aria-label="Permiso" style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:3px;border-radius:calc(var(--mimi-radius) + 2px);background:var(--mimi-muted)">
+                    <sc-for list="{{ m.perms }}" as="r" hint-placeholder-count="3">
+                      <button role="radio" aria-checked="{{ r.aria }}" onClick="{{ r.pick }}" style="height:28px;border:0;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:12.5px;cursor:pointer;transition:var(--mimi-transition);background:{{ r.bg }};color:{{ r.fg }};font-weight:{{ r.fw }};box-shadow:{{ r.sh }}" style-active="transform:scale(var(--mimi-press-scale))">{{ r.label }}</button>
+                    </sc-for>
+                  </div>
+                </div>
+                <label style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer"><button role="checkbox" aria-checked="{{ m.notifyAria }}" aria-label="Avisar por Slack" onClick="{{ m.toggleNotify }}" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;box-sizing:border-box;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);color:var(--mimi-primary-foreground);border:1px solid {{ m.notifyBorder }};background:{{ m.notifyBg }}" style-active="transform:scale(0.9)"><sc-if value="{{ m.notify }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if></button>Avisar también por Slack</label>
+                <button style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 14px;box-sizing:border-box;border:1px solid transparent;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);background:var(--mimi-primary);color:var(--mimi-primary-foreground);box-shadow:var(--mimi-shadow-primary)" style-hover="background:var(--mimi-primary-hover);box-shadow:var(--mimi-shadow-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="send" size="15"></mimi-icon>Enviar invitación</button>
+              </div>
+            </div>
+          </section>
+
+          <section style="display:flex;flex-direction:column;gap:16px">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">4 · Tooltip</h3>
+            <div style="height:380px;border:1px dashed var(--mimi-border);border-radius:var(--mimi-radius-card);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr">
+              <div style="position:relative;display:flex;align-items:center;justify-content:center">
+                <div role="tooltip" id="{{ m.k }}-tt1" style="position:absolute;left:50%;top:calc(50% - 20px - 10px);transform:translate(-50%,-100%);display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:8px;background:var(--mimi-tooltip);color:var(--mimi-tooltip-foreground);font-size:12.5px;font-weight:500;white-space:nowrap;box-shadow:var(--mimi-shadow-neutral)">Copiar<span style="font-family:var(--mimi-font-mono);font-size:11px;opacity:.75">⌘C</span><span aria-hidden="true" style="position:absolute;left:50%;bottom:-4px;width:8px;height:8px;margin-left:-4px;background:var(--mimi-tooltip);transform:rotate(45deg);border-radius:1px"></span></div>
+                <button aria-label="Copiar" aria-describedby="{{ m.k }}-tt1" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="copy" size="16"></mimi-icon></button>
+                <span style="position:absolute;bottom:14px;font-size:12px;color:var(--mimi-muted-foreground)">Arriba</span>
+              </div>
+              <div style="position:relative;display:flex;align-items:center;justify-content:center;border-left:1px dashed var(--mimi-border)">
+                <div role="tooltip" id="{{ m.k }}-tt2" style="position:absolute;left:50%;top:calc(50% + 20px + 10px);transform:translateX(-50%);padding:6px 10px;border-radius:8px;background:var(--mimi-tooltip);color:var(--mimi-tooltip-foreground);font-size:12.5px;font-weight:500;white-space:nowrap;box-shadow:var(--mimi-shadow-neutral)">Descargar PDF<span aria-hidden="true" style="position:absolute;left:50%;top:-4px;width:8px;height:8px;margin-left:-4px;background:var(--mimi-tooltip);transform:rotate(45deg);border-radius:1px"></span></div>
+                <button aria-label="Descargar PDF" aria-describedby="{{ m.k }}-tt2" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="download" size="16"></mimi-icon></button>
+                <span style="position:absolute;top:14px;font-size:12px;color:var(--mimi-muted-foreground)">Abajo</span>
+              </div>
+              <div style="position:relative;display:flex;align-items:center;justify-content:center;border-top:1px dashed var(--mimi-border)">
+                <div role="tooltip" id="{{ m.k }}-tt3" style="position:absolute;right:calc(50% + 20px + 10px);top:50%;transform:translateY(-50%);padding:6px 10px;border-radius:8px;background:var(--mimi-tooltip);color:var(--mimi-tooltip-foreground);font-size:12.5px;font-weight:500;white-space:nowrap;box-shadow:var(--mimi-shadow-neutral)">Ajustes<span aria-hidden="true" style="position:absolute;top:50%;right:-4px;width:8px;height:8px;margin-top:-4px;background:var(--mimi-tooltip);transform:rotate(45deg);border-radius:1px"></span></div>
+                <button aria-label="Ajustes" aria-describedby="{{ m.k }}-tt3" style="margin-left:60px;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="settings" size="16"></mimi-icon></button>
+                <span style="position:absolute;bottom:14px;font-size:12px;color:var(--mimi-muted-foreground)">Izquierda</span>
+              </div>
+              <div style="position:relative;display:flex;align-items:center;justify-content:center;border-top:1px dashed var(--mimi-border);border-left:1px dashed var(--mimi-border)">
+                <div role="tooltip" id="{{ m.k }}-tt4" style="position:absolute;left:calc(50% - 30px + 20px + 10px);top:50%;transform:translateY(-50%);padding:6px 10px;border-radius:8px;background:var(--mimi-tooltip);color:var(--mimi-tooltip-foreground);font-size:12.5px;font-weight:500;white-space:nowrap;box-shadow:var(--mimi-shadow-neutral)">Compartir<span aria-hidden="true" style="position:absolute;top:50%;left:-4px;width:8px;height:8px;margin-top:-4px;background:var(--mimi-tooltip);transform:rotate(45deg);border-radius:1px"></span></div>
+                <button aria-label="Compartir" aria-describedby="{{ m.k }}-tt4" style="margin-right:60px;display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="share-2" size="16"></mimi-icon></button>
+                <span style="position:absolute;bottom:14px;font-size:12px;color:var(--mimi-muted-foreground)">Derecha</span>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">5 · Dropdown Menu</h3>
+          <div style="position:relative;height:470px;border:1px dashed var(--mimi-border);border-radius:var(--mimi-radius-card);padding:24px 28px;box-sizing:border-box">
+            <button aria-haspopup="menu" aria-expanded="true" style="display:inline-flex;align-items:center;gap:8px;height:var(--mimi-control-height);padding:0 12px 0 14px;box-sizing:border-box;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><span style="width:20px;height:20px;border-radius:6px;background:var(--mimi-primary)"></span>panel-ventas<mimi-icon name="chevrons-up-down" size="14"></mimi-icon></button>
+            <div role="menu" aria-label="Proyecto" style="position:absolute;left:28px;top:72px;width:260px;box-sizing:border-box;padding:4px;display:flex;flex-direction:column;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover)">
+              <sc-for list="{{ m.dropdown }}" as="it" hint-placeholder-count="12">
+                <sc-if value="{{ it.isLabel }}"><span role="presentation" style="padding:6px 8px 4px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground)">{{ it.label }}</span></sc-if>
+                <sc-if value="{{ it.isSep }}"><div role="separator" style="height:1px;margin:4px -4px;background:var(--mimi-border)"></div></sc-if>
+                <sc-if value="{{ it.isItem }}">
+                  <div role="{{ it.role }}" aria-checked="{{ it.ariaChecked }}" aria-haspopup="{{ it.hasPopup }}" aria-expanded="{{ it.ariaExpanded }}" tabIndex="-1" onClick="{{ it.onClick }}" style="--hbg:{{ it.hoverBg }};position:relative;display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border-radius:var(--mimi-radius-sm);font-size:14px;cursor:pointer;transition:background-color .12s ease;color:{{ it.color }};background:{{ it.bg }}" style-hover="background:var(--hbg)" style-active="transform:scale(0.985)">
+                    <span style="width:16px;display:inline-flex;justify-content:center;color:{{ it.iconColor }}"><sc-if value="{{ it.hasIcon }}"><mimi-icon name="{{ it.icon }}" size="16"></mimi-icon></sc-if><sc-if value="{{ it.checked }}"><mimi-icon name="check" size="16"></mimi-icon></sc-if></span>
+                    <span style="flex:1;min-width:0">{{ it.label }}</span>
+                    <sc-if value="{{ it.hasKbd }}"><span style="font-family:var(--mimi-font-mono);font-size:11.5px;letter-spacing:.06em;color:var(--mimi-muted-foreground)">{{ it.kbd }}</span></sc-if>
+                    <sc-if value="{{ it.sub }}"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="chevron-right" size="14"></mimi-icon></span></sc-if>
+                    <sc-if value="{{ it.subOpen }}">
+                      <div role="menu" aria-label="{{ it.label }}" style="position:absolute;left:calc(100% + 10px);top:-5px;width:200px;box-sizing:border-box;padding:4px;display:flex;flex-direction:column;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);cursor:default">
+                        <sc-for list="{{ it.subItems }}" as="si">
+                          <sc-if value="{{ si.isSep }}"><div role="separator" style="height:1px;margin:4px -4px;background:var(--mimi-border)"></div></sc-if>
+                          <sc-if value="{{ si.isItem }}"><div role="menuitem" tabIndex="-1" style="display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border-radius:var(--mimi-radius-sm);font-size:14px;cursor:pointer;transition:background-color .12s ease" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.985)"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ si.icon }}" size="16"></mimi-icon></span>{{ si.label }}</div></sc-if>
+                        </sc-for>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+              </sc-for>
+            </div>
+          </div>
+        </section>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">6 · Context Menu</h3>
+          <div onContextMenu="{{ m.onContext }}" onClick="{{ m.closeContext }}" style="position:relative;height:360px;border:1px dashed var(--mimi-input);border-radius:var(--mimi-radius-card);display:flex;align-items:center;justify-content:center;background:var(--mimi-muted);overflow:hidden;cursor:context-menu">
+            <span style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--mimi-muted-foreground);pointer-events:none"><mimi-icon name="mouse-pointer-click" size="16"></mimi-icon>Haz clic derecho en esta área</span>
+            <sc-if value="{{ m.ctxOpen }}" hint-placeholder-val="{{ true }}">
+              <div role="menu" aria-label="Menú contextual" onClick="{{ m.stop }}" style="position:absolute;width:240px;box-sizing:border-box;padding:4px;display:flex;flex-direction:column;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);cursor:default;left:{{ m.ctxX }};top:{{ m.ctxY }}">
+                <sc-for list="{{ m.context }}" as="it" hint-placeholder-count="10">
+                  <sc-if value="{{ it.isLabel }}"><span role="presentation" style="padding:6px 8px 4px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground)">{{ it.label }}</span></sc-if>
+                  <sc-if value="{{ it.isSep }}"><div role="separator" style="height:1px;margin:4px -4px;background:var(--mimi-border)"></div></sc-if>
+                  <sc-if value="{{ it.isItem }}">
+                    <div role="{{ it.role }}" aria-checked="{{ it.ariaChecked }}" aria-disabled="{{ it.ariaDisabled }}" tabIndex="-1" onClick="{{ it.onClick }}" style="--hbg:{{ it.hoverBg }};display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border-radius:var(--mimi-radius-sm);font-size:14px;transition:background-color .12s ease;color:{{ it.color }};background:{{ it.bg }};opacity:{{ it.opacity }};cursor:{{ it.cursor }}" style-hover="background:var(--hbg)" style-active="transform:scale(0.985)">
+                      <span style="width:16px;display:inline-flex;justify-content:center;color:{{ it.iconColor }}"><sc-if value="{{ it.hasIcon }}"><mimi-icon name="{{ it.icon }}" size="16"></mimi-icon></sc-if><sc-if value="{{ it.checked }}"><mimi-icon name="check" size="16"></mimi-icon></sc-if></span>
+                      <span style="flex:1;min-width:0">{{ it.label }}</span>
+                      <sc-if value="{{ it.hasKbd }}"><span style="font-family:var(--mimi-font-mono);font-size:11.5px;letter-spacing:.06em;color:var(--mimi-muted-foreground)">{{ it.kbd }}</span></sc-if>
+                      <sc-if value="{{ it.sub }}"><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="chevron-right" size="14"></mimi-icon></span></sc-if>
+                    </div>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </section>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const noop = () => {};
+class Component extends DCLogic {
+  state = {
+    l: { dialog: true, role: 'Editor', pub: true, perm: 'Editor', notify: true, sidebar: true, minimap: false, bookmarks: true, urls: false, ctx: { open: true, x: 470, y: 24 } },
+    d: { dialog: true, role: 'Editor', pub: true, perm: 'Editor', notify: true, sidebar: true, minimap: false, bookmarks: true, urls: false, ctx: { open: true, x: 470, y: 24 } }
+  };
+  set(k, patch) { this.setState(s => ({ [k]: { ...s[k], ...patch } })); }
+
+  seg(k, key, opts) {
+    const cur = this.state[k][key];
+    return opts.map(label => {
+      const on = cur === label;
+      return { label, aria: on ? 'true' : 'false', pick: () => this.set(k, { [key]: label }),
+        bg: on ? 'var(--mimi-card)' : 'transparent', fg: on ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)',
+        fw: on ? '600' : '500', sh: on ? 'var(--mimi-shadow-neutral)' : 'none' };
+    });
+  }
+
+  items(k, defs) {
+    return defs.map(d => {
+      if (d === '-') return { isSep: true };
+      if (typeof d === 'string') return { isLabel: true, label: d };
+      const st = this.state[k];
+      const checked = d.check ? !!st[d.check] : false;
+      const danger = !!d.danger, dis = !!d.disabled;
+      return {
+        isItem: true, label: d.label, icon: d.icon, hasIcon: !!d.icon && !d.check, checked,
+        kbd: d.kbd || '', hasKbd: !!d.kbd, sub: !!d.sub, subOpen: !!d.subOpen, subItems: d.subItems || [],
+        role: d.check ? 'menuitemcheckbox' : 'menuitem', ariaChecked: d.check ? String(checked) : undefined,
+        hasPopup: d.sub ? 'menu' : undefined, ariaExpanded: d.sub ? String(!!d.subOpen) : undefined, ariaDisabled: dis ? 'true' : undefined,
+        color: danger ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-popover-foreground)',
+        iconColor: danger ? 'var(--mimi-destructive-soft-foreground)' : checked ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)',
+        bg: d.highlight ? 'var(--mimi-accent)' : 'transparent',
+        hoverBg: dis ? 'transparent' : danger ? 'var(--mimi-destructive-soft-bg)' : 'var(--mimi-accent)',
+        opacity: dis ? '.5' : '1', cursor: dis ? 'not-allowed' : 'pointer',
+        onClick: d.check ? (e => { e.stopPropagation(); this.set(k, { [d.check]: !st[d.check] }); }) : noop
+      };
+    });
+  }
+
+  renderVals() {
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+      const st = this.state[k];
+      return {
+        k, cls, label, icon,
+        dialogOpen: st.dialog, openDialog: () => this.set(k, { dialog: true }), closeDialog: () => this.set(k, { dialog: false }),
+        roles: this.seg(k, 'role', ['Lector', 'Editor', 'Admin']),
+        perms: this.seg(k, 'perm', ['Lector', 'Editor', 'Admin']),
+        pubAria: st.pub ? 'true' : 'false', togglePub: e => { e.preventDefault(); this.set(k, { pub: !st.pub }); },
+        pubTrack: st.pub ? 'var(--mimi-primary)' : 'var(--mimi-switch-off)', pubThumb: st.pub ? 'translateX(16px)' : 'translateX(0)',
+        notify: st.notify, notifyAria: st.notify ? 'true' : 'false', toggleNotify: e => { e.preventDefault(); this.set(k, { notify: !st.notify }); },
+        notifyBorder: st.notify ? 'var(--mimi-primary)' : 'var(--mimi-input)', notifyBg: st.notify ? 'var(--mimi-primary)' : 'var(--mimi-input-background)',
+        confirms: [
+          { id: k + '-cf1', caption: 'Neutral', icon: 'upload', iconBg: 'var(--mimi-info-soft)', iconFg: 'var(--mimi-info-soft-foreground)', title: '¿Publicar los cambios?', desc: 'Los 3 componentes editados quedarán visibles para todo el equipo.', action: 'Publicar', btnBg: 'var(--mimi-primary)', btnFg: 'var(--mimi-primary-foreground)', btnSh: 'var(--mimi-shadow-primary)', btnRing: 'var(--mimi-ring-soft)' },
+          { id: k + '-cf2', caption: 'Destructiva', icon: 'trash-2', iconBg: 'var(--mimi-destructive-soft-bg)', iconFg: 'var(--mimi-destructive-soft-foreground)', title: '¿Eliminar este proyecto?', desc: 'Se eliminará «panel-ventas» con sus 24 componentes. Esta acción no se puede deshacer.', action: 'Eliminar proyecto', btnBg: 'var(--mimi-destructive)', btnFg: 'var(--mimi-destructive-foreground)', btnSh: 'var(--mimi-shadow-destructive)', btnRing: 'var(--mimi-destructive-soft)' }
+        ],
+        dropdown: this.items(k, [
+          'Proyecto',
+          { icon: 'settings', label: 'Ajustes', kbd: '⌘,' },
+          { icon: 'credit-card', label: 'Facturación', kbd: '⌘B' },
+          { icon: 'keyboard', label: 'Atajos de teclado', kbd: '⌘K' },
+          '-', 'Vista',
+          { check: 'sidebar', label: 'Barra lateral', kbd: '⌘\\' },
+          { check: 'minimap', label: 'Minimapa' },
+          '-',
+          { icon: 'user-plus', label: 'Invitar personas', sub: true, subOpen: true, highlight: true, subItems: [{ isItem: true, icon: 'mail', label: 'Por correo' }, { isItem: true, icon: 'message-square', label: 'Por mensaje' }, { isSep: true }, { isItem: true, icon: 'link', label: 'Copiar enlace' }] },
+          { icon: 'github', label: 'Repositorio' },
+          '-',
+          { icon: 'trash-2', label: 'Eliminar proyecto', kbd: '⌘⌫', danger: true }
+        ]),
+        ctxOpen: st.ctx.open, ctxX: st.ctx.x + 'px', ctxY: st.ctx.y + 'px',
+        stop: e => e.stopPropagation(),
+        closeContext: () => this.set(k, { ctx: { ...st.ctx, open: false } }),
+        onContext: e => {
+          e.preventDefault();
+          const r = e.currentTarget.getBoundingClientRect();
+          const sc = r.width / e.currentTarget.offsetWidth || 1;
+          const x = Math.min(Math.max((e.clientX - r.left) / sc, 8), e.currentTarget.offsetWidth - 248);
+          const y = Math.min(Math.max((e.clientY - r.top) / sc, 8), e.currentTarget.offsetHeight - 300);
+          this.set(k, { ctx: { open: true, x, y } });
+        },
+        context: this.items(k, [
+          { icon: 'arrow-left', label: 'Atrás', kbd: '⌘[' },
+          { icon: 'arrow-right', label: 'Adelante', kbd: '⌘]', disabled: true },
+          { icon: 'rotate-cw', label: 'Recargar', kbd: '⌘R' },
+          { icon: 'wrench', label: 'Más herramientas', sub: true },
+          '-',
+          { check: 'bookmarks', label: 'Mostrar marcadores', kbd: '⇧⌘B' },
+          { check: 'urls', label: 'Mostrar URL completas' },
+          '-',
+          { icon: 'trash-2', label: 'Eliminar', kbd: '⌫', danger: true }
+        ])
+      };
+    });
+    return { modes };
+  }
+}
+</script>
+</body>
+</html>

@@ -16,7 +16,7 @@
 <script src="mimi-icon.js"></script>
 <style>body{margin:0}a{color:inherit;text-decoration:none}a:hover{text-decoration:underline}</style>
 </helmet>
-<div data-mimi-style="vivid" style="position:sticky;top:0;z-index:50;height:52px;box-sizing:border-box;display:flex;align-items:center;gap:14px;padding:0 20px;background:var(--mimi-background);border-bottom:1px solid var(--mimi-border);font-size:13px;overflow-x:auto">
+<div data-mimi-style="mimi" style="position:sticky;top:0;z-index:50;height:52px;box-sizing:border-box;display:flex;align-items:center;gap:14px;padding:0 20px;background:var(--mimi-background);border-bottom:1px solid var(--mimi-border);font-size:13px;overflow-x:auto">
   <span style="font-weight:700;white-space:nowrap">Mimi · diseño</span>
   <sc-for list="{{ toolbar }}" as="g" hint-placeholder-count="3">
     <div role="radiogroup" aria-label="{{ g.label }}" style="display:inline-flex;gap:2px;padding:3px;border-radius:9px;background:var(--mimi-muted)">
@@ -537,7 +537,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 const PAL = {
-  vivid: { light: ['oklch(0.205 0 0)', 'oklch(0.985 0 0)'], dark: ['oklch(0.922 0 0)', 'oklch(0.205 0 0)'] }
+  vivo: { light: ['oklch(0.205 0 0)', 'oklch(0.985 0 0)'], dark: ['oklch(0.922 0 0)', 'oklch(0.205 0 0)'] }
 };
 const SWATCHES = [
   ['style', 'Neutro'],
@@ -552,7 +552,7 @@ const HEIGHTS = { compact: '36px', normal: '40px', comfy: '44px' };
 class Component extends DCLogic {
   componentDidMount() { this._r = () => this.setState({ w: window.innerWidth }); window.addEventListener('resize', this._r); this._r(); }
   componentWillUnmount() { window.removeEventListener('resize', this._r); }
-  state = { w: 1440, selIcon: 'search', view: 'home', mode: 'both', style: 'vivid', lang: 'es', copied: null, installTab: 'pnpm', mainTab: 'preview', sw: true, cb: false, tPrimary: 'style', tRadius: '12', tDensity: 'normal', tStyle: 'vivid', showExport: false, migTab: 'primeng' };
+  state = { w: 1440, selIcon: 'search', view: 'home', mode: 'both', style: 'vivo', lang: 'es', copied: null, installTab: 'pnpm', mainTab: 'preview', sw: true, cb: false, tPrimary: 'style', tRadius: '12', tDensity: 'normal', tStyle: 'vivo', showExport: false, migTab: 'primeng' };
 
   copy(key, text) {
     try { navigator.clipboard.writeText(text); } catch (e) {}
@@ -642,9 +642,9 @@ class Component extends DCLogic {
     const crumbs = { intro: ['Primeros pasos', 'Introducción'], input: ['Componentes', 'Input'], install: ['Primeros pasos', 'Instalación'], themes: ['Primeros pasos', 'Temas'], icons: ['Primeros pasos', 'Iconos'], migrate: ['Primeros pasos', 'Migrar'] };
     const cr = crumbs[v] || ['', ''];
 
-    const cmds = { pnpm: 'pnpm mimi add input', ng: 'ng g @mimi-ng/cli:ui input' };
+    const cmds = { pnpm: 'ng g mimi input', ng: 'ng g mimi input' };
     const code = {
-      main: "import { MimiInput } from '@/components/ui/input';\n\n@Component({\n  selector: 'app-email',\n  imports: [MimiInput],\n  template: `<input mimiInput type=\"email\" placeholder=\"tu@correo.com\" />`,\n})\nexport class EmailComponent {}",
+      main: "import { MimiInput } from '@/app/components/ui/input/input';\n\n@Component({\n  selector: 'app-email',\n  imports: [MimiInput],\n  template: `<input mimiInput type=\"email\" placeholder=\"tu@correo.com\" />`,\n})\nexport class EmailComponent {}",
       label: '<label for="email">Correo</label>\n<input mimiInput id="email" type="email" placeholder="tu@correo.com" />',
       disabled: '<input mimiInput disabled value="No editable" />',
       error: '<mimi-form-field label="Correo">\n  <input mimiInput type="email" formControlName="email" />\n</mimi-form-field>\n<!-- El mensaje sale del validador: email → «Ingresa un correo válido.» -->',
@@ -671,11 +671,11 @@ class Component extends DCLogic {
 
     const stepData = [
       ['Crea un proyecto Angular 22', 'Si ya tienes uno, salta al paso 2.', 'ng new mi-app --style=css'],
-      ['Añade Tailwind CSS 4', 'Instala Tailwind y su plugin de PostCSS. Luego agrega @import "tailwindcss"; al inicio de src/styles.css.', 'pnpm add tailwindcss @tailwindcss/postcss postcss'],
-      ['Inicializa Mimi', 'Crea mimi.json, copia las variables --mimi-* a styles.css y configura el alias @/components/ui.', 'ng add @mimi-ng/cli'],
-      ['Agrega componentes', 'Cada componente se copia a src/components/ui. Puedes pedir varios a la vez.', 'pnpm mimi add button input card'],
+      ['Añade Tailwind CSS 4', 'Mimi no instala Tailwind: ng add solo verifica que esté. Instálalo y agrega @import "tailwindcss"; al inicio de src/styles.css.', 'npm install tailwindcss @tailwindcss/postcss postcss'],
+      ['Inicializa Mimi', 'Verifica Angular 22 y Tailwind CSS 4, agrega el tema y las utilidades, y crea mimi.json.', 'ng add @mimi-ng/cli'],
+      ['Agrega componentes', 'Cada componente se copia en su carpeta: src/app/components/ui/<nombre>/<nombre>.ts. Puedes pedir varios a la vez.', 'ng g mimi button input card'],
       ['Úsalos', 'Importa el componente o la directiva en tu componente standalone.', '<button mimiBtn>Hola, Mimi</button>'],
-      ['Actualiza cuando quieras', 'Mimi compara tu copia con la versión original y la nueva. Solo aplica lo que no tocaste y te avisa si hay conflictos.', 'pnpm mimi update']
+      ['Edita lo que necesites', 'El código vive en tu proyecto: cámbialo como cualquier otro archivo.', 'src/app/components/ui/button/button.ts']
     ];
     const steps = stepData.map(([title, desc, cmd], i) => {
       const k = 's' + i;
@@ -703,7 +703,7 @@ class Component extends DCLogic {
       iconStrokes: [1, 1.5, 2, 2.5].map(stroke => ({ stroke, label: 'stroke ' + stroke })),
       copyFns, ic, copyLabel,
       features: [
-        { icon: 'git-merge', title: 'Actualiza sin perder tus cambios', body: 'mimi update compara tu copia con la versión original y la nueva, y solo aplica lo que no tocaste. Si hay conflicto, te lo muestra antes de escribir.' },
+        { icon: 'git-merge', title: 'El código es tuyo', body: 'ng g mimi copia cada componente en src/app/components/ui/<nombre>/. Es tu código: lo editas y lo versionas como el resto de tu app.' },
         { icon: 'layers', title: 'Un solo prefijo, cero capas', body: 'Todo se llama mimi: mimiBtn, mimiInput, mimi-card. Sin wrappers ni dependencias ocultas: el código que ves es el que corre.' },
         { icon: 'arrow-left-right', title: '¿Vienes de PrimeNG o NG-ZORRO? Te sentirás en casa', body: 'Los mismos conceptos, presets de tema tipados y una tabla de equivalencias para migrar componente por componente.' },
         { icon: 'list-checks', title: 'Formularios listos: errores automáticos', body: 'mimi-form-field lee el estado del FormControl y muestra el mensaje correcto sin escribir un solo @if.' }
@@ -723,7 +723,7 @@ class Component extends DCLogic {
         border: s.cb ? 'var(--mimi-primary)' : 'var(--mimi-input)', bg: s.cb ? 'var(--mimi-primary)' : 'var(--mimi-input-background)'
       },
       howItWorks: [
-        { n: 1, title: 'La CLI copia', body: 'mimi add escribe el componente en src/components/ui. No hay paquete que actualizar a ciegas.' },
+        { n: 1, title: 'La CLI copia', body: 'ng g mimi escribe el componente en src/app/components/ui/<nombre>/<nombre>.ts. No hay paquete que actualizar a ciegas.' },
         { n: 2, title: 'Un prefijo', body: 'Directivas y componentes empiezan por mimi. Nada de p-, nz- ni capas intermedias.' },
         { n: 3, title: 'Tema opcional', body: 'Las variables --mimi-* funcionan solas. Si quieres más control, un preset tipado las define.' }
       ],

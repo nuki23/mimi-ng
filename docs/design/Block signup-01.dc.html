@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:100%;min-height:100%;box-sizing:border-box;display:flex;background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans)">
+  <sc-if value="{{ desktop }}">
+    <aside style="width:44%;flex-shrink:0;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;padding:40px 48px;background:var(--mimi-muted);border-right:1px solid var(--mimi-border)">
+      <div style="display:flex;align-items:center;gap:10px"><span style="width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:18px;font-weight:800;line-height:1">m</span><span style="font-size:16px;font-weight:700">Mimi Ventas</span></div>
+      <div style="display:flex;flex-direction:column;gap:22px">
+        <h2 style="margin:0;font-size:30px;line-height:1.15;font-weight:800;letter-spacing:-0.025em;text-wrap:balance">Todo tu equipo comercial en un solo panel.</h2>
+        <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ perks }}" as="p" hint-placeholder-count="3"><li style="display:flex;gap:12px;align-items:flex-start"><span style="width:30px;height:30px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;background:var(--mimi-card);border:1px solid var(--mimi-border)"><mimi-icon name="{{ p.icon }}" size="15"></mimi-icon></span><span style="display:flex;flex-direction:column;line-height:1.4"><span style="font-size:14.5px;font-weight:600">{{ p.t }}</span><span style="font-size:13.5px;color:var(--mimi-muted-foreground)">{{ p.d }}</span></span></li></sc-for>
+        </ul>
+      </div>
+      <span style="font-size:12.5px;color:var(--mimi-muted-foreground)">14 días gratis · sin tarjeta</span>
+    </aside>
+  </sc-if>
+  <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:center;padding:{{ pad }}">
+    <form onSubmit="{{ submit }}" novalidate="" style="width:100%;max-width:400px;display:flex;flex-direction:column;gap:16px">
+      <sc-if value="{{ mobile }}"><span style="width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:11px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:20px;font-weight:800;line-height:1">m</span></sc-if>
+      <div style="display:flex;flex-direction:column;gap:4px"><h1 style="margin:0;font-size:26px;font-weight:800;letter-spacing:-0.025em">Crea tu cuenta</h1><p style="margin:0;font-size:14px;color:var(--mimi-muted-foreground)">Tarda menos de un minuto.</p></div>
+      <sc-for list="{{ fields }}" as="f" hint-placeholder-count="2">
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label for="{{ f.id }}" style="font-size:14px;font-weight:500;color:{{ f.labelFg }}">{{ f.label }}</label>
+          <input id="{{ f.id }}" type="{{ f.type }}" autocomplete="{{ f.ac }}" aria-invalid="{{ f.inv }}" aria-describedby="{{ f.id }}-m" value="{{ f.value }}" onChange="{{ f.onChange }}" onBlur="{{ f.onBlur }}" style="height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition);border:1px solid {{ f.border }};box-shadow:{{ f.ring }}" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">
+          <sc-if value="{{ f.hasMsg }}"><span id="{{ f.id }}-m" style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:{{ f.msgFg }}"><mimi-icon name="{{ f.msgIcon }}" size="13"></mimi-icon>{{ f.msg }}</span></sc-if>
+        </div>
+      </sc-for>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label for="{{ uid }}-pw" style="font-size:14px;font-weight:500">Contraseña</label>
+        <div style="display:flex;align-items:center;height:var(--mimi-control-height);box-sizing:border-box;padding:0 4px 0 12px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-input-hover)"><input id="{{ uid }}-pw" type="{{ pwType }}" autocomplete="new-password" aria-describedby="{{ uid }}-pws" value="{{ pw }}" onChange="{{ onPw }}" style="flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none"><button type="button" aria-label="{{ eyeLabel }}" onClick="{{ toggleEye }}" style="display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.88)"><mimi-icon name="{{ eye }}" size="16"></mimi-icon></button></div>
+        <div id="{{ uid }}-pws" style="display:flex;align-items:center;gap:10px"><div aria-hidden="true" style="flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:4px"><sc-for list="{{ bars }}" as="b" hint-placeholder-count="4"><span style="height:5px;border-radius:999px;transition:background-color .3s ease;background:{{ b.bg }}"></span></sc-for></div><span style="min-width:44px;text-align:right;font-size:12.5px;font-weight:700;color:{{ levelFg }}">{{ level }}</span></div>
+        <ul style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:3px 10px"><sc-for list="{{ rules }}" as="r" hint-placeholder-count="4"><li style="display:flex;align-items:center;gap:6px;font-size:12px;color:{{ r.fg }}"><mimi-icon name="{{ r.icon }}" size="13"></mimi-icon>{{ r.label }}</li></sc-for></ul>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <label for="{{ uid }}-cf" style="font-size:14px;font-weight:500;color:{{ cf.labelFg }}">Confirmar contraseña</label>
+        <input id="{{ uid }}-cf" type="password" autocomplete="new-password" aria-invalid="{{ cf.inv }}" value="{{ cf.value }}" onChange="{{ cf.onChange }}" style="height:var(--mimi-control-height);box-sizing:border-box;padding:0 12px;border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;outline:none;transition:var(--mimi-transition);border:1px solid {{ cf.border }};box-shadow:{{ cf.ring }}">
+        <sc-if value="{{ cf.hasMsg }}"><span style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:{{ cf.msgFg }}"><mimi-icon name="{{ cf.msgIcon }}" size="13"></mimi-icon>{{ cf.msg }}</span></sc-if>
+      </div>
+      <label style="display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:1.45;cursor:pointer"><button type="button" role="checkbox" aria-checked="{{ termsAria }}" onClick="{{ toggleTerms }}" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;flex-shrink:0;margin-top:2px;padding:0;box-sizing:border-box;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);color:var(--mimi-primary-foreground);border:1px solid {{ termsBorder }};background:{{ termsBg }}" style-active="transform:scale(0.88)"><sc-if value="{{ terms }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if></button>Acepto los Términos y el Aviso de privacidad.</label>
+      <button type="submit" disabled="{{ disabled }}" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;height:calc(var(--mimi-control-height) + 4px);border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:15px;font-weight:600;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition);opacity:{{ btnOp }};cursor:{{ btnCur }}" style-active="transform:scale(var(--mimi-press-scale))">{{ btnLabel }}</button>
+      <span style="font-size:12.5px;text-align:center;color:var(--mimi-muted-foreground)">{{ btnHint }}</span>
+    </form>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1280px&quot;,&quot;height&quot;:&quot;800px&quot;},&quot;mobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const LV = [['', 'var(--mimi-muted-foreground)', 'var(--mimi-track)'], ['Débil', 'var(--mimi-destructive-soft-foreground)', 'var(--mimi-strength-weak)'], ['Media', 'var(--mimi-warning-soft-foreground)', 'var(--mimi-strength-medium)'], ['Fuerte', 'var(--mimi-success-soft-foreground)', 'var(--mimi-strength-strong)']];
+class Component extends DCLogic {
+  state = { name: 'Ana Torres', email: 'ana@empresa', touched: { email: true }, pw: 'Mimi2026', cf: 'Mimi2025', show: false, terms: false, done: false };
+  uid = 'su' + Math.random().toString(36).slice(2, 6);
+  renderVals() {
+    const m = this.props.mobile === true || this.props.mobile === 'true', s = this.state;
+    const emailOk = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(s.email), nameOk = s.name.trim().length >= 2;
+    const rules = [s.pw.length >= 8, /[A-ZÁÉÍÓÚÑ]/.test(s.pw), /\d/.test(s.pw), /[^A-Za-z0-9]/.test(s.pw)];
+    const n = rules.filter(Boolean).length, level = !s.pw ? 0 : n <= 1 ? 1 : n <= 3 ? 2 : 3;
+    const cfOk = s.cf && s.cf === s.pw;
+    const field = (key, label, type, ac, ok, msgErr, msgOk) => {
+      const t = s.touched[key], err = t && !ok, good = t && ok;
+      return { id: this.uid + key, label, type, ac, value: s[key], inv: String(err), border: err ? 'var(--mimi-destructive)' : 'var(--mimi-input)', ring: err ? '0 0 0 3px var(--mimi-destructive-soft)' : 'none', labelFg: err ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-foreground)',
+        hasMsg: err || good, msg: err ? msgErr : msgOk, msgFg: err ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-success-soft-foreground)', msgIcon: err ? 'circle-alert' : 'circle-check',
+        onChange: e => this.setState({ [key]: e.target.value }), onBlur: () => this.setState(st => ({ touched: { ...st.touched, [key]: true } })) };
+    };
+    const valid = nameOk && emailOk && n === 4 && cfOk && s.terms;
+    const missing = [!emailOk && 'un correo válido', n < 4 && 'una contraseña fuerte', !cfOk && 'que las contraseñas coincidan', !s.terms && 'aceptar los términos'].filter(Boolean);
+    return {
+      uid: this.uid, desktop: !m, mobile: m, pad: m ? '28px 22px' : '40px',
+      perks: [['git-merge', 'Sincroniza sin perder cambios', 'Tu equipo trabaja sobre los mismos datos.'], ['shield-check', 'Seguro por defecto', 'Cifrado y 2FA para todos.'], ['headset', 'Soporte en español', 'Respuesta en menos de 4 horas.']].map(([icon, t, d]) => ({ icon, t, d })),
+      fields: [field('name', 'Nombre completo', 'text', 'name', nameOk, 'Escribe tu nombre.', 'Perfecto.'), field('email', 'Correo de trabajo', 'email', 'email', emailOk, 'Falta el dominio, por ejemplo ana@empresa.com.', 'Correo válido.')],
+      pw: s.pw, pwType: s.show ? 'text' : 'password', eye: s.show ? 'eye-off' : 'eye', eyeLabel: s.show ? 'Ocultar contraseña' : 'Mostrar contraseña', toggleEye: () => this.setState({ show: !s.show }), onPw: e => this.setState({ pw: e.target.value }),
+      bars: [0, 1, 2, 3].map(i => ({ bg: i < (level === 3 ? 4 : level === 2 ? Math.max(2, Math.min(n, 3)) : level) ? LV[level][2] : 'var(--mimi-track)' })), level: LV[level][0], levelFg: LV[level][1],
+      rules: ['8 caracteres o más', 'Una mayúscula', 'Un número', 'Un símbolo'].map((l, i) => ({ label: l, icon: rules[i] ? 'circle-check' : 'circle', fg: rules[i] ? 'var(--mimi-success-soft-foreground)' : 'var(--mimi-muted-foreground)' })),
+      cf: { value: s.cf, inv: String(!!s.cf && !cfOk), border: s.cf && !cfOk ? 'var(--mimi-destructive)' : 'var(--mimi-input)', ring: s.cf && !cfOk ? '0 0 0 3px var(--mimi-destructive-soft)' : 'none', labelFg: s.cf && !cfOk ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-foreground)', hasMsg: !!s.cf, msg: cfOk ? 'Coinciden.' : 'Las contraseñas no coinciden.', msgFg: cfOk ? 'var(--mimi-success-soft-foreground)' : 'var(--mimi-destructive-soft-foreground)', msgIcon: cfOk ? 'circle-check' : 'circle-alert', onChange: e => this.setState({ cf: e.target.value }) },
+      terms: s.terms, termsAria: String(s.terms), toggleTerms: () => this.setState({ terms: !s.terms }), termsBorder: s.terms ? 'var(--mimi-primary)' : 'var(--mimi-input)', termsBg: s.terms ? 'var(--mimi-primary)' : 'var(--mimi-input-background)',
+      disabled: !valid, btnOp: valid ? '1' : '.5', btnCur: valid ? 'pointer' : 'not-allowed', btnLabel: s.done ? '¡Cuenta creada!' : 'Crear cuenta',
+      btnHint: valid ? 'Todo listo.' : 'Falta ' + missing.join(', ') + '.',
+      submit: e => { e.preventDefault(); if (valid) this.setState({ done: true }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

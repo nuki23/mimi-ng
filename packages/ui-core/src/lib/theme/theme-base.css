@@ -1,5 +1,5 @@
 /* Mimi · tema base (estilo Vivid).
-   Valores tomados de docs/design/tokens-vivid.css. Nombres según docs/spec.md, sección 6.
+   Valores tomados de docs/design/tokens-mimi.css. Nombres según docs/spec.md, sección 6.
    Este archivo no importa Tailwind ni carga fuentes: lo hace la app que lo usa. */
 
 @custom-variant dark (&:where(.dark, .dark *));

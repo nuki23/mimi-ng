@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}
+@keyframes mimi-indet{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+@media (prefers-reduced-motion: reduce){[data-fx]{animation:none !important;transition:none !important}}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 5 · Estructura</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F5 Estructura.dc.html">Sheet · Accordion · Stepper · Progress</a>
+      <a href="Mimi F5 Dashboard y Media.dc.html">Sidebar · Carousel · Preview · Timeline · Resizable · Hover Card · Rating</a>
+      <a href="Mimi F5 Effects.dc.html">Mimi Effects</a>
+      <a href="Mimi F4 Panel admin.dc.html">Fase 4</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,780px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:40px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Estructura</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">1 · Sheet / Drawer</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <sc-for list="{{ m.sheets }}" as="s" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ s.caption }}</span><button onClick="{{ s.toggle }}" style="height:28px;padding:0 10px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.94)">{{ s.btn }}</button></div>
+                <div style="position:relative;height:380px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-muted)">
+                  <div style="position:absolute;inset:14px;display:flex;flex-direction:column;gap:10px"><div style="height:36px;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div><div style="flex:1;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div></div>
+                  <div data-fx="" onClick="{{ s.close }}" style="position:absolute;inset:0;background:var(--mimi-overlay);backdrop-filter:blur(var(--mimi-overlay-blur));-webkit-backdrop-filter:blur(var(--mimi-overlay-blur));transition:opacity .3s ease;opacity:{{ s.ovOp }};pointer-events:{{ s.ovPe }}"></div>
+                  <div data-fx="" role="dialog" aria-modal="true" aria-label="{{ s.title }}" aria-hidden="{{ s.hidden }}" style="position:absolute;top:12px;bottom:12px;width:74%;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;background:color-mix(in oklab, var(--mimi-popover) 84%, transparent);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-glass-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-popover);transition:transform .42s cubic-bezier(.32,.72,0,1);left:{{ s.left }};right:{{ s.right }};transform:{{ s.tf }}">
+                    <div style="display:flex;align-items:flex-start;gap:12px;padding:18px 16px 12px 18px">
+                      <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:700">{{ s.title }}</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">{{ s.desc }}</span></div>
+                      <button aria-label="Cerrar" onClick="{{ s.close }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.9)"><mimi-icon name="x" size="17"></mimi-icon></button>
+                    </div>
+                    <sc-if value="{{ s.isForm }}">
+                      <div style="flex:1;padding:4px 18px;display:flex;flex-direction:column;gap:12px">
+                        <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:13px;font-weight:500">Empresa</label><input value="Café Altura" style="height:36px;box-sizing:border-box;padding:0 10px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;outline:none" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></div>
+                        <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:13px;font-weight:500">Contacto</label><input value="Lucía Vera" style="height:36px;box-sizing:border-box;padding:0 10px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;outline:none" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></div>
+                        <div style="display:flex;flex-direction:column;gap:6px"><label style="font-size:13px;font-weight:500">Plan</label><div style="display:flex;align-items:center;height:36px;box-sizing:border-box;padding:0 10px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);font-size:13.5px"><span style="flex:1">Equipo</span><mimi-icon name="chevron-down" size="15"></mimi-icon></div></div>
+                      </div>
+                      <div style="display:flex;justify-content:flex-end;gap:8px;padding:14px 18px;border-top:1px solid var(--mimi-border)"><button onClick="{{ s.close }}" style="height:34px;padding:0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))">Cancelar</button><button onClick="{{ s.close }}" style="height:34px;padding:0 12px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale))">Guardar</button></div>
+                    </sc-if>
+                    <sc-if value="{{ s.isNav }}">
+                      <nav style="flex:1;padding:4px 10px;display:flex;flex-direction:column;gap:2px">
+                        <sc-for list="{{ navItems }}" as="n"><button style="--hbg:{{ n.hbg }};display:flex;align-items:center;gap:10px;height:38px;padding:0 10px;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:14px;text-align:left;cursor:pointer;transition:var(--mimi-transition);background:{{ n.bg }};color:{{ n.fg }};font-weight:{{ n.fw }}" style-hover="background:var(--hbg)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ n.icon }}" size="17"></mimi-icon>{{ n.label }}</button></sc-for>
+                      </nav>
+                    </sc-if>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Desde abajo · escritorio · arrastra la barra para cerrar</span><button onClick="{{ m.deskBottom.toggle }}" style="height:28px;padding:0 10px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.94)">{{ m.deskBottom.btn }}</button></div>
+            <div style="position:relative;height:400px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);overflow:hidden;background:var(--mimi-muted)">
+              <div style="position:absolute;inset:14px;display:grid;grid-template-columns:160px 1fr;gap:10px"><div style="border-radius:var(--mimi-radius);background:var(--mimi-card)"></div><div style="display:flex;flex-direction:column;gap:10px"><div style="height:36px;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div><div style="flex:1;border-radius:var(--mimi-radius);background:var(--mimi-card)"></div></div></div>
+              <div data-fx="" onClick="{{ m.deskBottom.close }}" style="position:absolute;inset:0;background:var(--mimi-overlay);backdrop-filter:blur(var(--mimi-overlay-blur));-webkit-backdrop-filter:blur(var(--mimi-overlay-blur));transition:opacity .3s ease;opacity:{{ m.deskBottom.ovOp }};pointer-events:{{ m.deskBottom.ovPe }}"></div>
+              <div data-fx="" role="dialog" aria-modal="true" aria-label="Filtros" style="position:absolute;left:50%;bottom:12px;width:min(520px, calc(100% - 24px));margin-left:max(-260px, calc(-50% + 12px));box-sizing:border-box;padding:8px 22px 20px;display:flex;flex-direction:column;gap:14px;background:color-mix(in oklab, var(--mimi-popover) 84%, transparent);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid var(--mimi-glass-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-popover);transition:{{ m.deskBottom.tr }};transform:{{ m.deskBottom.tf }}">
+                <button aria-label="Arrastra hacia abajo para cerrar" onPointerDown="{{ m.deskBottom.down }}" onPointerMove="{{ m.deskBottom.move }}" onPointerUp="{{ m.deskBottom.up }}" onPointerCancel="{{ m.deskBottom.up }}" onClick="{{ m.deskBottom.tap }}" style="align-self:center;display:flex;align-items:center;justify-content:center;width:72px;height:20px;padding:0;border:0;background:transparent;cursor:grab;touch-action:none"><span style="width:40px;height:5px;border-radius:999px;background:color-mix(in oklab, var(--mimi-foreground) 25%, transparent)"></span></button>
+                <div style="display:flex;flex-direction:column;gap:2px;text-align:center"><span style="font-size:17px;font-weight:700">Objetivo de ventas</span><span style="font-size:13.5px;color:var(--mimi-muted-foreground)">Ajusta la meta mensual del equipo.</span></div>
+                <div style="display:flex;align-items:center;justify-content:center;gap:22px"><button aria-label="Reducir" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:1px solid var(--mimi-border);border-radius:999px;background:var(--mimi-card);color:var(--mimi-foreground);cursor:pointer" style-active="transform:scale(0.9)"><mimi-icon name="minus" size="16"></mimi-icon></button><span style="display:flex;flex-direction:column;align-items:center"><span style="font-size:44px;font-weight:800;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;line-height:1">$450k</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">por mes</span></span><button aria-label="Aumentar" style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:1px solid var(--mimi-border);border-radius:999px;background:var(--mimi-card);color:var(--mimi-foreground);cursor:pointer" style-active="transform:scale(0.9)"><mimi-icon name="plus" size="16"></mimi-icon></button></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><button onClick="{{ m.deskBottom.close }}" style="height:40px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))">Cancelar</button><button onClick="{{ m.deskBottom.close }}" style="height:40px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale))">Guardar meta</button></div>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;gap:20px;align-items:flex-start">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;justify-content:space-between;width:280px"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Desde abajo · móvil</span><button onClick="{{ m.bottom.toggle }}" style="height:28px;padding:0 10px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.94)">{{ m.bottom.btn }}</button></div>
+              <div style="position:relative;width:280px;height:520px;box-sizing:border-box;border:8px solid var(--mimi-foreground);border-radius:40px;overflow:hidden;background:var(--mimi-muted)">
+                <div style="position:absolute;left:50%;top:8px;width:84px;height:22px;margin-left:-42px;border-radius:999px;background:var(--mimi-foreground);z-index:3"></div>
+                <div style="position:absolute;inset:44px 14px 14px;display:flex;flex-direction:column;gap:10px"><div style="height:140px;border-radius:16px;background:var(--mimi-card)"></div><div style="height:14px;width:70%;border-radius:4px;background:var(--mimi-card)"></div><div style="height:14px;width:45%;border-radius:4px;background:var(--mimi-card)"></div></div>
+                <div data-fx="" onClick="{{ m.bottom.close }}" style="position:absolute;inset:0;background:var(--mimi-overlay);transition:opacity .3s ease;opacity:{{ m.bottom.ovOp }};pointer-events:{{ m.bottom.ovPe }}"></div>
+                <div data-fx="" role="dialog" aria-modal="true" aria-label="Compartir" style="position:absolute;left:8px;right:8px;bottom:8px;box-sizing:border-box;padding:8px 16px 18px;display:flex;flex-direction:column;gap:14px;background:color-mix(in oklab, var(--mimi-popover) 84%, transparent);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border:1px solid var(--mimi-glass-border);border-radius:28px;box-shadow:var(--mimi-shadow-popover);transition:{{ m.bottom.tr }};transform:{{ m.bottom.tf }}">
+                  <button aria-label="Arrastra hacia abajo para cerrar" onPointerDown="{{ m.bottom.down }}" onPointerMove="{{ m.bottom.move }}" onPointerUp="{{ m.bottom.up }}" onPointerCancel="{{ m.bottom.up }}" onClick="{{ m.bottom.tap }}" style="align-self:center;display:flex;align-items:center;justify-content:center;width:72px;height:20px;padding:0;border:0;background:transparent;cursor:grab;touch-action:none"><span style="width:40px;height:5px;border-radius:999px;background:color-mix(in oklab, var(--mimi-foreground) 25%, transparent)"></span></button>
+                  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:16px;font-weight:700">Compartir informe</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">Ventas · septiembre 2026</span></div>
+                  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+                    <sc-for list="{{ shareItems }}" as="sh"><button style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 0;border:0;border-radius:var(--mimi-radius);background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:11.5px;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.92)"><span style="width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:14px;background:{{ sh.bg }};color:{{ sh.fg }}"><mimi-icon name="{{ sh.icon }}" size="20"></mimi-icon></span>{{ sh.label }}</button></sc-for>
+                  </div>
+                  <button onClick="{{ m.bottom.close }}" style="height:44px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-secondary);color:var(--mimi-secondary-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:600;cursor:pointer;transition:var(--mimi-transition)" style-active="transform:scale(var(--mimi-press-scale))">Cancelar</button>
+                </div>
+              </div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:10px;padding-top:28px;font-size:13px;line-height:1.55;color:var(--mimi-muted-foreground)">
+              <span style="font-size:14px;font-weight:600;color:var(--mimi-foreground)">Comportamiento</span>
+              <span>Panel flotante: separado 12 px de los bordes (8 px en móvil), con radio de tarjeta en todas las esquinas, sombra y fondo translúcido con desenfoque. Entra en 420 ms con curva cubic-bezier(.32,.72,0,1).</span>
+              <span>Se cierra con la X, con Esc o tocando el fondo. Los de abajo se arrastran desde la barra de agarre: al pasar 80 px se cierran, si no vuelven a su sitio.</span>
+              <span>El foco queda atrapado dentro mientras está abierto y vuelve al botón que lo abrió al cerrarse.</span>
+              <span>Con «reducir movimiento» aparece sin deslizarse.</span>
+            </div>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:16px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">2 · Accordion</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <sc-for list="{{ m.accordions }}" as="a" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ a.caption }}</span>
+                <div style="display:flex;flex-direction:column;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card);overflow:hidden">
+                  <sc-for list="{{ a.items }}" as="it">
+                    <div style="border-top:{{ it.bt }}">
+                      <h4 style="margin:0"><button id="{{ it.id }}" aria-expanded="{{ it.aria }}" aria-controls="{{ it.id }}-p" onClick="{{ it.toggle }}" style="display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:0 16px;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14.5px;font-weight:600;text-align:left;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)"><span style="flex:1">{{ it.q }}</span><span data-fx="" style="display:inline-flex;color:var(--mimi-muted-foreground);transition:transform .3s cubic-bezier(.2,.8,.2,1);transform:{{ it.rot }}"><mimi-icon name="{{ a.icon }}" size="17"></mimi-icon></span></button></h4>
+                      <div id="{{ it.id }}-p" role="region" aria-labelledby="{{ it.id }}" data-fx="" style="display:grid;transition:grid-template-rows .3s cubic-bezier(.2,.8,.2,1);grid-template-rows:{{ it.rows }}"><div style="overflow:hidden"><p style="margin:0;padding:0 16px 16px;font-size:13.5px;line-height:1.6;color:var(--mimi-muted-foreground);text-wrap:pretty">{{ it.a }}</p></div></div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">3 · Stepper</h3>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <span style="font-size:12px;color:var(--mimi-muted-foreground)">Horizontal · interactivo</span>
+            <ol aria-label="Alta de cliente" style="list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr)">
+              <sc-for list="{{ m.stepsH }}" as="s" hint-placeholder-count="5">
+                <li aria-current="{{ s.current }}" style="position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+                  <span aria-hidden="true" data-fx="" style="position:absolute;top:15px;left:calc(50% + 22px);right:calc(-50% + 22px);height:2px;border-radius:2px;transition:background-color .4s ease;background:{{ s.line }};display:{{ s.lineShow }}"></span>
+                  <span data-fx="" style="position:relative;width:32px;height:32px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-size:13px;font-weight:700;transition:var(--mimi-transition);background:{{ s.bg }};color:{{ s.fg }};border:2px solid {{ s.border }};box-shadow:{{ s.ring }}"><sc-if value="{{ s.hasIcon }}"><mimi-icon name="{{ s.icon }}" size="15" stroke="3"></mimi-icon></sc-if><sc-if value="{{ s.noIcon }}">{{ s.n }}</sc-if></span>
+                  <div style="display:flex;flex-direction:column;gap:1px"><span style="font-size:13px;font-weight:600;color:{{ s.titleFg }}">{{ s.title }}</span><span style="font-size:11.5px;color:var(--mimi-muted-foreground)">{{ s.state }}</span></div>
+                </li>
+              </sc-for>
+            </ol>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card)">
+              <span style="font-size:13.5px"><b>Paso {{ m.stepNum }} de 5.</b> <span style="color:var(--mimi-muted-foreground)">{{ m.stepHint }}</span></span>
+              <div style="display:flex;gap:8px"><button onClick="{{ m.stepPrev }}" disabled="{{ m.prevDis }}" style="height:34px;padding:0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition);opacity:{{ m.prevOp }}" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))">Atrás</button><button onClick="{{ m.stepNext }}" style="height:34px;padding:0 14px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale))">{{ m.nextLabel }}</button></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Vertical · completado, error, actual y pendiente</span>
+              <ol aria-label="Despliegue" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column">
+                <sc-for list="{{ stepsV }}" as="s" hint-placeholder-count="5">
+                  <li aria-current="{{ s.current }}" style="display:grid;grid-template-columns:32px 1fr;gap:14px">
+                    <div style="display:flex;flex-direction:column;align-items:center"><span style="width:32px;height:32px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-size:13px;font-weight:700;background:{{ s.bg }};color:{{ s.fg }};border:2px solid {{ s.border }};box-shadow:{{ s.ring }}"><sc-if value="{{ s.hasIcon }}"><mimi-icon name="{{ s.icon }}" size="15" stroke="3"></mimi-icon></sc-if><sc-if value="{{ s.noIcon }}">{{ s.n }}</sc-if></span><span style="flex:1;width:2px;min-height:18px;margin:4px 0;border-radius:2px;background:{{ s.line }};display:{{ s.lineShow }}"></span></div>
+                    <div style="display:flex;flex-direction:column;gap:3px;padding:5px 0 18px"><span style="font-size:14px;font-weight:600;color:{{ s.titleFg }}">{{ s.title }}</span><span style="font-size:13px;line-height:1.45;color:{{ s.descFg }}">{{ s.desc }}</span><sc-if value="{{ s.retry }}"><button style="align-self:flex-start;display:inline-flex;align-items:center;gap:6px;height:30px;margin-top:6px;padding:0 10px;border:1px solid color-mix(in oklab, var(--mimi-destructive) 45%, var(--mimi-border));border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-destructive-soft-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-destructive-soft-bg)" style-active="transform:scale(0.94)"><mimi-icon name="rotate-cw" size="13"></mimi-icon>Reintentar</button></sc-if></div>
+                  </li>
+                </sc-for>
+              </ol>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <span style="font-size:12px;color:var(--mimi-muted-foreground)">Leyenda de estados</span>
+              <div style="display:flex;flex-direction:column;gap:12px;padding:16px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card)">
+                <sc-for list="{{ legend }}" as="l" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:12px"><span style="width:28px;height:28px;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-size:12px;font-weight:700;background:{{ l.bg }};color:{{ l.fg }};border:2px solid {{ l.border }};box-shadow:{{ l.ring }}"><sc-if value="{{ l.hasIcon }}"><mimi-icon name="{{ l.icon }}" size="13" stroke="3"></mimi-icon></sc-if><sc-if value="{{ l.noIcon }}">3</sc-if></span><div style="display:flex;flex-direction:column"><span style="font-size:13.5px;font-weight:600">{{ l.label }}</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">{{ l.desc }}</span></div></div></sc-for>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">4 · Progress</h3>
+            <div style="display:flex;gap:6px"><button aria-label="Menos" onClick="{{ m.pDec }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:var(--mimi-card);color:var(--mimi-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.9)"><mimi-icon name="minus" size="14"></mimi-icon></button><button aria-label="Más" onClick="{{ m.pInc }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-sm);background:var(--mimi-card);color:var(--mimi-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.9)"><mimi-icon name="plus" size="14"></mimi-icon></button></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px 32px">
+            <div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="font-weight:500">Subiendo informe.pdf</span><span style="font-variant-numeric:tabular-nums;color:var(--mimi-muted-foreground)">{{ m.pText }}</span></div><div role="progressbar" aria-label="Subiendo informe.pdf" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ m.p }}" style="height:8px;border-radius:999px;background:var(--mimi-track);overflow:hidden"><div data-fx="" style="height:100%;border-radius:999px;background:var(--mimi-primary);transition:width .35s cubic-bezier(.2,.8,.2,1);width:{{ m.pW }}"></div></div><span style="font-size:12px;color:var(--mimi-muted-foreground)">Determinada</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font-size:13.5px"><span style="font-weight:500">Sincronizando…</span><span style="color:var(--mimi-muted-foreground)">Sin estimación</span></div><div role="progressbar" aria-label="Sincronizando" aria-busy="true" style="position:relative;height:8px;border-radius:999px;background:var(--mimi-track);overflow:hidden"><div data-fx="" style="position:absolute;top:0;bottom:0;left:0;width:40%;border-radius:999px;background:var(--mimi-primary);animation:mimi-indet 1.4s cubic-bezier(.4,0,.2,1) infinite"></div></div><span style="font-size:12px;color:var(--mimi-muted-foreground)">Indeterminada · con «reducir movimiento» late en lugar de desplazarse</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+            <sc-for list="{{ m.toneBars }}" as="b" hint-placeholder-count="4"><div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:12.5px"><span style="font-weight:500">{{ b.label }}</span><span style="font-variant-numeric:tabular-nums;color:{{ b.textFg }}">{{ b.value }}%</span></div><div role="progressbar" aria-label="{{ b.label }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ b.value }}" style="height:6px;border-radius:999px;background:var(--mimi-track);overflow:hidden"><div style="height:100%;border-radius:999px;width:{{ b.w }};background:{{ b.color }}"></div></div></div></sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:28px;align-items:center;padding:18px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);background:var(--mimi-card)">
+            <sc-for list="{{ m.rings }}" as="r" hint-placeholder-count="5">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+                <div role="progressbar" aria-label="{{ r.label }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ r.now }}" style="position:relative;width:{{ r.size }};height:{{ r.size }}">
+                  <svg viewBox="0 0 36 36" width="100%" height="100%" style="display:block;transform:rotate(-90deg)"><circle cx="18" cy="18" r="15.915" fill="none" stroke="var(--mimi-track)" stroke-width="{{ r.sw }}"></circle><circle data-fx="" cx="18" cy="18" r="15.915" fill="none" stroke-linecap="round" stroke="{{ r.color }}" stroke-width="{{ r.sw }}" stroke-dasharray="{{ r.dash }}" style="transition:stroke-dasharray .4s cubic-bezier(.2,.8,.2,1);transform-origin:18px 18px;animation:{{ r.anim }}"></circle></svg>
+                  <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-variant-numeric:tabular-nums;font-size:{{ r.fs }}">{{ r.text }}</span>
+                </div>
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ r.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const FAQ = [
+  ['¿Puedo cambiar de plan en cualquier momento?', 'Sí. El cambio se aplica al instante y en la siguiente factura se prorratea la diferencia.'],
+  ['¿Qué pasa con mis datos si cancelo?', 'Se conservan 30 días por si vuelves. Después se eliminan de forma permanente.'],
+  ['¿Ofrecen factura con CFDI?', 'Sí. Agrega tu RFC en Facturación y cada pago genera su CFDI 4.0 automáticamente.'],
+  ['¿Hay descuento anual?', 'Pagando por año obtienes dos meses gratis en cualquier plan.']
+];
+const STEPS = [['Cuenta', 'Correo y contraseña'], ['Empresa', 'Datos fiscales'], ['Plan', 'Elige tu plan'], ['Pago', 'Tarjeta o SPEI'], ['Listo', 'Confirmación']];
+const ST = {
+  done: { bg: 'var(--mimi-primary)', fg: 'var(--mimi-primary-foreground)', border: 'var(--mimi-primary)', ring: 'none', icon: 'check', label: 'Completado', titleFg: 'var(--mimi-foreground)' },
+  current: { bg: 'var(--mimi-background)', fg: 'var(--mimi-foreground)', border: 'var(--mimi-primary)', ring: '0 0 0 4px var(--mimi-ring-soft)', icon: null, label: 'Actual', titleFg: 'var(--mimi-foreground)' },
+  pending: { bg: 'var(--mimi-background)', fg: 'var(--mimi-muted-foreground)', border: 'var(--mimi-border)', ring: 'none', icon: null, label: 'Pendiente', titleFg: 'var(--mimi-muted-foreground)' },
+  error: { bg: 'var(--mimi-destructive)', fg: 'var(--mimi-destructive-foreground)', border: 'var(--mimi-destructive)', ring: '0 0 0 4px var(--mimi-destructive-soft)', icon: 'x', label: 'Con error', titleFg: 'var(--mimi-destructive-soft-foreground)' }
+};
+const NAV = [['Inicio', 'house', true], ['Clientes', 'users'], ['Facturación', 'receipt'], ['Reportes', 'chart-line'], ['Ajustes', 'settings']];
+class Component extends DCLogic {
+  state = { l: { right: true, left: false, bottom: true, deskB: true, acc1: [0], acc2: [0, 2], step: 2, p: 64 }, d: { right: false, left: true, bottom: true, deskB: true, acc1: [1], acc2: [0, 1], step: 2, p: 64 } };
+  drawer(k, key, dyKey) {
+    const st = this.state[k], open = st[key], dy = st[dyKey] || 0, drag = this.drag && this.drag.k === k && this.drag.key === key;
+    return { btn: open ? 'Cerrar' : 'Abrir', ovOp: open ? String(Math.max(0, 1 - dy / 300)) : '0', ovPe: open ? 'auto' : 'none',
+      tf: open ? 'translateY(' + dy + 'px)' : 'translateY(calc(100% + 24px))', tr: drag ? 'none' : 'transform .42s cubic-bezier(.32,.72,0,1)',
+      toggle: () => this.set(k, { [key]: !open, [dyKey]: 0 }), close: () => this.set(k, { [key]: false, [dyKey]: 0 }),
+      down: e => { e.currentTarget.setPointerCapture(e.pointerId); this.drag = { k, key, y: e.clientY, moved: false }; this.forceUpdate(); },
+      move: e => { if (!this.drag || this.drag.k !== k || this.drag.key !== key) return; const d = Math.max(0, e.clientY - this.drag.y); if (d > 3) this.drag.moved = true; this.set(k, { [dyKey]: d }); },
+      up: () => { if (!this.drag || this.drag.key !== key) return; const moved = this.drag.moved; this.drag = null; if (moved && (this.state[k][dyKey] || 0) > 80) this.set(k, { [key]: false, [dyKey]: 0 }); else this.set(k, { [dyKey]: 0 }); this.tapBlock = moved; },
+      tap: () => { if (this.tapBlock) { this.tapBlock = false; return; } this.set(k, { [key]: false, [dyKey]: 0 }); } };
+  }
+  set(k, patch) { this.setState(s => ({ [k]: { ...s[k], ...(typeof patch === 'function' ? patch(s[k]) : patch) } })); }
+  renderVals() {
+    const stepView = (st, i, n, lineNext) => {
+      const v = ST[st];
+      return { n: String(i + 1), current: st === 'current' ? 'step' : undefined, bg: v.bg, fg: v.fg, border: v.border, ring: v.ring, hasIcon: !!v.icon, noIcon: !v.icon, icon: v.icon || 'check', titleFg: v.titleFg, state: v.label, line: lineNext ? 'var(--mimi-primary)' : 'var(--mimi-border)', lineShow: i < n - 1 ? 'block' : 'none' };
+    };
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+      const st = this.state[k];
+      const sheet = (key, caption, title, desc, side, kind) => {
+        const open = st[key];
+        return { caption, title, desc, isForm: kind === 'form', isNav: kind === 'nav', btn: open ? 'Cerrar' : 'Abrir', hidden: String(!open),
+          left: side === 'left' ? '12px' : 'auto', right: side === 'right' ? '12px' : 'auto', bl: side === 'right' ? '1px solid var(--mimi-border)' : '0', br: side === 'left' ? '1px solid var(--mimi-border)' : '0',
+          tf: open ? 'translateX(0)' : side === 'right' ? 'translateX(calc(100% + 24px))' : 'translateX(calc(-100% - 24px))', ovOp: open ? '1' : '0', ovPe: open ? 'auto' : 'none',
+          toggle: () => this.set(k, { [key]: !open }), close: () => this.set(k, { [key]: false }) };
+      };
+      const acc = (key, caption, multi, iconName) => ({ caption, icon: iconName, items: FAQ.map(([q, a], i) => { const open = st[key].includes(i); return {
+        id: k + '-' + key + '-' + i, q, a, aria: String(open), rows: open ? '1fr' : '0fr', rot: open ? (iconName === 'plus' ? 'rotate(45deg)' : 'rotate(180deg)') : 'none', bt: i ? '1px solid var(--mimi-border)' : '0',
+        toggle: () => this.set(k, s => ({ [key]: open ? s[key].filter(x => x !== i) : multi ? [...s[key], i] : [i] })) }; }) });
+      const p = st.p;
+      return {
+        k, cls, label, icon,
+        sheets: [sheet('right', 'Desde la derecha', 'Editar cliente', 'Café Altura · CL-1003', 'right', 'form'), sheet('left', 'Desde la izquierda', 'Menú', 'Mimi Ventas', 'left', 'nav')],
+        bottom: this.drawer(k, 'bottom', 'bDy'),
+        deskBottom: this.drawer(k, 'deskB', 'dDy'),
+        accordions: [acc('acc1', 'Simple · uno abierto a la vez · chevron gira 180°', false, 'chevron-down'), acc('acc2', 'Múltiple · varios abiertos · el + gira 45°', true, 'plus')],
+        stepsH: STEPS.map(([title], i) => ({ ...stepView(i < st.step ? 'done' : i === st.step ? 'current' : 'pending', i, 5, i < st.step), title })),
+        stepNum: String(st.step + 1), stepHint: st.step === 5 ? 'Alta completada.' : STEPS[Math.min(st.step, 4)][1] + '.',
+        prevDis: st.step === 0, prevOp: st.step === 0 ? '.45' : '1', nextLabel: st.step >= 4 ? 'Finalizar' : 'Siguiente',
+        stepPrev: () => this.set(k, s => ({ step: Math.max(0, s.step - 1) })), stepNext: () => this.set(k, s => ({ step: s.step >= 5 ? 0 : s.step + 1 })),
+        p: String(p), pText: p + '%', pW: p + '%', pDec: () => this.set(k, s => ({ p: Math.max(0, s.p - 10) })), pInc: () => this.set(k, s => ({ p: Math.min(100, s.p + 10) })),
+        toneBars: [['Almacenamiento', 82, 'warning'], ['Objetivo de ventas', 100, 'success'], ['Migración', 45, 'info'], ['Errores permitidos', 96, 'destructive']].map(([l, v, t]) => ({ label: l, value: String(v), w: v + '%', color: 'var(--mimi-' + t + ')', textFg: 'var(--mimi-' + t + '-soft-foreground)' })),
+        rings: [
+          { label: 'Determinado', now: String(p), size: '76px', sw: '3', fs: '16px', color: 'var(--mimi-primary)', dash: p + ' 100', text: p + '%', anim: 'none' },
+          { label: 'Success', now: '100', size: '76px', sw: '3', fs: '16px', color: 'var(--mimi-success)', dash: '100 100', text: '100%', anim: 'none' },
+          { label: 'Warning', now: '72', size: '76px', sw: '3', fs: '16px', color: 'var(--mimi-warning)', dash: '72 100', text: '72%', anim: 'none' },
+          { label: 'Pequeño', now: '40', size: '44px', sw: '4', fs: '11px', color: 'var(--mimi-info)', dash: '40 100', text: '40', anim: 'none' },
+          { label: 'Indeterminado', now: undefined, size: '44px', sw: '4', fs: '11px', color: 'var(--mimi-primary)', dash: '28 100', text: '', anim: 'mimi-spin 1s linear infinite' }
+        ]
+      };
+    });
+    const vstates = ['done', 'error', 'current', 'pending', 'pending'];
+    const vdata = [['Compilar', 'Terminó en 42 s.'], ['Pruebas', '3 pruebas fallaron en data-table.spec.ts.'], ['Revisión', 'Esperando aprobación de Marta Gil.'], ['Desplegar a staging', ''], ['Desplegar a producción', '']];
+    return {
+      modes,
+      navItems: NAV.map(([l, ic, on]) => ({ label: l, icon: ic, bg: on ? 'var(--mimi-primary)' : 'transparent', fg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)', fw: on ? '600' : '500', hbg: on ? 'var(--mimi-primary)' : 'var(--mimi-accent)' })),
+      shareItems: [['Copiar enlace', 'link', 'secondary'], ['Correo', 'mail', 'info'], ['WhatsApp', 'message-circle', 'success'], ['PDF', 'file-down', 'destructive']].map(([l, ic, t]) => ({ label: l, icon: ic, bg: t === 'secondary' ? 'var(--mimi-secondary)' : 'var(--mimi-' + (t === 'destructive' ? 'destructive-soft-bg' : t + '-soft') + ')', fg: t === 'secondary' ? 'var(--mimi-secondary-foreground)' : 'var(--mimi-' + t + '-soft-foreground)' })),
+      stepsV: vdata.map(([title, desc], i) => { const s = vstates[i], v = ST[s]; return { n: String(i + 1), current: s === 'current' ? 'step' : undefined, bg: v.bg, fg: v.fg, border: v.border, ring: v.ring, hasIcon: !!v.icon, noIcon: !v.icon, icon: v.icon || 'check', title, titleFg: v.titleFg, desc: desc || 'Pendiente', descFg: s === 'error' ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-muted-foreground)', retry: s === 'error', line: s === 'done' ? 'var(--mimi-primary)' : 'var(--mimi-border)', lineShow: i < 4 ? 'block' : 'none' }; }),
+      legend: ['done', 'current', 'pending', 'error'].map(s => { const v = ST[s]; return { label: v.label, desc: { done: 'Relleno primario con ✓', current: 'Borde primario y halo de foco', pending: 'Borde gris y número atenuado', error: 'Relleno destructive con ✕ y texto rojo' }[s], bg: v.bg, fg: v.fg, border: v.border, ring: v.ring, hasIcon: !!v.icon, noIcon: !v.icon, icon: v.icon || 'check' }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

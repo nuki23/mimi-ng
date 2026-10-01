@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div data-dt-root="" onClick="{{ closeAll }}" style="position:relative;display:flex;flex-direction:column;min-width:0;background:var(--mimi-card);color:var(--mimi-card-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);font-family:var(--mimi-font-sans)">
+  <sc-if value="{{ showToolbar }}">
+    <div style="display:flex;align-items:center;gap:10px;min-height:56px;box-sizing:border-box;padding:10px 12px 10px 16px;border-bottom:1px solid var(--mimi-border)">
+      <sc-if value="{{ hasSelection }}">
+        <div role="status" style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+          <span style="display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:13px;font-weight:700">{{ selCount }}</span>
+          <button onClick="{{ clearSel }}" style="height:30px;padding:0 10px;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.95)">Quitar selección</button>
+          <div style="flex:1"></div>
+          <button style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="download" size="14"></mimi-icon>Exportar</button>
+          <button onClick="{{ deleteSel }}" style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid transparent;border-radius:var(--mimi-radius);background:var(--mimi-destructive);color:var(--mimi-destructive-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-destructive);transition:var(--mimi-transition)" style-hover="background:var(--mimi-destructive-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-destructive-soft)"><mimi-icon name="trash-2" size="14"></mimi-icon>Eliminar</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ noSelection }}">
+        <div style="display:flex;align-items:center;gap:8px;width:280px;height:36px;box-sizing:border-box;padding:0 10px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius);background:var(--mimi-input-background);transition:var(--mimi-transition)" style-hover="border-color:var(--mimi-input-hover)">
+          <span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="search" size="15"></mimi-icon></span>
+          <input aria-label="Buscar en la tabla" placeholder="Buscar cliente, correo o ID…" value="{{ q }}" onChange="{{ onQ }}" style="flex:1;min-width:0;height:100%;border:0;background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;outline:none">
+          <sc-if value="{{ hasQ }}"><button aria-label="Borrar búsqueda" onClick="{{ clearQ }}" style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;border:0;border-radius:999px;background:var(--mimi-muted);color:var(--mimi-muted-foreground);cursor:pointer" style-active="transform:scale(0.88)"><mimi-icon name="x" size="12"></mimi-icon></button></sc-if>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;flex:1;min-width:0">
+          <sc-for list="{{ chips }}" as="c"><span style="display:inline-flex;align-items:center;gap:4px;height:26px;padding:0 4px 0 10px;border-radius:999px;background:var(--mimi-chip);color:var(--mimi-chip-foreground);font-size:12.5px;font-weight:500">{{ c.label }}<button aria-label="{{ c.aria }}" onClick="{{ c.remove }}" style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;padding:0;border:0;border-radius:999px;background:transparent;color:inherit;opacity:.7;cursor:pointer" style-hover="opacity:1" style-active="transform:scale(0.85)"><mimi-icon name="x" size="11"></mimi-icon></button></span></sc-for>
+          <sc-if value="{{ hasChips }}"><button onClick="{{ clearFilters }}" style="height:26px;padding:0 8px;border:0;border-radius:999px;background:transparent;color:var(--mimi-muted-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:500;cursor:pointer;text-decoration:underline;text-underline-offset:3px" style-hover="color:var(--mimi-foreground)">Limpiar filtros</button></sc-if>
+        </div>
+        <div role="radiogroup" aria-label="Densidad" style="position:relative;display:grid;grid-template-columns:repeat(2,36px);padding:3px;border-radius:calc(var(--mimi-radius-sm) + 4px);background:var(--mimi-muted)">
+          <span aria-hidden="true" style="position:absolute;top:3px;bottom:3px;left:3px;width:36px;border-radius:var(--mimi-radius-sm);background:var(--mimi-card);box-shadow:var(--mimi-shadow-neutral);transition:transform .4s cubic-bezier(.3,1.35,.5,1);transform:{{ densityTf }}"></span>
+          <sc-for list="{{ densities }}" as="d" hint-placeholder-count="2"><button role="radio" aria-checked="{{ d.aria }}" aria-label="{{ d.label }}" title="{{ d.label }}" onClick="{{ d.pick }}" style="position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;height:28px;border:0;background:transparent;cursor:pointer;transition:color .2s ease, transform .15s ease;color:{{ d.fg }}" style-active="transform:scale(0.9)"><mimi-icon name="{{ d.icon }}" size="15"></mimi-icon></button></sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <div onScroll="{{ onScroll }}" style="overflow-x:auto;overscroll-behavior-x:contain">
+    <table aria-label="{{ title }}" aria-rowcount="{{ total }}" style="width:100%;min-width:1180px;border-collapse:separate;border-spacing:0;table-layout:fixed;font-variant-numeric:tabular-nums;font-size:{{ d.fs }}">
+      
+      <thead>
+        <tr>
+          <th scope="col" style="width:44px;box-sizing:border-box;position:sticky;left:0;z-index:3;height:{{ d.headH }};padding:0 0 0 14px;background:var(--mimi-muted);border-bottom:1px solid var(--mimi-border);text-align:left">
+            <button role="checkbox" aria-checked="{{ all.aria }}" aria-label="Seleccionar todas las filas" onClick="{{ all.toggle }}" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;box-sizing:border-box;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);color:var(--mimi-primary-foreground);border:1px solid {{ all.border }};background:{{ all.bg }}" style-active="transform:scale(0.88)"><sc-if value="{{ all.checked }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if><sc-if value="{{ all.mixed }}"><mimi-icon name="minus" size="12" stroke="3"></mimi-icon></sc-if></button>
+          </th>
+          <th scope="col" aria-label="Expandir" style="width:36px;box-sizing:border-box;position:sticky;left:44px;z-index:3;background:var(--mimi-muted);border-bottom:1px solid var(--mimi-border)"></th>
+          <sc-for list="{{ heads }}" as="h" hint-placeholder-count="8">
+            <th scope="col" aria-sort="{{ h.ariaSort }}" style="box-sizing:border-box;width:{{ h.width }};padding:0 6px 0 10px;border-bottom:1px solid var(--mimi-border);font-weight:600;color:var(--mimi-muted-foreground);white-space:nowrap;position:{{ h.pos }};left:{{ h.left }};z-index:{{ h.z }};background:var(--mimi-muted);box-shadow:{{ h.edge }};text-align:{{ h.align }}">
+              <div style="display:flex;align-items:center;gap:2px;justify-content:{{ h.justify }}">
+                <button onClick="{{ h.sort }}" style="display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 6px;margin-left:-6px;border:0;border-radius:var(--mimi-radius-sm);background:transparent;font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:600;cursor:pointer;transition:var(--mimi-transition);color:{{ h.fg }}" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.95)">{{ h.label }}<span style="display:inline-flex;transition:opacity .2s ease;opacity:{{ h.iconOp }}"><mimi-icon name="{{ h.icon }}" size="13"></mimi-icon></span></button>
+                <sc-if value="{{ h.filterable }}"><button aria-label="{{ h.filterAria }}" aria-haspopup="dialog" onClick="{{ h.openFilter }}" style="position:relative;display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;padding:0;border:0;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);background:{{ h.fBg }};color:{{ h.fFg }}" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.88)"><mimi-icon name="list-filter" size="13"></mimi-icon><sc-if value="{{ h.fActive }}"><span style="position:absolute;top:2px;right:2px;width:6px;height:6px;border-radius:999px;background:var(--mimi-info);box-shadow:0 0 0 1.5px var(--mimi-muted)"></span></sc-if></button></sc-if>
+              </div>
+            </th>
+          </sc-for>
+          <th scope="col" aria-label="Acciones" style="width:56px;box-sizing:border-box;background:var(--mimi-muted);border-bottom:1px solid var(--mimi-border)"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <sc-if value="{{ loading }}">
+          <sc-for list="{{ skel }}" as="s">
+            <tr aria-hidden="true">
+              <td style="position:sticky;left:0;z-index:1;height:{{ d.rowH }};padding-left:14px;background:var(--mimi-card);border-bottom:1px solid var(--mimi-border)"><div style="width:16px;height:16px;border-radius:4px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div></td>
+              <td style="position:sticky;left:44px;z-index:1;background:var(--mimi-card);border-bottom:1px solid var(--mimi-border)"></td>
+              <td style="position:sticky;left:80px;z-index:1;padding:0 10px;background:var(--mimi-card);border-bottom:1px solid var(--mimi-border);box-shadow:{{ edge }}"><div style="display:flex;align-items:center;gap:10px"><div style="flex-shrink:0;border-radius:999px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite;width:{{ d.avatar }};height:{{ d.avatar }}"></div><div style="flex:1;display:flex;flex-direction:column;gap:6px"><div style="height:10px;border-radius:4px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite;width:{{ s.w1 }}"></div><div style="height:8px;width:55%;border-radius:4px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div></div></div></td>
+              <td colspan="8" style="padding:0 10px;border-bottom:1px solid var(--mimi-border)"><div style="display:grid;grid-template-columns:110px 90px 90px 70px 100px 110px 90px;gap:22px"><div style="height:18px;border-radius:999px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div><div style="height:10px;align-self:center;border-radius:4px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div><div style="height:10px;align-self:center;border-radius:4px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div><div style="height:10px;align-self:center;border-radius:4px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div><div style="height:10px;align-self:center;border-radius:4px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div><div style="height:10px;align-self:center;border-radius:4px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div><div style="height:10px;align-self:center;border-radius:4px;background:var(--mimi-muted);animation:mimi-pulse 1.6s ease-in-out infinite"></div></div></td>
+            </tr>
+          </sc-for>
+        </sc-if>
+        <sc-if value="{{ isEmpty }}">
+          <tr><td colspan="11" style="padding:0;border-bottom:1px solid var(--mimi-border)">
+            <div role="status" style="position:sticky;left:0;width:min(100%, 760px);box-sizing:border-box;padding:56px 24px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+              <span style="width:52px;height:52px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-muted);color:var(--mimi-muted-foreground)"><mimi-icon name="users" size="24"></mimi-icon></span>
+              <span style="font-size:15px;font-weight:700">{{ emptyTitle }}</span>
+              <span style="max-width:360px;font-size:13.5px;color:var(--mimi-muted-foreground);text-wrap:pretty">{{ emptyDesc }}</span>
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <sc-if value="{{ canClear }}"><button onClick="{{ clearFilters }}" style="height:36px;padding:0 14px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;font-weight:500;cursor:pointer;box-shadow:var(--mimi-shadow-neutral);transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))">Limpiar filtros</button></sc-if>
+                <button style="display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="plus" size="15"></mimi-icon>Nuevo cliente</button>
+              </div>
+            </div>
+          </td></tr>
+        </sc-if>
+        <sc-for list="{{ rows }}" as="r">
+          <tr aria-selected="{{ r.ariaSel }}" onMouseEnter="{{ r.enter }}" onMouseLeave="{{ r.leave }}">
+            <td style="position:sticky;left:0;z-index:1;height:{{ d.rowH }};padding-left:14px;border-bottom:1px solid var(--mimi-border);transition:background-color .12s ease;background:{{ r.bg }}">
+              <button role="checkbox" aria-checked="{{ r.ariaSel }}" aria-label="{{ r.selLabel }}" onClick="{{ r.toggleSel }}" style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;padding:0;box-sizing:border-box;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);color:var(--mimi-primary-foreground);border:1px solid {{ r.boxBorder }};background:{{ r.boxBg }}" style-active="transform:scale(0.88)"><sc-if value="{{ r.selected }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if></button>
+            </td>
+            <td style="position:sticky;left:44px;z-index:1;border-bottom:1px solid var(--mimi-border);transition:background-color .12s ease;background:{{ r.bg }}">
+              <button aria-label="{{ r.expandLabel }}" aria-expanded="{{ r.ariaExp }}" onClick="{{ r.toggleExp }}" style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.88)"><span style="display:inline-flex;transition:transform .25s cubic-bezier(.2,.8,.2,1);transform:{{ r.chev }}"><mimi-icon name="chevron-right" size="15"></mimi-icon></span></button>
+            </td>
+            <td style="position:sticky;left:80px;z-index:1;padding:0 10px;border-bottom:1px solid var(--mimi-border);transition:background-color .12s ease, box-shadow .2s ease;background:{{ r.bg }};box-shadow:{{ edge }}">
+              <div style="display:flex;align-items:center;gap:10px;min-width:0">
+                <span style="flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-weight:700;width:{{ d.avatar }};height:{{ d.avatar }};font-size:{{ d.avatarFs }};background:{{ r.avBg }};color:{{ r.avFg }}">{{ r.initials }}</span>
+                <div style="min-width:0;display:flex;flex-direction:column;line-height:1.3"><span style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.company }}</span><sc-if value="{{ d.showEmail }}"><span style="font-size:12.5px;color:var(--mimi-muted-foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.email }}</span></sc-if></div>
+              </div>
+            </td>
+            <td style="padding:0 10px;border-bottom:1px solid var(--mimi-border);transition:background-color .12s ease;background:{{ r.bg }}"><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:var(--mimi-badge-radius);font-size:12px;font-weight:600;background:{{ r.stBg }};color:{{ r.stFg }}"><span style="width:6px;height:6px;border-radius:999px;background:currentColor"></span>{{ r.status }}</span></td>
+            <td style="padding:0 10px;border-bottom:1px solid var(--mimi-border);transition:background-color .12s ease;background:{{ r.bg }}">{{ r.plan }}</td>
+            <td style="padding:0 16px 0 10px;border-bottom:1px solid var(--mimi-border);text-align:right;font-weight:600;transition:background-color .12s ease;background:{{ r.bg }}">{{ r.mrrText }}</td>
+            <td style="padding:0 16px 0 10px;border-bottom:1px solid var(--mimi-border);text-align:right;transition:background-color .12s ease;background:{{ r.bg }}">{{ r.users }}</td>
+            <td style="padding:0 10px;border-bottom:1px solid var(--mimi-border);transition:background-color .12s ease;background:{{ r.bg }}"><span style="display:inline-flex;align-items:center;gap:6px"><span style="font-family:var(--mimi-font-mono);font-size:11px;font-weight:600;padding:1px 5px;border-radius:5px;background:var(--mimi-muted);color:var(--mimi-muted-foreground)">{{ r.cc }}</span>{{ r.country }}</span></td>
+            <td style="padding:0 10px;border-bottom:1px solid var(--mimi-border);color:var(--mimi-muted-foreground);transition:background-color .12s ease;background:{{ r.bg }}">{{ r.lastSeen }}</td>
+            <td style="padding:0 10px;border-bottom:1px solid var(--mimi-border);color:var(--mimi-muted-foreground);transition:background-color .12s ease;background:{{ r.bg }}">{{ r.createdText }}</td>
+            <td style="padding:0 8px;border-bottom:1px solid var(--mimi-border);text-align:center;transition:background-color .12s ease;background:{{ r.bg }}">
+              <button aria-label="{{ r.menuLabel }}" aria-haspopup="menu" aria-expanded="{{ r.menuAria }}" onClick="{{ r.openMenu }}" style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;padding:0;border:0;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);background:{{ r.menuBg }};color:var(--mimi-muted-foreground)" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)" style-active="transform:scale(0.88)"><mimi-icon name="ellipsis" size="16"></mimi-icon></button>
+            </td>
+          </tr>
+          <sc-if value="{{ r.expanded }}">
+            <tr><td colspan="11" style="padding:0;border-bottom:1px solid var(--mimi-border);background:var(--mimi-muted)">
+              <div style="position:sticky;left:0;width:860px;box-sizing:border-box;padding:16px 20px 18px 80px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:24px;align-items:start">
+                <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Contacto</span><span style="font-size:13.5px;font-weight:600">{{ r.contact }}</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">{{ r.email }}</span></div>
+                <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Facturación</span><span style="font-size:13.5px;font-weight:600">Próxima: {{ r.nextInvoice }}</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">{{ r.method }}</span></div>
+                <div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Asientos usados</span><div role="progressbar" aria-label="Asientos usados" aria-valuemin="0" aria-valuemax="{{ r.seatMax }}" aria-valuenow="{{ r.users }}" style="height:6px;border-radius:999px;background:var(--mimi-track);overflow:hidden"><div style="height:100%;border-radius:999px;background:var(--mimi-primary);width:{{ r.seatPct }}"></div></div><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">{{ r.users }} de {{ r.seatMax }}</span></div>
+                <div style="display:flex;gap:8px"><button style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-card);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13px;font-weight:500;cursor:pointer;transition:var(--mimi-transition)" style-hover="background:var(--mimi-accent)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="send" size="14"></mimi-icon>Enviar factura</button></div>
+              </div>
+            </td></tr>
+          </sc-if>
+        </sc-for>
+      </tbody>
+    </table>
+  </div>
+
+  <sc-if value="{{ showPager }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 12px 12px 16px;border-top:1px solid var(--mimi-border);font-size:13px;font-variant-numeric:tabular-nums;color:var(--mimi-muted-foreground)">
+      <span>{{ rangeText }}</span>
+      <dc-import name="Mimi Pagination" variant="inline" page="{{ page }}" total="{{ pages }}" page-size="{{ size }}" on-page-change="{{ setPage }}" on-size-change="{{ setSize }}" hint-size="360px,52px"></dc-import>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ menu.open }}">
+    <div role="menu" aria-label="Acciones de la fila" onClick="{{ stop }}" style="position:absolute;z-index:20;width:208px;box-sizing:border-box;padding:4px;display:flex;flex-direction:column;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);left:{{ menu.x }};top:{{ menu.y }}">
+      <span style="padding:6px 8px 4px;font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ menu.title }}</span>
+      <sc-for list="{{ menu.items }}" as="it">
+        <sc-if value="{{ it.isSep }}"><div role="separator" style="height:1px;margin:4px -4px;background:var(--mimi-border)"></div></sc-if>
+        <sc-if value="{{ it.isItem }}"><div role="menuitem" tabIndex="-1" onClick="{{ it.run }}" style="--hbg:{{ it.hbg }};display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border-radius:var(--mimi-radius-sm);font-size:13.5px;cursor:pointer;transition:background-color .12s ease;color:{{ it.fg }}" style-hover="background:var(--hbg)" style-active="transform:scale(0.985)"><span style="display:inline-flex;color:{{ it.iconFg }}"><mimi-icon name="{{ it.icon }}" size="15"></mimi-icon></span><span style="flex:1">{{ it.label }}</span><span style="font-family:var(--mimi-font-mono);font-size:11px;color:var(--mimi-muted-foreground)">{{ it.kbd }}</span></div></sc-if>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ filter.open }}">
+    <div role="dialog" aria-label="{{ filter.title }}" onClick="{{ stop }}" style="position:absolute;z-index:20;width:236px;box-sizing:border-box;padding:10px;display:flex;flex-direction:column;gap:8px;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);left:{{ filter.x }};top:{{ filter.y }}">
+      <span style="font-size:13px;font-weight:700">{{ filter.title }}</span>
+      <sc-if value="{{ filter.isText }}"><input aria-label="{{ filter.title }}" placeholder="Contiene…" value="{{ filter.text }}" onChange="{{ filter.onText }}" style="height:34px;box-sizing:border-box;padding:0 10px;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius-sm);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;outline:none" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)"></sc-if>
+      <sc-if value="{{ filter.isSet }}">
+        <div style="display:flex;flex-direction:column;gap:1px">
+          <sc-for list="{{ filter.options }}" as="o"><button role="checkbox" aria-checked="{{ o.aria }}" onClick="{{ o.toggle }}" style="display:flex;align-items:center;gap:10px;height:32px;padding:0 6px;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;text-align:left;cursor:pointer;transition:background-color .12s ease" style-hover="background:var(--mimi-accent)" style-active="transform:scale(0.985)"><span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;box-sizing:border-box;border-radius:var(--mimi-radius-sm);color:var(--mimi-primary-foreground);border:1px solid {{ o.border }};background:{{ o.bg }}"><sc-if value="{{ o.on }}"><mimi-icon name="check" size="12" stroke="3"></mimi-icon></sc-if></span><span style="flex:1">{{ o.label }}</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ o.count }}</span></button></sc-for>
+        </div>
+      </sc-if>
+      <div style="display:flex;justify-content:space-between;padding-top:6px;border-top:1px solid var(--mimi-border)"><button onClick="{{ filter.clear }}" style="height:28px;padding:0 8px;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-muted-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:500;cursor:pointer" style-hover="background:var(--mimi-accent);color:var(--mimi-foreground)">Limpiar</button><button onClick="{{ closeAll }}" style="height:28px;padding:0 10px;border:0;border-radius:var(--mimi-radius-sm);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(0.94)">Listo</button></div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1100px&quot;,&quot;height&quot;:&quot;720px&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;compact&quot;,&quot;comfortable&quot;],&quot;default&quot;:&quot;compact&quot;,&quot;tsType&quot;:&quot;'compact' | 'comfortable'&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;data&quot;,&quot;loading&quot;,&quot;empty&quot;],&quot;default&quot;:&quot;data&quot;,&quot;tsType&quot;:&quot;'data' | 'loading' | 'empty'&quot;},&quot;pageSize&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:10,&quot;tsType&quot;:&quot;number&quot;},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Clientes&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;toolbar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const COMPANIES = ['Andes Logística', 'Bodega Norte', 'Café Altura', 'Clínica Sol', 'Constructora Ríos', 'Distribuidora Mar', 'Editorial Faro', 'Estudio Lima', 'Farmacia Vida', 'Ferretería Roble', 'Grupo Talento', 'Hotel Brisa', 'Inmobiliaria Cumbre', 'Joyería Luna', 'Laboratorio Nube', 'Librería Páramo', 'Moda Valle', 'Mueblería Cedro', 'Óptica Clara', 'Panadería Trigo', 'Radio Ola', 'Seguros Puente', 'Taller Motor', 'Viajes Rumbo', 'Agencia Brújula', 'Cervecería Volcán', 'Colegio Arce', 'Dental Sonrisa', 'Energía Llano', 'Florería Jazmín', 'Gimnasio Pulso', 'Imprenta Tinta', 'Lavandería Nieve', 'Notaría Pino', 'Pastelería Miel', 'Veterinaria Huella'];
+const PEOPLE = ['Ana Torres', 'Julián Ríos', 'Marta Gil', 'Diego Paz', 'Lucía Vera', 'Tomás Rey', 'Sofía Luna', 'Mateo Cruz', 'Valeria Sanz', 'Andrés Mora', 'Camila Ortiz', 'Pablo Núñez'];
+const COUNTRIES = [['MX', 'México'], ['CO', 'Colombia'], ['AR', 'Argentina'], ['CL', 'Chile'], ['PE', 'Perú'], ['ES', 'España']];
+const STATUS = [['Activo', 'success'], ['Prueba', 'info'], ['Moroso', 'warning'], ['Cancelado', 'destructive'], ['Pausado', null]];
+const PLANS = [['Inicial', 5], ['Equipo', 25], ['Empresa', 100]];
+const SEEN = [['hace 5 min', 5], ['hace 1 h', 60], ['hace 3 h', 180], ['ayer', 1440], ['hace 3 días', 4320], ['hace 2 sem', 20160]];
+const MSHORT = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const AV = ['info', 'success', 'warning', 'destructive', null];
+const rnd = i => { const x = Math.sin(i * 12.9898 + 78.233) * 43758.5453; return x - Math.floor(x); };
+const slug = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z]+/g, '');
+const norm = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const MXN = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 });
+const DATA = COMPANIES.map((c, i) => {
+  const st = STATUS[[0, 0, 0, 1, 2, 0, 3, 0, 1, 4, 0, 2][i % 12]];
+  const pl = PLANS[Math.floor(rnd(i + 3) * 3)];
+  const users = Math.max(1, Math.round(rnd(i + 7) * pl[1]));
+  const person = PEOPLE[i % PEOPLE.length];
+  const seen = SEEN[Math.floor(rnd(i + 11) * SEEN.length)];
+  const m = Math.floor(rnd(i + 13) * 9), d = 1 + Math.floor(rnd(i + 17) * 27), y = 2025 + (rnd(i + 19) > 0.4 ? 1 : 0);
+  const co = COUNTRIES[Math.floor(rnd(i + 23) * COUNTRIES.length)];
+  return {
+    id: 'CL-' + (1001 + i), company: c, contact: person, email: slug(person.split(' ')[0]) + '@' + slug(c) + '.com',
+    status: st[0], tone: st[1], plan: pl[0], seatMax: pl[1], users, mrr: st[0] === 'Cancelado' ? 0 : users * (pl[0] === 'Inicial' ? 190 : pl[0] === 'Equipo' ? 240 : 310),
+    cc: co[0], country: co[1], lastSeen: seen[0], seenMin: seen[1], created: y * 10000 + (m + 1) * 100 + d, createdText: d + ' ' + MSHORT[m] + ' ' + y,
+    initials: c.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase(), av: AV[i % AV.length],
+    nextInvoice: (1 + (i % 27)) + ' oct 2026', method: ['Visa •••• 4242', 'Mastercard •••• 5100', 'Transferencia SPEI'][i % 3]
+  };
+});
+const COLS = [
+  { key: 'company', w: '260px', label: 'Cliente', filter: 'text', sticky: true },
+  { key: 'status', w: '124px', label: 'Estado', filter: 'set', options: STATUS.map(s => s[0]) },
+  { key: 'plan', w: '110px', label: 'Plan', filter: 'set', options: PLANS.map(p => p[0]) },
+  { key: 'mrr', w: '112px', label: 'MRR', align: 'right' },
+  { key: 'users', w: '96px', label: 'Usuarios', align: 'right' },
+  { key: 'country', w: '120px', label: 'País' },
+  { key: 'seenMin', w: '130px', label: 'Último acceso' },
+  { key: 'created', w: '116px', label: 'Alta' }
+];
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    this.state = { data: DATA, q: '', sort: { key: 'mrr', dir: 'desc' }, filters: { company: '', status: [], plan: [] }, sel: [], exp: ['CL-1012'], page: 1, size: parseInt(this.props.pageSize, 10) || 10, density: this.props.density || 'compact', hover: null, scrolled: false, menu: null, filter: null };
+  }
+  componentDidMount() { this.reportMeta(); }
+  componentDidUpdate() { this.reportMeta(); }
+  reportMeta() { const m = this.meta; if (!m || !this.props.onMeta) return; const k = m.total + '/' + m.pages; if (k !== this.lastMeta) { this.lastMeta = k; this.props.onMeta(m); } }
+  rel(e) {
+    const root = e.currentTarget.closest('[data-dt-root]');
+    const R = root.getBoundingClientRect(), b = e.currentTarget.getBoundingClientRect(), sc = R.width / root.offsetWidth || 1;
+    return { x: (b.left - R.left) / sc, y: (b.bottom - R.top) / sc, r: (b.right - R.left) / sc, w: root.offsetWidth };
+  }
+  renderVals() {
+    const s = this.state, mode = this.props.state || 'data';
+    const comp = s.density === 'compact';
+    const D = comp ? { rowH: '42px', headH: '38px', fs: '13px', avatar: '24px', avatarFs: '10px', showEmail: false } : { rowH: '60px', headH: '44px', fs: '14px', avatar: '34px', avatarFs: '12px', showEmail: true };
+    const nq = norm(s.q.trim()), f = s.filters;
+    let rows = mode === 'empty' ? [] : s.data.filter(r => (!nq || norm(r.company + ' ' + r.email + ' ' + r.id + ' ' + r.contact).includes(nq)) && (!f.company || norm(r.company).includes(norm(f.company))) && (!f.status.length || f.status.includes(r.status)) && (!f.plan.length || f.plan.includes(r.plan)));
+    if (s.sort.dir) { const k = s.sort.key, d = s.sort.dir === 'asc' ? 1 : -1; rows = [...rows].sort((a, b) => (typeof a[k] === 'string' ? a[k].localeCompare(b[k], 'es') : a[k] - b[k]) * d); }
+    const ctrlP = parseInt(this.props.page, 10), ctrlS = parseInt(this.props.pageSize, 10);
+    const size = this.props.pagination === 'none' && ctrlS ? ctrlS : s.size;
+    const total = rows.length, pages = Math.max(1, Math.ceil(total / size)), page = Math.min(this.props.pagination === 'none' && ctrlP ? ctrlP : s.page, pages);
+    this.meta = { total, pages };
+    const pageRows = rows.slice((page - 1) * size, page * size);
+    const ids = rows.map(r => r.id), selIn = ids.filter(id => s.sel.includes(id));
+    const allState = selIn.length === 0 ? 'none' : selIn.length === ids.length ? 'all' : 'mixed';
+    const setF = (k, v) => this.setState(st => ({ filters: { ...st.filters, [k]: v }, page: 1 }));
+    const chips = [];
+    if (f.company) chips.push({ label: 'Cliente: «' + f.company + '»', aria: 'Quitar filtro de cliente', remove: e => { e.stopPropagation(); setF('company', ''); } });
+    f.status.forEach(v => chips.push({ label: 'Estado: ' + v, aria: 'Quitar ' + v, remove: e => { e.stopPropagation(); setF('status', f.status.filter(x => x !== v)); } }));
+    f.plan.forEach(v => chips.push({ label: 'Plan: ' + v, aria: 'Quitar ' + v, remove: e => { e.stopPropagation(); setF('plan', f.plan.filter(x => x !== v)); } }));
+    const clearFilters = e => { e && e.stopPropagation(); this.setState({ q: '', filters: { company: '', status: [], plan: [] }, page: 1 }); };
+
+    const pg = [];
+    const btn = (label, p, o = {}) => ({ isBtn: true, label, pick: () => this.setState({ page: p }), aria: o.aria || 'Página ' + p, current: o.cur ? 'page' : undefined, disabled: !!o.dis, hasIcon: !!o.icon, icon: o.icon || '', border: o.cur ? 'var(--mimi-primary)' : o.icon ? 'var(--mimi-border)' : 'transparent', bg: o.cur ? 'var(--mimi-primary)' : 'transparent', fg: o.cur ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)', fw: o.cur ? '700' : '500', op: o.dis ? '.4' : '1', cursor: o.dis ? 'not-allowed' : 'pointer', hbg: o.cur ? 'var(--mimi-primary)' : o.dis ? 'transparent' : 'var(--mimi-accent)' });
+    pg.push(btn('', 1, { icon: 'chevrons-left', aria: 'Primera página', dis: page === 1 }), btn('', page - 1, { icon: 'chevron-left', aria: 'Página anterior', dis: page === 1 }));
+    const nums = pages <= 7 ? Array.from({ length: pages }, (_, i) => i + 1) : page <= 4 ? [1, 2, 3, 4, 5, 'g', pages] : page >= pages - 3 ? [1, 'g', pages - 4, pages - 3, pages - 2, pages - 1, pages] : [1, 'g', page - 1, page, page + 1, 'g', pages];
+    nums.forEach(n => pg.push(n === 'g' ? { isGap: true } : btn(String(n), n, { cur: n === page })));
+    pg.push(btn('', page + 1, { icon: 'chevron-right', aria: 'Página siguiente', dis: page === pages }), btn('', pages, { icon: 'chevrons-right', aria: 'Última página', dis: page === pages }));
+
+    const menuRow = s.menu && s.data.find(r => r.id === s.menu.id);
+    const fCol = s.filter && COLS.find(c => c.key === s.filter.key);
+    const loading = mode === 'loading';
+    return {
+      title: this.props.title || 'Clientes', total: String(total), d: D, loading, skel: Array.from({ length: Math.min(s.size, 6) }, (_, i) => ({ w1: [70, 55, 80, 62, 74, 50][i] + '%' })),
+      isEmpty: !loading && total === 0, canClear: mode !== 'empty',
+      emptyTitle: mode === 'empty' ? 'Todavía no tienes clientes' : 'Sin clientes que coincidan',
+      emptyDesc: mode === 'empty' ? 'Cuando registres el primero aparecerá aquí, con su plan y su facturación.' : 'Prueba con otra búsqueda o quita algunos filtros.',
+      showToolbar: this.props.toolbar !== false && this.props.toolbar !== 'false',
+      hasSelection: s.sel.length > 0, noSelection: s.sel.length === 0, selCount: s.sel.length + (s.sel.length === 1 ? ' seleccionado' : ' seleccionados'),
+      clearSel: e => { e.stopPropagation(); this.setState({ sel: [] }); },
+      deleteSel: e => { e.stopPropagation(); this.setState(st => ({ data: st.data.filter(r => !st.sel.includes(r.id)), sel: [] })); },
+      q: s.q, hasQ: !!s.q, onQ: e => this.setState({ q: e.target.value, page: 1 }), clearQ: e => { e.stopPropagation(); this.setState({ q: '' }); },
+      chips, hasChips: chips.length > 0, clearFilters,
+      densityTf: comp ? 'translateX(0)' : 'translateX(100%)',
+      densities: [['compact', 'Densa', 'rows-4'], ['comfortable', 'Cómoda', 'rows-2']].map(([v, l, i]) => ({ label: l, icon: i, aria: String(s.density === v), fg: s.density === v ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', pick: e => { e.stopPropagation(); this.setState({ density: v }); } })),
+      onScroll: e => { const v = e.currentTarget.scrollLeft > 2; if (v !== s.scrolled) this.setState({ scrolled: v }); },
+      edge: s.scrolled ? '6px 0 10px -6px oklch(0 0 0 / .25), inset -1px 0 0 var(--mimi-border)' : 'inset -1px 0 0 transparent',
+      all: { aria: allState === 'all' ? 'true' : allState === 'mixed' ? 'mixed' : 'false', checked: allState === 'all', mixed: allState === 'mixed', border: allState === 'none' ? 'var(--mimi-input)' : 'var(--mimi-primary)', bg: allState === 'none' ? 'var(--mimi-input-background)' : 'var(--mimi-primary)', toggle: e => { e.stopPropagation(); this.setState({ sel: allState === 'all' ? [] : ids }); } },
+      heads: COLS.map(c => {
+        const on = s.sort.key === c.key && s.sort.dir;
+        const fAct = c.filter === 'text' ? !!f[c.key] : c.filter === 'set' ? f[c.key].length > 0 : false;
+        const open = s.filter && s.filter.key === c.key;
+        return {
+          label: c.label, width: c.w, align: c.align || 'left', justify: c.align === 'right' ? 'flex-end' : 'flex-start',
+          pos: c.sticky ? 'sticky' : 'static', left: c.sticky ? '80px' : 'auto', z: c.sticky ? '3' : '1', edge: c.sticky ? (s.scrolled ? '6px 0 10px -6px oklch(0 0 0 / .25), inset -1px 0 0 var(--mimi-border)' : 'none') : 'none',
+          ariaSort: on ? (s.sort.dir === 'asc' ? 'ascending' : 'descending') : 'none', fg: on ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)',
+          icon: on ? (s.sort.dir === 'asc' ? 'arrow-up' : 'arrow-down') : 'chevrons-up-down', iconOp: on ? '1' : '.45',
+          sort: e => { e.stopPropagation(); this.setState(st => ({ sort: st.sort.key !== c.key ? { key: c.key, dir: 'asc' } : st.sort.dir === 'asc' ? { key: c.key, dir: 'desc' } : st.sort.dir === 'desc' ? { key: c.key, dir: null } : { key: c.key, dir: 'asc' } })); },
+          filterable: !!c.filter, fActive: fAct, filterAria: 'Filtrar por ' + c.label.toLowerCase(),
+          fBg: open || fAct ? 'var(--mimi-info-soft)' : 'transparent', fFg: open || fAct ? 'var(--mimi-info-soft-foreground)' : 'var(--mimi-muted-foreground)',
+          openFilter: e => { e.stopPropagation(); const p = this.rel(e); this.setState({ menu: null, filter: open ? null : { key: c.key, x: Math.min(p.x - 8, p.w - 248) + 'px', y: p.y + 6 + 'px' } }); }
+        };
+      }),
+      rows: pageRows.map(r => {
+        const sel = s.sel.includes(r.id), exp = s.exp.includes(r.id), hov = s.hover === r.id, mOpen = s.menu && s.menu.id === r.id;
+        return {
+          ...r, mrrText: MXN.format(r.mrr), selected: sel, ariaSel: String(sel), expanded: exp, ariaExp: String(exp), chev: exp ? 'rotate(90deg)' : 'none',
+          bg: sel ? 'color-mix(in oklab, var(--mimi-info) 8%, var(--mimi-card))' : hov || mOpen ? 'color-mix(in oklab, var(--mimi-foreground) 3.5%, var(--mimi-card))' : 'var(--mimi-card)',
+          boxBorder: sel ? 'var(--mimi-primary)' : 'var(--mimi-input)', boxBg: sel ? 'var(--mimi-primary)' : 'var(--mimi-input-background)',
+          avBg: r.av ? 'var(--mimi-' + r.av + '-soft)' : 'var(--mimi-secondary)', avFg: r.av ? 'var(--mimi-' + r.av + '-soft-foreground)' : 'var(--mimi-secondary-foreground)',
+          stBg: r.tone ? 'var(--mimi-' + (r.tone === 'destructive' ? 'destructive-soft-bg' : r.tone + '-soft') + ')' : 'var(--mimi-muted)', stFg: r.tone ? 'var(--mimi-' + r.tone + '-soft-foreground)' : 'var(--mimi-muted-foreground)',
+          seatPct: Math.round((r.users / r.seatMax) * 100) + '%', seatMax: String(r.seatMax),
+          selLabel: 'Seleccionar ' + r.company, expandLabel: (exp ? 'Contraer ' : 'Expandir ') + r.company, menuLabel: 'Acciones para ' + r.company, menuAria: String(!!mOpen), menuBg: mOpen ? 'var(--mimi-accent)' : 'transparent',
+          enter: () => this.setState({ hover: r.id }), leave: () => this.setState(st => (st.hover === r.id ? { hover: null } : null)),
+          toggleSel: e => { e.stopPropagation(); this.setState(st => ({ sel: sel ? st.sel.filter(x => x !== r.id) : [...st.sel, r.id] })); },
+          toggleExp: e => { e.stopPropagation(); this.setState(st => ({ exp: exp ? st.exp.filter(x => x !== r.id) : [...st.exp, r.id] })); },
+          openMenu: e => { e.stopPropagation(); const p = this.rel(e); this.setState({ filter: null, menu: mOpen ? null : { id: r.id, x: Math.max(8, p.r - 208) + 'px', y: p.y + 4 + 'px' } }); }
+        };
+      }),
+      menu: menuRow ? {
+        open: true, x: s.menu.x, y: s.menu.y, title: menuRow.company,
+        items: [['eye', 'Ver detalle', ''], ['pencil', 'Editar', '⌘E'], ['copy', 'Duplicar', '⌘D'], '-', ['send', 'Enviar factura', ''], ['arrow-up-circle', 'Cambiar plan', ''], '-', ['trash-2', 'Eliminar', '⌘⌫', true]].map(it => it === '-' ? { isSep: true } : {
+          isItem: true, icon: it[0], label: it[1], kbd: it[2], fg: it[3] ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-popover-foreground)', iconFg: it[3] ? 'var(--mimi-destructive-soft-foreground)' : 'var(--mimi-muted-foreground)', hbg: it[3] ? 'var(--mimi-destructive-soft-bg)' : 'var(--mimi-accent)',
+          run: e => { e.stopPropagation(); if (it[3]) this.setState(st => ({ data: st.data.filter(x => x.id !== menuRow.id), sel: st.sel.filter(x => x !== menuRow.id), menu: null })); else if (it[1] === 'Ver detalle') this.setState(st => ({ exp: st.exp.includes(menuRow.id) ? st.exp : [...st.exp, menuRow.id], menu: null })); else this.setState({ menu: null }); }
+        })
+      } : { open: false, items: [] },
+      filter: fCol ? {
+        open: true, x: s.filter.x, y: s.filter.y, title: 'Filtrar por ' + fCol.label.toLowerCase(), isText: fCol.filter === 'text', isSet: fCol.filter === 'set',
+        text: fCol.filter === 'text' ? f[fCol.key] : '', onText: e => setF(fCol.key, e.target.value),
+        options: fCol.filter === 'set' ? fCol.options.map(o => { const on = f[fCol.key].includes(o); return { label: o, count: String(s.data.filter(r => r[fCol.key] === o).length), on, aria: String(on), border: on ? 'var(--mimi-primary)' : 'var(--mimi-input)', bg: on ? 'var(--mimi-primary)' : 'var(--mimi-input-background)', toggle: e => { e.stopPropagation(); setF(fCol.key, on ? f[fCol.key].filter(x => x !== o) : [...f[fCol.key], o]); } }; }) : [],
+        clear: e => { e.stopPropagation(); setF(fCol.key, fCol.filter === 'set' ? [] : ''); }
+      } : { open: false, options: [] },
+      closeAll: () => { if (s.menu || s.filter) this.setState({ menu: null, filter: null }); },
+      stop: e => e.stopPropagation(),
+      sizes: [5, 10, 20].map(n => ({ label: String(n), aria: String(s.size === n), bg: s.size === n ? 'var(--mimi-card)' : 'transparent', fg: s.size === n ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', fw: s.size === n ? '700' : '500', sh: s.size === n ? 'var(--mimi-shadow-neutral)' : 'none', pick: e => { e.stopPropagation(); this.setState({ size: n, page: 1 }); } })),
+      rangeText: total ? ((page - 1) * size + 1) + '–' + Math.min(page * size, total) + ' de ' + total : '0 de 0',
+      showPager: !loading && this.props.pagination !== 'none', page: String(page), pages: String(pages), size: String(size),
+      setPage: p => this.setState({ page: p }), setSize: n => this.setState({ size: n, page: 1 }),
+      pager: loading ? [] : pg
+    };
+  }
+}
+</script>
+</body>
+</html>

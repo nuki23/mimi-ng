@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<link rel="stylesheet" href="mimi-effects.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<script src="image-slot.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:28px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:14px">
+    <div style="display:flex;align-items:baseline;gap:18px;flex-wrap:wrap">
+      <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Blocks</h1>
+      <a href="Mimi Landing v2.dc.html" style="font-size:14px;font-weight:600">Landing renovada →</a>
+    </div>
+    <div role="tablist" aria-label="Block" style="display:flex;flex-wrap:wrap;gap:6px">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="8"><button role="tab" aria-selected="{{ t.aria }}" onClick="{{ t.pick }}" style="display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:999px;font-family:Outfit,sans-serif;font-size:14px;cursor:pointer;transition:background-color .2s ease, color .2s ease, transform .15s ease;border:1px solid {{ t.border }};background:{{ t.bg }};color:{{ t.fg }};font-weight:{{ t.fw }}" style-active="transform:scale(0.95)"><mimi-icon name="{{ t.icon }}" size="15"></mimi-icon>{{ t.id }}</button></sc-for>
+    </div>
+    <span style="max-width:900px;font-size:14.5px;line-height:1.55;color:oklch(0.38 0 0)">{{ desc }}</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:40px">
+    <div style="display:flex;gap:40px;align-items:flex-start">
+      <sc-for list="{{ desktopFrames }}" as="f" hint-placeholder-count="2">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:oklch(0.35 0 0)"><mimi-icon name="{{ f.icon }}" size="14"></mimi-icon>{{ f.caption }}</span>
+          <div data-mimi-style="mimi" class="{{ f.cls }}" style="width:1280px;height:800px;border-radius:14px;overflow:auto;background:var(--mimi-background);box-shadow:0 1px 3px oklch(0 0 0 / .12), 0 24px 60px -24px oklch(0 0 0 / .3)">
+            <sc-if value="{{ isLogin01 }}"><dc-import name="Block login-01" mobile="{{ f.mobile }}" hint-size="100%,100%" style="width:100%;min-height:100%"></dc-import></sc-if>
+            <sc-if value="{{ isLogin02 }}"><dc-import name="Block login-02" mobile="{{ f.mobile }}" slot-key="{{ f.key }}" hint-size="100%,100%" style="width:100%;min-height:100%"></dc-import></sc-if>
+            <sc-if value="{{ isSignup01 }}"><dc-import name="Block signup-01" mobile="{{ f.mobile }}" hint-size="100%,100%" style="width:100%;min-height:100%"></dc-import></sc-if>
+            <sc-if value="{{ isOtp01 }}"><dc-import name="Block otp-01" mobile="{{ f.mobile }}" hint-size="100%,100%" style="width:100%;min-height:100%"></dc-import></sc-if>
+            <sc-if value="{{ isSettings01 }}"><dc-import name="Block settings-01" mobile="{{ f.mobile }}" hint-size="100%,100%" style="width:100%;min-height:100%"></dc-import></sc-if>
+            <sc-if value="{{ isDashboard01 }}"><dc-import name="Block dashboard-01" mobile="{{ f.mobile }}" hint-size="100%,100%" style="width:100%;min-height:100%"></dc-import></sc-if>
+            <sc-if value="{{ isTable01 }}"><dc-import name="Block table-01" mobile="{{ f.mobile }}" hint-size="100%,100%" style="width:100%;min-height:100%"></dc-import></sc-if>
+            <sc-if value="{{ isPricing01 }}"><dc-import name="Block pricing-01" mobile="{{ f.mobile }}" hint-size="100%,100%" style="width:100%;min-height:100%"></dc-import></sc-if>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;gap:40px;align-items:flex-start">
+      <sc-for list="{{ mobileFrames }}" as="f" hint-placeholder-count="2">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:oklch(0.35 0 0)"><mimi-icon name="{{ f.icon }}" size="14"></mimi-icon>{{ f.caption }}</span>
+          <div style="padding:10px;border-radius:52px;background:oklch(0.18 0 0);box-shadow:0 24px 60px -24px oklch(0 0 0 / .4), inset 0 0 0 1.5px oklch(0.38 0 0)">
+            <div data-mimi-style="mimi" class="{{ f.cls }}" style="position:relative;width:390px;height:844px;border-radius:42px;overflow:auto;background:var(--mimi-background);scrollbar-width:none">
+              <div style="position:sticky;top:0;z-index:20;height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:14px;font-weight:600;background:var(--mimi-background);color:var(--mimi-foreground)"><span>9:41</span><span style="width:110px;height:30px;border-radius:999px;background:oklch(0.12 0 0)"></span><span style="display:flex;gap:4px"><mimi-icon name="signal" size="15"></mimi-icon><mimi-icon name="battery-full" size="15"></mimi-icon></span></div>
+              <sc-if value="{{ isLogin01 }}"><dc-import name="Block login-01" mobile="{{ f.mobile }}" hint-size="100%,800px" style="width:100%;min-height:800px"></dc-import></sc-if>
+              <sc-if value="{{ isLogin02 }}"><dc-import name="Block login-02" mobile="{{ f.mobile }}" slot-key="{{ f.key }}" hint-size="100%,800px" style="width:100%;min-height:800px"></dc-import></sc-if>
+              <sc-if value="{{ isSignup01 }}"><dc-import name="Block signup-01" mobile="{{ f.mobile }}" hint-size="100%,800px" style="width:100%;min-height:800px"></dc-import></sc-if>
+              <sc-if value="{{ isOtp01 }}"><dc-import name="Block otp-01" mobile="{{ f.mobile }}" hint-size="100%,800px" style="width:100%;min-height:800px"></dc-import></sc-if>
+              <sc-if value="{{ isSettings01 }}"><dc-import name="Block settings-01" mobile="{{ f.mobile }}" hint-size="100%,800px" style="width:100%;min-height:800px"></dc-import></sc-if>
+              <sc-if value="{{ isDashboard01 }}"><dc-import name="Block dashboard-01" mobile="{{ f.mobile }}" hint-size="100%,800px" style="width:100%;min-height:800px"></dc-import></sc-if>
+              <sc-if value="{{ isTable01 }}"><dc-import name="Block table-01" mobile="{{ f.mobile }}" hint-size="100%,800px" style="width:100%;min-height:800px"></dc-import></sc-if>
+              <sc-if value="{{ isPricing01 }}"><dc-import name="Block pricing-01" mobile="{{ f.mobile }}" hint-size="100%,800px" style="width:100%;min-height:800px"></dc-import></sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+      <div style="max-width:420px;display:flex;flex-direction:column;gap:10px;padding-top:30px;font-size:14px;line-height:1.55;color:oklch(0.35 0 0)">
+        <span style="font-size:15px;font-weight:700;color:oklch(0.2 0 0)">Cómo cambia en móvil</span>
+        <span>{{ mobileNote }}</span>
+        <span style="font-size:13px;color:oklch(0.45 0 0)">Componentes: {{ parts }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const BLOCKS = [
+  ['login-01', 'log-in', 'Inicio de sesión centrado: correo, contraseña con mostrar/ocultar, «recordarme» y botones de Google y GitHub.', 'La tarjeta desaparece y el formulario ocupa todo el ancho; los botones de redes se apilan.', 'Card, Input, Password, Checkbox, Button, Separator'],
+  ['login-02', 'columns-2', 'Dividido en dos: formulario a la izquierda y foto o ilustración a la derecha con un testimonio en vidrio. Arrastra tu imagen al hueco.', 'La imagen pasa arriba como banner de 200 px y el testimonio se oculta.', 'Input, Button, Image Slot, glass'],
+  ['signup-01', 'user-plus', 'Registro con validación en vivo: correo inválido, medidor de contraseña con reglas, confirmación que no coincide y botón deshabilitado que explica qué falta.', 'Se oculta la columna de beneficios y queda solo el formulario.', 'Input, Password, medidor, Checkbox, Button'],
+  ['otp-01', 'shield-check', 'Verificación con Input OTP de 6 casillas. El código correcto de prueba es 246810. El reenvío tiene cuenta regresiva.', 'Sin tarjeta y con casillas más pequeñas.', 'Input OTP, Button'],
+  ['settings-01', 'settings', 'Configuración con navegación lateral, formularios, switches, sesiones, zona de peligro y barra de «cambios sin guardar».', 'La navegación lateral se convierte en pestañas desplazables arriba.', 'Tabs, Input, Textarea, Switch, Badge, Button'],
+  ['dashboard-01', 'layout-dashboard', 'Sidebar, cuatro estadísticas con Number Ticker, gráfica de barras, actividad reciente y la Data Table.', 'Sin sidebar: menú hamburguesa arriba, estadísticas 2×2, tarjetas de clientes en lugar de tabla y barra de pestañas abajo.', 'Sidebar, Number Ticker, Card, Data Table, Timeline'],
+  ['table-01', 'table', 'Listado con resumen por estado y la Data Table con búsqueda, filtros por columna, orden y acciones masivas.', 'Tarjetas seleccionables con chips de filtro; al seleccionar aparece una barra flotante de acciones.', 'Data Table, Checkbox, Badge, Input, Toolbar'],
+  ['pricing-01', 'badge-dollar-sign', 'Tres planes con interruptor mensual/anual. El plan destacado lleva Border Beam y la insignia «Más popular».', 'Las tarjetas se apilan en una columna.', 'Toggle Group, Card, Border Beam, Badge, Button']
+];
+class Component extends DCLogic {
+  state = { sel: (() => { const h = (location.hash || '').slice(1); return BLOCKS.some(b => b[0] === h) ? h : 'login-01'; })() };
+  componentDidMount() { this.onHash = () => { const h = location.hash.slice(1); if (BLOCKS.some(b => b[0] === h)) this.setState({ sel: h }); }; window.addEventListener('hashchange', this.onHash); }
+  componentWillUnmount() { window.removeEventListener('hashchange', this.onHash); }
+  renderVals() {
+    const sel = this.state.sel, b = BLOCKS.find(x => x[0] === sel);
+    const flag = id => sel === id;
+    return {
+      tabs: BLOCKS.map(([id, icon]) => { const on = id === sel; return { id, icon, aria: String(on), border: on ? 'oklch(0.2 0 0)' : 'oklch(0.85 0 0)', bg: on ? 'oklch(0.2 0 0)' : 'oklch(1 0 0)', fg: on ? 'oklch(0.98 0 0)' : 'oklch(0.25 0 0)', fw: on ? '700' : '500', pick: () => { this.setState({ sel: id }); history.replaceState(null, '', '#' + id); } }; }),
+      desc: b[2], mobileNote: b[3], parts: b[4],
+      isLogin01: flag('login-01'), isLogin02: flag('login-02'), isSignup01: flag('signup-01'), isOtp01: flag('otp-01'), isSettings01: flag('settings-01'), isDashboard01: flag('dashboard-01'), isTable01: flag('table-01'), isPricing01: flag('pricing-01'),
+      desktopFrames: [['', 'Escritorio · claro', 'sun', 'dl'], ['dark', 'Escritorio · oscuro', 'moon', 'dd']].map(([cls, caption, icon, key]) => ({ cls, caption, icon, key, mobile: false })),
+      mobileFrames: [['', 'Móvil · claro', 'sun', 'ml'], ['dark', 'Móvil · oscuro', 'moon', 'md']].map(([cls, caption, icon, key]) => ({ cls, caption, icon, key, mobile: true }))
+    };
+  }
+}
+</script>
+</body>
+</html>

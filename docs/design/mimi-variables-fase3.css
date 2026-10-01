@@ -1,0 +1,28 @@
+/* Mimi · Fase 3 — tokens nuevos para entradas avanzadas y el editor de temas.
+   Solo agrega: cargar después de mimi-variables.css y mimi-variables-fase2.css. */
+[data-mimi-style] {
+  --mimi-range: color-mix(in oklab, var(--mimi-primary) 9%, var(--mimi-background));
+  --mimi-track: color-mix(in oklab, var(--mimi-foreground) 12%, var(--mimi-background));
+  --mimi-track-fill: var(--mimi-primary);
+  --mimi-thumb: oklch(1 0 0);
+  --mimi-chip: var(--mimi-secondary);
+  --mimi-chip-foreground: var(--mimi-secondary-foreground);
+  --mimi-dropzone: color-mix(in oklab, var(--mimi-muted) 55%, var(--mimi-background));
+  --mimi-dropzone-active: var(--mimi-info-soft);
+  --mimi-dropzone-active-border: var(--mimi-info);
+  --mimi-strength-weak: var(--mimi-destructive);
+  --mimi-strength-medium: var(--mimi-warning);
+  --mimi-strength-strong: var(--mimi-success);
+  --mimi-selection: var(--mimi-info);
+  --mimi-corner-shape: round;
+  --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 30%, var(--mimi-input));
+}
+[data-mimi-style].dark {
+  --mimi-range: color-mix(in oklab, var(--mimi-primary) 14%, var(--mimi-background));
+  --mimi-track: color-mix(in oklab, var(--mimi-foreground) 16%, var(--mimi-background));
+  --mimi-thumb: oklch(0.985 0 0);
+  --mimi-dropzone: color-mix(in oklab, var(--mimi-muted) 50%, var(--mimi-background));
+}
+@keyframes mimi-caret { 50% { opacity: 0; } }
+@keyframes mimi-bob { 50% { transform: translateY(-4px); } }
+@keyframes mimi-shake { 20%, 60% { transform: translateX(-4px); } 40%, 80% { transform: translateX(4px); } }

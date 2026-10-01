@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Outfit:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="mimi-variables.css">
+<link rel="stylesheet" href="mimi-variables-fase2.css">
+<link rel="stylesheet" href="mimi-variables-fase3.css">
+<script src="lucide.min.js"></script>
+<script src="mimi-icon.js"></script>
+<style>body{margin:0;background:oklch(0.93 0 0)}a{color:oklch(0.25 0 0)}a:hover{color:oklch(0.1 0 0)}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:24px;font-family:Outfit,system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <h1 style="margin:0;font-size:28px;font-weight:700;letter-spacing:-0.02em;color:oklch(0.2 0 0)">Mimi · Fase 4 · Data Table y Pagination</h1>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Mimi F4 Data Table y Pagination.dc.html">Data Table · Pagination</a>
+      <a href="Mimi F4 Command Tree Sortable.dc.html">Command · Tree · Sortable</a>
+      <a href="Mimi F4 Panel admin.dc.html">Panel administrativo</a>
+      <a href="Mimi F3 Editor de temas.dc.html">Fase 3</a>
+    </nav>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(2,1160px);gap:32px;align-items:start">
+    <sc-for list="{{ modes }}" as="m" hint-placeholder-count="2">
+      <div data-mimi-style="mimi" class="{{ m.cls }}" style="background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);border-radius:20px;padding:40px;display:flex;flex-direction:column;gap:36px;box-shadow:0 1px 3px oklch(0 0 0 / .1)">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:24px;font-weight:700;letter-spacing:-0.02em">Data Table</span><span style="font-size:14px;color:var(--mimi-muted-foreground)">Orden, filtros, búsqueda, selección, acciones, columnas fijas, filas expandibles y paginación.</span></div>
+          <span style="display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 12px;border-radius:999px;border:1px solid var(--mimi-border);font-size:12px;font-weight:600;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ m.icon }}" size="14"></mimi-icon>{{ m.label }}</span>
+        </div>
+        <section style="display:flex;flex-direction:column;gap:12px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">1 · Densa · 10 filas</h3>
+          <dc-import name="Mimi Data Table" density="compact" page-size="10" title="Clientes" hint-size="100%,620px"></dc-import>
+          <span style="font-size:12.5px;color:var(--mimi-muted-foreground)">Desplaza la tabla a la derecha: selección, expandir y Cliente quedan fijos. Clic en el embudo de Estado o Plan para filtrar; en ··· para acciones.</span>
+        </section>
+        <section style="display:flex;flex-direction:column;gap:12px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">2 · Cómoda · 5 filas</h3>
+          <dc-import name="Mimi Data Table" density="comfortable" page-size="5" title="Clientes" hint-size="100%,560px"></dc-import>
+        </section>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <section style="display:flex;flex-direction:column;gap:12px;min-width:0">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">3 · Cargando · Skeleton</h3>
+            <dc-import name="Mimi Data Table" state="loading" page-size="5" toolbar="false" title="Clientes" hint-size="100%,340px"></dc-import>
+          </section>
+          <section style="display:flex;flex-direction:column;gap:12px;min-width:0">
+            <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">4 · Vacío</h3>
+            <dc-import name="Mimi Data Table" state="empty" page-size="5" toolbar="false" title="Clientes" hint-size="100%,340px"></dc-import>
+          </section>
+        </div>
+
+        <div role="separator" style="height:1px;background:var(--mimi-border)"></div>
+
+        <section style="display:flex;flex-direction:column;gap:20px">
+          <h3 style="margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">5 · Pagination</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px 40px">
+            <sc-for list="{{ m.pagers }}" as="pg" hint-placeholder-count="4">
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ pg.caption }}</span>
+                <nav aria-label="{{ pg.caption }}" style="display:flex;align-items:center;gap:4px">
+                  <sc-for list="{{ pg.items }}" as="p">
+                    <sc-if value="{{ p.isGap }}"><span aria-hidden="true" style="width:32px;text-align:center;color:var(--mimi-muted-foreground)">…</span></sc-if>
+                    <sc-if value="{{ p.isBtn }}"><button aria-label="{{ p.aria }}" aria-current="{{ p.current }}" disabled="{{ p.disabled }}" onClick="{{ p.pick }}" style="--hbg:{{ p.hbg }};display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:36px;height:36px;padding:0 8px;box-sizing:border-box;border-radius:var(--mimi-radius);font-family:var(--mimi-font-sans);font-size:14px;font-variant-numeric:tabular-nums;transition:var(--mimi-transition);border:1px solid {{ p.border }};background:{{ p.bg }};color:{{ p.fg }};font-weight:{{ p.fw }};opacity:{{ p.op }};cursor:{{ p.cursor }};box-shadow:{{ p.sh }}" style-hover="background:var(--hbg)" style-active="transform:scale(0.9)"><sc-if value="{{ p.iconLeft }}"><mimi-icon name="{{ p.icon }}" size="16"></mimi-icon></sc-if>{{ p.label }}<sc-if value="{{ p.iconRight }}"><mimi-icon name="{{ p.icon }}" size="16"></mimi-icon></sc-if></button></sc-if>
+                    <sc-if value="{{ p.isInput }}"><span style="display:inline-flex;align-items:center;gap:8px;padding:0 6px;font-size:14px;color:var(--mimi-muted-foreground)">Página<input aria-label="Página actual" inputmode="numeric" value="{{ p.value }}" onChange="{{ p.onChange }}" onKeyDown="{{ p.onKey }}" style="width:44px;height:34px;box-sizing:border-box;border:1px solid var(--mimi-input);border-radius:var(--mimi-radius-sm);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;text-align:center;outline:none;transition:var(--mimi-transition)" style-focus="border-color:var(--mimi-ring);box-shadow:0 0 0 3px var(--mimi-ring-soft)">de {{ p.total }}</span></sc-if>
+                  </sc-for>
+                </nav>
+                <span style="font-size:12.5px;color:var(--mimi-muted-foreground);font-variant-numeric:tabular-nums">{{ pg.hint }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { l: { a: 3, b: 8, c: 13, d: 3, dText: null }, d: { a: 3, b: 8, c: 13, d: 3, dText: null } };
+  set(k, patch) { this.setState(s => ({ [k]: { ...s[k], ...patch } })); }
+  btn(k, key, label, p, total, o = {}) {
+    const cur = !!o.cur, dis = !!o.dis;
+    return { isBtn: true, label, aria: o.aria || 'Página ' + p, current: cur ? 'page' : undefined, disabled: dis, pick: () => this.set(k, { [key]: Math.min(Math.max(p, 1), total), dText: null }),
+      iconLeft: o.icon && o.side !== 'right', iconRight: o.icon && o.side === 'right', icon: o.icon || '',
+      border: cur ? 'var(--mimi-primary)' : o.outline ? 'var(--mimi-border)' : 'transparent', bg: cur ? 'var(--mimi-primary)' : 'transparent', fg: cur ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)',
+      fw: cur ? '700' : '500', op: dis ? '.4' : '1', cursor: dis ? 'not-allowed' : 'pointer', sh: cur ? 'var(--mimi-shadow-primary)' : 'none', hbg: cur ? 'var(--mimi-primary)' : dis ? 'transparent' : 'var(--mimi-accent)' };
+  }
+  nums(page, pages) { return pages <= 7 ? Array.from({ length: pages }, (_, i) => i + 1) : page <= 4 ? [1, 2, 3, 4, 5, 'g', pages] : page >= pages - 3 ? [1, 'g', pages - 4, pages - 3, pages - 2, pages - 1, pages] : [1, 'g', page - 1, page, page + 1, 'g', pages]; }
+  renderVals() {
+    const modes = [['l', '', 'Claro', 'sun'], ['d', 'dark', 'Oscuro', 'moon']].map(([k, cls, label, icon]) => {
+      const st = this.state[k];
+      const B = (key, l, p, t, o) => this.btn(k, key, l, p, t, o);
+      const numbered = (key, page, total, o = {}) => this.nums(page, total).map(n => n === 'g' ? { isGap: true } : B(key, String(n), n, total, { cur: n === page }));
+      return {
+        cls, label, icon,
+        pagers: [
+          { caption: 'Con números', hint: 'Página ' + st.a + ' de 5', items: [B('a', 'Anterior', st.a - 1, 5, { icon: 'chevron-left', aria: 'Página anterior', dis: st.a === 1 }), ...numbered('a', st.a, 5), B('a', 'Siguiente', st.a + 1, 5, { icon: 'chevron-right', side: 'right', aria: 'Página siguiente', dis: st.a === 5 })] },
+          { caption: 'Con elipsis', hint: 'Página ' + st.b + ' de 20', items: [B('b', '', st.b - 1, 20, { icon: 'chevron-left', aria: 'Página anterior', dis: st.b === 1, outline: true }), ...numbered('b', st.b, 20), B('b', '', st.b + 1, 20, { icon: 'chevron-right', aria: 'Página siguiente', dis: st.b === 20, outline: true })] },
+          { caption: 'Primera y última', hint: 'Página ' + st.c + ' de 20', items: [B('c', '', 1, 20, { icon: 'chevrons-left', aria: 'Primera página', dis: st.c === 1, outline: true }), B('c', '', st.c - 1, 20, { icon: 'chevron-left', aria: 'Página anterior', dis: st.c === 1, outline: true }), ...numbered('c', st.c, 20), B('c', '', st.c + 1, 20, { icon: 'chevron-right', aria: 'Página siguiente', dis: st.c === 20, outline: true }), B('c', '', 20, 20, { icon: 'chevrons-right', aria: 'Última página', dis: st.c === 20, outline: true })] },
+          { caption: 'Compacta', hint: 'Mostrando ' + ((st.d - 1) * 10 + 1) + '–' + Math.min(st.d * 10, 194) + ' de 194', items: [
+            B('d', '', st.d - 1, 20, { icon: 'chevron-left', aria: 'Página anterior', dis: st.d === 1, outline: true }),
+            { isInput: true, value: st.dText !== null ? st.dText : String(st.d), total: '20', onChange: e => this.set(k, { dText: e.target.value.replace(/\D/g, '') }), onKey: e => { if (e.key === 'Enter') { const n = parseInt(st.dText, 10); this.set(k, { d: isNaN(n) ? st.d : Math.min(Math.max(n, 1), 20), dText: null }); } } },
+            B('d', '', st.d + 1, 20, { icon: 'chevron-right', aria: 'Página siguiente', dis: st.d === 20, outline: true })
+          ] }
+        ]
+      };
+    });
+    return { modes };
+  }
+}
+</script>
+</body>
+</html>

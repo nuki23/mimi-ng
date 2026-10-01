@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="position:relative;width:100%;min-height:100%;box-sizing:border-box;display:flex;background:var(--mimi-background);color:var(--mimi-foreground);font-family:var(--mimi-font-sans)">
+  <sc-if value="{{ desktop }}">
+    <aside aria-label="Navegación" style="width:232px;flex-shrink:0;box-sizing:border-box;display:flex;flex-direction:column;gap:16px;padding:14px 12px;border-right:1px solid var(--mimi-border);background:var(--mimi-card)">
+      <div style="display:flex;align-items:center;gap:10px;height:36px;padding:0 4px"><span style="width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-size:17px;font-weight:800;line-height:1">m</span><span style="font-size:14px;font-weight:700">Mimi Ventas</span></div>
+      <sc-for list="{{ nav }}" as="g" hint-placeholder-count="2">
+        <nav aria-label="{{ g.label }}" style="display:flex;flex-direction:column;gap:2px"><span style="padding:0 8px 4px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mimi-muted-foreground)">{{ g.label }}</span>
+          <sc-for list="{{ g.items }}" as="it"><button aria-current="{{ it.current }}" onClick="{{ it.pick }}" style="--hbg:{{ it.hbg }};--hfg:{{ it.hfg }};display:flex;align-items:center;gap:10px;height:36px;padding:0 9px;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:14px;text-align:left;cursor:pointer;transition:var(--mimi-transition);background:{{ it.bg }};color:{{ it.fg }};font-weight:{{ it.fw }}" style-hover="background:var(--hbg);color:var(--hfg)" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="{{ it.icon }}" size="17"></mimi-icon><span style="flex:1">{{ it.label }}</span><sc-if value="{{ it.hasCount }}"><span style="display:inline-flex;align-items:center;height:20px;padding:0 7px;border-radius:999px;font-size:11px;font-weight:700;background:{{ it.cBg }};color:{{ it.cFg }}">{{ it.count }}</span></sc-if></button></sc-for>
+        </nav>
+      </sc-for>
+      <div style="flex:1"></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:4px"><span style="width:30px;height:30px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11.5px;font-weight:700">AT</span><div style="flex:1;display:flex;flex-direction:column;line-height:1.3"><span style="font-size:13px;font-weight:600">Ana Torres</span><span style="font-size:11.5px;color:var(--mimi-muted-foreground)">Administradora</span></div></div>
+    </aside>
+  </sc-if>
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header style="position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--mimi-border);background:var(--mimi-glass);backdrop-filter:blur(var(--mimi-glass-blur));-webkit-backdrop-filter:blur(var(--mimi-glass-blur));height:{{ headH }};padding:{{ headPad }}">
+      <sc-if value="{{ mobile }}"><button aria-label="Abrir menú" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;padding:0;border:0;border-radius:var(--mimi-radius-sm);background:transparent;color:var(--mimi-foreground);cursor:pointer" style-active="transform:scale(0.9)"><mimi-icon name="menu" size="20"></mimi-icon></button><span style="flex:1;font-size:15px;font-weight:700">Inicio</span></sc-if>
+      <sc-if value="{{ desktop }}"><div style="flex:1;display:flex;flex-direction:column;line-height:1.25"><span style="font-size:20px;font-weight:800;letter-spacing:-0.02em">Hola, Ana</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">Miércoles 30 de septiembre · así va tu mes</span></div>
+        <button style="display:flex;align-items:center;gap:8px;width:220px;height:36px;box-sizing:border-box;padding:0 6px 0 12px;border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);background:var(--mimi-input-background);color:var(--mimi-muted-foreground);font-family:var(--mimi-font-sans);font-size:13.5px;cursor:pointer" style-active="transform:scale(var(--mimi-press-scale))"><mimi-icon name="search" size="15"></mimi-icon><span style="flex:1;text-align:left">Buscar…</span><kbd style="height:22px;padding:0 6px;display:inline-flex;align-items:center;border:1px solid var(--mimi-border);border-radius:5px;font-family:var(--mimi-font-mono);font-size:11px">⌘K</kbd></button>
+        <button style="display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:0;border-radius:var(--mimi-radius);background:var(--mimi-primary);color:var(--mimi-primary-foreground);font-family:var(--mimi-font-sans);font-size:14px;font-weight:600;cursor:pointer;box-shadow:var(--mimi-shadow-primary);transition:var(--mimi-transition)" style-hover="background:var(--mimi-primary-hover)" style-active="transform:scale(var(--mimi-press-scale));box-shadow:0 0 0 3px var(--mimi-ring-soft)"><mimi-icon name="plus" size="16"></mimi-icon>Nuevo cliente</button>
+      </sc-if>
+      <sc-if value="{{ mobile }}"><span style="width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:var(--mimi-info-soft);color:var(--mimi-info-soft-foreground);font-size:11.5px;font-weight:700">AT</span></sc-if>
+    </header>
+    <main style="flex:1;display:flex;flex-direction:column;gap:{{ gap }};padding:{{ mainPad }}">
+      <sc-if value="{{ mobile }}"><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:22px;font-weight:800;letter-spacing:-0.02em">Hola, Ana</span><span style="font-size:13px;color:var(--mimi-muted-foreground)">Así va septiembre</span></div></sc-if>
+      <div style="display:grid;gap:{{ gap }};grid-template-columns:{{ statCols }}">
+        <sc-for list="{{ stats }}" as="c" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;gap:8px;background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);padding:{{ cardPad }}">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:6px"><span style="font-size:13px;font-weight:500;color:var(--mimi-muted-foreground)">{{ c.label }}</span><span style="display:inline-flex;color:var(--mimi-muted-foreground)"><mimi-icon name="{{ c.icon }}" size="15"></mimi-icon></span></div>
+            <span aria-label="{{ c.final }}" style="font-weight:800;letter-spacing:-0.025em;font-variant-numeric:tabular-nums;line-height:1.1;font-size:{{ statFs }}">{{ c.value }}</span>
+            <span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:{{ c.fg }}"><mimi-icon name="{{ c.trend }}" size="13"></mimi-icon>{{ c.delta }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:grid;gap:{{ gap }};grid-template-columns:{{ midCols }}">
+        <section style="display:flex;flex-direction:column;gap:14px;background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);padding:{{ cardPad }}">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="margin:0;font-size:15px;font-weight:700">Ingresos por mes</h2><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">2026 · MXN</span></div>
+          <div role="img" aria-label="Ingresos de enero a septiembre, creciendo de 180 mil a 412 mil" style="display:flex;align-items:flex-end;gap:{{ barGap }};height:150px;padding-top:8px">
+            <sc-for list="{{ bars }}" as="b" hint-placeholder-count="9"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end"><div data-fx="" style="width:100%;border-radius:6px 6px 2px 2px;transition:height .9s cubic-bezier(.2,.8,.2,1);height:{{ b.h }};background:{{ b.c }}"></div><span style="font-size:11px;color:var(--mimi-muted-foreground)">{{ b.m }}</span></div></sc-for>
+          </div>
+        </section>
+        <section style="display:flex;flex-direction:column;gap:6px;background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius-card);box-shadow:var(--mimi-shadow-card);padding:{{ cardPad }}">
+          <h2 style="margin:0 0 6px;font-size:15px;font-weight:700">Actividad reciente</h2>
+          <sc-for list="{{ activity }}" as="a" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-top:{{ a.bt }}"><span style="width:30px;height:30px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:{{ a.bg }};color:{{ a.fg }}"><mimi-icon name="{{ a.icon }}" size="14"></mimi-icon></span><div style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35"><span style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.t }}</span><span style="font-size:12px;color:var(--mimi-muted-foreground)">{{ a.d }}</span></div><time style="font-size:11.5px;color:var(--mimi-muted-foreground)">{{ a.when }}</time></div></sc-for>
+        </section>
+      </div>
+      <sc-if value="{{ desktop }}"><dc-import name="Mimi Data Table" density="compact" page-size="5" title="Clientes" hint-size="100%,440px"></dc-import></sc-if>
+      <sc-if value="{{ mobile }}">
+        <section style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><h2 style="margin:0;font-size:15px;font-weight:700">Clientes recientes</h2><a href="#" style="font-size:13px;font-weight:600;color:var(--mimi-foreground);text-decoration:underline;text-underline-offset:3px">Ver todos</a></div>
+          <sc-for list="{{ clients }}" as="c" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--mimi-card);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-neutral)"><span style="width:36px;height:36px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-size:12px;font-weight:700;background:{{ c.avBg }};color:{{ c.avFg }}">{{ c.ini }}</span><div style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.35"><span style="font-size:14px;font-weight:600">{{ c.name }}</span><span style="font-size:12.5px;color:var(--mimi-muted-foreground)">{{ c.plan }} · {{ c.mrr }}</span></div><span style="display:inline-flex;align-items:center;height:22px;padding:0 9px;border-radius:999px;font-size:11.5px;font-weight:600;background:{{ c.stBg }};color:{{ c.stFg }}">{{ c.status }}</span></div></sc-for>
+        </section>
+      </sc-if>
+    </main>
+    <sc-if value="{{ mobile }}">
+      <nav aria-label="Navegación" style="position:sticky;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);padding:6px 8px 10px;border-top:1px solid var(--mimi-border);background:var(--mimi-glass);backdrop-filter:blur(var(--mimi-glass-blur));-webkit-backdrop-filter:blur(var(--mimi-glass-blur))">
+        <sc-for list="{{ tabbar }}" as="t" hint-placeholder-count="4"><button aria-current="{{ t.current }}" onClick="{{ t.pick }}" style="display:flex;flex-direction:column;align-items:center;gap:3px;height:52px;justify-content:center;border:0;background:transparent;font-family:var(--mimi-font-sans);font-size:11px;cursor:pointer;color:{{ t.fg }};font-weight:{{ t.fw }}" style-active="transform:scale(0.92)"><span style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:28px;border-radius:999px;transition:var(--mimi-transition);background:{{ t.bg }}"><mimi-icon name="{{ t.icon }}" size="19"></mimi-icon></span>{{ t.label }}</button></sc-for>
+      </nav>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;1280px&quot;,&quot;height&quot;:&quot;800px&quot;},&quot;mobile&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const NAV = [['General', [['home', 'Inicio', 'layout-dashboard'], ['clients', 'Clientes', 'users', '36'], ['billing', 'Facturación', 'receipt', '4', 'warning'], ['reports', 'Reportes', 'chart-line']]], ['Equipo', [['members', 'Miembros', 'user-round'], ['settings', 'Ajustes', 'settings']]]];
+const STATS = [['MRR', 'banknote', 412380, v => '$' + Math.round(v).toLocaleString('es-MX'), '+8.2% vs. agosto', 'success', 'trending-up'], ['Clientes activos', 'users', 24, v => String(Math.round(v)), '+3 este mes', 'success', 'trending-up'], ['Conversión', 'target', 18.4, v => v.toFixed(1) + '%', '+1.1 pts', 'success', 'trending-up'], ['Pagos atrasados', 'clock-alert', 4, v => String(Math.round(v)), '$38,900 pendientes', 'warning', 'triangle-alert']];
+const REV = [180, 196, 214, 240, 262, 290, 331, 378, 412];
+const MS = ['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S'];
+class Component extends DCLogic {
+  state = { p: 0, nav: 'home' };
+  componentDidMount() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { this.setState({ p: 1 }); return; }
+    const t0 = performance.now(); const step = now => { const t = Math.min(1, (now - t0) / 1400); this.setState({ p: t === 1 ? 1 : 1 - Math.pow(2, -10 * t) }); if (t < 1) this.raf = requestAnimationFrame(step); }; this.raf = requestAnimationFrame(step);
+  }
+  componentWillUnmount() { cancelAnimationFrame(this.raf); }
+  renderVals() {
+    const m = this.props.mobile === true || this.props.mobile === 'true', p = this.state.p, nav = this.state.nav;
+    const tone = t => ({ bg: 'var(--mimi-' + (t === 'destructive' ? 'destructive-soft-bg' : t + '-soft') + ')', fg: 'var(--mimi-' + t + '-soft-foreground)' });
+    return {
+      mobile: m, desktop: !m, headH: m ? '56px' : '68px', headPad: m ? '0 10px 0 6px' : '0 28px', mainPad: m ? '16px 16px 20px' : '24px 28px 28px', gap: m ? '12px' : '16px', cardPad: m ? '14px' : '18px',
+      statCols: m ? '1fr 1fr' : 'repeat(4, minmax(0, 1fr))', statFs: m ? '22px' : '28px', midCols: m ? '1fr' : '1.5fr 1fr', barGap: m ? '6px' : '10px',
+      nav: NAV.map(([g, items]) => ({ label: g, items: items.map(([id, l, ic, count, t]) => { const on = nav === id; return { label: l, icon: ic, current: on ? 'page' : undefined, hasCount: !!count, count, cBg: t ? 'var(--mimi-warning-soft)' : on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-muted)', cFg: t ? 'var(--mimi-warning-soft-foreground)' : on ? 'var(--mimi-primary)' : 'var(--mimi-muted-foreground)', bg: on ? 'var(--mimi-primary)' : 'transparent', fg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-muted-foreground)', fw: on ? '600' : '500', hbg: on ? 'var(--mimi-primary)' : 'var(--mimi-accent)', hfg: on ? 'var(--mimi-primary-foreground)' : 'var(--mimi-foreground)', pick: () => this.setState({ nav: id }) }; }) })),
+      stats: STATS.map(([label, icon, v, f, delta, t, trend]) => ({ label, icon, value: f(v * p), final: label + ': ' + f(v), delta, trend, fg: 'var(--mimi-' + t + '-soft-foreground)' })),
+      bars: REV.map((v, i) => ({ m: MS[i], h: (v / 412 * 100 * (p > 0.05 ? 1 : 0)) + '%', c: i === REV.length - 1 ? 'var(--mimi-primary)' : 'color-mix(in oklab, var(--mimi-primary) 22%, var(--mimi-muted))' })),
+      activity: [['Pago recibido', 'Hotel Brisa · $4,560', 'circle-check', 'success', '2 h'], ['Nuevo cliente', 'Café Altura se registró', 'user-plus', 'info', '5 h'], ['Pago fallido', 'Taller Motor · tarjeta rechazada', 'circle-x', 'destructive', 'ayer'], ['Cambio de plan', 'Grupo Talento pasó a Empresa', 'arrow-up-circle', 'warning', 'ayer']].map(([t, d, icon, tn, when], i) => ({ t, d, icon, when, ...tone(tn), bt: i ? '1px solid var(--mimi-border)' : '0' })),
+      clients: [['Hotel Brisa', 'HB', 'Equipo', '$5,520', 'Activo', 'success', 'info'], ['Café Altura', 'CA', 'Inicial', '$950', 'Prueba', 'info', 'success'], ['Taller Motor', 'TM', 'Equipo', '$3,840', 'Moroso', 'warning', 'warning'], ['Grupo Talento', 'GT', 'Empresa', '$18,600', 'Activo', 'success', 'destructive']].map(([name, ini, plan, mrr, status, st, av]) => ({ name, ini, plan, mrr, status, stBg: tone(st).bg, stFg: tone(st).fg, avBg: tone(av).bg, avFg: tone(av).fg })),
+      tabbar: [['home', 'Inicio', 'layout-dashboard'], ['clients', 'Clientes', 'users'], ['billing', 'Facturas', 'receipt'], ['settings', 'Ajustes', 'settings']].map(([id, l, ic]) => { const on = nav === id; return { label: l, icon: ic, current: on ? 'page' : undefined, fg: on ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', fw: on ? '700' : '500', bg: on ? 'var(--mimi-accent)' : 'transparent', pick: () => this.setState({ nav: id }) }; })
+    };
+  }
+}
+</script>
+</body>
+</html>

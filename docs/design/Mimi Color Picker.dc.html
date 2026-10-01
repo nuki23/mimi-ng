@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:280px;box-sizing:border-box;display:flex;flex-direction:column;gap:12px;padding:12px;background:var(--mimi-popover);color:var(--mimi-popover-foreground);border:1px solid var(--mimi-border);border-radius:var(--mimi-radius);box-shadow:var(--mimi-shadow-popover);font-family:var(--mimi-font-sans)">
+  <div role="slider" aria-label="Saturación y brillo" aria-valuetext="{{ svText }}" tabIndex="0" onPointerDown="{{ svDown }}" onPointerMove="{{ svMove }}" onPointerUp="{{ up }}" onKeyDown="{{ svKey }}" style="position:relative;height:150px;border-radius:var(--mimi-radius-sm);cursor:crosshair;touch-action:none;background:linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent), {{ hueColor }}">
+    <span aria-hidden="true" style="position:absolute;width:14px;height:14px;box-sizing:border-box;border-radius:999px;border:2px solid #fff;box-shadow:0 0 0 1px oklch(0 0 0 / .25), 0 2px 6px oklch(0 0 0 / .3);transform:translate(-50%,-50%);pointer-events:none;left:{{ sx }};top:{{ sy }};background:{{ hex }}"></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <span aria-hidden="true" style="width:28px;height:28px;flex-shrink:0;border-radius:999px;box-shadow:inset 0 0 0 1px oklch(0 0 0 / .12);background:{{ hex }}"></span>
+    <div role="slider" aria-label="Tono" aria-valuemin="0" aria-valuemax="360" aria-valuenow="{{ hueNow }}" tabIndex="0" onPointerDown="{{ hueDown }}" onPointerMove="{{ hueMove }}" onPointerUp="{{ up }}" onKeyDown="{{ hueKey }}" style="position:relative;flex:1;height:12px;border-radius:999px;cursor:pointer;touch-action:none;background:linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00)">
+      <span aria-hidden="true" style="position:absolute;top:50%;width:16px;height:16px;box-sizing:border-box;border-radius:999px;border:2px solid #fff;box-shadow:0 0 0 1px oklch(0 0 0 / .25), 0 2px 6px oklch(0 0 0 / .3);transform:translate(-50%,-50%);pointer-events:none;left:{{ hx }};background:{{ hueColor }}"></span>
+    </div>
+  </div>
+  <div style="display:flex;gap:6px">
+    <div role="radiogroup" aria-label="Formato" style="display:inline-flex;gap:2px;padding:2px;border-radius:calc(var(--mimi-radius-sm) + 2px);background:var(--mimi-muted)">
+      <sc-for list="{{ formats }}" as="f" hint-placeholder-count="2">
+        <button role="radio" aria-checked="{{ f.aria }}" onClick="{{ f.pick }}" style="height:28px;padding:0 8px;border:0;border-radius:var(--mimi-radius-sm);font-family:var(--mimi-font-sans);font-size:11.5px;cursor:pointer;transition:var(--mimi-transition);background:{{ f.bg }};color:{{ f.fg }};font-weight:{{ f.fw }};box-shadow:{{ f.sh }}" style-active="transform:scale(0.94)">{{ f.label }}</button>
+      </sc-for>
+    </div>
+    <input aria-label="Valor del color" aria-invalid="{{ invalid }}" value="{{ text }}" onChange="{{ onText }}" onBlur="{{ commitText }}" onKeyDown="{{ textKey }}" spellcheck="false" style="flex:1;min-width:0;height:32px;box-sizing:border-box;padding:0 10px;border-radius:var(--mimi-radius-sm);background:var(--mimi-input-background);color:var(--mimi-foreground);font-family:var(--mimi-font-mono);font-size:12px;outline:none;transition:var(--mimi-transition);border:1px solid {{ textBorder }}" style-focus="box-shadow:0 0 0 3px var(--mimi-ring-soft)">
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Paleta</span>
+    <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px">
+      <sc-for list="{{ palette }}" as="c" hint-placeholder-count="16">
+        <button aria-label="{{ c.hex }}" aria-pressed="{{ c.aria }}" onClick="{{ c.pick }}" style="aspect-ratio:1;padding:0;border:0;border-radius:999px;cursor:pointer;transition:var(--mimi-transition);background:{{ c.hex }};box-shadow:{{ c.ring }}" style-hover="transform:scale(1.12)" style-active="transform:scale(0.9)"></button>
+      </sc-for>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <span style="font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--mimi-muted-foreground)">Recientes</span>
+    <sc-if value="{{ hasRecent }}">
+      <div style="display:grid;grid-template-columns:repeat(8,1fr);gap:6px">
+        <sc-for list="{{ recent }}" as="c">
+          <button aria-label="{{ c.hex }}" onClick="{{ c.pick }}" style="aspect-ratio:1;padding:0;border:0;border-radius:var(--mimi-radius-sm);cursor:pointer;transition:var(--mimi-transition);background:{{ c.hex }};box-shadow:inset 0 0 0 1px oklch(0 0 0 / .12)" style-hover="transform:scale(1.12)" style-active="transform:scale(0.9)"></button>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ noRecent }}"><span style="font-size:12px;color:var(--mimi-muted-foreground)">Los colores que elijas aparecerán aquí.</span></sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;300px&quot;,&quot;height&quot;:&quot;420px&quot;},&quot;value&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#4f46e5&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;onChange&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;(hex: string) =&gt; void&quot;}}">
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const hsv2rgb = (h, s, v) => { const f = n => { const k = (n + h / 60) % 6; return v - v * s * Math.max(0, Math.min(k, 4 - k, 1)); }; return [f(5), f(3), f(1)]; };
+const rgb2hex = rgb => '#' + rgb.map(x => Math.round(clamp(x, 0, 1) * 255).toString(16).padStart(2, '0')).join('');
+const hex2rgb = h => { h = h.replace('#', ''); if (h.length === 3) h = h.split('').map(c => c + c).join(''); if (!/^[0-9a-f]{6}$/i.test(h)) return null; return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); };
+const rgb2hsv = ([r, g, b]) => { const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn; let h = 0; if (d) { h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h *= 60; if (h < 0) h += 360; } return [h, mx ? d / mx : 0, mx]; };
+const lin = c => c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+const gam = c => c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055;
+const rgb2oklch = rgb => { const [r, g, b] = rgb.map(lin); const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b), m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b), s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b); const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s, A = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s, B = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s; let H = Math.atan2(B, A) * 180 / Math.PI; if (H < 0) H += 360; return [L, Math.hypot(A, B), H]; };
+const oklch2rgb = (L, C, H) => { const a = C * Math.cos(H * Math.PI / 180), b = C * Math.sin(H * Math.PI / 180); const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3, m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3, s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3; return [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s, -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s].map(x => clamp(gam(clamp(x, 0, 1)), 0, 1)); };
+const fmtOklch = rgb => { const [L, C, H] = rgb2oklch(rgb); return 'oklch(' + L.toFixed(3) + ' ' + C.toFixed(3) + ' ' + (C < 0.002 ? 0 : H.toFixed(1)) + ')'; };
+const parse = t => { t = t.trim(); const h = hex2rgb(t); if (h) return h; const m = t.match(/^oklch\(\s*([\d.]+)(%?)\s+([\d.]+)\s+([\d.]+)\s*\)$/i); if (m) { let L = parseFloat(m[1]); if (m[2]) L /= 100; return oklch2rgb(L, parseFloat(m[3]), parseFloat(m[4])); } return null; };
+const PALETTE = ['#171717', '#525252', '#a3a3a3', '#e5e5e5', '#dc2626', '#ea580c', '#d97706', '#ca8a04', '#16a34a', '#059669', '#0891b2', '#2563eb', '#4f46e5', '#7c3aed', '#c026d3', '#e11d48'];
+
+class Component extends DCLogic {
+  constructor(p) {
+    super(p);
+    const rgb = hex2rgb(this.props.value || '#4f46e5') || [0.3, 0.27, 0.9];
+    this.state = { hsv: rgb2hsv(rgb), fmt: 'hex', text: null, invalid: false, recent: [] };
+    this.lastHex = rgb2hex(rgb);
+  }
+  componentDidUpdate() {
+    const v = (this.props.value || '').toLowerCase();
+    if (v && v !== this.lastHex && hex2rgb(v)) { this.lastHex = v; this.setState({ hsv: rgb2hsv(hex2rgb(v)), text: null, invalid: false }); }
+  }
+  emit(hsv, addRecent) {
+    const hex = rgb2hex(hsv2rgb(...hsv));
+    this.lastHex = hex;
+    this.setState(s => ({ hsv, text: null, invalid: false, recent: addRecent ? [hex, ...s.recent.filter(x => x !== hex)].slice(0, 8) : s.recent }));
+    this.props.onChange && this.props.onChange(hex);
+  }
+  pos(e) { const r = e.currentTarget.getBoundingClientRect(); return [clamp((e.clientX - r.left) / r.width, 0, 1), clamp((e.clientY - r.top) / r.height, 0, 1)]; }
+  renderVals() {
+    const { hsv, fmt, recent } = this.state;
+    const [h, s, v] = hsv;
+    const rgb = hsv2rgb(h, s, v), hex = rgb2hex(rgb);
+    const shown = this.state.text !== null ? this.state.text : fmt === 'hex' ? hex.toUpperCase() : fmtOklch(rgb);
+    const commit = () => { if (this.state.text === null) return; const p = parse(this.state.text); if (p) this.emit(rgb2hsv(p), true); else this.setState({ invalid: true }); };
+    const sv = e => { const [x, y] = this.pos(e); this.emit([h, x, 1 - y]); };
+    const hu = e => { const [x] = this.pos(e); this.emit([x * 360, s, v]); };
+    return {
+      hex, hueColor: rgb2hex(hsv2rgb(h, 1, 1)), sx: s * 100 + '%', sy: (1 - v) * 100 + '%', hx: (h / 360) * 100 + '%', hueNow: Math.round(h),
+      svText: 'Saturación ' + Math.round(s * 100) + '%, brillo ' + Math.round(v * 100) + '%',
+      svDown: e => { e.currentTarget.setPointerCapture(e.pointerId); this.dragging = 'sv'; sv(e); },
+      svMove: e => { if (this.dragging === 'sv') sv(e); },
+      hueDown: e => { e.currentTarget.setPointerCapture(e.pointerId); this.dragging = 'hue'; hu(e); },
+      hueMove: e => { if (this.dragging === 'hue') hu(e); },
+      up: () => { if (this.dragging) { this.dragging = null; this.emit(this.state.hsv, true); } },
+      svKey: e => { const d = { ArrowRight: [0.02, 0], ArrowLeft: [-0.02, 0], ArrowUp: [0, 0.02], ArrowDown: [0, -0.02] }[e.key]; if (d) { e.preventDefault(); this.emit([h, clamp(s + d[0], 0, 1), clamp(v + d[1], 0, 1)]); } },
+      hueKey: e => { const d = { ArrowRight: 3, ArrowUp: 3, ArrowLeft: -3, ArrowDown: -3 }[e.key]; if (d) { e.preventDefault(); this.emit([(h + d + 360) % 360, s, v]); } },
+      formats: [['hex', 'HEX'], ['oklch', 'OKLCH']].map(([k, label]) => ({ label, aria: String(fmt === k), pick: () => this.setState({ fmt: k, text: null, invalid: false }), bg: fmt === k ? 'var(--mimi-card)' : 'transparent', fg: fmt === k ? 'var(--mimi-foreground)' : 'var(--mimi-muted-foreground)', fw: fmt === k ? '700' : '500', sh: fmt === k ? 'var(--mimi-shadow-neutral)' : 'none' })),
+      text: shown, invalid: String(this.state.invalid),
+      textBorder: this.state.invalid ? 'var(--mimi-destructive)' : 'var(--mimi-input)',
+      onText: e => this.setState({ text: e.target.value, invalid: false }), commitText: commit,
+      textKey: e => { if (e.key === 'Enter') { e.preventDefault(); commit(); } },
+      palette: PALETTE.map(c => ({ hex: c, aria: String(c === hex), ring: c === hex ? '0 0 0 2px var(--mimi-popover), 0 0 0 4px var(--mimi-foreground)' : 'inset 0 0 0 1px oklch(0 0 0 / .1)', pick: () => this.emit(rgb2hsv(hex2rgb(c)), true) })),
+      recent: recent.map(c => ({ hex: c, pick: () => this.emit(rgb2hsv(hex2rgb(c)), false) })), hasRecent: recent.length > 0, noRecent: recent.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>
