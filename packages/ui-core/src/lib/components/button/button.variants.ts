@@ -32,7 +32,7 @@ export const buttonVariants = cva(
         secondary:
           'bg-secondary text-secondary-foreground shadow-neutral hover:not-disabled:bg-secondary-hover hover:not-disabled:shadow-neutral-hover active:ring-3 active:ring-ring-soft',
         destructive:
-          'bg-destructive text-destructive-foreground shadow-destructive hover:not-disabled:bg-destructive-hover hover:not-disabled:shadow-destructive-hover active:ring-3 active:ring-destructive-soft',
+          'bg-destructive text-destructive-foreground shadow-destructive hover:not-disabled:bg-destructive-hover hover:not-disabled:shadow-destructive-hover active:ring-3 active:ring-destructive-ring',
         outline:
           'border-border bg-card text-foreground shadow-neutral hover:not-disabled:bg-accent hover:not-disabled:text-accent-foreground hover:not-disabled:shadow-neutral-hover active:ring-3 active:ring-ring-soft',
         ghost:

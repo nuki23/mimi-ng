@@ -39,6 +39,15 @@ const RADII: Record<string, string> = {
   badge: 'badge-radius',
 };
 
+/** Las sombras van a --mimi-shadow-*, salvo el glow: glowSuccess → --mimi-glow-success. */
+const shadowName = (key: string): string =>
+  key.startsWith('glow') ? kebab(key) : `shadow-${kebab(key)}`;
+
+/** Alturas → --mimi-control-*; los demás compartidos, sin prefijo: focusRing → --mimi-focus-ring. */
+const CONTROL_SIZES = new Set(['height', 'heightSm', 'heightLg']);
+const controlName = (key: string): string =>
+  CONTROL_SIZES.has(key) ? `control-${kebab(key)}` : kebab(key);
+
 /** Grupos del preset: en qué modo van y cómo se nombra cada variable (sin el prefijo --mimi-). */
 const GROUPS: readonly {
   key: keyof MimiThemePreset;
@@ -47,12 +56,13 @@ const GROUPS: readonly {
 }[] = [
   { key: 'colors', scope: 'light', name: kebab },
   { key: 'darkColors', scope: 'dark', name: kebab },
-  { key: 'shadows', scope: 'light', name: (k) => `shadow-${kebab(k)}` },
-  { key: 'darkShadows', scope: 'dark', name: (k) => `shadow-${kebab(k)}` },
+  { key: 'shadows', scope: 'light', name: shadowName },
+  { key: 'darkShadows', scope: 'dark', name: shadowName },
   { key: 'radii', scope: 'any', name: (k) => RADII[k] ?? `radius-${kebab(k)}` },
   { key: 'fonts', scope: 'any', name: (k) => `font-${kebab(k)}` },
   { key: 'motion', scope: 'any', name: kebab },
-  { key: 'controls', scope: 'any', name: (k) => `control-${kebab(k)}` },
+  { key: 'effects', scope: 'any', name: kebab },
+  { key: 'controls', scope: 'any', name: controlName },
 ];
 
 /** Prefijo de las variables de cada componente: button.fontWeight → --mimi-btn-font-weight. */

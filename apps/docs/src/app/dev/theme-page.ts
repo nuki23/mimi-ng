@@ -100,7 +100,12 @@ export class ThemePage {
     { name: 'ring-soft', class: 'bg-ring-soft' },
     { name: 'secondary', class: 'bg-secondary' },
     { name: 'destructive', class: 'bg-destructive' },
-    { name: 'destructive-soft', class: 'bg-destructive-soft' },
+    { name: 'destructive-ring', class: 'bg-destructive-ring' },
+    { name: 'destructive-soft-bg', class: 'bg-destructive-soft-bg' },
+    { name: 'success', class: 'bg-success' },
+    { name: 'success-soft', class: 'bg-success-soft' },
+    { name: 'info', class: 'bg-info' },
+    { name: 'info-soft', class: 'bg-info-soft' },
   ];
 
   protected apply(demo: DemoPreset): void {

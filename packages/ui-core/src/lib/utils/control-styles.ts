@@ -19,9 +19,9 @@ export const fieldFocusStyles =
 export const controlDisabledStyles =
   'disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50';
 
-/** Inválido: borde destructive fijo y halo destructive-soft solo al enfocar. */
+/** Inválido: borde destructive fijo y halo destructive-ring solo al enfocar. */
 export const controlInvalidStyles =
-  'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive-soft';
+  'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive-ring';
 
 /** Transición y escala al hacer clic. Solo botones. */
 export const controlPressStyles = 'mimi-transition active:scale-(--mimi-press-scale)';

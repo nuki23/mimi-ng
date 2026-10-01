@@ -529,32 +529,34 @@ El tema vive en `packages/ui-core/src/lib/theme/theme-base.css` (valores de `doc
 
 **Variables `--mimi-*`** (todas en `:root`; las marcadas con ◐ se redefinen en `.dark`):
 
-| Grupo                     | Variables                                                                                                                                                                                                                                                                                                                                                                                               |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Colores ◐                 | `background`, `foreground`, `card`, `card-foreground`, `popover`, `popover-foreground`, `primary`, `primary-foreground`, `secondary`, `secondary-foreground`, `muted`, `muted-foreground`, `accent`, `accent-foreground`, `destructive`, `destructive-foreground`, `border`, `input`, `input-background`, `ring`, `overlay` (fondo detrás de paneles y diálogos: `oklch(0 0 0 / 50%)` en los dos modos) |
-| Derivados ◐ (`color-mix`) | `primary-hover`, `secondary-hover`, `destructive-hover`, `ring-soft`, `destructive-soft`, `switch-off`                                                                                                                                                                                                                                                                                                  |
-| Sombras ◐                 | `shadow-card`, `shadow-primary`, `shadow-primary-hover`, `shadow-destructive`, `shadow-destructive-hover`, `shadow-neutral`, `shadow-neutral-hover`, `shadow-thumb` (pulgar del Switch, `0 1px 3px oklch(0 0 0 / .2)`, igual en los dos modos)                                                                                                                                                          |
-| Fuentes                   | `font-sans` (`'Outfit', ui-sans-serif, system-ui, sans-serif`), `font-mono` (`'Geist Mono', ui-monospace, monospace`)                                                                                                                                                                                                                                                                                   |
-| Forma                     | `radius` (0.75rem), `radius-sm` (`min(radius / 2, 6px)`), `radius-card` (`min(radius + 4px, 24px)`), `badge-radius` (999px)                                                                                                                                                                                                                                                                             |
-| Alturas                   | `control-height` (2.5rem), `control-height-sm` (2rem), `control-height-lg` (3rem)                                                                                                                                                                                                                                                                                                                       |
-| Movimiento                | `transition`, `press-scale`, `press-scale-sm` (Switch y Checkbox), `lift` (0px, sin uso por ahora). Ver 6.6                                                                                                                                                                                                                                                                                             |
+| Grupo                     | Variables                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Colores ◐                 | `background`, `foreground`, `card`, `card-foreground`, `popover`, `popover-foreground`, `primary`, `primary-foreground`, `secondary`, `secondary-foreground`, `muted`, `muted-foreground`, `accent`, `accent-foreground`, `destructive`, `destructive-foreground`, `border`, `input`, `input-background`, `ring`; tonos `success`, `warning` e `info`, cada uno con `-foreground` y `-soft-foreground`, y `destructive-soft-foreground`; `soft-mix` (cuánto tono lleva el fondo suave: 12 % en claro, 18 % en oscuro); `tooltip`, `tooltip-foreground`; `glass`, `glass-border` (píldoras translúcidas); `overlay` (fondo detrás de paneles y diálogos: `oklch(0.145 0 0 / 0.38)` en claro, `oklch(0 0 0 / 0.6)` en oscuro) |
+| Derivados ◐ (`color-mix`) | `primary-hover`, `secondary-hover`, `destructive-hover`, `ring-soft`, `switch-off`; por tono, `<tono>-soft` (fondo suave), `<tono>-hover` y `<tono>-ring` (anillo) para `success`, `warning` e `info`; `destructive-ring` y `destructive-soft-bg`; `destructive-soft` es un alias de `destructive-ring` hasta la 1.0 (sección 12)                                                                                                                                                                                                                                                                                                                                                                                           |
+| Sombras ◐                 | `shadow-card`, `shadow-primary`, `shadow-primary-hover`, `shadow-destructive`, `shadow-destructive-hover`, `shadow-neutral`, `shadow-neutral-hover`, `shadow-thumb` (pulgar del Switch, `0 1px 3px oklch(0 0 0 / .2)`, igual en los dos modos), `shadow-success`, `shadow-warning`, `shadow-info` (cada una con `-hover`), `shadow-popover` (menús, diálogos, toasts y píldoras) y el glow: `glow-primary`, `glow-success`, `glow-warning`, `glow-info`, `glow-destructive` y `glow` (= `glow-primary`)                                                                                                                                                                                                                     |
+| Fuentes                   | `font-sans` (`'Outfit', ui-sans-serif, system-ui, sans-serif`), `font-mono` (`'Geist Mono', ui-monospace, monospace`)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| Forma                     | `radius` (0.75rem), `radius-sm` (`min(radius / 2, 6px)`), `radius-card` (`min(radius + 4px, 24px)`), `badge-radius` (999px)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Compartidos               | alturas `control-height` (2.5rem), `control-height-sm` (2rem), `control-height-lg` (3rem); `focus-ring` (`0 0 0 3px var(--mimi-ring-soft)`), `focus-outline` (`2px solid var(--mimi-ring)`), `focus-offset` (2px), `disabled-opacity` (0.5), `icon-size` (1rem), `icon-size-sm` (0.875rem)                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Movimiento                | `transition`, `press-scale`, `press-scale-sm` (Switch y Checkbox), `lift` (0px, sin uso por ahora). Ver 6.6                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| Efectos                   | `overlay-blur` (6px) y `glass-blur` (16px), iguales en los dos modos. Es el grupo de los efectos que no son movimiento ni controles; los de Mimi Effects se sumarán aquí                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 **`@theme inline`** (siempre `inline`: los valores son `var()` y deben resolverse donde se usan, o el modo oscuro falla):
 
-| Tailwind                     | Origen                                                         | Clases                                                                                                                                                              |
-| ---------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--color-*`                  | cada color y derivado de arriba                                | `bg-*`, `text-*`, `border-*`, `ring-*`, `outline-*`, `fill-*`…                                                                                                      |
-| `--radius-sm`                | `--mimi-radius-sm`                                             | `rounded-sm`                                                                                                                                                        |
-| `--radius-md`                | `calc(radius - 2px)`                                           | `rounded-md`                                                                                                                                                        |
-| `--radius-lg`                | `--mimi-radius`                                                | `rounded-lg`                                                                                                                                                        |
-| `--radius-xl`                | `calc(radius + 4px)`                                           | `rounded-xl`                                                                                                                                                        |
-| `--radius-card`              | `--mimi-radius-card`                                           | `rounded-card`                                                                                                                                                      |
-| `--radius-badge`             | `--mimi-badge-radius`                                          | `rounded-badge`                                                                                                                                                     |
-| `--shadow-*`                 | cada sombra                                                    | `shadow-card`, `shadow-primary`, `shadow-primary-hover`, `shadow-destructive`, `shadow-destructive-hover`, `shadow-neutral`, `shadow-neutral-hover`, `shadow-thumb` |
-| `--font-sans`, `--font-mono` | fuentes                                                        | `font-sans` (también la fuente por defecto de la página), `font-mono`                                                                                               |
-| `--animate-mimi-pulse`       | `mimi-pulse 1.6s ease-in-out infinite` (keyframe `mimi-pulse`) | `animate-mimi-pulse` (Skeleton). Registrada en `cn.ts` (grupo `animate`)                                                                                            |
+| Tailwind                         | Origen                                                                                                       | Clases                                                                                                                                                                                                                                                                                                                  |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--color-*`                      | cada color y derivado de arriba (`--color-destructive-soft` apunta a `--mimi-destructive-ring` hasta la 1.0) | `bg-*`, `text-*`, `border-*`, `ring-*`, `outline-*`, `fill-*`… (`bg-success-soft`, `ring-destructive-ring`, `bg-destructive-soft-bg`, `bg-glass`…)                                                                                                                                                                      |
+| `--radius-sm`                    | `--mimi-radius-sm`                                                                                           | `rounded-sm`                                                                                                                                                                                                                                                                                                            |
+| `--radius-md`                    | `calc(radius - 2px)`                                                                                         | `rounded-md`                                                                                                                                                                                                                                                                                                            |
+| `--radius-lg`                    | `--mimi-radius`                                                                                              | `rounded-lg`                                                                                                                                                                                                                                                                                                            |
+| `--radius-xl`                    | `calc(radius + 4px)`                                                                                         | `rounded-xl`                                                                                                                                                                                                                                                                                                            |
+| `--radius-card`                  | `--mimi-radius-card`                                                                                         | `rounded-card`                                                                                                                                                                                                                                                                                                          |
+| `--radius-badge`                 | `--mimi-badge-radius`                                                                                        | `rounded-badge`                                                                                                                                                                                                                                                                                                         |
+| `--shadow-*`                     | cada sombra                                                                                                  | `shadow-card`, `shadow-primary`, `shadow-primary-hover`, `shadow-destructive`, `shadow-destructive-hover`, `shadow-neutral`, `shadow-neutral-hover`, `shadow-thumb`, `shadow-success`, `shadow-warning`, `shadow-info` (y sus `-hover`), `shadow-popover`, `shadow-glow` y `shadow-glow-<tono>`. Registradas en `cn.ts` |
+| `--blur-glass`, `--blur-overlay` | `--mimi-glass-blur`, `--mimi-overlay-blur`                                                                   | `backdrop-blur-glass`, `backdrop-blur-overlay`. Registradas en `cn.ts` (grupo `blur`)                                                                                                                                                                                                                                   |
+| `--font-sans`, `--font-mono`     | fuentes                                                                                                      | `font-sans` (también la fuente por defecto de la página), `font-mono`                                                                                                                                                                                                                                                   |
+| `--animate-mimi-pulse`           | `mimi-pulse 1.6s ease-in-out infinite` (keyframe `mimi-pulse`)                                               | `animate-mimi-pulse` (Skeleton). Registrada en `cn.ts` (grupo `animate`)                                                                                                                                                                                                                                                |
 
-Las alturas no se exponen: los componentes usan la cascada de 6.2 (`h-(--mimi-control-height)` o `h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))]`).
+Los compartidos no se exponen: los componentes usan la cascada de 6.2 (`h-(--mimi-control-height)` o `h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))]`).
 
 **`@layer base`:** `*, ::before, ::after { border-color: var(--mimi-border) }` (en Tailwind 4 el borde por defecto es `currentColor`) y `body` con `background-color: var(--mimi-background)` y `color: var(--mimi-foreground)`. La fuente no se pone en `body`: Tailwind la toma de `--font-sans`.
 
@@ -589,9 +591,10 @@ Valores de respaldo por tamaño (los mismos que los tokens de `theme-base.css`):
 
 El catálogo completo de tokens, en tres niveles y con una tabla por componente, está en la sección 13.
 
-Los tipos siguen a `theme-base.css`, que es la fuente de verdad. Los derivados con `color-mix` (`primary-hover`, `secondary-hover`, `destructive-hover`, `ring-soft`, `destructive-soft`, `switch-off`) **no** están en el preset: se recalculan solos a partir de los colores.
+Los tipos siguen a `theme-base.css`, que es la fuente de verdad. Los derivados con `color-mix` (`primary-hover`, `secondary-hover`, `destructive-hover`, `ring-soft`, `switch-off` y los `<tono>-soft`, `<tono>-hover` y `<tono>-ring`, incluidos `destructive-ring` y `destructive-soft-bg`) **no** están en el preset: se recalculan solos a partir de los colores.
 
 ```ts
+/** Colores. `colors` se aplica en claro y `darkColors` en oscuro. */
 export interface MimiColorTokens {
   background?: string;
   foreground?: string;
@@ -613,9 +616,29 @@ export interface MimiColorTokens {
   input?: string;
   inputBackground?: string;
   ring?: string;
-  overlay?: string; // fondo detrás de paneles y diálogos
+  /** Fondo que oscurece la página detrás de paneles y diálogos. */
+  overlay?: string;
+  success?: string;
+  successForeground?: string;
+  /** Texto sobre el fondo suave de success. */
+  successSoftForeground?: string;
+  warning?: string;
+  warningForeground?: string;
+  warningSoftForeground?: string;
+  info?: string;
+  infoForeground?: string;
+  infoSoftForeground?: string;
+  destructiveSoftForeground?: string;
+  /** Cuánto tono lleva cada fondo suave (-soft), en porcentaje: '12%'. */
+  softMix?: string;
+  tooltip?: string;
+  tooltipForeground?: string;
+  /** Fondo translúcido de las píldoras flotantes (mimi-toolbar, Pagination). */
+  glass?: string;
+  glassBorder?: string;
 }
 
+/** Sombras (`box-shadow` completo). `shadows` en claro y `darkShadows` en oscuro. */
 export interface MimiShadowTokens {
   card?: string;
   primary?: string;
@@ -624,8 +647,26 @@ export interface MimiShadowTokens {
   destructiveHover?: string;
   neutral?: string;
   neutralHover?: string;
+  /** Pulgar del Switch. */
+  thumb?: string;
+  success?: string;
+  successHover?: string;
+  warning?: string;
+  warningHover?: string;
+  info?: string;
+  infoHover?: string;
+  /** Menús, diálogos, toasts y píldoras flotantes. */
+  popover?: string;
+  /** Glow (opción glow): van a --mimi-glow y --mimi-glow-<tono>, sin el prefijo shadow-. */
+  glow?: string;
+  glowPrimary?: string;
+  glowSuccess?: string;
+  glowWarning?: string;
+  glowInfo?: string;
+  glowDestructive?: string;
 }
 
+/** Radios fijos. Si no se definen, sm y card se calculan a partir de `radius`. */
 export interface MimiRadiusTokens {
   sm?: string;
   card?: string;
@@ -638,18 +679,48 @@ export interface MimiFontTokens {
 }
 
 export interface MimiMotionTokens {
-  transition?: string; // debe animar `scale` (y `translate` si se usa `lift`)
+  /** Lista de transiciones. Debe animar `scale` y `translate` (pulgar del Switch y `lift`). */
+  transition?: string;
   pressScale?: string | number;
+  /** Escala al presionar de Switch y Checkbox. */
+  pressScaleSm?: string | number;
   lift?: string;
 }
 
+/** Alturas compartidas por Button, Input y Textarea (cascada de la spec 6.2). */
 export interface MimiControlSizeTokens {
   height?: string;
   heightSm?: string;
   heightLg?: string;
 }
 
-// Tokens por componente: contrato para la Fase 2 (cada componente los lee con la cascada de 6.2)
+/**
+ * Tokens compartidos por todos los controles (spec 13, nivel 2). Las alturas van a
+ * --mimi-control-height*; el resto, sin prefijo: focusRing → --mimi-focus-ring.
+ */
+export interface MimiSharedTokens extends MimiControlSizeTokens {
+  /** Halo de foco en campos y botones (box-shadow). */
+  focusRing?: string;
+  /** Contorno de foco con teclado (outline). */
+  focusOutline?: string;
+  focusOffset?: string;
+  disabledOpacity?: string | number;
+  iconSize?: string;
+  iconSizeSm?: string;
+}
+
+/**
+ * Efectos que no son movimiento ni controles: desenfoques (y, más adelante, los de Mimi
+ * Effects). Iguales en claro y oscuro.
+ */
+export interface MimiEffectTokens {
+  /** Desenfoque del fondo detrás de Dialog y Sheet. */
+  overlayBlur?: string;
+  /** Desenfoque de las píldoras translúcidas. */
+  glassBlur?: string;
+}
+
+/** Tokens por componente. Cada componente los lee con la cascada de la spec 6.2. */
 export interface MimiControlTokens extends MimiControlSizeTokens {
   radius?: string;
   paddingX?: string;
@@ -657,16 +728,18 @@ export interface MimiControlTokens extends MimiControlSizeTokens {
   borderWidth?: string;
   focusRingWidth?: string;
 }
-// paddingX y fontSize se aplican al tamaño default; sm y lg usan los valores del diseño.
-// Sin transitionDuration: el movimiento lo controla --mimi-transition (spec 6.6).
+
+/** paddingX y fontSize se aplican al tamaño default; sm y lg usan los valores del diseño. */
 export interface MimiButtonTokens extends MimiControlTokens {
   fontWeight?: string | number;
   letterSpacing?: string;
 }
+
 export interface MimiInputTokens extends MimiControlTokens {
   placeholderColor?: string;
   disabledOpacity?: string | number;
 }
+
 export interface MimiCardTokens {
   radius?: string;
   borderWidth?: string;
@@ -675,29 +748,33 @@ export interface MimiCardTokens {
   paddingContent?: string;
   paddingFooter?: string;
 }
+
 export interface MimiComponentTokens {
   button?: MimiButtonTokens;
   input?: MimiInputTokens;
   card?: MimiCardTokens;
-  // select y dialog se agregan en el Grupo 1 (G1.5 y G1.6)
+  // select y dialog se agregan con sus componentes (G1.5 y G1.6)
 }
 
 export interface MimiThemePreset {
-  name?: string; // informativo, no genera CSS
-  radius?: string; // --mimi-radius
+  /** Solo informativo: no genera CSS. */
+  name?: string;
+  /** --mimi-radius */
+  radius?: string;
   radii?: MimiRadiusTokens;
-  colors?: MimiColorTokens; // modo claro
-  darkColors?: MimiColorTokens; // modo oscuro
+  colors?: MimiColorTokens;
+  darkColors?: MimiColorTokens;
   shadows?: MimiShadowTokens;
   darkShadows?: MimiShadowTokens;
   fonts?: MimiFontTokens;
   motion?: MimiMotionTokens;
-  controls?: MimiControlSizeTokens;
+  effects?: MimiEffectTokens;
+  controls?: MimiSharedTokens;
   components?: MimiComponentTokens;
 }
 ```
 
-`controls` solo tiene alturas: no existen variables `--mimi-control-*` para radio, padding o tamaño de letra. Esos tokens son por componente (`--mimi-btn-radius`, etc.).
+`controls` tiene los compartidos (spec 13, nivel 2): las alturas van a `--mimi-control-height*` y el resto sin prefijo (`focusRing` → `--mimi-focus-ring`). No existen variables `--mimi-control-*` para radio, padding o tamaño de letra: esos tokens son por componente (`--mimi-btn-radius`, etc.). En `shadows`, el glow va a `--mimi-glow*`, sin el prefijo `shadow-` (`glowSuccess` → `--mimi-glow-success`). `effects` va a `:root` (igual en los dos modos).
 
 Ejemplo:
 
@@ -1120,6 +1197,13 @@ Mimi soporta las versiones de Angular con soporte oficial (activo o LTS). Cuando
 
 Lo que la CLI copia al proyecto es código del usuario: se actualiza con `ng update` junto al resto de su proyecto y no depende de una versión de Mimi instalada. `@mimi-ng/cli` solo se necesita para agregar componentes o actualizarlos con `mimi update` (tarea 5.4).
 
+### Compatibilidad que se quita en la 1.0
+
+- **`destructive-soft` → `destructive-ring`** (tarea T.1). En la 0.1.0, `--mimi-destructive-soft` (y la clase `ring-destructive-soft`) era el anillo de destructive. Desde la T.1 se siguen la convención `<tono>-soft` = fondo suave y `<tono>-ring` = anillo: el anillo es `--mimi-destructive-ring` y el fondo suave, `--mimi-destructive-soft-bg`. Hasta la 1.0, `--mimi-destructive-soft` y `--color-destructive-soft` quedan como **alias** del anillo (`theme-base.css`, con un comentario), así que el código copiado de la 0.1.0 que use `ring-destructive-soft` sigue igual. Lo comprueban `provider.spec.ts` y `cn.spec.ts`.
+- **En la 1.0, `destructive-soft` cambia de significado:** deja de ser el color del anillo y pasa a ser el fondo suave (y `destructive-soft-bg` desaparece). El código copiado que use `ring-destructive-soft` **seguirá compilando, pero con otro color, sin ningún error**. Por eso:
+  - antes de la 1.0, la nota de versión debe pedir buscar `destructive-soft` en el proyecto y cambiarlo a `destructive-ring`;
+  - cuando exista `mimi update` (tarea 5.4), que avise si encuentra esa clase.
+
 ### Tabla de compatibilidad
 
 | Mimi | Angular | Tailwind CSS |
@@ -1505,6 +1589,8 @@ Una tabla por componente (21: los de la 0.1.0 y los del Grupo 1). «Hereda de» 
 | `--mimi-pagination-input-width` | Ancho del campo     | —                       | `56px`            |
 | `--mimi-pagination-error`       | Error de página     | `--mimi-destructive`    | —                 |
 | `--mimi-pagination-offset`      | Separación inferior | —                       | `20px`            |
+
+**En ui-core desde la T.1:** los tonos con sus derivados, sombras y glow, `destructive-ring`, `destructive-soft-bg` y `destructive-soft-foreground`, `tooltip`, `glass`, `overlay-blur`, `glass-blur`, `soft-mix`, `shadow-popover` y los compartidos (foco, deshabilitado, íconos); `overlay` y `popover` en oscuro con los valores del diseño. Lo demás de `tokens-mimi.css` (rango, pista, chips, zona de arrastre, fuerza, selección, `corner-shape`, `input-hover` y los keyframes de la Fase 3 y de Effects) entra con su componente.
 
 ### Otros globales del diseño
 

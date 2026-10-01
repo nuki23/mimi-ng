@@ -95,8 +95,109 @@ describe('mimiThemeToCss', () => {
   });
 
   it('nunca emite los derivados con color-mix', () => {
-    const css = mimiThemeToCss({ colors: { primary: 'red', ring: 'red', destructive: 'red' } });
-    expect(css).not.toMatch(/--mimi-(primary-hover|ring-soft|destructive-soft|switch-off)/);
+    const css = mimiThemeToCss({
+      colors: { primary: 'red', ring: 'red', destructive: 'red', success: 'green', info: 'blue' },
+    });
+    expect(css).not.toMatch(
+      /--mimi-(primary-hover|ring-soft|destructive-soft|destructive-ring|switch-off|success-soft|success-hover|success-ring|info-soft):/,
+    );
+  });
+
+  it('convierte los tonos, tooltip, glass y softMix en claro y en oscuro', () => {
+    const css = mimiThemeToCss({
+      colors: {
+        success: 'green',
+        successForeground: 'white',
+        successSoftForeground: 'darkgreen',
+        warningSoftForeground: 'brown',
+        infoForeground: 'white',
+        destructiveSoftForeground: 'darkred',
+        softMix: '15%',
+        tooltip: 'black',
+        tooltipForeground: 'white',
+        glass: 'oklch(1 0 0 / 0.5)',
+        glassBorder: 'transparent',
+      },
+      darkColors: { success: 'lime', softMix: '20%', tooltip: 'white' },
+    });
+    for (const line of [
+      '--mimi-success: green;',
+      '--mimi-success-foreground: white;',
+      '--mimi-success-soft-foreground: darkgreen;',
+      '--mimi-warning-soft-foreground: brown;',
+      '--mimi-info-foreground: white;',
+      '--mimi-destructive-soft-foreground: darkred;',
+      '--mimi-soft-mix: 15%;',
+      '--mimi-tooltip: black;',
+      '--mimi-tooltip-foreground: white;',
+      '--mimi-glass: oklch(1 0 0 / 0.5);',
+      '--mimi-glass-border: transparent;',
+    ]) {
+      expect(css).toContain(line);
+    }
+    expect(css).toContain(
+      '.dark {\n  --mimi-success: lime;\n  --mimi-soft-mix: 20%;\n  --mimi-tooltip: white;\n}',
+    );
+  });
+
+  it('sombras de tono y popover van a --mimi-shadow-*; el glow, a --mimi-glow-* sin «shadow-»', () => {
+    const css = mimiThemeToCss({
+      shadows: {
+        success: 'a',
+        warningHover: 'b',
+        infoHover: 'c',
+        popover: 'd',
+        glow: 'e',
+        glowPrimary: 'f',
+        glowDestructive: 'g',
+      },
+      darkShadows: { glowInfo: 'h' },
+    });
+    for (const line of [
+      '--mimi-shadow-success: a;',
+      '--mimi-shadow-warning-hover: b;',
+      '--mimi-shadow-info-hover: c;',
+      '--mimi-shadow-popover: d;',
+      '--mimi-glow: e;',
+      '--mimi-glow-primary: f;',
+      '--mimi-glow-destructive: g;',
+    ]) {
+      expect(css).toContain(line);
+    }
+    expect(css).toContain('.dark {\n  --mimi-glow-info: h;\n}');
+    expect(css).not.toContain('--mimi-shadow-glow');
+  });
+
+  it('effects va a :root (igual en claro y oscuro)', () => {
+    expect(mimiThemeToCss({ effects: { overlayBlur: '4px', glassBlur: '20px' } })).toBe(
+      ':root {\n  --mimi-overlay-blur: 4px;\n  --mimi-glass-blur: 20px;\n}\n',
+    );
+  });
+
+  it('controls: las alturas llevan control-; los compartidos van sin prefijo', () => {
+    const css = mimiThemeToCss({
+      controls: {
+        height: '36px',
+        focusRing: '0 0 0 2px red',
+        focusOutline: '2px solid red',
+        focusOffset: '1px',
+        disabledOpacity: 0.4,
+        iconSize: '1.25rem',
+        iconSizeSm: '1rem',
+      },
+    });
+    for (const line of [
+      '--mimi-control-height: 36px;',
+      '--mimi-focus-ring: 0 0 0 2px red;',
+      '--mimi-focus-outline: 2px solid red;',
+      '--mimi-focus-offset: 1px;',
+      '--mimi-disabled-opacity: 0.4;',
+      '--mimi-icon-size: 1.25rem;',
+      '--mimi-icon-size-sm: 1rem;',
+    ]) {
+      expect(css).toContain(line);
+    }
+    expect(css).not.toMatch(/--mimi-control-(focus|disabled|icon)/);
   });
 
   it('agrega el bloque de movimiento reducido si el preset cambia el movimiento', () => {
@@ -216,5 +317,37 @@ describe('provideMimiTheme', () => {
   it('sin provideMimiTheme no crea ningún <style>', () => {
     const document = TestBed.inject(DOCUMENT);
     expect(document.getElementById(MIMI_THEME_STYLE_ID)).toBeNull();
+  });
+});
+
+describe('theme-base.css: compatibilidad de destructive-soft con la 0.1.0 (spec 12)', () => {
+  // Las pruebas corren en Node: se lee el CSS con fs, sin importarlo (ver imports.spec.ts).
+  const node = (
+    globalThis as unknown as { process: { cwd(): string; getBuiltinModule(id: string): unknown } }
+  ).process;
+  const fs = node.getBuiltinModule('node:fs') as {
+    readFileSync(path: string, enc: 'utf8'): string;
+  };
+  const css = fs.readFileSync(
+    `${node.cwd()}/packages/ui-core/src/lib/theme/theme-base.css`,
+    'utf8',
+  );
+  const block = (selector: string) => {
+    const start = css.indexOf(`${selector} {`);
+    return css.slice(start, css.indexOf('\n}', start));
+  };
+
+  it('--mimi-destructive-soft es alias de --mimi-destructive-ring en claro y oscuro', () => {
+    for (const selector of [':root', '.dark']) {
+      expect(block(selector)).toContain('--mimi-destructive-ring: color-mix(');
+      expect(block(selector)).toContain('--mimi-destructive-soft: var(--mimi-destructive-ring);');
+    }
+  });
+
+  it('ring-destructive-soft sigue generando el color del anillo (Tailwind lee --color-destructive-soft)', () => {
+    const theme = block('@theme inline');
+    expect(theme).toContain('--color-destructive-soft: var(--mimi-destructive-ring);');
+    expect(theme).toContain('--color-destructive-ring: var(--mimi-destructive-ring);');
+    expect(theme).toContain('--color-destructive-soft-bg: var(--mimi-destructive-soft-bg);');
   });
 });

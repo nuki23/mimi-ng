@@ -56,6 +56,64 @@
   </section>
 
   <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Tonos</h2>
+    <div class="flex flex-col gap-3">
+      @for (tone of tones; track tone.name) {
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="w-24 font-mono text-xs">{{ tone.name }}</span>
+          <span class="rounded-lg px-3 py-1.5 text-sm font-medium" [class]="tone.solid"
+            >Sólido</span
+          >
+          <span class="rounded-lg px-3 py-1.5 text-sm font-medium" [class]="tone.soft">Suave</span>
+          <span class="rounded-lg border bg-card px-3 py-1.5 text-sm" [class]="tone.ring"
+            >Anillo</span
+          >
+          <span class="rounded-lg bg-card px-3 py-1.5 text-sm" [class]="tone.glow">Glow</span>
+        </div>
+      }
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="w-24 font-mono text-xs">alias 0.1.0</span>
+        <span class="rounded-lg border bg-card px-3 py-1.5 text-sm ring-3 ring-destructive-soft">
+          ring-destructive-soft (igual que ring-destructive-ring)
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-4">
+    <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+      Superficies
+    </h2>
+    <div class="flex flex-wrap items-start gap-6">
+      <span class="rounded-md bg-tooltip px-2.5 py-1.5 text-xs text-tooltip-foreground">
+        Tooltip
+      </span>
+      <div
+        class="rounded-card border bg-popover p-4 text-sm text-popover-foreground shadow-popover"
+      >
+        Popover con shadow-popover
+      </div>
+      <div
+        class="relative flex h-28 w-72 items-center justify-center overflow-hidden rounded-card border bg-[image:repeating-linear-gradient(45deg,var(--mimi-muted)_0_10px,var(--mimi-background)_10px_20px)]"
+      >
+        <span
+          class="rounded-full border border-glass-border bg-glass px-4 py-2 text-sm shadow-popover backdrop-blur-glass"
+        >
+          Píldora glass
+        </span>
+      </div>
+      <div
+        class="relative flex h-28 w-72 items-center justify-center overflow-hidden rounded-card border bg-[image:repeating-linear-gradient(45deg,var(--mimi-primary)_0_10px,var(--mimi-background)_10px_20px)]"
+      >
+        <div class="absolute inset-0 bg-overlay backdrop-blur-overlay"></div>
+        <span class="relative rounded-card bg-popover px-4 py-2 text-sm shadow-popover">
+          Diálogo sobre overlay
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-4">
     <h2 class="text-xs font-semibold tracking-wider text-muted-foreground uppercase">Fuentes</h2>
     <p class="font-sans text-lg">font-sans · Outfit con respaldo del sistema</p>
     <p class="font-mono text-sm">font-mono · Geist Mono con respaldo del sistema</p>
