@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { DEV_ROUTES } from './dev/dev.routes';
 
 export const routes: Routes = [
   {
@@ -81,19 +82,8 @@ export const routes: Routes = [
       // Los componentes irán en components/<nombre> (Fase 2).
     ],
   },
-  // Uso interno: no aparecen en el menú.
-  {
-    path: 'dev/tokens',
-    loadComponent: () => import('./dev/tokens-page').then((m) => m.TokensPage),
-  },
-  {
-    path: 'dev/theme',
-    loadComponent: () => import('./dev/theme-page').then((m) => m.ThemePage),
-  },
-  {
-    path: 'dev/code',
-    loadComponent: () => import('./dev/code-page').then((m) => m.CodePage),
-  },
+  // Uso interno, solo en desarrollo: no aparecen en el menú (dev/dev.routes.ts).
+  ...DEV_ROUTES,
   {
     path: '**',
     title: 'Página no encontrada · Mimi',

@@ -1041,14 +1041,14 @@ apps/docs/src/app/
 
 ### Rutas
 
-| Ruta                                       | Página                                                        |
-| ------------------------------------------ | ------------------------------------------------------------- |
-| `/`                                        | Landing (tarea 2.12)                                          |
-| `/docs`                                    | Redirige a `/docs/introduction`                               |
-| `/docs/introduction`, `/docs/installation` | Páginas de Primeros pasos, dentro del layout de documentación |
-| `/docs/components/<nombre>`                | Páginas de componentes (Fase 2)                               |
-| `/dev/tokens`, `/dev/theme`, `/dev/code`   | Páginas internas, sin sidebar y fuera del menú                |
-| `**`                                       | 404                                                           |
+| Ruta                                       | Página                                                                                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/`                                        | Landing (tarea 2.12)                                                                                                                                                                                                                                                                                                                                                                            |
+| `/docs`                                    | Redirige a `/docs/introduction`                                                                                                                                                                                                                                                                                                                                                                 |
+| `/docs/introduction`, `/docs/installation` | Páginas de Primeros pasos, dentro del layout de documentación                                                                                                                                                                                                                                                                                                                                   |
+| `/docs/components/<nombre>`                | Páginas de componentes (Fase 2)                                                                                                                                                                                                                                                                                                                                                                 |
+| `/dev/tokens`, `/dev/theme`, `/dev/code`   | Páginas internas, sin sidebar y fuera del menú. **Solo en desarrollo:** sus rutas están en `app/dev/dev.routes.ts`, que la configuración `production` reemplaza por una lista vacía (`fileReplacements` en `angular.json`), y el build de producción usa `styles.prod.css` (importa `styles.css` y agrega `@source not './app/dev'`), así que sus clases no llegan al CSS del sitio (tarea 4.4) |
+| `**`                                       | 404                                                                                                                                                                                                                                                                                                                                                                                             |
 
 Las rutas y los archivos están en inglés; los títulos visibles, en español. El idioma se separará con un prefijo en la ruta (tarea 5.9).
 

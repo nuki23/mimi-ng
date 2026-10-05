@@ -1,0 +1,4 @@
+/* Estilos del build de producción: los de siempre, sin escanear las páginas internas /dev
+   (en producción no tienen rutas; ver app/dev/dev.routes.ts). En desarrollo se usa styles.css. */
+@import './styles.css';
+@source not './app/dev';
