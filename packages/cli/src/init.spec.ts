@@ -579,4 +579,40 @@ describe('ng-add', () => {
     const viaNgAdd = await b.run({ icons: true }, await createWorkspace(b.runner), 'ng-add');
     expect(snapshot(viaNgAdd)).toEqual(snapshot(viaInit));
   });
+
+  // Antes de instalar el paquete, ng add no conoce el esquema y pasa --icons=false y
+  // --icons=true como texto (tarea 0.1.1-1). --icons llega como true y --no-icons como false.
+  it.each<[string, Record<string, unknown>, boolean]>([
+    ['--icons=false (texto)', { icons: 'false' }, false],
+    ['--icons=true (texto)', { icons: 'true' }, true],
+    ['--icons', { icons: true }, true],
+    ['--no-icons', { icons: false }, false],
+    ['sin la opción (por defecto, sin terminal para preguntar)', {}, false],
+  ])('ng add %s', async (_, options, installsIcons) => {
+    const { runner, run } = harness();
+    const tree = await run(options, await createWorkspace(runner), 'ng-add');
+    const pkg = json(tree, '/package.json');
+    expect(pkg.dependencies['@lucide/angular'] !== undefined).toBe(installsIcons);
+    expect(tree.exists('/mimi.json')).toBe(true);
+  });
+
+  it('--icons con otro texto falla con un mensaje claro, sin cambios', async () => {
+    const { runner, run } = harness();
+    const tree = await createWorkspace(runner);
+    const before = snapshot(tree);
+    await expect(run({ icons: 'si' }, tree, 'ng-add')).rejects.toThrow(
+      '--icons acepta true o false (se recibió "si").',
+    );
+    expect(snapshot(tree)).toEqual(before);
+  });
+
+  it('el esquema de ng-add acepta texto en icons y conserva la pregunta de sí/no', () => {
+    const schema = JSON.parse(readFileSync(join(here, 'ng-add', 'schema.json'), 'utf8'));
+    expect(schema.properties.icons.type).toEqual(['boolean', 'string']);
+    expect(schema.properties.icons.default).toBe(false);
+    expect(schema.properties.icons['x-prompt'].type).toBe('confirmation');
+    // init sigue siendo solo booleano: su esquema se conoce siempre.
+    const init = JSON.parse(readFileSync(join(here, 'init', 'schema.json'), 'utf8'));
+    expect(init.properties.icons.type).toBe('boolean');
+  });
 });
