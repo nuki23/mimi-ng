@@ -12,6 +12,12 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 
 - **Accesibilidad: contraste del hover de los botones sólidos en modo claro.** En `success`, `info` y `danger` (`destructive`) el texto es blanco y el hover aclaraba el fondo hasta unos 3,8:1, por debajo de AA (4,5:1). Ahora el hover se aleja del color del texto: oscurece el fondo un 12 % (5,8:1). Cambia `--mimi-destructive-hover`, que ya fallaba en la 0.1.0 (`variant="destructive"` de Button), y los nuevos `--mimi-success-hover` e `--mimi-info-hover`. En modo oscuro no cambia nada.
 
+## 0.1.1: corrección
+
+### Correcciones
+
+- **`ng add @mimi-ng/cli --icons=false` fallaba** con "Data path "/icons" must be boolean". Antes de instalar el paquete, `ng add` no conoce su esquema y pasa `--icons=false` (y `--icons=true`) como texto. El esquema de `ng-add` ahora acepta también `"true"` y `"false"`, y los convierte antes de configurar el proyecto. `--icons`, `--no-icons` y la pregunta interactiva siguen igual.
+
 ## 0.1.0 (30/09/2026): vista previa
 
 Primera versión publicada en npm.

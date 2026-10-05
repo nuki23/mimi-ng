@@ -1,6 +1,6 @@
 {
   "name": "@mimi-ng/cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Angular + Tailwind CSS 4 UI components that a CLI copies into your project, so you own the code. Schematics for ng add and ng generate.",
   "keywords": [
     "angular",

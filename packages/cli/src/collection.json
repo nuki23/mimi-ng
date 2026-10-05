@@ -3,7 +3,7 @@
   "schematics": {
     "ng-add": {
       "factory": "./ng-add/index#ngAdd",
-      "schema": "./init/schema.json",
+      "schema": "./ng-add/schema.json",
       "description": "Instala Mimi en el proyecto: ejecuta init.",
       "hidden": true
     },
