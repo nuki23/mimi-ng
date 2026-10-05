@@ -382,7 +382,7 @@ El comando `mimi` es una capa delgada que llama a los schematics. El schematic `
 
 ### Qué hace `init` (y `ng add`)
 
-`ng add @mimi-ng/cli` ejecuta el schematic `ng-add`, que corre `init` con las mismas opciones. Opciones: `--project` (si el workspace tiene varias aplicaciones), `--icons` (instala `@lucide/angular`; por defecto no, y con terminal interactiva lo pregunta: _"¿Quieres instalar @lucide/angular para tus íconos? (recomendado)"_) y `--overwrite`.
+`ng add @mimi-ng/cli` ejecuta el schematic `ng-add`, que corre `init` con las mismas opciones. `ng-add` tiene su propio esquema (`ng-add/schema.json`, tarea 0.1.1-1): antes de instalar el paquete, `ng add` no conoce el esquema y pasa `--icons=false` y `--icons=true` como texto, así que ahí `icons` acepta `boolean` o `string` (con la pregunta declarada como `confirmation`) y `ng-add` convierte `"true"`/`"false"` antes de llamar a `init`, cuyo esquema sigue siendo booleano. Opciones: `--project` (si el workspace tiene varias aplicaciones), `--icons` (instala `@lucide/angular`; por defecto no, y con terminal interactiva lo pregunta: _"¿Quieres instalar @lucide/angular para tus íconos? (recomendado)"_) y `--overwrite`.
 
 **Primero verifica, sin modificar nada.** Si algo falla, termina con un mensaje claro y el proyecto queda como estaba:
 

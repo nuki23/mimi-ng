@@ -54,6 +54,19 @@ describe('InstallationPage', () => {
     expect(commands.join('\n')).not.toContain('mimi add');
   });
 
+  it('pnpm: explica minimumReleaseAge solo con lo que dice su documentación (tarea 0.1.1-2)', async () => {
+    const { el } = await setup();
+    const heading = el.querySelector('h3#pnpm-release-age')!;
+    expect(heading.textContent?.trim()).toBe('Versiones recién publicadas');
+    const text = heading.nextElementSibling!.textContent!.replace(/\s+/g, ' ');
+    expect(text).toContain('minimumReleaseAge vale 1440 minutos por defecto');
+    expect(text).toContain('minimumReleaseAgeStrict');
+    const link = heading.nextElementSibling!.querySelector('a')!;
+    expect(link.getAttribute('href')).toBe(
+      'https://pnpm.io/settings/dependency-resolution#minimumreleaseage',
+    );
+  });
+
   it('explica cuándo usar la forma larga, y que sin ng add no funciona ninguna', async () => {
     const { el } = await setup();
     const heading = el.querySelector('h3#add-long-form')!;

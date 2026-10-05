@@ -66,3 +66,4 @@ packages/cli/       # @mimi-ng/cli (Angular Schematics)
 - No hagas commits: los hace el usuario. Al terminar, avisa que toca commit y sugiere un mensaje breve.
 - No agregues dependencias que no estén en la spec sin preguntar.
 - Cada componente nuevo tiene su página en el showcase con todos sus estados.
+- Para crear o editar archivos usa siempre la herramienta de archivos, nunca bash con heredoc ni echo: las comillas invertidas se ejecutan como comandos.

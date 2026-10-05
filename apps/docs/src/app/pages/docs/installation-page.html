@@ -198,4 +198,28 @@
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">allowBuilds</code>:
   </p>
   <app-code-block [code]="pnpmAllowBuilds" lang="bash" [copyable]="false" />
+
+  <h3 id="pnpm-release-age" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Versiones recién publicadas
+  </h3>
+  <p class="text-pretty">
+    Desde pnpm 11,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >minimumReleaseAge</code
+    >
+    vale 1440 minutos por defecto: pnpm espera 24 horas antes de instalar una versión recién
+    publicada. Si
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >minimumReleaseAgeStrict</code
+    >
+    no está configurado, pnpm instala de todos modos una versión que no cumple esa espera, para que
+    la instalación no falle. Más detalles en la
+    <a
+      class="font-medium underline underline-offset-4 hover:text-muted-foreground"
+      href="https://pnpm.io/settings/dependency-resolution#minimumreleaseage"
+      target="_blank"
+      rel="noopener noreferrer"
+      >documentación de pnpm</a
+    >.
+  </p>
 </article>
