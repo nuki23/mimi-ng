@@ -441,7 +441,7 @@ Idempotente: `ng g mimi button` dos veces no cambia nada ni vuelve a instalar.
 
 ```json
 {
-  "style": "vivid",
+  "style": "mimi",
   "tailwind": { "css": "src/styles.css" },
   "aliases": {
     "components": "src/app/components/ui",
@@ -454,7 +454,7 @@ Idempotente: `ng g mimi button` dos veces no cambia nada ni vuelve a instalar.
 }
 ```
 
-`"style": "vivid"` es el valor que escribe la 0.1.0 (nombre anterior del tema); ver la sección 11.
+`style` es el tema (`"mimi"`). La CLI no lo lee ni lo valida: cualquier valor se conserva tal cual (para la 0.1.0, ver la sección 12).
 
 ### `registry.json` (dentro de la CLI)
 
@@ -1181,7 +1181,7 @@ El showcase se publica en **https://ng.mimiworks.dev** con **Cloudflare Workers*
 - Mimi tiene **un solo tema base: Mimi**. Cada persona lo adapta: de fábrica se llama «Mimi»; cuando el usuario cambia algo (con el preset o en Theme Studio), es «Mi tema». No hay temas ni estilos alternativos.
 - **El tema Mimi:** paleta neutra (primario casi negro en claro, casi blanco en oscuro), radio 12px, sombras en capas (las de primary y destructive teñidas de su color), fuente Outfit y micro-animaciones (escala al hacer clic, transiciones suaves de color y sombra). Inspirado en Vuesax sin copiarlo.
 - Los tokens están en `docs/design/tokens-mimi.css` (catálogo completo en la sección 13). El primario se cambia con el preset.
-- **`mimi.json`:** la 0.1.0 escribe `"style": "vivid"` (nombre anterior del tema) y el código lo usa así; cambiarlo es la tarea V.2, aceptando `"vivid"` en los `mimi.json` existentes.
+- **`mimi.json`:** guarda `"style": "mimi"` (para la 0.1.0, ver la sección 12).
 
 ## 12. Política de versiones
 
@@ -1214,6 +1214,7 @@ Lo que la CLI copia al proyecto es código del usuario: se actualiza con `ng upd
   - antes de la 1.0, la nota de versión debe pedir buscar `destructive-soft` en el proyecto y cambiarlo a `destructive-ring`;
   - cuando exista `mimi update` (tarea 5.4), que avise si encuentra esa clase.
 
+- **`style` de `mimi.json`:** la 0.1.0 escribe `"vivid"`; se acepta como sinónimo de `"mimi"` y se deja de aceptar en la 1.0. (tarea V.2)
 - **Atajos de variante de Button y Badge** (tarea V.1): `variant="default"`, `"secondary"` y `"destructive"` siguen funcionando como atajos de solid + primary / secondary / danger hasta la 1.0, sin error ni aviso (con `tone` a la vez, gana el atajo y avisa en modo desarrollo). En la 1.0 se quitan: `variant="destructive"` pasa a `tone="danger"`, `variant="secondary"` a `tone="secondary"` y `variant="default"` se borra.
 - **`data-variant` y `data-tone` muestran los valores resueltos** desde la V.1: `variant="destructive"` produce `data-variant="solid" data-tone="danger"`. Quien tenga CSS propio sobre los atributos de la 0.1.0 debe cambiarlo, por ejemplo `[data-variant="destructive"]` pasa a `[data-tone="danger"]` y `[data-variant="default"]` pasa a `[data-variant="solid"][data-tone="primary"]`.
 

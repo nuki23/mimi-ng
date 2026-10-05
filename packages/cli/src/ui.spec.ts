@@ -101,6 +101,19 @@ describe('mimi (alias ui)', () => {
     expect(added.length).toBe(new Set(added).size);
   });
 
+  it('con "style": "vivid" (mimi.json de la 0.1.0) funciona igual y conserva el valor', async () => {
+    const { run, tree, warnings } = await initialized();
+    const config = json(tree, '/mimi.json');
+    tree.overwrite('/mimi.json', `${JSON.stringify({ ...config, style: 'vivid' }, null, 2)}\n`);
+    const result = await run('mimi', { components: ['button'] }, tree);
+    expect(result.readContent(`/${UI}/button/button.ts`)).toBe(
+      template('components/button/button.ts'),
+    );
+    expect(json(result, '/mimi.json').style).toBe('vivid');
+    expect(json(result, '/mimi.json').components.button).toEqual({ version: registry.version });
+    expect(warnings()).toEqual([]);
+  });
+
   it('el alias ui ejecuta el mismo schematic (ng g ui y ng g @mimi-ng/cli:ui)', async () => {
     const { run, tree } = await initialized();
     const viaAlias = await run('ui', { components: ['badge'] }, tree);

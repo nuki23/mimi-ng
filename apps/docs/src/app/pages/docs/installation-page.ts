@@ -69,7 +69,7 @@ export class InstallationPage {
 
   protected readonly mimiJson = [
     '{',
-    '  "style": "vivid",',
+    '  "style": "mimi",',
     '  "tailwind": { "css": "src/styles.css" },',
     '  "aliases": {',
     '    "components": "src/app/components/ui",',

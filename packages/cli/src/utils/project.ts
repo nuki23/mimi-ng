@@ -10,6 +10,10 @@ export interface PackageJson {
 
 /** Configuración de Mimi en el workspace (spec, sección 5). */
 export interface MimiConfig {
+  /**
+   * Tema: "mimi". La 0.1.0 escribe "vivid", sinónimo que se acepta hasta la 1.0 (spec 12). La CLI no
+   * lo lee ni lo valida: cualquier valor se conserva tal cual.
+   */
   style?: string;
   tailwind?: { css?: string };
   aliases?: { components?: string; utils?: string; theme?: string };

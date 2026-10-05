@@ -301,7 +301,7 @@ function writeMimiConfig(plan: Plan): Rule {
   return (tree) => {
     if (plan.mimiConfig) return;
     const config: MimiConfig = {
-      style: 'vivid',
+      style: 'mimi',
       tailwind: { css: plan.cssPath },
       aliases: {
         components: plan.componentsDir,

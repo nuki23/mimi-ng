@@ -115,7 +115,7 @@ describe('init', () => {
     expect(nodeTasks(runner)).toBe(1);
 
     expect(json(tree, '/mimi.json')).toEqual({
-      style: 'vivid',
+      style: 'mimi',
       tailwind: { css: 'projects/app/src/styles.css' },
       aliases: {
         components: UI,
@@ -578,5 +578,39 @@ describe('ng-add', () => {
     const b = harness();
     const viaNgAdd = await b.run({ icons: true }, await createWorkspace(b.runner), 'ng-add');
     expect(snapshot(viaNgAdd)).toEqual(snapshot(viaInit));
+  });
+});
+
+describe('init: "style" de mimi.json (tarea V.2)', () => {
+  /** Re-ejecuta init sobre un proyecto ya configurado cuyo mimi.json dice `style`. */
+  async function rerunWith(style: string) {
+    const { runner, run, logs } = harness();
+    const first = await run({}, await createWorkspace(runner));
+    const config = json(first, '/mimi.json');
+    first.overwrite('/mimi.json', `${JSON.stringify({ ...config, style }, null, 2)}\n`);
+    const before = first.readContent('/mimi.json');
+    logs.length = 0;
+    const second = await run({}, first);
+    const warnings = () => logs.filter((l) => l.level === 'warn');
+    return { before, second, logs, warnings };
+  }
+
+  it('init en un proyecto nuevo escribe "style": "mimi"', async () => {
+    const { runner, run } = harness();
+    const tree = await run({}, await createWorkspace(runner));
+    expect(json(tree, '/mimi.json').style).toBe('mimi');
+  });
+
+  it('"vivid" (lo que escribe la 0.1.0) se acepta: init re-ejecutado no lo cambia ni avisa', async () => {
+    const { before, second, logs, warnings } = await rerunWith('vivid');
+    expect(second.readContent('/mimi.json')).toBe(before);
+    expect(warnings()).toEqual([]);
+    expect(logs.map((l) => l.message)).toContain('Mimi ya estaba configurado; no hubo cambios.');
+  });
+
+  it('un valor desconocido se comporta igual: la CLI no lo lee ni lo valida, y lo conserva', async () => {
+    const { before, second, warnings } = await rerunWith('otro');
+    expect(second.readContent('/mimi.json')).toBe(before);
+    expect(warnings()).toEqual([]);
   });
 });
