@@ -6,10 +6,10 @@ import { MimiBadge } from '@/components/ui/badge';
   imports: [MimiBadge],
   template: `
     <div class="flex flex-wrap items-center justify-center gap-2">
-      <span mimiBadge>Default</span>
-      <span mimiBadge variant="secondary">Secondary</span>
-      <span mimiBadge variant="outline">Outline</span>
-      <span mimiBadge variant="destructive">Destructive</span>
+      <span mimiBadge tone="success">Solid</span>
+      <span mimiBadge variant="soft" tone="success">Soft</span>
+      <span mimiBadge variant="outline" tone="success">Outline</span>
+      <span mimiBadge variant="outline">Outline sin tono</span>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

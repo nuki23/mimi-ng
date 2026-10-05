@@ -7,9 +7,7 @@ import { MimiBadge } from '@/components/ui/badge';
   template: `
     <div class="flex items-center gap-3 text-sm font-medium">
       Notificaciones
-      <span mimiBadge variant="destructive" class="min-w-5 justify-center px-1.5 tabular-nums">
-        12
-      </span>
+      <span mimiBadge tone="danger" class="min-w-5 justify-center px-1.5 tabular-nums"> 12 </span>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

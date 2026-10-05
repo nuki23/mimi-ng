@@ -17,10 +17,46 @@
 
   <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
 
+  <h3 id="tones" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tonos</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tone</code> elige el
+    color: primary, secondary, success, warning, info o danger.
+  </p>
+  <app-code-preview [code]="source.tones">
+    <app-badge-tones-example />
+  </app-code-preview>
+
   <h3 id="variants" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variantes</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">variant</code> elige
+    cómo se ve: solid, soft u outline. Outline con tono muestra un punto de ese color; sin
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tone</code> es neutro,
+    sin punto (cada variante usa su tono natural: outline, secondary; solid y soft, primary).
+  </p>
   <app-code-preview [code]="source.variants">
     <app-badge-variants-example />
   </app-code-preview>
+
+  <h3 id="matrix" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variante × tono</h3>
+  <app-code-preview [code]="source.matrix">
+    <app-badge-matrix-example />
+  </app-code-preview>
+  <p class="text-sm text-pretty text-muted-foreground">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >variant="destructive"</code
+    >
+    sigue funcionando, pero en código nuevo usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tone="danger"</code>.
+    Lo mismo con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >variant="secondary"</code
+    >
+    (ahora
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tone="secondary"</code
+    >) y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">variant="default"</code
+    >.
+  </p>
 
   <h3 id="with-icon" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con ícono</h3>
   <p class="text-pretty">

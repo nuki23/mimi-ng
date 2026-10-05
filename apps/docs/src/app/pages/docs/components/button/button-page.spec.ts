@@ -19,7 +19,7 @@ describe('ButtonPage', () => {
     const el = fixture.nativeElement as HTMLElement;
 
     const previews = Array.from(el.querySelectorAll('app-code-preview'));
-    expect(previews.length).toBe(6);
+    expect(previews.length).toBe(8);
     for (const preview of previews) {
       expect(preview.querySelector('[mimiBtn]')).not.toBeNull();
       const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;

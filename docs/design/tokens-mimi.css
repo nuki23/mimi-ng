@@ -63,7 +63,10 @@
   /* ── Derivados (color-mix sobre los tokens de arriba) ── */
   --mimi-primary-hover: color-mix(in oklch, var(--mimi-primary) 88%, var(--mimi-background));
   --mimi-secondary-hover: color-mix(in oklch, var(--mimi-secondary) 80%, var(--mimi-foreground) 6%);
-  --mimi-destructive-hover: color-mix(in oklch, var(--mimi-destructive) 88%, var(--mimi-background));
+  /* Corrección de contraste (Mimi, V.1): en claro el texto de success, info y destructive es blanco y el
+     hover del diseño (12% hacia el fondo) no pasaba AA (≈3,8:1). El hover se aleja del texto: 12% hacia
+     foreground (≈5,8:1). El diseño debe actualizar estos hovers (plan, T.2a). */
+  --mimi-destructive-hover: color-mix(in oklch, var(--mimi-destructive) 88%, var(--mimi-foreground));
   --mimi-ring-soft: color-mix(in oklch, var(--mimi-ring) 32%, transparent);
   --mimi-destructive-soft: color-mix(in oklch, var(--mimi-destructive) 24%, transparent);
   --mimi-switch-off: color-mix(in oklch, var(--mimi-foreground) 20%, transparent);
@@ -72,12 +75,29 @@
   --mimi-warning-soft: color-mix(in oklab, var(--mimi-warning) var(--mimi-soft-mix), var(--mimi-background));
   --mimi-info-soft: color-mix(in oklab, var(--mimi-info) var(--mimi-soft-mix), var(--mimi-background));
   --mimi-destructive-soft-bg: color-mix(in oklab, var(--mimi-destructive) var(--mimi-soft-mix), var(--mimi-background));
-  --mimi-success-hover: color-mix(in oklab, var(--mimi-success) 88%, var(--mimi-background));
+  --mimi-success-hover: color-mix(in oklab, var(--mimi-success) 88%, var(--mimi-foreground));
   --mimi-warning-hover: color-mix(in oklab, var(--mimi-warning) 88%, var(--mimi-background));
-  --mimi-info-hover: color-mix(in oklab, var(--mimi-info) 88%, var(--mimi-background));
+  --mimi-info-hover: color-mix(in oklab, var(--mimi-info) 88%, var(--mimi-foreground));
   --mimi-success-ring: color-mix(in oklch, var(--mimi-success) 30%, transparent);
   --mimi-warning-ring: color-mix(in oklch, var(--mimi-warning) 34%, transparent);
   --mimi-info-ring: color-mix(in oklch, var(--mimi-info) 30%, transparent);
+  /* Variantes con tono: salen de las fórmulas en línea de "Mimi F2 Tokens y Tonos.dc.html" (Tonos en Button):
+     hover de soft = tono 22% sobre el fondo; borde de outline = tono 55%; hover de outline = tono 10%. */
+  --mimi-primary-soft-hover: color-mix(in oklab, var(--mimi-primary) 22%, var(--mimi-background));
+  --mimi-primary-border: color-mix(in oklch, var(--mimi-primary) 55%, transparent);
+  --mimi-primary-subtle: color-mix(in oklch, var(--mimi-primary) 10%, transparent);
+  --mimi-success-soft-hover: color-mix(in oklab, var(--mimi-success) 22%, var(--mimi-background));
+  --mimi-success-border: color-mix(in oklch, var(--mimi-success) 55%, transparent);
+  --mimi-success-subtle: color-mix(in oklch, var(--mimi-success) 10%, transparent);
+  --mimi-warning-soft-hover: color-mix(in oklab, var(--mimi-warning) 22%, var(--mimi-background));
+  --mimi-warning-border: color-mix(in oklch, var(--mimi-warning) 55%, transparent);
+  --mimi-warning-subtle: color-mix(in oklch, var(--mimi-warning) 10%, transparent);
+  --mimi-info-soft-hover: color-mix(in oklab, var(--mimi-info) 22%, var(--mimi-background));
+  --mimi-info-border: color-mix(in oklch, var(--mimi-info) 55%, transparent);
+  --mimi-info-subtle: color-mix(in oklch, var(--mimi-info) 10%, transparent);
+  --mimi-destructive-soft-hover: color-mix(in oklab, var(--mimi-destructive) 22%, var(--mimi-background));
+  --mimi-destructive-border: color-mix(in oklch, var(--mimi-destructive) 55%, transparent);
+  --mimi-destructive-subtle: color-mix(in oklch, var(--mimi-destructive) 10%, transparent);
 
   /* ── Tonos (diseño Fase 2; contraste AA verificado en el diseño) ── */
   --mimi-success: oklch(0.527 0.137 150);
@@ -192,6 +212,23 @@
   --mimi-success-ring: color-mix(in oklch, var(--mimi-success) 30%, transparent);
   --mimi-warning-ring: color-mix(in oklch, var(--mimi-warning) 34%, transparent);
   --mimi-info-ring: color-mix(in oklch, var(--mimi-info) 30%, transparent);
+  /* Variantes con tono: salen de las fórmulas en línea de "Mimi F2 Tokens y Tonos.dc.html" (Tonos en Button):
+     hover de soft = tono 22% sobre el fondo; borde de outline = tono 55%; hover de outline = tono 10%. */
+  --mimi-primary-soft-hover: color-mix(in oklab, var(--mimi-primary) 22%, var(--mimi-background));
+  --mimi-primary-border: color-mix(in oklch, var(--mimi-primary) 55%, transparent);
+  --mimi-primary-subtle: color-mix(in oklch, var(--mimi-primary) 10%, transparent);
+  --mimi-success-soft-hover: color-mix(in oklab, var(--mimi-success) 22%, var(--mimi-background));
+  --mimi-success-border: color-mix(in oklch, var(--mimi-success) 55%, transparent);
+  --mimi-success-subtle: color-mix(in oklch, var(--mimi-success) 10%, transparent);
+  --mimi-warning-soft-hover: color-mix(in oklab, var(--mimi-warning) 22%, var(--mimi-background));
+  --mimi-warning-border: color-mix(in oklch, var(--mimi-warning) 55%, transparent);
+  --mimi-warning-subtle: color-mix(in oklch, var(--mimi-warning) 10%, transparent);
+  --mimi-info-soft-hover: color-mix(in oklab, var(--mimi-info) 22%, var(--mimi-background));
+  --mimi-info-border: color-mix(in oklch, var(--mimi-info) 55%, transparent);
+  --mimi-info-subtle: color-mix(in oklch, var(--mimi-info) 10%, transparent);
+  --mimi-destructive-soft-hover: color-mix(in oklab, var(--mimi-destructive) 22%, var(--mimi-background));
+  --mimi-destructive-border: color-mix(in oklch, var(--mimi-destructive) 55%, transparent);
+  --mimi-destructive-subtle: color-mix(in oklch, var(--mimi-destructive) 10%, transparent);
 
   /* ── Tonos, superficies y entradas avanzadas · oscuro (diseño Fases 2 y 3) ── */
   --mimi-success: oklch(0.72 0.15 150);

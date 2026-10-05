@@ -151,10 +151,12 @@
   /* Derivados */
   --mimi-primary-hover: color-mix(in oklch, var(--mimi-primary) 88%, var(--mimi-background));
   --mimi-secondary-hover: color-mix(in oklch, var(--mimi-secondary) 80%, var(--mimi-foreground) 6%);
+  /* Hover de los sólidos con texto blanco: se aleja del texto, hacia foreground (AA, V.1). En
+     oscuro el texto es oscuro y el hover sigue yendo hacia el fondo. */
   --mimi-destructive-hover: color-mix(
     in oklch,
     var(--mimi-destructive) 88%,
-    var(--mimi-background)
+    var(--mimi-foreground)
   );
   --mimi-ring-soft: color-mix(in oklch, var(--mimi-ring) 32%, transparent);
   --mimi-switch-off: color-mix(in oklch, var(--mimi-foreground) 20%, transparent);
@@ -174,9 +176,9 @@
     var(--mimi-info) var(--mimi-soft-mix),
     var(--mimi-background)
   );
-  --mimi-success-hover: color-mix(in oklab, var(--mimi-success) 88%, var(--mimi-background));
+  --mimi-success-hover: color-mix(in oklab, var(--mimi-success) 88%, var(--mimi-foreground));
   --mimi-warning-hover: color-mix(in oklab, var(--mimi-warning) 88%, var(--mimi-background));
-  --mimi-info-hover: color-mix(in oklab, var(--mimi-info) 88%, var(--mimi-background));
+  --mimi-info-hover: color-mix(in oklab, var(--mimi-info) 88%, var(--mimi-foreground));
   --mimi-success-ring: color-mix(in oklch, var(--mimi-success) 30%, transparent);
   --mimi-warning-ring: color-mix(in oklch, var(--mimi-warning) 34%, transparent);
   --mimi-info-ring: color-mix(in oklch, var(--mimi-info) 30%, transparent);
@@ -189,6 +191,26 @@
   );
   /* Alias de la 0.1.0 (era el anillo). Se quita en la 1.0: usar destructive-ring (spec 12). */
   --mimi-destructive-soft: var(--mimi-destructive-ring);
+  /* Variantes con tono (fórmulas de F2 Tokens y Tonos): hover de soft, borde y hover de outline */
+  --mimi-primary-soft-hover: color-mix(in oklab, var(--mimi-primary) 22%, var(--mimi-background));
+  --mimi-primary-border: color-mix(in oklch, var(--mimi-primary) 55%, transparent);
+  --mimi-primary-subtle: color-mix(in oklch, var(--mimi-primary) 10%, transparent);
+  --mimi-success-soft-hover: color-mix(in oklab, var(--mimi-success) 22%, var(--mimi-background));
+  --mimi-success-border: color-mix(in oklch, var(--mimi-success) 55%, transparent);
+  --mimi-success-subtle: color-mix(in oklch, var(--mimi-success) 10%, transparent);
+  --mimi-warning-soft-hover: color-mix(in oklab, var(--mimi-warning) 22%, var(--mimi-background));
+  --mimi-warning-border: color-mix(in oklch, var(--mimi-warning) 55%, transparent);
+  --mimi-warning-subtle: color-mix(in oklch, var(--mimi-warning) 10%, transparent);
+  --mimi-info-soft-hover: color-mix(in oklab, var(--mimi-info) 22%, var(--mimi-background));
+  --mimi-info-border: color-mix(in oklch, var(--mimi-info) 55%, transparent);
+  --mimi-info-subtle: color-mix(in oklch, var(--mimi-info) 10%, transparent);
+  --mimi-destructive-soft-hover: color-mix(
+    in oklab,
+    var(--mimi-destructive) 22%,
+    var(--mimi-background)
+  );
+  --mimi-destructive-border: color-mix(in oklch, var(--mimi-destructive) 55%, transparent);
+  --mimi-destructive-subtle: color-mix(in oklch, var(--mimi-destructive) 10%, transparent);
 
   color-scheme: light;
 }
@@ -339,6 +361,26 @@
   );
   /* Alias de la 0.1.0 (era el anillo). Se quita en la 1.0: usar destructive-ring (spec 12). */
   --mimi-destructive-soft: var(--mimi-destructive-ring);
+  /* Variantes con tono (fórmulas de F2 Tokens y Tonos): hover de soft, borde y hover de outline */
+  --mimi-primary-soft-hover: color-mix(in oklab, var(--mimi-primary) 22%, var(--mimi-background));
+  --mimi-primary-border: color-mix(in oklch, var(--mimi-primary) 55%, transparent);
+  --mimi-primary-subtle: color-mix(in oklch, var(--mimi-primary) 10%, transparent);
+  --mimi-success-soft-hover: color-mix(in oklab, var(--mimi-success) 22%, var(--mimi-background));
+  --mimi-success-border: color-mix(in oklch, var(--mimi-success) 55%, transparent);
+  --mimi-success-subtle: color-mix(in oklch, var(--mimi-success) 10%, transparent);
+  --mimi-warning-soft-hover: color-mix(in oklab, var(--mimi-warning) 22%, var(--mimi-background));
+  --mimi-warning-border: color-mix(in oklch, var(--mimi-warning) 55%, transparent);
+  --mimi-warning-subtle: color-mix(in oklch, var(--mimi-warning) 10%, transparent);
+  --mimi-info-soft-hover: color-mix(in oklab, var(--mimi-info) 22%, var(--mimi-background));
+  --mimi-info-border: color-mix(in oklch, var(--mimi-info) 55%, transparent);
+  --mimi-info-subtle: color-mix(in oklch, var(--mimi-info) 10%, transparent);
+  --mimi-destructive-soft-hover: color-mix(
+    in oklab,
+    var(--mimi-destructive) 22%,
+    var(--mimi-background)
+  );
+  --mimi-destructive-border: color-mix(in oklch, var(--mimi-destructive) 55%, transparent);
+  --mimi-destructive-subtle: color-mix(in oklch, var(--mimi-destructive) 10%, transparent);
 
   color-scheme: dark;
 }
@@ -397,6 +439,21 @@
   --color-info-soft-foreground: var(--mimi-info-soft-foreground);
   --color-info-hover: var(--mimi-info-hover);
   --color-info-ring: var(--mimi-info-ring);
+  --color-primary-soft-hover: var(--mimi-primary-soft-hover);
+  --color-primary-border: var(--mimi-primary-border);
+  --color-primary-subtle: var(--mimi-primary-subtle);
+  --color-success-soft-hover: var(--mimi-success-soft-hover);
+  --color-success-border: var(--mimi-success-border);
+  --color-success-subtle: var(--mimi-success-subtle);
+  --color-warning-soft-hover: var(--mimi-warning-soft-hover);
+  --color-warning-border: var(--mimi-warning-border);
+  --color-warning-subtle: var(--mimi-warning-subtle);
+  --color-info-soft-hover: var(--mimi-info-soft-hover);
+  --color-info-border: var(--mimi-info-border);
+  --color-info-subtle: var(--mimi-info-subtle);
+  --color-destructive-soft-hover: var(--mimi-destructive-soft-hover);
+  --color-destructive-border: var(--mimi-destructive-border);
+  --color-destructive-subtle: var(--mimi-destructive-subtle);
   --color-tooltip: var(--mimi-tooltip);
   --color-tooltip-foreground: var(--mimi-tooltip-foreground);
   --color-glass: var(--mimi-glass);

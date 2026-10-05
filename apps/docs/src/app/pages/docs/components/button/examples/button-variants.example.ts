@@ -6,9 +6,8 @@ import { MimiButton } from '@/components/ui/button';
   imports: [MimiButton],
   template: `
     <div class="flex flex-wrap items-center justify-center gap-3">
-      <button mimiBtn>Default</button>
-      <button mimiBtn variant="secondary">Secondary</button>
-      <button mimiBtn variant="destructive">Destructive</button>
+      <button mimiBtn>Solid</button>
+      <button mimiBtn variant="soft">Soft</button>
       <button mimiBtn variant="outline">Outline</button>
       <button mimiBtn variant="ghost">Ghost</button>
       <button mimiBtn variant="link">Link</button>

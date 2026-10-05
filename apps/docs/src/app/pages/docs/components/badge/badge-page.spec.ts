@@ -17,7 +17,7 @@ describe('BadgePage', () => {
     const el = fixture.nativeElement as HTMLElement;
 
     const previews = Array.from(el.querySelectorAll('app-code-preview'));
-    expect(previews.length).toBe(3);
+    expect(previews.length).toBe(5);
     for (const preview of previews) {
       expect(preview.querySelector('[mimiBadge]')).not.toBeNull();
       const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;

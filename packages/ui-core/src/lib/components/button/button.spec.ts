@@ -1,7 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MimiButton } from './button';
-import type { ButtonSize, ButtonVariant } from './button.variants';
+import type {
+  ButtonSize,
+  ButtonTone,
+  ButtonVariant,
+  ButtonVariantShortcut,
+} from './button.variants';
 
 @Component({
   imports: [MimiButton],
@@ -9,6 +14,7 @@ import type { ButtonSize, ButtonVariant } from './button.variants';
     <button
       mimiBtn
       [variant]="variant()"
+      [tone]="tone()"
       [size]="size()"
       [disabled]="disabled()"
       [loading]="loading()"
@@ -29,7 +35,8 @@ import type { ButtonSize, ButtonVariant } from './button.variants';
   `,
 })
 class Host {
-  readonly variant = signal<ButtonVariant>('default');
+  readonly variant = signal<ButtonVariant | ButtonVariantShortcut>('solid');
+  readonly tone = signal<ButtonTone | undefined>(undefined);
   readonly size = signal<ButtonSize>('default');
   readonly disabled = signal(false);
   readonly loading = signal(false);
@@ -56,7 +63,8 @@ describe('MimiButton', () => {
   it('es el elemento nativo, con variante y tamaño por defecto', async () => {
     const { button } = await setup();
     expect(button.tagName).toBe('BUTTON');
-    expect(button.dataset['variant']).toBe('default');
+    expect(button.dataset['variant']).toBe('solid');
+    expect(button.dataset['tone']).toBe('primary');
     expect(button.dataset['size']).toBe('default');
     expect(button.classList).toContain('bg-primary');
     expect(button.classList).toContain('shadow-primary');
@@ -69,18 +77,138 @@ describe('MimiButton', () => {
     expect(button.hasAttribute('aria-busy')).toBe(false);
   });
 
-  it.each<[ButtonVariant, string]>([
-    ['default', 'bg-primary'],
-    ['secondary', 'bg-secondary'],
-    ['destructive', 'bg-destructive'],
-    ['outline', 'border-border'],
-    ['ghost', 'hover:not-disabled:bg-accent'],
-    ['link', 'underline-offset-4'],
-  ])('variante %s', async (variant, expected) => {
+  // Una clase representativa de cada variante con cada tono (button.variants.ts, TONE_CLASSES).
+  const EXPECTED: Record<ButtonVariant, Record<ButtonTone, string>> = {
+    solid: {
+      primary: 'bg-primary',
+      secondary: 'bg-secondary',
+      success: 'bg-success',
+      warning: 'bg-warning',
+      info: 'bg-info',
+      danger: 'bg-destructive',
+    },
+    soft: {
+      primary: 'hover:not-disabled:bg-primary-soft-hover',
+      secondary: 'bg-muted',
+      success: 'bg-success-soft',
+      warning: 'bg-warning-soft',
+      info: 'bg-info-soft',
+      danger: 'bg-destructive-soft-bg',
+    },
+    outline: {
+      primary: 'border-primary-border',
+      secondary: 'border-border',
+      success: 'border-success-border',
+      warning: 'border-warning-border',
+      info: 'border-info-border',
+      danger: 'border-destructive-border',
+    },
+    ghost: {
+      primary: 'hover:not-disabled:bg-accent',
+      secondary: 'hover:not-disabled:bg-accent',
+      success: 'hover:not-disabled:bg-success-soft',
+      warning: 'hover:not-disabled:bg-warning-soft',
+      info: 'hover:not-disabled:bg-info-soft',
+      danger: 'hover:not-disabled:bg-destructive-soft-bg',
+    },
+    link: {
+      primary: 'text-primary',
+      secondary: 'text-foreground',
+      success: 'text-success-soft-foreground',
+      warning: 'text-warning-soft-foreground',
+      info: 'text-info-soft-foreground',
+      danger: 'text-destructive-soft-foreground',
+    },
+  };
+  const COMBOS = (Object.keys(EXPECTED) as ButtonVariant[]).flatMap((variant) =>
+    (Object.keys(EXPECTED[variant]) as ButtonTone[]).map(
+      (tone) => [variant, tone, EXPECTED[variant][tone]] as const,
+    ),
+  );
+
+  it.each(COMBOS)('variante %s con tono %s', async (variant, tone, expected) => {
+    const { host, button, update } = await setup();
+    await update(() => {
+      host.variant.set(variant);
+      host.tone.set(tone);
+    });
+    expect(button.dataset['variant']).toBe(variant);
+    expect(button.dataset['tone']).toBe(tone);
+    expect(button.classList).toContain(expected);
+  });
+
+  it.each<[ButtonVariant, ButtonTone]>([
+    ['solid', 'primary'],
+    ['soft', 'primary'],
+    ['outline', 'secondary'],
+    ['ghost', 'secondary'],
+    ['link', 'primary'],
+  ])('sin tone, %s usa su tono natural (%s)', async (variant, tone) => {
     const { host, button, update } = await setup();
     await update(() => host.variant.set(variant));
-    expect(button.dataset['variant']).toBe(variant);
-    expect(button.classList).toContain(expected);
+    expect(button.dataset['tone']).toBe(tone);
+  });
+
+  it('outline y ghost sin tone se ven como en la 0.1.0', async () => {
+    const { host, button, update } = await setup();
+    await update(() => host.variant.set('outline'));
+    for (const cls of [
+      'border-border',
+      'bg-card',
+      'text-foreground',
+      'shadow-neutral',
+      'hover:not-disabled:bg-accent',
+      'hover:not-disabled:shadow-neutral-hover',
+      'active:ring-ring-soft',
+    ]) {
+      expect(button.classList).toContain(cls);
+    }
+    await update(() => host.variant.set('ghost'));
+    for (const cls of ['bg-transparent', 'text-foreground', 'hover:not-disabled:bg-accent']) {
+      expect(button.classList).toContain(cls);
+    }
+  });
+
+  it.each<[ButtonVariantShortcut, ButtonTone, string[]]>([
+    ['default', 'primary', ['bg-primary', 'shadow-primary', 'active:ring-ring-soft']],
+    ['secondary', 'secondary', ['bg-secondary', 'shadow-neutral']],
+    [
+      'destructive',
+      'danger',
+      ['bg-destructive', 'shadow-destructive', 'active:ring-destructive-ring'],
+    ],
+  ])('atajo de la 0.1.0: variant="%s" = solid + %s', async (shortcut, tone, classes) => {
+    const { host, button, update } = await setup();
+    await update(() => host.variant.set(shortcut));
+    expect(button.dataset['variant']).toBe('solid');
+    expect(button.dataset['tone']).toBe(tone);
+    for (const cls of classes) expect(button.classList).toContain(cls);
+  });
+
+  it('un atajo con tone: gana el atajo y avisa una sola vez en modo desarrollo', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const { host, button, update } = await setup();
+    await update(() => {
+      host.variant.set('destructive');
+      host.tone.set('success');
+    });
+    expect(button.dataset['tone']).toBe('danger');
+    expect(button.classList).toContain('bg-destructive');
+    expect(button.classList).not.toContain('bg-success');
+    await update(() => host.tone.set('info'));
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn.mock.calls[0][0]).toContain('variant="destructive"');
+    warn.mockRestore();
+  });
+
+  it('la clase del usuario gana también a los colores del tono', async () => {
+    const { host, button, update } = await setup();
+    await update(() => {
+      host.tone.set('success');
+      host.extra.set('bg-info');
+    });
+    expect(button.classList).toContain('bg-info');
+    expect(button.classList).not.toContain('bg-success');
   });
 
   it('el enlace usa el padding del diseño (4px)', async () => {

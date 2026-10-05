@@ -351,3 +351,52 @@ describe('theme-base.css: compatibilidad de destructive-soft con la 0.1.0 (spec 
     expect(theme).toContain('--color-destructive-soft-bg: var(--mimi-destructive-soft-bg);');
   });
 });
+
+describe('theme-base.css: derivados de las variantes con tono (V.1)', () => {
+  const node = (
+    globalThis as unknown as { process: { cwd(): string; getBuiltinModule(id: string): unknown } }
+  ).process;
+  const fs = node.getBuiltinModule('node:fs') as {
+    readFileSync(path: string, enc: 'utf8'): string;
+  };
+  const css = fs.readFileSync(
+    `${node.cwd()}/packages/ui-core/src/lib/theme/theme-base.css`,
+    'utf8',
+  );
+  // Prettier parte los color-mix largos en varias líneas: se compara sin los saltos.
+  const block = (selector: string) => {
+    const start = css.indexOf(`${selector} {`);
+    return css
+      .slice(start, css.indexOf('\n}', start))
+      .replace(/\s+/g, ' ')
+      .replace(/\( /g, '(')
+      .replace(/ \)/g, ')');
+  };
+  const TONES = ['primary', 'success', 'warning', 'info', 'destructive'];
+
+  it('soft-hover, border y subtle con las fórmulas del diseño, en claro y en oscuro', () => {
+    for (const selector of [':root', '.dark']) {
+      for (const t of TONES) {
+        expect(block(selector)).toContain(
+          `--mimi-${t}-soft-hover: color-mix(in oklab, var(--mimi-${t}) 22%, var(--mimi-background));`,
+        );
+        expect(block(selector)).toContain(
+          `--mimi-${t}-border: color-mix(in oklch, var(--mimi-${t}) 55%, transparent);`,
+        );
+        expect(block(selector)).toContain(
+          `--mimi-${t}-subtle: color-mix(in oklch, var(--mimi-${t}) 10%, transparent);`,
+        );
+      }
+    }
+  });
+
+  it('se exponen a Tailwind y no se emiten desde el preset', () => {
+    for (const t of TONES) {
+      for (const k of ['soft-hover', 'border', 'subtle']) {
+        expect(block('@theme inline')).toContain(`--color-${t}-${k}: var(--mimi-${t}-${k});`);
+      }
+    }
+    const preset = mimiThemeToCss({ colors: { success: 'green', primary: 'red' } });
+    expect(preset).not.toMatch(/--mimi-(success|primary)-(soft-hover|border|subtle):/);
+  });
+});

@@ -7,11 +7,11 @@ import { MimiBadge } from '@/components/ui/badge';
   imports: [MimiBadge, LucideCircleAlert, LucideCircleCheck],
   template: `
     <div class="flex flex-wrap items-center justify-center gap-2">
-      <span mimiBadge variant="secondary">
+      <span mimiBadge tone="secondary">
         <svg lucideCircleCheck></svg>
         Verificado
       </span>
-      <span mimiBadge variant="destructive">
+      <span mimiBadge tone="danger">
         <svg lucideCircleAlert></svg>
         Pago pendiente
       </span>

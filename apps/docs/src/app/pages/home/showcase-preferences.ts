@@ -42,9 +42,7 @@ const INITIAL = { name: 'panel-ventas', email: '', weekly: true, notify: true };
                 class="min-w-0 flex-1"
                 formControlName="email"
               />
-              <button mimiBtn type="button" variant="secondary" (click)="verify()">
-                Verificar
-              </button>
+              <button mimiBtn type="button" tone="secondary" (click)="verify()">Verificar</button>
             </div>
           </mimi-form-field>
 

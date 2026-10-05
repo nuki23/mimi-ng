@@ -4,8 +4,10 @@ import { CodePreview } from '../../../../code/code-preview';
 import { InstallCommand } from '../../../../code/install-command';
 import { ButtonAsLinkExample } from './examples/button-as-link.example';
 import { ButtonCustomClassExample } from './examples/button-custom-class.example';
+import { ButtonMatrixExample } from './examples/button-matrix.example';
 import { ButtonSizesExample } from './examples/button-sizes.example';
 import { ButtonStatesExample } from './examples/button-states.example';
+import { ButtonTonesExample } from './examples/button-tones.example';
 import { ButtonVariantsExample } from './examples/button-variants.example';
 import { ButtonWithIconExample } from './examples/button-with-icon.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
@@ -17,9 +19,13 @@ import buttonCustomClassSource from './examples/button-custom-class.example' wit
   loader: 'text',
 };
 // @ts-expect-error
+import buttonMatrixSource from './examples/button-matrix.example' with { loader: 'text' };
+// @ts-expect-error
 import buttonSizesSource from './examples/button-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import buttonStatesSource from './examples/button-states.example' with { loader: 'text' };
+// @ts-expect-error
+import buttonTonesSource from './examples/button-tones.example' with { loader: 'text' };
 // @ts-expect-error
 import buttonVariantsSource from './examples/button-variants.example' with { loader: 'text' };
 // @ts-expect-error
@@ -41,8 +47,10 @@ interface ApiRow {
     InstallCommand,
     ButtonAsLinkExample,
     ButtonCustomClassExample,
+    ButtonMatrixExample,
     ButtonSizesExample,
     ButtonStatesExample,
+    ButtonTonesExample,
     ButtonVariantsExample,
     ButtonWithIconExample,
   ],
@@ -53,8 +61,10 @@ export class ButtonPage {
   protected readonly source = {
     asLink: buttonAsLinkSource as string,
     customClass: buttonCustomClassSource as string,
+    matrix: buttonMatrixSource as string,
     sizes: buttonSizesSource as string,
     states: buttonStatesSource as string,
+    tones: buttonTonesSource as string,
     variants: buttonVariantsSource as string,
     withIcon: buttonWithIconSource as string,
   };
@@ -73,9 +83,17 @@ export class ButtonPage {
   protected readonly api: ApiRow[] = [
     {
       name: 'variant',
-      type: "'default' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'link'",
-      default: "'default'",
-      description: 'Estilo del botón.',
+      type: "'solid' | 'soft' | 'outline' | 'ghost' | 'link'",
+      default: "'solid'",
+      description:
+        'Cómo se ve. Atajos de la 0.1.0 (se quitan en la 1.0): default = solid + primary, secondary = solid + secondary, destructive = solid + danger; si además pasas tone, gana el atajo.',
+    },
+    {
+      name: 'tone',
+      type: "'primary' | 'secondary' | 'success' | 'warning' | 'info' | 'danger'",
+      default: 'tono natural',
+      description:
+        'De qué color es. Sin tone, cada variante usa su tono natural: outline y ghost, secondary (neutro); solid, soft y link, primary. danger usa los colores destructive.',
     },
     {
       name: 'size',
