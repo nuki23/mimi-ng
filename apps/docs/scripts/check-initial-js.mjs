@@ -2,7 +2,7 @@
 // «JS inicial»: `initial` suma también el CSS global, que crece con cada componente, y `bundle`
 // solo mide archivos con nombre, pero el chunk compartido inicial no lo tiene. Este script suma lo
 // que index.html carga al inicio (el <script type="module"> y los <link rel="modulepreload">),
-// avisa a partir de 325 kB y falla a partir de 335 kB (tamaño crudo, como los budgets de
+// avisa a partir de 335 kB y falla a partir de 350 kB (tamaño crudo, como los budgets de
 // Angular). Informa crudo, gzip y brotli, y también el CSS global, sin
 // umbrales (lo vigila el budget `bundle styles` de angular.json). Tamaños en kB de 1000 bytes,
 // como el build de Angular.
@@ -16,8 +16,10 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { brotliCompressSync, gzipSync } from 'node:zlib';
 
-const WARNING_KB = 325;
-const ERROR_KB = 335;
+// Para detectar fugas grandes (10 kB o más, como fue @angular/forms), no las funciones pequeñas
+// de rxjs o @angular/core que esbuild sube al chunk inicial cuando una ruta lazy las usa (spec 10).
+const WARNING_KB = 335;
+const ERROR_KB = 350;
 
 const root = resolve(
   process.argv[2] ??

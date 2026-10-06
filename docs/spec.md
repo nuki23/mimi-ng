@@ -1244,7 +1244,7 @@ import buttonVariantsSource from './examples/button-variants.example' with { loa
 
 | Qué mide                                       | Dónde                                    | Aviso  | Error  | Al separarlos (crudo / gzip) |
 | ---------------------------------------------- | ---------------------------------------- | ------ | ------ | ---------------------------- |
-| JS inicial completo                            | `apps/docs/scripts/check-initial-js.mjs` | 325 kB | 335 kB | 318.11 / 100.24 kB           |
+| JS inicial completo                            | `apps/docs/scripts/check-initial-js.mjs` | 335 kB | 350 kB | 318.11 / 100.24 kB           |
 | `main` (JS de la app)                          | `angular.json`, budget `bundle` `main`   | 140 kB | 145 kB | 135.68 kB                    |
 | CSS global                                     | `angular.json`, budget `bundle` `styles` | 105 kB | 115 kB | 80.77 / 12.24 kB             |
 | Todo lo inicial (techo general = 325 + 105 kB) | `angular.json`, budget `initial`         | 430 kB | 450 kB | 398.88 kB                    |
@@ -1253,6 +1253,8 @@ import buttonVariantsSource from './examples/button-variants.example' with { loa
 - **El CSS tiene margen para el Grupo 1:** 80.77 kB, más 2.13 kB de `@angular/cdk/overlay-prebuilt.css`, más unos 12 componentes a 1–1.5 kB cada uno, da unos 98–101 kB. En gzip crece muy poco.
 - **Cómo se informa:** el script da crudo, gzip y brotli del JS inicial y del CSS global. Los umbrales son sobre el crudo, como los budgets. La columna «Estimated transfer size» del build de Angular es **brotli**, no gzip: las cifras «gzip» de las tareas anteriores (98.96 kB, etc.) eran en realidad brotli. Al separarlos, el inicial era 98.97 kB en brotli y el JS inicial 100.24 kB en gzip.
 - No se sube ninguno sin decidirlo. Si el JS inicial crece, primero se investiga (`ng build docs --stats-json`).
+- **JS inicial: de 325/335 a 335/350 kB (antes de la G1.2, decidido por el usuario).** esbuild mueve al chunk inicial funciones pequeñas compartidas (de rxjs y de `@angular/core`) cuando una ruta lazy las usa: con Popover fueron +4.0 kB (ver abajo, «JS inicial con el primer componente de `@angular/cdk`»). No son fugas. El límite está para detectar fugas grandes, de 10 kB o más, como fue `@angular/forms`. El techo de `initial` (430/450 kB) no cambió: se fijó como 325 + 105 kB y hoy suma 408 kB.
+- **Al cerrar cada tarea:** si el JS inicial crece más de 1 kB, se informa qué módulos entraron y por qué (comparando el `metafile` de `ng build docs --stats-json` con y sin el cambio, como en la G1.1).
 
 Historia del presupuesto único `initial` (hasta la G1.1): aviso a partir de 400 kB y error a partir de 420 kB. Después de la tarea 2.2 medía 353.3 kB (95 kB en brotli); después de la 2.11, 364.7 kB (96.9 kB); después de la T.1, 388.31 kB (98.96 kB).
 
@@ -1686,6 +1688,8 @@ Una tabla por componente (21: los de la 0.1.0 y los del Grupo 1). «Hereda de» 
 | `--mimi-popover-arrow`   | Flecha       | —                       | `10px`            |
 
 **En ui-core desde la G1.1.** En el preset (`components.popover`, `MimiPopoverTokens`): `radius`, `padding` y `arrow`. `bg`, `border` y `shadow` solo en el CSS (cambian entre claro y oscuro, sección 6.2). El texto usa el global `--mimi-popover-foreground` (la hoja no define `--mimi-popover-fg`). `--mimi-popover-arrow-offset` es interna: la escribe el componente para que la flecha apunte al centro del trigger; no es un token.
+
+**Valor que no está en el diseño:** el margen mínimo del panel al borde de la pantalla, 8px (`VIEWPORT_MARGIN` en `popover.ts`; el ancho máximo del panel es `100vw − 16px` por lo mismo). A revisar en el diseño (plan, T.2a).
 
 #### Dropdown y Context Menu (`menu`)
 
