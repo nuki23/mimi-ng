@@ -50,6 +50,12 @@ export const routes: Routes = [
           import('./pages/docs/components/card/card-page').then((m) => m.CardPage),
       },
       {
+        path: 'components/popover',
+        title: 'Popover · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/popover/popover-page').then((m) => m.PopoverPage),
+      },
+      {
         path: 'components/separator',
         title: 'Separator · Mimi',
         loadComponent: () =>

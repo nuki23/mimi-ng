@@ -28,7 +28,8 @@ export type TokenComponent =
   | 'separator'
   | 'skeleton'
   | 'switch'
-  | 'textarea';
+  | 'textarea'
+  | 'popover';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -43,6 +44,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   skeleton: 'skeleton',
   switch: 'switch',
   textarea: 'textarea',
+  popover: 'popover',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -541,6 +543,48 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-input-border',
       preset: false,
       description: 'Color del borde.',
+    },
+  ],
+  popover: [
+    {
+      name: '--mimi-popover-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio del panel.',
+    },
+    {
+      name: '--mimi-popover-padding',
+      default: '16px',
+      preset: true,
+      description: 'Padding del panel.',
+    },
+    {
+      name: '--mimi-popover-arrow',
+      default: '10px',
+      preset: true,
+      description: 'Lado de la flecha.',
+    },
+    {
+      name: '--mimi-popover-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo del panel y de la flecha.',
+    },
+    {
+      name: '--mimi-popover-border',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'Color del borde del panel y de la flecha.',
+    },
+    {
+      name: '--mimi-popover-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra (cambia entre claro y oscuro).',
     },
   ],
 };

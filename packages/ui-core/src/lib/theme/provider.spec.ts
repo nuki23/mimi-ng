@@ -323,6 +323,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
         button: { px: '1.25rem', gap: '0.75rem' },
         input: { px: '1rem' },
         card: { padding: '2rem' },
+        popover: { radius: '12px', padding: '1.25rem', arrow: '8px' },
       },
     });
     for (const line of [
@@ -353,6 +354,9 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-btn-gap: 0.75rem;',
       '--mimi-input-px: 1rem;',
       '--mimi-card-padding: 2rem;',
+      '--mimi-popover-radius: 12px;',
+      '--mimi-popover-padding: 1.25rem;',
+      '--mimi-popover-arrow: 8px;',
     ]) {
       expect(css).toContain(line);
     }

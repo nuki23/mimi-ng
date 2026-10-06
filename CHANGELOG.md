@@ -4,9 +4,14 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 
 ## Sin publicar
 
+### Componentes nuevos
+
+- **Popover** (`ng g mimi popover`): panel flotante junto a un botón, con flecha, flip si no cabe, `[(open)]`, Escape y clic fuera, y el foco de vuelta al botón. Usa `@angular/cdk` por dentro: si tu proyecto no lo tiene, `ng g mimi popover` lo instala en la versión de tu `@angular/core` y agrega `@import "@angular/cdk/overlay-prebuilt.css";` a tu CSS global.
+
 ### Cambios
 
 - `init` escribe `"style": "mimi"` en `mimi.json`; `"vivid"` se sigue aceptando.
+- `ng g mimi` agrega al CSS global los `@import` que necesita un componente (por ahora, los estilos del overlay del CDK para Popover), una sola vez y después del tema.
 
 ### Correcciones
 

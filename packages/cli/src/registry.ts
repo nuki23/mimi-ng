@@ -9,6 +9,11 @@ export interface RegistryItem {
   dependencies?: Record<string, string>;
   /** Paquetes que la app ya debe tener (p. ej. `@angular/forms`). */
   peerDependencies?: Record<string, string>;
+  /**
+   * `@import` que el ítem necesita en el CSS global (`tailwind.css` de mimi.json), p. ej. los
+   * estilos del overlay del CDK. Se agregan una sola vez, después del tema.
+   */
+  cssImports?: string[];
   /** Otros ítems del registro que se copian con este. */
   registryDependencies?: string[];
 }

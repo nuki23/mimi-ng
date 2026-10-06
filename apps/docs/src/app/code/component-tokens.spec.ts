@@ -26,10 +26,20 @@ const FOLDER: Record<TokenComponent, string> = {
   skeleton: 'skeleton',
   switch: 'switch',
   textarea: 'textarea',
+  popover: 'popover',
 };
 
-/** Variables globales cuyo nombre empieza como un prefijo de componente. */
-const GLOBALS = new Set(['--mimi-input-background', '--mimi-switch-off', '--mimi-card-foreground']);
+/**
+ * Variables que empiezan como un prefijo de componente pero no son suyas: globales del tema y
+ * variables internas que el componente escribe solo (la posición de la flecha del Popover).
+ */
+const GLOBALS = new Set([
+  '--mimi-input-background',
+  '--mimi-switch-off',
+  '--mimi-card-foreground',
+  '--mimi-popover-foreground',
+  '--mimi-popover-arrow-offset',
+]);
 
 /** Código del componente (sin pruebas). */
 function source(component: TokenComponent): string {

@@ -61,4 +61,63 @@ describe('importaciones de ui-core', () => {
       .map((file) => path.relative(ROOT, file));
     expect(offenders).toEqual([]);
   });
+
+  it('nada privado de @angular/aria ni @angular/cdk (decisión 4.3)', () => {
+    const offenders = files.flatMap((file) =>
+      privateAngularImports(fs.readFileSync(file, 'utf8')).map(
+        (found) => `${path.relative(ROOT, file)}: ${found}`,
+      ),
+    );
+    expect(offenders).toEqual([]);
+  });
+
+  it('la regla detecta entry points y símbolos privados', () => {
+    const from = (spec: string) => ` from '@angular/${spec}';`;
+    expect(privateAngularImports(`import { X }${from('cdk/private')}`)).toEqual(['cdk/private']);
+    expect(privateAngularImports(`import { X }${from('aria/private')}`)).toEqual(['aria/private']);
+    expect(privateAngularImports(`import { _Loader }${from('cdk/overlay')}`)).toEqual([
+      'cdk/overlay: _Loader',
+    ]);
+    expect(privateAngularImports(`import { a, ɵb as c }${from('aria/menu')}`)).toEqual([
+      'aria/menu: ɵb',
+    ]);
+    expect(privateAngularImports(`export { _x }${from('cdk/a11y')}`)).toEqual(['cdk/a11y: _x']);
+    expect(privateAngularImports(`import { X }${from('cdk/fesm2022/overlay.mjs')}`)).toEqual([
+      'cdk/fesm2022/overlay.mjs',
+    ]);
+    expect(
+      privateAngularImports(
+        `import { CdkConnectedOverlay, type ConnectedPosition }${from('cdk/overlay')}`,
+      ),
+    ).toEqual([]);
+  });
 });
+
+/**
+ * Importaciones de @angular/aria y @angular/cdk que no son API pública: el entry point `private`
+ * (o una ruta interna como `fesm2022/…`) y los símbolos que empiezan por `_` o `ɵ`.
+ */
+function privateAngularImports(code: string): string[] {
+  const found: string[] = [];
+  // Se arma por partes para que este archivo no se detecte a sí mismo.
+  const statement = new RegExp(
+    String.raw`(?:import|export)\s*(?:type\s+)?(?:\{([^}]*)\}|[\w$*\s]+)\s*from\s*['"]@angular/` +
+      String.raw`((?:aria|cdk)(?:/[^'"]*)?)['"]`,
+    'g',
+  );
+  for (const [, names, entry] of code.matchAll(statement)) {
+    const sub = entry.split('/').slice(1);
+    if (sub.includes('private') || sub.some((part) => /^fesm|\.m?js$/.test(part))) {
+      found.push(entry);
+      continue;
+    }
+    for (const name of (names ?? '').split(',')) {
+      const imported = name
+        .trim()
+        .replace(/^type\s+/, '')
+        .split(/\s+as\s+/)[0];
+      if (/^[_ɵ]/.test(imported)) found.push(`${entry}: ${imported}`);
+    }
+  }
+  return found;
+}

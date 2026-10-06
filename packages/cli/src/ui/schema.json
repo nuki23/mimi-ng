@@ -48,6 +48,10 @@
             "label": "input"
           },
           {
+            "value": "popover",
+            "label": "popover"
+          },
+          {
             "value": "separator",
             "label": "separator"
           },

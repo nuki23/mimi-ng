@@ -1,0 +1,142 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Popover</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Panel flotante junto a un botón, para contenido breve o un formulario pequeño. Se cierra con
+    Escape o con un clic fuera, y el foco vuelve al botón. Las piezas se importan juntas con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >MimiPopoverImports</code
+    >.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="popover" />
+  <p class="text-pretty">
+    Popover usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+    para posicionar el panel. Si tu proyecto no lo tiene, el comando lo instala en la misma versión
+    que tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code>
+    y agrega sus estilos a tu CSS global, después del tema:
+  </p>
+  <app-code-block [code]="cdkCss" lang="css" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    @for (part of parts; track part.name) {
+      <li>
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">{{
+          part.name
+        }}</code>
+        {{ part.description }}
+      </li>
+    }
+  </ul>
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
+  <p class="text-pretty">
+    Título, descripción y un botón que cierra. Al abrir, el foco pasa al primer elemento del panel.
+  </p>
+  <app-code-preview [code]="source.basic">
+    <app-popover-basic-example />
+  </app-code-preview>
+
+  <h3 id="positions" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Posiciones</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">side</code> elige el
+    lado y <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">align</code> la
+    alineación. Si el panel no cabe, se da vuelta solo; la flecha siempre apunta al botón.
+  </p>
+  <app-code-preview [code]="source.positions">
+    <app-popover-positions-example />
+  </app-code-preview>
+
+  <h3 id="form" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con un formulario</h3>
+  <p class="text-pretty">
+    El diseño de «Invitar al proyecto». Al enviar, el formulario cierra el popover con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(open)]</code>.
+  </p>
+  <app-code-preview [code]="source.form">
+    <app-popover-form-example />
+  </app-code-preview>
+
+  <h3 id="controlled" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Controlado</h3>
+  <p class="text-pretty">
+    Con <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(open)]</code> lo
+    abres o cierras desde tu código, y sabes cuándo lo cierra el usuario.
+  </p>
+  <app-code-preview [code]="source.controlled">
+    <app-popover-controlled-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Personalizar con class
+  </h3>
+  <p class="text-pretty">
+    El <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-popover</code> va
+    al panel: aquí, una píldora sin flecha con una paleta de colores. Como no tiene título, el
+    nombre accesible va en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">label</code>.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-popover-custom-class-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Accesibilidad</h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      El panel es un
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="dialog"</code>
+      no modal: Tab sale del panel hacia el resto de la página, que sigue disponible.
+    </li>
+    <li>
+      Necesita un nombre: márcalo con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >mimiPopoverTitle</code
+      >
+      o usa
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">label</code>. En modo
+      desarrollo, Mimi avisa si falta.
+    </li>
+    <li>
+      Se abre como popover nativo del navegador (capa superior), junto al botón en el DOM: no lo
+      tapa ningún
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">z-index</code> ni
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">overflow</code>, y el
+      orden de Tab sigue al botón.
+    </li>
+    <li>Con movimiento reducido, abre y cierra sin animación.</li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="popover" />
+</article>

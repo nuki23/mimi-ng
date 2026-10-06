@@ -5,6 +5,7 @@ import {
   InstallBehavior,
   addDependency,
 } from '@schematics/angular/utility';
+import { hasDirective, insertAfterTheme } from '../init/css';
 import { normalizePath } from '../init/paths';
 import { registry, resolveItems } from '../registry';
 import { type MimiConfig, type PackageJson, allDependencies, readJson } from '../utils/project';
@@ -60,6 +61,7 @@ export function ui(options: UiOptions): Rule {
         report,
       }),
       updateMimiConfig(plan, report),
+      updateGlobalCss(plan),
       ...Object.entries(plan.newPackages).map(([name, version]) =>
         addDependency(name, version, {
           type: DependencyType.Default,
@@ -168,6 +170,39 @@ function updateMimiConfig(plan: Plan, report: FileReport): Rule {
     const next = { ...plan.config, components };
     const text = `${JSON.stringify(next, null, 2)}\n`;
     if (tree.readText('mimi.json') !== text) tree.overwrite('mimi.json', text);
+  };
+}
+
+// ── CSS global ────────────────────────────────────────────────────────────────────────
+
+/**
+ * Agrega los `cssImports` de los ítems (p. ej. `@angular/cdk/overlay-prebuilt.css`, que pide la
+ * guía del CDK) al CSS global de mimi.json, una sola vez. Van después del `@import` del tema (o
+ * del de Tailwind): los `@import` tienen que ir antes que cualquier otra regla, y así quedan
+ * junto a los de Mimi. Si no se encuentra el archivo, se explica cómo agregarlos a mano.
+ */
+function updateGlobalCss(plan: Plan): Rule {
+  return (tree, context) => {
+    const imports = [
+      ...new Set(plan.items.flatMap((item) => registry.items[item].cssImports ?? [])),
+    ];
+    if (imports.length === 0) return;
+    const cssPath = plan.config.tailwind?.css;
+    const css = cssPath && tree.exists(cssPath) ? tree.readText(cssPath) : null;
+    const missing = imports.filter((path) => !css || !hasDirective(css, '@import', path));
+    if (missing.length === 0) return;
+    const lines = missing.map((path) => `@import "${path}";`);
+    const updated = css === null ? null : insertAfterTheme(css, lines);
+    if (!cssPath || updated === null) {
+      context.logger.warn(
+        `No se encontró el CSS global${cssPath ? ` (${cssPath})` : ''} con el @import de ` +
+          `Tailwind. Agrega a mano, después del tema de Mimi:\n${lines.map((l) => `  ${l}`).join('\n')}`,
+      );
+      return;
+    }
+    tree.overwrite(cssPath, updated);
+    context.logger.info(`Agregado a ${cssPath}:`);
+    for (const line of lines) context.logger.info(`  ${line}`);
   };
 }
 

@@ -29,6 +29,22 @@ export function insertAfterTailwind(css: string, lines: string[]): string {
   return css.slice(0, found.end) + insert + css.slice(found.end);
 }
 
+/** `@import` del tema de Mimi (`…/theme/theme-base.css`), en su propia línea. */
+const THEME_IMPORT = /^[ \t]*@import\s+(["'])[^"'\n]*theme-base\.css\1[^;\n]*;[^\n]*$/m;
+
+/**
+ * Inserta líneas después del `@import` del tema o, si no está, después del de Tailwind.
+ * Devuelve null si no hay ninguno de los dos (no se sabe dónde ponerlas).
+ */
+export function insertAfterTheme(css: string, lines: string[]): string | null {
+  const theme = THEME_IMPORT.exec(css);
+  if (!theme) return findTailwindImport(css) ? insertAfterTailwind(css, lines) : null;
+  if (lines.length === 0) return css;
+  const end = theme.index + theme[0].length;
+  const eol = eolOf(css);
+  return css.slice(0, end) + lines.map((line) => eol + line).join('') + css.slice(end);
+}
+
 /** ¿Ya hay un `@import` o `@source` con esa ruta (con comillas simples o dobles)? */
 export function hasDirective(css: string, directive: '@import' | '@source', path: string): boolean {
   const escaped = path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

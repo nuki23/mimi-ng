@@ -239,6 +239,67 @@ describe('mimi (alias ui)', () => {
     expect(h.logs.map((l) => l.message)).toContain(`  @angular/forms@${deps['@angular/core']}`);
   });
 
+  it('popover: @angular/cdk con el rango de @angular/core, solo si falta', async () => {
+    const { run, tree, logs } = await initialized();
+    expect(json(tree, '/package.json').dependencies['@angular/cdk']).toBeUndefined();
+    const result = await run('mimi', { components: ['popover'] }, tree);
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+    expect(logs.map((l) => l.message)).toContain(`  @angular/cdk@${deps['@angular/core']}`);
+    expect(result.exists(`/${UI}/popover/popover.ts`)).toBe(true);
+  });
+
+  it('popover: agrega el @import de overlay-prebuilt.css una sola vez, después del tema', async () => {
+    const { run, tree, logs } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const first = await run('mimi', { components: ['popover'] }, tree);
+    const css = first.readContent(`/${cssPath}`);
+    const lines = css.split(/\r?\n/);
+    const theme = lines.findIndex((l) => l.includes('theme-base.css'));
+    expect(lines[theme + 1]).toBe('@import "@angular/cdk/overlay-prebuilt.css";');
+    expect(logs.map((l) => l.message)).toContain(`Agregado a ${cssPath}:`);
+
+    // Otra vez (y con otro ítem): no se duplica.
+    const second = await run('mimi', { components: ['popover', 'button'] }, first);
+    const again = second.readContent(`/${cssPath}`);
+    expect(again.match(/overlay-prebuilt\.css/g)).toHaveLength(1);
+  });
+
+  it('popover: respeta un @import que ya estaba (con comillas simples)', async () => {
+    const { run, tree } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const original = `${tree.readContent(`/${cssPath}`)}\n@import '@angular/cdk/overlay-prebuilt.css';\n`;
+    tree.overwrite(`/${cssPath}`, original);
+    const result = await run('mimi', { components: ['popover'] }, tree);
+    expect(result.readContent(`/${cssPath}`)).toBe(original);
+  });
+
+  it('popover: sin el tema en el CSS, va después del @import de Tailwind', async () => {
+    const { run, tree } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    tree.overwrite(`/${cssPath}`, '@import "tailwindcss";\n\n.mia { color: red; }\n');
+    const result = await run('mimi', { components: ['popover'] }, tree);
+    expect(result.readContent(`/${cssPath}`)).toBe(
+      '@import "tailwindcss";\n@import "@angular/cdk/overlay-prebuilt.css";\n\n.mia { color: red; }\n',
+    );
+  });
+
+  it('popover: si no encuentra el CSS global, explica qué agregar a mano', async () => {
+    const { run, tree, warnings } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    tree.delete(`/${cssPath}`);
+    await run('mimi', { components: ['popover'] }, tree);
+    expect(warnings().join('\n')).toContain('@import "@angular/cdk/overlay-prebuilt.css";');
+  });
+
+  it('los componentes sin cssImports no tocan el CSS global', async () => {
+    const { run, tree } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const before = tree.readContent(`/${cssPath}`);
+    const result = await run('mimi', { components: ['button', 'switch'] }, tree);
+    expect(result.readContent(`/${cssPath}`)).toBe(before);
+  });
+
   it('el mensaje final recuerda guardar .mimi/ en git', async () => {
     const { run, tree, logs } = await initialized();
     await run('mimi', { components: ['card'] }, tree);

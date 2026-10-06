@@ -2,6 +2,9 @@
    (docs/, CLAUDE.md…). Solo se escanea el código del showcase y de ui-core. */
 @import 'tailwindcss' source(none);
 @import '@mimi-ng/ui-core/theme.css';
+/* Estilos del overlay del CDK (Popover y los demás overlays), como en el proyecto del usuario:
+   la guía del CDK pide importarlos y la CLI los agrega (spec 4.3). */
+@import '@angular/cdk/overlay-prebuilt.css';
 
 @source '.';
 /* Sin esto Tailwind no genera las clases que usan los componentes de ui-core */

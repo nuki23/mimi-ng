@@ -97,6 +97,15 @@
       },
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
     },
+    "popover": {
+      "type": "component",
+      "files": ["components/popover/popover.ts", "components/popover/index.ts"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
+      "registryDependencies": ["utils/cn"]
+    },
     "separator": {
       "type": "component",
       "files": [

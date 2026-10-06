@@ -231,6 +231,15 @@ export interface MimiTextareaTokens {
   py?: string;
 }
 
+/** Popover. Fondo, borde y sombra van en el CSS (`--mimi-popover-bg`, `-border`, `-shadow`). */
+export interface MimiPopoverTokens {
+  radius?: string;
+  /** Padding del panel (16px). */
+  padding?: string;
+  /** Lado de la flecha (10px). */
+  arrow?: string;
+}
+
 /**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
@@ -247,6 +256,7 @@ export interface MimiComponentTokens {
   skeleton?: MimiSkeletonTokens;
   badge?: MimiBadgeTokens;
   textarea?: MimiTextareaTokens;
+  popover?: MimiPopoverTokens;
   // select y dialog se agregan con sus componentes (G1.5 y G1.6)
 }
 
