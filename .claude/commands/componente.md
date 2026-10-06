@@ -58,7 +58,7 @@ Crea el componente **$ARGUMENTS** de Mimi siguiendo estos pasos en orden. Cumple
 
 ## 4. Al terminar
 
-1. `pnpm build`, `pnpm test` y `pnpm format` (y `pnpm format:check`). El build avisa a partir de 400 kB de bundle inicial y falla a partir de 420 kB (`angular.json`, spec 10): si crece, averigua por qué; el presupuesto no se sube sin que lo decida el usuario. Informa siempre el bundle inicial antes y después, crudo y gzip (y separando JS y CSS si cambió).
+1. `pnpm build`, `pnpm test` y `pnpm format` (y `pnpm format:check`). Presupuestos (spec 10): JS inicial con `check-initial-js.mjs` (aviso desde 325 kB, error desde 335 kB; corre dentro de `pnpm build`), y en `angular.json` `main` 140/145 kB, CSS global (`styles`) 105/115 kB e `initial` 430/450 kB. Si algo crece, averigua por qué; ningún presupuesto se sube sin que lo decida el usuario. Informa siempre, antes y después, el informe de check-initial-js (JS inicial) y del CSS global, crudo y gzip (la columna «Estimated transfer size» de Angular es brotli, no gzip).
 2. Levanta `pnpm dev` en un puerto libre y comprueba que `main.js` responde HTTP 200 sin errores en el log (`pnpm build` no detecta los fallos de resolución de `ng serve`). No lo dejes corriendo.
 3. Revisa que el CSS generado no tenga colores fijos.
 4. Actualiza `docs/spec.md` si cambió algo (API, tokens nuevos: la tabla del componente en la sección 13).

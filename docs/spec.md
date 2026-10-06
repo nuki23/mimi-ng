@@ -1227,7 +1227,21 @@ import buttonVariantsSource from './examples/button-variants.example' with { loa
 
 **Accesibilidad.** El `<pre>` tiene `tabindex="0"` y un `aria-label`, para recorrer el scroll horizontal con el teclado.
 
-**Presupuesto del bundle inicial** (`angular.json`, configuración de producción): aviso a partir de 400 kB y error a partir de 420 kB. Después de la tarea 2.2 medía 353.3 kB (95 kB en gzip); después de la 2.11, 364.7 kB (96.9 kB); después de la T.1, 388.31 kB (98.96 kB). Al informar el bundle se dan siempre el tamaño crudo y el gzip.
+**Presupuestos separados (G1.1, paso A).** Tailwind genera en el CSS global las clases de todos los componentes de ui-core, aunque sus páginas sean lazy, así que el CSS inicial crece con cada componente. El presupuesto `initial` mezcla JS y CSS, y su objetivo era detectar JS que se cuele al bundle inicial (como pasó con `@angular/forms`). Por eso se separan:
+
+| Qué mide                                       | Dónde                                    | Aviso  | Error  | Al separarlos (crudo / gzip) |
+| ---------------------------------------------- | ---------------------------------------- | ------ | ------ | ---------------------------- |
+| JS inicial completo                            | `apps/docs/scripts/check-initial-js.mjs` | 325 kB | 335 kB | 318.11 / 100.24 kB           |
+| `main` (JS de la app)                          | `angular.json`, budget `bundle` `main`   | 140 kB | 145 kB | 135.68 kB                    |
+| CSS global                                     | `angular.json`, budget `bundle` `styles` | 105 kB | 115 kB | 80.77 / 12.24 kB             |
+| Todo lo inicial (techo general = 325 + 105 kB) | `angular.json`, budget `initial`         | 430 kB | 450 kB | 398.88 kB                    |
+
+- **Por qué un script para el JS inicial.** Ningún tipo de budget de Angular lo mide solo: `initial` suma el CSS, `bundle` solo encuentra archivos con nombre y el chunk compartido inicial (donde está `@angular/core` y donde cae lo que se cuela) no lo tiene, y `anyScript` mide cada archivo por separado. El script suma lo que `index.html` carga al inicio (el `<script type="module">` y los `<link rel="modulepreload">`) y corre después de `ng build docs` en `pnpm build:docs`, así que también en `pnpm build` (al cerrar cada tarea) y en el build de Cloudflare. Lo prueba `apps/docs/src/app/initial-js.spec.ts`.
+- **El CSS tiene margen para el Grupo 1:** 80.77 kB, más 2.13 kB de `@angular/cdk/overlay-prebuilt.css`, más unos 12 componentes a 1–1.5 kB cada uno, da unos 98–101 kB. En gzip crece muy poco.
+- **Cómo se informa:** el script da crudo, gzip y brotli del JS inicial y del CSS global. Los umbrales son sobre el crudo, como los budgets. La columna «Estimated transfer size» del build de Angular es **brotli**, no gzip: las cifras «gzip» de las tareas anteriores (98.96 kB, etc.) eran en realidad brotli. Al separarlos, el inicial era 98.97 kB en brotli y el JS inicial 100.24 kB en gzip.
+- No se sube ninguno sin decidirlo. Si el JS inicial crece, primero se investiga (`ng build docs --stats-json`).
+
+Historia del presupuesto único `initial` (hasta la G1.1): aviso a partir de 400 kB y error a partir de 420 kB. Después de la tarea 2.2 medía 353.3 kB (95 kB en brotli); después de la 2.11, 364.7 kB (96.9 kB); después de la T.1, 388.31 kB (98.96 kB).
 
 **Por qué subió el aviso (tarea T.1, de 380 a 400 kB; el error sigue en 420 kB).** La T.1 sumó unos 20 kB de CSS (52.14 → 72.51 kB; JS 315.60 → 315.80 kB): las variables nuevas del tema (tonos, sombras de color y glow, de tres capas con `color-mix`, en claro y oscuro) y los respaldos `@supports` que Tailwind (Lightning CSS) agrega a todo lo que usa `color-mix` (13.5 kB del archivo), más las muestras de `/dev/tokens` y `/dev/theme` (6.4 kB). En gzip fue solo +1.3 kB (97.65 → 98.96 kB). No se sube otra vez sin decidirlo: los componentes con `@angular/cdk` y `@angular/aria` llegan solo en rutas diferidas (tarea G1.1).
 
