@@ -13,14 +13,16 @@ import {
 export const inputVariants = cva(
   [
     'w-full min-w-0 rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))]',
-    'border-[length:var(--mimi-input-border-width,1px)] border-input bg-input-background',
-    'px-[var(--mimi-input-padding-x,0.75rem)] font-sans text-foreground mimi-transition',
-    'placeholder:text-[color:var(--mimi-input-placeholder-color,var(--mimi-muted-foreground))]',
+    'border-[length:var(--mimi-input-border-width,1px)] border-[color:var(--mimi-input-border,var(--mimi-input))] bg-[color:var(--mimi-input-bg,var(--mimi-input-background))]',
+    'px-[var(--mimi-input-px,var(--mimi-input-padding-x,0.75rem))] font-sans text-[color:var(--mimi-input-fg,var(--mimi-foreground))] mimi-transition',
+    'placeholder:text-[color:var(--mimi-input-placeholder,var(--mimi-input-placeholder-color,var(--mimi-muted-foreground)))]',
     fieldFocusStyles,
+    'focus-visible:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))]',
     'focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
     controlDisabledStyles,
-    'disabled:opacity-[var(--mimi-input-disabled-opacity,0.5)]',
+    'disabled:opacity-[var(--mimi-input-disabled-opacity,var(--mimi-disabled-opacity,0.5))]',
     controlInvalidStyles,
+    'aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))] aria-invalid:focus-visible:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
   ],
   {
     variants: {

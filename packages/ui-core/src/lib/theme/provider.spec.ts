@@ -302,6 +302,120 @@ describe('applyMimiTheme', () => {
   });
 });
 
+describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
+  it('cada componente usa su prefijo', () => {
+    const css = mimiThemeToCss({
+      components: {
+        avatar: { size: '3rem', sizeSm: '2rem', sizeLg: '4rem', radius: '8px' },
+        switch: { width: '2.75rem', height: '1.5rem' },
+        checkbox: { size: '1.25rem', radius: '4px' },
+        formField: { gap: '0.5rem', labelSize: '1rem', labelWeight: 600 },
+        separator: { size: '2px' },
+        skeleton: { radius: '0', duration: '2s' },
+        badge: {
+          height: '24px',
+          px: '0.75rem',
+          fontSize: '0.8rem',
+          fontWeight: 500,
+          radius: '6px',
+        },
+        textarea: { radius: '4px', minHeight: '5rem', lineHeight: '1.5rem', py: '0.5rem' },
+        button: { px: '1.25rem', gap: '0.75rem' },
+        input: { px: '1rem' },
+        card: { padding: '2rem' },
+      },
+    });
+    for (const line of [
+      '--mimi-avatar-size: 3rem;',
+      '--mimi-avatar-size-sm: 2rem;',
+      '--mimi-avatar-size-lg: 4rem;',
+      '--mimi-avatar-radius: 8px;',
+      '--mimi-switch-width: 2.75rem;',
+      '--mimi-switch-height: 1.5rem;',
+      '--mimi-checkbox-size: 1.25rem;',
+      '--mimi-checkbox-radius: 4px;',
+      '--mimi-field-gap: 0.5rem;',
+      '--mimi-field-label-size: 1rem;',
+      '--mimi-field-label-weight: 600;',
+      '--mimi-separator-size: 2px;',
+      '--mimi-skeleton-radius: 0;',
+      '--mimi-skeleton-duration: 2s;',
+      '--mimi-badge-height: 24px;',
+      '--mimi-badge-px: 0.75rem;',
+      '--mimi-badge-font-size: 0.8rem;',
+      '--mimi-badge-font-weight: 500;',
+      '--mimi-badge-radius: 6px;',
+      '--mimi-textarea-radius: 4px;',
+      '--mimi-textarea-min-height: 5rem;',
+      '--mimi-textarea-line-height: 1.5rem;',
+      '--mimi-textarea-py: 0.5rem;',
+      '--mimi-btn-px: 1.25rem;',
+      '--mimi-btn-gap: 0.75rem;',
+      '--mimi-input-px: 1rem;',
+      '--mimi-card-padding: 2rem;',
+    ]) {
+      expect(css).toContain(line);
+    }
+  });
+
+  it('radii.badge (0.1.0) y components.badge.radius generan la misma variable', () => {
+    expect(mimiThemeToCss({ radii: { badge: '4px' } })).toContain('--mimi-badge-radius: 4px;');
+    expect(mimiThemeToCss({ components: { badge: { radius: '4px' } } })).toContain(
+      '--mimi-badge-radius: 4px;',
+    );
+  });
+
+  it('los nombres de la 0.1.0 siguen generando su variable (respaldo en la cascada)', () => {
+    const css = mimiThemeToCss({
+      components: {
+        button: { paddingX: '2rem' },
+        input: { paddingX: '1rem', placeholderColor: 'gray' },
+      },
+    });
+    expect(css).toContain('--mimi-btn-padding-x: 2rem;');
+    expect(css).toContain('--mimi-input-padding-x: 1rem;');
+    expect(css).toContain('--mimi-input-placeholder-color: gray;');
+  });
+
+  it('button.pressScale con movimiento reducido vale 1', () => {
+    const css = mimiThemeToCss({ components: { button: { pressScale: 0.95 } } });
+    expect(css).toContain('--mimi-btn-press-scale: 0.95;');
+    expect(css).toContain('@media (prefers-reduced-motion: reduce)');
+    expect(css).toContain('    --mimi-btn-press-scale: 1;');
+    expect(mimiThemeToCss({ motion: { pressScale: 0.9 } })).not.toContain('--mimi-btn-press-scale');
+  });
+});
+
+describe('provideMimiTheme: nombres de la 0.1.0', () => {
+  afterEach(() => TestBed.inject(DOCUMENT).getElementById(MIMI_THEME_STYLE_ID)?.remove());
+
+  it('avisa una sola vez por cada nombre viejo, diciendo cuál usar', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const preset = {
+      radii: { badge: '4px' },
+      components: {
+        button: { paddingX: '2rem' },
+        input: { paddingX: '1rem', placeholderColor: 'gray' },
+      },
+    };
+    provideMimiTheme(preset);
+    provideMimiTheme(preset);
+    const messages = warn.mock.calls.map((call) => String(call[0]));
+    expect(messages).toHaveLength(4);
+    expect(messages.join('\n')).toContain(
+      'components.button.paddingX es un nombre de la 0.1.0: usa components.button.px',
+    );
+    expect(messages.join('\n')).toContain(
+      'components.input.paddingX es un nombre de la 0.1.0: usa components.input.px',
+    );
+    expect(messages.join('\n')).toContain('--mimi-input-placeholder');
+    expect(messages.join('\n')).toContain(
+      'radii.badge es un nombre de la 0.1.0: usa components.badge.radius',
+    );
+    warn.mockRestore();
+  });
+});
+
 describe('provideMimiTheme', () => {
   afterEach(() => TestBed.inject(DOCUMENT).getElementById(MIMI_THEME_STYLE_ID)?.remove());
 

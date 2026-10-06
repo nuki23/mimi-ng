@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../../../code/code-block';
 import { CodePreview } from '../../../../code/code-preview';
+import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { SeparatorCustomClassExample } from './examples/separator-custom-class.example';
 import { SeparatorHorizontalExample } from './examples/separator-horizontal.example';
@@ -26,6 +27,7 @@ import separatorVerticalSource from './examples/separator-vertical.example' with
   selector: 'app-separator-page',
   imports: [
     CodeBlock,
+    CssVariables,
     CodePreview,
     InstallCommand,
     SeparatorCustomClassExample,

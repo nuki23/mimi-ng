@@ -38,7 +38,13 @@ describe('MimiSeparator', () => {
   it('por defecto: horizontal, 1px, color del borde y decorativa', async () => {
     const { q } = await setup();
     const sep = q('default');
-    for (const cls of ['block', 'h-px', 'w-full', 'shrink-0', 'bg-border']) {
+    for (const cls of [
+      'block',
+      'h-[var(--mimi-separator-size,1px)]',
+      'w-full',
+      'shrink-0',
+      'bg-[color:var(--mimi-separator-color,var(--mimi-border))]',
+    ]) {
       expect(sep.classList).toContain(cls);
     }
     expect(sep.dataset['orientation']).toBe('horizontal');
@@ -52,9 +58,9 @@ describe('MimiSeparator', () => {
     await update(() => host.orientation.set('vertical'));
     const sep = q('dynamic');
     expect(sep.dataset['orientation']).toBe('vertical');
-    expect(sep.classList).toContain('w-px');
+    expect(sep.classList).toContain('w-[var(--mimi-separator-size,1px)]');
     expect(sep.classList).toContain('self-stretch');
-    expect(sep.classList).not.toContain('h-px');
+    expect(sep.classList).not.toContain('h-[var(--mimi-separator-size,1px)]');
     expect(sep.classList).not.toContain('w-full');
   });
 
@@ -77,8 +83,10 @@ describe('MimiSeparator', () => {
     expect(sep.classList).toContain('bg-primary');
     expect(sep.classList).toContain('h-0.5');
     expect(sep.classList).toContain('w-1/2');
-    expect(sep.classList).not.toContain('bg-border');
-    expect(sep.classList).not.toContain('h-px');
+    expect(sep.classList).not.toContain(
+      'bg-[color:var(--mimi-separator-color,var(--mimi-border))]',
+    );
+    expect(sep.classList).not.toContain('h-[var(--mimi-separator-size,1px)]');
     expect(sep.classList).not.toContain('w-full');
   });
 });

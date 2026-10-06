@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../../../code/code-block';
 import { CodePreview } from '../../../../code/code-preview';
+import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { CheckboxSelectAllExample } from './examples/checkbox-select-all.example';
 import { CheckboxStatesExample } from './examples/checkbox-states.example';
@@ -98,6 +99,7 @@ const CHECKBOX_API: ApiRow[] = [
   selector: 'app-switch-page',
   imports: [
     CodeBlock,
+    CssVariables,
     CodePreview,
     InstallCommand,
     CheckboxSelectAllExample,

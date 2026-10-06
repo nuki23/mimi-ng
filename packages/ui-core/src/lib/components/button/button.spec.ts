@@ -72,7 +72,9 @@ describe('MimiButton', () => {
       'h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))]',
     );
     expect(button.classList).toContain('focus-visible:outline-ring');
-    expect(button.classList).toContain('active:scale-(--mimi-press-scale)');
+    expect(button.classList).toContain(
+      'active:scale-[var(--mimi-btn-press-scale,var(--mimi-press-scale))]',
+    );
     expect(button.hasAttribute('disabled')).toBe(false);
     expect(button.hasAttribute('aria-busy')).toBe(false);
   });
@@ -215,7 +217,9 @@ describe('MimiButton', () => {
     const { host, button, update } = await setup();
     await update(() => host.variant.set('link'));
     expect(button.classList).toContain('px-1');
-    expect(button.classList).not.toContain('px-[var(--mimi-btn-padding-x,1rem)]');
+    expect(button.classList).not.toContain(
+      'px-[var(--mimi-btn-px,var(--mimi-btn-padding-x,1rem))]',
+    );
   });
 
   it.each<[ButtonSize, string]>([

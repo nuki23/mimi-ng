@@ -109,19 +109,19 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
     cn('inline-flex items-center gap-2.5 text-sm', this.userClass()),
   );
 
-  // Pista: 36×20, 2px de padding. Encendida: primary con su sombra.
+  // Pista: 36×20 (--mimi-switch-width/-height), 2px de padding. Encendida: primary con su sombra.
   protected readonly trackClasses = cn(
-    'peer group inline-flex h-5 w-9 shrink-0 items-center rounded-full bg-switch-off p-0.5',
+    'peer group inline-flex h-[var(--mimi-switch-height,1.25rem)] w-[var(--mimi-switch-width,2.25rem)] shrink-0 items-center rounded-full bg-[color:var(--mimi-switch-track-off,var(--mimi-switch-off))] p-0.5',
     'mimi-transition active:scale-(--mimi-press-scale-sm)',
-    'data-[state=checked]:bg-primary data-[state=checked]:shadow-primary disabled:shadow-none',
+    'data-[state=checked]:bg-[color:var(--mimi-switch-track-on,var(--mimi-primary))] data-[state=checked]:shadow-primary disabled:shadow-none',
     buttonFocusStyles,
     controlDisabledStyles,
   );
 
-  // Pulgar: 16px; se desplaza 16px al encender.
+  // Pulgar: alto de la pista menos el padding (16px); al encender se desplaza ancho − alto (16px).
   protected readonly thumbClasses = cn(
-    'pointer-events-none block size-4 rounded-full bg-background shadow-thumb mimi-transition',
-    'group-data-[state=checked]:translate-x-4 group-data-[state=checked]:bg-primary-foreground',
+    'pointer-events-none block size-[calc(var(--mimi-switch-height,1.25rem)_-_0.25rem)] rounded-full bg-[color:var(--mimi-switch-thumb,var(--mimi-background))] shadow-thumb mimi-transition',
+    'group-data-[state=checked]:translate-x-[calc(var(--mimi-switch-width,2.25rem)_-_var(--mimi-switch-height,1.25rem))] group-data-[state=checked]:bg-primary-foreground',
     'group-disabled:shadow-none',
   );
 

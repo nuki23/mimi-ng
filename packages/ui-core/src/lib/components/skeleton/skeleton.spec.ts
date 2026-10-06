@@ -24,7 +24,12 @@ describe('MimiSkeleton', () => {
 
   it('tiene el fondo, el radio y la animación del diseño', async () => {
     const { skeleton } = await setup();
-    for (const cls of ['block', 'rounded-sm', 'bg-muted', 'animate-mimi-pulse']) {
+    for (const cls of [
+      'block',
+      'rounded-[var(--mimi-skeleton-radius,var(--mimi-radius-sm))]',
+      'bg-[color:var(--mimi-skeleton-bg,var(--mimi-muted))]',
+      'animate-[mimi-pulse_var(--mimi-skeleton-duration,1.6s)_ease-in-out_infinite]',
+    ]) {
       expect(skeleton.classList).toContain(cls);
     }
   });
@@ -46,7 +51,11 @@ describe('MimiSkeleton', () => {
     for (const cls of ['size-12', 'rounded-full', 'bg-accent', 'animate-none']) {
       expect(skeleton.classList).toContain(cls);
     }
-    for (const cls of ['rounded-sm', 'bg-muted', 'animate-mimi-pulse']) {
+    for (const cls of [
+      'rounded-[var(--mimi-skeleton-radius,var(--mimi-radius-sm))]',
+      'bg-[color:var(--mimi-skeleton-bg,var(--mimi-muted))]',
+      'animate-[mimi-pulse_var(--mimi-skeleton-duration,1.6s)_ease-in-out_infinite]',
+    ]) {
       expect(skeleton.classList).not.toContain(cls);
     }
   });

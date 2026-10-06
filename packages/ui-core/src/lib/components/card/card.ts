@@ -24,9 +24,9 @@ export class MimiCard {
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
     cn(
-      'flex flex-col bg-card text-card-foreground',
+      'flex flex-col bg-[color:var(--mimi-card-bg,var(--mimi-card))] text-[color:var(--mimi-card-fg,var(--mimi-card-foreground))]',
       'rounded-[var(--mimi-card-radius,var(--mimi-radius-card))]',
-      'border-[length:var(--mimi-card-border-width,1px)] border-border',
+      'border-[length:var(--mimi-card-border-width,1px)] border-[color:var(--mimi-card-border,var(--mimi-border))]',
       'shadow-[shadow:var(--mimi-card-shadow,var(--mimi-shadow-card))]',
       this.userClass(),
     ),
@@ -44,7 +44,7 @@ export class MimiCardHeader {
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
     cn(
-      'flex flex-col gap-1.5 p-[var(--mimi-card-padding-header,1.5rem_1.5rem_1rem)]',
+      'flex flex-col gap-1.5 p-[var(--mimi-card-padding-header,var(--mimi-card-padding,1.5rem)_var(--mimi-card-padding,1.5rem)_1rem)]',
       this.userClass(),
     ),
   );
@@ -101,7 +101,10 @@ export class MimiCardDescription {
 export class MimiCardContent {
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
-    cn('block p-[var(--mimi-card-padding-content,0_1.5rem_1.25rem)] first:pt-6', this.userClass()),
+    cn(
+      'block p-[var(--mimi-card-padding-content,0_var(--mimi-card-padding,1.5rem)_1.25rem)] first:pt-[var(--mimi-card-padding,1.5rem)]',
+      this.userClass(),
+    ),
   );
 }
 
@@ -116,7 +119,7 @@ export class MimiCardFooter {
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
     cn(
-      'flex items-center justify-end gap-2 p-[var(--mimi-card-padding-footer,0_1.5rem_1.5rem)] first:pt-6',
+      'flex items-center justify-end gap-2 p-[var(--mimi-card-padding-footer,0_var(--mimi-card-padding,1.5rem)_var(--mimi-card-padding,1.5rem))] first:pt-[var(--mimi-card-padding,1.5rem)]',
       this.userClass(),
     ),
   );

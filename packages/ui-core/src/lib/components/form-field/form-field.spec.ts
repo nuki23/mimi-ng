@@ -109,9 +109,9 @@ describe('MimiFormField', () => {
     expect(input.id).toMatch(/^mimi-form-field-\d+-control$/);
     expect(label.getAttribute('for')).toBe(input.id);
     expect(label.textContent?.trim()).toBe('Correo');
-    expect(label.classList).toContain('text-sm');
-    expect(label.classList).toContain('font-medium');
-    for (const cls of ['flex', 'flex-col', 'gap-1.5']) {
+    expect(label.classList).toContain('text-[length:var(--mimi-field-label-size,0.875rem)]');
+    expect(label.classList).toContain('font-[weight:var(--mimi-field-label-weight,500)]');
+    for (const cls of ['flex', 'flex-col', 'gap-[var(--mimi-field-gap,0.375rem)]']) {
       expect(field('reactive').classList).toContain(cls);
     }
   });
@@ -148,13 +148,21 @@ describe('MimiFormField', () => {
     expect(error('reactive')).toBe(container);
     expect(container.textContent?.trim()).toBe('This field is required.');
     expect(container.classList).not.toContain('sr-only');
-    for (const cls of ['flex', 'items-center', 'gap-1.5', 'text-[13px]', 'text-destructive']) {
+    for (const cls of [
+      'flex',
+      'items-center',
+      'gap-1.5',
+      'text-[13px]',
+      'text-[color:var(--mimi-field-error,var(--mimi-destructive))]',
+    ]) {
       expect(container.classList).toContain(cls);
     }
     expect(container.querySelector('svg')!.getAttribute('aria-hidden')).toBe('true');
     // Con error, el host lo marca y la etiqueta se pone roja.
     expect(field('reactive').hasAttribute('data-invalid')).toBe(true);
-    expect(field('reactive').classList).toContain('[&[data-invalid]>label]:text-destructive');
+    expect(field('reactive').classList).toContain(
+      '[&[data-invalid]>label]:text-[color:var(--mimi-field-error,var(--mimi-destructive))]',
+    );
 
     type(input, 'ana@');
     await settle(fixture);
@@ -222,7 +230,7 @@ describe('MimiFormField', () => {
     await settle(fixture);
     expect(field('reactive').classList).toContain('gap-3');
     expect(field('reactive').classList).toContain('flex-row');
-    expect(field('reactive').classList).not.toContain('gap-1.5');
+    expect(field('reactive').classList).not.toContain('gap-[var(--mimi-field-gap,0.375rem)]');
     expect(field('reactive').classList).not.toContain('flex-col');
   });
 });

@@ -111,29 +111,5 @@
   </div>
 
   <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
-  <p class="text-pretty">
-    Se definen en tu
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">styles.css</code> o con
-    el preset (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-      >components.card</code
-    >). Si no las defines, se usan los valores de la columna «Por defecto».
-  </p>
-  <div class="overflow-x-auto rounded-card border">
-    <table class="w-full text-left text-sm">
-      <thead class="bg-muted text-muted-foreground">
-        <tr>
-          <th scope="col" class="px-4 py-2.5 font-medium">Variable</th>
-          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (token of tokens; track token.name) {
-          <tr class="border-t align-top">
-            <td class="px-4 py-2.5 font-mono text-[13px] whitespace-nowrap">{{ token.name }}</td>
-            <td class="px-4 py-2.5 font-mono text-[13px]">{{ token.default }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  </div>
+  <app-css-variables component="card" />
 </article>

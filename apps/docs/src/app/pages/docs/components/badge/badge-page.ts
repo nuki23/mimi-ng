@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../../../code/code-block';
 import { CodePreview } from '../../../../code/code-preview';
+import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { BadgeCustomClassExample } from './examples/badge-custom-class.example';
 import { BadgeMatrixExample } from './examples/badge-matrix.example';
@@ -25,6 +26,7 @@ import badgeWithIconSource from './examples/badge-with-icon.example' with { load
   selector: 'app-badge-page',
   imports: [
     CodeBlock,
+    CssVariables,
     CodePreview,
     InstallCommand,
     BadgeCustomClassExample,

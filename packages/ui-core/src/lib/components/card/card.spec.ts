@@ -42,9 +42,9 @@ describe('MimiCard', () => {
     for (const cls of [
       'flex',
       'flex-col',
-      'bg-card',
-      'text-card-foreground',
-      'border-border',
+      'bg-[color:var(--mimi-card-bg,var(--mimi-card))]',
+      'text-[color:var(--mimi-card-fg,var(--mimi-card-foreground))]',
+      'border-[color:var(--mimi-card-border,var(--mimi-border))]',
       'rounded-[var(--mimi-card-radius,var(--mimi-radius-card))]',
       'border-[length:var(--mimi-card-border-width,1px)]',
       'shadow-[shadow:var(--mimi-card-shadow,var(--mimi-shadow-card))]',
@@ -56,17 +56,19 @@ describe('MimiCard', () => {
   it('cada parte tiene su padding y su tipografía', async () => {
     const { q } = await setup();
     expect(q('#full mimi-card-header').classList).toContain(
-      'p-[var(--mimi-card-padding-header,1.5rem_1.5rem_1rem)]',
+      'p-[var(--mimi-card-padding-header,var(--mimi-card-padding,1.5rem)_var(--mimi-card-padding,1.5rem)_1rem)]',
     );
     expect(q('#full mimi-card-header').classList).toContain('gap-1.5');
     expect(q('#full mimi-card-title').classList).toContain('text-lg');
     expect(q('#full mimi-card-title').classList).toContain('font-semibold');
     expect(q('#full mimi-card-description').classList).toContain('text-muted-foreground');
     expect(q('#full mimi-card-content').classList).toContain(
-      'p-[var(--mimi-card-padding-content,0_1.5rem_1.25rem)]',
+      'p-[var(--mimi-card-padding-content,0_var(--mimi-card-padding,1.5rem)_1.25rem)]',
     );
     const footer = q('#full mimi-card-footer');
-    expect(footer.classList).toContain('p-[var(--mimi-card-padding-footer,0_1.5rem_1.5rem)]');
+    expect(footer.classList).toContain(
+      'p-[var(--mimi-card-padding-footer,0_var(--mimi-card-padding,1.5rem)_var(--mimi-card-padding,1.5rem))]',
+    );
     expect(footer.classList).toContain('justify-end');
     expect(footer.classList).toContain('gap-2');
   });
@@ -74,7 +76,9 @@ describe('MimiCard', () => {
   it('el contenido suma padding arriba solo si es el primer hijo (sin encabezado)', async () => {
     const { q } = await setup();
     // La regla es la misma clase; se aplica según :first-child.
-    expect(q('#content-only mimi-card-content').classList).toContain('first:pt-6');
+    expect(q('#content-only mimi-card-content').classList).toContain(
+      'first:pt-[var(--mimi-card-padding,1.5rem)]',
+    );
     expect(q('#content-only mimi-card-content').matches(':first-child')).toBe(true);
     expect(q('#full mimi-card-content').matches(':first-child')).toBe(false);
   });
@@ -98,11 +102,11 @@ describe('MimiCard', () => {
     expect(card.classList).not.toContain(
       'shadow-[shadow:var(--mimi-card-shadow,var(--mimi-shadow-card))]',
     );
-    expect(card.classList).not.toContain('bg-card');
+    expect(card.classList).not.toContain('bg-[color:var(--mimi-card-bg,var(--mimi-card))]');
     expect(card.classList).toContain('border-2');
     expect(card.classList).not.toContain('border-[length:var(--mimi-card-border-width,1px)]');
     // El color del borde es otra propiedad: se mantiene.
-    expect(card.classList).toContain('border-border');
+    expect(card.classList).toContain('border-[color:var(--mimi-card-border,var(--mimi-border))]');
   });
 
   it('MimiCardImports trae las seis piezas', () => {

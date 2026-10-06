@@ -73,7 +73,7 @@ export class MimiFormError {
 
   protected readonly classes = computed(() =>
     cn(
-      'flex items-center gap-1.5 text-[13px] text-destructive [&_svg]:size-3.5 [&_svg]:shrink-0',
+      'flex items-center gap-1.5 text-[13px] text-[color:var(--mimi-field-error,var(--mimi-destructive))] [&_svg]:size-3.5 [&_svg]:shrink-0',
       this.userClass(),
       // Sin error: vacío y fuera del flujo, pero en el DOM para que aria-live funcione.
       !this.context.showError() && 'sr-only',

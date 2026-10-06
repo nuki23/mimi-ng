@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../../../code/code-block';
 import { CodePreview } from '../../../../code/code-preview';
+import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { FormFieldBasicExample } from './examples/form-field-basic.example';
 import { FormFieldCustomClassExample } from './examples/form-field-custom-class.example';
@@ -55,6 +56,7 @@ interface ApiRow {
   selector: 'app-form-field-page',
   imports: [
     CodeBlock,
+    CssVariables,
     CodePreview,
     InstallCommand,
     FormFieldBasicExample,

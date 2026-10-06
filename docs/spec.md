@@ -595,6 +595,20 @@ Valores de respaldo por tamaño (los mismos que los tokens de `theme-base.css`):
 | default | `--mimi-control-height`    | 2.5rem   |
 | lg      | `--mimi-control-height-lg` | 3rem     |
 
+**Los colores de los componentes se cambian en el CSS, no en el preset** (T.0b). Los tokens de color (`--mimi-card-bg`, `--mimi-input-border`, `--mimi-switch-track-on`…) existen en la cascada, pero no en `MimiComponentTokens`: el preset escribe los tokens de componente en `:root`, igual en claro y oscuro, y un color fijo rompería el otro modo (además, en Theme Studio el color es global). Se definen en el `styles.css` de la app, después del tema:
+
+```css
+/* styles.css */
+:root {
+  --mimi-card-bg: oklch(0.98 0.01 250);
+}
+.dark {
+  --mimi-card-bg: oklch(0.22 0.02 250);
+}
+```
+
+Cada página del showcase tiene su tabla «Variables CSS» (nombre, valor por defecto, de qué hereda y si va en el preset), generada desde `apps/docs/src/app/code/component-tokens.ts`; `component-tokens.spec.ts` la compara con el código de ui-core.
+
 ### 6.3 Preset tipado (`theme/types.ts`)
 
 El catálogo completo de tokens, en tres niveles y con una tabla por componente, está en la sección 13.
@@ -678,6 +692,7 @@ export interface MimiShadowTokens {
 export interface MimiRadiusTokens {
   sm?: string;
   card?: string;
+  /** @deprecated Usa components.badge.radius (la misma variable). Sigue hasta la 1.0. */
   badge?: string;
 }
 
@@ -731,6 +746,12 @@ export interface MimiEffectTokens {
 /** Tokens por componente. Cada componente los lee con la cascada de la spec 6.2. */
 export interface MimiControlTokens extends MimiControlSizeTokens {
   radius?: string;
+  /** Padding horizontal del tamaño default: --mimi-<prefijo>-px. */
+  px?: string;
+  /**
+   * @deprecated Nombre de la 0.1.0 (--mimi-<prefijo>-padding-x): usa `px`. Sigue funcionando
+   * hasta la 1.0 (spec 12).
+   */
   paddingX?: string;
   fontSize?: string;
   borderWidth?: string;
@@ -739,11 +760,19 @@ export interface MimiControlTokens extends MimiControlSizeTokens {
 
 /** paddingX y fontSize se aplican al tamaño default; sm y lg usan los valores del diseño. */
 export interface MimiButtonTokens extends MimiControlTokens {
+  /** Espacio entre ícono y texto del tamaño default. */
+  gap?: string;
+  /** Escala al presionar; si no, --mimi-press-scale. Con movimiento reducido vale 1. */
+  pressScale?: string | number;
   fontWeight?: string | number;
   letterSpacing?: string;
 }
 
 export interface MimiInputTokens extends MimiControlTokens {
+  /**
+   * @deprecated Es un color: cámbialo en el CSS con --mimi-input-placeholder (spec 6.2). Sigue
+   * funcionando hasta la 1.0.
+   */
   placeholderColor?: string;
   disabledOpacity?: string | number;
 }
@@ -752,15 +781,83 @@ export interface MimiCardTokens {
   radius?: string;
   borderWidth?: string;
   shadow?: string;
+  /** Padding exterior de las partes (1.5rem); los paddingHeader/Content/Footer lo detallan. */
+  padding?: string;
   paddingHeader?: string;
   paddingContent?: string;
   paddingFooter?: string;
 }
 
+export interface MimiAvatarTokens {
+  size?: string;
+  sizeSm?: string;
+  sizeLg?: string;
+  radius?: string;
+}
+
+export interface MimiSwitchTokens {
+  /** Ancho de la pista. El pulgar se desplaza ancho − alto. */
+  width?: string;
+  /** Alto de la pista. El pulgar mide alto − 4px. */
+  height?: string;
+}
+
+export interface MimiCheckboxTokens {
+  size?: string;
+  radius?: string;
+}
+
+/** FormField (prefijo field). */
+export interface MimiFieldTokens {
+  gap?: string;
+  labelSize?: string;
+  labelWeight?: string | number;
+}
+
+export interface MimiSeparatorTokens {
+  /** Grosor de la línea. */
+  size?: string;
+}
+
+export interface MimiSkeletonTokens {
+  radius?: string;
+  /** Duración del pulso: '1.6s'. */
+  duration?: string;
+}
+
+export interface MimiBadgeTokens {
+  height?: string;
+  px?: string;
+  fontSize?: string;
+  fontWeight?: string | number;
+  /** --mimi-badge-radius (el mismo que radii.badge de la 0.1.0). */
+  radius?: string;
+}
+
+/** Textarea: si no se definen, usa los de Input y después los compartidos. */
+export interface MimiTextareaTokens {
+  radius?: string;
+  minHeight?: string;
+  lineHeight?: string;
+  py?: string;
+}
+
+/**
+ * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
+ * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
+ */
 export interface MimiComponentTokens {
   button?: MimiButtonTokens;
   input?: MimiInputTokens;
   card?: MimiCardTokens;
+  avatar?: MimiAvatarTokens;
+  switch?: MimiSwitchTokens;
+  checkbox?: MimiCheckboxTokens;
+  formField?: MimiFieldTokens;
+  separator?: MimiSeparatorTokens;
+  skeleton?: MimiSkeletonTokens;
+  badge?: MimiBadgeTokens;
+  textarea?: MimiTextareaTokens;
   // select y dialog se agregan con sus componentes (G1.5 y G1.6)
 }
 
@@ -1215,6 +1312,12 @@ Lo que la CLI copia al proyecto es código del usuario: se actualiza con `ng upd
   - cuando exista `mimi update` (tarea 5.4), que avise si encuentra esa clase.
 
 - **`style` de `mimi.json`:** la 0.1.0 escribe `"vivid"`; se acepta como sinónimo de `"mimi"` y se deja de aceptar en la 1.0. (tarea V.2)
+- **Nombres de tokens de la 0.1.0** (tarea T.0b). Siguen funcionando hasta la 1.0, como respaldo dentro de la cascada, y en modo desarrollo `provideMimiTheme` avisa una sola vez por cada uno que use el preset:
+  - `components.button.paddingX` (`--mimi-btn-padding-x`) → `components.button.px` (`--mimi-btn-px`): `var(--mimi-btn-px, var(--mimi-btn-padding-x, 1rem))`.
+  - `components.input.paddingX` (`--mimi-input-padding-x`) → `components.input.px` (`--mimi-input-px`), igual.
+  - `components.input.placeholderColor` (`--mimi-input-placeholder-color`) → `--mimi-input-placeholder` en el CSS (es un color: no va en el preset).
+  - `radii.badge` → `components.badge.radius`. Las dos generan la misma variable, `--mimi-badge-radius`.
+  - Textarea usaba los tokens de Input; ahora tiene los suyos (`--mimi-textarea-*`), que caen en los de Input: no cambia nada para quien ya personalizó Input.
 - **Atajos de variante de Button y Badge** (tarea V.1): `variant="default"`, `"secondary"` y `"destructive"` siguen funcionando como atajos de solid + primary / secondary / danger hasta la 1.0, sin error ni aviso (con `tone` a la vez, gana el atajo y avisa en modo desarrollo). En la 1.0 se quitan: `variant="destructive"` pasa a `tone="danger"`, `variant="secondary"` a `tone="secondary"` y `variant="default"` se borra.
 - **`data-variant` y `data-tone` muestran los valores resueltos** desde la V.1: `variant="destructive"` produce `data-variant="solid" data-tone="danger"`. Quien tenga CSS propio sobre los atributos de la 0.1.0 debe cambiarlo, por ejemplo `[data-variant="destructive"]` pasa a `[data-tone="danger"]` y `[data-variant="default"]` pasa a `[data-variant="solid"][data-tone="primary"]`.
 
@@ -1611,6 +1714,14 @@ Una tabla por componente (21: los de la 0.1.0 y los del Grupo 1). «Hereda de» 
 **Variantes con tono (V.1):** `--mimi-<tono>-soft-hover`, `--mimi-<tono>-border` y `--mimi-<tono>-subtle` para `primary`, `success`, `warning`, `info` y `destructive` son derivados con las fórmulas en línea del diseño `F2 Tokens y Tonos` (`color-mix` del tono al 22 % sobre el fondo, al 55 % y al 10 % sobre transparente). Están en `theme-base.css` y en `tokens-mimi.css`, no en el preset: se recalculan solos.
 
 **Provisional, sin diseño (V.1):** en Button, el tono `secondary` en todas sus variantes (solid = el secondary de la 0.1.0; soft = `muted` con hover `accent`; outline y ghost = los de la 0.1.0; link = `foreground`) y ghost y link con tono (ghost: texto `<tono>-soft-foreground`, hover `<tono>-soft`; link: texto `<tono>-soft-foreground`); en Badge, `secondary` soft (`muted`). Se diseñan en Claude Design antes de Theme Studio (plan, T.2a).
+
+**En ui-core desde la T.0b:** los tokens de las tablas de arriba para Avatar, Switch, Checkbox, FormField, Separator, Skeleton, Badge, Textarea, y los nuevos de Button (`px`, `gap`, `press-scale`), Input (`px`, `bg`, `fg`, `border`, `border-focus`, `error`, `placeholder`) y Card (`padding`, `bg`, `fg`, `border`), con los valores de la 0.1.0 como respaldo (el aspecto no cambia). Los colores van solo en el CSS (sección 6.2). Diferencias con la hoja:
+
+- **Button y Badge no tienen tokens de color** (`bg`, `fg`, `bg-hover`, `border` color, `shadow`, `shadow-hover`, `ring`): los ponen los tokens del tono (V.1).
+- **`--mimi-field-error`** vale `destructive` (el color de la 0.1.0); la hoja dice `destructive-soft-foreground`. A revisar en el diseño (plan, T.2a).
+- **No se agregaron:** `--mimi-field-hint` (FormField no tiene texto de ayuda), `--mimi-input-border-hover` (Input no tiene hover y `input-hover` no está en ui-core: cambiaría el aspecto) ni `--mimi-input-ring` (en la hoja es una sombra completa; hoy el halo es `ring-3` con un color en utilidades compartidas).
+- **Avatar:** el radio por defecto es el de `rounded-full` (`calc(infinity * 1px)`); la hoja dice `999px`, que se ve igual.
+- **Switch:** el pulgar mide alto − 4px y se desplaza ancho − alto, así que cambiar `--mimi-switch-width` o `-height` mantiene la proporción. `--mimi-switch-off` sigue siendo global; `--mimi-switch-track-off` cae en él.
 
 ### Otros globales del diseño
 

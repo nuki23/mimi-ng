@@ -1,9 +1,5 @@
 import { cva, type VariantProps } from 'class-variance-authority';
-import {
-  buttonFocusStyles,
-  controlDisabledStyles,
-  controlPressStyles,
-} from '@/components/ui/utils/control-styles';
+import { buttonFocusStyles, controlDisabledStyles } from '@/components/ui/utils/control-styles';
 
 /** Cómo se ve el botón (spec 4, «Variante y tono»). */
 export type ButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost' | 'link';
@@ -100,7 +96,8 @@ export const buttonVariants = cva(
     buttonFocusStyles,
     'focus-visible:outline-[length:var(--mimi-btn-focus-ring-width,2px)]',
     controlDisabledStyles,
-    controlPressStyles,
+    // Escala al presionar: --mimi-btn-press-scale → --mimi-press-scale (spec 6.6).
+    'mimi-transition active:scale-[var(--mimi-btn-press-scale,var(--mimi-press-scale))]',
     // Cargando: deshabilitado, pero con opacidad 85% y cursor de progreso (gana a disabled:).
     'aria-busy:disabled:cursor-progress aria-busy:disabled:opacity-85 aria-busy:aria-disabled:opacity-85',
   ],
@@ -123,7 +120,7 @@ export const buttonVariants = cva(
       },
       size: {
         default:
-          'h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))] gap-2 px-[var(--mimi-btn-padding-x,1rem)] text-[length:var(--mimi-btn-font-size,0.875rem)]',
+          'h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))] gap-[var(--mimi-btn-gap,0.5rem)] px-[var(--mimi-btn-px,var(--mimi-btn-padding-x,1rem))] text-[length:var(--mimi-btn-font-size,0.875rem)]',
         sm: 'h-[var(--mimi-btn-height-sm,var(--mimi-control-height-sm,2rem))] gap-1.5 px-3 text-[13px]',
         lg: 'h-[var(--mimi-btn-height-lg,var(--mimi-control-height-lg,3rem))] gap-2 px-6 text-[15px]',
         icon: 'size-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))] p-0',

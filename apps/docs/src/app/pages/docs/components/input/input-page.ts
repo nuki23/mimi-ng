@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../../../code/code-block';
 import { CodePreview } from '../../../../code/code-preview';
+import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { FieldRowExample } from './examples/field-row.example';
 import { InputBasicExample } from './examples/input-basic.example';
@@ -67,6 +68,7 @@ const CLASS: ApiRow = {
   selector: 'app-input-page',
   imports: [
     CodeBlock,
+    CssVariables,
     CodePreview,
     InstallCommand,
     FieldRowExample,
@@ -131,34 +133,5 @@ export class InputPage {
   protected readonly apiTables = [
     { id: 'api-input', title: 'Input', rows: this.inputApi },
     { id: 'api-textarea', title: 'Textarea', rows: this.textareaApi },
-  ];
-
-  protected readonly tokens: { name: string; description: string }[] = [
-    {
-      name: '--mimi-input-height',
-      description:
-        'Alto del tamaño default y alto mínimo de Textarea. Si no, --mimi-control-height.',
-    },
-    {
-      name: '--mimi-input-height-sm',
-      description: 'Alto del tamaño sm. Si no, --mimi-control-height-sm.',
-    },
-    {
-      name: '--mimi-input-height-lg',
-      description: 'Alto del tamaño lg. Si no, --mimi-control-height-lg.',
-    },
-    { name: '--mimi-input-radius', description: 'Radio. Si no, --mimi-radius.' },
-    { name: '--mimi-input-padding-x', description: 'Padding horizontal (0.75rem).' },
-    {
-      name: '--mimi-input-font-size',
-      description: 'Tamaño de letra del tamaño default y de Textarea (0.875rem).',
-    },
-    { name: '--mimi-input-border-width', description: 'Grosor del borde (1px).' },
-    { name: '--mimi-input-focus-ring-width', description: 'Grosor del halo de foco (3px).' },
-    {
-      name: '--mimi-input-placeholder-color',
-      description: 'Color del placeholder. Si no, --mimi-muted-foreground.',
-    },
-    { name: '--mimi-input-disabled-opacity', description: 'Opacidad deshabilitado (0.5).' },
   ];
 }

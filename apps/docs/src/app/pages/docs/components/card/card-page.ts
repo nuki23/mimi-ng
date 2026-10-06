@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../../../code/code-block';
 import { CodePreview } from '../../../../code/code-preview';
+import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { CardContentOnlyExample } from './examples/card-content-only.example';
 import { CardCustomClassExample } from './examples/card-custom-class.example';
@@ -22,6 +23,7 @@ import cardPlanSource from './examples/card-plan.example' with { loader: 'text' 
   selector: 'app-card-page',
   imports: [
     CodeBlock,
+    CssVariables,
     CodePreview,
     InstallCommand,
     CardContentOnlyExample,
@@ -95,14 +97,5 @@ export class CardPage {
       default: "''",
       description: 'En todas las piezas. Se mezcla con cn(): tus clases ganan.',
     },
-  ];
-
-  protected readonly tokens = [
-    { name: '--mimi-card-radius', default: 'var(--mimi-radius-card)' },
-    { name: '--mimi-card-border-width', default: '1px' },
-    { name: '--mimi-card-shadow', default: 'var(--mimi-shadow-card)' },
-    { name: '--mimi-card-padding-header', default: '1.5rem 1.5rem 1rem' },
-    { name: '--mimi-card-padding-content', default: '0 1.5rem 1.25rem' },
-    { name: '--mimi-card-padding-footer', default: '0 1.5rem 1.5rem' },
   ];
 }

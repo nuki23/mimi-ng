@@ -80,13 +80,21 @@ describe('MimiCheckbox', () => {
     expect(btn.getAttribute('type')).toBe('button');
     expect(btn.getAttribute('role')).toBe('checkbox');
     expect(btn.getAttribute('aria-checked')).toBe('false');
-    for (const cls of ['size-4', 'rounded-sm', 'border', 'border-input', 'bg-input-background']) {
+    for (const cls of [
+      'size-[var(--mimi-checkbox-size,1rem)]',
+      'rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))]',
+      'border',
+      'border-[color:var(--mimi-checkbox-border,var(--mimi-input))]',
+      'bg-input-background',
+    ]) {
       expect(btn.classList).toContain(cls);
     }
     expect(btn.classList).toContain('active:scale-(--mimi-press-scale-sm)');
     expect(btn.classList).toContain('focus-visible:outline-ring');
     expect(btn.classList).toContain('data-[state=unchecked]:focus-visible:border-ring');
-    expect(btn.classList).toContain('data-[state=checked]:bg-primary');
+    expect(btn.classList).toContain(
+      'data-[state=checked]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))]',
+    );
     expect(btn.classList).toContain('data-[state=checked]:shadow-primary');
     expect(btn.querySelector('svg')).toBeNull();
     expect(host('plain').classList).toContain('gap-2.5');
@@ -121,7 +129,9 @@ describe('MimiCheckbox', () => {
     expect(btn.getAttribute('aria-checked')).toBe('mixed');
     expect(btn.dataset['state']).toBe('indeterminate');
     expect(btn.querySelector('path')!.getAttribute('d')).toBe('M5 12h14');
-    expect(btn.classList).toContain('data-[state=indeterminate]:bg-primary');
+    expect(btn.classList).toContain(
+      'data-[state=indeterminate]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))]',
+    );
 
     btn.click();
     await settle(fixture);

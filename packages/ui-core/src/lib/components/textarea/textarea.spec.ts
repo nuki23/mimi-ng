@@ -56,11 +56,11 @@ describe('MimiTextarea', () => {
     // Alto mínimo = alto del control; interlineado 20px; padding = (alto − 20px − 2 bordes) / 2.
     // Con border-box: padding×2 + 20px + bordes×2 = alto del control.
     expect(el.classList).toContain(
-      'min-h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))]',
+      'min-h-[var(--mimi-textarea-min-height,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))]',
     );
-    expect(el.classList).toContain('leading-5');
+    expect(el.classList).toContain('leading-[var(--mimi-textarea-line-height,1.25rem)]');
     expect(el.classList).toContain(
-      'py-[calc((var(--mimi-input-height,var(--mimi-control-height,2.5rem))_-_20px_-_2*var(--mimi-input-border-width,1px))/2)]',
+      'py-[var(--mimi-textarea-py,calc((var(--mimi-textarea-min-height,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))_-_var(--mimi-textarea-line-height,1.25rem)_-_2*var(--mimi-input-border-width,1px))/2))]',
     );
     expect(el.classList).toContain('border-[length:var(--mimi-input-border-width,1px)]');
     expect(el.classList).toContain('resize-y');
@@ -92,7 +92,7 @@ describe('MimiTextarea', () => {
     for (const cls of [
       'border-[length:var(--mimi-input-border-width,1px)]',
       'text-[length:var(--mimi-input-font-size,0.875rem)]',
-      'placeholder:text-[color:var(--mimi-input-placeholder-color,var(--mimi-muted-foreground))]',
+      'placeholder:text-[color:var(--mimi-input-placeholder,var(--mimi-input-placeholder-color,var(--mimi-muted-foreground)))]',
       'focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
     ]) {
       expect(el.classList).not.toContain(cls);

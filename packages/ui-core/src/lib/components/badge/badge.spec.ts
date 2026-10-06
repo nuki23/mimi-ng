@@ -37,11 +37,11 @@ describe('MimiBadge', () => {
     expect(badge.dataset['tone']).toBe('primary');
     for (const cls of [
       'inline-flex',
-      'h-[22px]',
-      'px-2.5',
+      'h-[var(--mimi-badge-height,22px)]',
+      'px-[var(--mimi-badge-px,0.625rem)]',
       'rounded-badge',
-      'text-xs',
-      'font-semibold',
+      'text-[length:var(--mimi-badge-font-size,0.75rem)]',
+      'font-[weight:var(--mimi-badge-font-weight,600)]',
       'border',
     ]) {
       expect(badge.classList).toContain(cls);
@@ -167,6 +167,6 @@ describe('MimiBadge', () => {
     expect(badge.classList).toContain('h-6');
     expect(badge.classList).not.toContain('rounded-badge');
     expect(badge.classList).not.toContain('bg-primary');
-    expect(badge.classList).not.toContain('h-[22px]');
+    expect(badge.classList).not.toContain('h-[var(--mimi-badge-height,22px)]');
   });
 });

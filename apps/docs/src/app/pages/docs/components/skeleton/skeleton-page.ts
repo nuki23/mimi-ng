@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../../../code/code-block';
 import { CodePreview } from '../../../../code/code-preview';
+import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { SkeletonCardExample } from './examples/skeleton-card.example';
 import { SkeletonCustomClassExample } from './examples/skeleton-custom-class.example';
@@ -24,6 +25,7 @@ import skeletonShapesSource from './examples/skeleton-shapes.example' with { loa
   selector: 'app-skeleton-page',
   imports: [
     CodeBlock,
+    CssVariables,
     CodePreview,
     InstallCommand,
     SkeletonCardExample,

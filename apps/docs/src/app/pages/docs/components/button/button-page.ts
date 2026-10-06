@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../../../code/code-block';
 import { CodePreview } from '../../../../code/code-preview';
+import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { ButtonAsLinkExample } from './examples/button-as-link.example';
 import { ButtonCustomClassExample } from './examples/button-custom-class.example';
@@ -43,6 +44,7 @@ interface ApiRow {
   selector: 'app-button-page',
   imports: [
     CodeBlock,
+    CssVariables,
     CodePreview,
     InstallCommand,
     ButtonAsLinkExample,
@@ -120,27 +122,5 @@ export class ButtonPage {
       default: "''",
       description: 'Clases propias. Se mezclan con cn(): las tuyas ganan.',
     },
-  ];
-
-  protected readonly tokens: { name: string; description: string }[] = [
-    {
-      name: '--mimi-btn-height',
-      description: 'Alto (tamaño default e icon). Si no, --mimi-control-height.',
-    },
-    {
-      name: '--mimi-btn-height-sm',
-      description: 'Alto del tamaño sm. Si no, --mimi-control-height-sm.',
-    },
-    {
-      name: '--mimi-btn-height-lg',
-      description: 'Alto del tamaño lg. Si no, --mimi-control-height-lg.',
-    },
-    { name: '--mimi-btn-radius', description: 'Radio. Si no, --mimi-radius.' },
-    { name: '--mimi-btn-padding-x', description: 'Padding horizontal del tamaño default (1rem).' },
-    { name: '--mimi-btn-font-size', description: 'Tamaño de letra del tamaño default (0.875rem).' },
-    { name: '--mimi-btn-font-weight', description: 'Peso de la letra (500).' },
-    { name: '--mimi-btn-letter-spacing', description: 'Espaciado entre letras (normal).' },
-    { name: '--mimi-btn-border-width', description: 'Grosor del borde (1px).' },
-    { name: '--mimi-btn-focus-ring-width', description: 'Grosor del contorno de foco (2px).' },
   ];
 }

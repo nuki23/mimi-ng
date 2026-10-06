@@ -117,7 +117,7 @@ export class MimiAvatarFallback {
 
   protected readonly classes = computed(() =>
     cn(
-      'flex size-full items-center justify-center rounded-full bg-secondary font-semibold text-secondary-foreground',
+      'flex size-full items-center justify-center rounded-[var(--mimi-avatar-radius,calc(infinity*1px))] bg-[color:var(--mimi-avatar-bg,var(--mimi-secondary))] font-semibold text-[color:var(--mimi-avatar-fg,var(--mimi-secondary-foreground))]',
       this.userClass(),
       // Al final: con la imagen cargada se oculta aunque el usuario pase `flex`.
       this.avatar.status() === 'loaded' && 'hidden',

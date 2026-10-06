@@ -70,24 +70,34 @@ describe('MimiSwitch', () => {
     expect(btn.getAttribute('type')).toBe('button');
     expect(btn.getAttribute('role')).toBe('switch');
     expect(btn.getAttribute('aria-checked')).toBe('false');
-    for (const cls of ['h-5', 'w-9', 'p-0.5', 'rounded-full', 'bg-switch-off']) {
+    for (const cls of [
+      'h-[var(--mimi-switch-height,1.25rem)]',
+      'w-[var(--mimi-switch-width,2.25rem)]',
+      'p-0.5',
+      'rounded-full',
+      'bg-[color:var(--mimi-switch-track-off,var(--mimi-switch-off))]',
+    ]) {
       expect(btn.classList).toContain(cls);
     }
     expect(btn.classList).toContain('active:scale-(--mimi-press-scale-sm)');
     expect(btn.classList).toContain('focus-visible:outline-ring');
-    expect(btn.classList).toContain('data-[state=checked]:bg-primary');
+    expect(btn.classList).toContain(
+      'data-[state=checked]:bg-[color:var(--mimi-switch-track-on,var(--mimi-primary))]',
+    );
     expect(btn.classList).toContain('data-[state=checked]:shadow-primary');
     const thumb = btn.querySelector('span')!;
     for (const cls of [
-      'size-4',
+      'size-[calc(var(--mimi-switch-height,1.25rem)_-_0.25rem)]',
       'rounded-full',
-      'bg-background',
+      'bg-[color:var(--mimi-switch-thumb,var(--mimi-background))]',
       'shadow-thumb',
       'mimi-transition',
     ]) {
       expect(thumb.classList).toContain(cls);
     }
-    expect(thumb.classList).toContain('group-data-[state=checked]:translate-x-4');
+    expect(thumb.classList).toContain(
+      'group-data-[state=checked]:translate-x-[calc(var(--mimi-switch-width,2.25rem)_-_var(--mimi-switch-height,1.25rem))]',
+    );
     expect(host('plain').classList).toContain('gap-2.5');
   });
 

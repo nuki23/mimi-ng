@@ -52,16 +52,21 @@ describe('MimiAvatar', () => {
   }
 
   it.each<[AvatarSize, string, string]>([
-    ['sm', 'size-8', 'text-xs'],
-    ['default', 'size-10', 'text-sm'],
-    ['lg', 'size-14', 'text-lg'],
+    ['sm', 'size-[var(--mimi-avatar-size-sm,2rem)]', 'text-xs'],
+    ['default', 'size-[var(--mimi-avatar-size,2.5rem)]', 'text-sm'],
+    ['lg', 'size-[var(--mimi-avatar-size-lg,3.5rem)]', 'text-lg'],
   ])('tamaño %s', async (size, box, text) => {
     const { host, avatar, update } = await setup();
     await update(() => host.size.set(size));
     expect(avatar.dataset['size']).toBe(size);
     expect(avatar.classList).toContain(box);
     expect(avatar.classList).toContain(text);
-    for (const cls of ['rounded-full', 'bg-muted', 'overflow-hidden', 'shrink-0']) {
+    for (const cls of [
+      'rounded-[var(--mimi-avatar-radius,calc(infinity*1px))]',
+      'bg-muted',
+      'overflow-hidden',
+      'shrink-0',
+    ]) {
       expect(avatar.classList).toContain(cls);
     }
   });
@@ -125,7 +130,12 @@ describe('MimiAvatar', () => {
     const avatar = root.querySelector<HTMLElement>('#initials')!;
     const fallback = avatar.querySelector<HTMLElement>('mimi-avatar-fallback')!;
     expect(avatar.dataset['state']).toBe('idle');
-    for (const cls of ['bg-secondary', 'text-secondary-foreground', 'font-semibold', 'flex']) {
+    for (const cls of [
+      'bg-[color:var(--mimi-avatar-bg,var(--mimi-secondary))]',
+      'text-[color:var(--mimi-avatar-fg,var(--mimi-secondary-foreground))]',
+      'font-semibold',
+      'flex',
+    ]) {
       expect(fallback.classList).toContain(cls);
     }
     // Sin label es texto normal.
@@ -147,15 +157,21 @@ describe('MimiAvatar', () => {
       host.fallbackExtra.set('bg-primary text-primary-foreground rounded-lg');
     });
     expect(avatar.classList).toContain('size-20');
-    expect(avatar.classList).not.toContain('size-10');
+    expect(avatar.classList).not.toContain('size-[var(--mimi-avatar-size,2.5rem)]');
     expect(avatar.classList).toContain('text-2xl');
     expect(avatar.classList).not.toContain('text-sm');
-    expect(avatar.classList).not.toContain('rounded-full');
+    expect(avatar.classList).not.toContain(
+      'rounded-[var(--mimi-avatar-radius,calc(infinity*1px))]',
+    );
     expect(img.classList).toContain('object-contain');
     expect(img.classList).not.toContain('object-cover');
     expect(fallback.classList).toContain('bg-primary');
-    expect(fallback.classList).not.toContain('bg-secondary');
-    expect(fallback.classList).not.toContain('rounded-full');
+    expect(fallback.classList).not.toContain(
+      'bg-[color:var(--mimi-avatar-bg,var(--mimi-secondary))]',
+    );
+    expect(fallback.classList).not.toContain(
+      'rounded-[var(--mimi-avatar-radius,calc(infinity*1px))]',
+    );
     // Con la imagen cargada, el fallback se oculta aunque el usuario pase otra visualización.
     await update(() => host.fallbackExtra.set('flex'));
     await fire('load');

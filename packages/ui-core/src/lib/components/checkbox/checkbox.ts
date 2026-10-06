@@ -150,10 +150,10 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
 
   // Caja de 16px. Marcada o mixta: primary con su sombra. Foco: borde ring (sin marcar) y contorno.
   protected readonly boxClasses = cn(
-    'peer inline-flex size-4 shrink-0 items-center justify-center rounded-sm border border-input bg-input-background text-primary-foreground',
+    'peer inline-flex size-[var(--mimi-checkbox-size,1rem)] shrink-0 items-center justify-center rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))] border border-[color:var(--mimi-checkbox-border,var(--mimi-input))] bg-input-background text-[color:var(--mimi-checkbox-check,var(--mimi-primary-foreground))]',
     'mimi-transition active:scale-(--mimi-press-scale-sm)',
-    'data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:shadow-primary',
-    'data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary data-[state=indeterminate]:shadow-primary',
+    'data-[state=checked]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:shadow-primary',
+    'data-[state=indeterminate]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:shadow-primary',
     'data-[state=unchecked]:focus-visible:border-ring data-[state=unchecked]:aria-invalid:border-destructive',
     'disabled:shadow-none',
     buttonFocusStyles,

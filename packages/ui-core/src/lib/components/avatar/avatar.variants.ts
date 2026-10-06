@@ -6,13 +6,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
  * default 40px / 14px, lg 56px / 18px (el tamaño de letra lo heredan las iniciales).
  */
 export const avatarVariants = cva(
-  'relative inline-flex shrink-0 overflow-hidden rounded-full bg-muted select-none',
+  'relative inline-flex shrink-0 overflow-hidden rounded-[var(--mimi-avatar-radius,calc(infinity*1px))] bg-muted select-none',
   {
     variants: {
       size: {
-        sm: 'size-8 text-xs',
-        default: 'size-10 text-sm',
-        lg: 'size-14 text-lg',
+        sm: 'size-[var(--mimi-avatar-size-sm,2rem)] text-xs',
+        default: 'size-[var(--mimi-avatar-size,2.5rem)] text-sm',
+        lg: 'size-[var(--mimi-avatar-size-lg,3.5rem)] text-lg',
       },
     },
     defaultVariants: { size: 'default' },

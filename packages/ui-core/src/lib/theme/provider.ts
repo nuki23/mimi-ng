@@ -70,7 +70,39 @@ const COMPONENT_PREFIX: Record<keyof MimiComponentTokens, string> = {
   button: 'btn',
   input: 'input',
   card: 'card',
+  avatar: 'avatar',
+  switch: 'switch',
+  checkbox: 'checkbox',
+  formField: 'field',
+  separator: 'separator',
+  skeleton: 'skeleton',
+  badge: 'badge',
+  textarea: 'textarea',
 };
+
+/** Nombres de la 0.1.0 que siguen funcionando hasta la 1.0 (spec 12): ruta → qué usar. */
+const DEPRECATED: readonly [path: readonly string[], use: string][] = [
+  [['components', 'button', 'paddingX'], 'components.button.px'],
+  [['components', 'input', 'paddingX'], 'components.input.px'],
+  [['components', 'input', 'placeholderColor'], 'la variable --mimi-input-placeholder en tu CSS'],
+  [['radii', 'badge'], 'components.badge.radius'],
+];
+const warnedDeprecated = new Set<string>();
+
+/** En modo desarrollo, avisa una sola vez por cada nombre viejo que use el preset. */
+function warnDeprecated(preset: MimiThemePreset): void {
+  if (!isDevMode()) return;
+  for (const [path, use] of DEPRECATED) {
+    const name = path.join('.');
+    let value: unknown = preset;
+    for (const key of path) value = (value as Record<string, unknown> | undefined)?.[key];
+    if (value === undefined || warnedDeprecated.has(name)) continue;
+    warnedDeprecated.add(name);
+    console.warn(
+      `[mimi] ${name} es un nombre de la 0.1.0: usa ${use}. Sigue funcionando hasta la 1.0.`,
+    );
+  }
+}
 
 /** Caracteres que romperían el CSS o cerrarían la etiqueta <style>. */
 const UNSAFE_VALUE = /[;{}<]/;
@@ -115,11 +147,14 @@ export function mimiThemeToCss(preset: MimiThemePreset): string {
 
   // El :root del preset le ganaría al prefers-reduced-motion de theme-base.css.
   const hasMotion = declarations.any.some((d) =>
-    /--mimi-(press-scale|press-scale-sm|lift|transition):/.test(d),
+    /--mimi-(press-scale|press-scale-sm|lift|transition|btn-press-scale):/.test(d),
   );
   if (hasMotion) {
+    const btnScale = declarations.any.some((d) => d.startsWith('  --mimi-btn-press-scale:'))
+      ? '\n    --mimi-btn-press-scale: 1;'
+      : '';
     blocks.push(
-      '@media (prefers-reduced-motion: reduce) {\n  :root {\n    --mimi-press-scale: 1;\n    --mimi-press-scale-sm: 1;\n    --mimi-lift: 0;\n  }\n}',
+      `@media (prefers-reduced-motion: reduce) {\n  :root {\n    --mimi-press-scale: 1;\n    --mimi-press-scale-sm: 1;\n    --mimi-lift: 0;${btnScale}\n  }\n}`,
     );
   }
 
@@ -153,6 +188,7 @@ export function applyMimiTheme(
 
 /** Registra un preset del tema. Opcional: sin él, se usa theme-base.css tal cual. */
 export function provideMimiTheme(preset: MimiThemePreset): EnvironmentProviders {
+  warnDeprecated(preset);
   return makeEnvironmentProviders([
     { provide: MIMI_THEME, useValue: preset },
     provideAppInitializer(() => applyMimiTheme(inject(DOCUMENT), inject(MIMI_THEME))),

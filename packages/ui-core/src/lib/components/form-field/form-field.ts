@@ -80,12 +80,13 @@ export class MimiFormField implements MimiFormFieldContext {
   protected readonly classes = computed(() =>
     cn(
       // La etiqueta (la de label="…" o la tuya) se pone roja con error.
-      'flex flex-col gap-1.5 [&[data-invalid]>label]:text-destructive',
+      'flex flex-col gap-[var(--mimi-field-gap,0.375rem)] [&[data-invalid]>label]:text-[color:var(--mimi-field-error,var(--mimi-destructive))]',
       this.userClass(),
     ),
   );
 
-  protected readonly labelClasses = 'text-sm font-medium';
+  protected readonly labelClasses =
+    'text-[length:var(--mimi-field-label-size,0.875rem)] leading-[calc(1.25/0.875)] font-[weight:var(--mimi-field-label-weight,500)]';
 
   constructor() {
     // Conecta el control: id, etiquetas propias sin `for` y aria-describedby del mensaje.
