@@ -60,10 +60,13 @@ packages/cli/       # @mimi-ng/cli (Angular Schematics)
 
 ## Forma de trabajar
 
-- Una tarea de `docs/plan.md` por vez. Antes de escribir código, propone un plan breve.
-- Al terminar: verifica que `pnpm build` pase, marca la casilla en `docs/plan.md` y resume qué cambió.
-- Al terminar cada tarea, ejecuta `pnpm format`.
-- No hagas commits: los hace el usuario. Al terminar, avisa que toca commit y sugiere un mensaje breve.
+- Una tarea de `docs/plan.md` por vez. Antes de escribir código, propone un plan breve y **espera la aprobación**. Si el usuario pide un paso aparte («PASO A»), detente al terminarlo para que haga su commit.
+- Al terminar: `pnpm build`, `pnpm test` y `pnpm format` en verde (y `pnpm format:check`); marca la casilla en `docs/plan.md`, actualiza la spec si cambió algo y resume qué cambió, con la **lista de archivos** nuevos y modificados. Si algo no salió como se pidió (una decisión distinta, un valor que no está en el diseño, una regla que no cumpliste), dilo explícitamente.
+- No hagas commits: los hace el usuario. Al terminar, avisa que toca commit y sugiere un mensaje breve, sin líneas de atribución.
+- **No publiques nada** (npm, tags, releases, despliegues): lo hace el usuario. Puedes darle los comandos.
 - No agregues dependencias que no estén en la spec sin preguntar.
 - Cada componente nuevo tiene su página en el showcase con todos sus estados.
-- Para crear o editar archivos usa siempre la herramienta de archivos, nunca bash con heredoc ni echo: las comillas invertidas se ejecutan como comandos.
+- Para crear o editar archivos usa siempre la herramienta de archivos, nunca bash con heredoc ni echo: las comillas invertidas se ejecutan como comandos. Tampoco `sed -i` para editar archivos del repo.
+- **Bundle:** cada vez que lo informes, da el tamaño crudo **y** el gzip, antes y después, con el JS y el CSS por separado (la salida de `apps/docs/scripts/check-initial-js.mjs`; la columna «Estimated transfer size» de `ng build` es brotli, no gzip). Si el JS inicial crece más de 1 kB, explica qué módulos entraron y por qué. Ningún presupuesto se sube sin que lo decida el usuario (spec 10).
+- **Servidores en segundo plano:** detén el `pnpm dev` que levantes para comprobar algo. Si un servidor se detuvo por falta de memoria, no lo vuelvas a levantar sin que lo pida.
+- **Privacidad:** las copias de respaldo del historial antiguo (`mimi-ng-respaldo-2026-09-30\` y el `.bundle`, fuera del repo) contienen el correo personal del autor: no las subas, compartas ni copies al repo. El `author` de `packages/cli/package.json` (el que se publica) es «Ariel O (https://github.com/nuki23)», sin correo: no agregues correos a ningún archivo.
