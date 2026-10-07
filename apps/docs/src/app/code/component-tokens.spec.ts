@@ -27,6 +27,7 @@ const FOLDER: Record<TokenComponent, string> = {
   switch: 'switch',
   textarea: 'textarea',
   popover: 'popover',
+  tooltip: 'tooltip',
 };
 
 /**
@@ -39,6 +40,8 @@ const GLOBALS = new Set([
   '--mimi-card-foreground',
   '--mimi-popover-foreground',
   '--mimi-popover-arrow-offset',
+  '--mimi-tooltip-foreground',
+  '--mimi-tooltip-arrow-offset',
 ]);
 
 /** Código del componente (sin pruebas). */

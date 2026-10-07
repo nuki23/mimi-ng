@@ -66,6 +66,10 @@
           {
             "value": "textarea",
             "label": "textarea"
+          },
+          {
+            "value": "tooltip",
+            "label": "tooltip"
           }
         ]
       }

@@ -29,7 +29,8 @@ export type TokenComponent =
   | 'skeleton'
   | 'switch'
   | 'textarea'
-  | 'popover';
+  | 'popover'
+  | 'tooltip';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -45,6 +46,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   switch: 'switch',
   textarea: 'textarea',
   popover: 'popover',
+  tooltip: 'tooltip',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -585,6 +587,41 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-shadow-popover',
       preset: false,
       description: 'Sombra (cambia entre claro y oscuro).',
+    },
+  ],
+  tooltip: [
+    { name: '--mimi-tooltip-radius', default: '8px', preset: true, description: 'Radio.' },
+    {
+      name: '--mimi-tooltip-font-size',
+      default: '12.5px',
+      preset: true,
+      description: 'Tamaño del texto.',
+    },
+    {
+      name: '--mimi-tooltip-arrow',
+      default: '8px',
+      preset: true,
+      description: 'Lado de la flecha.',
+    },
+    {
+      name: '--mimi-tooltip-delay',
+      default: '300ms',
+      preset: true,
+      description: 'Retraso al abrir. mimiTooltipDelay lo cambia en un tooltip.',
+    },
+    {
+      name: '--mimi-tooltip-bg',
+      default: 'tooltip',
+      inherits: '--mimi-tooltip',
+      preset: false,
+      description: 'Fondo y flecha.',
+    },
+    {
+      name: '--mimi-tooltip-fg',
+      default: 'tooltip-foreground',
+      inherits: '--mimi-tooltip-foreground',
+      preset: false,
+      description: 'Texto.',
     },
   ],
 };

@@ -292,6 +292,17 @@ describe('mimi (alias ui)', () => {
     expect(warnings().join('\n')).toContain('@import "@angular/cdk/overlay-prebuilt.css";');
   });
 
+  it('tooltip: copia utils/overlay, instala @angular/cdk y agrega el @import una vez', async () => {
+    const { run, tree } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const result = await run('mimi', { components: ['tooltip', 'popover'] }, tree);
+    expect(result.exists(`/${UI}/tooltip/tooltip.ts`)).toBe(true);
+    expect(result.readContent(`/${UI}/utils/overlay.ts`)).toBe(template('utils/overlay.ts'));
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+    expect(result.readContent(`/${cssPath}`).match(/overlay-prebuilt\.css/g)).toHaveLength(1);
+  });
+
   it('los componentes sin cssImports no tocan el CSS global', async () => {
     const { run, tree } = await initialized();
     const cssPath = json(tree, '/mimi.json').tailwind.css as string;

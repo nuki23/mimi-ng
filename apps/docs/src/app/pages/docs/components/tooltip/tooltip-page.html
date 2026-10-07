@@ -1,0 +1,151 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Tooltip</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Un texto breve que aparece al pasar el puntero o al llegar con el teclado a un elemento. Se
+    agrega con un atributo,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiTooltip</code>, en
+    cualquier elemento.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="tooltip" />
+  <p class="text-pretty">
+    Como Popover, usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>: si
+    tu proyecto no lo tiene, el comando lo instala en la misma versión que tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code> y
+    agrega sus estilos a tu CSS global, después del tema (una sola vez, aunque instales los dos):
+  </p>
+  <app-code-block [code]="cdkCss" lang="css" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <p class="text-pretty">
+    <strong>Solo texto.</strong> El tooltip desaparece cuando el puntero o el foco se van, así que
+    no puede tener enlaces ni botones: nadie llegaría a usarlos. Si necesitas contenido interactivo,
+    usa
+    <a class="font-medium underline underline-offset-4" routerLink="/docs/components/popover"
+      >Popover</a
+    >.
+  </p>
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
+  <p class="text-pretty">Pasa el puntero o llega con Tab. Escape lo cierra.</p>
+  <app-code-preview [code]="source.basic">
+    <app-tooltip-basic-example />
+  </app-code-preview>
+
+  <h3 id="positions" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Posiciones</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiTooltipSide</code>
+    elige el lado (arriba por defecto) y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiTooltipAlign</code>
+    la alineación. Si no cabe, se da vuelta solo.
+  </p>
+  <app-code-preview [code]="source.positions">
+    <app-tooltip-positions-example />
+  </app-code-preview>
+
+  <h3 id="icon-button" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    En un botón de ícono
+  </h3>
+  <p class="text-pretty">
+    El nombre del botón va en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code>. Si
+    el tooltip dice lo mismo, Mimi no lo agrega como descripción, para que el lector de pantalla no
+    lo repita.
+  </p>
+  <app-code-preview [code]="source.iconButton">
+    <app-tooltip-icon-button-example />
+  </app-code-preview>
+
+  <h3 id="toolbar" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Fila de botones</h3>
+  <p class="text-pretty">
+    Después del primer tooltip, los siguientes abren sin esperar: si otro se cerró hace menos de 300
+    ms, el nuevo aparece enseguida. Así recorrer una barra de herramientas no hace esperar el
+    retraso en cada botón.
+  </p>
+  <app-code-preview [code]="source.toolbar">
+    <app-tooltip-toolbar-example />
+  </app-code-preview>
+
+  <h3 id="delay" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con retraso</h3>
+  <p class="text-pretty">
+    Por defecto espera 300 ms (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-tooltip-delay</code
+    >, que puedes cambiar en el tema).
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiTooltipDelay</code>
+    lo cambia en un tooltip.
+  </p>
+  <app-code-preview [code]="source.delay">
+    <app-tooltip-delay-example />
+  </app-code-preview>
+
+  <h3 id="disabled" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Deshabilitado</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >mimiTooltipDisabled</code
+    >
+    lo apaga. Un botón deshabilitado no recibe el puntero ni el foco, así que para explicar por qué
+    está deshabilitado el tooltip va en un envoltorio enfocable.
+  </p>
+  <app-code-preview [code]="source.disabled">
+    <app-tooltip-disabled-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Accesibilidad</h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Se abre con el puntero y con el foco de teclado (no con un clic), lleva
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="tooltip"</code>
+      y, mientras se ve, el elemento lo anuncia con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-describedby</code
+      >.
+    </li>
+    <li>
+      Puedes pasar el puntero al tooltip sin que se cierre, y Escape lo cierra sin mover el foco
+      (WCAG 1.4.13).
+    </li>
+    <li>
+      <strong>En pantallas táctiles no se muestra:</strong> no hay hover, y una pulsación larga
+      choca con el menú y la selección del sistema. Por eso el tooltip no debe llevar información
+      esencial; en un botón de ícono, el nombre va en
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code>.
+      Con un teclado conectado sí aparece al llegar con Tab.
+    </li>
+    <li>Con movimiento reducido, aparece y desaparece sin animación.</li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="tooltip" />
+</article>

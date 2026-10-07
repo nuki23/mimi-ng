@@ -1,8 +1,4 @@
-import {
-  CdkConnectedOverlay,
-  type ConnectedOverlayPositionChange,
-  type ConnectedPosition,
-} from '@angular/cdk/overlay';
+import { CdkConnectedOverlay, type ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 import { InteractivityChecker } from '@angular/cdk/a11y';
 import {
   ChangeDetectionStrategy,
@@ -28,6 +24,16 @@ import {
   viewChild,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
+import {
+  MIMI_OVERLAY_ANIMATION,
+  MIMI_VIEWPORT_MARGIN,
+  type MimiOverlayAlign,
+  type MimiOverlaySide,
+  mimiArrowOffset,
+  mimiConnectedPositions,
+  mimiPlacedSide,
+  mimiWaitForExit,
+} from '@/components/ui/utils/overlay';
 
 /*
  * Popover (docs/design/Mimi F2 Overlays.dc.html, «3 · Popover»): panel de 300px, padding 16px,
@@ -37,42 +43,14 @@ import { cn } from '@/components/ui/utils/cn';
  * Por dentro usa @angular/cdk/overlay (decisión 4.3): CdkConnectedOverlay posiciona el panel como
  * popover nativo (top layer) insertado junto al trigger ('inline'), con flip si no cabe. Nada del
  * CDK sale en la API pública. Los estilos del overlay vienen de @angular/cdk/overlay-prebuilt.css,
- * que la CLI agrega al CSS global (spec 4.3).
+ * que la CLI agrega al CSS global (spec 4.3). Posición, flecha y animación: utils/overlay.ts.
  */
 
-export type MimiPopoverSide = 'top' | 'right' | 'bottom' | 'left';
-export type MimiPopoverAlign = 'start' | 'center' | 'end';
+export type MimiPopoverSide = MimiOverlaySide;
+export type MimiPopoverAlign = MimiOverlayAlign;
 
 /** Distancia entre el trigger y el panel (diseño: margin-top 12px). */
 const OFFSET = 12;
-/** Distancia mínima del panel al borde de la pantalla. */
-const VIEWPORT_MARGIN = 8;
-
-const OPPOSITE: Record<MimiPopoverSide, MimiPopoverSide> = {
-  top: 'bottom',
-  bottom: 'top',
-  left: 'right',
-  right: 'left',
-};
-
-function connectedPosition(side: MimiPopoverSide, align: MimiPopoverAlign): ConnectedPosition {
-  if (side === 'top' || side === 'bottom') {
-    return side === 'bottom'
-      ? { originX: align, originY: 'bottom', overlayX: align, overlayY: 'top', offsetY: OFFSET }
-      : { originX: align, originY: 'top', overlayX: align, overlayY: 'bottom', offsetY: -OFFSET };
-  }
-  const y = align === 'start' ? 'top' : align === 'end' ? 'bottom' : 'center';
-  return side === 'right'
-    ? { originX: 'end', originY: y, overlayX: 'start', overlayY: y, offsetX: OFFSET }
-    : { originX: 'start', originY: y, overlayX: 'end', overlayY: y, offsetX: -OFFSET };
-}
-
-/** Lado en el que quedó el panel, según la posición que eligió el CDK. */
-function sideOf({ originX, originY, overlayX, overlayY }: ConnectedPosition): MimiPopoverSide {
-  if (originY === 'bottom' && overlayY === 'top') return 'bottom';
-  if (originY === 'top' && overlayY === 'bottom') return 'top';
-  return originX === 'end' && overlayX === 'start' ? 'right' : 'left';
-}
 
 let nextId = 0;
 
@@ -113,7 +91,7 @@ export class MimiPopoverOutlet {
       [cdkConnectedOverlayViewportMargin]="viewportMargin"
       [cdkConnectedOverlayDisableClose]="true"
       cdkConnectedOverlayUsePopover="inline"
-      cdkConnectedOverlayTransformOriginOn="[data-mimi-popover-panel]"
+      cdkConnectedOverlayTransformOriginOn="[data-mimi-overlay-panel]"
       (attach)="onAttach()"
       (detach)="onDetach()"
       (overlayKeydown)="onKeydown($event)"
@@ -122,7 +100,7 @@ export class MimiPopoverOutlet {
     >
       <div
         #panel
-        data-mimi-popover-panel
+        data-mimi-overlay-panel
         role="dialog"
         tabindex="-1"
         [id]="panelId"
@@ -145,32 +123,7 @@ export class MimiPopoverOutlet {
       </div>
     </ng-template>
   `,
-  styles: `
-    @keyframes mimi-popover-in {
-      from {
-        opacity: 0;
-        scale: var(--mimi-press-scale);
-      }
-    }
-    @keyframes mimi-popover-out {
-      to {
-        opacity: 0;
-        scale: var(--mimi-press-scale);
-      }
-    }
-    /* Valores de --mimi-transition (spec 6.6): 0.15s cubic-bezier(.2,.8,.2,1). */
-    [data-mimi-popover-panel][data-state='open'] {
-      animation: mimi-popover-in 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    [data-mimi-popover-panel][data-state='closed'] {
-      animation: mimi-popover-out 0.15s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      [data-mimi-popover-panel] {
-        animation: none !important;
-      }
-    }
-  `,
+  styles: MIMI_OVERLAY_ANIMATION,
   host: {
     style: 'display: contents',
     // El class es del panel: en el host no tendría efecto o se heredaría al trigger.
@@ -214,21 +167,14 @@ export class MimiPopover {
   protected readonly state = signal<'open' | 'closed'>('closed');
   protected readonly placedSide = signal<MimiPopoverSide>('bottom');
   protected readonly arrowOffset = signal<string | null>(null);
-  protected readonly viewportMargin = VIEWPORT_MARGIN;
+  protected readonly viewportMargin = MIMI_VIEWPORT_MARGIN;
 
   protected readonly originElement = computed(() => this.trigger()?.element ?? null);
 
   /** Lado y alineación pedidos, el lado opuesto y, por último, los otros dos lados. */
-  protected readonly positions = computed(() => {
-    const side = this.side();
-    const others: MimiPopoverSide[] =
-      side === 'top' || side === 'bottom' ? ['right', 'left'] : ['bottom', 'top'];
-    return [
-      connectedPosition(side, this.align()),
-      connectedPosition(OPPOSITE[side], this.align()),
-      ...others.map((other) => connectedPosition(other, 'center')),
-    ];
-  });
+  protected readonly positions = computed(() =>
+    mimiConnectedPositions(this.side(), this.align(), OFFSET),
+  );
 
   protected readonly panelClasses = computed(() =>
     cn(
@@ -293,8 +239,7 @@ export class MimiPopover {
       {
         read: () => {
           // Espera la animación de salida (sin animación, como con movimiento reducido, no hay).
-          const animations = panel?.getAnimations?.() ?? [];
-          void Promise.allSettled(animations.map((animation) => animation.finished)).then(() => {
+          void mimiWaitForExit(panel).then(() => {
             if (closing === this.closing) this.rendered.set(false);
           });
         },
@@ -321,21 +266,12 @@ export class MimiPopover {
   }
 
   protected onPositionChange({ connectionPair }: ConnectedOverlayPositionChange): void {
-    const side = sideOf(connectionPair);
+    const side = mimiPlacedSide(connectionPair);
     this.placedSide.set(side);
     // La flecha apunta al centro del trigger.
     const trigger = this.trigger()?.element.getBoundingClientRect();
     const panel = this.panel()?.nativeElement.getBoundingClientRect();
-    if (!trigger || !panel || panel.width === 0 || panel.height === 0) {
-      this.arrowOffset.set(null);
-      return;
-    }
-    const offset =
-      side === 'top' || side === 'bottom'
-        ? trigger.left + trigger.width / 2 - panel.left
-        : trigger.top + trigger.height / 2 - panel.top;
-    const size = side === 'top' || side === 'bottom' ? panel.width : panel.height;
-    this.arrowOffset.set(`${Math.min(Math.max(offset, 0), size)}px`);
+    this.arrowOffset.set(trigger && panel ? mimiArrowOffset(trigger, panel, side) : null);
   }
 
   /** Al abrir, el foco va al primer elemento enfocable del panel o, si no hay, al panel. */

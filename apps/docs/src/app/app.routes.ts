@@ -56,6 +56,12 @@ export const routes: Routes = [
           import('./pages/docs/components/popover/popover-page').then((m) => m.PopoverPage),
       },
       {
+        path: 'components/tooltip',
+        title: 'Tooltip · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/tooltip/tooltip-page').then((m) => m.TooltipPage),
+      },
+      {
         path: 'components/separator',
         title: 'Separator · Mimi',
         loadComponent: () =>

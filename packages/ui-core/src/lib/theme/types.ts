@@ -240,6 +240,16 @@ export interface MimiPopoverTokens {
   arrow?: string;
 }
 
+/** Tooltip. Fondo y texto van en el CSS (`--mimi-tooltip-bg`, `--mimi-tooltip-fg`). */
+export interface MimiTooltipTokens {
+  radius?: string;
+  fontSize?: string;
+  /** Lado de la flecha (8px). */
+  arrow?: string;
+  /** Retraso al abrir (300ms). `mimiTooltipDelay` lo cambia en un tooltip. */
+  delay?: string;
+}
+
 /**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
@@ -257,6 +267,7 @@ export interface MimiComponentTokens {
   badge?: MimiBadgeTokens;
   textarea?: MimiTextareaTokens;
   popover?: MimiPopoverTokens;
+  tooltip?: MimiTooltipTokens;
   // select y dialog se agregan con sus componentes (G1.5 y G1.6)
 }
 

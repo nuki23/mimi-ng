@@ -22,6 +22,13 @@
         "@angular/forms": "^22.0.0"
       }
     },
+    "utils/overlay": {
+      "type": "util",
+      "files": ["utils/overlay.ts"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      }
+    },
     "theme": {
       "type": "theme",
       "files": ["theme/theme-base.css", "theme/types.ts", "theme/provider.ts", "theme/index.ts"]
@@ -104,7 +111,7 @@
         "@angular/cdk": "^22.0.0"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["utils/cn"]
+      "registryDependencies": ["utils/cn", "utils/overlay"]
     },
     "separator": {
       "type": "component",
@@ -130,6 +137,15 @@
         "@angular/forms": "^22.0.0"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+    },
+    "tooltip": {
+      "type": "component",
+      "files": ["components/tooltip/tooltip.ts", "components/tooltip/index.ts"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
+      "registryDependencies": ["utils/cn", "utils/overlay"]
     },
     "textarea": {
       "type": "component",

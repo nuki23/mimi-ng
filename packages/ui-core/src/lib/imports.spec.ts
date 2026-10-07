@@ -62,6 +62,23 @@ describe('importaciones de ui-core', () => {
     expect(offenders).toEqual([]);
   });
 
+  it('el índice de utils no reexporta archivos que dependan de cdk, aria ni forms', () => {
+    const index = fs.readFileSync(path.join(ROOT, 'utils', 'index.ts'), 'utf8');
+    const heavy = /from\s+['"]@angular\/(cdk|aria|forms)(\/[^'"]*)?['"]/;
+    const offenders = [...index.matchAll(/from\s+['"]\.\/([\w-]+)['"]/g)]
+      .map(([, name]) => name)
+      .filter((name) =>
+        heavy.test(fs.readFileSync(path.join(ROOT, 'utils', `${name}.ts`), 'utf8')),
+      );
+    expect(offenders).toEqual([]);
+    // Y los que sí dependen existen (si no, la regla no estaría probando nada).
+    for (const name of ['field-state', 'overlay']) {
+      expect(heavy.test(fs.readFileSync(path.join(ROOT, 'utils', `${name}.ts`), 'utf8'))).toBe(
+        true,
+      );
+    }
+  });
+
   it('nada privado de @angular/aria ni @angular/cdk (decisión 4.3)', () => {
     const offenders = files.flatMap((file) =>
       privateAngularImports(fs.readFileSync(file, 'utf8')).map(

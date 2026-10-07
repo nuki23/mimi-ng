@@ -7,6 +7,7 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 ### Componentes nuevos
 
 - **Popover** (`ng g mimi popover`): panel flotante junto a un botón, con flecha, flip si no cabe, `[(open)]`, Escape y clic fuera, y el foco de vuelta al botón. Usa `@angular/cdk` por dentro: si tu proyecto no lo tiene, `ng g mimi popover` lo instala en la versión de tu `@angular/core` y agrega `@import "@angular/cdk/overlay-prebuilt.css";` a tu CSS global.
+- **Tooltip** (`ng g mimi tooltip`): `mimiTooltip="Texto"` en cualquier elemento. Se abre con el puntero o con el teclado después de un retraso (`--mimi-tooltip-delay`, 300 ms), se cierra con Escape sin mover el foco, y en una fila de botones los siguientes abren sin esperar. En pantallas táctiles no se muestra. Usa `@angular/cdk`, igual que Popover.
 
 ### Cambios
 
