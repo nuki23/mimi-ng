@@ -241,6 +241,22 @@ Regla para los componentes nuevos: variante y tono desde el principio, sin varia
 - **Nunca se usan los entry points `private` de aria** (ni los de cdk, ni símbolos `ɵ`). `imports.spec.ts` lo rechaza desde la tarea G1.1.
 - **Revisión después de G1.5 (Select):** antes de usar aria en el resto del Grupo 1, se confirma que funcionó bien (teclado, lectores de pantalla, formularios y bundle). Si no convence, la alternativa es una capa propia de comportamiento, al estilo de las directivas Brain de Spartan, sin cambiar la API de Mimi.
 
+**Resultado de la revisión (G1.5b, 13/10/2026): se sigue con aria** en el resto del Grupo 1 (Tabs, G1.9, y mimi-toolbar, G1.10).
+
+- **Motivos:**
+  - **Teclado:** probado en Chrome real en el Dropdown Menu (G1.3), el Context Menu (G1.4) y el Select (G1.5), con el overlay abierto.
+  - **Formularios:** el Select funciona con Signal Forms, Reactive Forms y `ngModel`, con pruebas de los tres.
+  - **Bundle:** aria y el CDK quedan en las rutas diferidas. El JS inicial solo sumó una vez los 2 kB de `hostDirectives` (G1.3).
+  - **Lector de pantalla:** el autor probó con NVDA la página del Select (prueba general) y lee bien los componentes, sin problemas detectados. El árbol de accesibilidad de Chrome se revisó además por CDP (G1.5).
+  - **Rodeos:** todos usan API pública de aria (ningún entry point `private` ni símbolo `_`/`ɵ`). El Select necesita más que el menú, casi todos por el buscador dentro del panel. La lista completa, separada en «pegamento» y «choque», está en el plan (G1.5b).
+- **Los dos choques del Select y cómo se contienen:** aria desmarca la opción elegida al volver a elegirla (`toggleOne` en la selección simple explícita) y vacía el valor del listbox cuando la opción elegida queda fuera del filtro o la lista está vacía. Mimi no usa el `value` del listbox como valor del Select: es solo lo que se pinta (el check y `aria-selected`), y se le vuelve a escribir cada vez que aria lo cambia. El valor real vive en `MimiSelect` y solo cambia cuando Mimi elige una opción.
+- **Pendientes:**
+  - Con el panel cerrado, una letra no salta a la opción (el `<select>` nativo sí). aria no lo ofrece: habría que escribir la búsqueda por letra en Mimi. Una prueba de alarma avisa si aria empieza a hacerlo.
+  - **Error encontrado en esta revisión:** al escribir en el buscador, si la opción elegida sigue en la lista filtrada, queda activa ella y no la primera coincidencia (el diseño pide la primera). aria vuelve a activar la elegida cuando cambia la lista, después del `gotoFirst()` de Mimi. Su prueba de alarma está omitida (`it.skip`) hasta corregirlo.
+- **Pruebas de alarma:** cada rodeo tiene una prueba que falla si aria cambia ese comportamiento (`dropdown-menu.spec.ts`, `context-menu.spec.ts` y `select.spec.ts`; las que no ejercitaba ninguna otra prueba llevan «alarma» en el nombre).
+- **Cuándo se revisa de nuevo:** en cada versión mayor de Angular se leen las notas de `@angular/aria` y se corren las pruebas de alarma (sección 12, «Rutina ante una versión nueva de Angular»). Si un choque crece, o aparece uno nuevo sin solución con API pública, se reabre la decisión. El plan B no cambia: una capa propia de comportamiento, al estilo de las directivas Brain de Spartan, con la misma API de Mimi.
+- **Para los próximos componentes con aria:** empezar con un spike como el del Select y comparar la cuenta de rodeos.
+
 **Costos y riesgos:**
 
 - Dos dependencias más en el proyecto del usuario.

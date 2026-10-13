@@ -499,6 +499,74 @@ describe('MimiSelect', () => {
     expect(h.touches).toBe(1);
   });
 
+  // Pruebas de alarma (plan, G1.5b): cada una cubre un rodeo sobre @angular/aria que las pruebas
+  // de arriba no ejercitan. Si fallan tras actualizar Angular, aria cambió ese comportamiento.
+
+  it('alarma: el puntero activa la opción (gotoIndex), menos la deshabilitada', async () => {
+    const { fixture, trigger, open, option, active } = await setup();
+    await open('plain');
+    expect(active(trigger('plain'))).toBe('Argentina');
+    option('Chile').dispatchEvent(new Event('pointermove', { bubbles: true }));
+    await settle(fixture);
+    expect(active(trigger('plain'))).toBe('Chile');
+    expect(option('Chile').dataset['active']).toBe('true');
+    option('Perú').dispatchEvent(new Event('pointermove', { bubbles: true }));
+    await settle(fixture);
+    expect(active(trigger('plain'))).toBe('Chile');
+  });
+
+  // Omitida: hoy falla (plan, G1.5b, «Error encontrado»). Si la opción elegida sigue en la lista
+  // filtrada, aria la vuelve a activar después del gotoFirst() de Mimi. Quitar el skip al corregirlo.
+  it.skip('alarma: al escribir, la primera coincidencia queda activa aunque la elegida siga en la lista (gotoFirst)', async () => {
+    const { open, searchInput, type, options, active } = await setup();
+    await open('search');
+    expect(active(searchInput())).toBe('México');
+    await type('i');
+    expect(options().some((o) => o.textContent?.includes('México'))).toBe(true);
+    expect(active(searchInput())).toBe('Argentina');
+  });
+
+  it('alarma: el panel y sus opciones siguen montados durante la animación de salida (preserveContent)', async () => {
+    const { fixture, trigger, open, press, panel, options } = await setup();
+    await open('plain');
+    let finish!: () => void;
+    const finished = new Promise<void>((resolve) => (finish = resolve));
+    panel()!.getAnimations = () => [{ finished } as unknown as Animation];
+    await press(trigger('plain'), 'Escape');
+    expect(trigger('plain').getAttribute('aria-expanded')).toBe('false');
+    expect(panel()!.dataset['state']).toBe('closed');
+    expect(panel()!.hasAttribute('inert')).toBe(true);
+    expect(options().length).toBe(8);
+    finish();
+    await settle(fixture);
+    expect(panel()).toBeNull();
+  });
+
+  it('alarma: un clic en el panel no mueve el foco (mousedown), salvo en el buscador', async () => {
+    const { open, option, searchInput, panel } = await setup();
+    await open('search');
+    const mousedown = (target: Element) => {
+      const event = new MouseEvent('mousedown', { bubbles: true, cancelable: true });
+      target.dispatchEvent(event);
+      return event.defaultPrevented;
+    };
+    expect(mousedown(option('Chile'))).toBe(true);
+    expect(mousedown(panel()!.querySelector('[role="group"] > span')!)).toBe(true);
+    expect(mousedown(searchInput())).toBe(false);
+    expect(document.activeElement).toBe(searchInput());
+  });
+
+  it('alarma (pendiente): con el panel cerrado, una letra no abre ni elige', async () => {
+    // Si falla, aria ya atiende las letras con el panel cerrado: se puede quitar el pendiente
+    // de la spec 4 («Base técnica») y de la tabla del Select.
+    const { h, trigger, press } = await setup();
+    const btn = trigger('plain');
+    btn.focus();
+    await press(btn, 'c');
+    expect(btn.getAttribute('aria-expanded')).toBe('false');
+    expect(h.country()).toBeNull();
+  });
+
   it('objetos con compareWith, plantilla propia y un valor que no está en las opciones', async () => {
     const { fixture, h, trigger, open, options, option } = await setup();
     const btn = trigger('objects');
