@@ -1290,18 +1290,21 @@ import buttonVariantsSource from './examples/button-variants.example' with { loa
 
 **Presupuestos separados (G1.1, paso A).** Tailwind genera en el CSS global las clases de todos los componentes de ui-core, aunque sus páginas sean lazy, así que el CSS inicial crece con cada componente. El presupuesto `initial` mezcla JS y CSS, y su objetivo era detectar JS que se cuele al bundle inicial (como pasó con `@angular/forms`). Por eso se separan:
 
-| Qué mide                                       | Dónde                                    | Aviso  | Error  | Al separarlos (crudo / gzip) |
-| ---------------------------------------------- | ---------------------------------------- | ------ | ------ | ---------------------------- |
-| JS inicial completo                            | `apps/docs/scripts/check-initial-js.mjs` | 335 kB | 350 kB | 318.11 / 100.24 kB           |
-| `main` (JS de la app)                          | `angular.json`, budget `bundle` `main`   | 140 kB | 145 kB | 135.68 kB                    |
-| CSS global                                     | `angular.json`, budget `bundle` `styles` | 105 kB | 115 kB | 80.77 / 12.24 kB             |
-| Todo lo inicial (techo general = 325 + 105 kB) | `angular.json`, budget `initial`         | 430 kB | 450 kB | 398.88 kB                    |
+| Qué mide                                  | Dónde                                    | Aviso  | Error  | Al separarlos (crudo / gzip) |
+| ----------------------------------------- | ---------------------------------------- | ------ | ------ | ---------------------------- |
+| JS inicial completo                       | `apps/docs/scripts/check-initial-js.mjs` | 335 kB | 350 kB | 318.11 / 100.24 kB           |
+| `main` (JS de la app)                     | `angular.json`, budget `bundle` `main`   | 140 kB | 145 kB | 135.68 kB                    |
+| CSS global                                | `angular.json`, budget `bundle` `styles` | 120 kB | 135 kB | 80.77 / 12.24 kB             |
+| Todo lo inicial (JS inicial + CSS global) | `angular.json`, budget `initial`         | 455 kB | 485 kB | 398.88 kB                    |
+
+**Regla del `initial`:** es la suma de los avisos y la suma de los errores del JS inicial y del CSS global (aviso 335 + 120 = 455 kB; error 350 + 135 = 485 kB). Si cambia uno de los dos, el `initial` se actualiza con la misma fórmula.
 
 - **Por qué un script para el JS inicial.** Ningún tipo de budget de Angular lo mide solo: `initial` suma el CSS, `bundle` solo encuentra archivos con nombre y el chunk compartido inicial (donde está `@angular/core` y donde cae lo que se cuela) no lo tiene, y `anyScript` mide cada archivo por separado. El script suma lo que `index.html` carga al inicio (el `<script type="module">` y los `<link rel="modulepreload">`) y corre después de `ng build docs` en `pnpm build:docs`, así que también en `pnpm build` (al cerrar cada tarea) y en el build de Cloudflare. Lo prueba `apps/docs/src/app/initial-js.spec.ts`.
 - **El CSS tiene margen para el Grupo 1:** 80.77 kB, más 2.13 kB de `@angular/cdk/overlay-prebuilt.css`, más unos 12 componentes a 1–1.5 kB cada uno, da unos 98–101 kB. En gzip crece muy poco.
 - **Cómo se informa:** el script da crudo, gzip y brotli del JS inicial y del CSS global. Los umbrales son sobre el crudo, como los budgets. La columna «Estimated transfer size» del build de Angular es **brotli**, no gzip: las cifras «gzip» de las tareas anteriores (98.96 kB, etc.) eran en realidad brotli. Al separarlos, el inicial era 98.97 kB en brotli y el JS inicial 100.24 kB en gzip.
 - No se sube ninguno sin decidirlo. Si el JS inicial crece, primero se investiga (`ng build docs --stats-json`).
 - **JS inicial: de 325/335 a 335/350 kB (antes de la G1.2, decidido por el usuario).** esbuild mueve al chunk inicial funciones pequeñas compartidas (de rxjs y de `@angular/core`) cuando una ruta lazy las usa: con Popover fueron +4.0 kB (ver abajo, «JS inicial con el primer componente de `@angular/cdk`»). No son fugas. El límite está para detectar fugas grandes, de 10 kB o más, como fue `@angular/forms`. El techo de `initial` (430/450 kB) no cambió: se fijó como 325 + 105 kB y hoy suma 408 kB.
+- **CSS global: de 105/115 a 120/135 kB (después de la G1.6, decidido por el usuario).** El CSS global crece con cada componente del catálogo, unos 2–4 kB crudos y unos 0,4 kB gzip por componente, porque Tailwind genera las clases de todos aunque sus páginas sean lazy (la estimación de arriba, 1–1.5 kB, quedó corta). Con Dialog llegó a 101.28 kB crudo (15.28 kB gzip) y quedan 5 componentes del Grupo 1. Se revisa al empezar cada grupo nuevo; el control estricto sigue siendo el del JS inicial. En el mismo cambio, el `initial` pasó de 430/450 a 455/485 kB con la regla de arriba (venía de 325 + 105 y no se había actualizado al subir el JS inicial); hoy suma 426.61 kB.
 - **Al cerrar cada tarea:** si el JS inicial crece más de 1 kB, se informa qué módulos entraron y por qué (comparando el `metafile` de `ng build docs --stats-json` con y sin el cambio, como en la G1.1).
 
 Historia del presupuesto único `initial` (hasta la G1.1): aviso a partir de 400 kB y error a partir de 420 kB. Después de la tarea 2.2 medía 353.3 kB (95 kB en brotli); después de la 2.11, 364.7 kB (96.9 kB); después de la T.1, 388.31 kB (98.96 kB).
