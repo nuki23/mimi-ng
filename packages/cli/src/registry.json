@@ -29,6 +29,17 @@
         "@angular/cdk": "^22.0.0"
       }
     },
+    "menu": {
+      "type": "util",
+      "files": ["components/menu/menu.ts", "components/menu/index.ts"],
+      "dependencies": {
+        "class-variance-authority": "^0.7.1"
+      },
+      "peerDependencies": {
+        "@angular/aria": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/overlay"]
+    },
     "theme": {
       "type": "theme",
       "files": ["theme/theme-base.css", "theme/types.ts", "theme/provider.ts", "theme/index.ts"]
@@ -82,22 +93,23 @@
       },
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
     },
-    "dropdown-menu": {
+    "context-menu": {
       "type": "component",
-      "files": [
-        "components/dropdown-menu/dropdown-menu.ts",
-        "components/dropdown-menu/menu-item.ts",
-        "components/dropdown-menu/index.ts"
-      ],
-      "dependencies": {
-        "class-variance-authority": "^0.7.1"
-      },
+      "files": ["components/context-menu/context-menu.ts", "components/context-menu/index.ts"],
       "peerDependencies": {
-        "@angular/aria": "^22.0.0",
         "@angular/cdk": "^22.0.0"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["utils/cn", "utils/overlay"]
+      "registryDependencies": ["menu", "utils/overlay"]
+    },
+    "dropdown-menu": {
+      "type": "component",
+      "files": ["components/dropdown-menu/dropdown-menu.ts", "components/dropdown-menu/index.ts"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
+      "registryDependencies": ["menu", "utils/overlay"]
     },
     "form-field": {
       "type": "component",

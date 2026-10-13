@@ -307,10 +307,12 @@ describe('mimi (alias ui)', () => {
     const { run, tree, logs } = await initialized();
     const cssPath = json(tree, '/mimi.json').tailwind.css as string;
     const result = await run('mimi', { components: ['dropdown-menu', 'popover'] }, tree);
-    for (const file of ['dropdown-menu.ts', 'menu-item.ts', 'index.ts']) {
-      expect(result.readContent(`/${UI}/dropdown-menu/${file}`)).toBe(
-        template(`components/dropdown-menu/${file}`),
-      );
+    for (const file of [
+      'dropdown-menu/dropdown-menu.ts',
+      'dropdown-menu/index.ts',
+      'menu/menu.ts',
+    ]) {
+      expect(result.readContent(`/${UI}/${file}`)).toBe(template(`components/${file}`));
     }
     expect(result.exists(`/${UI}/utils/overlay.ts`)).toBe(true);
     const deps = json(result, '/package.json').dependencies;
@@ -318,6 +320,37 @@ describe('mimi (alias ui)', () => {
     expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
     expect(logs.map((l) => l.message)).toContain(`  @angular/aria@${deps['@angular/core']}`);
     expect(result.readContent(`/${cssPath}`).match(/overlay-prebuilt\.css/g)).toHaveLength(1);
+  });
+
+  it('context-menu: copia menu (con su base) y no dropdown-menu; menu no cuenta como componente', async () => {
+    const { run, tree } = await initialized();
+    const result = await run('mimi', { components: ['context-menu'] }, tree);
+    for (const file of [
+      'context-menu/context-menu.ts',
+      'context-menu/index.ts',
+      'menu/menu.ts',
+      'menu/index.ts',
+    ]) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(template(`components/${file}`));
+    }
+    expect(result.readContent('/.mimi/base/menu/menu.ts')).toBe(
+      template('components/menu/menu.ts'),
+    );
+    expect(json(result, '/.mimi/manifest.json').files['menu/menu.ts']).toBeDefined();
+    expect(result.exists(`/${UI}/dropdown-menu/dropdown-menu.ts`)).toBe(false);
+    expect(json(result, '/mimi.json').components).toEqual({
+      'context-menu': { version: registry.version },
+    });
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/aria']).toBe(deps['@angular/core']);
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+  });
+
+  it('menu no se puede pedir: no es un componente', async () => {
+    const { run, tree } = await initialized();
+    await expect(run('mimi', { components: ['menu'] }, tree)).rejects.toThrow(
+      /no es un componente de Mimi/,
+    );
   });
 
   it('dropdown-menu: con @angular/cdk instalado, @angular/aria en su versión exacta', async () => {

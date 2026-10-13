@@ -1,4 +1,3 @@
-import { Menu } from '@angular/aria/menu';
 import { CdkConnectedOverlay, type ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
@@ -20,9 +19,8 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import { cn } from '@/components/ui/utils/cn';
+import { MimiMenuItemsImports, MimiMenuPanel } from '@/components/ui/menu';
 import {
-  MIMI_OVERLAY_ANIMATION,
   MIMI_VIEWPORT_MARGIN,
   type MimiOverlayAlign,
   type MimiOverlaySide,
@@ -30,31 +28,15 @@ import {
   mimiPlacedSide,
   mimiWaitForExit,
 } from '@/components/ui/utils/overlay';
-import {
-  MIMI_MENU_HOST,
-  MIMI_MENU_PANEL_CLASSES,
-  type MimiMenuHost,
-  MimiMenuCheckboxItem,
-  MimiMenuItem,
-  MimiMenuLabel,
-  MimiMenuOutlet,
-  MimiMenuRadioGroup,
-  MimiMenuRadioItem,
-  MimiMenuSeparator,
-  MimiMenuSub,
-  MimiMenuSubContent,
-  MimiMenuSubTrigger,
-} from './menu-item';
 
 /*
- * Dropdown Menu (docs/design/Mimi F2 Overlays.dc.html, «5 · Dropdown Menu»): panel con padding de
- * 4px a 8px del trigger. Tokens de la spec 13 (MimiMenuTokens, prefijo `menu`).
+ * Dropdown Menu (docs/design/Mimi F2 Overlays.dc.html, «5 · Dropdown Menu»): panel a 8px del
+ * trigger. Ítems, panel y tokens (`menu`, spec 13) en `@/components/ui/menu`.
  *
  * Por dentro: @angular/cdk/overlay posiciona el panel (popover nativo 'inline', como Popover) y
- * @angular/aria/menu da el teclado del patrón de menú (flechas, Home/End, typeahead, Enter y
- * Espacio, submenús). El trigger y el cierre son de Mimi: ngMenuTrigger necesita una referencia
- * al menú en el botón del usuario, que no se puede dar sin exponer aria (decisión 4.3). Nada de
- * aria ni del CDK sale en la API pública.
+ * @angular/aria/menu da el teclado del patrón de menú (en MimiMenuPanel). El trigger es de Mimi:
+ * ngMenuTrigger necesita una referencia al menú en el botón del usuario, que no se puede dar sin
+ * exponer aria (decisión 4.3). Nada de aria ni del CDK sale en la API pública.
  */
 
 export type MimiDropdownMenuSide = MimiOverlaySide;
@@ -72,7 +54,7 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-dropdown-menu',
-  imports: [CdkConnectedOverlay, Menu, MimiMenuOutlet],
+  imports: [CdkConnectedOverlay, MimiMenuPanel],
   template: `
     <ng-content />
     <ng-template
@@ -84,35 +66,27 @@ let nextId = 0;
       [cdkConnectedOverlayDisableClose]="true"
       cdkConnectedOverlayUsePopover="inline"
       cdkConnectedOverlayTransformOriginOn="[data-mimi-overlay-panel]"
-      (attach)="focusItem()"
       (detach)="onDetach()"
       (overlayOutsideClick)="close(false)"
       (positionChange)="onPositionChange($event)"
     >
-      <div
-        ngMenu
-        #panel
-        data-mimi-overlay-panel
-        [id]="menuId"
-        [class]="panelClasses()"
-        [attr.aria-label]="label() || null"
-        [attr.aria-labelledby]="label() ? null : trigger()?.id"
-        [attr.data-state]="state()"
-        [attr.data-side]="placedSide()"
-        [attr.data-align]="align()"
-        [attr.inert]="state() === 'closed' ? '' : null"
-        (itemSelected)="onItemSelected($event)"
-        (keydown)="onKeydown($event)"
-        (focusout)="onFocusOut($event)"
-      >
-        @if (content(); as content) {
-          <ng-container [mimiMenuOutlet]="content.templateRef" />
-        }
-      </div>
+      @if (content(); as content) {
+        <mimi-menu-panel
+          [template]="content.templateRef"
+          [menuId]="menuId"
+          [label]="label()"
+          [labelledBy]="trigger()?.id"
+          [state]="state()"
+          [side]="placedSide()"
+          [align]="align()"
+          [initialFocus]="focusTarget"
+          [focusExempt]="trigger()?.element"
+          [class]="userClass()"
+          (closeRequest)="close($event)"
+        />
+      }
     </ng-template>
   `,
-  styles: MIMI_OVERLAY_ANIMATION,
-  providers: [{ provide: MIMI_MENU_HOST, useExisting: MimiDropdownMenu }],
   host: {
     style: 'display: contents',
     // El class es del panel: en el host no tendría efecto o se heredaría al trigger.
@@ -121,7 +95,7 @@ let nextId = 0;
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MimiDropdownMenu implements MimiMenuHost {
+export class MimiDropdownMenu {
   private readonly document = inject(DOCUMENT);
   private readonly injector = inject(Injector);
 
@@ -138,7 +112,7 @@ export class MimiDropdownMenu implements MimiMenuHost {
 
   protected readonly trigger = contentChild(MimiDropdownMenuTrigger);
   protected readonly content = contentChild(MimiDropdownMenuContent);
-  private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
+  private readonly panel = viewChild(MimiMenuPanel);
 
   /** id del menú (aria-controls del trigger). */
   readonly menuId = `mimi-dropdown-menu-${nextId++}`;
@@ -153,21 +127,13 @@ export class MimiDropdownMenu implements MimiMenuHost {
   protected readonly positions = computed(() =>
     mimiConnectedPositions(this.side(), this.align(), OFFSET),
   );
-  protected readonly panelClasses = computed(() =>
-    cn(
-      MIMI_MENU_PANEL_CLASSES,
-      'w-[var(--mimi-menu-width,240px)] max-w-[calc(100vw_-_16px)]',
-      this.userClass(),
-    ),
-  );
 
   /** A qué ítem va el foco al abrir: el primero, o el último si se abrió con ↑. */
-  private focusTarget: 'first' | 'last' = 'first';
+  protected focusTarget: 'first' | 'last' = 'first';
   /** Cuenta los cierres: si se vuelve a abrir durante la animación de salida, no se desmonta. */
   private closing = 0;
   /** Si el próximo cierre devuelve el foco al trigger. */
   private refocus = true;
-  private readonly items = new Map<string, () => void>();
 
   private readonly syncOpen = effect(() => {
     const open = this.open();
@@ -183,7 +149,7 @@ export class MimiDropdownMenu implements MimiMenuHost {
   /** Abre con el foco en el primer o el último ítem (lo usa el trigger con las flechas). */
   openAt(target: 'first' | 'last'): void {
     this.focusTarget = target;
-    if (this.open()) this.focusItem();
+    if (this.open()) this.panel()?.focusItem(target);
     else this.open.set(true);
   }
 
@@ -196,26 +162,19 @@ export class MimiDropdownMenu implements MimiMenuHost {
     this.open.set(false);
   }
 
-  register(id: string, select: () => void): void {
-    this.items.set(id, select);
-  }
-
-  unregister(id: string): void {
-    this.items.delete(id);
-  }
-
   private show(): void {
     this.closing++;
     this.placedSide.set(this.side());
     this.state.set('open');
-    if (this.rendered()) this.focusItem();
+    // Reabierto durante la animación de salida: el panel sigue montado.
+    if (this.rendered()) this.panel()?.focusItem(this.focusTarget);
     else this.rendered.set(true);
   }
 
   private hide(): void {
     if (!this.rendered()) return;
     this.state.set('closed');
-    const panel = this.panel()?.nativeElement;
+    const panel = this.panel()?.element;
     const active = this.document.activeElement;
     const focusInside = !active || active === this.document.body || panel?.contains(active);
     if (this.refocus && focusInside) this.trigger()?.element.focus();
@@ -233,50 +192,9 @@ export class MimiDropdownMenu implements MimiMenuHost {
     );
   }
 
-  /**
-   * Al abrir, el foco va al primer ítem (o al último). aria no tiene un método público para eso:
-   * se le envía Home o End, las teclas del patrón (la prueba «foco al abrir» avisa si cambia).
-   */
-  protected focusItem(): void {
-    const key = this.focusTarget === 'last' ? 'End' : 'Home';
-    afterNextRender(
-      {
-        write: () => {
-          const panel = this.panel()?.nativeElement;
-          if (!panel || this.state() !== 'open') return;
-          panel.dispatchEvent(
-            new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }),
-          );
-        },
-      },
-      { injector: this.injector },
-    );
-  }
-
   protected onDetach(): void {
     this.rendered.set(false);
     if (this.open()) this.open.set(false);
-  }
-
-  protected onItemSelected(value: unknown): void {
-    this.items.get(value as string)?.();
-    this.close();
-  }
-
-  /** Escape en el menú (aria detiene su propagación: el CDK no lo vería). En un submenú, aria lo cierra. */
-  protected onKeydown(event: KeyboardEvent): void {
-    if (event.key === 'Escape' && !event.altKey && !event.ctrlKey && !event.metaKey) {
-      event.preventDefault();
-      this.close();
-    }
-  }
-
-  /** Tab (o el foco que sale del menú por otro camino) cierra sin mover el foco. */
-  protected onFocusOut(event: FocusEvent): void {
-    const next = event.relatedTarget as Node | null;
-    if (!next || this.panel()?.nativeElement.contains(next)) return;
-    if (next === this.trigger()?.element) return;
-    this.close(false);
   }
 
   protected onPositionChange({ connectionPair }: ConnectedOverlayPositionChange): void {
@@ -328,13 +246,5 @@ export const MimiDropdownMenuImports = [
   MimiDropdownMenu,
   MimiDropdownMenuTrigger,
   MimiDropdownMenuContent,
-  MimiMenuItem,
-  MimiMenuCheckboxItem,
-  MimiMenuRadioGroup,
-  MimiMenuRadioItem,
-  MimiMenuLabel,
-  MimiMenuSeparator,
-  MimiMenuSub,
-  MimiMenuSubTrigger,
-  MimiMenuSubContent,
+  ...MimiMenuItemsImports,
 ] as const;

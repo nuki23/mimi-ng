@@ -70,6 +70,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'components/context-menu',
+        title: 'Context Menu · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/context-menu/context-menu-page').then(
+            (m) => m.ContextMenuPage,
+          ),
+      },
+      {
         path: 'components/separator',
         title: 'Separator · Mimi',
         loadComponent: () =>

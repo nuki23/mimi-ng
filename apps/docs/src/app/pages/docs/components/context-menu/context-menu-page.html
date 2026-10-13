@@ -1,0 +1,171 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Context Menu</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Menú que aparece con el clic derecho sobre una zona, una lista o una tabla, en el punto del
+    puntero. Usa los mismos ítems que el
+    <a routerLink="/docs/components/dropdown-menu" class="font-medium text-foreground underline"
+      >Dropdown Menu</a
+    >. Las piezas se importan juntas con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >MimiContextMenuImports</code
+    >.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="context-menu" />
+  <p class="text-pretty">
+    Instala también los ítems compartidos con el Dropdown Menu (en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >components/ui/menu</code
+    >), pero no el Dropdown Menu. Como él, usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/aria</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>: el
+    comando los instala si faltan (aria en la versión exacta de tu cdk) y agrega los estilos del CDK
+    a tu CSS global:
+  </p>
+  <app-code-block [code]="depsCss" lang="css" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    @for (part of parts; track part.name) {
+      <li>
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">{{
+          part.name
+        }}</code>
+        {{ part.description }}
+      </li>
+    }
+  </ul>
+  <p class="text-pretty">
+    Elegir un ítem (o Escape) cierra el menú y devuelve el foco al elemento que lo tenía antes de
+    abrir. Los tipos de los ítems, como
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">MimiMenuItemTone</code
+    >, también se importan de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >@/components/ui/context-menu</code
+    >.
+  </p>
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
+  <p class="text-pretty">
+    El del diseño: ítems con íconos y atajos, uno deshabilitado y una acción destructiva. El menú se
+    abre en el punto del clic y, si no cabe, se voltea hacia el otro lado.
+  </p>
+  <app-code-preview [code]="source.basic">
+    <app-context-menu-basic-example />
+  </app-code-preview>
+
+  <h3 id="submenu" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con submenú</h3>
+  <p class="text-pretty">
+    Con el foco en la zona, Shift+F10 o la tecla de menú abren el menú junto a ella, y → abre el
+    submenú.
+  </p>
+  <app-code-preview [code]="source.submenu">
+    <app-context-menu-submenu-example />
+  </app-code-preview>
+
+  <h3 id="checkbox" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con checkbox</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(checked)]</code>
+    con signals. Al marcar, el menú se cierra.
+  </p>
+  <app-code-preview [code]="source.checkbox">
+    <app-context-menu-checkbox-example />
+  </app-code-preview>
+
+  <h3 id="table" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Sobre una tabla</h3>
+  <p class="text-pretty">
+    Un solo menú para todas las filas: cada
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tr</code> es un trigger
+    con su archivo en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >[mimiContextMenuTriggerData]</code
+    >, que el contenido recibe como
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">let-file</code>. La
+    fila abierta lleva
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-state="open"</code
+    >. Las mismas acciones están en el botón de cada fila, para quien no tiene clic derecho.
+  </p>
+  <app-code-preview [code]="source.table">
+    <app-context-menu-table-example />
+  </app-code-preview>
+
+  <h3 id="disabled" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Desactivado</h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">disabled</code>, Mimi
+    no toca el clic derecho y aparece el menú del navegador.
+  </p>
+  <app-code-preview [code]="source.disabled">
+    <app-context-menu-disabled-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Teclado y táctil</h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Con el foco dentro de un trigger, Shift+F10 o la tecla de menú abren el menú junto al elemento
+      enfocado. Para eso, la zona (o algo dentro de ella) tiene que poder recibir el foco.
+    </li>
+    <li>
+      Dentro del menú, el teclado es el del Dropdown Menu: flechas, Inicio y Fin, una letra, Enter,
+      Espacio, → y ←, Escape. Tab y un clic fuera lo cierran sin mover el foco.
+    </li>
+    <li>
+      Abierto con el puntero, se cierra al hacer scroll, como el menú del sistema; abierto con el
+      teclado, sigue al elemento.
+    </li>
+    <li>
+      En Android, la pulsación larga abre el menú de Mimi. En iPhone y iPad (sin trackpad) no hay
+      menú contextual: el sistema conserva la pulsación larga para seleccionar texto. El menú
+      contextual es un atajo; deja las mismas acciones en un botón visible.
+    </li>
+    <li>
+      Con el ratón, el foco suele estar en la página (no en la zona) al abrir: al cerrar, vuelve
+      ahí.
+    </li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    Los ítems (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >mimi-menu-*</code
+    >) tienen la misma API que en el
+    <a
+      routerLink="/docs/components/dropdown-menu"
+      fragment="items"
+      class="font-medium text-foreground underline"
+      >Dropdown Menu</a
+    >.
+  </p>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <p class="text-pretty">Las mismas del Dropdown Menu (prefijo menu).</p>
+  <app-css-variables component="menu" />
+</article>

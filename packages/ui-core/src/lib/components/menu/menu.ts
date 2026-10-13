@@ -28,18 +28,19 @@ import { cn } from '@/components/ui/utils/cn';
 import { MIMI_OVERLAY_ANIMATION, MIMI_VIEWPORT_MARGIN } from '@/components/ui/utils/overlay';
 
 /*
- * Ítems de menú (docs/design/Mimi F2 Overlays.dc.html, «5 · Dropdown Menu»). Los comparten Dropdown
- * Menu y Context Menu (prefijo de tokens `menu`, spec 13). Ítem de 32px, padding 0 8px, gap 8px,
- * columna de ícono de 16px, atajo en monoespaciada; etiqueta de grupo y separador.
+ * Piezas compartidas de Dropdown Menu y Context Menu (docs/design/Mimi F2 Overlays.dc.html, «5 ·
+ * Dropdown Menu» y «6 · Context Menu»; prefijo de tokens `menu`, spec 13). Ítem de 32px, padding
+ * 0 8px, gap 8px, columna de ícono de 16px, atajo en monoespaciada; etiqueta de grupo, separador,
+ * checkbox, radio y submenú. Panel de 240px con padding de 4px.
  *
  * Teclado, foco, typeahead y submenús: @angular/aria/menu (decisión 4.3), solo por dentro. Cada
- * ítem pinta su `div ngMenuItem` con un `value` interno único; el menú raíz traduce el
- * `itemSelected` de aria al ítem con MIMI_MENU_HOST. Nada de aria sale en la API pública.
+ * ítem pinta su `div ngMenuItem` con un `value` interno único; MimiMenuPanel traduce el
+ * `itemSelected` de aria al ítem (MIMI_MENU_HOST). Nada de aria sale en la API pública.
  */
 
 let nextId = 0;
 
-/** Uso interno: el menú raíz (Dropdown o Context Menu) avisa al ítem elegido y se cierra. */
+/** Uso interno: el panel avisa al ítem elegido. */
 export interface MimiMenuHost {
   register(id: string, select: () => void): void;
   unregister(id: string): void;
@@ -51,17 +52,20 @@ export const MIMI_MENU_HOST = new InjectionToken<MimiMenuHost>('MimiMenuHost');
  * Uso interno (no está en los Imports; se exporta porque el compilador lo exige): pinta el
  * contenido del usuario con el injector de este punto, dentro del `ngMenu`, para que los ítems
  * encuentren su menú. Hace lo mismo que NgTemplateOutlet con `injector`, sin @angular/common.
+ * `mimiMenuOutletContext` llega al contenido como `let-x` (el dato de la fila en Context Menu).
  */
 @Directive({ selector: '[mimiMenuOutlet]' })
 export class MimiMenuOutlet {
   readonly template = input.required<TemplateRef<unknown>>({ alias: 'mimiMenuOutlet' });
+  readonly context = input<unknown>(undefined, { alias: 'mimiMenuOutletContext' });
   private readonly viewContainer = inject(ViewContainerRef);
   private readonly injector = inject(Injector);
   private readonly render = effect(() => {
     const template = this.template();
+    const context = { $implicit: this.context() };
     untracked(() => {
       this.viewContainer.clear();
-      this.viewContainer.createEmbeddedView(template, undefined, { injector: this.injector });
+      this.viewContainer.createEmbeddedView(template, context, { injector: this.injector });
     });
   });
 }
@@ -69,6 +73,137 @@ export class MimiMenuOutlet {
 /** Panel del menú y del submenú: fondo, borde, radio y sombra de la spec 13. */
 export const MIMI_MENU_PANEL_CLASSES =
   'flex flex-col p-1 outline-none rounded-[var(--mimi-menu-radius,var(--mimi-radius))] border border-[color:var(--mimi-menu-border,var(--mimi-border))] bg-[color:var(--mimi-menu-bg,var(--mimi-popover))] text-popover-foreground shadow-[shadow:var(--mimi-menu-shadow,var(--mimi-shadow-popover))]';
+
+/**
+ * Uso interno de Dropdown Menu y Context Menu (no está en los Imports): el `ngMenu` raíz con el
+ * contenido del usuario. Reúne lo que aria no hace en un menú sin `ngMenuTrigger` (plan, G1.5b):
+ * avisa al ítem elegido y pide cerrar; Escape (aria detiene su propagación, así que se escucha en
+ * el mismo elemento); Tab fuera del menú; y el foco inicial con Home/End, porque aria no tiene un
+ * método público para enfocar el primer o el último ítem. Lleva la animación de entrada y salida.
+ */
+@Component({
+  selector: 'mimi-menu-panel',
+  imports: [Menu, MimiMenuOutlet],
+  template: `
+    <div
+      ngMenu
+      #panel
+      data-mimi-overlay-panel
+      [id]="menuId()"
+      [class]="classes()"
+      [attr.aria-label]="label() || null"
+      [attr.aria-labelledby]="label() ? null : labelledBy()"
+      [attr.data-state]="state()"
+      [attr.data-side]="side()"
+      [attr.data-align]="align()"
+      [attr.inert]="state() === 'closed' ? '' : null"
+      (itemSelected)="onItemSelected($event)"
+      (keydown)="onKeydown($event)"
+      (focusout)="onFocusOut($event)"
+      (contextmenu)="onContextMenu($event)"
+    >
+      <ng-container [mimiMenuOutlet]="template()" [mimiMenuOutletContext]="context()" />
+    </div>
+  `,
+  styles: MIMI_OVERLAY_ANIMATION,
+  providers: [{ provide: MIMI_MENU_HOST, useExisting: MimiMenuPanel }],
+  host: { style: 'display: contents', '[attr.class]': 'null' },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class MimiMenuPanel implements MimiMenuHost {
+  private readonly injector = inject(Injector);
+
+  readonly template = input.required<TemplateRef<unknown>>();
+  /** Dato para el contenido (`let-x`). */
+  readonly context = input<unknown>(undefined);
+  readonly menuId = input.required<string>();
+  readonly label = input('');
+  /** id del elemento que nombra el menú, si no hay `label`. */
+  readonly labelledBy = input<string | null | undefined>(null);
+  readonly state = input<'open' | 'closed'>('open');
+  readonly side = input<string | null>(null);
+  readonly align = input<string | null>(null);
+  /** Ítem enfocado al crearse. */
+  readonly initialFocus = input<'first' | 'last'>('first');
+  /** Un elemento al que el foco puede ir sin cerrar el menú (el trigger del Dropdown). */
+  readonly focusExempt = input<Element | null | undefined>(null);
+  readonly userClass = input('', { alias: 'class' });
+  /** Pide cerrar: `true` devuelve el foco (ítem elegido, Escape), `false` no (Tab). */
+  readonly closeRequest = output<boolean>();
+
+  private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
+  private readonly items = new Map<string, () => void>();
+
+  protected readonly classes = computed(() =>
+    cn(
+      MIMI_MENU_PANEL_CLASSES,
+      'w-[var(--mimi-menu-width,240px)] max-w-[calc(100vw_-_16px)]',
+      this.userClass(),
+    ),
+  );
+
+  /** El `div` del menú (para la animación de salida y el foco). */
+  get element(): HTMLElement {
+    return this.panel().nativeElement;
+  }
+
+  constructor() {
+    this.focusItem();
+  }
+
+  register(id: string, select: () => void): void {
+    this.items.set(id, select);
+  }
+
+  unregister(id: string): void {
+    this.items.delete(id);
+  }
+
+  /**
+   * Enfoca el primer o el último ítem después del render: se le envía Home o End al `ngMenu`,
+   * las teclas del patrón (la prueba «foco al abrir» del Dropdown avisa si aria cambia).
+   */
+  focusItem(target?: 'first' | 'last'): void {
+    afterNextRender(
+      {
+        write: () => {
+          if (this.state() !== 'open') return;
+          const key = (target ?? this.initialFocus()) === 'last' ? 'End' : 'Home';
+          this.element.dispatchEvent(
+            new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true }),
+          );
+        },
+      },
+      { injector: this.injector },
+    );
+  }
+
+  protected onItemSelected(value: unknown): void {
+    this.items.get(value as string)?.();
+    this.closeRequest.emit(true);
+  }
+
+  /** Escape en el menú raíz. En un submenú lo maneja aria (cierra solo el submenú). */
+  protected onKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape' && !event.altKey && !event.ctrlKey && !event.metaKey) {
+      event.preventDefault();
+      this.closeRequest.emit(true);
+    }
+  }
+
+  /** Tab (o el foco que sale del menú por otro camino) cierra sin mover el foco. */
+  protected onFocusOut(event: FocusEvent): void {
+    const next = event.relatedTarget as Node | null;
+    if (!next || this.element.contains(next) || next === this.focusExempt()) return;
+    this.closeRequest.emit(false);
+  }
+
+  /** Clic derecho dentro del menú: ni el menú del navegador ni otro menú contextual de fuera. */
+  protected onContextMenu(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+}
 
 export type MimiMenuItemTone = 'default' | 'danger';
 
@@ -491,3 +626,16 @@ export class MimiMenuSub {
     if (below > 0) this.shiftY.set(Math.min(below, Math.max(rect.top - MIMI_VIEWPORT_MARGIN, 0)));
   }
 }
+
+/** Los ítems que traen `MimiDropdownMenuImports` y `MimiContextMenuImports`. */
+export const MimiMenuItemsImports = [
+  MimiMenuItem,
+  MimiMenuCheckboxItem,
+  MimiMenuRadioGroup,
+  MimiMenuRadioItem,
+  MimiMenuLabel,
+  MimiMenuSeparator,
+  MimiMenuSub,
+  MimiMenuSubTrigger,
+  MimiMenuSubContent,
+] as const;

@@ -54,6 +54,19 @@ export function mimiConnectedPositions(
   ];
 }
 
+/**
+ * Posiciones para abrir en un punto (el puntero, en Context Menu): la esquina superior izquierda
+ * del panel en el punto; si no cabe, se voltea a la izquierda del punto, hacia arriba o ambas.
+ */
+export function mimiPointPositions(): ConnectedPosition[] {
+  return [
+    { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'top' },
+    { originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'top' },
+    { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom' },
+    { originX: 'start', originY: 'top', overlayX: 'end', overlayY: 'bottom' },
+  ];
+}
+
 /** Lado en el que quedó el overlay, según la posición que eligió el CDK. */
 export function mimiPlacedSide({
   originX,

@@ -3,6 +3,7 @@ import {
   mimiArrowOffset,
   mimiConnectedPositions,
   mimiPlacedSide,
+  mimiPointPositions,
   mimiWaitForExit,
 } from './overlay';
 
@@ -35,6 +36,18 @@ describe('utils/overlay', () => {
     });
     expect(mimiPlacedSide(left)).toBe('left');
     expect(left.offsetX).toBe(-10);
+  });
+
+  it('en un punto: abajo a la derecha; si no cabe, a la izquierda, arriba o ambas', () => {
+    const positions = mimiPointPositions();
+    expect(positions.map((p) => `${p.overlayX}-${p.overlayY}`)).toEqual([
+      'start-top',
+      'end-top',
+      'start-bottom',
+      'end-bottom',
+    ]);
+    expect(positions.every((p) => p.originX === 'start' && p.originY === 'top')).toBe(true);
+    expect(positions.some((p) => p.offsetX || p.offsetY)).toBe(false);
   });
 
   it('la flecha apunta al centro del trigger, sin salirse del panel', () => {
