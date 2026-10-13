@@ -30,7 +30,8 @@ export type TokenComponent =
   | 'switch'
   | 'textarea'
   | 'popover'
-  | 'tooltip';
+  | 'tooltip'
+  | 'menu';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -47,6 +48,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   textarea: 'textarea',
   popover: 'popover',
   tooltip: 'tooltip',
+  menu: 'menu',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -622,6 +624,78 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-tooltip-foreground',
       preset: false,
       description: 'Texto.',
+    },
+  ],
+  menu: [
+    {
+      name: '--mimi-menu-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio del panel y del submenú.',
+    },
+    { name: '--mimi-menu-width', default: '240px', preset: true, description: 'Ancho del panel.' },
+    {
+      name: '--mimi-menu-item-height',
+      default: '32px',
+      preset: true,
+      description: 'Alto de cada ítem.',
+    },
+    {
+      name: '--mimi-menu-item-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio de cada ítem.',
+    },
+    {
+      name: '--mimi-menu-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo del panel.',
+    },
+    {
+      name: '--mimi-menu-border',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'Color del borde del panel.',
+    },
+    {
+      name: '--mimi-menu-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra (cambia entre claro y oscuro).',
+    },
+    {
+      name: '--mimi-menu-item-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo del ítem activo (puntero o teclado) y del que tiene el submenú abierto.',
+    },
+    {
+      name: '--mimi-menu-shortcut',
+      default: 'muted-foreground',
+      inherits: '--mimi-muted-foreground',
+      preset: false,
+      description: 'Color del atajo.',
+    },
+    {
+      name: '--mimi-menu-danger',
+      default: 'destructive-soft-foreground',
+      inherits: '--mimi-destructive-soft-foreground',
+      preset: false,
+      description: 'Texto e ícono del ítem con tone="danger".',
+    },
+    {
+      name: '--mimi-menu-danger-hover',
+      default: 'destructive-soft-bg',
+      inherits: '--mimi-destructive-soft-bg',
+      preset: false,
+      description: 'Fondo del ítem con tone="danger" activo.',
     },
   ],
 };

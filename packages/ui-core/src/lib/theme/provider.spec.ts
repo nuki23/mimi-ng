@@ -325,6 +325,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
         card: { padding: '2rem' },
         popover: { radius: '12px', padding: '1.25rem', arrow: '8px' },
         tooltip: { radius: '6px', fontSize: '13px', arrow: '6px', delay: '500ms' },
+        menu: { radius: '10px', width: '260px', itemHeight: '36px', itemRadius: '4px' },
       },
     });
     for (const line of [
@@ -362,6 +363,10 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-tooltip-font-size: 13px;',
       '--mimi-tooltip-arrow: 6px;',
       '--mimi-tooltip-delay: 500ms;',
+      '--mimi-menu-radius: 10px;',
+      '--mimi-menu-width: 260px;',
+      '--mimi-menu-item-height: 36px;',
+      '--mimi-menu-item-radius: 4px;',
     ]) {
       expect(css).toContain(line);
     }

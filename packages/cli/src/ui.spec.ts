@@ -303,6 +303,46 @@ describe('mimi (alias ui)', () => {
     expect(result.readContent(`/${cssPath}`).match(/overlay-prebuilt\.css/g)).toHaveLength(1);
   });
 
+  it('dropdown-menu: sin cdk, instala @angular/aria y @angular/cdk con el rango de @angular/core', async () => {
+    const { run, tree, logs } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const result = await run('mimi', { components: ['dropdown-menu', 'popover'] }, tree);
+    for (const file of ['dropdown-menu.ts', 'menu-item.ts', 'index.ts']) {
+      expect(result.readContent(`/${UI}/dropdown-menu/${file}`)).toBe(
+        template(`components/dropdown-menu/${file}`),
+      );
+    }
+    expect(result.exists(`/${UI}/utils/overlay.ts`)).toBe(true);
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/aria']).toBe(deps['@angular/core']);
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+    expect(logs.map((l) => l.message)).toContain(`  @angular/aria@${deps['@angular/core']}`);
+    expect(result.readContent(`/${cssPath}`).match(/overlay-prebuilt\.css/g)).toHaveLength(1);
+  });
+
+  it('dropdown-menu: con @angular/cdk instalado, @angular/aria en su versión exacta', async () => {
+    const { run, tree } = await initialized();
+    const pkg = json(tree, '/package.json');
+    pkg.dependencies['@angular/cdk'] = '^22.0.0';
+    tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+    tree.create('/node_modules/@angular/cdk/package.json', JSON.stringify({ version: '22.1.7' }));
+    const result = await run('mimi', { components: ['dropdown-menu'] }, tree);
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/aria']).toBe('22.1.7');
+    expect(deps['@angular/cdk']).toBe('^22.0.0');
+  });
+
+  it('dropdown-menu: con @angular/cdk declarado pero sin instalar, @angular/aria con su rango', async () => {
+    const { run, tree } = await initialized();
+    const pkg = json(tree, '/package.json');
+    pkg.dependencies['@angular/cdk'] = '~22.1.0';
+    tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+    const result = await run('mimi', { components: ['dropdown-menu'] }, tree);
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/aria']).toBe('~22.1.0');
+    expect(deps['@angular/cdk']).toBe('~22.1.0');
+  });
+
   it('los componentes sin cssImports no tocan el CSS global', async () => {
     const { run, tree } = await initialized();
     const cssPath = json(tree, '/mimi.json').tailwind.css as string;

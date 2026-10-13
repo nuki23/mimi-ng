@@ -119,12 +119,32 @@ function inspect(tree: Tree, options: UiOptions): Plan {
     // @angular/core del proyecto, para que no queden desalineadas.
     for (const [name, version] of Object.entries(registry.items[item].peerDependencies ?? {})) {
       if (installed[name]) continue;
-      newPackages[name] = name.startsWith('@angular/') && angularRange ? angularRange : version;
+      newPackages[name] =
+        name === '@angular/aria'
+          ? ariaVersion(tree, installed, version)
+          : name.startsWith('@angular/') && angularRange
+            ? angularRange
+            : version;
     }
   }
 
   const componentsDir = normalizePath(config.aliases?.components ?? 'src/app/components/ui');
   return { componentsDir, config, items, newPackages };
+}
+
+/**
+ * @angular/aria pide como peer la versión exacta de @angular/cdk (22.1.7 → cdk 22.1.7). Si el cdk
+ * está instalado, aria va en esa versión (de `node_modules`, que el árbol del schematic lee del
+ * disco); si está declarado pero sin instalar, con su mismo rango; si no hay cdk, con el rango de
+ * `@angular/core`, igual que el cdk que se agrega junto con él.
+ */
+function ariaVersion(tree: Tree, installed: Record<string, string>, fallback: string): string {
+  const cdk = tree.read('node_modules/@angular/cdk/package.json');
+  if (cdk) {
+    const { version } = JSON.parse(cdk.toString('utf-8')) as { version?: string };
+    if (version) return version;
+  }
+  return installed['@angular/cdk'] ?? installed['@angular/core'] ?? fallback;
 }
 
 /** El componente más parecido (distancia de edición ≤ 2, o que empiece igual). */

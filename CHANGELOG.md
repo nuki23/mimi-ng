@@ -8,11 +8,12 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 
 - **Popover** (`ng g mimi popover`): panel flotante junto a un botón, con flecha, flip si no cabe, `[(open)]`, Escape y clic fuera, y el foco de vuelta al botón. Usa `@angular/cdk` por dentro: si tu proyecto no lo tiene, `ng g mimi popover` lo instala en la versión de tu `@angular/core` y agrega `@import "@angular/cdk/overlay-prebuilt.css";` a tu CSS global.
 - **Tooltip** (`ng g mimi tooltip`): `mimiTooltip="Texto"` en cualquier elemento. Se abre con el puntero o con el teclado después de un retraso (`--mimi-tooltip-delay`, 300 ms), se cierra con Escape sin mover el foco, y en una fila de botones los siguientes abren sin esperar. En pantallas táctiles no se muestra. Usa `@angular/cdk`, igual que Popover.
+- **Dropdown Menu** (`ng g mimi dropdown-menu`): menú desplegable desde un botón, con ítems con ícono y atajo, acciones destructivas (`tone="danger"`), checkbox (`[(checked)]`), grupo radio (`[(value)]`), etiquetas, separadores y submenús. Se maneja con el teclado como pide el patrón de menú: flechas, Inicio y Fin, búsqueda por letra, Enter, Espacio, → y ←, y Escape. Usa `@angular/aria` y `@angular/cdk` por dentro: `ng g mimi dropdown-menu` instala `@angular/aria` en la versión exacta de tu `@angular/cdk` (o los dos en la de tu `@angular/core`) y agrega los estilos del CDK a tu CSS global.
 
 ### Cambios
 
 - `init` escribe `"style": "mimi"` en `mimi.json`; `"vivid"` se sigue aceptando.
-- `ng g mimi` agrega al CSS global los `@import` que necesita un componente (por ahora, los estilos del overlay del CDK para Popover), una sola vez y después del tema.
+- `ng g mimi` agrega al CSS global los `@import` que necesita un componente (por ahora, los estilos del overlay del CDK para Popover, Tooltip y Dropdown Menu), una sola vez y después del tema.
 
 ### Correcciones
 

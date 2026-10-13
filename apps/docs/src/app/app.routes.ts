@@ -62,6 +62,14 @@ export const routes: Routes = [
           import('./pages/docs/components/tooltip/tooltip-page').then((m) => m.TooltipPage),
       },
       {
+        path: 'components/dropdown-menu',
+        title: 'Dropdown Menu · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/dropdown-menu/dropdown-menu-page').then(
+            (m) => m.DropdownMenuPage,
+          ),
+      },
+      {
         path: 'components/separator',
         title: 'Separator · Mimi',
         loadComponent: () =>

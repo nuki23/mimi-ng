@@ -66,6 +66,7 @@ export class App {}
 - **Button**: `ng g mimi button` · [documentación](https://ng.mimiworks.dev/docs/components/button)
 - **Card**: `ng g mimi card` · [documentación](https://ng.mimiworks.dev/docs/components/card)
 - **Checkbox**: `ng g mimi checkbox` · [documentación](https://ng.mimiworks.dev/docs/components/switch)
+- **Dropdown Menu**: `ng g mimi dropdown-menu` · [documentación](https://ng.mimiworks.dev/docs/components/dropdown-menu)
 - **FormField**: `ng g mimi form-field` · [documentación](https://ng.mimiworks.dev/docs/components/form-field)
 - **Input**: `ng g mimi input` · [documentación](https://ng.mimiworks.dev/docs/components/input)
 - **Popover**: `ng g mimi popover` · [documentación](https://ng.mimiworks.dev/docs/components/popover)

@@ -40,6 +40,10 @@
             "label": "checkbox"
           },
           {
+            "value": "dropdown-menu",
+            "label": "dropdown-menu"
+          },
+          {
             "value": "form-field",
             "label": "form-field"
           },

@@ -1,0 +1,177 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Dropdown Menu</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Lista de acciones que se abre desde un botón: con íconos, atajos, opciones que se marcan,
+    submenús y acciones destructivas. Se maneja entero con el teclado. Las piezas se importan juntas
+    con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >MimiDropdownMenuImports</code
+    >.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="dropdown-menu" />
+  <p class="text-pretty">
+    Usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/aria</code>
+    para el teclado del menú y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+    para posicionar el panel. Si tu proyecto no los tiene, el comando los instala:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/aria</code>
+    en la versión exacta de tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+    (aria la exige), o los dos en la de tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code>.
+    También agrega los estilos del CDK a tu CSS global, después del tema:
+  </p>
+  <app-code-block [code]="depsCss" lang="css" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    @for (part of parts; track part.name) {
+      <li>
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">{{
+          part.name
+        }}</code>
+        {{ part.description }}
+      </li>
+    }
+  </ul>
+  <p class="text-pretty">
+    Al elegir un ítem (también un checkbox o una opción de radio, en cualquier nivel) el menú se
+    cierra y el foco vuelve al botón. Un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">svg</code> dentro del
+    ítem va a la columna de íconos;
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">shortcut</code> solo
+    muestra el atajo, no lo registra.
+  </p>
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
+  <p class="text-pretty">
+    Ítems con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(selected)</code> y uno
+    deshabilitado (recibe el foco, pero no se puede elegir). El
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class="w-52"</code>
+    de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >mimi-dropdown-menu</code
+    >
+    cambia el ancho del panel.
+  </p>
+  <app-code-preview [code]="source.basic">
+    <app-dropdown-menu-basic-example />
+  </app-code-preview>
+
+  <h3 id="shortcuts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con íconos y atajos</h3>
+  <p class="text-pretty">
+    El menú «Proyecto» del diseño. Escribe una letra con el menú abierto para saltar al ítem que
+    empieza por ella.
+  </p>
+  <app-code-preview [code]="source.shortcuts">
+    <app-dropdown-menu-shortcuts-example />
+  </app-code-preview>
+
+  <h3 id="checkbox-radio" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Checkbox y radio
+  </h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(checked)]</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(value)]</code>
+    funcionan con signals. El grupo radio es provisional: todavía no está en el diseño.
+  </p>
+  <app-code-preview [code]="source.checkboxRadio">
+    <app-dropdown-menu-checkbox-radio-example />
+  </app-code-preview>
+
+  <h3 id="submenu" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Submenú</h3>
+  <p class="text-pretty">
+    Se abre al pasar el puntero, o con → , Enter o Espacio; ← o Escape lo cierran y el foco vuelve a
+    su ítem. Si no cabe a la derecha, se abre a la izquierda.
+  </p>
+  <app-code-preview [code]="source.submenu">
+    <app-dropdown-menu-submenu-example />
+  </app-code-preview>
+
+  <h3 id="destructive" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Destructivo</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tone="danger"</code>
+    para acciones que borran algo. El botón solo tiene ícono: lleva
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code>, y el
+    menú, su propio
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">label</code>.
+  </p>
+  <app-code-preview [code]="source.destructive">
+    <app-dropdown-menu-destructive-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Teclado</h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>En el botón: Enter, Espacio o ↓ abren en el primer ítem; ↑, en el último.</li>
+    <li>
+      En el menú: ↑ y ↓ recorren los ítems (al llegar al final vuelven al principio), Inicio y Fin
+      van al primero y al último, y una letra salta al ítem que empieza por ella.
+    </li>
+    <li>Enter o Espacio eligen el ítem. Escape cierra y devuelve el foco al botón.</li>
+    <li>Tab o un clic fuera cierran el menú sin mover el foco.</li>
+    <li>
+      Se abre como popover nativo (capa superior), junto al botón en el DOM. Con movimiento
+      reducido, sin animación.
+    </li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="items" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Ítems</h3>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Componente</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Inputs</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Outputs</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of itemApi; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">
+              {{ row.inputs }}
+            </td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.outputs }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="menu" />
+</article>

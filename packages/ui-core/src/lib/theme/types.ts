@@ -251,6 +251,19 @@ export interface MimiTooltipTokens {
 }
 
 /**
+ * Dropdown Menu y Context Menu. Fondo, borde, sombra, hover, atajo y tono de peligro van en el CSS
+ * (`--mimi-menu-bg`, `-border`, `-shadow`, `-item-hover`, `-shortcut`, `-danger`, `-danger-hover`).
+ */
+export interface MimiMenuTokens {
+  radius?: string;
+  /** Ancho del panel (240px). */
+  width?: string;
+  /** Alto de cada ítem (32px). */
+  itemHeight?: string;
+  itemRadius?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -268,6 +281,7 @@ export interface MimiComponentTokens {
   textarea?: MimiTextareaTokens;
   popover?: MimiPopoverTokens;
   tooltip?: MimiTooltipTokens;
+  menu?: MimiMenuTokens;
   // select y dialog se agregan con sus componentes (G1.5 y G1.6)
 }
 
