@@ -29,6 +29,7 @@ const FOLDER: Record<TokenComponent, string> = {
   popover: 'popover',
   tooltip: 'tooltip',
   menu: 'menu',
+  select: 'select',
 };
 
 /**

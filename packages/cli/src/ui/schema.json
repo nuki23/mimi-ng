@@ -60,6 +60,10 @@
             "label": "popover"
           },
           {
+            "value": "select",
+            "label": "select"
+          },
+          {
             "value": "separator",
             "label": "separator"
           },

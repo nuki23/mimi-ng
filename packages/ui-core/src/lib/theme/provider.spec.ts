@@ -326,6 +326,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
         popover: { radius: '12px', padding: '1.25rem', arrow: '8px' },
         tooltip: { radius: '6px', fontSize: '13px', arrow: '6px', delay: '500ms' },
         menu: { radius: '10px', width: '260px', itemHeight: '36px', itemRadius: '4px' },
+        select: { radius: '8px', height: '2.75rem', optionHeight: '40px', optionRadius: '6px' },
       },
     });
     for (const line of [
@@ -367,6 +368,10 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-menu-width: 260px;',
       '--mimi-menu-item-height: 36px;',
       '--mimi-menu-item-radius: 4px;',
+      '--mimi-select-radius: 8px;',
+      '--mimi-select-height: 2.75rem;',
+      '--mimi-select-option-height: 40px;',
+      '--mimi-select-option-radius: 6px;',
     ]) {
       expect(css).toContain(line);
     }

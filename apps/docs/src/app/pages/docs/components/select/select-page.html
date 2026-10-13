@@ -1,0 +1,230 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Select</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Lista desplegable para elegir una opción: con buscador, grupos, opciones deshabilitadas, botón
+    de limpiar y estado de carga. Tiene el alto de Input y Button, se maneja entero con el teclado y
+    funciona con los tres sistemas de formularios de Angular.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="select" />
+  <p class="text-pretty">
+    Usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/aria</code>
+    para el teclado de la lista y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+    para posicionar el panel. Si tu proyecto no los tiene, el comando los instala:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/aria</code>
+    en la versión exacta de tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+    (aria la exige), o los dos en la de tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code>.
+    También agrega los estilos del CDK a tu CSS global, después del tema:
+  </p>
+  <app-code-block [code]="depsCss" lang="css" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <p class="text-pretty">
+    Las opciones son datos:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">label</code> es lo que
+    se ve y <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">value</code>,
+    lo que recibe tu signal o tu formulario. Sin valor,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">value</code> es
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">null</code>.
+  </p>
+  <app-code-block [code]="optionType" lang="typescript" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
+  <p class="text-pretty">
+    Un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;label for&gt;</code
+    >
+    nombra el Select y también lo abre. Con el panel abierto, escribe una letra para saltar a la
+    opción que empieza por ella.
+  </p>
+  <app-code-preview [code]="source.basic">
+    <app-select-basic-example />
+  </app-code-preview>
+
+  <h3 id="search" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con búsqueda</h3>
+  <p class="text-pretty">
+    El Select del diseño.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">search</code> pone el
+    buscador dentro del panel: filtra sin tildes ni mayúsculas, cuenta los resultados y resalta la
+    coincidencia. La plantilla
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiSelectOption</code>
+    cambia el contenido de cada opción, en la lista y en el disparador.
+  </p>
+  <app-code-preview [code]="source.search">
+    <app-select-search-example />
+  </app-code-preview>
+
+  <h3 id="groups" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Grupos y opciones deshabilitadas
+  </h3>
+  <p class="text-pretty">
+    Un grupo es
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >{{ '{' }} label, options {{ '}' }}</code
+    >. Las opciones deshabilitadas se saltan al navegar con las flechas;
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">hint</code> explica por
+    qué.
+  </p>
+  <app-code-preview [code]="source.groups">
+    <app-select-groups-example />
+  </app-code-preview>
+
+  <h3 id="server" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Búsqueda en el servidor</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(searchChange)</code>
+    avisa de cada cambio del buscador y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">loading</code> muestra
+    el estado de carga mientras llegan las opciones. Los valores son objetos, así que
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">compareWith</code> los
+    compara por id. Si la opción elegida ya no está en la lista, el disparador conserva su texto.
+  </p>
+  <app-code-preview [code]="source.server">
+    <app-select-server-example />
+  </app-code-preview>
+
+  <h3 id="states" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Estados</h3>
+  <p class="text-pretty">Con botón de limpiar, deshabilitado, cargando y con error.</p>
+  <app-code-preview [code]="source.states">
+    <app-select-states-example />
+  </app-code-preview>
+
+  <h3 id="reactive-forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Reactive Forms</h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">formControlName</code>,
+    sin adaptadores. Dentro de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-form-field</code>
+    queda alineado con Input y muestra el error solo. Envía el formulario vacío para verlo.
+  </p>
+  <app-code-preview [code]="source.reactiveForms">
+    <app-select-reactive-forms-example />
+  </app-code-preview>
+
+  <h3 id="signal-forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Signal Forms</h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[formField]</code>.
+    Limpia el valor para ver el mensaje del esquema.
+  </p>
+  <app-code-preview [code]="source.signalForms">
+    <app-select-signal-forms-example />
+  </app-code-preview>
+
+  <h3 id="ng-model" class="mt-2 text-lg font-semibold tracking-[-0.01em]">ngModel</h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(ngModel)]</code> y un
+    signal.
+  </p>
+  <app-code-preview [code]="source.ngModel">
+    <app-select-ng-model-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Personalizado</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> va al
+    disparador y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">panelClass</code>, al
+    panel. El panel toma el ancho del disparador salvo que le des otro.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-select-custom-class-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Teclado</h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>En el disparador: Enter, Espacio, ↓, ↑ o Alt+↓ abren el panel en la opción elegida.</li>
+    <li>
+      En la lista: ↑ y ↓ recorren las opciones habilitadas (al llegar al final vuelven al
+      principio), Inicio y Fin van a la primera y a la última, y una letra salta a la opción que
+      empieza por ella.
+    </li>
+    <li>
+      Enter, Espacio o Alt+↑ eligen la opción activa y cierran. Escape cierra sin cambiar nada. En
+      los dos casos el foco vuelve al disparador.
+    </li>
+    <li>Tab cierra sin elegir y sigue al siguiente campo.</li>
+    <li>
+      Con buscador, el foco queda en el campo de búsqueda y las flechas, Enter y Escape funcionan
+      desde ahí; la opción activa se anuncia con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-activedescendant</code
+      >.
+    </li>
+    <li>
+      Se abre como popover nativo (capa superior), junto al disparador en el DOM. Con movimiento
+      reducido, sin animación.
+    </li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="outputs" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Outputs</h3>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Output</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of outputs; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textos</h3>
+  <p class="text-pretty">
+    Los textos propios («Sin resultados», «Cargando…», el contador, el nombre del botón de limpiar)
+    están en inglés por defecto.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >MIMI_SELECT_TEXT_ES</code
+    >
+    trae el español; lo que no definas sigue en inglés.
+  </p>
+  <app-code-block [code]="texts" lang="typescript" />
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="select" />
+</article>

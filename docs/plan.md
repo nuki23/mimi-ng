@@ -106,7 +106,14 @@ Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → 
   - **Componente:** `mimi-context-menu` con uno o varios `[mimiContextMenuTrigger]` y su dato (`let-x`). Se abre solo con el evento `contextmenu`: con el puntero, en el punto (origen `{x, y}` del CDK, con volteo); con Shift+F10 o la tecla de menú, junto al elemento enfocado. El panel queda dentro del host (`{type: 'parent'}`). Al hacer scroll, se cierra si se abrió con el puntero. Tiene `disabled` (menú del navegador). En táctil, solo el `contextmenu` nativo.
   - **Comprobado en Chrome real (CDP):** las teclas, el punto, el volteo vertical, la fila de la tabla, el scroll y el modo desactivado.
   - **JS inicial:** +0.42 kB.
-- [ ] G1.5 Select, estilo NG-ZORRO, con `FormValueControl` (spec 8) sobre `@angular/aria` (Combobox + Listbox) y CDK Overlay; el filtrado de la búsqueda lo hace Mimi. Al hacerlo, completar `MimiComponentTokens` en `theme/types.ts` (hoy tiene el comentario «select y dialog se agregan en la Fase 4»). Diseño: `F2 Select`.
+- [x] G1.5 Select, estilo NG-ZORRO, con `FormValueControl` (spec 8) sobre `@angular/aria` (Combobox + Listbox) y CDK Overlay; el filtrado de la búsqueda lo hace Mimi. Al hacerlo, completar `MimiComponentTokens` en `theme/types.ts` (hoy tiene el comentario «select y dialog se agregan en la Fase 4»). Diseño: `F2 Select`.
+  - **Alcance:** lo del diseño: selección simple (sin múltiple ni chips), buscador opcional (`search`) con contador y resaltado, limpiar, grupos, opciones deshabilitadas con `hint`, check, sin resultados, cargando, error y deshabilitado. API por datos (`options`), con `MimiOption.hint` y `MimiOptionGroup`; plantilla `mimiSelectOption` opcional; textos en `MIMI_SELECT_TEXT` (inglés y español).
+  - **Estructura:** caja del alto de Input con un `<button role="combobox">` dentro; panel en `CdkConnectedOverlay` (`'inline'`, ancho del disparador, 8px). El `ngComboboxPopup` va por fuera del overlay (así `aria-haspopup` existe con el panel cerrado) y la lista es un componente interno (`MimiSelectList`) para que el listbox se registre en el popup que lo contiene. `class` va al disparador y `panelClass` al panel (regla nueva, spec 4).
+  - **Formularios:** los tres sistemas, con `mimi-form-field` (etiqueta, error, `aria-describedby`). `touch` al salir el foco del Select entero, no en el `blur` del botón.
+  - **Comprobado en Chrome real (CDP):** todas las teclas, el puntero, el foco, las medidas (40px junto a Input, panel a 8px y del mismo ancho, opción de 34px), el anillo igual al de Input y el árbol de accesibilidad (combobox con `hasPopup` también cerrado; panel `dialog` con nombre; input `combobox` con `activedescendant`; opciones con nombre, `selected` y `disabled` dentro de su grupo).
+  - **Pendiente:** la prueba con NVDA (G1.5b) y saltar a una opción con una letra estando cerrado.
+  - **Móvil (5.17):** la API no depende del overlay; un panel tipo hoja o modal se puede hacer después cambiando la estrategia de posición y las clases del panel, sin tocar entradas ni salidas.
+  - **JS inicial:** +0.13 kB. **CSS global:** +4.47 kB (spec 10).
 - [ ] G1.5b Revisión de aria después del Select: teclado (con el overlay abierto, en navegador real), lectores de pantalla (NVDA o VoiceOver), formularios (Signal Forms, Reactive Forms y ngModel) y peso en el bundle. Si convence, se sigue con aria en el resto del Grupo 1; si no, se reemplaza por una capa propia de comportamiento (estilo Brain de Spartan) sin cambiar la API de Mimi. Registrar el resultado en la spec (sección 4, «Base técnica»). La decisión debe pesar los rodeos que hizo falta en el menú (G1.3):
   - **Trigger propio:** `ngMenuTrigger` necesita `[menu]` en el botón del usuario, y eso no se puede dar sin `hostDirectives` que expongan aria ni sin el entry point `private`. Mimi pone `aria-haspopup`, `aria-expanded`, `aria-controls` y las teclas del botón.
   - **Foco inicial:** ninguna API pública enfoca el primer o el último ítem, así que Mimi envía Home/End al `ngMenu`. Lo cubre una prueba de alarma.
@@ -115,13 +122,38 @@ Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → 
   - **Contexto:** el contenido del usuario se pinta con el injector de dentro del `ngMenu`, para que los ítems lo encuentren por DI. Cada ítem lleva un `value` interno, porque aria lo exige y Mimi traduce `itemSelected`. aria tampoco maneja `aria-checked`.
   - **Reiniciar el menú (G1.4):** no hay API pública para reiniciar el ítem activo y los submenús al volver a abrir. Mimi recrea el `ngMenu` entero en cada apertura del Context Menu.
   - **Dato para la decisión (G1.4):** aria no aporta nada propio al menú contextual. La apertura, el punto, las teclas y el táctil son de Mimi y del CDK; aria solo da el teclado dentro del menú, igual que en el Dropdown.
+
+  Y los del Select (G1.5), separados en dos tipos. Todos usan API pública de aria.
+
+  **Lo que aria hace solo en el Select:** `role="combobox"`, `aria-expanded`, `aria-haspopup`, `aria-controls` y `aria-activedescendant` en el disparador (el foco no se mueve); abrir con ↓, Enter, Espacio y clic; la opción elegida activa al abrir; flechas con vuelta, Inicio/Fin y letra; saltar las deshabilitadas (`softDisabled` en falso); Escape; cerrar cuando el foco sale; `aria-selected`, `aria-disabled` y los grupos; y, con buscador, el input como combobox que maneja la lista sin perder el foco.
+
+  **Pegamento** (integración normal):
+  - **Elegir y cerrar:** el listbox no avisa al combobox. Mimi elige con el clic en una opción habilitada y, desde el teclado, con la opción activa (Enter, Espacio); luego cierra.
+  - **Foco:** Mimi lo devuelve al disparador al elegir o cerrar, y evita que un clic en el panel lo mueva (`mousedown.preventDefault`); sin eso, aria cierra al hacer clic en una zona no enfocable.
+  - **Clave interna:** aria compara por identidad. Cada opción lleva su posición en la lista completa y Mimi traduce con `compareWith`.
+  - **Teclas con el panel cerrado:** aria exige los modificadores exactos, así que ↑, Alt+↓ y Alt+↑ los atiende Mimi escribiendo `expanded`.
+  - **Espacio durante la búsqueda por letra:** aria lo toma como parte del texto; Mimi lleva la misma cuenta de tiempo para no elegir.
+  - **Buscador (combobox doble):** un segundo `ngCombobox` dentro del panel (`alwaysExpanded`), como el ejemplo oficial `combobox-dialog`. Mimi lleva el foco al input al abrir, maneja Escape, Enter y Tab en él (Tab devuelve el foco al disparador para que siga desde ahí, porque el panel está fuera del orden del documento) y activa la primera coincidencia al escribir (`gotoFirst()`).
+  - **El puntero activa la opción** (`gotoIndex()`): aria solo la activa con el teclado.
+  - **Animación de salida:** `preserveContent` en el combobox, para que aria no destruya el panel al cerrar.
+  - **Popup por fuera del overlay:** si el `ngComboboxPopup` va dentro, `aria-haspopup` desaparece con el panel cerrado.
+
+  **Choque con el comportamiento de aria:**
+  - **La opción elegida se desmarca** al volver a elegirla (Enter, Espacio o clic): aria usa `toggleOne` en la selección simple explícita y el valor queda vacío.
+  - **aria vacía el valor al filtrar:** si la opción elegida queda fuera del filtro, o la lista está vacía por «cargando», el listbox emite `[]`.
+  - En los dos casos Mimi no usa el `value` del listbox como valor: es solo lo que se pinta (el check y `aria-selected`), y se le vuelve a escribir cada vez que aria lo cambia. Lo cubren pruebas.
+
+  **Pendiente:** con el panel cerrado, una letra no salta a la opción (el `<select>` nativo sí). aria no lo ofrece: cerrado solo atiende ↓, Enter y Espacio, y la lista no existe. Habría que escribir la búsqueda por letra en Mimi.
+
+  **Comparado con el menú:** más rodeos en número, casi todos del buscador dentro del panel; ninguno usa API privada. Faltan para decidir la prueba con NVDA (sobre todo el paso del disparador al buscador, que son dos combobox) y los dos choques de arriba.
+
 - [ ] G1.6 Dialog (servicio, X siempre visible), con `@angular/cdk/dialog`. Diseño: `F2 Overlays`.
 - [ ] G1.7 Confirm: `mimi.confirm()` sobre Dialog. Diseño: `F2 Overlays`.
 - [ ] G1.8 Toast, estilo Sonner + Vuesax. Usa los tokens de T.1. Diseño: `F2 Toast Tabs Toolbar`.
 - [ ] G1.9 Tabs con indicador animado, estilo HeroUI, con `@angular/aria/tabs`. Después, la tarea 5.11. Diseño: `F2 Toast Tabs Toolbar`.
 - [ ] G1.10 mimi-toolbar, con `@angular/aria/toolbar`, horizontal o vertical, inspirada en VsCanvasToolbar de Vuesax (sin modo Dock): píldora translúcida, ítem activo sobre un disco, anillo animado en hover y selección, tooltips, flechas, separadores, contadores, estado presionado y herramientas propias del usuario. Diseño: `F2 Toast Tabs Toolbar`.
 - [ ] G1.11 Pagination: píldora flotante compacta como mimi-toolbar (`[←] [input de página] / total [→] | registros por página`). Tamaño SM por defecto (hereda la altura global de control SM) y MD opcional; variantes flotante y en línea; en móvil, sin el selector de registros. Diseño: `F7 Pagination` (con `Pagination`).
-- [ ] G1.12 Página «Accesibilidad y base técnica» del showcase, en Primeros pasos (ruta `/docs/foundations`), antes de publicar la 0.2.0. Contenido: qué usa Mimi por dentro (`@angular/aria` para teclado, foco y atributos ARIA; `@angular/cdk` para posicionar popups y diálogos; las dos son paquetes oficiales del equipo de Angular y `ng g mimi` las instala sola cuando un componente las necesita); por qué (la accesibilidad de un Select o de un menú es muy difícil de hacer bien a mano, y con los paquetes oficiales las correcciones llegan con `ng update`); qué es de Mimi y qué no (lo copiado es la estructura, los estilos y la API; el teclado y el foco vienen de aria; todo lo de Mimi se puede modificar); la garantía (la API de Mimi no depende de la de aria: si aria cambia, Mimi lo absorbe por dentro y el código del usuario sigue igual); una tabla de qué componentes usan cada paquete y cuáles ninguno (los de la 0.1.0); y una sección de accesibilidad con lo que Mimi garantiza en teclado, lectores de pantalla, movimiento reducido y contraste. Con la página: una línea en el README de la CLI sobre las dependencias nuevas y una pregunta frecuente en el CHANGELOG de la 0.2.0 («¿Por qué ahora se instalan @angular/aria y @angular/cdk?»).
+- [ ] G1.12 Página «Accesibilidad y base técnica» del showcase, en Primeros pasos (ruta `/docs/foundations`), antes de publicar la 0.2.0. Contenido: qué usa Mimi por dentro (`@angular/aria` para teclado, foco y atributos ARIA; `@angular/cdk` para posicionar popups y diálogos; las dos son paquetes oficiales del equipo de Angular y `ng g mimi` las instala sola cuando un componente las necesita); por qué (la accesibilidad de un Select o de un menú es muy difícil de hacer bien a mano, y con los paquetes oficiales las correcciones llegan con `ng update`); qué es de Mimi y qué no (lo copiado es la estructura, los estilos y la API; el teclado y el foco vienen de aria; todo lo de Mimi se puede modificar); la garantía (la API de Mimi no depende de la de aria: si aria cambia, Mimi lo absorbe por dentro y el código del usuario sigue igual); una tabla de qué componentes usan cada paquete y cuáles ninguno (los de la 0.1.0); y una sección de accesibilidad con lo que Mimi garantiza en teclado, lectores de pantalla, movimiento reducido y contraste. Incluir también la regla de `class` (spec 4): «`class` va al elemento visible principal del componente; si además hay un panel aparte, se usa `panelClass`. En las directivas sobre un elemento del usuario, el panel recibe `<nombre>Class`», con la tabla de Popover, Tooltip, los menús y Select. Con la página: una línea en el README de la CLI sobre las dependencias nuevas y una pregunta frecuente en el CHANGELOG de la 0.2.0 («¿Por qué ahora se instalan @angular/aria y @angular/cdk?»).
 
 ## Grupo 2 → v0.3.0: entradas avanzadas
 
@@ -152,6 +184,15 @@ Solo sirve para editar los componentes de Mimi tal como existen: sin presets gua
   Context Menu (G1.4):
   - **Volteo:** el diseño mantiene el menú a 8px del borde. Mimi lo voltea a la izquierda o hacia arriba del punto, con el mismo margen. El diseño fijo no puede mostrar ese caso.
   - **Apertura con teclado:** el diseño no la muestra. Mimi lo abre junto al elemento enfocado, con los 8px del Dropdown.
+
+  Select (G1.5):
+  - **Alto máximo de la lista:** 280px (unas 8 opciones), sin token. No está en el diseño.
+  - **Panel sin buscador:** el diseño siempre lo muestra. Mimi lo hace opcional (`search`); sin él, el mismo panel sin la barra.
+  - **Anillos:** el diseño muestra el anillo de error siempre y el de foco mientras el panel está abierto. Mimi los muestra solo con el foco en el disparador, como Input. Con buscador, el foco está en el input del panel y el disparador queda sin anillo mientras está abierto.
+  - **Sin opciones y sin búsqueda:** el diseño solo muestra «Sin resultados» con una búsqueda. Sin búsqueda, Mimi muestra el mismo bloque sin la segunda línea.
+  - **`hint`:** el diseño lo muestra solo en la opción deshabilitada. Mimi lo muestra en cualquier opción que lo tenga.
+  - **Volteo:** si el panel no cabe debajo, se abre encima, con los mismos 8px.
+  - **Varios grupos:** el diseño muestra uno. Con varios, cada uno lleva su etiqueta, sin separador.
 
 - [ ] T.2 Modo Componente (estructura de Vuesax): lista de componentes a la izquierda; barra flotante arriba (mimi-toolbar) con Volver, Móvil/Tablet/Escritorio, Claro/Oscuro, fondo del lienzo, «Uno | Ver todos» (matriz tonos × variantes), «Código» y «Copiar prompt»; un solo componente en el lienzo; la tira de variantes abajo.
 - [ ] T.3 Panel derecho: «Vista previa», que no se guarda (tono, estado, tamaño y texto), y «Estilo del componente», que sí se guarda (radio: Rounded, Squircle, Pill o un valor propio; borde; efectos: sombra, glow y escala al presionar). Cada propiedad muestra su origen (el token del que hereda, o «Mío»); pestaña «Variables» con todas las variables del componente y su cadena de herencia. Todo valor cambiado por el usuario se etiqueta «Mío».

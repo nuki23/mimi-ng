@@ -47,7 +47,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Tooltip', path: '/docs/components/tooltip', status: 'ready' },
       { title: 'Dropdown Menu', path: '/docs/components/dropdown-menu', status: 'ready' },
       { title: 'Context Menu', path: '/docs/components/context-menu', status: 'ready' },
-      { title: 'Select', path: '/docs/components/select', status: 'soon' },
+      { title: 'Select', path: '/docs/components/select', status: 'ready' },
       { title: 'Dialog', path: '/docs/components/dialog', status: 'soon' },
     ],
   },

@@ -142,6 +142,26 @@
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["utils/cn", "utils/overlay"]
     },
+    "select": {
+      "type": "component",
+      "files": [
+        "components/select/select.ts",
+        "components/select/select-texts.ts",
+        "components/select/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/aria": "^22.0.0",
+        "@angular/cdk": "^22.0.0",
+        "@angular/forms": "^22.0.0"
+      },
+      "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/overlay"
+      ]
+    },
     "separator": {
       "type": "component",
       "files": [

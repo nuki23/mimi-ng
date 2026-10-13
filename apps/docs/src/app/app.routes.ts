@@ -78,6 +78,12 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'components/select',
+        title: 'Select · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/select/select-page').then((m) => m.SelectPage),
+      },
+      {
         path: 'components/separator',
         title: 'Separator · Mimi',
         loadComponent: () =>

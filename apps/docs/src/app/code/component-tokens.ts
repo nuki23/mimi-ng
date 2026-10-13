@@ -31,7 +31,8 @@ export type TokenComponent =
   | 'textarea'
   | 'popover'
   | 'tooltip'
-  | 'menu';
+  | 'menu'
+  | 'select';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -49,6 +50,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   popover: 'popover',
   tooltip: 'tooltip',
   menu: 'menu',
+  select: 'select',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -696,6 +698,70 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-destructive-soft-bg',
       preset: false,
       description: 'Fondo del ítem con tone="danger" activo.',
+    },
+  ],
+  select: [
+    {
+      name: '--mimi-select-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio del disparador y del panel.',
+    },
+    {
+      name: '--mimi-select-height',
+      default: '2.5rem',
+      inherits: '--mimi-control-height',
+      preset: true,
+      description: 'Alto del disparador.',
+    },
+    {
+      name: '--mimi-select-option-height',
+      default: '34px',
+      preset: true,
+      description: 'Alto de cada opción.',
+    },
+    {
+      name: '--mimi-select-option-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio de cada opción.',
+    },
+    {
+      name: '--mimi-select-trigger-bg',
+      default: 'input-background',
+      inherits: '--mimi-input-background',
+      preset: false,
+      description: 'Fondo del disparador.',
+    },
+    {
+      name: '--mimi-select-border',
+      default: 'input',
+      inherits: '--mimi-input',
+      preset: false,
+      description: 'Color del borde del disparador.',
+    },
+    {
+      name: '--mimi-select-menu-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo del panel.',
+    },
+    {
+      name: '--mimi-select-menu-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra del panel (cambia entre claro y oscuro).',
+    },
+    {
+      name: '--mimi-select-option-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo de la opción activa (puntero o teclado).',
     },
   ],
 };

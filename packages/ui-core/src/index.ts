@@ -19,3 +19,4 @@ export * from './lib/components/tooltip';
 export * from './lib/components/menu';
 export * from './lib/components/dropdown-menu';
 export * from './lib/components/context-menu';
+export * from './lib/components/select';

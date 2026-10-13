@@ -346,6 +346,29 @@ describe('mimi (alias ui)', () => {
     expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
   });
 
+  it('select: copia sus tres archivos y sus utils, e instala aria, cdk y forms', async () => {
+    const { run, tree } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const result = await run('mimi', { components: ['select'] }, tree);
+    for (const file of ['select/select.ts', 'select/select-texts.ts', 'select/index.ts']) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(template(`components/${file}`));
+    }
+    for (const util of ['cn', 'control-styles', 'field-state', 'overlay']) {
+      expect(result.exists(`/${UI}/utils/${util}.ts`), util).toBe(true);
+    }
+    // No trae los menús ni FormField: no los importa.
+    expect(result.exists(`/${UI}/menu/menu.ts`)).toBe(false);
+    expect(result.exists(`/${UI}/form-field/form-field.ts`)).toBe(false);
+    expect(json(result, '/mimi.json').components).toEqual({
+      select: { version: registry.version },
+    });
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/aria']).toBe(deps['@angular/core']);
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+    expect(deps['@angular/forms']).toBe(deps['@angular/core']);
+    expect(result.readContent(`/${cssPath}`).match(/overlay-prebuilt\.css/g)).toHaveLength(1);
+  });
+
   it('menu no se puede pedir: no es un componente', async () => {
     const { run, tree } = await initialized();
     await expect(run('mimi', { components: ['menu'] }, tree)).rejects.toThrow(

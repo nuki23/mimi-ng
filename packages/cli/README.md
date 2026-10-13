@@ -71,6 +71,7 @@ export class App {}
 - **FormField**: `ng g mimi form-field` · [documentación](https://ng.mimiworks.dev/docs/components/form-field)
 - **Input**: `ng g mimi input` · [documentación](https://ng.mimiworks.dev/docs/components/input)
 - **Popover**: `ng g mimi popover` · [documentación](https://ng.mimiworks.dev/docs/components/popover)
+- **Select**: `ng g mimi select` · [documentación](https://ng.mimiworks.dev/docs/components/select)
 - **Separator**: `ng g mimi separator` · [documentación](https://ng.mimiworks.dev/docs/components/separator)
 - **Skeleton**: `ng g mimi skeleton` · [documentación](https://ng.mimiworks.dev/docs/components/skeleton)
 - **Switch**: `ng g mimi switch` · [documentación](https://ng.mimiworks.dev/docs/components/switch)

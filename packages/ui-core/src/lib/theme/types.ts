@@ -264,6 +264,20 @@ export interface MimiMenuTokens {
 }
 
 /**
+ * Select. Fondos, borde, sombra y opción activa van en el CSS (`--mimi-select-trigger-bg`,
+ * `-border`, `-menu-bg`, `-menu-shadow`, `-option-hover`).
+ */
+export interface MimiSelectTokens {
+  /** Radio del disparador y del panel. */
+  radius?: string;
+  /** Alto del disparador (el de los controles). */
+  height?: string;
+  /** Alto de cada opción (34px). */
+  optionHeight?: string;
+  optionRadius?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -282,7 +296,8 @@ export interface MimiComponentTokens {
   popover?: MimiPopoverTokens;
   tooltip?: MimiTooltipTokens;
   menu?: MimiMenuTokens;
-  // select y dialog se agregan con sus componentes (G1.5 y G1.6)
+  select?: MimiSelectTokens;
+  // dialog se agrega con su componente (G1.6)
 }
 
 export interface MimiThemePreset {
