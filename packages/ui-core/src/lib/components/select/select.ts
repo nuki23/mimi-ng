@@ -247,6 +247,7 @@ const SKELETON_CLASSES =
       (valueChange)="resync()"
       (click)="onClick($event)"
       (pointermove)="onPointerMove($event)"
+      (keydown)="keepFirst.set(false)"
     >
       @for (section of sections(); track section.id) {
         <div
@@ -400,7 +401,24 @@ export class MimiSelectList {
   /** El activo cambió con el puntero: no hace falta traerlo a la vista. */
   private byPointer = false;
 
+  /**
+   * La primera opción habilitada debe seguir activa (se está escribiendo en el buscador), hasta
+   * que el usuario mueva la activa con el teclado o el puntero.
+   */
+  protected readonly keepFirst = signal(false);
+
   constructor() {
+    // Rodeo (choque): mientras no se haya usado el teclado en la lista, aria vuelve a activar la
+    // opción elegida cada vez que cambian las opciones. Mimi repone la primera cada vez.
+    afterRenderEffect({
+      read: () => {
+        if (!this.keepFirst()) return;
+        this.keys();
+        const listbox = this.listbox();
+        listbox.activeDescendant();
+        untracked(() => listbox.gotoFirst());
+      },
+    });
     afterRenderEffect({
       read: () => {
         const listbox = this.listbox();
@@ -427,7 +445,7 @@ export class MimiSelectList {
 
   /** Activa la primera opción habilitada (al escribir en el buscador). */
   gotoFirst(): void {
-    this.listbox().gotoFirst();
+    this.keepFirst.set(true);
   }
 
   private optionAt(event: Event): HTMLElement | null {
@@ -448,6 +466,7 @@ export class MimiSelectList {
     if (key === undefined || option?.dataset['active'] === 'true') return;
     if (option?.getAttribute('aria-disabled') === 'true') return;
     this.byPointer = true;
+    this.keepFirst.set(false);
     this.listbox().gotoIndex(this.keys().indexOf(key));
   }
 }
@@ -1032,7 +1051,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
     this.query.set(query);
     this.searchChange.emit(query);
     // Como en el diseño: al escribir, la primera coincidencia habilitada queda activa.
-    afterNextRender({ read: () => this.list()?.gotoFirst() }, { injector: this.injector });
+    this.list()?.gotoFirst();
   }
 
   /** Un clic en el panel no mueve el foco (salvo al buscador): si no, aria cerraría. */

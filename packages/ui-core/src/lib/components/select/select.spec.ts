@@ -515,15 +515,24 @@ describe('MimiSelect', () => {
     expect(active(trigger('plain'))).toBe('Chile');
   });
 
-  // Omitida: hoy falla (plan, G1.5b, «Error encontrado»). Si la opción elegida sigue en la lista
-  // filtrada, aria la vuelve a activar después del gotoFirst() de Mimi. Quitar el skip al corregirlo.
-  it.skip('alarma: al escribir, la primera coincidencia queda activa aunque la elegida siga en la lista (gotoFirst)', async () => {
-    const { open, searchInput, type, options, active } = await setup();
+  it('alarma: al escribir, la primera coincidencia queda activa aunque la elegida siga en la lista (gotoFirst)', async () => {
+    const { h, open, searchInput, type, press, options, option, active } = await setup();
     await open('search');
     expect(active(searchInput())).toBe('México');
     await type('i');
     expect(options().some((o) => o.textContent?.includes('México'))).toBe(true);
+    expect(option('México').getAttribute('aria-selected')).toBe('true');
     expect(active(searchInput())).toBe('Argentina');
+    // Las flechas mueven la activa desde ahí, y seguir escribiendo vuelve a la primera.
+    await press(searchInput(), 'ArrowDown');
+    expect(active(searchInput())).toBe('Brasil');
+    await type('il');
+    expect(active(searchInput())).toBe('Brasil');
+    await type('');
+    expect(active(searchInput())).toBe('Argentina');
+    await type('i');
+    await press(searchInput(), 'Enter');
+    expect(h.searched()).toBe('AR');
   });
 
   it('alarma: el panel y sus opciones siguen montados durante la animación de salida (preserveContent)', async () => {
