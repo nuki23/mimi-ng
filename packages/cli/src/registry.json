@@ -102,6 +102,19 @@
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["menu", "utils/overlay"]
     },
+    "dialog": {
+      "type": "component",
+      "files": [
+        "components/dialog/dialog.ts",
+        "components/dialog/dialog-texts.ts",
+        "components/dialog/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/overlay"]
+    },
     "dropdown-menu": {
       "type": "component",
       "files": ["components/dropdown-menu/dropdown-menu.ts", "components/dropdown-menu/index.ts"],

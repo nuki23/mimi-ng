@@ -153,7 +153,12 @@ Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → 
 
   **Comparado con el menú:** más rodeos en número, casi todos del buscador dentro del panel; ninguno usa API privada.
 
-- [ ] G1.6 Dialog (servicio, X siempre visible), con `@angular/cdk/dialog`. Diseño: `F2 Overlays`.
+- [x] G1.6 Dialog (servicio, X siempre visible), con `@angular/cdk/dialog`. Diseño: `F2 Overlays`.
+  - **Dos formas de uso:** `MimiDialogService.open()` (base; devuelve un `MimiDialogRef` con `afterClosed()`) y `<mimi-dialog [(open)]>` en la plantilla, sobre el mismo servicio. Piezas: encabezado, título, descripción, cuerpo, pie y `[mimiDialogClose]`.
+  - **Cierre:** `closeOnEscape` y `closeOnBackdropClick`, más `disableClose` como atajo. La X funciona siempre; `closeButton: false` la oculta solo para confirmaciones con sus propios botones (lo usará la G1.7).
+  - **Por dentro:** solo API pública del CDK, sin extender su contenedor. Mimi abre un panel propio (`MimiDialogShell`) y atiende Escape y el fondo para animar la salida; el foco, el `aria-hidden` del resto de la página y el bloqueo del scroll son del CDK.
+  - **Comprobado en Chrome real (CDP):** medidas del diseño; foco al primer campo y de vuelta al que abrió (también cuando lo abre un ítem del Dropdown: vuelve al botón del menú); Tab encerrado; salida animada con Escape, fondo y X; scroll bloqueado sin salto con barra clásica y con el header fijo en su sitio; Select dentro (encima, y Escape lo cierra primero); árbol de accesibilidad (`dialog` modal con nombre y descripción, resto de la página oculto); contenido largo con scroll en el cuerpo; y móvil a 360×640 (328px de ancho, `100dvh − 32px` de alto).
+  - **JS inicial:** +0.40 kB. **CSS global:** +2.97 kB (queda en 101.28 kB; aviso en 105 kB).
 - [ ] G1.7 Confirm: `mimi.confirm()` sobre Dialog. Diseño: `F2 Overlays`.
 - [ ] G1.8 Toast, estilo Sonner + Vuesax. Usa los tokens de T.1. Diseño: `F2 Toast Tabs Toolbar`.
 - [ ] G1.9 Tabs con indicador animado, estilo HeroUI, con `@angular/aria/tabs`. Después, la tarea 5.11. Diseño: `F2 Toast Tabs Toolbar`. Empezar con un spike de aria como en el Select y comparar la cuenta de rodeos.
@@ -199,6 +204,12 @@ Solo sirve para editar los componentes de Mimi tal como existen: sin presets gua
   - **`hint`:** el diseño lo muestra solo en la opción deshabilitada. Mimi lo muestra en cualquier opción que lo tenga.
   - **Volteo:** si el panel no cabe debajo, se abre encima, con los mismos 8px.
   - **Varios grupos:** el diseño muestra uno. Con varios, cada uno lleva su etiqueta, sin separador.
+
+  Dialog (G1.6):
+  - **Animación:** el diseño no la define. Mimi usa la de los demás overlays (0,15 s, escala desde `--mimi-press-scale`), y el fondo se desvanece en el mismo tiempo.
+  - **Pantallas chicas y contenido largo:** no están en el diseño. Mimi deja 16px a cada borde (`100vw − 32px` de ancho máximo, `100dvh − 32px` de alto máximo) y pone el scroll en el cuerpo, con el encabezado y el pie fijos.
+  - **Tamaños:** el diseño trae uno (420px). No hay sm, md ni lg; se cambia con `width`, `maxWidth` o `class`.
+  - **Línea del título:** el diseño no da el interlineado; Mimi usa 1,25, como Popover.
 
 - [ ] T.2 Modo Componente (estructura de Vuesax): lista de componentes a la izquierda; barra flotante arriba (mimi-toolbar) con Volver, Móvil/Tablet/Escritorio, Claro/Oscuro, fondo del lienzo, «Uno | Ver todos» (matriz tonos × variantes), «Código» y «Copiar prompt»; un solo componente en el lienzo; la tira de variantes abajo.
 - [ ] T.3 Panel derecho: «Vista previa», que no se guarda (tono, estado, tamaño y texto), y «Estilo del componente», que sí se guarda (radio: Rounded, Squircle, Pill o un valor propio; borde; efectos: sombra, glow y escala al presionar). Cada propiedad muestra su origen (el token del que hereda, o «Mío»); pestaña «Variables» con todas las variables del componente y su cadena de herencia. Todo valor cambiado por el usuario se etiqueta «Mío».

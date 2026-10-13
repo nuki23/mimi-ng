@@ -278,6 +278,22 @@ export interface MimiSelectTokens {
 }
 
 /**
+ * Dialog. El fondo oscurecido, el fondo del panel y la sombra van en el CSS
+ * (`--mimi-dialog-overlay`, `-bg`, `-shadow`).
+ */
+export interface MimiDialogTokens {
+  radius?: string;
+  /** Ancho del panel (420px). */
+  width?: string;
+  /** Relleno a los lados del encabezado, el cuerpo y el pie (24px). */
+  padding?: string;
+  /** Tamaño de la X (32px). */
+  closeSize?: string;
+  /** Desenfoque del fondo (el global `effects.overlayBlur`). */
+  overlayBlur?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -297,7 +313,7 @@ export interface MimiComponentTokens {
   tooltip?: MimiTooltipTokens;
   menu?: MimiMenuTokens;
   select?: MimiSelectTokens;
-  // dialog se agrega con su componente (G1.6)
+  dialog?: MimiDialogTokens;
 }
 
 export interface MimiThemePreset {

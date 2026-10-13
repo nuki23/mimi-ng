@@ -30,6 +30,7 @@ const FOLDER: Record<TokenComponent, string> = {
   tooltip: 'tooltip',
   menu: 'menu',
   select: 'select',
+  dialog: 'dialog',
 };
 
 /**

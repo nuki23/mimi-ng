@@ -369,6 +369,24 @@ describe('mimi (alias ui)', () => {
     expect(result.readContent(`/${cssPath}`).match(/overlay-prebuilt\.css/g)).toHaveLength(1);
   });
 
+  it('dialog: copia sus tres archivos y sus utils, instala solo @angular/cdk y agrega su CSS', async () => {
+    const { run, tree } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const result = await run('mimi', { components: ['dialog'] }, tree);
+    for (const file of ['dialog/dialog.ts', 'dialog/dialog-texts.ts', 'dialog/index.ts']) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(template(`components/${file}`));
+    }
+    for (const util of ['cn', 'control-styles', 'overlay']) {
+      expect(result.exists(`/${UI}/utils/${util}.ts`), util).toBe(true);
+    }
+    // No trae Button ni aria: no los importa.
+    expect(result.exists(`/${UI}/button/button.ts`)).toBe(false);
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+    expect(deps['@angular/aria']).toBeUndefined();
+    expect(result.readContent(`/${cssPath}`).match(/overlay-prebuilt\.css/g)).toHaveLength(1);
+  });
+
   it('menu no se puede pedir: no es un componente', async () => {
     const { run, tree } = await initialized();
     await expect(run('mimi', { components: ['menu'] }, tree)).rejects.toThrow(

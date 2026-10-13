@@ -32,7 +32,8 @@ export type TokenComponent =
   | 'popover'
   | 'tooltip'
   | 'menu'
-  | 'select';
+  | 'select'
+  | 'dialog';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -51,6 +52,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   tooltip: 'tooltip',
   menu: 'menu',
   select: 'select',
+  dialog: 'dialog',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -762,6 +764,61 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-accent',
       preset: false,
       description: 'Fondo de la opción activa (puntero o teclado).',
+    },
+  ],
+  dialog: [
+    {
+      name: '--mimi-dialog-radius',
+      default: 'radius-card',
+      inherits: '--mimi-radius-card',
+      preset: true,
+      description: 'Radio del panel.',
+    },
+    {
+      name: '--mimi-dialog-width',
+      default: '420px',
+      preset: true,
+      description: 'Ancho del panel.',
+    },
+    {
+      name: '--mimi-dialog-padding',
+      default: '24px',
+      preset: true,
+      description: 'Relleno a los lados del encabezado, el cuerpo y el pie.',
+    },
+    {
+      name: '--mimi-dialog-close-size',
+      default: '32px',
+      preset: true,
+      description: 'Tamaño de la X.',
+    },
+    {
+      name: '--mimi-dialog-overlay-blur',
+      default: 'overlay-blur',
+      inherits: '--mimi-overlay-blur',
+      preset: true,
+      description: 'Desenfoque del fondo.',
+    },
+    {
+      name: '--mimi-dialog-overlay',
+      default: 'overlay',
+      inherits: '--mimi-overlay',
+      preset: false,
+      description: 'Color del fondo oscurecido.',
+    },
+    {
+      name: '--mimi-dialog-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo del panel.',
+    },
+    {
+      name: '--mimi-dialog-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra del panel (cambia entre claro y oscuro).',
     },
   ],
 };

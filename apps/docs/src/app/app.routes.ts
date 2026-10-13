@@ -78,6 +78,12 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'components/dialog',
+        title: 'Dialog · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/dialog/dialog-page').then((m) => m.DialogPage),
+      },
+      {
         path: 'components/select',
         title: 'Select · Mimi',
         loadComponent: () =>

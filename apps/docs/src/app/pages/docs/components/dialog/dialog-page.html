@@ -1,0 +1,228 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Dialog</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Ventana modal centrada sobre un fondo oscurecido: para editar algo o pedir una decisión sin
+    salir de la página. El foco queda dentro, el resto de la página no se puede usar y siempre hay
+    una X para cerrar. Se usa en la plantilla o desde un servicio.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="dialog" />
+  <p class="text-pretty">
+    Usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+    para el foco, el bloqueo del scroll y el fondo. Si tu proyecto no lo tiene, el comando lo
+    instala en la versión de tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code>.
+    También agrega los estilos del CDK a tu CSS global, después del tema:
+  </p>
+  <app-code-block [code]="depsCss" lang="css" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <h3 id="usage-template" class="mt-2 text-lg font-semibold tracking-[-0.01em]">En la plantilla</h3>
+  <p class="text-pretty">
+    Para la mayoría de los casos: el contenido vive en la misma plantilla y usa los signals y los
+    formularios de tu componente.
+  </p>
+  <app-code-block [code]="usageTemplate" lang="angular-ts" />
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    @for (part of parts; track part.name) {
+      <li>
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">{{
+          part.name
+        }}</code>
+        {{ part.description }}
+      </li>
+    }
+  </ul>
+  <p class="text-pretty">
+    Ninguna pieza es obligatoria, pero sin
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiDialogTitle</code>
+    hay que dar un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code>: en
+    modo desarrollo, un diálogo sin nombre avisa en la consola.
+  </p>
+
+  <h3 id="usage-service" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con el servicio</h3>
+  <p class="text-pretty">
+    Para abrir un componente desde el código, pasarle datos y esperar su resultado.
+  </p>
+  <app-code-block [code]="usageService" lang="typescript" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
+  <p class="text-pretty">
+    El diálogo del diseño. Al abrir, el foco va al primer campo; al cerrar, vuelve al botón.
+  </p>
+  <app-code-preview [code]="source.basic">
+    <app-dialog-basic-example />
+  </app-code-preview>
+
+  <h3 id="form" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Formulario dentro</h3>
+  <p class="text-pretty">
+    Reactive Forms con Input, Select y Switch. El
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;form&gt;</code>
+    envuelve el cuerpo y el pie, y cierra con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(open)]</code> solo si
+    es válido. El panel del Select se abre encima del diálogo y Escape lo cierra a él primero.
+  </p>
+  <app-code-preview [code]="source.form">
+    <app-dialog-form-example />
+  </app-code-preview>
+
+  <h3 id="no-dismiss" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Sin cierre al hacer clic fuera
+  </h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">disableClose</code>
+    apaga Escape y el clic en el fondo. Por separado:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >[closeOnEscape]="false"</code
+    >
+    y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >[closeOnBackdropClick]="false"</code
+    >. La X sigue cerrando.
+  </p>
+  <app-code-preview [code]="source.noDismiss">
+    <app-dialog-no-dismiss-example />
+  </app-code-preview>
+
+  <h3 id="long-content" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Contenido largo</h3>
+  <p class="text-pretty">
+    El diálogo nunca se sale de la pantalla: el scroll queda en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-dialog-body</code>
+    y el encabezado y el pie no se mueven. La página de detrás no se desplaza.
+  </p>
+  <app-code-preview [code]="source.longContent">
+    <app-dialog-long-content-example />
+  </app-code-preview>
+
+  <h3 id="service" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con datos y resultado</h3>
+  <p class="text-pretty">
+    El servicio abre un componente, le pasa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">afterClosed()</code>
+    entrega el resultado:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">undefined</code> si se
+    canceló.
+  </p>
+  <app-code-preview [code]="source.service">
+    <app-dialog-service-example />
+  </app-code-preview>
+
+  <h3 id="from-menu" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Desde un menú</h3>
+  <p class="text-pretty">
+    Sin
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiDialogTrigger</code
+    >: un ítem del Dropdown Menu lo abre con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(open)]</code>. Al
+    cerrar, el foco vuelve al botón del menú.
+  </p>
+  <app-code-preview [code]="source.fromMenu">
+    <app-dialog-from-menu-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Personalizado</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">width</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">maxWidth</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> van al
+    panel. Cada pieza acepta también su
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code>.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-dialog-custom-class-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Teclado y accesibilidad
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Al abrir, el foco va al primer elemento enfocable del contenido (la X es el último). Con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">autoFocus</code>
+      eliges otro.
+    </li>
+    <li>Tab y Shift+Tab recorren solo el diálogo. Escape lo cierra.</li>
+    <li>Al cerrar, el foco vuelve al elemento que lo abrió.</li>
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="dialog"</code>
+      con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-modal</code>,
+      nombrado por el título y descrito por la descripción. El resto de la página queda oculto para
+      los lectores de pantalla.
+    </li>
+    <li>La página de detrás no se desplaza mientras el diálogo está abierto.</li>
+    <li>Con movimiento reducido, sin animación.</li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <p class="text-pretty">
+    Las mismas opciones valen como entradas de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;mimi-dialog&gt;</code
+    >
+    y como segundo argumento de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">open()</code>. En la
+    plantilla se leen al abrir.
+  </p>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Opción</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="members" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Abrir y cerrar</h3>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Miembro</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of members; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textos</h3>
+  <p class="text-pretty">
+    El nombre accesible de la X está en inglés por defecto («Close»).
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >MIMI_DIALOG_TEXT_ES</code
+    >
+    trae el español.
+  </p>
+  <app-code-block [code]="texts" lang="typescript" />
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="dialog" />
+</article>

@@ -44,6 +44,10 @@
             "label": "context-menu"
           },
           {
+            "value": "dialog",
+            "label": "dialog"
+          },
+          {
             "value": "dropdown-menu",
             "label": "dropdown-menu"
           },
