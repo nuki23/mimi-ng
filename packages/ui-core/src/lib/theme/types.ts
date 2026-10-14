@@ -294,6 +294,15 @@ export interface MimiDialogTokens {
 }
 
 /**
+ * Confirm. Los colores del círculo del tono danger van en el CSS (`--mimi-confirm-icon-bg`,
+ * `-icon-fg`).
+ */
+export interface MimiConfirmTokens {
+  /** Ancho del panel (380px). */
+  width?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -314,6 +323,7 @@ export interface MimiComponentTokens {
   menu?: MimiMenuTokens;
   select?: MimiSelectTokens;
   dialog?: MimiDialogTokens;
+  confirm?: MimiConfirmTokens;
 }
 
 export interface MimiThemePreset {

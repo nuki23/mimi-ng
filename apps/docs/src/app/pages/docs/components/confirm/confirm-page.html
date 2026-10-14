@@ -1,0 +1,184 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Confirm</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Pregunta antes de hacer algo y espera la respuesta:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >if (await confirm(…))</code
+    >. Es un Dialog con dos botones, sin X, que se cierra solo con Cancelar, Confirmar o Escape.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="confirm" />
+  <p class="text-pretty">
+    Trae también Dialog y Button. Como Dialog, usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>: si
+    tu proyecto no lo tiene, el comando lo instala en la versión de tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code> y
+    agrega sus estilos a tu CSS global, después del tema:
+  </p>
+  <app-code-block [code]="depsCss" lang="css" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >injectMimiConfirm()</code
+    >
+    devuelve la función
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">confirm</code>, que
+    abre el diálogo y devuelve una promesa:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">true</code> si se
+    confirmó y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">false</code> en
+    cualquier otro caso (Cancelar, Escape, una navegación). La promesa se resuelve cuando el diálogo
+    ya se cerró y el foco volvió a su sitio.
+  </p>
+  <app-code-block [code]="usage" lang="typescript" />
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >injectMimiConfirm()</code
+    >
+    se llama al declarar la propiedad (o en el constructor), porque necesita el contexto de
+    inyección: así toma los textos y los providers de tu componente y de su ruta. La función que
+    devuelve se usa después en cualquier método. Llamarlo dentro de un método falla:
+  </p>
+  <app-code-block [code]="wrongContext" lang="typescript" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
+  <p class="text-pretty">Título y descripción. El foco empieza en Confirmar: Enter confirma.</p>
+  <app-code-preview [code]="source.basic">
+    <app-confirm-basic-example />
+  </app-code-preview>
+
+  <h3 id="danger" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Destructivo</h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tone: 'danger'</code>
+    el botón de confirmar va en rojo y el foco empieza en Cancelar, para que Enter no borre nada por
+    accidente. El ícono es una plantilla con un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;svg&gt;</code>.
+  </p>
+  <app-code-preview [code]="source.danger">
+    <app-confirm-danger-example />
+  </app-code-preview>
+
+  <h3 id="icon" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con ícono</h3>
+  <p class="text-pretty">
+    El ícono es opcional: sin
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">icon</code> no hay
+    círculo. En el tono primary, el círculo usa los colores de info.
+  </p>
+  <app-code-preview [code]="source.icon">
+    <app-confirm-icon-example />
+  </app-code-preview>
+
+  <h3 id="custom-texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Textos personalizados
+  </h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">confirmText</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">cancelText</code>
+    cambian los botones de una sola pregunta. Para todas, usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >provideMimiConfirmText</code
+    >
+    (en «Textos», abajo).
+  </p>
+  <app-code-preview [code]="source.customTexts">
+    <app-confirm-custom-texts-example />
+  </app-code-preview>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Personalizado</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> va al
+    panel y gana sobre sus clases, también sobre el ancho.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-confirm-custom-class-example />
+  </app-code-preview>
+
+  <h3 id="from-menu" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Desde un menú</h3>
+  <p class="text-pretty">
+    Un ítem del Dropdown Menu pregunta antes de eliminar. Al cerrar, el foco vuelve al botón del
+    menú.
+  </p>
+  <app-code-preview [code]="source.fromMenu">
+    <app-confirm-from-menu-example />
+  </app-code-preview>
+
+  <h3 id="from-dialog" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Desde un Dialog</h3>
+  <p class="text-pretty">
+    El confirm se abre encima del Dialog. Escape cierra solo el confirm y el foco vuelve al Dialog.
+  </p>
+  <app-code-preview [code]="source.fromDialog">
+    <app-confirm-from-dialog-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Teclado y accesibilidad
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >role="alertdialog"</code
+      >
+      con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-modal</code>,
+      nombrado por el título y descrito por la descripción. El ícono queda oculto a los lectores de
+      pantalla.
+    </li>
+    <li>
+      El foco empieza en Confirmar, o en Cancelar con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tone: 'danger'</code
+      >. Enter y Espacio activan el botón enfocado; Tab pasa al otro.
+    </li>
+    <li>Escape cancela. El clic en el fondo no cierra, como en un AlertDialog.</li>
+    <li>Al cerrar, el foco vuelve al elemento que lo abrió.</li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <p class="text-pretty">
+    Opciones de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >confirm(opciones): Promise&lt;boolean&gt;</code
+    >.
+  </p>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Opción</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textos</h3>
+  <p class="text-pretty">
+    Los botones dicen «Confirm» y «Cancel» por defecto.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >MIMI_CONFIRM_TEXT_ES</code
+    >
+    trae el español.
+  </p>
+  <app-code-block [code]="texts" lang="typescript" />
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="confirm" />
+</article>

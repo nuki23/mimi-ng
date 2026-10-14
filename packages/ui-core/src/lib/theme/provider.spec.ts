@@ -334,6 +334,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           closeSize: '36px',
           overlayBlur: '10px',
         },
+        confirm: { width: '420px' },
       },
     });
     for (const line of [
@@ -384,6 +385,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-dialog-padding: 32px;',
       '--mimi-dialog-close-size: 36px;',
       '--mimi-dialog-overlay-blur: 10px;',
+      '--mimi-confirm-width: 420px;',
     ]) {
       expect(css).toContain(line);
     }

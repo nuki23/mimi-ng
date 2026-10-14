@@ -31,6 +31,7 @@ const FOLDER: Record<TokenComponent, string> = {
   menu: 'menu',
   select: 'select',
   dialog: 'dialog',
+  confirm: 'confirm',
 };
 
 /**

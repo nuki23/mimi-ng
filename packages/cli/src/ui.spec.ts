@@ -387,6 +387,36 @@ describe('mimi (alias ui)', () => {
     expect(result.readContent(`/${cssPath}`).match(/overlay-prebuilt\.css/g)).toHaveLength(1);
   });
 
+  it('confirm: trae dialog y button con sus utils, @angular/cdk y el CSS del overlay', async () => {
+    const { run, tree } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const result = await run('mimi', { components: ['confirm'] }, tree);
+    for (const file of [
+      'confirm/confirm.ts',
+      'confirm/confirm-texts.ts',
+      'confirm/index.ts',
+      'dialog/dialog.ts',
+      'dialog/dialog-texts.ts',
+      'button/button.ts',
+      'button/button.variants.ts',
+    ]) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(template(`components/${file}`));
+    }
+    for (const util of ['cn', 'control-styles', 'overlay']) {
+      expect(result.exists(`/${UI}/utils/${util}.ts`), util).toBe(true);
+    }
+    expect(json(result, '/mimi.json').components).toEqual({
+      confirm: { version: registry.version },
+      dialog: { version: registry.version },
+      button: { version: registry.version },
+    });
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+    expect(deps['@angular/aria']).toBeUndefined();
+    expect(deps['class-variance-authority']).toBeDefined();
+    expect(result.readContent(`/${cssPath}`).match(/overlay-prebuilt\.css/g)).toHaveLength(1);
+  });
+
   it('menu no se puede pedir: no es un componente', async () => {
     const { run, tree } = await initialized();
     await expect(run('mimi', { components: ['menu'] }, tree)).rejects.toThrow(

@@ -33,7 +33,8 @@ export type TokenComponent =
   | 'tooltip'
   | 'menu'
   | 'select'
-  | 'dialog';
+  | 'dialog'
+  | 'confirm';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -53,6 +54,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   menu: 'menu',
   select: 'select',
   dialog: 'dialog',
+  confirm: 'confirm',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -819,6 +821,28 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-shadow-popover',
       preset: false,
       description: 'Sombra del panel (cambia entre claro y oscuro).',
+    },
+  ],
+  confirm: [
+    {
+      name: '--mimi-confirm-width',
+      default: '380px',
+      preset: true,
+      description: 'Ancho del panel.',
+    },
+    {
+      name: '--mimi-confirm-icon-bg',
+      default: 'destructive-soft-bg',
+      inherits: '--mimi-destructive-soft-bg',
+      preset: false,
+      description: 'Fondo del círculo del ícono, en el tono danger.',
+    },
+    {
+      name: '--mimi-confirm-icon-fg',
+      default: 'destructive-soft-foreground',
+      inherits: '--mimi-destructive-soft-foreground',
+      preset: false,
+      description: 'Color del ícono, en el tono danger.',
     },
   ],
 };

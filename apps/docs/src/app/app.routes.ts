@@ -84,6 +84,12 @@ export const routes: Routes = [
           import('./pages/docs/components/dialog/dialog-page').then((m) => m.DialogPage),
       },
       {
+        path: 'components/confirm',
+        title: 'Confirm · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/confirm/confirm-page').then((m) => m.ConfirmPage),
+      },
+      {
         path: 'components/select',
         title: 'Select · Mimi',
         loadComponent: () =>

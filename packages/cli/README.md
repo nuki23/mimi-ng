@@ -66,6 +66,7 @@ export class App {}
 - **Button**: `ng g mimi button` · [documentación](https://ng.mimiworks.dev/docs/components/button)
 - **Card**: `ng g mimi card` · [documentación](https://ng.mimiworks.dev/docs/components/card)
 - **Checkbox**: `ng g mimi checkbox` · [documentación](https://ng.mimiworks.dev/docs/components/switch)
+- **Confirm**: `ng g mimi confirm` · [documentación](https://ng.mimiworks.dev/docs/components/confirm)
 - **Context Menu**: `ng g mimi context-menu` · [documentación](https://ng.mimiworks.dev/docs/components/context-menu)
 - **Dialog**: `ng g mimi dialog` · [documentación](https://ng.mimiworks.dev/docs/components/dialog)
 - **Dropdown Menu**: `ng g mimi dropdown-menu` · [documentación](https://ng.mimiworks.dev/docs/components/dropdown-menu)

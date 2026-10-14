@@ -93,6 +93,15 @@
       },
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
     },
+    "confirm": {
+      "type": "component",
+      "files": [
+        "components/confirm/confirm.ts",
+        "components/confirm/confirm-texts.ts",
+        "components/confirm/index.ts"
+      ],
+      "registryDependencies": ["button", "dialog", "utils/cn"]
+    },
     "context-menu": {
       "type": "component",
       "files": ["components/context-menu/context-menu.ts", "components/context-menu/index.ts"],
