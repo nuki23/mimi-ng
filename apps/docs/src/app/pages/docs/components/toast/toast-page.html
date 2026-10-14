@@ -1,0 +1,221 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Toast</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Avisos breves que aparecen en una esquina y se van solos. Se apilan; al pasar el puntero, la
+    pila se abre. No hace falta poner nada en la plantilla.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="toast" />
+  <p class="text-pretty">
+    Trae también Button. Usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+    para los anuncios a los lectores de pantalla: si tu proyecto no lo tiene, el comando lo instala
+    en la versión de tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code>.
+  </p>
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >injectMimiToast()</code
+    >
+    se llama al declarar la propiedad, como
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >injectMimiConfirm()</code
+    >; dentro de un método falla con NG0203. La pila se crea sola la primera vez y vive en la raíz
+    de la aplicación: los toasts sobreviven a la navegación.
+  </p>
+  <app-code-block [code]="usage" lang="typescript" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
+  <p class="text-pretty">Título y descripción. Se cierra solo a los 6 segundos.</p>
+  <app-code-preview [code]="source.basic">
+    <app-toast-basic-example />
+  </app-code-preview>
+
+  <h3 id="tones" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tonos</h3>
+  <p class="text-pretty">
+    Cada tono trae su ícono. Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">icon</code> pones el
+    tuyo (una plantilla con un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;svg&gt;</code>), o
+    ninguno con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">false</code>.
+  </p>
+  <app-code-preview [code]="source.tones">
+    <app-toast-tones-example />
+  </app-code-preview>
+
+  <h3 id="solid" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Sólidos</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">variant: 'solid'</code
+    >: el toast toma el color del tono.
+  </p>
+  <app-code-preview [code]="source.solid">
+    <app-toast-solid-example />
+  </app-code-preview>
+
+  <h3 id="action" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con acción</h3>
+  <p class="text-pretty">
+    Un toast con acción no se cierra solo, para que se pueda llegar a él con el teclado: F8 lleva el
+    foco a los toasts y Escape lo devuelve.
+  </p>
+  <app-code-preview [code]="source.action">
+    <app-toast-action-example />
+  </app-code-preview>
+
+  <h3 id="promise" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con una promesa</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">toast.promise</code>
+    muestra «cargando» y lo reemplaza por el éxito o el error.
+  </p>
+  <app-code-preview [code]="source.promise">
+    <app-toast-promise-example />
+  </app-code-preview>
+
+  <h3 id="in-dialog" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Desde un Dialog</h3>
+  <p class="text-pretty">
+    Con un diálogo abierto, el toast queda encima del diálogo y de su fondo, y se anuncia igual.
+  </p>
+  <app-code-preview [code]="source.inDialog">
+    <app-toast-in-dialog-example />
+  </app-code-preview>
+
+  <h3 id="position" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Posición</h3>
+  <p class="text-pretty">
+    Hay una sola pila por aplicación. Su posición, la duración y la tecla se cambian con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >provideMimiToast()</code
+    >, que es opcional:
+  </p>
+  <app-code-block [code]="config" lang="typescript" />
+  <div class="grid grid-cols-2 gap-3 sm:grid-cols-3" aria-label="Las seis posiciones" role="list">
+    @for (position of positions; track position.name) {
+      <div role="listitem" class="flex flex-col gap-1.5">
+        <div class="relative h-24 rounded-[var(--mimi-radius)] border bg-muted" aria-hidden="true">
+          <div
+            class="absolute h-5 w-[45%] rounded-[6px] border bg-popover shadow-popover"
+            [class]="position.classes"
+          ></div>
+        </div>
+        <code class="font-mono text-[13px] text-muted-foreground">{{ position.name }}</code>
+      </div>
+    }
+  </div>
+
+  <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Personalizado</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> va al
+    toast y gana sobre sus clases.
+  </p>
+  <app-code-preview [code]="source.customClass">
+    <app-toast-custom-class-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Teclado y accesibilidad
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Los lectores de pantalla anuncian cada toast (título y descripción); los de error, con
+      prioridad. La región de los anuncios existe antes del primer toast.
+    </li>
+    <li>
+      <kbd class="rounded-[6px] border px-1.5 py-0.5 font-mono text-[13px]">F8</kbd> lleva el foco
+      al toast más nuevo y abre la pila; Tab recorre sus botones;
+      <kbd class="rounded-[6px] border px-1.5 py-0.5 font-mono text-[13px]">Escape</kbd> devuelve el
+      foco a donde estaba.
+    </li>
+    <li>
+      El tiempo se detiene con el puntero encima, con el foco dentro y con la pestaña oculta. Los
+      toasts con acción no se cierran solos.
+    </li>
+    <li>La X tiene nombre («Cerrar notificación»). Los toasts quedan encima de los diálogos.</li>
+    <li>Con movimiento reducido, sin desplazamientos.</li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <h3 id="members" class="mt-2 text-lg font-semibold tracking-[-0.01em]">La función toast</h3>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Llamada</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of members; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="options" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Opciones de un toast</h3>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Opción</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="global" class="mt-2 text-lg font-semibold tracking-[-0.01em]">provideMimiToast</h3>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Opción</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of options; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textos</h3>
+  <p class="text-pretty">
+    En inglés por defecto («Notifications (F8)», «Close notification»).
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >MIMI_TOAST_TEXT_ES</code
+    >
+    trae el español. Importa el archivo concreto, así no llevas Toast al JS inicial:
+  </p>
+  <app-code-block [code]="texts" lang="typescript" />
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="toast" />
+</article>

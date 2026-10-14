@@ -335,6 +335,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           overlayBlur: '10px',
         },
         confirm: { width: '420px' },
+        toast: { radius: '8px', width: '360px', offset: '24px', stackGap: '10px' },
       },
     });
     for (const line of [
@@ -386,6 +387,10 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-dialog-close-size: 36px;',
       '--mimi-dialog-overlay-blur: 10px;',
       '--mimi-confirm-width: 420px;',
+      '--mimi-toast-radius: 8px;',
+      '--mimi-toast-width: 360px;',
+      '--mimi-toast-offset: 24px;',
+      '--mimi-toast-stack-gap: 10px;',
     ]) {
       expect(css).toContain(line);
     }

@@ -32,6 +32,7 @@ const FOLDER: Record<TokenComponent, string> = {
   select: 'select',
   dialog: 'dialog',
   confirm: 'confirm',
+  toast: 'toast',
 };
 
 /**
@@ -46,6 +47,8 @@ const GLOBALS = new Set([
   '--mimi-popover-arrow-offset',
   '--mimi-tooltip-foreground',
   '--mimi-tooltip-arrow-offset',
+  // Dirección de la entrada y la salida del Toast (arriba o abajo), la escribe el componente.
+  '--mimi-toast-enter',
 ]);
 
 /** Código del componente (sin pruebas). */

@@ -78,6 +78,7 @@ export class App {}
 - **Skeleton**: `ng g mimi skeleton` · [documentación](https://ng.mimiworks.dev/docs/components/skeleton)
 - **Switch**: `ng g mimi switch` · [documentación](https://ng.mimiworks.dev/docs/components/switch)
 - **Textarea**: `ng g mimi textarea` · [documentación](https://ng.mimiworks.dev/docs/components/input)
+- **Toast**: `ng g mimi toast` · [documentación](https://ng.mimiworks.dev/docs/components/toast)
 - **Tooltip**: `ng g mimi tooltip` · [documentación](https://ng.mimiworks.dev/docs/components/tooltip)
 
 ## Tus cambios

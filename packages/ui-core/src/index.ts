@@ -22,3 +22,4 @@ export * from './lib/components/context-menu';
 export * from './lib/components/select';
 export * from './lib/components/dialog';
 export * from './lib/components/confirm';
+export * from './lib/components/toast';

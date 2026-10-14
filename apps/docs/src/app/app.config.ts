@@ -10,6 +10,7 @@ import {
   MIMI_ERROR_MESSAGES_ES,
   provideMimiErrorMessages,
 } from '@/components/ui/form-field/error-messages';
+import { MIMI_TOAST_TEXT_ES, provideMimiToastText } from '@/components/ui/toast/toast-texts';
 import { routes } from './app.routes';
 
 /** Alto del header fijo (60px) más 16px, para que los anclas no queden debajo del header. */
@@ -26,5 +27,8 @@ export const appConfig: ApplicationConfig = {
     // El showcase muestra los mensajes de error en español (los predeterminados son en inglés).
     // Se importa el archivo concreto para no traer form-field (ni @angular/forms) al bundle inicial.
     provideMimiErrorMessages(MIMI_ERROR_MESSAGES_ES),
+    // Los toasts viven en la raíz: el nombre de su región se lee aquí. Archivo concreto, sin Toast
+    // ni @angular/cdk.
+    provideMimiToastText(MIMI_TOAST_TEXT_ES),
   ],
 };

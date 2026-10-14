@@ -417,6 +417,34 @@ describe('mimi (alias ui)', () => {
     expect(result.readContent(`/${cssPath}`).match(/overlay-prebuilt\.css/g)).toHaveLength(1);
   });
 
+  it('toast: sus cuatro archivos, Button y sus utils; @angular/cdk sin el CSS del overlay', async () => {
+    const { run, tree } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const result = await run('mimi', { components: ['toast'] }, tree);
+    for (const file of [
+      'toast/toast.ts',
+      'toast/toast-config.ts',
+      'toast/toast-texts.ts',
+      'toast/index.ts',
+      'button/button.ts',
+    ]) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(template(`components/${file}`));
+    }
+    for (const util of ['cn', 'control-styles', 'overlay']) {
+      expect(result.exists(`/${UI}/utils/${util}.ts`), util).toBe(true);
+    }
+    expect(json(result, '/mimi.json').components).toEqual({
+      toast: { version: registry.version },
+      button: { version: registry.version },
+    });
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+    expect(deps['@angular/aria']).toBeUndefined();
+    expect(deps['class-variance-authority']).toBeDefined();
+    // No usa el CDK Overlay: no agrega su CSS.
+    expect(result.readContent(`/${cssPath}`)).not.toContain('overlay-prebuilt.css');
+  });
+
   it('menu no se puede pedir: no es un componente', async () => {
     const { run, tree } = await initialized();
     await expect(run('mimi', { components: ['menu'] }, tree)).rejects.toThrow(

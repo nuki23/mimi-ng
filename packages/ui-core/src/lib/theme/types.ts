@@ -303,6 +303,19 @@ export interface MimiConfirmTokens {
 }
 
 /**
+ * Toast. El fondo, el borde y la sombra van en el CSS (`--mimi-toast-bg`, `-border`, `-shadow`).
+ */
+export interface MimiToastTokens {
+  radius?: string;
+  /** Ancho de la pila (340px). */
+  width?: string;
+  /** Separación de la pila con el borde de la pantalla (16px). */
+  offset?: string;
+  /** Cuánto asoma cada toast de atrás con la pila colapsada (12px). */
+  stackGap?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -324,6 +337,7 @@ export interface MimiComponentTokens {
   select?: MimiSelectTokens;
   dialog?: MimiDialogTokens;
   confirm?: MimiConfirmTokens;
+  toast?: MimiToastTokens;
 }
 
 export interface MimiThemePreset {

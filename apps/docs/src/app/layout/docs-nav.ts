@@ -50,6 +50,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Select', path: '/docs/components/select', status: 'ready' },
       { title: 'Dialog', path: '/docs/components/dialog', status: 'ready' },
       { title: 'Confirm', path: '/docs/components/confirm', status: 'ready' },
+      { title: 'Toast', path: '/docs/components/toast', status: 'ready' },
     ],
   },
 ];

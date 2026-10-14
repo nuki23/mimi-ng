@@ -88,6 +88,10 @@
             "label": "textarea"
           },
           {
+            "value": "toast",
+            "label": "toast"
+          },
+          {
             "value": "tooltip",
             "label": "tooltip"
           }

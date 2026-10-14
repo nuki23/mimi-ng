@@ -34,7 +34,8 @@ export type TokenComponent =
   | 'menu'
   | 'select'
   | 'dialog'
-  | 'confirm';
+  | 'confirm'
+  | 'toast';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -55,6 +56,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   select: 'select',
   dialog: 'dialog',
   confirm: 'confirm',
+  toast: 'toast',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -843,6 +845,54 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-destructive-soft-foreground',
       preset: false,
       description: 'Color del ícono, en el tono danger.',
+    },
+  ],
+  toast: [
+    {
+      name: '--mimi-toast-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio de cada toast.',
+    },
+    {
+      name: '--mimi-toast-width',
+      default: '340px',
+      preset: true,
+      description: 'Ancho de la pila.',
+    },
+    {
+      name: '--mimi-toast-offset',
+      default: '16px',
+      preset: true,
+      description: 'Separación de la pila con el borde de la pantalla.',
+    },
+    {
+      name: '--mimi-toast-stack-gap',
+      default: '12px',
+      preset: true,
+      description: 'Cuánto asoma cada toast de atrás con la pila colapsada.',
+    },
+    {
+      name: '--mimi-toast-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo de la tarjeta.',
+    },
+    {
+      name: '--mimi-toast-border',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'Borde de la tarjeta.',
+    },
+    {
+      name: '--mimi-toast-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra de la tarjeta (cambia entre claro y oscuro).',
     },
   ],
 };
