@@ -6,7 +6,6 @@ import {
   Injector,
   TemplateRef,
   ViewContainerRef,
-  afterNextRender,
   assertInInjectionContext,
   effect,
   inject,
@@ -156,8 +155,11 @@ class MimiConfirmContent {
  *
  * `confirm()` resuelve `true` si se confirmó y `false` en cualquier otro caso (Cancelar, Escape,
  * una navegación, `closeAll()` o el componente que se destruye), después de la animación de
- * salida y con el foco ya devuelto. Solo rechaza si el diálogo no se pudo abrir. El clic en el
- * fondo no cierra.
+ * salida y con el foco ya devuelto. Nunca rechaza: si el diálogo no se pudo abrir, el error va al
+ * `ErrorHandler` y la respuesta es `false`. El clic en el fondo no cierra.
+ *
+ * Como todo Dialog, se abre después del render en curso: desde un ítem de menú, el foco vuelve
+ * al botón del menú al cerrar.
  */
 export function injectMimiConfirm(): MimiConfirmFn {
   assertInInjectionContext(injectMimiConfirm);
@@ -166,42 +168,23 @@ export function injectMimiConfirm(): MimiConfirmFn {
   const destroyRef = inject(DestroyRef);
 
   return (options) =>
-    new Promise<boolean>((resolve, reject) => {
-      let ref: MimiDialogRef<boolean> | null = null;
-
-      const open = () => {
-        try {
-          ref = dialog.open<boolean, MimiConfirmOptions>(MimiConfirmContent, {
-            data: options,
-            role: 'alertdialog',
-            closeButton: false,
-            closeOnBackdropClick: false,
-            // Lo más seguro primero: en una acción destructiva, Enter no confirma por accidente.
-            autoFocus: options.tone === 'danger' ? '[data-slot="cancel"]' : '[data-slot="confirm"]',
-            // Por clase y no con `width`: así la clase del usuario puede cambiar el ancho.
-            class: cn('w-[var(--mimi-confirm-width,380px)] gap-3.5 p-5', options.class),
-            injector,
-          });
-        } catch (error) {
-          stop();
-          reject(error);
-          return;
-        }
-        ref.afterClosed().subscribe((result) => {
-          stop();
-          resolve(result === true);
-        });
-      };
-
-      // Se abre después del render en curso: si lo pide un ítem de menú, el menú ya se cerró y
-      // devolvió el foco a su botón, y el diálogo lo devuelve ahí al cerrar (no al ítem, que ya
-      // no existe).
-      const hook = afterNextRender({ write: open }, { injector });
+    new Promise<boolean>((resolve) => {
+      const ref = dialog.open<boolean, MimiConfirmOptions>(MimiConfirmContent, {
+        data: options,
+        role: 'alertdialog',
+        closeButton: false,
+        closeOnBackdropClick: false,
+        // Lo más seguro primero: en una acción destructiva, Enter no confirma por accidente.
+        autoFocus: options.tone === 'danger' ? '[data-slot="cancel"]' : '[data-slot="confirm"]',
+        // Por clase y no con `width`: así la clase del usuario puede cambiar el ancho.
+        class: cn('w-[var(--mimi-confirm-width,380px)] gap-3.5 p-5', options.class),
+        injector,
+      });
       // Si el componente que pregunta se destruye antes de la respuesta, se cierra con false.
-      const stop = destroyRef.onDestroy(() => {
-        hook.destroy();
-        ref?.close(false);
-        resolve(false);
+      const stop = destroyRef.onDestroy(() => ref.close(false));
+      ref.afterClosed().subscribe((result) => {
+        stop();
+        resolve(result === true);
       });
     });
 }

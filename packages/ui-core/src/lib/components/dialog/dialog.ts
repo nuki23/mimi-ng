@@ -26,7 +26,7 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import type { Observable } from 'rxjs';
+import { type Observable, Subject } from 'rxjs';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import { MIMI_OVERLAY_ANIMATION, mimiWaitForExit } from '@/components/ui/utils/overlay';
@@ -103,13 +103,17 @@ export class MimiDialogRef<R = unknown> {
 
   private cdkRef: DialogRef<R> | null = null;
   private result: R | undefined;
+  private readonly closed = new Subject<R | undefined>();
+  private onClosing: (() => void) | null = null;
 
   /** Cierra el diálogo, con un resultado opcional para `afterClosed()`. */
   close(result?: R): void {
     if (this.state() === 'closed') return;
     this.result = result;
     this.state.set('closed');
+    this.onClosing?.();
     // El fondo se desvanece junto con el panel; el diálogo se cierra al terminar la animación.
+    // Si todavía no se abrió, ya no se abre (el servicio lo descarta).
     this.cdkRef?.overlayRef.detachBackdrop();
   }
 
@@ -118,18 +122,31 @@ export class MimiDialogRef<R = unknown> {
    * salida, o enseguida si lo cerró una navegación).
    */
   afterClosed(): Observable<R | undefined> {
-    return this.cdkRef!.closed;
+    return this.closed.asObservable();
   }
 
-  /** Uso interno: lo conecta el servicio al abrir. */
-  connect(cdkRef: DialogRef<R>): void {
+  /** Uso interno: lo conecta el servicio al abrir. `onClosing` corre al empezar a cerrarse. */
+  connect(cdkRef: DialogRef<R>, onClosing: () => void): void {
     this.cdkRef = cdkRef;
+    this.onClosing = onClosing;
+    cdkRef.closed.subscribe((result) => this.emit(result));
   }
 
   /** Uso interno: cierra de verdad (terminó la animación de salida, o no hay que esperarla). */
   finish(): void {
     this.state.set('closed');
     this.cdkRef?.close(this.result);
+  }
+
+  /** Uso interno: se cerró antes de abrirse. */
+  discard(): void {
+    this.state.set('closed');
+    this.emit(this.result);
+  }
+
+  private emit(result: R | undefined): void {
+    this.closed.next(result);
+    this.closed.complete();
   }
 }
 
@@ -251,6 +268,7 @@ export class MimiDialogShell {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly document = inject(DOCUMENT);
   private readonly injector = inject(Injector);
+  private readonly service = inject(MimiDialogService);
   protected readonly ref = inject<MimiDialogRef>(MimiDialogRef);
   protected readonly options = inject(MIMI_DIALOG_SHELL_OPTIONS);
   protected readonly text = inject(MIMI_DIALOG_TEXT);
@@ -304,6 +322,8 @@ export class MimiDialogShell {
         const container = this.container;
         // `autoFocus` con un selector que no encuentra nada deja el foco fuera: va al panel.
         if (container && !container.contains(this.document.activeElement)) container.focus();
+        // Con el foco ya aquí, los diálogos de abajo se ocultan a los lectores de pantalla.
+        this.service.syncStack();
         if (isDevMode() && !this.options.config.ariaLabel && !this.ref.titleId()) {
           console.warn(
             'Mimi Dialog: el diálogo no tiene nombre accesible. Marca su título con ' +
@@ -330,17 +350,75 @@ function setAttribute(element: HTMLElement, name: string, value: string | null):
  *
  * El contenido es un componente o un `TemplateRef`. Dentro: `inject(MIMI_DIALOG_DATA)` y
  * `inject(MimiDialogRef).close(resultado)`.
+ *
+ * El diálogo se abre después del render en curso: si lo pide un ítem de menú, el menú ya se
+ * cerró y devolvió el foco a su botón, y el diálogo lo devuelve ahí al cerrar (no al ítem, que ya
+ * no existe). Con varios abiertos, los lectores de pantalla solo ven el de arriba.
  */
 @Injectable({ providedIn: 'root' })
 export class MimiDialogService {
   private readonly dialog = inject(Dialog);
+  private readonly injector = inject(Injector);
+  /** Los diálogos, en el orden en que se pidieron (también los que todavía no se abrieron). */
   private readonly refs = new Set<MimiDialogRef<unknown>>();
+  /** El elemento de cada diálogo ya abierto, el que se oculta a los lectores. */
+  private readonly hosts = new Map<MimiDialogRef<unknown>, HTMLElement>();
 
   open<R = unknown, D = unknown>(
     content: Type<unknown> | TemplateRef<unknown>,
     config: MimiDialogConfig<D> = {},
   ): MimiDialogRef<R> {
     const ref = new MimiDialogRef<R>();
+    const tracked = ref as MimiDialogRef<unknown>;
+    this.refs.add(tracked);
+    afterNextRender(
+      {
+        write: () => {
+          // Se cerró antes de abrirse (closeAll, o el componente que lo pidió se destruyó).
+          if (ref.state() === 'closed') {
+            this.refs.delete(tracked);
+            ref.discard();
+            return;
+          }
+          try {
+            this.attach(ref, content, config);
+          } catch (error) {
+            // El error llega al ErrorHandler; afterClosed() emite sin resultado.
+            this.refs.delete(tracked);
+            ref.discard();
+            throw error;
+          }
+        },
+      },
+      { injector: this.injector },
+    );
+    return ref;
+  }
+
+  /** Cierra todos los diálogos abiertos. */
+  closeAll(): void {
+    for (const ref of [...this.refs]) ref.close();
+  }
+
+  /**
+   * Uso interno: solo el diálogo de arriba queda visible para los lectores de pantalla; los de
+   * abajo llevan `aria-hidden` hasta que el de arriba empieza a cerrarse. El CDK hace lo mismo
+   * con el resto de la página, pero no entre diálogos.
+   */
+  syncStack(): void {
+    const open = [...this.hosts.keys()].filter((ref) => ref.state() === 'open');
+    const top = open.at(-1);
+    for (const [ref, host] of this.hosts) {
+      if (ref.state() === 'open' && ref !== top) host.setAttribute('aria-hidden', 'true');
+      else host.removeAttribute('aria-hidden');
+    }
+  }
+
+  private attach<R, D>(
+    ref: MimiDialogRef<R>,
+    content: Type<unknown> | TemplateRef<unknown>,
+    config: MimiDialogConfig<D>,
+  ): void {
     const options: MimiDialogShellOptions = { content, config };
     const autoFocus = config.autoFocus ?? 'first';
     const cdkRef = this.dialog.open<R, D>(MimiDialogShell, {
@@ -360,7 +438,10 @@ export class MimiDialogService {
         { provide: MIMI_DIALOG_SHELL_OPTIONS, useValue: options },
       ],
     });
-    ref.connect(cdkRef);
+    const tracked = ref as MimiDialogRef<unknown>;
+    // Al empezar a cerrarse, el de abajo vuelve a los lectores antes de recibir el foco.
+    ref.connect(cdkRef, () => this.syncStack());
+    this.hosts.set(tracked, cdkRef.overlayRef.hostElement);
 
     const closeOnEscape = !config.disableClose && (config.closeOnEscape ?? true);
     const closeOnBackdropClick = !config.disableClose && (config.closeOnBackdropClick ?? true);
@@ -374,16 +455,12 @@ export class MimiDialogService {
       if (closeOnBackdropClick) ref.close();
     });
 
-    const tracked = ref as MimiDialogRef<unknown>;
-    this.refs.add(tracked);
     // También cuando lo cierra el CDK por su cuenta (una navegación, o al destruirse).
-    cdkRef.closed.subscribe(() => this.refs.delete(tracked));
-    return ref;
-  }
-
-  /** Cierra todos los diálogos abiertos. */
-  closeAll(): void {
-    for (const ref of [...this.refs]) ref.close();
+    cdkRef.closed.subscribe(() => {
+      this.refs.delete(tracked);
+      this.hosts.delete(tracked);
+      this.syncStack();
+    });
   }
 }
 

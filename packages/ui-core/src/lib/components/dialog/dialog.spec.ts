@@ -384,6 +384,81 @@ describe('MimiDialog', () => {
     expect(first.closed.length).toBe(1);
   });
 
+  it('apilados: los de abajo quedan ocultos a los lectores hasta que se cierra el de arriba', async () => {
+    const { fixture, openWith, escape, containers, root } = await setup();
+    const host = (container: HTMLElement) => container.closest('.cdk-global-overlay-wrapper')!;
+    await openWith();
+    const [first] = containers();
+    expect(host(first).hasAttribute('aria-hidden')).toBe(false);
+
+    await openWith({ data: { name: 'Bruno' } });
+    const second = containers()[1];
+    expect(host(first).getAttribute('aria-hidden')).toBe('true');
+    expect(host(second).hasAttribute('aria-hidden')).toBe(false);
+    await openWith({ data: { name: 'Carla' } });
+    const third = containers()[2];
+    expect(host(first).getAttribute('aria-hidden')).toBe('true');
+    expect(host(second).getAttribute('aria-hidden')).toBe('true');
+    expect(third.contains(document.activeElement)).toBe(true);
+
+    // Al empezar a cerrarse el de arriba, el de abajo vuelve antes de recibir el foco.
+    let finish!: () => void;
+    const finished = new Promise<void>((resolve) => (finish = resolve));
+    third.querySelector<HTMLElement>('[data-mimi-overlay-panel]')!.getAnimations = () => [
+      { finished } as unknown as Animation,
+    ];
+    await escape();
+    expect(containers().length).toBe(3);
+    expect(host(second).hasAttribute('aria-hidden')).toBe(false);
+    expect(host(first).getAttribute('aria-hidden')).toBe('true');
+    finish();
+    await settle(fixture);
+    expect(containers().length).toBe(2);
+    await escape();
+    expect(host(first).hasAttribute('aria-hidden')).toBe(false);
+    expect(root.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('se abre después del render en curso: el foco vuelve a donde estaba entonces (menús)', async () => {
+    const { fixture, service, opener, container, inDialog } = await setup();
+    // Un ítem de menú: pide el diálogo en su evento y enseguida el menú lo quita y devuelve el
+    // foco a su botón (opener). El diálogo debe recordar el botón, no el ítem.
+    const item = document.createElement('button');
+    document.body.appendChild(item);
+    item.focus();
+    const ref = service.open(UserForm, { data: { name: 'Ana' } });
+    expect(container()).toBeNull();
+    opener.focus();
+    item.remove();
+    const closed: unknown[] = [];
+    ref.afterClosed().subscribe((result) => closed.push(result));
+    await settle(fixture);
+    expect(container()).not.toBeNull();
+    inDialog('cancel').click();
+    await settle(fixture);
+    expect(closed).toEqual([undefined]);
+    expect(document.activeElement).toBe(opener);
+  });
+
+  it('cerrado antes de abrirse: no se abre y afterClosed emite el resultado', async () => {
+    const { fixture, service, container } = await setup();
+    const ref = service.open<string>(UserForm, { data: { name: 'Ana' } });
+    const closed: unknown[] = [];
+    ref.afterClosed().subscribe((result) => closed.push(result));
+    ref.close('nada');
+    await settle(fixture);
+    expect(container()).toBeNull();
+    expect(closed).toEqual(['nada']);
+
+    const other = service.open(UserForm, { data: { name: 'Ana' } });
+    const otherClosed: unknown[] = [];
+    other.afterClosed().subscribe((result) => otherClosed.push(result));
+    service.closeAll();
+    await settle(fixture);
+    expect(container()).toBeNull();
+    expect(otherClosed).toEqual([undefined]);
+  });
+
   it('el resto de la página queda oculto a los lectores mientras está abierto', async () => {
     const { fixture, root, openWith, service } = await setup();
     expect(root.hasAttribute('aria-hidden')).toBe(false);
