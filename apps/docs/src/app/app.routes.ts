@@ -90,6 +90,12 @@ export const routes: Routes = [
           import('./pages/docs/components/confirm/confirm-page').then((m) => m.ConfirmPage),
       },
       {
+        path: 'components/tabs',
+        title: 'Tabs · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/tabs/tabs-page').then((m) => m.TabsPage),
+      },
+      {
         path: 'components/toast',
         title: 'Toast · Mimi',
         loadComponent: () =>

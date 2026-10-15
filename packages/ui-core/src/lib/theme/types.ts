@@ -316,6 +316,17 @@ export interface MimiToastTokens {
 }
 
 /**
+ * Tabs. Los colores (pestañas, indicador y píldora) van en el CSS (`--mimi-tabs-fg`,
+ * `-active-fg`, `-indicator`, `-pill-bg`, `-pill-active`).
+ */
+export interface MimiTabsTokens {
+  /** Alto de las pestañas subrayadas (44px). */
+  height?: string;
+  /** Curva del indicador (`cubic-bezier(.3, 1.35, .5, 1)`). */
+  spring?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -338,6 +349,7 @@ export interface MimiComponentTokens {
   dialog?: MimiDialogTokens;
   confirm?: MimiConfirmTokens;
   toast?: MimiToastTokens;
+  tabs?: MimiTabsTokens;
 }
 
 export interface MimiThemePreset {

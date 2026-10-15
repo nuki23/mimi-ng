@@ -60,6 +60,9 @@ describe('MimiTooltip', () => {
     const root = fixture.nativeElement as HTMLElement;
     document.body.appendChild(root);
     await settle(fixture);
+    // jsdom decide :focus-visible por el último evento de teclado o de ratón del documento, que
+    // puede venir de otro archivo de pruebas. Un Tab deja la modalidad en teclado, como en uso real.
+    document.body.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab', bubbles: true }));
     const button = (name: string) => root.querySelector<HTMLElement>(`[data-test=${name}]`)!;
     const tooltip = () => document.querySelector<HTMLElement>('[role=tooltip]');
     const hover = async (el: HTMLElement, pointerType = 'mouse') => {

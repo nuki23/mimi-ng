@@ -33,6 +33,7 @@ const FOLDER: Record<TokenComponent, string> = {
   dialog: 'dialog',
   confirm: 'confirm',
   toast: 'toast',
+  tabs: 'tabs',
 };
 
 /**
@@ -49,6 +50,9 @@ const GLOBALS = new Set([
   '--mimi-tooltip-arrow-offset',
   // Dirección de la entrada y la salida del Toast (arriba o abajo), la escribe el componente.
   '--mimi-toast-enter',
+  // Cuántas pestañas hay y cuál se pinta: las escribe Tabs para colocar el indicador.
+  '--mimi-tabs-count',
+  '--mimi-tabs-index',
 ]);
 
 /** Código del componente (sin pruebas). */

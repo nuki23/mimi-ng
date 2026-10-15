@@ -124,6 +124,17 @@
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/overlay"]
     },
+    "tabs": {
+      "type": "component",
+      "files": ["components/tabs/tabs.ts", "components/tabs/index.ts"],
+      "dependencies": {
+        "class-variance-authority": "^0.7.1"
+      },
+      "peerDependencies": {
+        "@angular/aria": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles"]
+    },
     "toast": {
       "type": "component",
       "files": [

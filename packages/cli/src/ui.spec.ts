@@ -475,6 +475,39 @@ describe('mimi (alias ui)', () => {
     expect(deps['@angular/cdk']).toBe('~22.1.0');
   });
 
+  it('tabs: solo importa aria, pero instala también @angular/cdk (aria lo necesita)', async () => {
+    const { run, tree, logs } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const before = tree.readContent(`/${cssPath}`);
+    const result = await run('mimi', { components: ['tabs'] }, tree);
+    for (const file of ['tabs/tabs.ts', 'tabs/index.ts']) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(template(`components/${file}`));
+    }
+    for (const util of ['cn', 'control-styles']) {
+      expect(result.exists(`/${UI}/utils/${util}.ts`), util).toBe(true);
+    }
+    expect(result.exists(`/${UI}/utils/overlay.ts`)).toBe(false);
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/aria']).toBe(deps['@angular/core']);
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+    expect(deps['class-variance-authority']).toBeDefined();
+    expect(logs.map((l) => l.message)).toContain(`  @angular/cdk@${deps['@angular/core']}`);
+    // Sin CDK Overlay: no toca el CSS global.
+    expect(result.readContent(`/${cssPath}`)).toBe(before);
+  });
+
+  it('tabs: con @angular/cdk instalado, aria en su versión exacta y el cdk sin tocar', async () => {
+    const { run, tree } = await initialized();
+    const pkg = json(tree, '/package.json');
+    pkg.dependencies['@angular/cdk'] = '^22.0.0';
+    tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+    tree.create('/node_modules/@angular/cdk/package.json', JSON.stringify({ version: '22.1.7' }));
+    const result = await run('mimi', { components: ['tabs'] }, tree);
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/aria']).toBe('22.1.7');
+    expect(deps['@angular/cdk']).toBe('^22.0.0');
+  });
+
   it('los componentes sin cssImports no tocan el CSS global', async () => {
     const { run, tree } = await initialized();
     const cssPath = json(tree, '/mimi.json').tailwind.css as string;

@@ -127,6 +127,11 @@ function inspect(tree: Tree, options: UiOptions): Plan {
             : version;
     }
   }
+  // aria necesita el cdk (bidi, a11y, platform). Un ítem que solo importa aria (Tabs) no declara
+  // el cdk como peer; sin otro ítem que lo traiga, va con la misma versión que aria.
+  if (newPackages['@angular/aria'] && !installed['@angular/cdk'] && !newPackages['@angular/cdk']) {
+    newPackages['@angular/cdk'] = newPackages['@angular/aria'];
+  }
 
   const componentsDir = normalizePath(config.aliases?.components ?? 'src/app/components/ui');
   return { componentsDir, config, items, newPackages };
@@ -136,7 +141,7 @@ function inspect(tree: Tree, options: UiOptions): Plan {
  * @angular/aria pide como peer la versión exacta de @angular/cdk (22.1.7 → cdk 22.1.7). Si el cdk
  * está instalado, aria va en esa versión (de `node_modules`, que el árbol del schematic lee del
  * disco); si está declarado pero sin instalar, con su mismo rango; si no hay cdk, con el rango de
- * `@angular/core`, igual que el cdk que se agrega junto con él.
+ * `@angular/core`, igual que el cdk que se agrega junto con él (lo declare otro ítem o no).
  */
 function ariaVersion(tree: Tree, installed: Record<string, string>, fallback: string): string {
   const cdk = tree.read('node_modules/@angular/cdk/package.json');

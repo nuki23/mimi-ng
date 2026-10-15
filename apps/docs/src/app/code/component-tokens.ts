@@ -35,7 +35,8 @@ export type TokenComponent =
   | 'select'
   | 'dialog'
   | 'confirm'
-  | 'toast';
+  | 'toast'
+  | 'tabs';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -57,6 +58,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   dialog: 'dialog',
   confirm: 'confirm',
   toast: 'toast',
+  tabs: 'tabs',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -893,6 +895,55 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-shadow-popover',
       preset: false,
       description: 'Sombra de la tarjeta (cambia entre claro y oscuro).',
+    },
+  ],
+  tabs: [
+    {
+      name: '--mimi-tabs-height',
+      default: '44px',
+      preset: true,
+      description: 'Alto de las pestañas subrayadas.',
+    },
+    {
+      name: '--mimi-tabs-spring',
+      default: 'cubic-bezier(.3, 1.35, .5, 1)',
+      preset: true,
+      description: 'Curva del indicador al deslizarse.',
+    },
+    {
+      name: '--mimi-tabs-fg',
+      default: 'muted-foreground',
+      inherits: '--mimi-muted-foreground',
+      preset: false,
+      description: 'Texto de las pestañas no elegidas.',
+    },
+    {
+      name: '--mimi-tabs-active-fg',
+      default: 'foreground',
+      inherits: '--mimi-foreground',
+      preset: false,
+      description: 'Texto de la pestaña elegida (y del hover).',
+    },
+    {
+      name: '--mimi-tabs-indicator',
+      default: 'foreground',
+      inherits: '--mimi-foreground',
+      preset: false,
+      description: 'Subrayado de la pestaña elegida.',
+    },
+    {
+      name: '--mimi-tabs-pill-bg',
+      default: 'muted',
+      inherits: '--mimi-muted',
+      preset: false,
+      description: 'Fondo de la píldora.',
+    },
+    {
+      name: '--mimi-tabs-pill-active',
+      default: 'card',
+      inherits: '--mimi-card',
+      preset: false,
+      description: 'Fondo de la pestaña elegida en la píldora.',
     },
   ],
 };

@@ -153,6 +153,20 @@ Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → 
 
   **Comparado con el menú:** más rodeos en número, casi todos del buscador dentro del panel; ninguno usa API privada.
 
+  Y los de Tabs (G1.9), con la misma separación. Todos usan API pública.
+
+  **Pegamento:**
+  - **Directivas de aria dentro de la plantilla de Mimi:** `ngTab` y `ngTabPanel` buscan a `ngTabs` por DI; exponerlas con `hostDirectives` está prohibido (spec 4).
+  - **Ocultar los paneles:** aria solo les pone `inert`; Mimi los oculta con `hidden`.
+  - **Pestaña por defecto:** sin valor aria no elige ninguna; Mimi elige la primera habilitada.
+  - **Clic, Enter o Espacio en la pestaña que se pinta** mientras se espera otro valor: aria no emite (ya está elegida para él); Mimi toma la elección.
+
+  **Choque con el comportamiento de aria:**
+  - **aria vacía el modelo** si el valor no coincide con una pestaña (pestañas que llegan después, o la elegida que se quita). Mimi aplica la regla general de la spec 4: el valor vive en Mimi y nunca se toma el `undefined` de aria. Alarma: «alarma (choque 1)» en `tabs.spec.ts`.
+  - **El `tabindex="0"` no sigue al valor después de interactuar**, y quitar la pestaña activa deja la fila sin entrada con Tab. Mimi recrea el `ngTabList` cuando el valor cambia desde fuera o cambian las pestañas, sin el foco dentro. Alarma: «alarma (choque 2)» en `tabs.spec.ts`.
+
+  **Comparado con el Select:** menos rodeos (4 y 2 frente a 9 y 3); ninguno usa API privada.
+
 - [x] G1.6 Dialog (servicio, X siempre visible), con `@angular/cdk/dialog`. Diseño: `F2 Overlays`.
   - **Dos formas de uso:** `MimiDialogService.open()` (base; devuelve un `MimiDialogRef` con `afterClosed()`) y `<mimi-dialog [(open)]>` en la plantilla, sobre el mismo servicio. Piezas: encabezado, título, descripción, cuerpo, pie y `[mimiDialogClose]`.
   - **Cierre:** `closeOnEscape` y `closeOnBackdropClick`, más `disableClose` como atajo. La X funciona siempre; `closeButton: false` la oculta solo para confirmaciones con sus propios botones (lo usará la G1.7).
@@ -175,7 +189,12 @@ Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → 
   - **Accesibilidad:** con acción, sin tiempo; F8 y Escape; pausa con puntero, foco y pestaña oculta; los de atrás `inert`; el foco pasa al vecino al cerrarse; movimiento reducido.
   - **Comprobado en Chrome real (CDP):** medidas del diseño (340px a 16px del borde, 68px con una línea, relleno 12/40/12/14, X de 24px, ícono de 18px, título 14px/600, descripción 12.5px); pila colapsada (12px y 5 %, tres visibles, los demás inertes) y expandida con el puntero (8px; el hueco entre toasts no la colapsa); región «Notificaciones (F8)» antes del primer toast y anuncios (polite; assertive para error); F8, Tab y Escape (el foco vuelve al botón); con acción sigue a los 6.8 s; sin acción se cierra a los 6 s, y con el puntero encima no; promesa (cargando → éxito o error); encima de un Dialog abierto (con `aria-owns` del anunciador en el diálogo; Escape en el toast no cierra el diálogo); sólido con la sombra del tono; claro y oscuro; movimiento reducido; móvil a 360×640 (328px).
   - **JS inicial:** +0.19 kB (ruta y sidebar) y +0.28 kB por los textos en español en `app.config` (decidido por el usuario): +0.47 kB crudo en total. **CSS global:** +4.21 kB (queda en 106.18 kB; aviso en 120 kB).
-- [ ] G1.9 Tabs con indicador animado, estilo HeroUI, con `@angular/aria/tabs`. Después, la tarea 5.11. Diseño: `F2 Toast Tabs Toolbar`. Empezar con un spike de aria como en el Select y comparar la cuenta de rodeos.
+- [x] G1.9 Tabs con indicador animado, estilo HeroUI, con `@angular/aria/tabs`. Después, la tarea 5.11. Diseño: `F2 Toast Tabs Toolbar`. Empezar con un spike de aria como en el Select y comparar la cuenta de rodeos.
+  - **Spike (Chrome real):** aria da roles, foco itinerante, flechas con vuelta, Inicio/Fin, activación automática o manual, RTL, deshabilitadas y contenido diferido con `preserveContent`. **Rodeos: 4 de pegamento y 2 choques** (lista en la G1.5b). Borradores de dos issues para angular/components, fuera del repo.
+  - **API:** `<mimi-tabs [(value)] variant preserveContent aria-label>` con `<ng-template mimiTab="valor" label [count] [disabled]>` (el contenido es el panel, diferido) y `<ng-template mimiTabLabel>` opcional para íconos. Sin `tone`. Deshabilitadas enfocables pero no elegibles.
+  - **CLI:** el ítem `tabs` declara solo `@angular/aria`; la CLI agrega `@angular/cdk` con la misma versión cuando agrega aria y el proyecto no lo tiene (aria lo necesita).
+  - **Comprobado en Chrome real (CDP):** medidas de las dos variantes (44px y 34px, 14px y 13,5px, contador de 20px, ícono de 15px, 14px hasta el panel); indicador con la curva del token en 0,45 s, alineado a la elegida después de clics, teclado, cambio de ancho de la ventana, letra de 20px y derecha a izquierda; sin transición con movimiento reducido; teclado (flechas con vuelta, Inicio/Fin, Tab al panel); deshabilitada enfocable y no elegible; los dos choques contenidos (valor desde un botón con el `tabindex="0"` en la elegida; valor que llega antes que su pestaña); árbol de accesibilidad; claro y oscuro; móvil a 360px (cuatro pestañas de 51px: las etiquetas se cortan con puntos suspensivos).
+  - **JS inicial:** +0.23 kB (ruta y sidebar). **CSS global:** +3.30 kB (queda en 109.43 kB; aviso en 120 kB).
 - [ ] G1.10 mimi-toolbar, con `@angular/aria/toolbar`, horizontal o vertical, inspirada en VsCanvasToolbar de Vuesax (sin modo Dock): píldora translúcida, ítem activo sobre un disco, anillo animado en hover y selección, tooltips, flechas, separadores, contadores, estado presionado y herramientas propias del usuario. Diseño: `F2 Toast Tabs Toolbar`. Empezar con un spike de aria como en el Select y comparar la cuenta de rodeos.
 - [ ] G1.11 Pagination: píldora flotante compacta como mimi-toolbar (`[←] [input de página] / total [→] | registros por página`). Tamaño SM por defecto (hereda la altura global de control SM) y MD opcional; variantes flotante y en línea; en móvil, sin el selector de registros. Diseño: `F7 Pagination` (con `Pagination`).
 - [ ] G1.12 Página «Accesibilidad y base técnica» del showcase, en Primeros pasos (ruta `/docs/foundations`), antes de publicar la 0.2.0. Contenido: qué usa Mimi por dentro (`@angular/aria` para teclado, foco y atributos ARIA; `@angular/cdk` para posicionar popups y diálogos; las dos son paquetes oficiales del equipo de Angular y `ng g mimi` las instala sola cuando un componente las necesita); por qué (la accesibilidad de un Select o de un menú es muy difícil de hacer bien a mano, y con los paquetes oficiales las correcciones llegan con `ng update`); qué es de Mimi y qué no (lo copiado es la estructura, los estilos y la API; el teclado y el foco vienen de aria; todo lo de Mimi se puede modificar); la garantía (la API de Mimi no depende de la de aria: si aria cambia, Mimi lo absorbe por dentro y el código del usuario sigue igual); una tabla de qué componentes usan cada paquete y cuáles ninguno (los de la 0.1.0); y una sección de accesibilidad con lo que Mimi garantiza en teclado, lectores de pantalla, movimiento reducido y contraste. Incluir también la regla de `class` (spec 4): «`class` va al elemento visible principal del componente; si además hay un panel aparte, se usa `panelClass`. En las directivas sobre un elemento del usuario, el panel recibe `<nombre>Class`», con la tabla de Popover, Tooltip, los menús y Select. Con la página: una línea en el README de la CLI sobre las dependencias nuevas y una pregunta frecuente en el CHANGELOG de la 0.2.0 («¿Por qué ahora se instalan @angular/aria y @angular/cdk?»).
@@ -249,6 +268,16 @@ Solo sirve para editar los componentes de Mimi tal como existen: sin presets gua
   - **Posiciones, móvil, entrada y salida:** el diseño solo muestra `bottom-right`. Las otras cinco, el ancho en móvil (`100vw − 32px`), `safe-area-inset` (no se usa), la entrada (desde abajo o arriba con opacidad, 0,4 s) y la salida (0,3 s) no están en el diseño.
   - **Separación expandida:** 8px del diseño, sin token.
   - **Botón de acción de 28px:** igual que el de 36px de Confirm, no es un tamaño de Button.
+
+  Tabs (G1.9):
+  - **Deshabilitadas:** no están en el diseño. Mimi las muestra con `--mimi-disabled-opacity` y cursor de no permitido; se enfocan con las flechas pero no se eligen. Definir cómo se ven.
+  - **Vertical:** fuera por ahora. Pendiente de diseño: el indicador y la píldora en vertical (aria ya maneja ↑/↓).
+  - **Anchos distintos:** el indicador funciona con columnas iguales (porcentajes, sin medir). Pestañas de ancho propio no están soportadas, ni padding o gap propios en la píldora.
+  - **Presión al pulsar:** el diseño usa 0,96 (subrayada) y 0,95 (píldora); Mimi usa `--mimi-press-scale` (0,975).
+  - **Sin `tone`:** el diseño no tiene tonos para Tabs; el contador es fijo en `info-soft`.
+  - **Alto de la píldora (34px) y duración del indicador (0,45 s):** sin token.
+  - **Panel:** el diseño le da 4px 2px de relleno y 14px de separación con las pestañas (puede ser parte de la demo); Mimi los usa.
+  - **Móvil:** con cuatro pestañas a 360px, cada una mide 51px y las etiquetas se cortan con puntos suspensivos. El diseño no muestra el caso.
 
 - [ ] T.2 Modo Componente (estructura de Vuesax): lista de componentes a la izquierda; barra flotante arriba (mimi-toolbar) con Volver, Móvil/Tablet/Escritorio, Claro/Oscuro, fondo del lienzo, «Uno | Ver todos» (matriz tonos × variantes), «Código» y «Copiar prompt»; un solo componente en el lienzo; la tira de variantes abajo.
 - [ ] T.3 Panel derecho: «Vista previa», que no se guarda (tono, estado, tamaño y texto), y «Estilo del componente», que sí se guarda (radio: Rounded, Squircle, Pill o un valor propio; borde; efectos: sombra, glow y escala al presionar). Cada propiedad muestra su origen (el token del que hereda, o «Mío»); pestaña «Variables» con todas las variables del componente y su cadena de herencia. Todo valor cambiado por el usuario se etiqueta «Mío».
@@ -334,7 +363,7 @@ Las tareas que eran la Fase 5. Conservan sus números porque el código y la spe
 - [ ] 5.8 Buscador ⌘K en el header del showcase, con Command (G3.3).
 - [ ] 5.9 Selector ES/EN en el header (el idioma va como prefijo en la ruta).
 - [ ] 5.10 Navegación superior del header (Documentación · Componentes · Temas), como en el diseño. Revisado en la 2.12: todavía no aporta. Documentación y Componentes ya están a un clic (botones de la landing y sidebar), y «Temas» apuntaría a una página que no existe. Hacerla cuando exista Theme Studio, junto con el buscador ⌘K, que ocupa el mismo lugar del header; «Documentación» y «Componentes» viven bajo `/docs` y necesitan una regla propia para el estado activo, y en móvil irían en el panel.
-- [ ] 5.11 Cuando exista el componente Tabs (G1.9), reemplazar las pestañas hechas a mano de CodePreview e InstallCommand.
+- [ ] 5.11 Cuando exista el componente Tabs (G1.9), reemplazar las pestañas hechas a mano de CodePreview e InstallCommand. Dato de la G1.9: los dos se usan solo en las páginas de componentes (lazy) y en `/dev/code`; ningún archivo del JS inicial contiene su código, así que usar Tabs sumaría 0 kB al JS inicial (el costo de aria Tabs iría a los chunks de esas páginas).
 - [ ] 5.12 GitHub Actions: pruebas de la CLI en proyectos limpios con cada versión de Angular soportada.
 - [ ] 5.13 Tabla de compatibilidad en la documentación.
 - [ ] 5.14 Prerender del showcase: páginas estáticas y 404 con estado real (hoy el modo SPA de Cloudflare responde 200 y la 404 lleva `noindex`). Revisar `not_found_handling` en `wrangler.jsonc` (pasaría a `404-page` con un `404.html`).
