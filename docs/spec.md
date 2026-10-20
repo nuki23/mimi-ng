@@ -1180,7 +1180,7 @@ Verificado en Angular 22.1.7 con una prueba real: un control que implementa solo
 
 ## 10. Showcase (`apps/docs`)
 
-El diseño visual sale de `docs/design/Mimi Sitio.dc.html`. Los botones del layout (header, panel móvil, copiar, inicio, 404 y páginas `/dev`) usan `mimiBtn` desde la tarea 2.1; las pestañas siguen hechas a mano hasta que exista Tabs.
+El diseño visual sale de `docs/design/Mimi Sitio.dc.html`. Los botones del layout (header, panel móvil, copiar, inicio, 404 y páginas `/dev`) usan `mimiBtn` desde la tarea 2.1; las pestañas de CodePreview e InstallCommand usan `<mimi-tabs>` desde la tarea 5.11.
 
 ### Layout (tarea 1.6)
 
@@ -1258,13 +1258,13 @@ Lee los `h2[id]` y `h3[id]` del contenido de la página con un `MutationObserver
 
 Están en `apps/docs/src/app/code/`. Las medidas salen de la página de Input de `Mimi Sitio.dc.html`.
 
-| Pieza                | Qué hace                                                                                                                                                                                                                                                                                                                                    |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `CodePreview`        | Tarjeta con pestañas tipo segmento (Preview con ícono de ojo, Código con ícono de código) y un botón «Copiar». El lienzo tiene 260px de alto mínimo, borde punteado, `bg-background`, contenido centrado y tres puntos decorativos. El ejemplo va por `ng-content`; `code` es el texto de su archivo. `lang` vale `angular-ts` por defecto. |
-| `CodeBlock`          | Bloque de código con botón copiar. Entradas: `code`, `lang`, `prompt` (`$` delante de un comando, que no se copia), `bordered`, `copyable` y `roomy` (la variante holgada del panel Código).                                                                                                                                                |
-| `InstallCommand`     | Pestañas subrayadas `Angular CLI` (`ng g mimi <nombre>`) y `Forma larga` (`ng g @mimi-ng/cli:ui <nombre>`), cada una con un `CodeBlock`. La de pnpm (`pnpm mimi add`) vuelve con la tarea 5.3.                                                                                                                                              |
-| `CopyButton`         | `navigator.clipboard.writeText` con try/catch. Muestra un check durante 2 s y anuncia «Copiado» en una región `aria-live`. Tiene una variante solo ícono (32px) y otra con texto.                                                                                                                                                           |
-| `HighlighterService` | Shiki (ver abajo).                                                                                                                                                                                                                                                                                                                          |
+| Pieza                | Qué hace                                                                                                                                                                                                                                                                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CodePreview`        | Tarjeta con `<mimi-tabs variant="pill">` (Preview con ícono de ojo, Código con ícono de código) y un botón «Copiar». El lienzo tiene 260px de alto mínimo, borde punteado, `bg-background`, contenido centrado y tres puntos decorativos. El ejemplo va por `ng-content`; `code` es el texto de su archivo. `lang` vale `angular-ts` por defecto. |
+| `CodeBlock`          | Bloque de código con botón copiar. Entradas: `code`, `lang`, `prompt` (`$` delante de un comando, que no se copia), `bordered`, `copyable` y `roomy` (la variante holgada del panel Código).                                                                                                                                                      |
+| `InstallCommand`     | `<mimi-tabs>` subrayadas `Angular CLI` (`ng g mimi <nombre>`) y `Forma larga` (`ng g @mimi-ng/cli:ui <nombre>`), cada una con un `CodeBlock`. La de pnpm (`pnpm mimi add`) vuelve con la tarea 5.3.                                                                                                                                               |
+| `CopyButton`         | `navigator.clipboard.writeText` con try/catch. Muestra un check durante 2 s y anuncia «Copiado» en una región `aria-live`. Tiene una variante solo ícono (32px) y otra con texto.                                                                                                                                                                 |
+| `HighlighterService` | Shiki (ver abajo).                                                                                                                                                                                                                                                                                                                                |
 
 **El código mostrado es el código real.** Cada ejemplo es un componente en su propio archivo, por ejemplo `pages/docs/components/button/examples/button-variants.example.ts`. La pestaña Código muestra ese mismo archivo, importado como texto con el atributo de importación del builder de Angular:
 
@@ -1292,9 +1292,17 @@ import buttonVariantsSource from './examples/button-variants.example' with { loa
 - Usa el modo dual (`defaultColor: false`): los colores quedan en `--shiki-light` y `--shiki-dark`, y `styles.css` elige según `.dark`. Cambiar de modo no vuelve a resaltar.
 - Con `structure: 'inline'` Shiki devuelve solo los `<span>`: el `<pre>` es nuestro y usa `bg-muted`, como el diseño, en lugar del fondo del tema.
 - Mientras Shiki carga, se muestra el código sin colores con la misma fuente e interlineado, así la página no salta.
+- Lo resaltado se guarda en el servicio (por lenguaje y código) y `peek()` lo devuelve sin esperar. CodePreview resalta su código por adelantado cuando el navegador está libre (`requestIdleCallback`, o `setTimeout` donde no existe), y `CodeBlock` empieza con `peek()`: al abrir la pestaña Código, el código sale con colores desde el primer pintado.
 - Shiki pone los colores en atributos `style`, que el sanitizador de Angular eliminaría. `DomSanitizer.bypassSecurityTrustHtml` se usa **solo** para su salida, en `HighlighterService`: el contenido es código fuente propio y estático, nunca texto del usuario.
 
-**Pestañas.** Están hechas a mano hasta que exista el componente Tabs: `role="tablist"`, `tab` y `tabpanel`, `aria-selected`, `aria-controls` y `aria-labelledby`. Solo la pestaña activa recibe foco con Tab. Las flechas izquierda/derecha (circulares), Inicio y Fin cambian de pestaña y mueven el foco.
+**Pestañas (tarea 5.11).** CodePreview e InstallCommand usan `<mimi-tabs preserveContent>`, el mismo componente que copia el usuario: roles, `aria-selected`, `aria-controls`, `aria-labelledby`, foco itinerante, flechas con vuelta, Inicio y Fin vienen de Tabs.
+
+- CodePreview: píldora de `w-52` (las columnas son iguales) y el botón Copiar en posición absoluta a la derecha, pero **antes** de las pestañas en el DOM: el orden de Tab es Copiar → pestaña elegida → panel. La línea de la barra es el `border-t` de los paneles, y su anillo de foco va hacia dentro (`focus-visible:-outline-offset-2`) porque la tarjeta recorta (`overflow-hidden`).
+- InstallCommand: subrayado de `w-64`, indicador en `foreground` (el de Tabs) y la línea a todo el ancho con el `border-t` del panel.
+- `mimi-tabs` lleva `style="gap: 0"`: el estilo estático de la plantilla gana al del anfitrión (`gap: 14px`).
+- El contenido es diferido: el panel Código se crea al elegirlo (una página con muchos ejemplos ya no resalta todos al cargar; el resaltado por adelantado corre en tiempo libre) y `preserveContent` conserva la vista previa, con su estado, al ir y volver.
+- El panel visible es enfocable (`tabindex="0"`, de aria): en Código hay dos paradas, el panel y el `<pre>`. Se decidió dejarlo así.
+- Pruebas: `code/code-preview.testing.ts` tiene `settle()` (Tabs crea los paneles en un `afterRenderEffect`, así que un solo `whenStable` no alcanza) y `examples()`, que devuelve el lienzo de cada ejemplo y su `code()`. Las pruebas de páginas leen el código con `examples()`; que el panel Código lo muestre lo prueban `code-preview.spec.ts` y `dev/code-page.spec.ts`.
 
 **Accesibilidad.** El `<pre>` tiene `tabindex="0"` y un `aria-label`, para recorrer el scroll horizontal con el teclado.
 

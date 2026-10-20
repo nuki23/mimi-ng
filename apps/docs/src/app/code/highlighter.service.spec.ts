@@ -19,6 +19,16 @@ describe('HighlighterService (Shiki real)', () => {
     expect(result).not.toMatch(/background-color/);
   }, 30_000);
 
+  it('guarda lo resaltado: peek lo devuelve sin esperar y highlight no lo repite', async () => {
+    const service = TestBed.inject(HighlighterService);
+    expect(service.peek('let x = 1;', 'typescript')).toBeNull();
+    const first = await service.highlight('let x = 1;', 'typescript');
+    expect(service.peek('let x = 1;', 'typescript')).toBe(first);
+    expect(await service.highlight('let x = 1;', 'typescript')).toBe(first);
+    // Otro lenguaje, otra entrada.
+    expect(service.peek('let x = 1;', 'json')).toBeNull();
+  }, 30_000);
+
   it('reutiliza la misma instancia y resalta plantillas de Angular', async () => {
     const service = TestBed.inject(HighlighterService);
     const [ts, template] = await Promise.all([

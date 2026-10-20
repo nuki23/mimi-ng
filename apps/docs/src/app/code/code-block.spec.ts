@@ -52,6 +52,35 @@ describe('CodeBlock', () => {
     expect(code.querySelector('span[style]')?.textContent).toBe('ls');
   });
 
+  it('si el código ya está resaltado (peek), sale con colores desde el primer pintado', async () => {
+    const highlight = vi.fn(() => new Promise(() => undefined));
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: HighlighterService,
+          useFactory: () => ({
+            highlight,
+            peek: (code: string) =>
+              code === 'ls'
+                ? TestBed.inject(DomSanitizer).bypassSecurityTrustHtml(
+                    '<span style="--shiki-light:#000">ls</span>',
+                  )
+                : null,
+          }),
+        },
+      ],
+    });
+    const fixture = TestBed.createComponent(CodeBlock);
+    // Con el salto final: peek recibe el código recortado, el mismo que resalta CodePreview.
+    fixture.componentRef.setInput('code', 'ls\n');
+    fixture.detectChanges();
+
+    const code = (fixture.nativeElement as HTMLElement).querySelector('pre code')!;
+    expect(code.hasAttribute('data-highlighted')).toBe(true);
+    expect(code.querySelector('span[style]')?.textContent).toBe('ls');
+    expect(highlight).not.toHaveBeenCalled();
+  });
+
   it('el prompt no forma parte del texto copiado', async () => {
     TestBed.configureTestingModule({
       providers: [

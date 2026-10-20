@@ -19,6 +19,7 @@ __screenshots__/
 
 # Editores y sistema
 .idea/
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json

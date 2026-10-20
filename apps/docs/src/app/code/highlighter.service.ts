@@ -16,8 +16,21 @@ export type CodeLang =
 export class HighlighterService {
   private readonly sanitizer = inject(DomSanitizer);
   private highlighter: Promise<HighlighterCore> | null = null;
+  /** Lo ya resaltado, por lenguaje y código. */
+  private readonly cache = new Map<string, SafeHtml>();
+
+  /**
+   * Lo ya resaltado, sin esperar (null si todavía no). CodeBlock lo usa para pintar el código con
+   * colores desde el primer momento cuando alguien lo resaltó antes (CodePreview).
+   */
+  peek(code: string, lang: CodeLang): SafeHtml | null {
+    return this.cache.get(`${lang}\n${code}`) ?? null;
+  }
 
   async highlight(code: string, lang: CodeLang): Promise<SafeHtml> {
+    const key = `${lang}\n${code}`;
+    const cached = this.cache.get(key);
+    if (cached) return cached;
     const highlighter = await this.load();
     const html = highlighter.codeToHtml(code, {
       lang,
@@ -30,7 +43,9 @@ export class HighlighterService {
     // Es seguro saltarlo aquí: el contenido es código fuente propio y estático del showcase
     // (archivos del repositorio y cadenas escritas en el código), nunca texto del usuario, y
     // Shiki escapa el código al generar el HTML.
-    return this.sanitizer.bypassSecurityTrustHtml(html);
+    const safe = this.sanitizer.bypassSecurityTrustHtml(html);
+    this.cache.set(key, safe);
+    return safe;
   }
 
   private load(): Promise<HighlighterCore> {

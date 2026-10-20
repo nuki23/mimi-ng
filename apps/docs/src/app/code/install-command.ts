@@ -1,14 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  type ElementRef,
-  computed,
-  input,
-  signal,
-  viewChildren,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { MimiTabsImports } from '@/components/ui/tabs';
 import { CodeBlock } from './code-block';
-import { nextTabIndex, uniqueTabsId } from './tab-keys';
 
 interface InstallTab {
   id: 'short' | 'long';
@@ -18,12 +10,12 @@ interface InstallTab {
 
 /**
  * Comandos para agregar un componente (spec, sección 5): `ng g mimi` (tras init, por
- * schematicCollections) y la forma larga. La pestaña de pnpm vuelve cuando exista el comando
- * de Mimi (tarea 5.3).
+ * schematicCollections) y la forma larga, en `<mimi-tabs>` subrayadas. La pestaña de pnpm vuelve
+ * cuando exista el comando de Mimi (tarea 5.3).
  */
 @Component({
   selector: 'app-install-command',
-  imports: [CodeBlock],
+  imports: [CodeBlock, MimiTabsImports],
   templateUrl: './install-command.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -35,20 +27,7 @@ export class InstallCommand {
     { id: 'short', label: 'Angular CLI', command: `ng g mimi ${this.name()}` },
     { id: 'long', label: 'Forma larga', command: `ng g @mimi-ng/cli:ui ${this.name()}` },
   ]);
-  protected readonly selected = signal(0);
-  protected readonly idPrefix = uniqueTabsId('install');
 
-  private readonly tabButtons = viewChildren<ElementRef<HTMLButtonElement>>('tab');
-
-  protected select(index: number): void {
-    this.selected.set(index);
-  }
-
-  protected onKeydown(event: KeyboardEvent): void {
-    const next = nextTabIndex(event.key, this.selected(), this.tabs().length);
-    if (next === null) return;
-    event.preventDefault();
-    this.selected.set(next);
-    this.tabButtons()[next]?.nativeElement.focus();
-  }
+  /** La línea de la barra es el borde superior del panel (a todo el ancho de la tarjeta). */
+  protected readonly panelClass = 'border-t p-0 focus-visible:-outline-offset-2';
 }

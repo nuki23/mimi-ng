@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { examples, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { DialogPage } from './dialog-page';
 
@@ -15,14 +16,13 @@ describe('DialogPage', () => {
       ],
     });
     const fixture = TestBed.createComponent(DialogPage);
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
 
-    const previews = Array.from(el.querySelectorAll('app-code-preview'));
+    const previews = examples(fixture);
     expect(previews.length).toBe(7);
-    for (const preview of previews) {
-      expect(preview.querySelector('button')).not.toBeNull();
-      const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;
+    for (const { example, code } of previews) {
+      expect(example?.querySelector('button')).not.toBeNull();
       expect(code).toContain("from '@/components/ui/dialog';");
       expect(code).toMatch(/export class Dialog\w+Example/);
     }

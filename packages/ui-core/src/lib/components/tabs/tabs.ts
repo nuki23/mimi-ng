@@ -304,14 +304,15 @@ export class MimiTabs {
     indicatorVariants({ variant: this.variant() }),
   );
   protected readonly tabClasses = computed(() => tabVariants({ variant: this.variant() }));
+  // Sin outline-none: en Tailwind 4 pone --tw-outline-style en none y anula el anillo de foco.
   protected readonly tablistClasses = cn(
-    'grid grid-cols-[repeat(var(--mimi-tabs-count),minmax(0,1fr))] rounded-[inherit] outline-none',
+    'grid grid-cols-[repeat(var(--mimi-tabs-count),minmax(0,1fr))] rounded-[inherit]',
     // Con todas deshabilitadas, el foco queda en la fila (aria).
     buttonFocusStyles,
   );
   protected readonly countClasses = COUNT_CLASSES;
   protected readonly panelClasses = computed(() =>
-    cn('px-0.5 py-1 outline-none', buttonFocusStyles, this.panelClass()),
+    cn('px-0.5 py-1', buttonFocusStyles, this.panelClass()),
   );
 
   /** El último valor que puso Mimi (no viene de fuera). */

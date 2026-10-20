@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { settle } from './code-preview.testing';
 import { HighlighterService } from './highlighter.service';
 import { InstallCommand } from './install-command';
 
@@ -14,21 +15,23 @@ describe('InstallCommand', () => {
     });
     const fixture = TestBed.createComponent(InstallCommand);
     fixture.componentRef.setInput('name', 'card');
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
 
+    expect(el.querySelector('[role="tablist"]')?.getAttribute('aria-label')).toBe(
+      'Forma de instalar',
+    );
     const tabs = Array.from(el.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
     const panels = Array.from(el.querySelectorAll<HTMLElement>('[role="tabpanel"]'));
     expect(tabs.map((t) => t.textContent?.trim())).toEqual(['Angular CLI', 'Forma larga']);
-    expect(panels.map((p) => p.querySelector('pre')?.textContent)).toEqual([
-      'ng g mimi card',
-      'ng g @mimi-ng/cli:ui card',
-    ]);
+    expect(tabs[0].getAttribute('aria-selected')).toBe('true');
+    expect(panels[0].querySelector('pre')?.textContent).toBe('ng g mimi card');
     expect(panels[1].hidden).toBe(true);
 
     tabs[1].click();
-    await fixture.whenStable();
+    await settle(fixture);
     expect(panels[0].hidden).toBe(true);
     expect(panels[1].hidden).toBe(false);
+    expect(panels[1].querySelector('pre')?.textContent).toBe('ng g @mimi-ng/cli:ui card');
   });
 });

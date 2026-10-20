@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { examples, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { DropdownMenuPage } from './dropdown-menu-page';
 
@@ -15,14 +16,15 @@ describe('DropdownMenuPage', () => {
       ],
     });
     const fixture = TestBed.createComponent(DropdownMenuPage);
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
 
-    const previews = Array.from(el.querySelectorAll('app-code-preview'));
+    const previews = examples(fixture);
     expect(previews.length).toBe(5);
-    for (const preview of previews) {
-      expect(preview.querySelector('[mimiDropdownMenuTrigger][aria-haspopup=menu]')).not.toBeNull();
-      const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;
+    for (const { example, code } of previews) {
+      expect(
+        example?.querySelector('[mimiDropdownMenuTrigger][aria-haspopup=menu]'),
+      ).not.toBeNull();
       expect(code).toContain("from '@/components/ui/dropdown-menu';");
       expect(code).toMatch(/export class DropdownMenu\w+Example/);
     }

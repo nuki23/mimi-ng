@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { examples, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { InputPage } from './input-page';
 
@@ -15,14 +16,13 @@ describe('InputPage', () => {
       ],
     });
     const fixture = TestBed.createComponent(InputPage);
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
 
-    const previews = Array.from(el.querySelectorAll('app-code-preview'));
+    const previews = examples(fixture);
     expect(previews.length).toBe(11);
-    for (const preview of previews) {
-      expect(preview.querySelector('[mimiInput], [mimiTextarea]')).not.toBeNull();
-      const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;
+    for (const { example, code } of previews) {
+      expect(example?.querySelector('[mimiInput], [mimiTextarea]')).not.toBeNull();
       // Las importaciones son las del proyecto del usuario, no las del monorepo.
       expect(code).toMatch(/from '@\/components\/ui\/(input|textarea)';/);
       expect(code).not.toContain('@mimi-ng/ui-core');

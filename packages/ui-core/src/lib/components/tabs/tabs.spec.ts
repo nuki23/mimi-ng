@@ -362,6 +362,14 @@ describe('MimiTabs', () => {
     expect(visible()[0].classList).not.toContain('py-1');
   });
 
+  it('el panel y la fila muestran el anillo de foco (sin outline-none, que lo anula)', async () => {
+    const { visible, tablist } = await setup();
+    for (const node of [visible()[0], tablist()]) {
+      expect(node.classList).toContain('focus-visible:outline-2');
+      expect(node.classList).not.toContain('outline-none');
+    }
+  });
+
   it('contador; etiqueta propia; solo ícono usa label como nombre y avisa si falta', async () => {
     const { fixture, h, tab } = await setup();
     const count = tab('b').querySelector('[data-slot="count"]')!;

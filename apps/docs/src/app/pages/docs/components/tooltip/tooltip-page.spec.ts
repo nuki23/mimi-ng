@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { examples, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { TooltipPage } from './tooltip-page';
 
@@ -15,15 +16,14 @@ describe('TooltipPage', () => {
       ],
     });
     const fixture = TestBed.createComponent(TooltipPage);
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
 
-    const previews = Array.from(el.querySelectorAll('app-code-preview'));
+    const previews = examples(fixture);
     expect(previews.length).toBe(6);
-    for (const preview of previews) {
+    for (const { example, code } of previews) {
       // data-tooltip-state lo pone la directiva (también con [mimiTooltip]="…").
-      expect(preview.querySelector('[data-tooltip-state]')).not.toBeNull();
-      const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;
+      expect(example?.querySelector('[data-tooltip-state]')).not.toBeNull();
       expect(code).toContain("from '@/components/ui/tooltip';");
       expect(code).toMatch(/export class Tooltip\w+Example/);
     }

@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { examples, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { PopoverPage } from './popover-page';
 
@@ -13,14 +14,13 @@ describe('PopoverPage', () => {
       ],
     });
     const fixture = TestBed.createComponent(PopoverPage);
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
 
-    const previews = Array.from(el.querySelectorAll('app-code-preview'));
+    const previews = examples(fixture);
     expect(previews.length).toBe(5);
-    for (const preview of previews) {
-      expect(preview.querySelector('mimi-popover [mimiPopoverTrigger]')).not.toBeNull();
-      const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;
+    for (const { example, code } of previews) {
+      expect(example?.querySelector('mimi-popover [mimiPopoverTrigger]')).not.toBeNull();
       expect(code).toContain("from '@/components/ui/popover';");
       expect(code).toMatch(/export class Popover\w+Example/);
     }

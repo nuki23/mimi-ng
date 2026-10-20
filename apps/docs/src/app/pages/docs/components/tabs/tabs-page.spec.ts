@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { examples, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { TabsPage } from './tabs-page';
 
@@ -15,14 +16,14 @@ describe('TabsPage', () => {
       ],
     });
     const fixture = TestBed.createComponent(TabsPage);
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
 
-    const previews = Array.from(el.querySelectorAll('app-code-preview'));
+    const previews = examples(fixture);
     expect(previews.length).toBe(6);
-    for (const preview of previews) {
-      expect(preview.querySelector('mimi-tabs [role="tab"]')).not.toBeNull();
-      const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;
+    for (const { example, code } of previews) {
+      // Las pestañas del ejemplo (dentro del lienzo), no las de Preview/Código.
+      expect(example?.querySelector('mimi-tabs [role="tab"]')).not.toBeNull();
       expect(code).toContain("from '@/components/ui/tabs';");
       expect(code).toMatch(/export class Tabs\w+Example/);
     }

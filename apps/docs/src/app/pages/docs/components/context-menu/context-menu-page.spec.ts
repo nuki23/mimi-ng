@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { examples, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { ContextMenuPage } from './context-menu-page';
 
@@ -15,14 +16,13 @@ describe('ContextMenuPage', () => {
       ],
     });
     const fixture = TestBed.createComponent(ContextMenuPage);
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
 
-    const previews = Array.from(el.querySelectorAll('app-code-preview'));
+    const previews = examples(fixture);
     expect(previews.length).toBe(5);
-    for (const preview of previews) {
-      expect(preview.querySelector('[mimiContextMenuTrigger][data-state]')).not.toBeNull();
-      const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;
+    for (const { example, code } of previews) {
+      expect(example?.querySelector('[mimiContextMenuTrigger][data-state]')).not.toBeNull();
       expect(code).toContain("from '@/components/ui/context-menu';");
       expect(code).toMatch(/export class ContextMenu\w+Example/);
     }

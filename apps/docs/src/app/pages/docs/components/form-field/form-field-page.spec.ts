@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { examples, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { MIMI_ERROR_MESSAGES_ES, provideMimiErrorMessages } from '@/components/ui/form-field';
 import { FormFieldPage } from './form-field-page';
@@ -14,14 +15,13 @@ describe('FormFieldPage', () => {
       ],
     });
     const fixture = TestBed.createComponent(FormFieldPage);
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
 
-    const previews = Array.from(el.querySelectorAll('app-code-preview'));
+    const previews = examples(fixture);
     expect(previews.length).toBe(8);
-    for (const preview of previews) {
-      expect(preview.querySelector('mimi-form-field')).not.toBeNull();
-      const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;
+    for (const { example, code } of previews) {
+      expect(example?.querySelector('mimi-form-field')).not.toBeNull();
       expect(code).toMatch(
         /import \{[^}]*\bMimiFormField(Imports)?\b[^}]*\} from '@\/components\/ui\/form-field';/,
       );
@@ -48,9 +48,7 @@ describe('FormFieldPage', () => {
       ],
     });
     const fixture = TestBed.createComponent(FormFieldPage);
-    await fixture.whenStable();
-    await new Promise((r) => setTimeout(r));
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
     const message = (selector: string) =>
       el.querySelector(`${selector} mimi-form-error`)?.textContent?.trim();

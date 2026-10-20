@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { examples, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { AvatarPage } from './avatar-page';
 
@@ -13,14 +14,13 @@ describe('AvatarPage', () => {
       ],
     });
     const fixture = TestBed.createComponent(AvatarPage);
-    await fixture.whenStable();
+    await settle(fixture);
     const el = fixture.nativeElement as HTMLElement;
 
-    const previews = Array.from(el.querySelectorAll('app-code-preview'));
+    const previews = examples(fixture);
     expect(previews.length).toBe(3);
-    for (const preview of previews) {
-      expect(preview.querySelector('mimi-avatar')).not.toBeNull();
-      const code = preview.querySelector('[role="tabpanel"] + [role="tabpanel"] pre')?.textContent;
+    for (const { example, code } of previews) {
+      expect(example?.querySelector('mimi-avatar')).not.toBeNull();
       expect(code).toContain("import { MimiAvatarImports } from '@/components/ui/avatar';");
       expect(code).toMatch(/export class Avatar\w+Example/);
     }

@@ -11,6 +11,11 @@ import type { SafeHtml } from '@angular/platform-browser';
 import { CopyButton } from './copy-button';
 import { type CodeLang, HighlighterService } from './highlighter.service';
 
+/** El código tal como se muestra y se resalta (sin saltos de línea al final). */
+export function trimCode(code: string): string {
+  return code.replace(/\n+$/, '');
+}
+
 /**
  * Bloque de código con botón copiar. Muestra el código sin colores con la misma fuente e
  * interlineado mientras Shiki carga, así la página no salta; después cambia a la versión
@@ -39,7 +44,7 @@ export class CodeBlock {
 
   private readonly highlighter = inject(HighlighterService);
   protected readonly highlighted = signal<SafeHtml | null>(null);
-  protected readonly trimmed = computed(() => this.code().replace(/\n+$/, ''));
+  protected readonly trimmed = computed(() => trimCode(this.code()));
 
   /** Clases del <pre>, escritas completas para que Tailwind las detecte. */
   protected readonly preClass = computed(() => {
@@ -56,7 +61,11 @@ export class CodeBlock {
     const lang = this.lang();
     let cancelled = false;
     onCleanup(() => (cancelled = true));
-    this.highlighted.set(null);
+    // Ya resaltado (CodePreview lo adelanta): con colores desde el primer pintado. Los dobles de
+    // prueba del servicio no tienen peek.
+    const ready = this.highlighter.peek?.(code, lang) ?? null;
+    this.highlighted.set(ready);
+    if (ready) return;
     this.highlighter
       .highlight(code, lang)
       .then((html) => {
