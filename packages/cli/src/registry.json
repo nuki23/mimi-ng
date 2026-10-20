@@ -151,6 +151,17 @@
       },
       "registryDependencies": ["button", "utils/cn", "utils/control-styles", "utils/overlay"]
     },
+    "toolbar": {
+      "type": "component",
+      "files": ["components/toolbar/toolbar.ts", "components/toolbar/index.ts"],
+      "dependencies": {
+        "class-variance-authority": "^0.7.1"
+      },
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles"]
+    },
     "dropdown-menu": {
       "type": "component",
       "files": ["components/dropdown-menu/dropdown-menu.ts", "components/dropdown-menu/index.ts"],

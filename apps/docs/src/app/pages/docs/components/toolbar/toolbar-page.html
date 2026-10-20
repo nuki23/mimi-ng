@@ -1,0 +1,216 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Toolbar</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Una píldora translúcida con botones de herramienta, horizontal o vertical: la herramienta activa
+    sobre un disco, interruptores presionados, separadores y contadores.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="toolbar" />
+  <p class="text-pretty">
+    Usa el
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">FocusKeyManager</code>
+    de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+    para las flechas. Si tu proyecto no lo tiene, el comando lo instala en la versión de tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code>.
+  </p>
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <p class="text-pretty">
+    Los botones son tuyos: les pones
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiToolbarItem</code>
+    con su valor, el contenido y el
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code> (en
+    los de solo ícono es su nombre). Un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiTooltip</code>
+    puede ir en el mismo botón.
+  </p>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
+  <p class="text-pretty">
+    Acciones sueltas: cada clic, Enter o Espacio emite
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(activate)</code> con
+    el valor del botón.
+  </p>
+  <app-code-preview [code]="source.basic">
+    <app-toolbar-basic-example />
+  </app-code-preview>
+
+  <h3 id="toggle" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Interruptores y herramienta activa
+  </h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">kind="toggle"</code>
+    alterna en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(pressed)]</code>
+    (fondo gris) y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">kind="tool"</code>
+    elige una sola en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(value)]</code> (el
+    disco). En pantallas angostas, el ejemplo pone la toolbar en un contenedor con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">overflow-x-auto</code>.
+  </p>
+  <app-code-preview [code]="source.toggle">
+    <app-toolbar-toggle-example />
+  </app-code-preview>
+
+  <h3 id="vertical" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Vertical</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >orientation="vertical"</code
+    >: las flechas ↑ y ↓ recorren los botones. «Bloquear» está deshabilitado: se enfoca, pero no se
+    activa.
+  </p>
+  <app-code-preview [code]="source.vertical">
+    <app-toolbar-vertical-example />
+  </app-code-preview>
+
+  <h3 id="tooltips" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tooltips y contadores</h3>
+  <p class="text-pretty">
+    Al pasar de un botón a otro, el siguiente tooltip abre sin esperar. El contador (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;span mimiToolbarCount&gt;</code
+    >) es decorativo: el número va también en el
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code>
+    («Comentarios, 3 sin leer»), y el tooltip no lo repite.
+  </p>
+  <app-code-preview [code]="source.tooltips">
+    <app-toolbar-tooltips-example />
+  </app-code-preview>
+
+  <h3 id="floating" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Flotante</h3>
+  <p class="text-pretty">
+    La toolbar no se posiciona sola: con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> la pones
+    donde quieras, como en un lienzo. En la vertical, los tooltips van a la derecha (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >mimiTooltipSide="right"</code
+    >).
+  </p>
+  <app-code-preview [code]="source.floating">
+    <app-toolbar-floating-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Teclado y accesibilidad
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Una sola parada de Tab: entra al primer botón, o al último que usaste. Las flechas recorren
+      los botones (←→ en horizontal, ↑↓ en vertical, con vuelta); Inicio y Fin van al primero y al
+      último. Enter y Espacio son los del botón nativo.
+    </li>
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="toolbar"</code>
+      con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-orientation</code
+      >; las herramientas y los interruptores llevan
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-pressed</code>,
+      como el diseño. La herramienta activa no se desmarca al volver a pulsarla (un grupo de radio
+      con nombre llegará con los grupos).
+    </li>
+    <li>
+      Los deshabilitados se enfocan con las flechas, para que se lean, pero el clic no llega a tu
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(click)</code> ni a
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(activate)</code>.
+    </li>
+    <li>
+      Las flechas de un campo o de un menú dentro de la toolbar siguen siendo suyas. Si mueves el
+      foco con código, la toolbar sigue desde ahí.
+    </li>
+    <li>
+      En derecha a izquierda (<code
+        class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >dir="rtl"</code
+      >
+      en
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;html&gt;</code> o
+      la directiva
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">Dir</code> del CDK),
+      ← avanza. Un
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">dir</code> suelto en
+      un contenedor no lo cambia.
+    </li>
+    <li>
+      Los botones deben estar escritos dentro de
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >&lt;mimi-toolbar&gt;</code
+      >
+      (también dentro de un
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;if</code> o un
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">div</code>), no en la
+      plantilla de otro componente.
+    </li>
+    <li>Con movimiento reducido, sin escala al pulsar ni animación del anillo.</li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <h3 id="api-toolbar" class="mt-2 text-lg font-semibold tracking-[-0.01em]">mimi-toolbar</h3>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Entrada</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of toolbarApi; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="api-item" class="mt-2 text-lg font-semibold tracking-[-0.01em]">mimiToolbarItem</h3>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Entrada</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of itemApi; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;mimi-toolbar-separator /&gt;</code
+    >
+    separa grupos (perpendicular a la toolbar) y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;span mimiToolbarCount&gt;</code
+    >
+    es el contador sobre un botón. Los dos aceptan
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code>.
+  </p>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="toolbar" />
+</article>

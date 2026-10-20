@@ -80,6 +80,7 @@ export class App {}
 - **Tabs**: `ng g mimi tabs` · [documentación](https://ng.mimiworks.dev/docs/components/tabs)
 - **Textarea**: `ng g mimi textarea` · [documentación](https://ng.mimiworks.dev/docs/components/input)
 - **Toast**: `ng g mimi toast` · [documentación](https://ng.mimiworks.dev/docs/components/toast)
+- **Toolbar**: `ng g mimi toolbar` · [documentación](https://ng.mimiworks.dev/docs/components/toolbar)
 - **Tooltip**: `ng g mimi tooltip` · [documentación](https://ng.mimiworks.dev/docs/components/tooltip)
 
 ## Tus cambios

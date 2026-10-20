@@ -34,6 +34,7 @@ const FOLDER: Record<TokenComponent, string> = {
   confirm: 'confirm',
   toast: 'toast',
   tabs: 'tabs',
+  toolbar: 'toolbar',
 };
 
 /**

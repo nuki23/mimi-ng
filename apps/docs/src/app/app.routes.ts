@@ -96,6 +96,12 @@ export const routes: Routes = [
           import('./pages/docs/components/tabs/tabs-page').then((m) => m.TabsPage),
       },
       {
+        path: 'components/toolbar',
+        title: 'Toolbar · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/toolbar/toolbar-page').then((m) => m.ToolbarPage),
+      },
+      {
         path: 'components/toast',
         title: 'Toast · Mimi',
         loadComponent: () =>

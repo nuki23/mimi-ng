@@ -86,6 +86,7 @@ const COMPONENT_PREFIX: Record<keyof MimiComponentTokens, string> = {
   confirm: 'confirm',
   toast: 'toast',
   tabs: 'tabs',
+  toolbar: 'toolbar',
 };
 
 /** Nombres de la 0.1.0 que siguen funcionando hasta la 1.0 (spec 12): ruta → qué usar. */

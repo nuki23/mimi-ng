@@ -96,6 +96,10 @@
             "label": "toast"
           },
           {
+            "value": "toolbar",
+            "label": "toolbar"
+          },
+          {
             "value": "tooltip",
             "label": "tooltip"
           }

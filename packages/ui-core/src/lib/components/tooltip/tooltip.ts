@@ -75,6 +75,11 @@ function parseDelay(value: string): number | null {
   return Math.max(0, amount);
 }
 
+/** Para comparar nombres: minúsculas y un solo espacio entre palabras. */
+function normalizeName(value: string): string {
+  return value.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
 /** Panel del tooltip (uso interno: lo crea `mimiTooltip`; no está en la API pública). */
 @Component({
   selector: 'mimi-tooltip-panel',
@@ -362,9 +367,25 @@ export class MimiTooltip {
     return parseDelay(token) ?? DEFAULT_DELAY;
   }
 
+  /**
+   * El texto ya está en el nombre del elemento (`aria-labelledby` o `aria-label`), sin distinguir
+   * mayúsculas ni espacios: «Comentarios» dentro de «Comentarios, 3 sin leer» no se repite.
+   */
   private textIsLabel(): boolean {
-    const label = this.element.getAttribute('aria-label');
-    return !!label && label.trim() === this.text().trim();
+    const text = normalizeName(this.text());
+    return !!text && normalizeName(this.accessibleName()).includes(text);
+  }
+
+  private accessibleName(): string {
+    const labelledBy = this.element.getAttribute('aria-labelledby')?.trim();
+    if (labelledBy) {
+      const root = this.element.getRootNode() as Document | ShadowRoot;
+      return labelledBy
+        .split(/\s+/)
+        .map((id) => root.getElementById?.(id)?.textContent ?? '')
+        .join(' ');
+    }
+    return this.element.getAttribute('aria-label') ?? '';
   }
 
   private isInPanel(target: EventTarget | null): boolean {

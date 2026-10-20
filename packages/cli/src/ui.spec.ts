@@ -508,6 +508,24 @@ describe('mimi (alias ui)', () => {
     expect(deps['@angular/cdk']).toBe('^22.0.0');
   });
 
+  it('toolbar: solo @angular/cdk (FocusKeyManager), sin @angular/aria ni CSS del overlay', async () => {
+    const { run, tree } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const before = tree.readContent(`/${cssPath}`);
+    const result = await run('mimi', { components: ['toolbar'] }, tree);
+    for (const file of ['toolbar/toolbar.ts', 'toolbar/index.ts']) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(template(`components/${file}`));
+    }
+    for (const util of ['cn', 'control-styles']) {
+      expect(result.exists(`/${UI}/utils/${util}.ts`), util).toBe(true);
+    }
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+    expect(deps['@angular/aria']).toBeUndefined();
+    expect(deps['class-variance-authority']).toBeDefined();
+    expect(result.readContent(`/${cssPath}`)).toBe(before);
+  });
+
   it('los componentes sin cssImports no tocan el CSS global', async () => {
     const { run, tree } = await initialized();
     const cssPath = json(tree, '/mimi.json').tailwind.css as string;

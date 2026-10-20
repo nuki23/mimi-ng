@@ -21,6 +21,31 @@ import { MIMI_TOOLTIP_SKIP_DELAY, MimiTooltip, type MimiTooltipSide } from './to
     <button data-test="icon" aria-label="Ajustes" mimiTooltip="Ajustes" [mimiTooltipDelay]="0">
       ⚙
     </button>
+    <button
+      data-test="count"
+      aria-label="COMENTARIOS,  3 sin leer"
+      mimiTooltip="  comentarios "
+      [mimiTooltipDelay]="0"
+    >
+      C
+    </button>
+    <button
+      data-test="labelled"
+      aria-labelledby="guardar"
+      mimiTooltip="Guardar"
+      [mimiTooltipDelay]="0"
+    >
+      G
+    </button>
+    <span id="guardar">Guardar cambios</span>
+    <button
+      data-test="other"
+      aria-label="Borrar"
+      mimiTooltip="Eliminar archivo"
+      [mimiTooltipDelay]="0"
+    >
+      B
+    </button>
     <button data-test="token" mimiTooltip="Del tema" style="--mimi-tooltip-delay: 0ms">T</button>
     <button data-test="slow" mimiTooltip="Lento" [mimiTooltipDelay]="10000">L</button>
     <p id="ayuda">Ayuda</p>
@@ -166,6 +191,22 @@ describe('MimiTooltip', () => {
     await hover(button('icon'));
     expect(tooltip()!.textContent).toContain('Ajustes');
     expect(button('icon').hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('si el texto ya está en el nombre (aria-label o aria-labelledby), no lo repite', async () => {
+    const { button, tooltip, hover } = await setup();
+    // Contenido, sin distinguir mayúsculas ni espacios de más.
+    await hover(button('count'));
+    expect(tooltip()).not.toBeNull();
+    expect(button('count').hasAttribute('aria-describedby')).toBe(false);
+    await hover(button('labelled'));
+    expect(button('labelled').hasAttribute('aria-describedby')).toBe(false);
+    // Un texto que no está en el nombre sí lo describe.
+    await hover(button('other'));
+    const own = Array.from(document.querySelectorAll<HTMLElement>('[role=tooltip]')).find((t) =>
+      t.textContent?.includes('Eliminar archivo'),
+    );
+    expect(button('other').getAttribute('aria-describedby')).toBe(own!.id);
   });
 
   it('deshabilitado no se muestra, y deshabilitarlo lo oculta', async () => {

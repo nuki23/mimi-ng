@@ -36,7 +36,8 @@ export type TokenComponent =
   | 'dialog'
   | 'confirm'
   | 'toast'
-  | 'tabs';
+  | 'tabs'
+  | 'toolbar';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -59,6 +60,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   confirm: 'confirm',
   toast: 'toast',
   tabs: 'tabs',
+  toolbar: 'toolbar',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -944,6 +946,70 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-card',
       preset: false,
       description: 'Fondo de la pestaña elegida en la píldora.',
+    },
+  ],
+  toolbar: [
+    {
+      name: '--mimi-toolbar-item-size',
+      default: '40px',
+      preset: true,
+      description: 'Tamaño de cada botón.',
+    },
+    {
+      name: '--mimi-toolbar-blur',
+      default: 'glass-blur',
+      inherits: '--mimi-glass-blur',
+      preset: true,
+      description: 'Desenfoque del fondo de la píldora.',
+    },
+    {
+      name: '--mimi-toolbar-bg',
+      default: 'glass',
+      inherits: '--mimi-glass',
+      preset: false,
+      description: 'Fondo translúcido de la píldora.',
+    },
+    {
+      name: '--mimi-toolbar-border',
+      default: 'glass-border',
+      inherits: '--mimi-glass-border',
+      preset: false,
+      description: 'Borde de la píldora.',
+    },
+    {
+      name: '--mimi-toolbar-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra de la píldora (cambia entre claro y oscuro).',
+    },
+    {
+      name: '--mimi-toolbar-active-bg',
+      default: 'primary',
+      inherits: '--mimi-primary',
+      preset: false,
+      description: 'Disco de la herramienta activa.',
+    },
+    {
+      name: '--mimi-toolbar-active-fg',
+      default: 'primary-foreground',
+      inherits: '--mimi-primary-foreground',
+      preset: false,
+      description: 'Ícono de la herramienta activa.',
+    },
+    {
+      name: '--mimi-toolbar-ring',
+      default: 'info',
+      inherits: '--mimi-info',
+      preset: false,
+      description: 'Anillo de la herramienta activa y del hover (al 60 %).',
+    },
+    {
+      name: '--mimi-toolbar-pressed-bg',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo de un interruptor presionado.',
     },
   ],
 };

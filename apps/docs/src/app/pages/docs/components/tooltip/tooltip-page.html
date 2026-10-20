@@ -106,7 +106,10 @@
       y, mientras se ve, el elemento lo anuncia con
       <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
         >aria-describedby</code
-      >.
+      >. Si el texto ya está en el nombre del elemento (su
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code> o
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-labelledby</code
+      >), no lo repite: «Comentarios» no se vuelve a leer después de «Comentarios, 3 sin leer».
     </li>
     <li>
       Puedes pasar el puntero al tooltip sin que se cierre, y Escape lo cierra sin mover el foco

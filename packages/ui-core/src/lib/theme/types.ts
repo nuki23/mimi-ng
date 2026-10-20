@@ -327,6 +327,17 @@ export interface MimiTabsTokens {
 }
 
 /**
+ * mimi-toolbar. Fondo, borde, sombra, disco activo, anillo y presionado van en el CSS
+ * (`--mimi-toolbar-bg`, `-border`, `-shadow`, `-active-bg`, `-active-fg`, `-ring`, `-pressed-bg`).
+ */
+export interface MimiToolbarTokens {
+  /** Tamaño de cada botón (40px). */
+  itemSize?: string;
+  /** Desenfoque del fondo (el global `effects.glassBlur`). */
+  blur?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -350,6 +361,7 @@ export interface MimiComponentTokens {
   confirm?: MimiConfirmTokens;
   toast?: MimiToastTokens;
   tabs?: MimiTabsTokens;
+  toolbar?: MimiToolbarTokens;
 }
 
 export interface MimiThemePreset {
