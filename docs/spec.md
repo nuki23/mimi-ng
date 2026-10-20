@@ -1053,6 +1053,12 @@ export const controlInvalidStyles =
 export const controlPressStyles = 'mimi-transition active:scale-(--mimi-press-scale)';
 ```
 
+**`outline-none` y el anillo de foco.** En Tailwind 4, `outline-none` pone `--tw-outline-style: none` y `focus-visible:outline-2` toma el estilo de esa variable: si un elemento tiene las dos clases, el anillo de foco no se ve. Pasó en Tabs (fila y paneles, 5.11) y en el toast enfocado con F8 (paso A antes de la G1.10). Por eso:
+
+- Un elemento con `buttonFocusStyles` o `focus-visible:outline-*` no lleva `outline-none`: el navegador solo dibuja su contorno propio con `:focus-visible`, y ahí lo reemplaza el de Mimi.
+- `outline-none` solo va en elementos que muestran el foco de otra forma (borde y halo `ring` en Input y Textarea, fondo de la opción activa en Menu y Select, la caja del Select con `has-[[role=combobox]:focus]`) o que reciben el foco por código (paneles de Dialog y Popover, región de los toasts).
+- `packages/ui-core/src/lib/focus-styles.spec.ts` lo comprueba: cada `outline-none` está en una lista con el motivo (uno nuevo falla hasta revisarlo), y ninguno comparte bloque (líneas seguidas, una constante, un `cn()` o un `cva()`) con un anillo de contorno.
+
 **`field-state.ts`**: `injectFieldState()` devuelve el estado del campo del elemento actual como signals (`invalid`, `touched`, `dirty`, `disabled`, `showError` = inválido y tocado o modificado, y `errors`: los errores normalizados como `MimiFieldError`, con `kind` en minúsculas, `message` y `params` con los nombres de Reactive Forms). También define el token `MIMI_FIELD_CONTROL`, que proveen Input, Textarea, Switch y Checkbox para `mimi-form-field`, sea cual sea el sistema de formularios (spec, sección 8). Lo usan Input y Textarea, y lo usará `mimi-form-error`.
 
 **Pruebas de ui-core:** corren con `ng test ui-core` (`pnpm test:ui-core`, incluido en `pnpm test`), con TestBed disponible.

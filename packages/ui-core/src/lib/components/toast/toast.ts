@@ -405,8 +405,9 @@ class MimiToastItem {
 
   protected readonly hostClasses = computed(() =>
     cn(
-      'absolute inset-x-0 block rounded-[var(--mimi-toast-radius,var(--mimi-radius))] outline-none',
+      'absolute inset-x-0 block rounded-[var(--mimi-toast-radius,var(--mimi-radius))]',
       this.top() ? 'top-0 origin-top' : 'bottom-0 origin-bottom',
+      // Sin outline-none: en Tailwind 4 anula este anillo (focus-styles.spec.ts).
       'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
     ),
   );

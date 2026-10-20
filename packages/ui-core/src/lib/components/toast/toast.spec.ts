@@ -367,6 +367,9 @@ describe('injectMimiToast', () => {
     expect(document.activeElement).toBe(opener);
     expect(key(document.body, { key: 'F8' }).defaultPrevented).toBe(true);
     expect(document.activeElement).toBe(items()[0]);
+    // El toast enfocado muestra el anillo: sin outline-none, que lo anularía.
+    expect(items()[0].classList).toContain('focus-visible:outline-2');
+    expect(items()[0].classList).not.toContain('outline-none');
     const escape = key(items()[0], { key: 'Escape' });
     expect(escape.defaultPrevented).toBe(true);
     expect(document.activeElement).toBe(opener);
