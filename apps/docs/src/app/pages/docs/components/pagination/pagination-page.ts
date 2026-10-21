@@ -117,7 +117,12 @@ export class PaginationPage {
       description:
         'Tamaños para elegir. Vacío, sin selector (y sin cargar Select). En móvil el selector se oculta.',
     },
-    { name: 'size', type: "'sm' | 'md'", default: "'sm'", description: '40px o 50px de alto.' },
+    {
+      name: 'size',
+      type: "'sm' | 'default'",
+      default: "'sm'",
+      description: '40px o 50px de alto (con los nombres de tamaño de Button e Input).',
+    },
     {
       name: 'variant',
       type: "'inline' | 'floating'",

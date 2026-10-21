@@ -322,12 +322,12 @@ describe('MimiPagination', () => {
     expect(next().classList).toContain('active:scale-(--mimi-press-scale-sm)');
     expect(field().classList).toContain('w-[var(--mimi-pagination-input-width,44px)]');
     expect(field().classList).not.toContain('w-full');
-    h.size.set('md');
+    h.size.set('default');
     h.variant.set('floating');
     h.off.set(true);
     h.extra.set('p-2 absolute bottom-4');
     await settle(fixture);
-    expect(nav.dataset['size']).toBe('md');
+    expect(nav.dataset['size']).toBe('default');
     expect(nav.dataset['variant']).toBe('floating');
     expect(nav.dataset['disabled']).toBe('');
     expect(nav.classList).toContain(

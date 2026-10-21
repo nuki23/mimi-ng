@@ -1,7 +1,15 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MimiBadge } from './badge';
-import type { BadgeTone, BadgeVariant, BadgeVariantShortcut } from './badge.variants';
+import type {
+  BadgeStyleVariant,
+  BadgeTone,
+  BadgeVariant,
+  BadgeVariantShortcut,
+} from './badge.variants';
+
+// Código de la 0.1.x: `BadgeVariant` aceptaba los atajos. Tiene que seguir compilando (D1).
+const LEGACY_VARIANTS: BadgeVariant[] = ['default', 'secondary', 'destructive', 'outline'];
 
 @Component({
   imports: [MimiBadge],
@@ -13,7 +21,7 @@ import type { BadgeTone, BadgeVariant, BadgeVariantShortcut } from './badge.vari
   `,
 })
 class Host {
-  readonly variant = signal<BadgeVariant | BadgeVariantShortcut>('solid');
+  readonly variant = signal<BadgeVariant>('solid');
   readonly tone = signal<BadgeTone | undefined>(undefined);
   readonly extra = signal('');
 }
@@ -52,7 +60,7 @@ describe('MimiBadge', () => {
   });
 
   // Una clase representativa de cada variante con cada tono (badge.variants.ts, TONE_CLASSES).
-  const EXPECTED: Record<BadgeVariant, Record<BadgeTone, string>> = {
+  const EXPECTED: Record<BadgeStyleVariant, Record<BadgeTone, string>> = {
     solid: {
       primary: 'bg-primary',
       secondary: 'bg-secondary',
@@ -78,7 +86,7 @@ describe('MimiBadge', () => {
       danger: 'before:bg-destructive',
     },
   };
-  const COMBOS = (Object.keys(EXPECTED) as BadgeVariant[]).flatMap((variant) =>
+  const COMBOS = (Object.keys(EXPECTED) as BadgeStyleVariant[]).flatMap((variant) =>
     (Object.keys(EXPECTED[variant]) as BadgeTone[]).map(
       (tone) => [variant, tone, EXPECTED[variant][tone]] as const,
     ),
@@ -126,6 +134,14 @@ describe('MimiBadge', () => {
     expect(badge.dataset['variant']).toBe('solid');
     expect(badge.dataset['tone']).toBe(tone);
     expect(badge.classList).toContain(cls);
+  });
+
+  it('el tipo BadgeVariant de la 0.1.x (con atajos) sigue sirviendo para la entrada', async () => {
+    const { host, badge, update } = await setup();
+    for (const variant of LEGACY_VARIANTS) {
+      await update(() => host.variant.set(variant));
+      expect(badge.dataset['variant']).toBe(variant === 'outline' ? 'outline' : 'solid');
+    }
   });
 
   it('un atajo con tone: gana el atajo y avisa una sola vez en modo desarrollo', async () => {

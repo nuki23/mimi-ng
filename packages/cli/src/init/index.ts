@@ -21,12 +21,14 @@ import {
 import {
   BASE_DIR,
   type FileReport,
+  blockedMessages,
   emptyReport,
   hasFileChanges,
   updatedMessages,
   writeTemplates,
 } from '../utils/write-files';
 import { findTailwindImport, hasDirective, insertAfterTailwind } from './css';
+import { INIT_ITEMS } from './items';
 import { dirnameOf, normalizePath, relativePath } from './paths';
 
 export interface InitOptions {
@@ -37,8 +39,6 @@ export interface InitOptions {
 
 /** Alias que usan todos los componentes. Lo configurable es la carpeta a la que apunta. */
 export const ALIAS = '@/components/ui/*';
-/** Ítems del registro que copia init: el tema y las utilidades base. */
-const INIT_ITEMS = ['theme', 'utils/cn', 'utils/control-styles'];
 /** Paquetes que instala init (versiones del registro). */
 const INIT_PACKAGES = ['clsx', 'tailwind-merge', 'class-variance-authority'];
 const ICONS_PACKAGE = '@lucide/angular';
@@ -76,9 +76,7 @@ export function init(options: InitOptions): Rule {
     const report = emptyReport();
     return chain([
       writeTemplates({
-        files: INIT_ITEMS.flatMap((item) => resolveItems(item)).flatMap(
-          (item) => registry.items[item].files,
-        ),
+        items: INIT_ITEMS.flatMap((item) => resolveItems(item)),
         componentsDir: plan.componentsDir,
         overwrite: options.overwrite ?? false,
         version: registry.version,
@@ -364,6 +362,9 @@ function nextSteps(plan: Plan, report: FileReport, icons: boolean): Rule {
       INIT_ITEMS.find((item) => registry.items[item].files.includes(file)) ?? file;
     for (const message of updatedMessages(report, itemOf, registry.version)) {
       context.logger.info(message);
+    }
+    for (const message of blockedMessages(report, plan.componentsDir, registry.version)) {
+      context.logger.warn(message);
     }
     if (!plan.changed && !hasFileChanges(report)) {
       context.logger.info('Mimi ya estaba configurado; no hubo cambios.');

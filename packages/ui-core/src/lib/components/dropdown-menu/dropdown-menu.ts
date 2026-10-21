@@ -19,7 +19,8 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import { MimiMenuItemsImports, MimiMenuPanel } from '@/components/ui/menu';
+import { MimiMenuItemsImports } from '@/components/ui/menu';
+import { MimiMenuPanel } from '@/components/ui/menu/menu';
 import {
   MIMI_VIEWPORT_MARGIN,
   type MimiOverlayAlign,
@@ -50,7 +51,7 @@ let nextId = 0;
 /**
  * Menú desplegable: un trigger (`[mimiDropdownMenuTrigger]`) y el contenido en un
  * `<ng-template mimiDropdownMenuContent>`. No dibuja nada propio (`display: contents`): su
- * `class` y su `label` van al panel.
+ * `class` y su `aria-label` van al panel.
  */
 @Component({
   selector: 'mimi-dropdown-menu',
@@ -74,7 +75,7 @@ let nextId = 0;
         <mimi-menu-panel
           [template]="content.templateRef"
           [menuId]="menuId"
-          [label]="label()"
+          [label]="ariaLabel() ?? ''"
           [labelledBy]="trigger()?.id"
           [state]="state()"
           [side]="placedSide()"
@@ -89,8 +90,9 @@ let nextId = 0;
   `,
   host: {
     style: 'display: contents',
-    // El class es del panel: en el host no tendría efecto o se heredaría al trigger.
+    // El class y el aria-label son del panel: en el host no tendrían efecto o se heredarían.
     '[attr.class]': 'null',
+    '[attr.aria-label]': 'null',
     '[attr.data-state]': 'open() ? "open" : "closed"',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -105,8 +107,8 @@ export class MimiDropdownMenu {
   readonly side = input<MimiDropdownMenuSide>('bottom');
   /** Alineación con el trigger. */
   readonly align = input<MimiDropdownMenuAlign>('start');
-  /** Nombre accesible del menú (aria-label). Sin él, lo nombra el texto del trigger. */
-  readonly label = input('');
+  /** Nombre accesible del menú (`aria-label`). Sin él, lo nombra el texto del trigger. */
+  readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   /** Clases del panel, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
 

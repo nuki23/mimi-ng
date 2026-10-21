@@ -156,8 +156,27 @@
     <li>
       Los que no tocaste se actualizan solos cuando ejecutas
       <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g mimi</code> con
-      una versión nueva de la CLI, y te dice cuáles («button actualizado de 0.1.0 a 0.2.0»). Si tu
+      una versión nueva de la CLI, y te dice cuáles («button actualizado de 0.1.1 a 0.2.0»). Si tu
       Prettier les dio otro formato, no cuentan como modificados.
+    </li>
+    <li>
+      <strong>El tema también se actualiza</strong> (<code
+        class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >components/ui/theme/</code
+      >
+      y las utilidades que copió
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng add</code>), si no
+      lo modificaste: los componentes nuevos usan tokens nuevos. Si lo modificaste, no se toca y el
+      aviso te dice qué hacer.
+    </li>
+    <li>
+      <strong>Todo o nada:</strong> si modificaste un archivo de un componente de una versión
+      anterior, no se actualiza ninguno de sus archivos (así no se mezclan versiones), ni los
+      componentes que lo necesitan (Confirm usa Button). El aviso dice cuál no se actualizó y por
+      qué. Para actualizarlo, guarda tus cambios (por ejemplo, en git), usa
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--overwrite</code> y
+      vuelve a aplicarlos, o combínalos a mano con la copia original de
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">.mimi/base/</code>.
     </li>
   </ul>
   <app-code-block code="ng g mimi button --overwrite" lang="bash" prompt="$" />

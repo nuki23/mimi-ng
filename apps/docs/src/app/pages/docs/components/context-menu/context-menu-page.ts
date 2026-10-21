@@ -56,7 +56,7 @@ export class ContextMenuPage {
     "  selector: 'app-file-list',",
     '  imports: [MimiContextMenuImports],',
     '  template: `',
-    '    <mimi-context-menu label="Acciones del archivo">',
+    '    <mimi-context-menu aria-label="Acciones del archivo">',
     '      @for (file of files; track file.id) {',
     '        <div mimiContextMenuTrigger [mimiContextMenuTriggerData]="file">{{ file.name }}</div>',
     '      }',
@@ -103,11 +103,11 @@ export class ContextMenuPage {
       description: 'Abierto o cerrado. Abierto desde tu código, va junto al primer trigger.',
     },
     {
-      name: 'label',
+      name: 'aria-label',
       type: 'string',
-      default: "''",
+      default: '—',
       description:
-        'Nombre accesible del menú. Hace falta: en modo desarrollo, Mimi avisa si falta.',
+        'Nombre accesible del menú (va al panel). Hace falta: en modo desarrollo, Mimi avisa si falta.',
     },
     {
       name: 'disabled',

@@ -103,7 +103,11 @@ export interface MimiToastFn {
   dismiss(id?: string): void;
 }
 
-type ToastTone = 'neutral' | 'success' | 'warning' | 'info' | 'danger';
+/**
+ * Tonos de Toast: un subconjunto de la lista común (spec 4, «Variante y tono»). Sin tono (`toast()`),
+ * la tarjeta neutra con la campana; no hay un valor «neutro» con nombre.
+ */
+type ToastTone = 'success' | 'warning' | 'info' | 'danger';
 
 /** Uso interno: un toast en la pila. */
 interface ToastRecord {
@@ -113,7 +117,8 @@ interface ToastRecord {
   action?: MimiToastAction;
   icon?: TemplateRef<unknown> | false;
   variant: MimiToastVariant;
-  tone: ToastTone;
+  /** Sin tono: `toast()` y el «cargando» de `promise()`. */
+  tone: ToastTone | undefined;
   loading: boolean;
   class?: string;
   duration: number;
@@ -145,7 +150,6 @@ const OUTLINE =
 
 /** Colores de cada tono en cada variante (spec 4, «Variante y tono»). */
 const TONE_CLASSES = {
-  neutral: { outline: OUTLINE, solid: OUTLINE },
   success: { outline: OUTLINE, solid: 'bg-success text-success-foreground shadow-success-hover' },
   warning: { outline: OUTLINE, solid: 'bg-warning text-warning-foreground shadow-warning-hover' },
   info: { outline: OUTLINE, solid: 'bg-info text-info-foreground shadow-info-hover' },
@@ -155,9 +159,9 @@ const TONE_CLASSES = {
   },
 } as const satisfies Record<ToastTone, Record<MimiToastVariant, string>>;
 
-/** Color del ícono en la tarjeta (en el sólido, el del texto). */
+/** Color del ícono en la tarjeta (en el sólido, el del texto). Sin tono, el del texto. */
+const ICON_NO_TONE = 'text-foreground';
 const ICON_TONE_CLASSES = {
-  neutral: 'text-foreground',
   success: 'text-success-soft-foreground',
   warning: 'text-warning-soft-foreground',
   info: 'text-info-soft-foreground',
@@ -173,7 +177,7 @@ const toastVariants = cva(
   {
     variants: {
       variant: { outline: '', solid: '' },
-      tone: { neutral: '', success: '', warning: '', info: '', danger: '' },
+      tone: { success: '', warning: '', info: '', danger: '' },
     },
     compoundVariants: Object.entries(TONE_CLASSES).flatMap(([tone, byVariant]) =>
       Object.entries(byVariant).map(([variant, cls]) => ({
@@ -182,7 +186,8 @@ const toastVariants = cva(
         class: cls,
       })),
     ),
-    defaultVariants: { variant: 'outline', tone: 'neutral' },
+    // Sin tono no hay combinación: la tarjeta (OUTLINE) la agrega MimiToastItem.
+    defaultVariants: { variant: 'outline' },
   },
 );
 
@@ -380,7 +385,7 @@ class MimiToastIcon {
     '[attr.inert]': 'layout().hidden || toast().state === "closed" ? "" : null',
     '[attr.data-state]': 'toast().state',
     '[attr.data-variant]': 'variant()',
-    '[attr.data-tone]': 'toast().tone === "neutral" ? null : toast().tone',
+    '[attr.data-tone]': 'toast().tone ?? null',
     '[attr.data-front]': 'layout().front ? "" : null',
     '[attr.data-entered]': 'entered() ? "" : null',
   },
@@ -399,7 +404,7 @@ class MimiToastItem {
 
   /** El sólido sin tono se ve como la tarjeta (el diseño no lo muestra). */
   protected readonly variant = computed<MimiToastVariant>(() =>
-    this.toast().variant === 'solid' && this.toast().tone !== 'neutral' ? 'solid' : 'outline',
+    this.toast().variant === 'solid' && this.toast().tone ? 'solid' : 'outline',
   );
   private readonly solid = computed(() => this.variant() === 'solid');
 
@@ -415,14 +420,20 @@ class MimiToastItem {
     cn(
       'pointer-events-auto',
       toastVariants({ variant: this.variant(), tone: this.toast().tone }),
+      !this.toast().tone && OUTLINE,
       this.toast().class,
     ),
   );
-  protected readonly iconClasses = computed(() =>
-    this.solid()
-      ? 'inline-flex size-[34px] shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklch,currentColor_16%,transparent)] [&_svg]:size-[18px]'
-      : cn('inline-flex shrink-0 [&_svg]:size-[18px]', ICON_TONE_CLASSES[this.toast().tone]),
-  );
+  protected readonly iconClasses = computed(() => {
+    if (this.solid()) {
+      return 'inline-flex size-[34px] shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklch,currentColor_16%,transparent)] [&_svg]:size-[18px]';
+    }
+    const tone = this.toast().tone;
+    return cn(
+      'inline-flex shrink-0 [&_svg]:size-[18px]',
+      tone ? ICON_TONE_CLASSES[tone] : ICON_NO_TONE,
+    );
+  });
   protected readonly titleClasses = computed(() =>
     this.solid() ? 'text-sm font-bold' : 'text-sm font-semibold',
   );
@@ -680,7 +691,7 @@ class MimiToastStore {
 
   show(
     title: string,
-    tone: ToastTone,
+    tone: ToastTone | undefined,
     options: MimiToastOptions,
     closeLabel: string,
     extra: { loading?: boolean; replaceOnly?: boolean } = {},
@@ -940,11 +951,11 @@ export function injectMimiToast(): MimiToastFn {
   // El nombre de la X sale de quien llama (sus providers o los de su ruta), como en Confirm.
   const closeLabel = inject(MIMI_TOAST_TEXT).close;
   const show =
-    (tone: ToastTone) =>
+    (tone: ToastTone | undefined) =>
     (title: string, options: MimiToastOptions = {}): string =>
       store.show(title, tone, options, closeLabel);
 
-  return Object.assign(show('neutral'), {
+  return Object.assign(show(undefined), {
     success: show('success'),
     info: show('info'),
     warning: show('warning'),
@@ -958,7 +969,7 @@ export function injectMimiToast(): MimiToastFn {
       const loading = content(messages.loading);
       const id = store.show(
         loading.title,
-        'neutral',
+        undefined,
         { ...options, description: loading.description },
         closeLabel,
         { loading: true },

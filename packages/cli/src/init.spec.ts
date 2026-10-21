@@ -408,6 +408,49 @@ describe('init: copias originales en .mimi/base', () => {
     }
   });
 
+  it('repetido con el tema de una versión anterior: lo actualiza si no se modificó, y si se modificó no toca ninguno de sus archivos', async () => {
+    const { runner, run, logs } = harness();
+    const first = await run({}, await createWorkspace(runner));
+    const theme = BASE_FILES.filter((file) => file.startsWith('theme/'));
+    const manifest = JSON.parse(first.readContent('/.mimi/manifest.json'));
+    for (const file of theme) {
+      first.overwrite(`/${UI}/${file}`, `// ${file} de la 0.1.1\n`);
+      first.overwrite(`/.mimi/base/${file}`, `// ${file} de la 0.1.1\n`);
+      manifest.files[file] = '0.1.1';
+    }
+    first.overwrite('/.mimi/manifest.json', JSON.stringify(manifest));
+
+    // Sin cambios del usuario: se actualiza.
+    const updated = await run({}, first);
+    for (const file of theme) {
+      expect(updated.readContent(`/${UI}/${file}`), file).toBe(
+        readFileSync(join(uiCoreLib, file), 'utf8'),
+      );
+    }
+
+    // Modificado: no cambia ninguno (tampoco types.ts, que no tocó) y avisa.
+    const modified = await run({}, await createWorkspace(runner));
+    for (const file of theme) {
+      modified.overwrite(`/.mimi/base/${file}`, `// ${file} de la 0.1.1\n`);
+      modified.overwrite(`/${UI}/${file}`, `// ${file} de la 0.1.1\n`);
+      manifest.files[file] = '0.1.1';
+    }
+    modified.overwrite(`/${UI}/theme/theme-base.css`, '/* mi tema */\n');
+    modified.overwrite('/.mimi/manifest.json', JSON.stringify(manifest));
+    logs.length = 0;
+    const kept = await run({}, modified);
+    expect(kept.readContent(`/${UI}/theme/theme-base.css`)).toBe('/* mi tema */\n');
+    expect(kept.readContent(`/${UI}/theme/types.ts`)).toBe('// theme/types.ts de la 0.1.1\n');
+    expect(
+      logs.some(
+        (l) =>
+          l.level === 'warn' &&
+          l.message.startsWith('El tema no se actualizó a ') &&
+          l.message.includes('--overwrite'),
+      ),
+    ).toBe(true);
+  });
+
   it('si un archivo se omite por estar modificado, no crea ni cambia su base', async () => {
     const { runner, run } = harness();
     const tree = await createWorkspace(runner);

@@ -6,7 +6,7 @@ import { MimiDropdownMenuImports } from './dropdown-menu';
   imports: [MimiDropdownMenuImports],
   template: `
     <button data-test="before">Antes</button>
-    <mimi-dropdown-menu [(open)]="open" [class]="extra()" [label]="label()">
+    <mimi-dropdown-menu [(open)]="open" [class]="extra()" [aria-label]="label()">
       <button data-test="trigger" mimiDropdownMenuTrigger>Proyecto</button>
       <ng-template mimiDropdownMenuContent>
         <mimi-menu-label>Proyecto</mimi-menu-label>
@@ -19,7 +19,7 @@ import { MimiDropdownMenuImports } from './dropdown-menu';
         </mimi-menu-item>
         <mimi-menu-separator />
         <mimi-menu-checkbox-item [(checked)]="sidebar">Barra lateral</mimi-menu-checkbox-item>
-        <mimi-menu-radio-group [(value)]="order" label="Orden">
+        <mimi-menu-radio-group [(value)]="order" aria-label="Orden">
           <mimi-menu-radio-item value="name">Nombre</mimi-menu-radio-item>
           <mimi-menu-radio-item value="date">Fecha</mimi-menu-radio-item>
         </mimi-menu-radio-group>
@@ -322,7 +322,7 @@ describe('MimiDropdownMenu', () => {
     expect(menu()!.querySelectorAll('[role=separator]').length).toBe(2);
   });
 
-  it('label="…" da el aria-label del menú', async () => {
+  it('aria-label="…" nombra el menú', async () => {
     const { fixture, open, menu, host } = await setup();
     host.label.set('Opciones del proyecto');
     await settle(fixture);

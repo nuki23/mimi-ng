@@ -78,6 +78,7 @@ export class MimiTabLabel {
 /**
  * Uso interno (se exporta porque el compilador lo exige): crea una plantilla del usuario. Hace lo
  * mismo que NgTemplateOutlet, sin @angular/common.
+ * @internal No está en el índice; no forma parte de la API de Mimi.
  */
 @Directive({ selector: '[mimiTabsOutlet]' })
 export class MimiTabsOutlet {
@@ -417,7 +418,7 @@ export class MimiTabs {
     ].filter(Boolean);
     if (!problems.length) return;
     this.warned = true;
-    console.warn(`Mimi Tabs: ${problems.join('; ')}.`);
+    console.warn(`[Mimi] Tabs: ${problems.join('; ')}.`);
   }
 }
 

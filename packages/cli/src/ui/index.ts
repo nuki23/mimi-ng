@@ -6,12 +6,14 @@ import {
   addDependency,
 } from '@schematics/angular/utility';
 import { hasDirective, insertAfterTheme } from '../init/css';
+import { INIT_ITEMS } from '../init/items';
 import { normalizePath } from '../init/paths';
 import { registry, resolveItems } from '../registry';
 import { type MimiConfig, type PackageJson, allDependencies, readJson } from '../utils/project';
 import {
   BASE_DIR,
   type FileReport,
+  blockedMessages,
   emptyReport,
   hasFileChanges,
   projectPathOf,
@@ -36,6 +38,11 @@ interface Plan {
   config: MimiConfig;
   /** Ítems a copiar: los pedidos y sus registryDependencies, sin repetir. */
   items: string[];
+  /**
+   * Lo que copia init (el tema y sus utilidades) que no está en `items`: se revisa siempre, para
+   * que el tema no quede en una versión anterior a la de los componentes.
+   */
+  implicit: string[];
   /** Paquetes que se agregan a package.json (los que el proyecto no tiene). */
   newPackages: Record<string, string>;
 }
@@ -44,8 +51,10 @@ interface Plan {
  * `ng g mimi button input form-field`: copia los componentes y sus dependencias del registro a la
  * carpeta de mimi.json. Sin nombres, pregunta (x-prompt de selección múltiple).
  *
- * Requiere init (mimi.json). Archivos existentes: igual → nada; distinto → se omite con aviso;
- * --overwrite → se reemplaza. Guarda la copia original en .mimi/base/ y la versión de cada
+ * Requiere init (mimi.json). Revisa también el tema y lo que copia init, y lo actualiza si el
+ * usuario no lo modificó. Todo o nada por componente (ver writeTemplates): si el usuario modificó
+ * un archivo de una versión anterior, ese componente y los que dependen de él no se tocan, con
+ * un aviso; --overwrite reemplaza. Guarda la copia original en .mimi/base/ y la versión de cada
  * componente en mimi.json. Instala las dependencias que falten con el gestor del proyecto.
  */
 export function ui(options: UiOptions): Rule {
@@ -54,7 +63,8 @@ export function ui(options: UiOptions): Rule {
     const report = emptyReport();
     return chain([
       writeTemplates({
-        files: plan.items.flatMap((item) => registry.items[item].files),
+        items: [...plan.items, ...plan.implicit],
+        implicit: plan.implicit,
         componentsDir: plan.componentsDir,
         overwrite: options.overwrite ?? false,
         version: registry.version,
@@ -133,8 +143,12 @@ function inspect(tree: Tree, options: UiOptions): Plan {
     newPackages['@angular/cdk'] = newPackages['@angular/aria'];
   }
 
+  const implicit = [...new Set(INIT_ITEMS.flatMap((item) => resolveItems(item)))].filter(
+    (item) => !items.includes(item),
+  );
+
   const componentsDir = normalizePath(config.aliases?.components ?? 'src/app/components/ui');
-  return { componentsDir, config, items, newPackages };
+  return { componentsDir, config, items, implicit, newPackages };
 }
 
 /**
@@ -181,14 +195,17 @@ function editDistance(a: string, b: string): number {
 
 /**
  * Registra la versión de cada componente cuyos archivos quedaron iguales a la plantilla. Si
- * alguno se omitió por estar modificado, se conserva lo que había.
+ * alguno se omitió por estar modificado, o el componente no se escribió (bloqueado), se conserva
+ * lo que había (y uno que no se agregó no aparece).
  */
 function updateMimiConfig(plan: Plan, report: FileReport): Rule {
   return (tree) => {
     const skipped = new Set(report.skipped);
+    const blocked = new Set(report.blocked.map((b) => b.item));
     const components = { ...plan.config.components };
     for (const item of plan.items) {
       if (registry.items[item].type !== 'component') continue;
+      if (blocked.has(item)) continue;
       if (registry.items[item].files.some((file) => skipped.has(file))) continue;
       components[item] = { version: registry.version };
     }
@@ -247,14 +264,18 @@ function summary(plan: Plan, report: FileReport): Rule {
       for (const file of report.overwritten) log.info(`  ~ ${path(file)}`);
     }
     const itemOf = (file: string) =>
-      plan.items.find((item) => registry.items[item].files.includes(file)) ?? file;
+      [...plan.items, ...plan.implicit].find((item) => registry.items[item].files.includes(file)) ??
+      file;
     for (const message of updatedMessages(report, itemOf, registry.version)) log.info(message);
     for (const file of report.skipped) {
       log.warn(
         `Omitido: ${path(file)} ya existe con otro contenido (usa --overwrite para reemplazarlo).`,
       );
     }
-    if (!hasFileChanges(report) && report.skipped.length === 0) {
+    for (const message of blockedMessages(report, plan.componentsDir, registry.version)) {
+      log.warn(message);
+    }
+    if (!hasFileChanges(report) && report.skipped.length === 0 && report.blocked.length === 0) {
       log.info('Nada que hacer: los archivos ya están al día.');
     }
 

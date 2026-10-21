@@ -221,6 +221,11 @@ Pendientes después del Grupo 1:
   - **`closeAll()` y navegación durante la acción:** cierran y resuelven `false` aunque la acción siga y quizá termine bien. Documentarlo o hacer que `closeAll()` respete el bloqueo.
   - **Cambio que exige en Dialog:** poder bloquear Escape y el fondo con el diálogo abierto. Propuesta: `disableClose` como signal en `MimiDialogRef`, leído en el momento en que llega Escape o el clic (hoy se calcula al abrir). Es API pública nueva de Dialog: spec 4, página de Dialog y pruebas.
 
+Después de la 0.2.0:
+
+- [ ] Angular 22.2.4 completo cuando salga core (trae #33974 del combobox). Hoy (21/10/2026) cdk y aria ya están en 22.2.4 y core, cli y build en 22.2.3: se sube todo junto, en la misma versión exacta, con `pnpm dedupe` para que las peers de ui-core no queden en la anterior.
+- [ ] Revisar rodeos con aria 22.2: MenuItem value opcional (#33715) y tokens exportados (#33607); quitar los que ya no hagan falta, con las pruebas de alarma.
+
 ## Correcciones de diseño pendientes
 
 Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude Design. Cada componente nuevo agrega aquí lo suyo (antes era la T.2a, dentro de Theme Studio).

@@ -16,7 +16,6 @@ import {
   type ButtonSize,
   type ButtonTone,
   type ButtonVariant,
-  type ButtonVariantShortcut,
   buttonVariants,
   resolveButtonStyle,
 } from './button.variants';
@@ -79,7 +78,8 @@ let warnedShortcutWithTone = false;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MimiButton {
-  readonly variant = input<ButtonVariant | ButtonVariantShortcut>('solid');
+  /** Incluye los atajos de la 0.1.x (`ButtonVariantShortcut`, deprecados). */
+  readonly variant = input<ButtonVariant>('solid');
   readonly tone = input<ButtonTone>();
   readonly size = input<ButtonSize>('default');
   readonly disabled = input(false, { transform: booleanAttribute });
@@ -96,7 +96,7 @@ export class MimiButton {
     if (style.ignoredTone && isDevMode() && !warnedShortcutWithTone) {
       warnedShortcutWithTone = true;
       console.warn(
-        `[mimi] mimiBtn: variant="${this.variant()}" ya define el color; se ignora ` +
+        `[Mimi] Button: variant="${this.variant()}" ya define el color; se ignora ` +
           `tone="${this.tone()}". Usa variant="${style.variant}" con tone (los atajos se ` +
           `quitan en la 1.0).`,
       );

@@ -1,8 +1,8 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import { buttonFocusStyles, controlDisabledStyles } from '@/components/ui/utils/control-styles';
 
-/** Cómo se ve el botón (spec 4, «Variante y tono»). */
-export type ButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost' | 'link';
+/** Cómo se ve el botón (spec 4, «Variante y tono»), sin los atajos de la 0.1.x. */
+export type ButtonStyleVariant = 'solid' | 'soft' | 'outline' | 'ghost' | 'link';
 
 /** De qué color es. `danger` usa los tokens `destructive`. */
 export type ButtonTone = 'primary' | 'secondary' | 'success' | 'warning' | 'info' | 'danger';
@@ -13,6 +13,12 @@ export type ButtonTone = 'primary' | 'secondary' | 'success' | 'warning' | 'info
  * @deprecated Se quitan en la 1.0 (spec 12). Usa `variant` y `tone`.
  */
 export type ButtonVariantShortcut = 'default' | 'secondary' | 'destructive';
+
+/**
+ * Lo que acepta `variant`: las variantes y, hasta la 1.0, los atajos de la 0.1.x (deprecados), para
+ * que el código que tipaba `ButtonVariant` con `'default'` o `'destructive'` siga compilando.
+ */
+export type ButtonVariant = ButtonStyleVariant | ButtonVariantShortcut;
 
 /**
  * Colores de cada tono en cada variante: una fila por tono, una entrada por variante. Todas las
@@ -78,7 +84,7 @@ const TONE_CLASSES = {
       'bg-transparent text-destructive-soft-foreground hover:not-disabled:bg-destructive-soft-bg',
     link: 'bg-transparent text-destructive-soft-foreground',
   },
-} as const satisfies Record<ButtonTone, Record<ButtonVariant, string>>;
+} as const satisfies Record<ButtonTone, Record<ButtonStyleVariant, string>>;
 
 /**
  * Clases de mimiBtn (docs/design/Mimi Componentes.dc.html, sección 1). Todas literales para
@@ -131,7 +137,7 @@ export const buttonVariants = cva(
       ...Object.entries(TONE_CLASSES).flatMap(([tone, byVariant]) =>
         Object.entries(byVariant).map(([variant, cls]) => ({
           tone: tone as ButtonTone,
-          variant: variant as ButtonVariant,
+          variant: variant as ButtonStyleVariant,
           class: cls,
         })),
       ),
@@ -146,7 +152,7 @@ type ButtonVariantProps = VariantProps<typeof buttonVariants>;
 export type ButtonSize = NonNullable<ButtonVariantProps['size']>;
 
 /** Sin `tone`, cada variante usa su tono natural: outline y ghost son neutros, como en la 0.1.0. */
-const NATURAL_TONE: Record<ButtonVariant, ButtonTone> = {
+const NATURAL_TONE: Record<ButtonStyleVariant, ButtonTone> = {
   solid: 'primary',
   soft: 'primary',
   outline: 'secondary',
@@ -154,24 +160,25 @@ const NATURAL_TONE: Record<ButtonVariant, ButtonTone> = {
   link: 'primary',
 };
 
-const SHORTCUTS: Record<ButtonVariantShortcut, { variant: ButtonVariant; tone: ButtonTone }> = {
-  default: { variant: 'solid', tone: 'primary' },
-  secondary: { variant: 'solid', tone: 'secondary' },
-  destructive: { variant: 'solid', tone: 'danger' },
-};
+const SHORTCUTS: Record<ButtonVariantShortcut, { variant: ButtonStyleVariant; tone: ButtonTone }> =
+  {
+    default: { variant: 'solid', tone: 'primary' },
+    secondary: { variant: 'solid', tone: 'secondary' },
+    destructive: { variant: 'solid', tone: 'danger' },
+  };
 
 /**
  * Resuelve variante y tono. Un atajo de la 0.1.0 gana siempre; `ignoredTone` indica que además
  * se pasó un `tone` que no se aplicó.
  */
 export function resolveButtonStyle(
-  variant: ButtonVariant | ButtonVariantShortcut,
+  variant: ButtonVariant,
   tone: ButtonTone | undefined,
-): { variant: ButtonVariant; tone: ButtonTone; ignoredTone: boolean } {
+): { variant: ButtonStyleVariant; tone: ButtonTone; ignoredTone: boolean } {
   if (variant in SHORTCUTS) {
     const shortcut = SHORTCUTS[variant as ButtonVariantShortcut];
     return { ...shortcut, ignoredTone: tone !== undefined && tone !== shortcut.tone };
   }
-  const v = variant as ButtonVariant;
+  const v = variant as ButtonStyleVariant;
   return { variant: v, tone: tone ?? NATURAL_TONE[v], ignoredTone: false };
 }

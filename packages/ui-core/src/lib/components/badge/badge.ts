@@ -3,7 +3,6 @@ import { cn } from '@/components/ui/utils/cn';
 import {
   type BadgeTone,
   type BadgeVariant,
-  type BadgeVariantShortcut,
   badgeVariants,
   resolveBadgeStyle,
 } from './badge.variants';
@@ -30,7 +29,8 @@ let warnedShortcutWithTone = false;
   },
 })
 export class MimiBadge {
-  readonly variant = input<BadgeVariant | BadgeVariantShortcut>('solid');
+  /** Incluye los atajos de la 0.1.x (`BadgeVariantShortcut`, deprecados). */
+  readonly variant = input<BadgeVariant>('solid');
   readonly tone = input<BadgeTone>();
   readonly userClass = input('', { alias: 'class' });
 
@@ -39,7 +39,7 @@ export class MimiBadge {
     if (style.ignoredTone && isDevMode() && !warnedShortcutWithTone) {
       warnedShortcutWithTone = true;
       console.warn(
-        `[mimi] mimiBadge: variant="${this.variant()}" ya define el color; se ignora ` +
+        `[Mimi] Badge: variant="${this.variant()}" ya define el color; se ignora ` +
           `tone="${this.tone()}". Usa variant="${style.variant}" con tone (los atajos se ` +
           `quitan en la 1.0).`,
       );

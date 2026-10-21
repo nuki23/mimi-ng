@@ -183,6 +183,7 @@ const PANE_CLASSES = ['[&>.cdk-dialog-container]:outline-none'];
 /**
  * Uso interno (se exporta porque el compilador lo exige): crea el contenido del usuario dentro
  * del panel. Hace lo mismo que NgComponentOutlet y NgTemplateOutlet, sin @angular/common.
+ * @internal No está en el índice; no forma parte de la API de Mimi.
  */
 @Directive({ selector: '[mimiDialogOutlet]' })
 export class MimiDialogOutlet {
@@ -218,6 +219,7 @@ export class MimiDialogOutlet {
 /**
  * Uso interno (se exporta porque el compilador lo exige): el panel del diálogo, con la X y el
  * contenido del usuario. Es lo que Mimi le abre al `Dialog` del CDK.
+ * @internal No está en el índice; no forma parte de la API de Mimi.
  */
 @Component({
   selector: 'mimi-dialog-shell',
@@ -326,8 +328,8 @@ export class MimiDialogShell {
         this.service.syncStack();
         if (isDevMode() && !this.options.config.ariaLabel && !this.ref.titleId()) {
           console.warn(
-            'Mimi Dialog: el diálogo no tiene nombre accesible. Marca su título con ' +
-              'mimiDialogTitle o pasa ariaLabel.',
+            '[Mimi] Dialog: el diálogo no tiene nombre accesible. Marca su título con ' +
+              'mimiDialogTitle o pasa ariaLabel (aria-label en <mimi-dialog>).',
           );
         }
       },

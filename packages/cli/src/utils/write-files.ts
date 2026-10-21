@@ -8,6 +8,7 @@ import {
   mergeWith,
   url,
 } from '@angular-devkit/schematics';
+import { registry, resolveItems } from '../registry';
 
 /** Carpeta de las copias originales, en la raíz del workspace. Debe quedar en git. */
 export const BASE_DIR = '.mimi/base';
@@ -27,8 +28,27 @@ export interface FileReport {
   updated: { file: string; from: string | null }[];
   /** Ya estaba al día (igual a la plantilla, o igual a su base en la misma versión). */
   unchanged: string[];
-  /** Modificado por el usuario (distinto de su base, o sin base): no se tocó, ni su base. */
+  /**
+   * Modificado por el usuario sobre la versión actual (o sin base: un archivo suyo que ya
+   * estaba): no se tocó, ni su base. El resto de su ítem sí se escribe: no mezcla versiones.
+   */
   skipped: string[];
+  /** Ítems que no se escribieron (ninguno de sus archivos), con el motivo. */
+  blocked: BlockedItem[];
+}
+
+/**
+ * Un ítem que no se escribió para no mezclar versiones: o el usuario modificó alguno de sus
+ * archivos de una versión anterior (`files`), o depende de un ítem que quedó así (`dependency`).
+ */
+export interface BlockedItem {
+  item: string;
+  /** Archivos modificados por el usuario (vacío si lo bloquea una dependencia). */
+  files: string[];
+  /** El ítem bloqueado del que depende. */
+  dependency?: string;
+  /** Ya estaba en el proyecto (se habría actualizado) o se habría agregado. */
+  installed: boolean;
 }
 
 export const emptyReport = (): FileReport => ({
@@ -37,6 +57,7 @@ export const emptyReport = (): FileReport => ({
   updated: [],
   unchanged: [],
   skipped: [],
+  blocked: [],
 });
 
 /** ¿El reporte tiene cambios en archivos del proyecto? */
@@ -69,32 +90,124 @@ function readManifest(tree: Tree): Manifest {
 }
 
 /**
- * Copia archivos de las plantillas del paquete (`dist/templates`, rutas relativas a esa
- * carpeta) a `componentsDir`, revisando el árbol antes de escribir. Si el archivo ya existe:
+ * Estado de un archivo antes de escribir:
  *
- * - igual a la plantilla → al día;
- * - igual a su base en `.mimi/base/` → el usuario no lo tocó. Si la base es de esta versión,
- *   la diferencia con la plantilla es solo de formato (la CLI de Angular pasa el Prettier del
- *   proyecto por lo que escriben los schematics): al día. Si es de una versión anterior, se
- *   actualiza;
- * - distinto de su base, o sin base → modificado por el usuario: se omite (o se reemplaza con
- *   `overwrite`).
+ * - `new`: no existe;
+ * - `same`: igual a la plantilla;
+ * - `formatted`: igual a su base de esta versión (la diferencia con la plantilla es solo de
+ *   formato: la CLI de Angular pasa el Prettier del proyecto por lo que escriben los schematics);
+ * - `old`: igual a su base de una versión anterior (el usuario no lo tocó): se actualiza;
+ * - `modifiedOld`: distinto de su base, que es de una versión anterior: el usuario modificó una
+ *   versión vieja. Bloquea su ítem;
+ * - `modified`: distinto de su base de esta versión, o sin base (un archivo suyo que ya estaba):
+ *   se conserva, sin bloquear nada.
+ */
+type FileState = 'new' | 'same' | 'formatted' | 'old' | 'modifiedOld' | 'modified';
+
+/**
+ * Copia los archivos de los ítems del registro desde las plantillas del paquete
+ * (`dist/templates`) a `componentsDir`. **Todo o nada por ítem:** primero revisa cada archivo
+ * (ver `FileState`) y después decide por ítem:
  *
- * Nunca deja que mergeWith encuentre un archivo existente ("merge conflicted"). Guarda la base
- * y su versión en `.mimi/manifest.json` siempre que el archivo quede igual a la plantilla; si se
- * omitió por estar modificado, su base no cambia.
+ * - si el usuario modificó alguno de sus archivos de una versión anterior, no se escribe
+ *   ninguno (ni los nuevos ni los que no tocó): mezclar versiones rompe la compilación;
+ * - lo mismo si depende (por `registryDependencies`, en cualquier nivel) de un ítem que quedó
+ *   así, esté instalado o no;
+ * - si no, se crean los que faltan y se actualizan los que el usuario no tocó. Los modificados
+ *   sobre esta versión se conservan (`skipped`).
+ *
+ * Con `overwrite`, todo se reemplaza y nada se bloquea. Los ítems `implicit` (el tema y lo que
+ * copia init, que `ng g mimi` revisa aunque no se pidan) solo se escriben si hay que
+ * actualizarlos: un cambio del usuario sobre la versión actual se respeta en silencio, también
+ * con `overwrite`, y no bloquean a otros ítems.
+ *
+ * Nunca deja que mergeWith encuentre un archivo existente ("merge conflicted"). Guarda la base y
+ * su versión en `.mimi/manifest.json` siempre que el archivo quede igual a la plantilla; los de un
+ * ítem bloqueado o conservado no cambian su base.
  */
 export function writeTemplates(options: {
-  files: Iterable<string>;
+  items: string[];
+  implicit?: Iterable<string>;
   componentsDir: string;
   overwrite: boolean;
   version: string;
   report: FileReport;
 }): Rule {
-  const files = new Set(options.files);
-  return (tree) => {
+  const items = [...new Set(options.items)];
+  const implicit = new Set(options.implicit ?? []);
+  const files = new Set(items.flatMap((item) => registry.items[item].files));
+  const contents = new Map<string, string>();
+
+  // 1. Lee las plantillas (sin escribir nada: forEach devuelve null).
+  const read = mergeWith(
+    apply(url('../templates'), [
+      filter((path) => files.has(path.replace(/^\//, ''))),
+      forEach((entry) => {
+        contents.set(entry.path.replace(/^\//, ''), entry.content.toString('utf8'));
+        return null;
+      }),
+    ]),
+  );
+
+  // 2. Decide por ítem y escribe.
+  const write: Rule = (tree) => {
     const manifest = readManifest(tree);
     let manifestChanged = false;
+    const targetOf = (file: string) => `${options.componentsDir}/${projectPathOf(file)}`;
+
+    const stateOf = (file: string): { state: FileState; from: string | null } => {
+      const target = targetOf(file);
+      if (!tree.exists(target)) return { state: 'new', from: null };
+      const current = tree.readText(target);
+      if (current === contents.get(file)) return { state: 'same', from: null };
+      const from = manifest.files[projectPathOf(file)] ?? null;
+      const base = basePathOf(file);
+      if (tree.exists(base)) {
+        if (tree.readText(base) === current) {
+          return { state: from === options.version ? 'formatted' : 'old', from };
+        }
+        if (from !== null && from !== options.version) return { state: 'modifiedOld', from };
+      }
+      return { state: 'modified', from };
+    };
+
+    const states = new Map(
+      items.map((item) => [
+        item,
+        registry.items[item].files
+          .filter((file) => contents.has(file))
+          .map((file) => ({ file, ...stateOf(file) })),
+      ]),
+    );
+
+    // Bloqueados por un cambio propio y, después, por una dependencia bloqueada.
+    const blocked = new Map<string, BlockedItem>();
+    if (!options.overwrite) {
+      for (const item of items) {
+        const modified = states.get(item)!.filter((s) => s.state === 'modifiedOld');
+        if (modified.length > 0) {
+          blocked.set(item, {
+            item,
+            files: modified.map((s) => s.file),
+            installed: true,
+          });
+        }
+      }
+      for (const item of items) {
+        if (blocked.has(item)) continue;
+        const dependency = resolveItems(item)
+          .filter((dep) => dep !== item)
+          .find((dep) => blocked.has(dep) && blocked.get(dep)!.files.length > 0);
+        if (dependency) {
+          blocked.set(item, {
+            item,
+            files: [],
+            dependency,
+            installed: states.get(item)!.some((s) => s.state !== 'new'),
+          });
+        }
+      }
+    }
 
     const writeBase = (file: string, content: string) => {
       const base = basePathOf(file);
@@ -107,58 +220,89 @@ export function writeTemplates(options: {
       }
     };
 
-    const copy = mergeWith(
-      apply(url('../templates'), [
-        filter((path) => files.has(path.replace(/^\//, ''))),
-        forEach((entry) => {
-          const file = entry.path.replace(/^\//, '');
-          const target = `${options.componentsDir}/${projectPathOf(file)}`;
-          const base = basePathOf(file);
-          const content = entry.content.toString('utf8');
-
-          if (!tree.exists(target)) {
+    for (const item of items) {
+      if (blocked.has(item)) {
+        options.report.blocked.push(blocked.get(item)!);
+        continue;
+      }
+      for (const { file, state, from } of states.get(item)!) {
+        const content = contents.get(file)!;
+        const target = targetOf(file);
+        switch (state) {
+          case 'new':
             tree.create(target, content);
             options.report.created.push(file);
             writeBase(file, content);
-            return null;
-          }
-          const current = tree.readText(target);
-          if (current === content) {
+            break;
+          case 'same':
             options.report.unchanged.push(file);
             writeBase(file, content);
-          } else if (tree.exists(base) && tree.readText(base) === current) {
-            const from = manifest.files[projectPathOf(file)] ?? null;
-            if (from === options.version) {
-              // Mismo contenido que escribió Mimi, solo con otro formato.
-              options.report.unchanged.push(file);
-            } else {
-              tree.overwrite(target, content);
-              options.report.updated.push({ file, from });
-              writeBase(file, content);
-            }
-          } else if (options.overwrite) {
+            break;
+          case 'formatted':
+            options.report.unchanged.push(file);
+            break;
+          case 'old':
             tree.overwrite(target, content);
-            options.report.overwritten.push(file);
+            options.report.updated.push({ file, from });
             writeBase(file, content);
-          } else {
-            options.report.skipped.push(file);
-          }
-          // Todo se escribe arriba, en el árbol del proyecto: nada llega a mergeWith.
-          return null;
-        }),
-      ]),
-    );
+            break;
+          case 'modifiedOld':
+          case 'modified':
+            // Un cambio sobre la versión actual de un ítem implícito se respeta siempre.
+            if (options.overwrite && !(implicit.has(item) && state === 'modified')) {
+              tree.overwrite(target, content);
+              options.report.overwritten.push(file);
+              writeBase(file, content);
+            } else if (!implicit.has(item)) {
+              options.report.skipped.push(file);
+            }
+            break;
+        }
+      }
+    }
 
-    const saveManifest: Rule = (t) => {
-      if (!manifestChanged) return;
+    if (manifestChanged) {
       const sorted = Object.fromEntries(Object.entries(manifest.files).sort());
       const text = `${JSON.stringify({ files: sorted }, null, 2)}\n`;
-      if (t.exists(MANIFEST)) t.overwrite(MANIFEST, text);
-      else t.create(MANIFEST, text);
-    };
-
-    return chain([copy, saveManifest]);
+      if (tree.exists(MANIFEST)) tree.overwrite(MANIFEST, text);
+      else tree.create(MANIFEST, text);
+    }
   };
+
+  return chain([read, write]);
+}
+
+/**
+ * Los avisos de los ítems que no se escribieron (`report.blocked`): qué no se actualizó, por qué
+ * y qué hacer. Nunca dicen «actualizado».
+ */
+export function blockedMessages(
+  report: FileReport,
+  componentsDir: string,
+  version: string,
+): string[] {
+  const path = (file: string) => `${componentsDir}/${projectPathOf(file)}`;
+  return report.blocked.map(({ item, files, dependency, installed }) => {
+    if (dependency) {
+      const needs = `necesita ${dependency} ${version}, que no se actualizó (ver el aviso de ${dependency}).`;
+      return installed
+        ? `${item} no se actualizó a ${version}: ${needs}`
+        : `${item} no se agregó: ${needs}`;
+    }
+    const isTheme = registry.items[item]?.type === 'theme';
+    const label = isTheme ? 'El tema' : item;
+    const dir = projectPathOf(files[0]).split('/').slice(0, -1).join('/');
+    return (
+      `${label} no se actualizó a ${version} porque modificaste ${files.map(path).join(', ')}. ` +
+      'No se cambió ninguno de sus archivos, para no mezclar versiones.' +
+      (isTheme
+        ? ` Los componentes de la ${version} usan tokens nuevos del tema: sin ellos, algunos estilos no se generan.`
+        : '') +
+      ' Para actualizarlo: guarda tus cambios (por ejemplo, en git), vuelve a ejecutar el ' +
+      'comando con --overwrite y aplícalos de nuevo. La versión de Mimi que modificaste está en ' +
+      `${BASE_DIR}/${dir}/, para comparar.`
+    );
+  });
 }
 
 /** Compara versiones `x.y.z` numéricamente (`0.10.0` > `0.9.0`). `null` es la más vieja. */

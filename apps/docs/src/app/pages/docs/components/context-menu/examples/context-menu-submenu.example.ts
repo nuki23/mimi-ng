@@ -6,7 +6,7 @@ import { MimiContextMenuImports } from '@/components/ui/context-menu';
   selector: 'app-context-menu-submenu-example',
   imports: [MimiContextMenuImports, LucideCode, LucidePrinter, LucideSave, LucideWrench],
   template: `
-    <mimi-context-menu label="Menú de la página">
+    <mimi-context-menu aria-label="Menú de la página">
       <div
         mimiContextMenuTrigger
         tabindex="0"

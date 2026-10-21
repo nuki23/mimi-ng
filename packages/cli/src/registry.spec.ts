@@ -51,8 +51,14 @@ function importsOf(file: string): string[] {
 const packageName = (spec: string) =>
   spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0];
 
-/** `@/components/ui/utils/cn` → `utils/cn`; `@/components/ui/card` → `card`. */
-const registryName = (spec: string) => spec.replace('@/components/ui/', '');
+/**
+ * `@/components/ui/utils/cn` → `utils/cn`; `@/components/ui/card` → `card`. Una pieza interna
+ * importada desde su archivo (`@/components/ui/menu/menu`, spec 4) es del ítem de su carpeta: `menu`.
+ */
+const registryName = (spec: string) => {
+  const [folder, file] = spec.replace('@/components/ui/', '').split('/');
+  return folder === 'utils' || folder === 'theme' ? `${folder}/${file}` : folder;
+};
 
 describe('registry.json', () => {
   const entries = Object.entries(registry.items);

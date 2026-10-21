@@ -28,7 +28,8 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import { MimiMenuItemsImports, MimiMenuPanel } from '@/components/ui/menu';
+import { MimiMenuItemsImports } from '@/components/ui/menu';
+import { MimiMenuPanel } from '@/components/ui/menu/menu';
 import {
   MIMI_VIEWPORT_MARGIN,
   mimiConnectedPositions,
@@ -59,7 +60,7 @@ const handled = new WeakSet<Event>();
 /**
  * Menú contextual: uno o varios triggers (`[mimiContextMenuTrigger]`) y el contenido en un
  * `<ng-template mimiContextMenuContent let-dato>`. No dibuja nada propio (`display: contents`): su
- * `class` y su `label` van al panel.
+ * `class` y su `aria-label` van al panel.
  */
 @Component({
   selector: 'mimi-context-menu',
@@ -86,7 +87,7 @@ const handled = new WeakSet<Event>();
             [template]="content.templateRef"
             [context]="context()"
             [menuId]="menuId"
-            [label]="label()"
+            [label]="ariaLabel() ?? ''"
             [state]="state()"
             [class]="userClass()"
             (closeRequest)="close($event)"
@@ -97,8 +98,9 @@ const handled = new WeakSet<Event>();
   `,
   host: {
     style: 'display: contents',
-    // El class es del panel: en el host no tendría efecto o se heredaría a los triggers.
+    // El class y el aria-label son del panel: en el host no tendrían efecto o se heredarían.
     '[attr.class]': 'null',
+    '[attr.aria-label]': 'null',
     '[attr.data-state]': 'open() ? "open" : "closed"',
     '[attr.data-disabled]': 'disabled() ? "" : null',
   },
@@ -110,8 +112,8 @@ export class MimiContextMenu {
 
   /** Abierto o cerrado. Admite `[(open)]`; abierto desde el código, va junto al primer trigger. */
   readonly open = model(false);
-  /** Nombre accesible del menú (aria-label). Hace falta: no hay un botón con texto que lo nombre. */
-  readonly label = input('');
+  /** Nombre accesible del menú (`aria-label`). Hace falta: no hay un botón con texto que lo nombre. */
+  readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   /** Sin menú propio: el clic derecho muestra el del navegador. */
   readonly disabled = input(false, { transform: booleanAttribute });
   /** Clases del panel, mezcladas con `cn()` (gana la del usuario). */
@@ -316,10 +318,10 @@ export class MimiContextMenu {
   }
 
   private warnMissingLabel(): void {
-    if (!isDevMode() || this.warnedLabel || this.label()) return;
+    if (!isDevMode() || this.warnedLabel || this.ariaLabel()) return;
     this.warnedLabel = true;
     console.warn(
-      'mimi-context-menu: el menú no tiene nombre accesible. Agrega label="…" al <mimi-context-menu>.',
+      '[Mimi] Context Menu: el menú no tiene nombre accesible. Agrega aria-label="…" al <mimi-context-menu>.',
     );
   }
 }

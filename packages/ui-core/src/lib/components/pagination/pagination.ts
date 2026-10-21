@@ -29,7 +29,8 @@ import { MIMI_PAGINATION_TEXT } from './pagination-texts';
  * `aria-disabled` en los extremos (no `disabled`), para que el foco no se pierda al llegar.
  */
 
-export type MimiPaginationSize = 'sm' | 'md';
+/** `sm` (por defecto, como el diseño) o `default`, con los nombres de tamaño de Button e Input. */
+export type MimiPaginationSize = 'sm' | 'default';
 export type MimiPaginationVariant = 'inline' | 'floating';
 
 /** Lo que emite `paginate`: el estado final de cada acción del usuario. */
@@ -46,7 +47,7 @@ const paginationVariants = cva(
   ],
   {
     variants: {
-      size: { sm: 'gap-[4px] p-[3px] text-[13px]', md: 'gap-[6px] p-[4px] text-sm' },
+      size: { sm: 'gap-[4px] p-[3px] text-[13px]', default: 'gap-[6px] p-[4px] text-sm' },
       // La flotante solo cambia la sombra; la posición se da con `class`.
       variant: {
         inline: 'shadow-neutral',
@@ -59,8 +60,9 @@ const paginationVariants = cva(
 
 const ARROW_CLASSES = {
   sm: 'size-[var(--mimi-pagination-item-size,var(--mimi-control-height-sm,2rem))] rounded-full [&_svg]:size-4',
-  md: 'size-[var(--mimi-pagination-item-size,var(--mimi-control-height,2.5rem))] rounded-full [&_svg]:size-[18px]',
-};
+  default:
+    'size-[var(--mimi-pagination-item-size,var(--mimi-control-height,2.5rem))] rounded-full [&_svg]:size-[18px]',
+} satisfies Record<MimiPaginationSize, string>;
 // 0,9 en vez del 0,88 del diseño (plan D6); deshabilitado, sin escala (también con Espacio).
 const ARROW_PRESS = 'active:scale-(--mimi-press-scale-sm) aria-disabled:active:scale-100';
 
@@ -135,7 +137,7 @@ let warnedSize = false;
         inputmode="numeric"
         autocomplete="off"
         enterkeyhint="go"
-        [size]="size() === 'md' ? 'default' : 'sm'"
+        [size]="size()"
         [class]="inputClasses()"
         [showError]="error()"
         [value]="fieldValue()"
@@ -283,7 +285,7 @@ export class MimiPagination {
     if (!options.length || options.includes(size)) return options;
     if (isDevMode() && !warnedSize) {
       warnedSize = true;
-      console.warn(`Mimi Pagination: pageSize (${size}) no está en pageSizeOptions; se agrega.`);
+      console.warn(`[Mimi] Pagination: pageSize (${size}) no está en pageSizeOptions; se agrega.`);
     }
     return [...options, size].sort((a, b) => a - b);
   });
@@ -308,7 +310,7 @@ export class MimiPagination {
   protected readonly inputClasses = computed(() =>
     cn(
       INPUT_CLASSES,
-      this.size() === 'md'
+      this.size() === 'default'
         ? 'w-[var(--mimi-pagination-input-width,52px)]'
         : 'w-[var(--mimi-pagination-input-width,44px)]',
     ),
@@ -317,7 +319,7 @@ export class MimiPagination {
   protected readonly placeholderClasses = computed(() =>
     cn(
       'inline-flex items-center gap-1 rounded-full pr-2 pl-2.5 font-semibold whitespace-nowrap tabular-nums',
-      this.size() === 'md'
+      this.size() === 'default'
         ? 'h-[var(--mimi-pagination-item-size,var(--mimi-control-height,2.5rem))] text-sm'
         : 'h-[var(--mimi-pagination-item-size,var(--mimi-control-height-sm,2rem))] text-[13px]',
     ),

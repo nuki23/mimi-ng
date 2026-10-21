@@ -23,7 +23,6 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
-import { cva } from 'class-variance-authority';
 import { cn } from '@/components/ui/utils/cn';
 import { MIMI_OVERLAY_ANIMATION, MIMI_VIEWPORT_MARGIN } from '@/components/ui/utils/overlay';
 
@@ -40,12 +39,16 @@ import { MIMI_OVERLAY_ANIMATION, MIMI_VIEWPORT_MARGIN } from '@/components/ui/ut
 
 let nextId = 0;
 
-/** Uso interno: el panel avisa al ítem elegido. */
+/**
+ * Uso interno: el panel avisa al ítem elegido.
+ * @internal No está en el índice; no forma parte de la API de Mimi.
+ */
 export interface MimiMenuHost {
   register(id: string, select: () => void): void;
   unregister(id: string): void;
 }
 
+/** @internal No está en el índice; no forma parte de la API de Mimi. */
 export const MIMI_MENU_HOST = new InjectionToken<MimiMenuHost>('MimiMenuHost');
 
 /**
@@ -53,6 +56,7 @@ export const MIMI_MENU_HOST = new InjectionToken<MimiMenuHost>('MimiMenuHost');
  * contenido del usuario con el injector de este punto, dentro del `ngMenu`, para que los ítems
  * encuentren su menú. Hace lo mismo que NgTemplateOutlet con `injector`, sin @angular/common.
  * `mimiMenuOutletContext` llega al contenido como `let-x` (el dato de la fila en Context Menu).
+ * @internal No está en el índice; no forma parte de la API de Mimi.
  */
 @Directive({ selector: '[mimiMenuOutlet]' })
 export class MimiMenuOutlet {
@@ -70,7 +74,10 @@ export class MimiMenuOutlet {
   });
 }
 
-/** Panel del menú y del submenú: fondo, borde, radio y sombra de la spec 13. */
+/**
+ * Panel del menú y del submenú: fondo, borde, radio y sombra de la spec 13.
+ * @internal No está en el índice; no forma parte de la API de Mimi.
+ */
 export const MIMI_MENU_PANEL_CLASSES =
   'flex flex-col p-1 outline-none rounded-[var(--mimi-menu-radius,var(--mimi-radius))] border border-[color:var(--mimi-menu-border,var(--mimi-border))] bg-[color:var(--mimi-menu-bg,var(--mimi-popover))] text-popover-foreground shadow-[shadow:var(--mimi-menu-shadow,var(--mimi-shadow-popover))]';
 
@@ -80,6 +87,7 @@ export const MIMI_MENU_PANEL_CLASSES =
  * avisa al ítem elegido y pide cerrar; Escape (aria detiene su propagación, así que se escucha en
  * el mismo elemento); Tab fuera del menú; y el foco inicial con Home/End, porque aria no tiene un
  * método público para enfocar el primer o el último ítem. Lleva la animación de entrada y salida.
+ * @internal No está en el índice: Dropdown Menu y Context Menu lo importan desde `menu/menu`.
  */
 @Component({
   selector: 'mimi-menu-panel',
@@ -205,40 +213,45 @@ export class MimiMenuPanel implements MimiMenuHost {
   }
 }
 
-export type MimiMenuItemTone = 'default' | 'danger';
+/**
+ * Tono de un ítem: un subconjunto de la lista común (spec 4, «Variante y tono»). Sin `tone`, el
+ * color normal del menú; no hay un valor «por defecto» con nombre.
+ */
+export type MimiMenuItemTone = 'danger';
 
-export const menuItemVariants = cva(
-  [
-    'relative flex h-[var(--mimi-menu-item-height,32px)] cursor-pointer items-center gap-2 px-2 text-sm outline-none select-none',
-    'rounded-[var(--mimi-menu-item-radius,var(--mimi-radius-sm))]',
-    'transition-[background-color] duration-120 ease-[ease] active:scale-[0.985]',
-    'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:active:scale-100',
-  ],
-  {
-    variants: {
-      tone: {
-        // Activo (puntero o teclado) con fondo; deshabilitado, solo con el foco de teclado.
-        default: [
-          'text-popover-foreground',
-          'not-aria-disabled:data-[active=true]:bg-[color:var(--mimi-menu-item-hover,var(--mimi-accent))]',
-          'aria-disabled:focus-visible:bg-[color:var(--mimi-menu-item-hover,var(--mimi-accent))]',
-          'aria-expanded:bg-[color:var(--mimi-menu-item-hover,var(--mimi-accent))]',
-        ],
-        danger: [
-          'text-[color:var(--mimi-menu-danger,var(--mimi-destructive-soft-foreground))]',
-          'not-aria-disabled:data-[active=true]:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft-bg))]',
-          'aria-disabled:focus-visible:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft-bg))]',
-        ],
-      },
-    },
-    defaultVariants: { tone: 'default' },
-  },
-);
+/** Sin tono: activo (puntero o teclado) con fondo; deshabilitado, solo con el foco de teclado. */
+const NO_TONE = [
+  'text-popover-foreground',
+  'not-aria-disabled:data-[active=true]:bg-[color:var(--mimi-menu-item-hover,var(--mimi-accent))]',
+  'aria-disabled:focus-visible:bg-[color:var(--mimi-menu-item-hover,var(--mimi-accent))]',
+  'aria-expanded:bg-[color:var(--mimi-menu-item-hover,var(--mimi-accent))]',
+];
+
+const DANGER = [
+  'text-[color:var(--mimi-menu-danger,var(--mimi-destructive-soft-foreground))]',
+  'not-aria-disabled:data-[active=true]:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft-bg))]',
+  'aria-disabled:focus-visible:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft-bg))]',
+];
+
+const MENU_ITEM_BASE = [
+  'relative flex h-[var(--mimi-menu-item-height,32px)] cursor-pointer items-center gap-2 px-2 text-sm outline-none select-none',
+  'rounded-[var(--mimi-menu-item-radius,var(--mimi-radius-sm))]',
+  'transition-[background-color] duration-120 ease-[ease] active:scale-[0.985]',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:active:scale-100',
+];
+
+/**
+ * Clases de un ítem de menú (también checkbox, radio y el disparador de un submenú).
+ * @internal No está en el índice; no forma parte de la API de Mimi.
+ */
+export function menuItemVariants({ tone }: { tone?: MimiMenuItemTone } = {}): string {
+  return cn(MENU_ITEM_BASE, tone === 'danger' ? DANGER : NO_TONE);
+}
 
 /** Columna de ícono de 16px. El check del checkbox va en `foreground`; los íconos, en muted. */
 const ICON_COLUMN = 'inline-flex w-4 shrink-0 justify-center [&_svg]:size-4 [&_svg]:shrink-0';
-const ICON_TONE: Record<MimiMenuItemTone | 'checked', string> = {
-  default: 'text-muted-foreground',
+const ICON_TONE = {
+  muted: 'text-muted-foreground',
   checked: 'text-foreground',
   danger: 'text-[color:var(--mimi-menu-danger,var(--mimi-destructive-soft-foreground))]',
 };
@@ -295,8 +308,8 @@ function menuSearchTerm(
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MimiMenuItem {
-  /** `danger` para acciones destructivas (texto y hover en rojo suave). */
-  readonly tone = input<MimiMenuItemTone>('default');
+  /** `danger` para acciones destructivas (texto y hover en rojo suave). Sin él, el color normal. */
+  readonly tone = input<MimiMenuItemTone>();
   /** Atajo de teclado que se muestra (solo texto: no registra el atajo). */
   readonly shortcut = input('');
   /** No se puede elegir (recibe el foco, como pide el patrón de menú). */
@@ -315,7 +328,9 @@ export class MimiMenuItem {
   protected readonly classes = computed(() =>
     cn(menuItemVariants({ tone: this.tone() }), this.userClass()),
   );
-  protected readonly iconClasses = computed(() => cn(ICON_COLUMN, ICON_TONE[this.tone()]));
+  protected readonly iconClasses = computed(() =>
+    cn(ICON_COLUMN, this.tone() === 'danger' ? ICON_TONE.danger : ICON_TONE.muted),
+  );
   protected readonly labelClasses = LABEL;
   protected readonly shortcutClasses = SHORTCUT;
 }
@@ -384,14 +399,14 @@ export class MimiMenuCheckboxItem {
 @Component({
   selector: 'mimi-menu-radio-group',
   template: '<ng-content />',
-  host: { role: 'group', '[attr.aria-label]': 'label() || null', '[class]': 'classes()' },
+  host: { role: 'group', '[attr.aria-label]': 'ariaLabel() || null', '[class]': 'classes()' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MimiMenuRadioGroup {
   /** Valor de la opción marcada. Admite `[(value)]`. */
   readonly value = model<unknown>(undefined);
-  /** Nombre accesible del grupo (aria-label). */
-  readonly label = input('');
+  /** Nombre accesible del grupo (`aria-label`). */
+  readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() => cn('flex flex-col', this.userClass()));
 }
@@ -444,7 +459,7 @@ export class MimiMenuRadioItem {
 
   constructor() {
     if (isDevMode() && !this.group) {
-      console.warn('mimi-menu-radio-item: ponlo dentro de un <mimi-menu-radio-group>.');
+      console.warn('[Mimi] Menu: pon <mimi-menu-radio-item> dentro de un <mimi-menu-radio-group>.');
     }
   }
 }
@@ -499,7 +514,7 @@ export class MimiMenuSubTrigger {
   readonly userClass = input('', { alias: 'class' });
 
   readonly label = viewChild<ElementRef<HTMLElement>>('label');
-  protected readonly iconClasses = cn(ICON_COLUMN, ICON_TONE.default);
+  protected readonly iconClasses = cn(ICON_COLUMN, ICON_TONE.muted);
   protected readonly labelClasses = LABEL;
 }
 

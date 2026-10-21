@@ -301,7 +301,7 @@ export class MimiToolbar {
     ].filter(Boolean);
     if (!problems.length) return;
     this.warned = true;
-    console.warn(`Mimi Toolbar: ${problems.join('; ')}.`);
+    console.warn(`[Mimi] Toolbar: ${problems.join('; ')}.`);
   }
 }
 

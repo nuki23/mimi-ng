@@ -19,7 +19,7 @@ import { MimiDropdownMenuImports } from '@/components/ui/dropdown-menu';
     LucideSettings,
   ],
   template: `
-    <mimi-dropdown-menu label="Proyecto">
+    <mimi-dropdown-menu aria-label="Proyecto">
       <button mimiBtn variant="outline" mimiDropdownMenuTrigger>
         panel-ventas
         <svg lucideChevronsUpDown></svg>

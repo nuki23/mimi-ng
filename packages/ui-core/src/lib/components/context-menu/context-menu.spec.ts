@@ -11,7 +11,12 @@ interface Row {
   imports: [MimiContextMenuImports],
   template: `
     <button data-test="outside">Fuera</button>
-    <mimi-context-menu [(open)]="open" [label]="label()" [disabled]="disabled()" [class]="extra()">
+    <mimi-context-menu
+      [(open)]="open"
+      [aria-label]="label()"
+      [disabled]="disabled()"
+      [class]="extra()"
+    >
       @for (row of rows; track row.id) {
         <div
           [attr.data-test]="'row-' + row.id"

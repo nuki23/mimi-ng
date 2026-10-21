@@ -3,10 +3,14 @@ import { TestBed } from '@angular/core/testing';
 import { MimiButton } from './button';
 import type {
   ButtonSize,
+  ButtonStyleVariant,
   ButtonTone,
   ButtonVariant,
   ButtonVariantShortcut,
 } from './button.variants';
+
+// Código de la 0.1.x: `ButtonVariant` aceptaba los atajos. Tiene que seguir compilando (D1).
+const LEGACY_VARIANTS: ButtonVariant[] = ['default', 'secondary', 'destructive', 'outline'];
 
 @Component({
   imports: [MimiButton],
@@ -35,7 +39,7 @@ import type {
   `,
 })
 class Host {
-  readonly variant = signal<ButtonVariant | ButtonVariantShortcut>('solid');
+  readonly variant = signal<ButtonVariant>('solid');
   readonly tone = signal<ButtonTone | undefined>(undefined);
   readonly size = signal<ButtonSize>('default');
   readonly disabled = signal(false);
@@ -116,7 +120,7 @@ describe('MimiButton', () => {
   });
 
   // Una clase representativa de cada variante con cada tono (button.variants.ts, TONE_CLASSES).
-  const EXPECTED: Record<ButtonVariant, Record<ButtonTone, string>> = {
+  const EXPECTED: Record<ButtonStyleVariant, Record<ButtonTone, string>> = {
     solid: {
       primary: 'bg-primary',
       secondary: 'bg-secondary',
@@ -158,7 +162,7 @@ describe('MimiButton', () => {
       danger: 'text-destructive-soft-foreground',
     },
   };
-  const COMBOS = (Object.keys(EXPECTED) as ButtonVariant[]).flatMap((variant) =>
+  const COMBOS = (Object.keys(EXPECTED) as ButtonStyleVariant[]).flatMap((variant) =>
     (Object.keys(EXPECTED[variant]) as ButtonTone[]).map(
       (tone) => [variant, tone, EXPECTED[variant][tone]] as const,
     ),
@@ -175,7 +179,7 @@ describe('MimiButton', () => {
     expect(button.classList).toContain(expected);
   });
 
-  it.each<[ButtonVariant, ButtonTone]>([
+  it.each<[ButtonStyleVariant, ButtonTone]>([
     ['solid', 'primary'],
     ['soft', 'primary'],
     ['outline', 'secondary'],
@@ -221,6 +225,14 @@ describe('MimiButton', () => {
     expect(button.dataset['variant']).toBe('solid');
     expect(button.dataset['tone']).toBe(tone);
     for (const cls of classes) expect(button.classList).toContain(cls);
+  });
+
+  it('el tipo ButtonVariant de la 0.1.x (con atajos) sigue sirviendo para la entrada', async () => {
+    const { host, button, update } = await setup();
+    for (const variant of LEGACY_VARIANTS) {
+      await update(() => host.variant.set(variant));
+      expect(button.dataset['variant']).toBe(variant === 'outline' ? 'outline' : 'solid');
+    }
   });
 
   it('un atajo con tone: gana el atajo y avisa una sola vez en modo desarrollo', async () => {

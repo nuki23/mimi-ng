@@ -42,14 +42,14 @@
       <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
         >utils/field-state.ts</code
       >
-      (el estado del formulario: Input, Textarea, Switch, Checkbox, FormField y Select).
+      (el estado del formulario: Input, Textarea, Switch, Checkbox, FormField, Select y Pagination).
     </li>
     <li>
       <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
         >utils/overlay.ts</code
       >
-      (posición y animación de los paneles: Popover, Tooltip, los menús, Select, Dialog, Confirm y
-      Toast).
+      (posición y animación de los paneles: Popover, Tooltip, los menús, Select, Dialog, Confirm,
+      Toast y Pagination).
     </li>
     <li>
       Otros componentes: Confirm trae Dialog y Button; Toast, Button; Pagination, Button, Input y
@@ -164,7 +164,9 @@
   </p>
   <app-code-block [code]="toneExample" lang="angular-html" />
   <p class="text-pretty">
-    Los demás componentes usan solo los valores que tienen sentido para ellos:
+    Los demás componentes usan un subconjunto de esa misma lista; no hay otros nombres de tono. Sin
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tone</code>, cada uno
+    usa su color natural («neutro» no es un valor que se escriba):
   </p>
   <div class="overflow-x-auto rounded-card border">
     <table class="w-full text-left text-sm">
@@ -419,8 +421,8 @@
       <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code>.
     </li>
     <li>
-      Para los componentes con paneles, agrega una vez a tu CSS global, después del tema, los
-      estilos del CDK:
+      Para los componentes con paneles, la CLI agrega a tu CSS global, una sola vez y después del
+      tema, los estilos del CDK (si no encuentra tu CSS global, te pide que lo agregues a mano):
     </li>
   </ul>
   <app-code-block [code]="overlayImport" lang="css" />
@@ -440,6 +442,22 @@
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">pageSizeOptions</code>.
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;defer</code> suma
     una vez a tu app su parte de Angular (unos 6,5 kB crudos, 2,3 kB gzip).
+  </p>
+  <p class="text-pretty">
+    <strong>Usa rutas lazy</strong> (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >loadComponent</code
+    >) para las páginas con overlays. En un proyecto recién creado con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng new</code>, una
+    página con Select, Dialog y Toast cargada desde el inicio deja el bundle inicial en unos 564 kB
+    crudos, y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng build</code> muestra
+    un aviso: el presupuesto que trae
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng new</code> en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">angular.json</code>
+    avisa desde 500 kB (y falla desde 1 MB). Es solo un aviso del presupuesto por defecto, no un
+    error de Mimi: con esa página en una ruta lazy, el JS inicial no incluye esos componentes ni el
+    CDK.
   </p>
 
   <!-- 11 -->
@@ -473,9 +491,11 @@
     vuelve a correr
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
       >ng g mimi &lt;nombre&gt;</code
-    >: actualiza los archivos que no tocaste y se salta los que modificaste, con un aviso;
+    >. Actualiza el componente, lo que necesita y el tema, si no los modificaste. La unidad es el
+    componente: si modificaste alguno de sus archivos, no se actualiza ninguno (ni los componentes
+    que dependen de él), y un aviso te dice por qué y qué hacer;
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--overwrite</code> los
-    reemplaza. Los detalles, en
+    reemplaza. Lo mismo con el tema: si lo modificaste, no se toca. Los detalles, en
     <a
       routerLink="/docs/installation"
       fragment="updates"

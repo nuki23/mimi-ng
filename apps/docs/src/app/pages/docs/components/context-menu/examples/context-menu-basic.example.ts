@@ -20,7 +20,7 @@ import { MimiContextMenuImports } from '@/components/ui/context-menu';
   ],
   template: `
     <div class="flex w-full flex-col gap-3">
-      <mimi-context-menu label="Menú contextual">
+      <mimi-context-menu aria-label="Menú contextual">
         <div
           mimiContextMenuTrigger
           tabindex="0"

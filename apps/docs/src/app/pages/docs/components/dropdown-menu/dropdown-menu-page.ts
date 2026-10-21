@@ -130,10 +130,10 @@ export class DropdownMenuPage {
       description: 'Alineación con el botón.',
     },
     {
-      name: 'label',
+      name: 'aria-label',
       type: 'string',
-      default: "''",
-      description: 'Nombre accesible del menú. Sin él, lo nombra el texto del botón.',
+      default: '—',
+      description: 'Nombre accesible del menú (va al panel). Sin él, lo nombra el texto del botón.',
     },
     {
       name: 'class',
@@ -146,7 +146,7 @@ export class DropdownMenuPage {
   protected readonly itemApi = [
     {
       name: 'mimi-menu-item',
-      inputs: 'tone (default | danger), shortcut, disabled, textValue, class',
+      inputs: 'tone (danger; sin él, el color normal), shortcut, disabled, textValue, class',
       outputs: '(selected)',
     },
     {
@@ -154,7 +154,11 @@ export class DropdownMenuPage {
       inputs: '[(checked)], shortcut, disabled, textValue, class',
       outputs: '(checkedChange)',
     },
-    { name: 'mimi-menu-radio-group', inputs: '[(value)], label, class', outputs: '(valueChange)' },
+    {
+      name: 'mimi-menu-radio-group',
+      inputs: '[(value)], aria-label, class',
+      outputs: '(valueChange)',
+    },
     { name: 'mimi-menu-radio-item', inputs: 'value, disabled, textValue, class', outputs: '—' },
     { name: 'mimi-menu-sub', inputs: 'class (del panel del submenú)', outputs: '—' },
     { name: 'mimi-menu-sub-trigger', inputs: 'disabled, textValue, class', outputs: '—' },

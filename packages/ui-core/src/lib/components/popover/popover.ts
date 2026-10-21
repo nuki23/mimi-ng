@@ -59,6 +59,7 @@ let nextId = 0;
  * Angular lo exige): pinta el contenido del usuario dentro del panel. Hace lo mismo que
  * NgTemplateOutlet, pero sin importar @angular/common: esbuild pondría ese módulo en el chunk
  * inicial del proyecto, aunque Popover sea lazy (spec 10).
+ * @internal No está en el índice; no forma parte de la API de Mimi.
  */
 @Directive({ selector: '[mimiPopoverOutlet]' })
 export class MimiPopoverOutlet {
@@ -76,7 +77,7 @@ export class MimiPopoverOutlet {
 /**
  * Contenedor del popover: un trigger (`[mimiPopoverTrigger]`) y el contenido en un
  * `<ng-template mimiPopoverContent>`. No dibuja nada propio (`display: contents`): su `class` y
- * su `label` van al panel.
+ * su `aria-label` van al panel.
  */
 @Component({
   selector: 'mimi-popover',
@@ -105,8 +106,8 @@ export class MimiPopoverOutlet {
         tabindex="-1"
         [id]="panelId"
         [class]="panelClasses()"
-        [attr.aria-label]="label() || null"
-        [attr.aria-labelledby]="label() ? null : titleId()"
+        [attr.aria-label]="ariaLabel() || null"
+        [attr.aria-labelledby]="ariaLabel() ? null : titleId()"
         [attr.aria-describedby]="descriptionId()"
         [attr.data-state]="state()"
         [attr.data-side]="placedSide()"
@@ -126,8 +127,9 @@ export class MimiPopoverOutlet {
   styles: MIMI_OVERLAY_ANIMATION,
   host: {
     style: 'display: contents',
-    // El class es del panel: en el host no tendría efecto o se heredaría al trigger.
+    // El class y el aria-label son del panel: en el host no tendrían efecto o se heredarían.
     '[attr.class]': 'null',
+    '[attr.aria-label]': 'null',
     '[attr.data-state]': 'open() ? "open" : "closed"',
     '[attr.data-side]': 'side()',
     '[attr.data-align]': 'align()',
@@ -149,8 +151,8 @@ export class MimiPopover {
   readonly align = input<MimiPopoverAlign>('center');
   /** Flecha hacia el trigger (decorativa). */
   readonly arrow = input(true, { transform: booleanAttribute });
-  /** Nombre accesible del panel (aria-label). Si hay `mimiPopoverTitle`, no hace falta. */
-  readonly label = input('');
+  /** Nombre accesible del panel (`aria-label`). Si hay `mimiPopoverTitle`, no hace falta. */
+  readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   /** Clases del panel, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
 
@@ -296,10 +298,10 @@ export class MimiPopover {
 
   private warnMissingLabel(): void {
     if (!isDevMode() || this.warnedLabel) return;
-    if (this.label() || this.titleId()) return;
+    if (this.ariaLabel() || this.titleId()) return;
     this.warnedLabel = true;
     console.warn(
-      'mimi-popover: el panel no tiene nombre accesible. Agrega label="…" al ' +
+      '[Mimi] Popover: el panel no tiene nombre accesible. Agrega aria-label="…" al ' +
         '<mimi-popover> o marca su título con mimiPopoverTitle.',
     );
   }

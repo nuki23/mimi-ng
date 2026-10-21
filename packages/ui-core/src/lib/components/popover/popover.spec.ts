@@ -12,7 +12,7 @@ import { MimiPopoverImports, type MimiPopoverAlign, type MimiPopoverSide } from 
       [align]="align()"
       [arrow]="arrow()"
       [class]="extra()"
-      [label]="label()"
+      [aria-label]="label()"
     >
       <button data-test="trigger" mimiPopoverTrigger>Invitar</button>
       <ng-template mimiPopoverContent>
@@ -103,7 +103,7 @@ describe('MimiPopover', () => {
     expect(description.className).toContain('text-muted-foreground');
   });
 
-  it('label="…" da el aria-label y le gana al título', async () => {
+  it('aria-label="…" va al panel y le gana al título', async () => {
     const { fixture, panel, open, host } = await setup();
     host.label.set('Invitar');
     await settle(fixture);
@@ -239,11 +239,11 @@ describe('MimiPopover', () => {
     expect(classes).not.toContain('border-[color:var(--mimi-popover-border,var(--mimi-border))]');
   });
 
-  it('class y label estáticos van al panel, no al host', async () => {
+  it('class y aria-label estáticos van al panel, no al host', async () => {
     @Component({
       imports: [MimiPopoverImports],
       template: `
-        <mimi-popover [open]="true" class="w-96 text-lg" label="Prueba">
+        <mimi-popover [open]="true" class="w-96 text-lg" aria-label="Prueba">
           <button mimiPopoverTrigger>Abrir</button>
           <ng-template mimiPopoverContent>Hola</ng-template>
         </mimi-popover>
@@ -259,6 +259,8 @@ describe('MimiPopover', () => {
     // Si quedara en el host (display: contents), text-lg se heredaría al trigger.
     const host = (fixture.nativeElement as HTMLElement).querySelector('mimi-popover')!;
     expect(host.hasAttribute('class')).toBe(false);
+    // Dos nombres (host y panel) harían que el lector lo anuncie dos veces.
+    expect(host.hasAttribute('aria-label')).toBe(false);
     fixture.destroy();
   });
 

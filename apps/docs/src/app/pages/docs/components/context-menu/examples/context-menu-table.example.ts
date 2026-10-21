@@ -15,7 +15,7 @@ interface FileRow {
   imports: [MimiContextMenuImports, MimiDropdownMenuImports, MimiButton, LucideEllipsis],
   template: `
     <div class="flex w-full flex-col gap-3">
-      <mimi-context-menu label="Acciones del archivo">
+      <mimi-context-menu aria-label="Acciones del archivo">
         <table class="w-full text-left text-sm">
           <thead class="text-muted-foreground">
             <tr class="border-b">
@@ -35,7 +35,7 @@ interface FileRow {
                 <td class="px-3 py-2 text-muted-foreground">{{ file.size }}</td>
                 <td class="px-3 py-1">
                   <!-- En táctil no hay clic derecho: las mismas acciones, en un botón. -->
-                  <mimi-dropdown-menu align="end" [label]="'Acciones de ' + file.name">
+                  <mimi-dropdown-menu align="end" [aria-label]="'Acciones de ' + file.name">
                     <button
                       mimiBtn
                       variant="ghost"
@@ -52,7 +52,7 @@ interface FileRow {
                           <mimi-menu-separator />
                         }
                         <mimi-menu-item
-                          [tone]="action === 'Eliminar' ? 'danger' : 'default'"
+                          [tone]="action === 'Eliminar' ? 'danger' : undefined"
                           (selected)="last.set(action + ' ' + file.name)"
                         >
                           {{ action }}
@@ -72,7 +72,7 @@ interface FileRow {
               <mimi-menu-separator />
             }
             <mimi-menu-item
-              [tone]="action === 'Eliminar' ? 'danger' : 'default'"
+              [tone]="action === 'Eliminar' ? 'danger' : undefined"
               (selected)="last.set(action + ' ' + file.name)"
             >
               {{ action }}

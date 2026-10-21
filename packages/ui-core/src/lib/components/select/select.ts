@@ -175,6 +175,7 @@ export class MimiSelectOption {
  * Uso interno (no está en los Imports; se exporta porque el compilador lo exige): pinta la
  * plantilla `mimiSelectOption` y actualiza su contexto sin recrearla. Hace lo mismo que
  * NgTemplateOutlet, sin @angular/common.
+ * @internal No está en el índice; no forma parte de la API de Mimi.
  */
 @Directive({ selector: '[mimiSelectOutlet]' })
 export class MimiSelectOutlet {
@@ -226,6 +227,7 @@ const SKELETON_CLASSES =
  * El `value` del listbox es solo lo que se pinta (el check y `aria-selected`): el valor real es
  * el de Select. Rodeo: aria desmarca la opción elegida al volver a elegirla y vacía el valor
  * cuando la opción queda fuera del filtro; aquí se le vuelve a escribir (`resync`).
+ * @internal No está en el índice; no forma parte de la API de Mimi.
  */
 @Component({
   selector: 'mimi-select-list',

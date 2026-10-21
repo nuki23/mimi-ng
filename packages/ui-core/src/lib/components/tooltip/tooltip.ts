@@ -80,7 +80,10 @@ function normalizeName(value: string): string {
   return value.trim().replace(/\s+/g, ' ').toLowerCase();
 }
 
-/** Panel del tooltip (uso interno: lo crea `mimiTooltip`; no está en la API pública). */
+/**
+ * Panel del tooltip (uso interno: lo crea `mimiTooltip`).
+ * @internal No está en el índice; no forma parte de la API de Mimi.
+ */
 @Component({
   selector: 'mimi-tooltip-panel',
   template: `

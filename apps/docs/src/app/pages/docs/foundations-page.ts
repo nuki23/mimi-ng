@@ -138,10 +138,11 @@ export class FoundationsPage {
   protected readonly otherTones = [
     {
       component: 'Toast',
-      values: 'tone: neutral, success, warning, info, danger · variant: outline, solid',
+      values:
+        'el tono sale del método: success(), info(), warning(), error() (danger); toast(), sin tono · variant: outline, solid',
     },
-    { component: 'Confirm', values: 'tone: primary, danger' },
-    { component: 'Ítems de menú', values: 'tone: default, danger' },
+    { component: 'Confirm', values: 'tone: primary (por defecto), danger' },
+    { component: 'Ítems de menú', values: 'tone: danger (sin tone, el color normal)' },
     { component: 'Tabs', values: 'variant: underline, pill (sin tono)' },
     { component: 'Pagination', values: 'variant: inline, floating (sin tono)' },
   ];
@@ -238,7 +239,7 @@ export class FoundationsPage {
 
   protected readonly compatibility = [
     'Los atajos variant="default", "secondary" y "destructive" de Button y Badge (pasan a tone).',
-    'Los nombres de tokens de la 0.1.0 (paddingX, placeholderColor, radii.badge), con un aviso en desarrollo.',
+    'Los nombres de tokens de la 0.1.0 (paddingX, placeholderColor, radii.badge), con un aviso en desarrollo, y sus variables CSS (--mimi-btn-padding-x, --mimi-input-padding-x, --mimi-input-placeholder-color).',
     'El alias destructive-soft del anillo: en la 1.0 pasa a ser el fondo suave, así que cambia ring-destructive-soft por ring-destructive-ring antes.',
     '"vivid" como estilo en mimi.json (es "mimi").',
   ];

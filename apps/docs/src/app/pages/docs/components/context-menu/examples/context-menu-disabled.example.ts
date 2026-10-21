@@ -10,7 +10,7 @@ import { MimiContextMenuImports } from '@/components/ui/context-menu';
       <button mimiBtn variant="outline" size="sm" (click)="disabled.set(!disabled())">
         {{ disabled() ? 'Activar' : 'Desactivar' }} el menú
       </button>
-      <mimi-context-menu label="Menú del texto" [disabled]="disabled()">
+      <mimi-context-menu aria-label="Menú del texto" [disabled]="disabled()">
         <div
           mimiContextMenuTrigger
           tabindex="0"

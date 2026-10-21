@@ -17,7 +17,7 @@ import { MimiDropdownMenuImports } from '@/components/ui/dropdown-menu';
           <mimi-menu-checkbox-item [(checked)]="minimap">Minimapa</mimi-menu-checkbox-item>
           <mimi-menu-separator />
           <mimi-menu-label>Ordenar por</mimi-menu-label>
-          <mimi-menu-radio-group [(value)]="order" label="Ordenar por">
+          <mimi-menu-radio-group [(value)]="order" aria-label="Ordenar por">
             <mimi-menu-radio-item value="name">Nombre</mimi-menu-radio-item>
             <mimi-menu-radio-item value="date">Fecha</mimi-menu-radio-item>
             <mimi-menu-radio-item value="size">Tamaño</mimi-menu-radio-item>

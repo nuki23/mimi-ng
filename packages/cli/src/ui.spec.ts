@@ -660,3 +660,206 @@ describe('ui: modificados según .mimi/base (no según la plantilla)', () => {
     expect(warnings()).toHaveLength(1);
   });
 });
+
+/**
+ * Simula archivos instalados con una versión anterior de Mimi: el archivo y su base con el
+ * contenido «viejo» y el manifiesto con esa versión. Los de `modified` además tienen un cambio
+ * del usuario (distintos de su base).
+ */
+const OLD = '0.1.1';
+const oldContent = (file: string) => `// ${file} de la ${OLD}\n`;
+function makeOld(tree: UnitTestTree, files: string[], modified: string[] = []) {
+  const manifest = json(tree, '/.mimi/manifest.json');
+  for (const file of files) {
+    const old = oldContent(file);
+    tree.overwrite(`/${UI}/${file}`, modified.includes(file) ? `${old}// cambio propio\n` : old);
+    tree.overwrite(`/.mimi/base/${file}`, old);
+    manifest.files[file] = OLD;
+  }
+  tree.overwrite('/.mimi/manifest.json', JSON.stringify(manifest, null, 2));
+  const config = json(tree, '/mimi.json');
+  for (const name of Object.keys(config.components ?? {})) {
+    if (files.some((file) => file.startsWith(`${name}/`))) config.components[name].version = OLD;
+  }
+  tree.overwrite('/mimi.json', JSON.stringify(config, null, 2));
+}
+
+const THEME = ['theme/theme-base.css', 'theme/types.ts', 'theme/provider.ts', 'theme/index.ts'];
+const CONFIRM = ['confirm/confirm.ts', 'confirm/confirm-texts.ts', 'confirm/index.ts'];
+const DIALOG = ['dialog/dialog.ts', 'dialog/dialog-texts.ts', 'dialog/index.ts'];
+const BUTTON_FILES = BUTTON.map((name) => `button/${name}`);
+const templateOf = (file: string) =>
+  template(file.startsWith('theme/') || file.startsWith('utils/') ? file : `components/${file}`);
+
+describe('ng g mimi: el tema y lo que copia init', () => {
+  it('tema de una versión anterior sin modificar: se actualiza aunque no se pida', async () => {
+    const { run, tree, warnings, logs } = await initialized();
+    makeOld(tree, THEME);
+    const result = await run('mimi', { components: ['card'] }, tree);
+    for (const file of THEME) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(templateOf(file));
+      expect(result.readContent(`/.mimi/base/${file}`), file).toBe(templateOf(file));
+      expect(json(result, '/.mimi/manifest.json').files[file]).toBe(registry.version);
+    }
+    expect(logs.map((l) => l.message)).toContain(
+      `theme actualizado de ${OLD} a ${registry.version}`,
+    );
+    expect(warnings()).toEqual([]);
+    // El tema no es un componente: no va a mimi.json.
+    expect(Object.keys(json(result, '/mimi.json').components)).toEqual(['card']);
+  });
+
+  it('tema de una versión anterior modificado: no se toca, se avisa y el componente sí se agrega', async () => {
+    const { run, tree, warnings } = await initialized();
+    makeOld(tree, THEME, ['theme/theme-base.css']);
+    const result = await run('mimi', { components: ['card'] }, tree);
+    // Ningún archivo del tema cambia: tampoco los que el usuario no tocó.
+    for (const file of THEME) {
+      expect(result.readContent(`/.mimi/base/${file}`), file).toBe(oldContent(file));
+      expect(json(result, '/.mimi/manifest.json').files[file]).toBe(OLD);
+    }
+    expect(result.readContent(`/${UI}/theme/theme-base.css`)).toContain('// cambio propio');
+    expect(result.readContent(`/${UI}/theme/types.ts`)).toBe(oldContent('theme/types.ts'));
+    expect(result.readContent(`/${UI}/card/card.ts`)).toBe(template('components/card/card.ts'));
+    expect(warnings()).toEqual([
+      `El tema no se actualizó a ${registry.version} porque modificaste ${UI}/theme/theme-base.css. ` +
+        'No se cambió ninguno de sus archivos, para no mezclar versiones. ' +
+        `Los componentes de la ${registry.version} usan tokens nuevos del tema: sin ellos, algunos estilos no se generan. ` +
+        'Para actualizarlo: guarda tus cambios (por ejemplo, en git), vuelve a ejecutar el comando con ' +
+        '--overwrite y aplícalos de nuevo. La versión de Mimi que modificaste está en .mimi/base/theme/, para comparar.',
+    ]);
+  });
+
+  it('tema de una versión anterior modificado, con --overwrite: se reemplaza y se dice', async () => {
+    const { run, tree, logs } = await initialized();
+    makeOld(tree, THEME, ['theme/theme-base.css']);
+    const result = await run('mimi', { components: ['card'], overwrite: true }, tree);
+    for (const file of THEME) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(templateOf(file));
+    }
+    const messages = logs.map((l) => l.message);
+    expect(messages).toContain('Reemplazado (--overwrite):');
+    expect(messages).toContain(`  ~ ${UI}/theme/theme-base.css`);
+  });
+
+  it('tema modificado sobre la versión actual: se respeta en silencio, también con --overwrite', async () => {
+    const { run, tree, warnings } = await initialized();
+    const file = `/${UI}/theme/theme-base.css`;
+    tree.overwrite(file, `${tree.readContent(file)}/* mis colores */\n`);
+    const edited = tree.readContent(file);
+    const plain = await run('mimi', { components: ['card'] }, tree);
+    expect(plain.readContent(file)).toBe(edited);
+    const forced = await run('mimi', { components: ['card'], overwrite: true }, plain);
+    expect(forced.readContent(file)).toBe(edited);
+    expect(warnings()).toEqual([]);
+  });
+});
+
+describe('ng g mimi: todo o nada por componente', () => {
+  it('button modificado de una versión anterior: no cambia ninguno de sus archivos ni su versión', async () => {
+    const { run, tree, warnings, logs } = await initialized();
+    const installed = await run('mimi', { components: ['button'] }, tree);
+    makeOld(installed, BUTTON_FILES, ['button/button.ts']);
+    logs.length = 0;
+    const result = await run('mimi', { components: ['button'] }, installed);
+
+    expect(result.readContent(`/${UI}/button/button.ts`)).toBe(
+      `${oldContent('button/button.ts')}// cambio propio\n`,
+    );
+    for (const file of ['button/button.variants.ts', 'button/index.ts']) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(oldContent(file));
+    }
+    for (const file of BUTTON_FILES) {
+      expect(result.readContent(`/.mimi/base/${file}`), file).toBe(oldContent(file));
+      expect(json(result, '/.mimi/manifest.json').files[file], file).toBe(OLD);
+    }
+    expect(json(result, '/mimi.json').components.button.version).toBe(OLD);
+    const messages = logs.map((l) => l.message);
+    expect(messages.some((m) => m.includes('actualizado de'))).toBe(false);
+    expect(messages).not.toContain('Nada que hacer: los archivos ya están al día.');
+    expect(warnings()).toEqual([
+      `button no se actualizó a ${registry.version} porque modificaste ${UI}/button/button.ts. ` +
+        'No se cambió ninguno de sus archivos, para no mezclar versiones. ' +
+        'Para actualizarlo: guarda tus cambios (por ejemplo, en git), vuelve a ejecutar el comando con ' +
+        '--overwrite y aplícalos de nuevo. La versión de Mimi que modificaste está en .mimi/base/button/, para comparar.',
+    ]);
+  });
+
+  it('confirm instalado y button modificado: confirm tampoco se actualiza; dialog sí', async () => {
+    const { run, tree, warnings, logs } = await initialized();
+    const installed = await run('mimi', { components: ['confirm'] }, tree);
+    makeOld(installed, [...BUTTON_FILES, ...CONFIRM, ...DIALOG], ['button/button.ts']);
+    logs.length = 0;
+    const result = await run('mimi', { components: ['confirm'] }, installed);
+
+    for (const file of CONFIRM) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(oldContent(file));
+      expect(json(result, '/.mimi/manifest.json').files[file], file).toBe(OLD);
+    }
+    for (const file of DIALOG) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(templateOf(file));
+    }
+    const config = json(result, '/mimi.json').components;
+    expect(config.confirm.version).toBe(OLD);
+    expect(config.button.version).toBe(OLD);
+    expect(config.dialog.version).toBe(registry.version);
+    const messages = logs.map((l) => l.message);
+    expect(messages).toContain(`dialog actualizado de ${OLD} a ${registry.version}`);
+    expect(messages.some((m) => /^(button|confirm) actualizado/.test(m))).toBe(false);
+    expect(warnings()).toContain(
+      `confirm no se actualizó a ${registry.version}: necesita button ${registry.version}, ` +
+        'que no se actualizó (ver el aviso de button).',
+    );
+    expect(warnings()).toHaveLength(2);
+  });
+
+  it('confirm sin instalar y button modificado: confirm no se agrega y se explica', async () => {
+    const { run, tree, warnings } = await initialized();
+    const installed = await run('mimi', { components: ['button'] }, tree);
+    makeOld(installed, BUTTON_FILES, ['button/button.ts']);
+    const result = await run('mimi', { components: ['confirm'] }, installed);
+
+    for (const file of CONFIRM) expect(result.exists(`/${UI}/${file}`), file).toBe(false);
+    expect(json(result, '/mimi.json').components.confirm).toBeUndefined();
+    // Dialog no depende de button: se agrega.
+    expect(result.readContent(`/${UI}/dialog/dialog.ts`)).toBe(templateOf('dialog/dialog.ts'));
+    expect(warnings()).toContain(
+      `confirm no se agregó: necesita button ${registry.version}, que no se actualizó (ver el aviso de button).`,
+    );
+  });
+
+  it('--overwrite reemplaza todo (button y confirm) y lo dice', async () => {
+    const { run, tree, warnings, logs } = await initialized();
+    const installed = await run('mimi', { components: ['confirm'] }, tree);
+    makeOld(installed, [...BUTTON_FILES, ...CONFIRM], ['button/button.ts']);
+    logs.length = 0;
+    const result = await run('mimi', { components: ['confirm'], overwrite: true }, installed);
+
+    for (const file of [...BUTTON_FILES, ...CONFIRM]) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(templateOf(file));
+      expect(json(result, '/.mimi/manifest.json').files[file], file).toBe(registry.version);
+    }
+    const config = json(result, '/mimi.json').components;
+    expect(config.button.version).toBe(registry.version);
+    expect(config.confirm.version).toBe(registry.version);
+    const messages = logs.map((l) => l.message);
+    expect(messages).toContain('Reemplazado (--overwrite):');
+    expect(messages).toContain(`  ~ ${UI}/button/button.ts`);
+    expect(warnings()).toEqual([]);
+  });
+
+  it('versión anterior sin cambios del usuario: actualiza el componente completo', async () => {
+    const { run, tree, warnings, logs } = await initialized();
+    const installed = await run('mimi', { components: ['button'] }, tree);
+    makeOld(installed, BUTTON_FILES);
+    logs.length = 0;
+    const result = await run('mimi', { components: ['button'] }, installed);
+    for (const file of BUTTON_FILES) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(templateOf(file));
+    }
+    expect(logs.map((l) => l.message)).toContain(
+      `button actualizado de ${OLD} a ${registry.version}`,
+    );
+    expect(warnings()).toEqual([]);
+  });
+});

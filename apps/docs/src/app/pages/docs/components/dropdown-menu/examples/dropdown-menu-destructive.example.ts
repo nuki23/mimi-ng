@@ -14,7 +14,7 @@ import { MimiDropdownMenuImports } from '@/components/ui/dropdown-menu';
     LucideTrash2,
   ],
   template: `
-    <mimi-dropdown-menu align="end" label="Acciones del proyecto">
+    <mimi-dropdown-menu align="end" aria-label="Acciones del proyecto">
       <button mimiBtn variant="ghost" size="icon" aria-label="Acciones" mimiDropdownMenuTrigger>
         <svg lucideEllipsis></svg>
       </button>

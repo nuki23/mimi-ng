@@ -127,10 +127,11 @@ export class PopoverPage {
       description: 'Flecha hacia el trigger. Es decorativa: aria-hidden y sin foco.',
     },
     {
-      name: 'label',
+      name: 'aria-label',
       type: 'string',
-      default: "''",
-      description: 'Nombre accesible del panel (aria-label). Con mimiPopoverTitle no hace falta.',
+      default: '—',
+      description:
+        'Nombre accesible del panel (va al panel, no al host). Con mimiPopoverTitle no hace falta.',
     },
     {
       name: 'class',

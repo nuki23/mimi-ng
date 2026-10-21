@@ -7,7 +7,7 @@ import { MimiPopoverImports } from '@/components/ui/popover';
   imports: [MimiPopoverImports, MimiButton],
   template: `
     <mimi-popover
-      label="Color del equipo"
+      aria-label="Color del equipo"
       [arrow]="false"
       class="w-auto flex-row gap-2 rounded-full p-2"
     >

@@ -109,7 +109,7 @@ function warnDeprecated(preset: MimiThemePreset): void {
     if (value === undefined || warnedDeprecated.has(name)) continue;
     warnedDeprecated.add(name);
     console.warn(
-      `[mimi] ${name} es un nombre de la 0.1.0: usa ${use}. Sigue funcionando hasta la 1.0.`,
+      `[Mimi] Theme: ${name} es un nombre de la 0.1.0: usa ${use}. Sigue funcionando hasta la 1.0.`,
     );
   }
 }
@@ -127,7 +127,7 @@ export function mimiThemeToCss(preset: MimiThemePreset): string {
     if (text === '') return;
     if (UNSAFE_VALUE.test(text)) {
       if (isDevMode()) {
-        console.warn(`[mimi] Se ignora --mimi-${name}: el valor "${text}" no es seguro.`);
+        console.warn(`[Mimi] Theme: se ignora --mimi-${name}: el valor "${text}" no es seguro.`);
       }
       return;
     }

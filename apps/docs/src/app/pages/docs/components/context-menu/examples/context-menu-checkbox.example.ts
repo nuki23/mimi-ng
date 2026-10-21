@@ -6,7 +6,7 @@ import { MimiContextMenuImports } from '@/components/ui/context-menu';
   imports: [MimiContextMenuImports],
   template: `
     <div class="flex w-full flex-col gap-3">
-      <mimi-context-menu label="Vista">
+      <mimi-context-menu aria-label="Vista">
         <div
           mimiContextMenuTrigger
           tabindex="0"
