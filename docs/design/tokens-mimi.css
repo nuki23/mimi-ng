@@ -65,7 +65,7 @@
   --mimi-secondary-hover: color-mix(in oklch, var(--mimi-secondary) 80%, var(--mimi-foreground) 6%);
   /* Corrección de contraste (Mimi, V.1): en claro el texto de success, info y destructive es blanco y el
      hover del diseño (12% hacia el fondo) no pasaba AA (≈3,8:1). El hover se aleja del texto: 12% hacia
-     foreground (≈5,8:1). El diseño debe actualizar estos hovers (plan, T.2a). */
+     foreground (≈5,8:1). El diseño debe actualizar estos hovers (plan, D6). */
   --mimi-destructive-hover: color-mix(in oklch, var(--mimi-destructive) 88%, var(--mimi-foreground));
   --mimi-ring-soft: color-mix(in oklch, var(--mimi-ring) 32%, transparent);
   --mimi-destructive-soft: color-mix(in oklch, var(--mimi-destructive) 24%, transparent);

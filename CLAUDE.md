@@ -6,7 +6,8 @@ Librería de componentes UI para **Angular 22** + **Tailwind CSS 4**. Los compon
 
 - `docs/spec.md`: especificación completa. Léela antes de crear o cambiar un componente, el tema o la CLI.
 - `docs/plan.md`: tareas por fase. Trabaja solo la tarea que se te pida y marca su casilla al terminar.
-- `docs/design/`: diseños y variables CSS de Claude Design. Colores, radios y sombras salen de aquí, nunca inventados.
+- `docs/design/`: diseños y variables CSS de Claude Design. Colores, radios y sombras salen de aquí, nunca inventados. Lo que Mimi haga distinto del diseño, o sin diseño, se anota en la tarea D6 del plan.
+- `docs/futuro/`: proyectos aparte que no se trabajan en mimi-ng (por ahora, `theme-studio.md`). No se toman como tareas.
 
 ## Estructura
 

@@ -20,9 +20,9 @@ Los `.dc.html` se abren en el navegador junto con los scripts de soporte de esta
 - Tokens: `Mimi Tokens.dc.html` (tres niveles), `Mimi F2 Tokens y Tonos.dc.html`.
 - Grupo 1: `Mimi F2 Overlays.dc.html`, `Mimi F2 Select.dc.html`, `Mimi F2 Toast Tabs Toolbar.dc.html`, `Mimi F7 Pagination.dc.html` (con `Mimi Pagination.dc.html`).
 - Grupo 2: `Mimi F3 Archivos Tags Toggle Color.dc.html` (con `Mimi Color Picker.dc.html`), `Mimi F3 Combobox Fechas Hora.dc.html`, `Mimi F3 Slider OTP Numero Mascara.dc.html`.
-- Theme Studio: `Mimi Theme Studio.dc.html`.
+- Theme Studio: `Mimi Theme Studio.dc.html` (proyecto aparte, no se construye en mimi-ng: `docs/futuro/theme-studio.md`).
 - Grupo 3: `Mimi F4 Command Tree Sortable.dc.html`, `Mimi F4 Data Table y Pagination.dc.html` (con `Mimi Data Table.dc.html`), `Mimi F4 Panel admin.dc.html`.
 - Grupos 4 y 5 y Mimi Effects: `Mimi F5 Estructura.dc.html`, `Mimi F5 Dashboard y Media.dc.html`, `Mimi F5 Effects.dc.html`.
 - Blocks: `Mimi F6 Blocks.dc.html` y `Block <nombre>.dc.html`.
 
-Los nombres «F2»…«F7» son las tandas de trabajo en Claude Design, no las fases de `docs/plan.md`. Los textos de los diseños que contradicen la spec (comandos, imports, funciones de Theme Studio) están anotados en la spec, sección 13, y se corrigen al pasarlos al código.
+Los nombres «F2»…«F7» son las tandas de trabajo en Claude Design, no las fases de `docs/plan.md`. Los textos de los diseños que contradicen la spec (comandos, imports) están anotados en la spec, sección 13, y se corrigen al pasarlos al código; los de Theme Studio, en `docs/futuro/theme-studio.md`. Lo que Mimi hizo distinto del diseño, o sin diseño, está en la tarea D6 de `docs/plan.md`.

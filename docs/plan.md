@@ -79,11 +79,11 @@ Hallazgos de la prueba real de la 0.1.0 desde npm (L.6).
 
 ## Hoja de ruta del catálogo
 
-Criterio (spec, sección 4): solo componentes funcionales y difíciles de hacer bien a mano (teclado, accesibilidad, overlays, estados). Cada grupo es una versión menor. Colores, radios y sombras salen de `docs/design/`, nunca inventados. Inspiración y dependencias de cada componente: spec, sección 4, «Hoja de ruta». Cada componente nuevo registra sus tokens en `MimiComponentTokens` y su prefijo en `COMPONENT_PREFIX`, con prueba, y tiene su tabla en la spec, sección 13 (paso obligatorio de `/componente`). Los componentes con color usan variante y tono por separado (spec, sección 4).
+Criterio (spec, sección 4): solo componentes funcionales y difíciles de hacer bien a mano (teclado, accesibilidad, overlays, estados). Cada grupo es una versión menor. Colores, radios y sombras salen de `docs/design/`, nunca inventados. Inspiración y dependencias de cada componente: spec, sección 4, «Hoja de ruta». Cada componente nuevo registra sus tokens en `MimiComponentTokens` y su prefijo en `COMPONENT_PREFIX`, con prueba, se agrega a `component-tokens.ts` y tiene su tabla en la spec, sección 13 (paso obligatorio de `/componente`): es el contrato que usará el Theme Studio, que no define variables propias. Lo que un componente haga distinto del diseño, o sin diseño, se anota en la D6. Los componentes con color usan variante y tono por separado (spec, sección 4).
 
-**Diseños:** las tandas D1–D5 están hechas (exportadas el 01/10/2026). En cada tarea, «Diseño:» indica el archivo de `docs/design/` (sin el prefijo `Mimi ` ni la extensión `.dc.html`). Los textos de los diseños que contradicen la spec están en la spec, sección 13, «Correcciones pendientes del diseño».
+**Diseños:** las tandas D1–D5 están hechas (exportadas el 01/10/2026); la D6 (correcciones pendientes) está abierta. En cada tarea, «Diseño:» indica el archivo de `docs/design/` (sin el prefijo `Mimi ` ni la extensión `.dc.html`). Los textos de los diseños que contradicen la spec están en la spec, sección 13, «Correcciones pendientes del diseño».
 
-Orden: Fase 4 → Grupo 1 → Grupo 2 → Theme Studio y Blocks → Grupo 3 → Grupo 4. Mimi Effects tiene prioridad baja y puede empezar después del Grupo 3. El Grupo 5 se prioriza según lo que pidan los usuarios después de la 0.2.0.
+Orden: Fase 4 → Grupo 1 → Grupo 2 → Blocks → Grupo 3 → Grupo 4. Las correcciones de diseño pendientes (D6) se hacen en Claude Design cuando se decida, sin bloquear ningún grupo. Theme Studio ya no es parte de mimi-ng: es un proyecto aparte que se retoma cuando Mimi esté completo (`docs/futuro/theme-studio.md`); aquí queda la página de tema sencilla (5.2), después de la 0.2.0. Mimi Effects tiene prioridad baja y puede empezar después del Grupo 3. El Grupo 5 se prioriza según lo que pidan los usuarios después de la 0.2.0.
 
 ## Fase 4: Preparación del catálogo ampliado
 
@@ -221,27 +221,11 @@ Pendientes después del Grupo 1:
   - **`closeAll()` y navegación durante la acción:** cierran y resuelven `false` aunque la acción siga y quizá termine bien. Documentarlo o hacer que `closeAll()` respete el bloqueo.
   - **Cambio que exige en Dialog:** poder bloquear Escape y el fondo con el diálogo abierto. Propuesta: `disableClose` como signal en `MimiDialogRef`, leído en el momento en que llega Escape o el clic (hoy se calcula al abrir). Es API pública nueva de Dialog: spec 4, página de Dialog y pruebas.
 
-## Grupo 2 → v0.3.0: entradas avanzadas
+## Correcciones de diseño pendientes
 
-- [x] D2 Diseño: Grupo 2 y Theme Studio. Archivos: `F3 Archivos Tags Toggle Color` (con `Color Picker`), `F3 Combobox Fechas Hora`, `F3 Slider OTP Numero Mascara` y `Theme Studio`; variables en `mimi-variables-fase3.css` (en `tokens-mimi.css`). La hoja de tokens todavía no tiene tablas para estos componentes: se agregan antes de construirlos.
-- [ ] G2.1 Toggle Group. Diseño: `F3 Archivos Tags Toggle Color`.
-- [ ] G2.2 Number Input. Diseño: `F3 Slider OTP Numero Mascara`.
-- [ ] G2.3 Password (mostrar/ocultar y medidor de seguridad). Diseño: `F3 Slider OTP Numero Mascara`.
-- [ ] G2.4 Input Mask. Diseño: `F3 Slider OTP Numero Mascara`.
-- [ ] G2.5 Input OTP. Diseño: `F3 Slider OTP Numero Mascara`.
-- [ ] G2.6 Tags Input. Diseño: `F3 Archivos Tags Toggle Color`.
-- [ ] G2.7 Slider (rango doble). Diseño: `F3 Slider OTP Numero Mascara`.
-- [ ] G2.8 Combobox/Autocomplete (múltiple con chips). Diseño: `F3 Combobox Fechas Hora`.
-- [ ] G2.9 Date Picker y Date Range. Diseño: `F3 Combobox Fechas Hora`.
-- [ ] G2.10 Progress (barra y circular). Diseño: `F5 Estructura`.
-- [ ] G2.11 File Upload, con Progress. Diseño: `F3 Archivos Tags Toggle Color`.
-- [ ] G2.12 Color Picker (lo usa Theme Studio). Diseño: `Color Picker` (en `F3 Archivos Tags Toggle Color`).
+Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude Design. Cada componente nuevo agrega aquí lo suyo (antes era la T.2a, dentro de Theme Studio).
 
-## Theme Studio (después del Grupo 2; reemplaza la 5.2)
-
-Solo sirve para editar los componentes de Mimi tal como existen: sin presets guardados, sin «Mis variantes» y sin tonos propios. Se construye solo con componentes de Mimi; si necesita uno que no está en el plan, se agrega. Ver spec, sección 4, «Theme Studio». Diseño: `Theme Studio` (corregir: quitar «Mis variantes» y agregar «Copiar prompt»; spec 13).
-
-- [ ] T.2a Revisar en el diseño `--mimi-field-error` (la hoja dice `destructive-soft-foreground`; Mimi usa `destructive`, el color de la 0.1.0; spec 13). Diseñar en Claude Design las celdas provisionales de la V.1 (tono secondary, ghost y link con tono; spec 13), junto con la corrección del diseño de Theme Studio. Actualizar en el diseño los hovers de success, info y danger corregidos por contraste en la V.1. Definir en el diseño la animación de entrada y salida de los overlays (duración, curva y escala; hoy Popover usa los valores de `--mimi-transition`: 0,15 s, `cubic-bezier(.2,.8,.2,1)`, escala desde `--mimi-press-scale`) y, si conviene, un token propio. Definir también el margen mínimo de los overlays al borde de la pantalla: Popover y Tooltip usan 8px (`MIMI_VIEWPORT_MARGIN`, spec 13), que no está en el diseño. Tooltip: definir el ancho máximo (hoy `100vw − 16px`) y el margen del «salto sin retraso» (hoy 300 ms, como el retraso). Dropdown Menu (G1.3):
+- [ ] D6 Correcciones de diseño pendientes (Claude Design). Revisar en el diseño `--mimi-field-error` (la hoja dice `destructive-soft-foreground`; Mimi usa `destructive`, el color de la 0.1.0; spec 13). Diseñar en Claude Design las celdas provisionales de la V.1 (tono secondary, ghost y link con tono; spec 13). Actualizar en el diseño los hovers de success, info y danger corregidos por contraste en la V.1. Definir en el diseño la animación de entrada y salida de los overlays (duración, curva y escala; hoy Popover usa los valores de `--mimi-transition`: 0,15 s, `cubic-bezier(.2,.8,.2,1)`, escala desde `--mimi-press-scale`) y, si conviene, un token propio. Definir también el margen mínimo de los overlays al borde de la pantalla: Popover y Tooltip usan 8px (`MIMI_VIEWPORT_MARGIN`, spec 13), que no está en el diseño. Tooltip: definir el ancho máximo (hoy `100vw − 16px`) y el margen del «salto sin retraso» (hoy 300 ms, como el retraso). Dropdown Menu (G1.3):
   - **Ancho:** el diseño mide 260px y el token `--mimi-menu-width`, 240px (el del Context Menu). Se usa el token.
   - **Submenú:** 200px sin token propio.
   - **Grupo radio** (`menuitemradio`): no está en el diseño. Es provisional, con un punto de 8px en la columna del ícono.
@@ -308,10 +292,21 @@ Solo sirve para editar los componentes de Mimi tal como existen: sin presets gua
   - **Cambiar el tamaño:** el diseño vuelve a la página 1; Mimi mantiene visible el primer registro (como MatPaginator).
   - **Selector:** la separación con el panel es 8px (la de Select); el diseño, 10px.
 
-- [ ] T.2 Modo Componente (estructura de Vuesax): lista de componentes a la izquierda; barra flotante arriba (mimi-toolbar) con Volver, Móvil/Tablet/Escritorio, Claro/Oscuro, fondo del lienzo, «Uno | Ver todos» (matriz tonos × variantes), «Código» y «Copiar prompt»; un solo componente en el lienzo; la tira de variantes abajo.
-- [ ] T.3 Panel derecho: «Vista previa», que no se guarda (tono, estado, tamaño y texto), y «Estilo del componente», que sí se guarda (radio: Rounded, Squircle, Pill o un valor propio; borde; efectos: sombra, glow y escala al presionar). Cada propiedad muestra su origen (el token del que hereda, o «Mío»); pestaña «Variables» con todas las variables del componente y su cadena de herencia. Todo valor cambiado por el usuario se etiqueta «Mío».
-- [ ] T.4 Modo Tema global: Simple (color principal, radio, densidad y fuente) y Avanzado (Marca, Estados, Superficies, Texto, Bordes, Forma, Profundidad, Movimiento y Tipografía), con parejas de color y su texto, indicador de contraste AA y vista previa en vivo. El color y los tamaños SM, MD y LG (compartidos por todos los controles) solo se editan aquí. Exportación de `mimi.preset.ts` para `provideMimiTheme()`.
-- [ ] T.5 Radio «Squircle»: verificar el soporte actual de `corner-shape` y usarlo como mejora progresiva, con respaldo a `border-radius`.
+## Grupo 2 → v0.3.0: entradas avanzadas
+
+- [x] D2 Diseño: Grupo 2 y Theme Studio. Archivos: `F3 Archivos Tags Toggle Color` (con `Color Picker`), `F3 Combobox Fechas Hora`, `F3 Slider OTP Numero Mascara` y `Theme Studio`; variables en `mimi-variables-fase3.css` (en `tokens-mimi.css`). La hoja de tokens todavía no tiene tablas para estos componentes: se agregan antes de construirlos. (Theme Studio pasó a ser un proyecto aparte: `docs/futuro/theme-studio.md`.)
+- [ ] G2.1 Toggle Group. Diseño: `F3 Archivos Tags Toggle Color`.
+- [ ] G2.2 Number Input. Diseño: `F3 Slider OTP Numero Mascara`.
+- [ ] G2.3 Password (mostrar/ocultar y medidor de seguridad). Diseño: `F3 Slider OTP Numero Mascara`.
+- [ ] G2.4 Input Mask. Diseño: `F3 Slider OTP Numero Mascara`.
+- [ ] G2.5 Input OTP. Diseño: `F3 Slider OTP Numero Mascara`.
+- [ ] G2.6 Tags Input. Diseño: `F3 Archivos Tags Toggle Color`.
+- [ ] G2.7 Slider (rango doble). Diseño: `F3 Slider OTP Numero Mascara`.
+- [ ] G2.8 Combobox/Autocomplete (múltiple con chips). Diseño: `F3 Combobox Fechas Hora`.
+- [ ] G2.9 Date Picker y Date Range. Diseño: `F3 Combobox Fechas Hora`.
+- [ ] G2.10 Progress (barra y circular). Diseño: `F5 Estructura`.
+- [ ] G2.11 File Upload, con Progress. Diseño: `F3 Archivos Tags Toggle Color`.
+- [ ] G2.12 Color Picker. Diseño: `Color Picker` (en `F3 Archivos Tags Toggle Color`).
 
 ## Blocks (después del Grupo 2)
 
@@ -383,7 +378,7 @@ Prioridad según lo que pidan los usuarios después de la 0.2.0. Sin orden fijo.
 Las tareas que eran la Fase 5. Conservan sus números porque el código y la spec los citan.
 
 - [ ] 5.1 Schematic `theme` (preguntas + opciones `--palette`, `--radius`).
-- ~~5.2 Página "Temas" con personalizador en vivo y exportación de `mimi.preset.ts`.~~ Reemplazada por Theme Studio (T.2–T.5).
+- [ ] 5.2 Página «Tema» sencilla (después de la 0.2.0; spec 11, «Página "Tema"»). Ruta `/docs/theme`, lazy, en Primeros pasos. Cambia solo variables globales: color principal (unas muestras de color y un `<input type="color">` nativo, sin depender del Color Picker), radio, y claro/oscuro para previsualizar. Vista previa con algunos componentes reales. Botón para copiar el resultado como CSS (`:root` y `.dark`) y como preset de `provideMimiTheme()`. Usa el mismo sistema que el usuario: arma un `MimiThemePreset` y lo aplica con `applyMimiTheme` / `mimiThemeToCss`, sin otro camino ni variables propias. Sin guardar, sin cuentas y sin edición por componente. (Antes «Temas» con personalizador; el editor completo, Theme Studio, es un proyecto aparte: `docs/futuro/theme-studio.md`.)
 - [ ] 5.3 Comando `mimi` (`pnpm mimi add button`, `mimi list`, `mimi theme`). Al hacerlo: volver a agregar la pestaña de pnpm en `InstallCommand` (hoy muestra `ng g mimi` y la forma larga) y actualizar la prueba de comandos prohibidos (`apps/docs/src/app/commands.spec.ts`) para permitir los que ya existan.
 - [ ] 5.4 `mimi update`: combina la versión nueva con los cambios del usuario usando `.mimi/base/`. La base queda formateada con el Prettier del usuario (la CLI de Angular formatea lo que escriben los schematics), así que antes de combinar hay que formatear la plantilla nueva con el Prettier del proyecto; si no, las diferencias de formato se mezclarán con los cambios reales.
 - [ ] 5.5 Página "Migrar desde PrimeNG / NG-ZORRO".
@@ -391,7 +386,7 @@ Las tareas que eran la Fase 5. Conservan sus números porque el código y la spe
 - [x] 5.7 Publicar `@mimi-ng/cli` en npm: hecha en la 0.1.0 (ver Lanzamiento 0.1.0).
 - [ ] 5.8 Buscador ⌘K en el header del showcase, con Command (G3.3).
 - [ ] 5.9 Selector ES/EN en el header (el idioma va como prefijo en la ruta).
-- [ ] 5.10 Navegación superior del header (Documentación · Componentes · Temas), como en el diseño. Revisado en la 2.12: todavía no aporta. Documentación y Componentes ya están a un clic (botones de la landing y sidebar), y «Temas» apuntaría a una página que no existe. Hacerla cuando exista Theme Studio, junto con el buscador ⌘K, que ocupa el mismo lugar del header; «Documentación» y «Componentes» viven bajo `/docs` y necesitan una regla propia para el estado activo, y en móvil irían en el panel.
+- [ ] 5.10 Navegación superior del header (Documentación · Componentes · Temas), como en el diseño. Revisado en la 2.12: todavía no aporta. Documentación y Componentes ya están a un clic (botones de la landing y sidebar), y «Temas» apuntaría a una página que no existe. Hacerla cuando exista la página «Tema» (5.2), junto con el buscador ⌘K, que ocupa el mismo lugar del header; «Documentación» y «Componentes» viven bajo `/docs` y necesitan una regla propia para el estado activo, y en móvil irían en el panel.
 - [x] 5.11 Cuando exista el componente Tabs (G1.9), reemplazar las pestañas hechas a mano de CodePreview e InstallCommand. Dato de la G1.9: los dos se usan solo en las páginas de componentes (lazy) y en `/dev/code`; ningún archivo del JS inicial contiene su código, así que usar Tabs sumaría 0 kB al JS inicial (el costo de aria Tabs iría a los chunks de esas páginas).
   - Hecho con `<mimi-tabs preserveContent>`: píldora en CodePreview (Copiar antes de las pestañas en el orden de Tab) y subrayado en `foreground` en InstallCommand, con las medidas de Tabs. El panel Código es diferido; el código se resalta por adelantado en tiempo libre (caché y `peek()` en `HighlighterService`) para que no aparezca sin colores. Se borró `tab-keys.ts`.
   - Arreglo en Tabs (ui-core): la fila y los paneles tenían `outline-none`, que en Tailwind 4 anula el `focus-visible:outline-2` (el anillo de foco del panel no se veía). Con prueba.
@@ -418,4 +413,5 @@ Cambios que rompen, acumulados para la 1.0 (spec, sección 12, «Compatibilidad 
 - [x] Formularios: Signal Forms, Reactive Forms y ngModel. Campos nativos detectan FormField o NgControl; controles propios con FormValueControl (spec, sección 8).
 - [x] Idioma por defecto de los mensajes de error: inglés. `MIMI_ERROR_MESSAGES_ES` trae el español: `provideMimiErrorMessages(MIMI_ERROR_MESSAGES_ES)` (el showcase lo usa). Ver spec, sección 8.
 - [x] Versión exacta de Node.js y TypeScript según los requisitos de Angular 22 (ver spec, sección 2).
-- [x] Variantes propias en `mimi.preset.ts`: no se harán. Theme Studio solo edita los componentes tal como existen (spec, sección 4).
+- [x] Variantes propias en `mimi.preset.ts`: no se harán. El preset solo cambia los tokens que Mimi expone (spec, sección 11).
+- [x] Theme Studio (20/10/2026): deja de ser parte de mimi-ng. Proyecto aparte, construido con Mimi como un usuario más, cuando el catálogo esté completo (`docs/futuro/theme-studio.md`). En mimi-ng queda la página de tema sencilla (5.2); el sistema de tokens no cambia.
