@@ -25,6 +25,7 @@ export const DOCS_NAV: DocsNavSection[] = [
     items: [
       { title: 'Introducción', path: '/docs/introduction', status: 'ready' },
       { title: 'Instalación', path: '/docs/installation', status: 'ready' },
+      { title: 'Fundamentos', path: '/docs/foundations', status: 'ready' },
       { title: 'Personalización', path: '/docs/customization', status: 'pending' },
       { title: 'Temas', path: '/docs/themes', status: 'pending' },
       { title: 'Iconos', path: '/docs/icons', status: 'pending' },

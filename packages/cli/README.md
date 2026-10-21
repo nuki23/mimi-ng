@@ -46,7 +46,9 @@ ng g mimi                     # menú para elegir (terminal interactiva)
 ng g @mimi-ng/cli:ui button   # forma larga (si Mimi no está en schematicCollections)
 ```
 
-Cada componente se copia a `src/app/components/ui/<nombre>`, con lo que necesite, y se instalan las dependencias que falten. Después lo importas como cualquier otro:
+Cada componente se copia a `src/app/components/ui/<nombre>`, con lo que necesite, y se instalan las dependencias que falten. Algunos usan por dentro `@angular/cdk` y `@angular/aria`, paquetes oficiales del equipo de Angular: `ng g mimi` los instala cuando hacen falta (aria en la versión exacta de tu cdk) y agrega los estilos del CDK a tu CSS global. Más en [Fundamentos](https://ng.mimiworks.dev/docs/foundations).
+
+Después lo importas como cualquier otro:
 
 ```ts
 import { MimiButton } from '@/components/ui/button';

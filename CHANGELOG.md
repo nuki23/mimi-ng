@@ -23,6 +23,10 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 - **Button borraba el `aria-disabled`, el `tabindex` y el `aria-busy` del usuario.** En `<button mimiBtn aria-disabled="true">` (un botón deshabilitado que sigue enfocable) o con `[attr.tabindex]`, Button quitaba el atributo, porque lo manejaba siempre aunque no lo necesitara. Ahora solo los escribe cuando hacen falta (`aria-disabled` y `tabindex="-1"` en un `<a mimiBtn>` deshabilitado, `aria-busy` mientras carga) y después devuelve el valor que había. `disabled` y `<a mimiBtn>` siguen igual. Actualiza `button.ts` con `ng g mimi button --overwrite` si no lo modificaste.
 - **Accesibilidad: contraste del hover de los botones sólidos en modo claro.** En `success`, `info` y `danger` (`destructive`) el texto es blanco y el hover aclaraba el fondo hasta unos 3,8:1, por debajo de AA (4,5:1). Ahora el hover se aleja del color del texto: oscurece el fondo un 12 % (5,8:1). Cambia `--mimi-destructive-hover`, que ya fallaba en la 0.1.0 (`variant="destructive"` de Button), y los nuevos `--mimi-success-hover` e `--mimi-info-hover`. En modo oscuro no cambia nada.
 
+### Preguntas frecuentes
+
+- **¿Por qué ahora se instalan `@angular/aria` y `@angular/cdk`?** Los componentes nuevos necesitan teclado, foco y posición de paneles que son muy difíciles de hacer bien a mano. Mimi usa por dentro estos dos paquetes oficiales del equipo de Angular: `@angular/cdk` en Popover, Tooltip, Dialog, Confirm, Toast, Toolbar y Pagination, y además `@angular/aria` en Select, Dropdown Menu, Context Menu y Tabs. Solo llegan con los componentes que los usan, `ng g mimi` los instala en la versión correcta (aria en la exacta de tu cdk), nunca aparecen en la API de Mimi y sus correcciones te llegan con `ng update`. Los componentes de la 0.1.0 no los usan. Más en [Fundamentos](https://ng.mimiworks.dev/docs/foundations).
+
 ## 0.1.1: corrección
 
 ### Correcciones

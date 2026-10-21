@@ -1,0 +1,486 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Fundamentos</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Qué copia la CLI, cómo se usa, accesibilidad y base técnica.
+  </p>
+
+  <!-- 1 -->
+  <h2 id="what-gets-copied" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Qué copia la CLI
+  </h2>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >ng add @mimi-ng/cli</code
+    >
+    copia a
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >src/app/components/ui/</code
+    >
+    el tema (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">theme/</code>)
+    y dos utilidades:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">cn</code>, que mezcla
+    tus clases con las del componente, y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">control-styles</code>,
+    con el foco, el deshabilitado y la presión que comparten los controles. El resto de lo que hace
+    (el import del tema, el alias, las dependencias) está en
+    <a
+      routerLink="/docs/installation"
+      fragment="install"
+      class="font-medium underline underline-offset-4 hover:text-muted-foreground"
+      >Instalación</a
+    >.
+  </p>
+  <p class="text-pretty">
+    Cada
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >ng g mimi &lt;nombre&gt;</code
+    >
+    copia la carpeta del componente y lo que necesite:
+  </p>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >utils/field-state.ts</code
+      >
+      (el estado del formulario: Input, Textarea, Switch, Checkbox, FormField y Select).
+    </li>
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >utils/overlay.ts</code
+      >
+      (posición y animación de los paneles: Popover, Tooltip, los menús, Select, Dialog, Confirm y
+      Toast).
+    </li>
+    <li>
+      Otros componentes: Confirm trae Dialog y Button; Toast, Button; Pagination, Button, Input y
+      Select; Dropdown Menu y Context Menu, los ítems de menú (<code
+        class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >menu/</code
+      >).
+    </li>
+    <li>Los paquetes que falten (ver «Base técnica»).</li>
+  </ul>
+  <app-code-block [code]="tree" lang="bash" label="Carpetas después de ng add y ng g mimi select" />
+  <p class="text-pretty">
+    Todo eso es código tuyo: lo puedes leer y modificar. La carpeta
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">.mimi/</code> guarda el
+    original de cada archivo, para que Mimi sepa qué cambiaste (ver «Compatibilidad y
+    actualizaciones»).
+  </p>
+
+  <!-- 2 -->
+  <h2 id="imports" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Cómo se importa
+  </h2>
+  <p class="text-pretty">
+    Un componente de una pieza se importa solo:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">MimiButton</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">MimiPagination</code>.
+    Los de varias piezas traen un arreglo con todas,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >Mimi&lt;Nombre&gt;Imports</code
+    >: Card, Avatar, FormField, Popover, Dropdown Menu, Context Menu, Select, Dialog, Tabs y
+    Toolbar.
+  </p>
+  <app-code-block [code]="importsExample" lang="angular-ts" />
+  <p class="text-pretty">
+    Si importas solo una pieza, Angular no reconoce las otras. Con un elemento (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;mimi-card-header&gt;</code
+    >) falla la compilación, pero con un atributo (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >mimiPopoverTrigger</code
+    >) no hay error: el botón queda como HTML normal y no abre nada. Por eso conviene el arreglo.
+  </p>
+  <p class="text-pretty">
+    Toast y Confirm no tienen plantilla: se usan desde el código, con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >injectMimiToast()</code
+    >
+    e
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >injectMimiConfirm()</code
+    >.
+  </p>
+
+  <!-- 3 -->
+  <h2 id="class" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Dónde va class
+  </h2>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> va al
+    elemento visible principal del componente; si además hay un panel aparte, se usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">panelClass</code>. Tus
+    clases se mezclan con las del componente y, si chocan, ganan las tuyas:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;button mimiBtn class="w-full h-12"&gt;</code
+    >.
+  </p>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Componente</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">A dónde va</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of classPlaces; track row.component) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5">{{ row.component }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.goes }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4 -->
+  <h2 id="variant-and-tone" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Variante y tono
+  </h2>
+  <p class="text-pretty">
+    Son dos cosas separadas.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">variant</code> es cómo
+    se ve: <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">solid</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">soft</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">outline</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ghost</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">link</code>.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tone</code> es de qué
+    color: <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">primary</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">secondary</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">success</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">warning</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">info</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">danger</code>. En
+    Button y Badge, sin
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tone</code> cada
+    variante usa su tono natural: solid, soft y link son primary; outline y ghost, secondary
+    (neutros).
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-variant</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-tone</code>
+    muestran los valores resueltos.
+  </p>
+  <app-code-block [code]="toneExample" lang="angular-html" />
+  <p class="text-pretty">
+    Los demás componentes usan solo los valores que tienen sentido para ellos:
+  </p>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Componente</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Valores</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of otherTones; track row.component) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5">{{ row.component }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.values }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 5 -->
+  <h2 id="customize" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Personalizar
+  </h2>
+  <p class="text-pretty">
+    Los tokens son variables CSS
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-*</code> en tres
+    niveles, en cascada: los globales (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-primary</code
+    >,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-radius</code>),
+    los compartidos por los controles (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-control-height</code
+    >) y los de cada componente (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-btn-height</code
+    >). Si no defines el de un componente, toma el compartido, y este el global. Cada página de
+    componente lista los suyos en «Variables CSS».
+  </p>
+  <p class="text-pretty">
+    <strong>Colores de un componente, solo en CSS</strong> (cambian entre claro y oscuro). Los
+    <strong>colores globales</strong>, en CSS o en el preset:
+  </p>
+  <app-code-block [code]="cssColors" lang="css" />
+  <p class="text-pretty">
+    <strong>Tamaños, radios y tiempos, en el preset</strong>, con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >provideMimiTheme()</code
+    >, que también acepta los colores globales (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >colors</code
+    >
+    y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">darkColors</code>):
+  </p>
+  <app-code-block [code]="presetExample" lang="angular-ts" />
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Un color del preset gana al mismo color en tu
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">:root</code>: define
+      cada color en un solo lugar.
+    </li>
+    <li>
+      Si das
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">colors</code> sin
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">darkColors</code>, el
+      modo oscuro conserva el color de la base.
+    </li>
+    <li>
+      Para una sola instancia,
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code>; para
+      todo un componente, también puedes editar su archivo.
+    </li>
+  </ul>
+
+  <!-- 6 -->
+  <h2 id="texts" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Textos e idioma
+  </h2>
+  <p class="text-pretty">
+    Los textos que pone Mimi (nombres accesibles, anuncios, mensajes de error) vienen en inglés.
+    Cada componente con textos trae su versión en español:
+  </p>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Componente</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Función</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Español</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Archivo</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of texts; track row.provider) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5">{{ row.component }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.provider }}()</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.spanish }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.file }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <app-code-block [code]="textsExample" lang="angular-ts" />
+
+  <!-- 7 -->
+  <h2 id="forms" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Formularios</h2>
+  <p class="text-pretty">
+    Funcionan con los tres sistemas de Angular, sin adaptadores: Signal Forms (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >[formField]</code
+    >), Reactive Forms (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >formControlName</code
+    >) y <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ngModel</code>.
+    Input y Textarea son directivas sobre el elemento nativo; Switch y Checkbox implementan
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >FormCheckboxControl</code
+    >
+    y Select
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">FormValueControl</code
+    >.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-form-field</code>
+    muestra la etiqueta y el primer error sin que escribas nada.
+  </p>
+  <app-code-block [code]="formsExample" lang="angular-html" />
+  <p class="text-pretty text-muted-foreground">
+    Para reconocer Signal Forms, el estado del campo carga unos 10 kB de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >@angular/forms/signals</code
+    >
+    aunque uses solo Reactive Forms o ngModel: es la forma documentada de hacerlo.
+  </p>
+
+  <!-- 8 -->
+  <h2 id="accessibility" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Accesibilidad
+  </h2>
+  <h3 id="accessibility-mimi" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Lo que hace Mimi
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      <strong>Teclado</strong> según los patrones de WAI-ARIA (APG) en los menús, Select, Tabs,
+      Toolbar y Dialog; Tooltip sigue WCAG 1.4.13 (se abre con el foco y Escape lo cierra sin mover
+      el foco); Toast se alcanza con F8.
+    </li>
+    <li>
+      <strong>Foco siempre visible:</strong> una prueba revisa que ningún componente anule su anillo
+      de foco.
+    </li>
+    <li>
+      <strong>Contraste AA</strong> (4,5:1) en cada combinación de variante y tono de Button y
+      Badge, en reposo y en hover, en claro y en oscuro, con una prueba automática sobre los tokens.
+    </li>
+    <li>
+      <strong>Movimiento reducido</strong> (<code
+        class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >prefers-reduced-motion</code
+      >): sin escalas al pulsar ni desplazamientos; los paneles y los toasts aparecen sin animación,
+      el Skeleton se queda quieto y el indicador de Tabs cambia sin deslizarse. Los spinners siguen
+      girando.
+    </li>
+    <li>
+      <strong>Nombres y anuncios propios</strong> (en inglés o en español): los botones internos,
+      las regiones, los anuncios de Toast y de Pagination y el mensaje de error de FormField.
+    </li>
+    <li>
+      <strong>Avisos en desarrollo</strong> cuando falta un nombre: Dialog sin título, Popover y
+      Context Menu sin nombre, la Toolbar o uno de sus botones sin
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code>, y
+      una pestaña solo con ícono sin
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">label</code>.
+    </li>
+    <li>
+      <strong>Cómo se prueba:</strong> pruebas automáticas, el teclado en Chrome real y NVDA en el
+      Select.
+    </li>
+  </ul>
+  <h3 id="accessibility-you" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Lo que queda a tu cargo
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      El nombre de los botones solo con ícono:
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >&lt;button mimiBtn size="icon" aria-label="Cerrar"&gt;</code
+      >.
+    </li>
+    <li>
+      El
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code> de
+      las regiones: Toolbar, Tabs, y cada paginación si hay más de una en la página.
+    </li>
+    <li>El contraste de los colores que cambies.</li>
+    <li>No poner información esencial solo en un tooltip: en pantallas táctiles no se muestra.</li>
+    <li>El texto alternativo de las imágenes (Avatar) y el orden lógico de tu página.</li>
+  </ul>
+
+  <!-- 9 -->
+  <h2 id="technical-base" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Base técnica
+  </h2>
+  <p class="text-pretty">
+    La accesibilidad de un Select o de un menú es muy difícil de hacer bien a mano. Por eso Mimi usa
+    por dentro dos paquetes oficiales del equipo de Angular:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/aria</code>
+    (teclado, foco y atributos ARIA) y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+    (posición de los paneles, diálogos, anuncios y foco). Sus correcciones te llegan con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng update</code>.
+  </p>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Usa</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Componentes</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of packageRows; track row.packages) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px] whitespace-nowrap">{{ row.packages }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.components }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    La Toolbar usa el
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">FocusKeyManager</code>
+    del CDK y no aria: así sus botones siguen siendo nativos (Enter, Espacio y el clic funcionan
+    como siempre).
+  </p>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      <strong>Nunca forman parte de la API de Mimi:</strong> ni entradas, ni tipos, ni directivas
+      expuestas. Si aria o el CDK cambian, Mimi lo absorbe por dentro y tu código que usa los
+      componentes sigue igual (el archivo copiado puede necesitar la versión nueva de Mimi).
+    </li>
+    <li>
+      <strong>La CLI los instala</strong> cuando un componente los necesita:
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/aria</code>
+      en la versión exacta de tu
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+      (aria lo exige), y si no tienes ninguno, los dos en la versión de tu
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code>.
+    </li>
+    <li>
+      Para los componentes con paneles, agrega una vez a tu CSS global, después del tema, los
+      estilos del CDK:
+    </li>
+  </ul>
+  <app-code-block [code]="overlayImport" lang="css" />
+
+  <!-- 10 -->
+  <h2 id="bundle-size" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Peso</h2>
+  <p class="text-pretty">
+    Cada componente se paga solo si lo usas: es código tuyo y el build deja fuera lo que no
+    importas. aria y el CDK llegan solo con los componentes que los usan, y si esos componentes
+    están en rutas lazy, no tocan tu JS inicial.
+  </p>
+  <p class="text-pretty">
+    Por ejemplo, Pagination carga el selector de registros por página (Select, aria y el overlay:
+    unos 105 kB crudos, 28 kB gzip) con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;defer</code>, solo
+    si usas
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">pageSizeOptions</code>.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;defer</code> suma
+    una vez a tu app su parte de Angular (unos 6,5 kB crudos, 2,3 kB gzip).
+  </p>
+
+  <!-- 11 -->
+  <h2 id="compatibility" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Compatibilidad y actualizaciones
+  </h2>
+  <p class="text-pretty">
+    Mimi está en 0.x: la API puede cambiar entre versiones menores hasta la 1.0. Funciona con
+    Angular 22 o superior y Tailwind CSS 4. Hasta la 1.0 siguen funcionando:
+  </p>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    @for (item of compatibility; track item) {
+      <li>{{ item }}</li>
+    }
+    <li>
+      Desde la 0.2.0,
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-variant</code> y
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-tone</code>
+      muestran los valores resueltos: si tienes CSS sobre
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >[data-variant="destructive"]</code
+      >, cámbialo a
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >[data-tone="danger"]</code
+      >.
+    </li>
+  </ul>
+  <p class="text-pretty">
+    Para actualizar un componente, primero actualiza
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@mimi-ng/cli</code> y
+    vuelve a correr
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >ng g mimi &lt;nombre&gt;</code
+    >: actualiza los archivos que no tocaste y se salta los que modificaste, con un aviso;
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--overwrite</code> los
+    reemplaza. Los detalles, en
+    <a
+      routerLink="/docs/installation"
+      fragment="updates"
+      class="font-medium underline underline-offset-4 hover:text-muted-foreground"
+      >Instalación</a
+    >.
+  </p>
+</article>
