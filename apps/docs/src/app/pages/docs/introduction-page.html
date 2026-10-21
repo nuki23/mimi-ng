@@ -45,11 +45,22 @@
     Familiar si vienes de PrimeNG o NG-ZORRO
   </h3>
   <p class="text-pretty">
-    APIs como
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">showSearch</code> y
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">allowClear</code>,
-    modales por servicio y presets tipados. La documentación incluirá una página de migración con
-    las equivalencias.
+    Un Select con buscador y botón de limpiar (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >search</code
+    >
+    y <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">clearable</code>),
+    diálogos y confirmaciones desde el código (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >MimiDialogService</code
+    >,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >injectMimiConfirm()</code
+    >), avisos con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >injectMimiToast()</code
+    >
+    y presets tipados. La documentación incluirá una página de migración con las equivalencias.
   </p>
   <h3 id="forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Formularios listos</h3>
   <p class="text-pretty">
@@ -80,18 +91,13 @@
     Componentes disponibles
   </h2>
   <div class="flex flex-wrap gap-2">
-    @for (name of available; track name) {
+    @for (component of available; track component.id) {
       <span
         class="inline-flex h-[26px] items-center rounded-badge bg-secondary px-3 text-[13px] font-semibold text-secondary-foreground"
       >
-        {{ name }}
+        {{ component.name }}
       </span>
     }
-    <span
-      class="inline-flex h-[26px] items-center rounded-badge border border-dashed px-3 text-[13px] text-muted-foreground"
-    >
-      Select y Dialog · próximamente
-    </span>
   </div>
 
   <h2 id="why-mimi" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">

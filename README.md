@@ -83,7 +83,7 @@ pnpm format         # formatear con Prettier (pnpm format:check solo revisa)
 2. Crea el proyecto de prueba también **fuera de este repositorio** (dentro, pnpm lo trataría como parte del workspace), por ejemplo en `<carpeta-de-pruebas>/app`. Ahí instala el `.tgz` como dependencia de desarrollo y ejecuta `ng add`. `ng add` no acepta el archivo directamente, pero si el paquete ya está instalado, ejecuta su schematic:
 
    ```sh
-   pnpm add -D <carpeta-de-pruebas>/mimi-ng-cli-0.1.0.tgz
+   pnpm add -D <carpeta-de-pruebas>/mimi-ng-cli-<versión>.tgz
    pnpm ng add @mimi-ng/cli
    ```
 

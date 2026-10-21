@@ -8,7 +8,7 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 
 1. **Actualizaciones que respetan tus cambios.** La CLI guarda la versión original de cada componente en `.mimi/base/` y `mimi update` combina la versión nueva con las personalizaciones del usuario, mostrando solo los conflictos. (Spartan obliga a actualizar a mano o sobrescribe.)
 2. **Un solo modelo mental.** Sin capas Brain/Helm: un prefijo y todo el código en tu proyecto.
-3. **Familiar para quien viene de PrimeNG o NG-ZORRO.** APIs como `showSearch` y `allowClear`, modales por servicio y presets tipados. Página de migración con equivalencias.
+3. **Familiar para quien viene de PrimeNG o NG-ZORRO.** Lo que allí es `showSearch` y `allowClear` aquí es `search` y `clearable`; modales por servicio y presets tipados. Página de migración con equivalencias.
 4. **Formularios listos.** Errores en rojo y mensajes automáticos.
 5. **Un solo tema base, Mimi:** paleta neutra con radio amplio, sombras en capas y micro-animaciones (inspirado en Vuesax), que cada persona adapta (sección 11).
 6. **Documentación en español e inglés.**

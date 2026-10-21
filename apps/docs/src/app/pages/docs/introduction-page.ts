@@ -28,17 +28,31 @@ export class IntroductionPage {
     },
   ];
 
-  protected readonly available = [
-    'Button',
-    'Input',
-    'Textarea',
-    'FormField',
-    'Card',
-    'Badge',
-    'Avatar',
-    'Switch',
-    'Checkbox',
-    'Separator',
-    'Skeleton',
-  ];
+  protected readonly available = INTRODUCTION_COMPONENTS;
 }
+
+/** Los componentes que instala `ng g mimi` (nombre del registro → nombre visible). */
+export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = [
+  { id: 'avatar', name: 'Avatar' },
+  { id: 'badge', name: 'Badge' },
+  { id: 'button', name: 'Button' },
+  { id: 'card', name: 'Card' },
+  { id: 'checkbox', name: 'Checkbox' },
+  { id: 'confirm', name: 'Confirm' },
+  { id: 'context-menu', name: 'Context Menu' },
+  { id: 'dialog', name: 'Dialog' },
+  { id: 'dropdown-menu', name: 'Dropdown Menu' },
+  { id: 'form-field', name: 'FormField' },
+  { id: 'input', name: 'Input' },
+  { id: 'pagination', name: 'Pagination' },
+  { id: 'popover', name: 'Popover' },
+  { id: 'select', name: 'Select' },
+  { id: 'separator', name: 'Separator' },
+  { id: 'skeleton', name: 'Skeleton' },
+  { id: 'switch', name: 'Switch' },
+  { id: 'tabs', name: 'Tabs' },
+  { id: 'textarea', name: 'Textarea' },
+  { id: 'toast', name: 'Toast' },
+  { id: 'toolbar', name: 'Toolbar' },
+  { id: 'tooltip', name: 'Tooltip' },
+];
