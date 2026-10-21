@@ -37,7 +37,8 @@ export type TokenComponent =
   | 'confirm'
   | 'toast'
   | 'tabs'
-  | 'toolbar';
+  | 'toolbar'
+  | 'pagination';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -61,6 +62,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   toast: 'toast',
   tabs: 'tabs',
   toolbar: 'toolbar',
+  pagination: 'pagination',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1010,6 +1012,56 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-accent',
       preset: false,
       description: 'Fondo de un interruptor presionado.',
+    },
+  ],
+  pagination: [
+    {
+      name: '--mimi-pagination-item-size',
+      default: 'control-height-sm (md: control-height)',
+      inherits: '--mimi-control-height-sm',
+      preset: true,
+      description: 'Tamaño de ← y → y alto del selector de registros.',
+    },
+    {
+      name: '--mimi-pagination-input-width',
+      default: '44px (md: 52px)',
+      preset: true,
+      description: 'Ancho del campo de página.',
+    },
+    {
+      name: '--mimi-pagination-blur',
+      default: 'glass-blur',
+      inherits: '--mimi-glass-blur',
+      preset: true,
+      description: 'Desenfoque del fondo de la píldora.',
+    },
+    {
+      name: '--mimi-pagination-bg',
+      default: 'glass',
+      inherits: '--mimi-glass',
+      preset: false,
+      description: 'Fondo translúcido de la píldora.',
+    },
+    {
+      name: '--mimi-pagination-border',
+      default: 'glass-border',
+      inherits: '--mimi-glass-border',
+      preset: false,
+      description: 'Borde de la píldora.',
+    },
+    {
+      name: '--mimi-pagination-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra de la variante flotante (la en línea usa shadow-neutral).',
+    },
+    {
+      name: '--mimi-pagination-error',
+      default: 'destructive',
+      inherits: '--mimi-destructive',
+      preset: false,
+      description: 'Borde del campo y globo «Entre 1 y N» con una página inválida.',
     },
   ],
 };

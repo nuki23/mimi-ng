@@ -194,6 +194,21 @@ describe('MimiPopover', () => {
     expect(['top', 'bottom', 'left', 'right']).toContain(panel()!.dataset['side']);
   });
 
+  it('align estático no queda como atributo HTML (el navegador lo convertiría en text-align)', async () => {
+    @Component({
+      imports: [MimiPopoverImports],
+      template: `<mimi-popover align="end"
+        ><button mimiPopoverTrigger>Abrir</button></mimi-popover
+      >`,
+    })
+    class StaticAlign {}
+    const fixture = TestBed.createComponent(StaticAlign);
+    await settle(fixture);
+    const popover = (fixture.nativeElement as HTMLElement).querySelector('mimi-popover')!;
+    expect(popover.hasAttribute('align')).toBe(false);
+    expect(popover.getAttribute('data-align')).toBe('end');
+  });
+
   it('flecha decorativa por defecto (aria-hidden, sin foco); arrow=false la quita', async () => {
     const { fixture, panel, open, host } = await setup();
     await open();

@@ -151,6 +151,22 @@
       },
       "registryDependencies": ["button", "utils/cn", "utils/control-styles", "utils/overlay"]
     },
+    "pagination": {
+      "type": "component",
+      "files": [
+        "components/pagination/pagination.ts",
+        "components/pagination/pagination-page-size.ts",
+        "components/pagination/pagination-texts.ts",
+        "components/pagination/index.ts"
+      ],
+      "dependencies": {
+        "class-variance-authority": "^0.7.1"
+      },
+      "peerDependencies": {
+        "@angular/cdk": "^22.0.0"
+      },
+      "registryDependencies": ["button", "input", "select", "utils/cn"]
+    },
     "toolbar": {
       "type": "component",
       "files": ["components/toolbar/toolbar.ts", "components/toolbar/index.ts"],

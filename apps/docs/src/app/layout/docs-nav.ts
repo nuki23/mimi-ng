@@ -53,6 +53,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Toast', path: '/docs/components/toast', status: 'ready' },
       { title: 'Tabs', path: '/docs/components/tabs', status: 'ready' },
       { title: 'Toolbar', path: '/docs/components/toolbar', status: 'ready' },
+      { title: 'Pagination', path: '/docs/components/pagination', status: 'ready' },
     ],
   },
 ];

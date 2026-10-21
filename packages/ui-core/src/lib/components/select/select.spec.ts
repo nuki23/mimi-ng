@@ -1,5 +1,7 @@
+import type { ConnectedPosition } from '@angular/cdk/overlay';
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import {
   FormControl,
   FormGroup,
@@ -9,6 +11,7 @@ import {
 } from '@angular/forms';
 import { FormField, disabled, form, required } from '@angular/forms/signals';
 import { MimiFormField } from '@/components/ui/form-field';
+import type { MimiOverlayAlign, MimiOverlaySide } from '@/components/ui/utils/overlay';
 import { type MimiOption, type MimiOptionGroup, MimiSelect, MimiSelectImports } from './select';
 import { MIMI_SELECT_TEXT_ES, provideMimiSelectText } from './select-texts';
 
@@ -54,6 +57,9 @@ const FLAT: MimiOption<string>[] = [
       [loading]="loading()"
       [class]="extra()"
       [panelClass]="panelExtra()"
+      [side]="side()"
+      [align]="align()"
+      [matchWidth]="matchWidth()"
     />
     <button data-test="after">Después</button>
 
@@ -113,6 +119,9 @@ class Host {
   readonly loading = signal(false);
   readonly extra = signal('');
   readonly panelExtra = signal('');
+  readonly side = signal<MimiOverlaySide>('bottom');
+  readonly align = signal<MimiOverlayAlign>('start');
+  readonly matchWidth = signal(true);
   readonly queries: string[] = [];
   touches = 0;
 
@@ -691,5 +700,35 @@ describe('MimiSelect', () => {
     expect(panel()!.classList).not.toContain(
       'shadow-[shadow:var(--mimi-select-menu-shadow,var(--mimi-shadow-popover))]',
     );
+  });
+
+  it('side, align y matchWidth (como Popover): posiciones del panel y ancho propio', async () => {
+    const { fixture, h, open, press, trigger, panel } = await setup();
+    const select = fixture.debugElement.query(By.directive(MimiSelect))
+      .componentInstance as unknown as { positions(): ConnectedPosition[] };
+    const pane = () => panel()!.closest<HTMLElement>('.cdk-overlay-pane')!;
+    // Por defecto: debajo, al inicio y con el ancho del disparador; si no cabe, encima.
+    expect(select.positions().map((p) => [p.overlayY, p.originX])).toEqual([
+      ['top', 'start'],
+      ['bottom', 'start'],
+    ]);
+    await open('plain');
+    expect(pane().style.width).not.toBe('');
+    await press(trigger('plain'), 'Escape');
+    h.side.set('top');
+    h.align.set('end');
+    h.matchWidth.set(false);
+    await settle(fixture);
+    expect(select.positions().map((p) => [p.overlayY, p.originX])).toEqual([
+      ['bottom', 'end'],
+      ['top', 'end'],
+    ]);
+    await open('plain');
+    // Sin matchWidth, el CDK no le fija el ancho del disparador.
+    expect(pane().style.width).toBe('');
+    // El atributo HTML `align` (antiguo) alinearía el texto: no queda en el anfitrión.
+    expect(
+      fixture.nativeElement.querySelector('mimi-select[data-test="plain"]').hasAttribute('align'),
+    ).toBe(false);
   });
 });

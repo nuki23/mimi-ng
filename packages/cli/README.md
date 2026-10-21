@@ -72,6 +72,7 @@ export class App {}
 - **Dropdown Menu**: `ng g mimi dropdown-menu` · [documentación](https://ng.mimiworks.dev/docs/components/dropdown-menu)
 - **FormField**: `ng g mimi form-field` · [documentación](https://ng.mimiworks.dev/docs/components/form-field)
 - **Input**: `ng g mimi input` · [documentación](https://ng.mimiworks.dev/docs/components/input)
+- **Pagination**: `ng g mimi pagination` · [documentación](https://ng.mimiworks.dev/docs/components/pagination)
 - **Popover**: `ng g mimi popover` · [documentación](https://ng.mimiworks.dev/docs/components/popover)
 - **Select**: `ng g mimi select` · [documentación](https://ng.mimiworks.dev/docs/components/select)
 - **Separator**: `ng g mimi separator` · [documentación](https://ng.mimiworks.dev/docs/components/separator)

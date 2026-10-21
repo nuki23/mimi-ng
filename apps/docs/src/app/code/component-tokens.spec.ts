@@ -35,6 +35,7 @@ const FOLDER: Record<TokenComponent, string> = {
   toast: 'toast',
   tabs: 'tabs',
   toolbar: 'toolbar',
+  pagination: 'pagination',
 };
 
 /**

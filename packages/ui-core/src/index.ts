@@ -25,3 +25,4 @@ export * from './lib/components/confirm';
 export * from './lib/components/toast';
 export * from './lib/components/tabs';
 export * from './lib/components/toolbar';
+export * from './lib/components/pagination';

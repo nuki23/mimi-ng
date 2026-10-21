@@ -338,6 +338,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
         toast: { radius: '8px', width: '360px', offset: '24px', stackGap: '10px' },
         tabs: { height: '40px', spring: 'ease-out' },
         toolbar: { itemSize: '36px', blur: '8px' },
+        pagination: { itemSize: '28px', inputWidth: '48px', blur: '6px' },
       },
     });
     for (const line of [
@@ -397,6 +398,9 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-tabs-spring: ease-out;',
       '--mimi-toolbar-item-size: 36px;',
       '--mimi-toolbar-blur: 8px;',
+      '--mimi-pagination-item-size: 28px;',
+      '--mimi-pagination-input-width: 48px;',
+      '--mimi-pagination-blur: 6px;',
     ]) {
       expect(css).toContain(line);
     }

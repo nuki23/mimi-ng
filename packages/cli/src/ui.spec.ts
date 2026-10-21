@@ -526,6 +526,27 @@ describe('mimi (alias ui)', () => {
     expect(result.readContent(`/${cssPath}`)).toBe(before);
   });
 
+  it('pagination: copia Button, Input y Select (con aria, el cdk y el CSS del overlay)', async () => {
+    const { run, tree } = await initialized();
+    const cssPath = json(tree, '/mimi.json').tailwind.css as string;
+    const result = await run('mimi', { components: ['pagination'] }, tree);
+    for (const file of [
+      'pagination/pagination.ts',
+      'pagination/pagination-page-size.ts',
+      'pagination/pagination-texts.ts',
+      'pagination/index.ts',
+    ]) {
+      expect(result.readContent(`/${UI}/${file}`), file).toBe(template(`components/${file}`));
+    }
+    for (const dir of ['button', 'input', 'select']) {
+      expect(result.exists(`/${UI}/${dir}/index.ts`), dir).toBe(true);
+    }
+    const deps = json(result, '/package.json').dependencies;
+    expect(deps['@angular/cdk']).toBe(deps['@angular/core']);
+    expect(deps['@angular/aria']).toBe(deps['@angular/core']);
+    expect(result.readContent(`/${cssPath}`)).toContain('@angular/cdk/overlay-prebuilt.css');
+  });
+
   it('los componentes sin cssImports no tocan el CSS global', async () => {
     const { run, tree } = await initialized();
     const cssPath = json(tree, '/mimi.json').tailwind.css as string;

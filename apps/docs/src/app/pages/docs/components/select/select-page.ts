@@ -226,6 +226,25 @@ export class SelectPage {
       default: "''",
       description: 'Clases del panel.',
     },
+    {
+      name: 'side',
+      type: "'top' | 'right' | 'bottom' | 'left'",
+      default: "'bottom'",
+      description: 'Lado preferido del panel (como Popover). Si no cabe, pasa al opuesto.',
+    },
+    {
+      name: 'align',
+      type: "'start' | 'center' | 'end'",
+      default: "'start'",
+      description: 'Alineación del panel con el disparador.',
+    },
+    {
+      name: 'matchWidth',
+      type: 'boolean',
+      default: 'true',
+      description:
+        'El panel mide lo mismo que el disparador. Con false, lo que pida su contenido (por ejemplo, un min-w en panelClass).',
+    },
   ];
 
   protected readonly outputs = [

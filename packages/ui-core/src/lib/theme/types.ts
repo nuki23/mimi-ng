@@ -26,6 +26,8 @@ export interface MimiColorTokens {
   border?: string;
   input?: string;
   inputBackground?: string;
+  /** Borde de un campo con el puntero encima (por defecto, mezcla de foreground e input). */
+  inputHover?: string;
   ring?: string;
   /** Fondo que oscurece la página detrás de paneles y diálogos. */
   overlay?: string;
@@ -338,6 +340,19 @@ export interface MimiToolbarTokens {
 }
 
 /**
+ * Pagination. Fondo, borde, sombra flotante y error van en el CSS (`--mimi-pagination-bg`,
+ * `-border`, `-shadow`, `-error`).
+ */
+export interface MimiPaginationTokens {
+  /** Tamaño de ← y → y alto del selector (el alto de control: sm 32px, md 40px). */
+  itemSize?: string;
+  /** Ancho del campo de página (sm 44px, md 52px). */
+  inputWidth?: string;
+  /** Desenfoque del fondo (el global `effects.glassBlur`). */
+  blur?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -362,6 +377,7 @@ export interface MimiComponentTokens {
   toast?: MimiToastTokens;
   tabs?: MimiTabsTokens;
   toolbar?: MimiToolbarTokens;
+  pagination?: MimiPaginationTokens;
 }
 
 export interface MimiThemePreset {

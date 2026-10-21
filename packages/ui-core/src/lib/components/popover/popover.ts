@@ -131,6 +131,8 @@ export class MimiPopoverOutlet {
     '[attr.data-state]': 'open() ? "open" : "closed"',
     '[attr.data-side]': 'side()',
     '[attr.data-align]': 'align()',
+    // `align` es un atributo HTML antiguo: el navegador lo convierte en text-align (se heredaría).
+    '[attr.align]': 'null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

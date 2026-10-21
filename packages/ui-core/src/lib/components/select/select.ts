@@ -36,6 +36,8 @@ import {
 import {
   MIMI_OVERLAY_ANIMATION,
   MIMI_VIEWPORT_MARGIN,
+  type MimiOverlayAlign,
+  type MimiOverlaySide,
   mimiConnectedPositions,
   mimiPlacedSide,
   mimiWaitForExit,
@@ -627,10 +629,10 @@ const SEARCH_INPUT_CLASSES =
         cdkConnectedOverlay
         [cdkConnectedOverlayOrigin]="box"
         [cdkConnectedOverlayOpen]="rendered()"
-        [cdkConnectedOverlayPositions]="positions"
+        [cdkConnectedOverlayPositions]="positions()"
         [cdkConnectedOverlayViewportMargin]="viewportMargin"
         [cdkConnectedOverlayDisableClose]="true"
-        [cdkConnectedOverlayMatchWidth]="true"
+        [cdkConnectedOverlayMatchWidth]="matchWidth()"
         cdkConnectedOverlayUsePopover="inline"
         cdkConnectedOverlayTransformOriginOn="[data-mimi-overlay-panel]"
         (detach)="onDetach()"
@@ -735,6 +737,8 @@ const SEARCH_INPUT_CLASSES =
     '[attr.id]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    // `align` es un atributo HTML antiguo: el navegador lo convierte en text-align (se heredaría).
+    '[attr.align]': 'null',
     '(focusout)': 'onFocusOut($event)',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -775,6 +779,12 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   readonly userClass = input('', { alias: 'class' });
   /** Clases del panel. */
   readonly panelClass = input('');
+  /** Lado preferido del panel (como Popover). Si no cabe, pasa al opuesto. */
+  readonly side = input<MimiOverlaySide>('bottom');
+  /** Alineación del panel con el disparador (como Popover). */
+  readonly align = input<MimiOverlayAlign>('start');
+  /** El panel mide lo mismo que el disparador. Con `false`, lo que pida su contenido. */
+  readonly matchWidth = input(true, { transform: booleanAttribute });
 
   /** Se emite cuando el foco sale del Select (disparador y panel): marca el control como tocado. */
   readonly touch = output<void>();
@@ -806,8 +816,10 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly clearClasses = CLEAR_CLASSES;
   protected readonly searchInputClasses = SEARCH_INPUT_CLASSES;
   protected readonly viewportMargin = MIMI_VIEWPORT_MARGIN;
-  /** Debajo del disparador; si no cabe, encima. */
-  protected readonly positions = mimiConnectedPositions('bottom', 'start', OFFSET).slice(0, 2);
+  /** En el lado pedido (debajo, por defecto); si no cabe, en el opuesto. */
+  protected readonly positions = computed(() =>
+    mimiConnectedPositions(this.side(), this.align(), OFFSET).slice(0, 2),
+  );
 
   protected readonly classes = computed(() => cn(TRIGGER_CLASSES, this.userClass()));
   protected readonly panelClasses = computed(() => cn(PANEL_CLASSES, this.panelClass()));
@@ -886,7 +898,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly rendered = signal(false);
   /** Estado ya pintado: cambia después de `open`, en el siguiente ciclo. */
   protected readonly state = signal<'open' | 'closed'>('closed');
-  protected readonly placedSide = signal<'top' | 'right' | 'bottom' | 'left'>('bottom');
+  protected readonly placedSide = linkedSignal<MimiOverlaySide>(() => this.side());
   /** Nombre del panel y de la lista: el del disparador. */
   protected readonly panelLabel = signal('');
 
