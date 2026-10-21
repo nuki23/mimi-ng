@@ -109,6 +109,9 @@ describe('MimiPagination', () => {
     expect(nav.getAttribute('aria-label')).toBe('Paginación');
     expect(prev().type).toBe('button');
     expect(next().type).toBe('button');
+    // Son mimiBtn ghost de ícono (con aria-disabled propio, que Button conserva).
+    expect(prev().dataset['variant']).toBe('ghost');
+    expect(next().dataset['size']).toBe('icon');
     expect(field().getAttribute('aria-label')).toBe('Página, de 12');
     expect(field().value).toBe('1');
     expect(field().getAttribute('inputmode')).toBe('numeric');

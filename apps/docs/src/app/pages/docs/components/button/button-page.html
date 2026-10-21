@@ -101,6 +101,22 @@
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-disabled</code>,
     lo saca del orden de tabulación y cancela el clic.
   </p>
+  <p class="text-pretty">
+    Para un botón deshabilitado que siga enfocable (por ejemplo, para no perder el foco cuando se
+    deshabilita estando enfocado), usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;button mimiBtn [attr.aria-disabled]="…"&gt;</code
+    >
+    en vez de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">disabled</code>: se ve
+    deshabilitado y no recibe clics del puntero, pero Enter y Espacio siguen llegando a tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(click)</code>, así que
+    revisa el estado ahí. Button conserva tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-disabled</code>,
+    tu <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">tabindex</code> y tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-busy</code>; solo
+    los cambia mientras los necesita (enlace deshabilitado o cargando).
+  </p>
   <app-code-preview [code]="source.asLink">
     <app-button-as-link-example />
   </app-code-preview>

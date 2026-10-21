@@ -3,8 +3,10 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  Renderer2,
   booleanAttribute,
   computed,
+  effect,
   inject,
   input,
   isDevMode,
@@ -71,9 +73,8 @@ let warnedShortcutWithTone = false;
     '[attr.data-loading]': 'loading() ? "" : null',
     '[attr.data-disabled]': 'isDisabled() ? "" : null',
     '[attr.disabled]': 'isNativeButton && isDisabled() ? "" : null',
-    '[attr.aria-disabled]': '!isNativeButton && isDisabled() ? "true" : null',
-    '[attr.tabindex]': '!isNativeButton && isDisabled() ? "-1" : null',
-    '[attr.aria-busy]': 'loading() ? "true" : null',
+    // aria-disabled, tabindex y aria-busy no van aquí: un binding de host que vale null borra el
+    // atributo que haya puesto el usuario. Los pone `ownAttributes` solo cuando hacen falta.
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -115,6 +116,36 @@ export class MimiButton {
       this.userClass(),
     ),
   );
+
+  /**
+   * `aria-disabled="true"` y `tabindex="-1"` en un <a> deshabilitado, y `aria-busy="true"` mientras
+   * carga. Solo se escriben cuando hacen falta; al dejar de hacer falta vuelve el valor que tenía el
+   * elemento (el del usuario, fijo o enlazado) o se quitan. Así `<button mimiBtn aria-disabled="true">`
+   * (un botón deshabilitado que sigue enfocable) conserva su atributo.
+   */
+  private readonly ownAttributes = (() => {
+    const renderer = inject(Renderer2);
+    /** Lo que había antes de que Mimi escribiera cada atributo (null: no había). */
+    const previous = new Map<string, string | null>();
+    const apply = (name: string, value: string | null) => {
+      if (value !== null) {
+        if (!previous.has(name)) previous.set(name, this.element.getAttribute(name));
+        renderer.setAttribute(this.element, name, value);
+        return;
+      }
+      if (!previous.has(name)) return;
+      const before = previous.get(name) ?? null;
+      previous.delete(name);
+      if (before === null) renderer.removeAttribute(this.element, name);
+      else renderer.setAttribute(this.element, name, before);
+    };
+    return effect(() => {
+      const disabledLink = !this.isNativeButton && this.isDisabled();
+      apply('aria-disabled', disabledLink ? 'true' : null);
+      apply('tabindex', disabledLink ? '-1' : null);
+      apply('aria-busy', this.loading() ? 'true' : null);
+    });
+  })();
 
   /**
    * En <a> deshabilitado cancela el clic (en <button> el navegador ya lo bloquea). Se escucha

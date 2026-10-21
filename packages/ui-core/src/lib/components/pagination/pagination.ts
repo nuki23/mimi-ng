@@ -14,7 +14,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { cva } from 'class-variance-authority';
-import { buttonVariants } from '@/components/ui/button';
+import { MimiButton } from '@/components/ui/button';
 import { MimiInput } from '@/components/ui/input';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiPaginationPageSize } from './pagination-page-size';
@@ -89,10 +89,13 @@ let warnedSize = false;
  */
 @Component({
   selector: 'mimi-pagination',
-  imports: [MimiInput, MimiPaginationPageSize],
+  imports: [MimiButton, MimiInput, MimiPaginationPageSize],
   template: `
     <button
       type="button"
+      mimiBtn
+      variant="ghost"
+      size="icon"
       [class]="arrowClasses()"
       [attr.aria-label]="text.previous"
       [attr.aria-disabled]="first() || disabled() ? 'true' : null"
@@ -158,6 +161,9 @@ let warnedSize = false;
 
     <button
       type="button"
+      mimiBtn
+      variant="ghost"
+      size="icon"
       [class]="arrowClasses()"
       [attr.aria-label]="text.next"
       [attr.aria-disabled]="last() || disabled() ? 'true' : null"
@@ -295,16 +301,10 @@ export class MimiPagination {
     cn(paginationVariants({ size: this.size(), variant: this.variant() }), this.userClass()),
   );
   /**
-   * Las clases de un botón ghost de ícono de Button, sin la directiva `mimiBtn`: ella pondría
-   * `disabled` nativo (y el foco se perdería en los extremos) o pisaría el `aria-disabled`.
+   * Clases propias de ← y → sobre las de `mimiBtn` ghost de ícono. No se le pasa `disabled` a
+   * Button (sería nativo y el foco se perdería en los extremos): se usa `aria-disabled`.
    */
-  protected readonly arrowClasses = computed(() =>
-    cn(
-      buttonVariants({ variant: 'ghost', tone: 'secondary', size: 'icon' }),
-      ARROW_CLASSES[this.size()],
-      ARROW_PRESS,
-    ),
-  );
+  protected readonly arrowClasses = computed(() => cn(ARROW_CLASSES[this.size()], ARROW_PRESS));
   protected readonly inputClasses = computed(() =>
     cn(
       INPUT_CLASSES,

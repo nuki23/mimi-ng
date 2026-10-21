@@ -45,6 +45,42 @@ class Host {
   readonly linkClicks = signal(0);
 }
 
+/** Atributos que escribe el usuario: Button no los pisa cuando no los necesita. */
+@Component({
+  imports: [MimiButton],
+  template: `
+    <button data-test="static" mimiBtn aria-disabled="true" tabindex="-1" aria-busy="true">
+      Fijos
+    </button>
+    <button
+      data-test="bound"
+      mimiBtn
+      [attr.aria-disabled]="soft() ? 'true' : null"
+      [attr.tabindex]="tab()"
+      [attr.aria-busy]="busy() ? 'true' : null"
+    >
+      Enlazados
+    </button>
+    <a
+      data-test="link"
+      mimiBtn
+      href="/destino"
+      aria-disabled="true"
+      tabindex="0"
+      [disabled]="linkOff()"
+      [loading]="linkLoading()"
+      >Ir</a
+    >
+  `,
+})
+class UserAttrsHost {
+  readonly soft = signal(true);
+  readonly tab = signal<number | null>(-1);
+  readonly busy = signal(true);
+  readonly linkOff = signal(false);
+  readonly linkLoading = signal(false);
+}
+
 describe('MimiButton', () => {
   async function setup() {
     const fixture = TestBed.createComponent(Host);
@@ -336,6 +372,53 @@ describe('MimiButton', () => {
     expect(content.classList).not.toContain('text-transparent');
     expect(button.hasAttribute('disabled')).toBe(false);
     expect(button.hasAttribute('aria-busy')).toBe(false);
+  });
+
+  it('conserva el aria-disabled, el tabindex y el aria-busy del usuario (fijos o enlazados)', async () => {
+    const fixture = TestBed.createComponent(UserAttrsHost);
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    const get = (name: string) => el.querySelector<HTMLElement>(`[data-test="${name}"]`)!;
+    const host = fixture.componentInstance;
+
+    // <button> con atributos fijos: Button no los necesita, así que no los toca.
+    expect(get('static').getAttribute('aria-disabled')).toBe('true');
+    expect(get('static').getAttribute('tabindex')).toBe('-1');
+    expect(get('static').getAttribute('aria-busy')).toBe('true');
+    // Con aria-disabled, la clase del diseño deshabilitado (y pointer-events-none) aplica.
+    expect(get('static').classList).toContain('aria-disabled:pointer-events-none');
+
+    // Enlazados: siguen los cambios del usuario.
+    expect(get('bound').getAttribute('aria-disabled')).toBe('true');
+    expect(get('bound').getAttribute('tabindex')).toBe('-1');
+    expect(get('bound').getAttribute('aria-busy')).toBe('true');
+    host.soft.set(false);
+    host.tab.set(null);
+    host.busy.set(false);
+    await fixture.whenStable();
+    expect(get('bound').hasAttribute('aria-disabled')).toBe(false);
+    expect(get('bound').hasAttribute('tabindex')).toBe(false);
+    expect(get('bound').hasAttribute('aria-busy')).toBe(false);
+    host.soft.set(true);
+    await fixture.whenStable();
+    expect(get('bound').getAttribute('aria-disabled')).toBe('true');
+
+    // <a> con atributos propios: mientras Mimi no lo deshabilita, quedan los del usuario.
+    expect(get('link').getAttribute('aria-disabled')).toBe('true');
+    expect(get('link').getAttribute('tabindex')).toBe('0');
+    // Deshabilitado o cargando por Mimi: los de Mimi; al terminar, vuelven los del usuario.
+    host.linkOff.set(true);
+    host.linkLoading.set(true);
+    await fixture.whenStable();
+    expect(get('link').getAttribute('aria-disabled')).toBe('true');
+    expect(get('link').getAttribute('tabindex')).toBe('-1');
+    expect(get('link').getAttribute('aria-busy')).toBe('true');
+    host.linkOff.set(false);
+    host.linkLoading.set(false);
+    await fixture.whenStable();
+    expect(get('link').getAttribute('aria-disabled')).toBe('true');
+    expect(get('link').getAttribute('tabindex')).toBe('0');
+    expect(get('link').hasAttribute('aria-busy')).toBe(false);
   });
 
   it('habilitado responde al clic y al teclado como un botón nativo', async () => {
