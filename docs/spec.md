@@ -41,8 +41,9 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 | ---------------------- | ----------------- | -------------------------------------------------------------------------------------------- |
 | Node.js                | 24.15.0           | Angular 22 exige `^22.22.3 \|\| ^24.15.0 \|\| ^26.0.0`                                       |
 | pnpm                   | 12.5.1            | Fijada en `packageManager` del `package.json` raíz                                           |
-| Angular (framework)    | 22.1.7            | `@angular/core`, `common`, `compiler`, `compiler-cli`, `forms`, `platform-browser`, `router` |
-| Angular (herramientas) | 22.1.8            | `@angular/cli`, `@angular/build` (se versionan aparte del framework)                         |
+| Angular (framework)    | 22.2.3            | `@angular/core`, `common`, `compiler`, `compiler-cli`, `forms`, `platform-browser`, `router` |
+| Angular (herramientas) | 22.2.3            | `@angular/cli`, `@angular/build` (se versionan aparte del framework)                         |
+| Angular CDK y Aria     | 22.2.3            | `@angular/cdk`, `@angular/aria` (aria exige la misma versión exacta que cdk)                 |
 | TypeScript             | 6.0.3             | Angular 22 exige `>=6.0.0 <6.1.0`                                                            |
 | Tailwind CSS           | 4.3.3             | Con `@tailwindcss/postcss`                                                                   |
 | Vitest                 | 4.1.11            | Pruebas de docs y ui-core con `ng test` (con jsdom)                                          |

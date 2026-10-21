@@ -136,7 +136,7 @@ const tabVariants = cva(
     'font-medium text-[color:var(--mimi-tabs-fg,var(--mimi-muted-foreground))] mimi-transition',
     'aria-selected:font-semibold aria-selected:text-[color:var(--mimi-tabs-active-fg,var(--mimi-foreground))]',
     'not-aria-disabled:hover:text-[color:var(--mimi-tabs-active-fg,var(--mimi-foreground))] not-aria-disabled:active:scale-(--mimi-press-scale)',
-    // Deshabilitada (sin diseño, plan T.2a): enfocable con las flechas, pero no se elige.
+    // Deshabilitada (sin diseño, plan D6): enfocable con las flechas, pero no se elige.
     'aria-disabled:cursor-not-allowed aria-disabled:opacity-(--mimi-disabled-opacity)',
     buttonFocusStyles,
   ],
@@ -144,7 +144,7 @@ const tabVariants = cva(
     variants: {
       variant: {
         underline: 'h-[var(--mimi-tabs-height,44px)] gap-2 text-sm',
-        // 34px sin token (el token de alto es el de la subrayada): plan T.2a.
+        // 34px sin token (el token de alto es el de la subrayada): plan D6.
         pill: 'h-[34px] gap-1.5 rounded-[var(--mimi-radius)] text-[13.5px] [&_svg]:size-[15px] [&_svg]:shrink-0',
       },
     },

@@ -10,7 +10,7 @@ import type { ConnectedPosition } from '@angular/cdk/overlay';
 export type MimiOverlaySide = 'top' | 'right' | 'bottom' | 'left';
 export type MimiOverlayAlign = 'start' | 'center' | 'end';
 
-/** Distancia mínima de un overlay al borde de la pantalla (no está en el diseño: spec 13, T.2a). */
+/** Distancia mínima de un overlay al borde de la pantalla (no está en el diseño: spec 13, plan D6). */
 export const MIMI_VIEWPORT_MARGIN = 8;
 
 const OPPOSITE: Record<MimiOverlaySide, MimiOverlaySide> = {

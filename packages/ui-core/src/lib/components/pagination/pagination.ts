@@ -61,7 +61,7 @@ const ARROW_CLASSES = {
   sm: 'size-[var(--mimi-pagination-item-size,var(--mimi-control-height-sm,2rem))] rounded-full [&_svg]:size-4',
   md: 'size-[var(--mimi-pagination-item-size,var(--mimi-control-height,2.5rem))] rounded-full [&_svg]:size-[18px]',
 };
-// 0,9 en vez del 0,88 del diseño (plan T.2a); deshabilitado, sin escala (también con Espacio).
+// 0,9 en vez del 0,88 del diseño (plan D6); deshabilitado, sin escala (también con Espacio).
 const ARROW_PRESS = 'active:scale-(--mimi-press-scale-sm) aria-disabled:active:scale-100';
 
 const INPUT_CLASSES = cn(

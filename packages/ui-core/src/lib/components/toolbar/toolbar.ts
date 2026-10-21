@@ -70,12 +70,12 @@ const ITEM_CLASSES = cn(
   'data-[state=active]:bg-[color:var(--mimi-toolbar-active-bg,var(--mimi-primary))] data-[state=active]:text-[color:var(--mimi-toolbar-active-fg,var(--mimi-primary-foreground))]',
   'data-[state=active]:shadow-[0_0_0_2px_var(--mimi-background),0_0_0_4px_var(--mimi-toolbar-ring,var(--mimi-info))]',
   'data-[state=pressed]:bg-[color:var(--mimi-toolbar-pressed-bg,var(--mimi-accent))]',
-  // 0,9 (con movimiento reducido, 1); el diseño usa 0,88 sin token: plan T.2a.
+  // 0,9 (con movimiento reducido, 1); el diseño usa 0,88 sin token: plan D6.
   'not-aria-disabled:active:scale-(--mimi-press-scale-sm)',
-  // Deshabilitado (sin diseño, plan T.2a): enfocable con las flechas, pero no se activa.
+  // Deshabilitado (sin diseño, plan D6): enfocable con las flechas, pero no se activa.
   'aria-disabled:cursor-not-allowed aria-disabled:opacity-(--mimi-disabled-opacity)',
   // Foco de teclado (el diseño solo muestra el anillo del hover, que no basta): por fuera del
-  // anillo del activo, sin pisar al vecino (6px de separación). Plan T.2a.
+  // anillo del activo, sin pisar al vecino (6px de separación). Plan D6.
   buttonFocusStyles,
   'focus-visible:outline-offset-4',
 );
