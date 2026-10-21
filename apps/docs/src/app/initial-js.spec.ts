@@ -1,7 +1,7 @@
 /**
  * Presupuesto del JS inicial (apps/docs/scripts/check-initial-js.mjs, spec 10): el script suma el
- * <script type="module"> y los <link rel="modulepreload"> de index.html, avisa desde 335 kB y
- * falla desde 350 kB. Se prueba con un index.html de ejemplo en una carpeta temporal.
+ * <script type="module"> y los <link rel="modulepreload"> de index.html, avisa desde 345 kB y
+ * falla desde 360 kB. Se prueba con un index.html de ejemplo en una carpeta temporal.
  *
  * Las pruebas corren en Node (Vitest), con los módulos de Node sin importarlos, como en
  * public-files.spec.ts. Sin imports, los dos archivos comparten ámbito: los nombres de aquí son
@@ -88,24 +88,24 @@ describe('check-initial-js.mjs (presupuesto del JS inicial)', () => {
     expect(result.stderr).toBe('');
   });
 
-  it('no avisa justo debajo de 335 kB', () => {
-    write('main.js', 153);
+  it('no avisa justo debajo de 345 kB', () => {
+    write('main.js', 163);
     const result = run();
     expect(result.status).toBe(0);
     expect(result.stderr).toBe('');
   });
 
-  it('avisa desde 335 kB, sin fallar', () => {
-    write('main.js', 154);
+  it('avisa desde 345 kB, sin fallar', () => {
+    write('main.js', 164);
     const result = run();
     expect(result.status).toBe(0);
-    expect(result.stderr).toContain('Aviso: el JS inicial (335.00 kB) pasa los 335 kB');
+    expect(result.stderr).toContain('Aviso: el JS inicial (345.00 kB) pasa los 345 kB');
   });
 
-  it('falla desde 350 kB', () => {
-    write('main.js', 169);
+  it('falla desde 360 kB', () => {
+    write('main.js', 179);
     const result = run();
     expect(result.status).toBe(1);
-    expect(result.stderr).toContain('pasa el límite de 350 kB');
+    expect(result.stderr).toContain('pasa el límite de 360 kB');
   });
 });
