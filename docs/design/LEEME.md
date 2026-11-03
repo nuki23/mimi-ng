@@ -25,4 +25,4 @@ Los `.dc.html` se abren en el navegador junto con los scripts de soporte de esta
 - Grupos 4 y 5 y Mimi Effects: `Mimi F5 Estructura.dc.html`, `Mimi F5 Dashboard y Media.dc.html`, `Mimi F5 Effects.dc.html`.
 - Blocks: `Mimi F6 Blocks.dc.html` y `Block <nombre>.dc.html`.
 
-Los nombres «F2»…«F7» son las tandas de trabajo en Claude Design, no las fases de `docs/plan.md`. Los textos de los diseños que contradicen la spec (comandos, imports) están anotados en la spec, sección 13, y se corrigen al pasarlos al código; los de Theme Studio, en `docs/futuro/theme-studio.md`. Lo que Mimi hizo distinto del diseño, o sin diseño, está en la tarea D6 de `docs/plan.md`.
+Los nombres «F2»…«F7» son las tandas de trabajo en Claude Design, no las fases de `docs/plan.md`. Los textos de los diseños que contradicen la spec (comandos, imports) están anotados en la spec, sección 13, y se corrigen al pasarlos al código; los de Theme Studio, en `docs/futuro/theme-studio.md`. Lo que Mimi hizo distinto del diseño, o sin diseño, está en `correcciones-pendientes.md`, en esta carpeta (tarea D6 de `docs/plan.md`).

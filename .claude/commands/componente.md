@@ -10,7 +10,7 @@ Crea el componente **$ARGUMENTS** de Mimi siguiendo estos pasos en orden. Cumple
 1. Busca la tarea de $ARGUMENTS en `docs/plan.md` y **lee sus notas propias** (por ejemplo, la 2.1 pide `tabindex="-1"` en `a[mimiBtn]` con `aria-disabled` y reemplazar los botones del layout del showcase por `mimiBtn`). Cumple todas.
 2. Lee en `docs/spec.md` el catálogo (sección 4), la tabla de tokens de $ARGUMENTS (sección 13) y todo lo que mencione a $ARGUMENTS: selector, variantes, tamaños, estados, formularios (sección 8).
 3. Revisa $ARGUMENTS en `docs/design/Mimi Componentes.dc.html`: medidas, estados (normal, hover, foco, deshabilitado, cargando, error…), claro y oscuro.
-4. Todo sale de ese diseño y de los tokens existentes (`packages/ui-core/src/lib/theme/theme-base.css`, clases de la spec 6.1). **No inventes valores.** Si falta algo o el diseño se contradice, pregúntame. Lo que al final quede distinto del diseño o sin diseño se anota en la tarea D6 de `docs/plan.md` («Correcciones de diseño pendientes»).
+4. Todo sale de ese diseño y de los tokens existentes (`packages/ui-core/src/lib/theme/theme-base.css`, clases de la spec 6.1). **No inventes valores.** Si falta algo o el diseño se contradice, pregúntame. Lo que al final quede distinto del diseño o sin diseño se anota en `docs/design/correcciones-pendientes.md` (tarea D6 del plan), en un apartado con el nombre del componente y su ID.
 5. Propón un plan breve (archivos, API pública, variantes, tokens, decisiones) y **espera mi aprobación**.
 
 ## 2. El componente, en `packages/ui-core/src/lib/components/$ARGUMENTS/`
