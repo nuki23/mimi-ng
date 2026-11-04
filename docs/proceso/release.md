@@ -53,7 +53,8 @@ En los comandos, `X.Y.Z` es la versión (por ejemplo, `0.3.0`) y `X.Y.W` la ante
 
 2. Release en GitHub (en el repositorio, «Releases» → «Draft a new release»):
    - Etiqueta: `vX.Y.Z`.
-   - Título: PENDIENTE: lo decide el usuario. La 0.1.0 se llamó «v0.1.0 · Vista previa»; no consta en el repositorio si hubo release de la 0.2.0 ni su título.
+   - Título: «X.Y.Z — <subtítulo de la sección en el CHANGELOG>». Por ejemplo, la sección `## 0.2.0 (21/10/2026): overlays y navegación` da «0.2.0 — overlays y navegación».
+   - PENDIENTE: el usuario confirma si el release de la 0.2.0 se publicó en GitHub (no consta en el repositorio).
    - Descripción: la sección `## X.Y.Z …` de `CHANGELOG.md` pegada **sin su título** (desde la primera línea debajo del `##` hasta antes de la sección de la versión anterior).
    - Marcar «Set as the latest release» («Latest»).
 
@@ -74,7 +75,7 @@ Datos de `wrangler.jsonc` (raíz del repositorio): el Worker se llama `mimi-ng-d
    npx wrangler@4 login
    ```
 
-2. PENDIENTE: lo comprueba el usuario. La spec 10 («Despliegue») dice que el build lo hace **Workers Builds desde GitHub** (`pnpm build:docs` en Cloudflare, con Node de `.node-version` y pnpm de la variable `PNPM_VERSION` del panel). Si ese build despliega solo al subir a la rama principal, el `npx wrangler@4 deploy` manual no hace falta (y no conviene hacer los dos). Anotar aquí cuál de los dos se usa.
+2. PENDIENTE: el usuario comprueba en Cloudflare, Settings → Builds, si hay un repositorio conectado; si lo hay, cada push a main publica el sitio. (La spec 10, «Despliegue», habla de Workers Builds desde GitHub.) Si es así, el `npx wrangler@4 deploy` manual no hace falta; cuando el usuario confirme el dato, se corrige este paso.
 3. Comprobar el sitio en el navegador con **Ctrl+F5** (recarga sin caché): la versión nueva en la landing y en la página de Instalación, y una página de un componente nuevo. `index.html` no tiene caché larga, pero el navegador puede mostrar la versión anterior hasta recargar.
 
 ## Probar desde npm
@@ -92,7 +93,15 @@ En un proyecto limpio, **fuera del repositorio**, en una **ruta corta** (por eje
    ```
 
 2. **pnpm, proyecto nuevo:** lo mismo con `pnpm dlx @angular/cli@22 new app-pnpm --style=tailwind --package-manager=pnpm` y `pnpm ng …`.
-3. **Actualización sin cambios:** un proyecto con la versión anterior (`ng add @mimi-ng/cli@X.Y.W` y algunos componentes), y después la nueva: instalar `@mimi-ng/cli@X.Y.Z` y volver a ejecutar `ng g mimi <los mismos componentes>`. La CLI tiene que decir «actualizado de X.Y.W a X.Y.Z» (spec 5, «Qué hace `mimi`»). PENDIENTE: lo comprueba el usuario: el comando exacto para instalar la versión nueva en un proyecto que ya la tiene (por ejemplo, `npm install -D @mimi-ng/cli@X.Y.Z`); no consta en el repositorio cómo se hizo en la 0.2.0.
+3. **Actualización sin cambios:** un proyecto con la versión anterior (`ng add @mimi-ng/cli@X.Y.W` y algunos componentes), y después la nueva, como dice el CHANGELOG de la 0.2.0:
+
+   ```sh
+   npm i -D @mimi-ng/cli@X.Y.Z
+   npx ng g mimi <componentes que usa el proyecto>
+   ```
+
+   (con pnpm: `pnpm add -D @mimi-ng/cli@X.Y.Z` y `pnpm ng g mimi …`). La CLI tiene que decir «actualizado de X.Y.W a X.Y.Z» (spec 5, «Qué hace `mimi`»).
+
 4. **Actualización con un archivo modificado:** como el 3, pero cambiando antes un archivo de un componente (y, si la versión trae tokens nuevos, el `theme-base.css`). La CLI tiene que bloquear ese ítem con su aviso y no tocar sus archivos (todo o nada, spec 5).
 
 En cada uno: `ng build` sin avisos y `ng serve` abre la página.
@@ -104,6 +113,6 @@ En el historial del grupo, `docs/historial/plan-grupo-<n>.md`, en una sección �
 ## Si algo sale mal
 
 - **`pnpm publish` da 404** aunque `npm whoami` funciona: pnpm 12 no usa la sesión de `npm login` (tarea 0.1.1-3). Publicar con `npm publish` desde `packages/cli`.
-- **`npm publish` o `npm whoami` dan 401:** la sesión de npm caducó. `npm login` y repetir.
-- **`npm view` no muestra la versión recién publicada:** es la caché de npm. Repetir con `--prefer-online`.
+- **401 de npm** (en `npm publish` o `npm whoami`): la sesión de `npm login` caducó. Volver a entrar con `npm login` y repetir.
+- **E404 o versiones viejas en `npm view`** justo después de publicar: es la caché de npm. Repetir con `--prefer-online`.
 - **`ng serve` falla con pnpm en Windows** en el proyecto de prueba: la ruta es demasiado larga (límite de 260 caracteres). Mover el proyecto a una ruta corta y repetir.
