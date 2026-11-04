@@ -5,7 +5,7 @@ Librería de componentes UI para **Angular 22** + **Tailwind CSS 4**. Los compon
 ## Documentos del proyecto
 
 - `docs/spec.md`: especificación completa. Léela antes de crear o cambiar un componente, el tema o la CLI.
-- `docs/plan.md`: el índice de tareas (una línea por tarea, con su estado y el enlace a su detalle) y las reglas del plan. El detalle de cada tarea está en `docs/plan/` (una tarea detallada tiene su archivo con el ID como nombre, por ejemplo `docs/plan/grupo-2/G2.1.md`; las de una línea van en el archivo de su bloque). Para encontrar una tarea por su ID: el índice o `grep -rn "<ID>" docs/plan/`. Trabaja solo la tarea que se te pida y, al terminar, marca su casilla en su archivo de detalle **y** en el índice.
+- `docs/plan.md`: el índice de tareas (una línea por tarea, con su estado y el enlace a su detalle) y las reglas del plan. El detalle de cada tarea está en `docs/plan/` (una tarea detallada tiene su archivo con el ID como nombre, por ejemplo `docs/plan/grupo-2/G2.1.md`; las de una línea van en el archivo de su bloque). Para encontrar una tarea por su ID: el índice o `grep -rn "<ID>" docs/plan/`. Cómo se trabaja una tarea: «Forma de trabajar», abajo.
 - `docs/design/`: diseños y variables CSS de Claude Design. Colores, radios y sombras salen de aquí, nunca inventados. Lo que Mimi haga distinto del diseño, o sin diseño, se anota en `docs/design/correcciones-pendientes.md` (tarea D6 del plan).
 - `docs/historial/`: el texto completo de las tareas terminadas del plan. No se edita.
 - `docs/futuro/`: proyectos aparte que no se trabajan en mimi-ng (por ahora, `theme-studio.md`). No se toman como tareas.
@@ -62,10 +62,34 @@ packages/cli/       # @mimi-ng/cli (Angular Schematics)
 
 ## Forma de trabajar
 
-- Una tarea del plan por vez (índice en `docs/plan.md`, detalle en `docs/plan/`). Antes de escribir código, propone un plan breve y **espera la aprobación**. Si el usuario pide un paso aparte («PASO A»), detente al terminarlo para que haga su commit.
-- Al terminar: `pnpm build`, `pnpm test` y `pnpm format` en verde (y `pnpm format:check`); marca la casilla en el archivo de la tarea en `docs/plan/` y en el índice de `docs/plan.md`, actualiza la spec si cambió algo y resume qué cambió, con la **lista de archivos** nuevos y modificados. Si algo no salió como se pidió (una decisión distinta, un valor que no está en el diseño, una regla que no cumpliste), dilo explícitamente.
-- No hagas commits: los hace el usuario. Al terminar, avisa que toca commit y sugiere un mensaje breve, sin líneas de atribución.
-- **No publiques nada** (npm, tags, releases, despliegues): lo hace el usuario. Puedes darle los comandos.
+- Una tarea del plan por vez (índice en `docs/plan.md`, detalle en `docs/plan/`). Si el usuario pide un paso aparte («PASO A»), detente al terminarlo para que haga su commit.
+- Los comandos `/componente` (componentes), `/tarea` (todo lo demás) y `/cerrar-grupo` (la puerta de un grupo) siguen este protocolo.
+
+**Al empezar una tarea**
+
+- a. Lee su línea del índice y su archivo en `docs/plan/` (búscalo con `grep -rn "<ID>" docs/plan/`), no todo el plan. De la tarea, lee «Leer antes», «Depende de», «Trampas conocidas» y «Criterios de hecho».
+- b. Si una dependencia no está hecha, o hay un «PENDIENTE DE DECIDIR» que afecta a la tarea, pregunta al usuario; no lo resuelvas tú.
+- c. Marca la tarea `[~]` en su archivo de detalle y en el índice, y agrega su fila a «En curso» de `docs/plan.md` (ID, rama si la hay, quién, fecha).
+- d. Antes de escribir código, propone un plan breve y **espera la aprobación**.
+
+**Al terminar una tarea**
+
+- e. Verifica cada «Criterio de hecho» uno por uno y repórtalos en una lista con la evidencia de cada uno (el comando y su resultado, la prueba, el archivo). Entre ellos, siempre: `pnpm build`, `pnpm test` y `pnpm format` en verde (y `pnpm format:check`). Un criterio que no comprobaste se informa como **NO COMPROBADO**; la tarea no se marca hecha si falta alguno obligatorio.
+- f. Marca `[x]` en su archivo de detalle y en el índice, y quita su fila de «En curso». Si la tarea cierra el grupo, mueve el texto al historial como dice «Cómo usar este plan» (`docs/plan.md`).
+- g. Anota en `docs/design/correcciones-pendientes.md` lo que quedó distinto del diseño o sin diseño. Actualiza la spec si cambió algo; las decisiones que siguen vigentes van a la spec.
+- h. Informa: la **lista de archivos** nuevos y modificados, el bundle (ver «Bundle», abajo), el CSS global crudo y gzip, las alertas para el revisor y el mensaje de commit sugerido. Si algo no salió como se pidió (una decisión distinta, un valor que no está en el diseño, una regla que no cumpliste), dilo explícitamente.
+
+**Commit y push**
+
+- Por defecto, los commits los hace el usuario. Al terminar, avisa que toca commit y sugiere un mensaje breve, sin líneas de atribución.
+- Solo si el usuario lo autoriza en el prompt de la sesión, haz el commit y el push con estas barreras:
+  - `git status --short` antes.
+  - `git add` solo de rutas concretas de lo que tocaste en esa tarea: nunca `git add -A` ni `git add .`, nunca `.vscode/`.
+  - `git config user.email` debe ser exactamente `220945288+nuki23@users.noreply.github.com`; si no, **no hagas el commit** y avísale. No cambies la configuración global de git.
+  - El mensaje, solo el acordado: sin pie «Co-Authored-By», sin «Generated with…», sin «Claude-Session» ni ninguna mención a Claude o a una IA.
+  - Antes del push, verifica autor y mensaje con `git log -1 --format='%an <%ae>%n%B'`.
+  - Push sin `--force`. Si algo falla, detente y avisa.
+- **No publiques nada** (npm, tags, releases, despliegues): lo hace siempre el usuario, aunque autorice commits. Puedes darle los comandos (`docs/proceso/release.md`).
 - No agregues dependencias que no estén en la spec sin preguntar.
 - Cada componente nuevo tiene su página en el showcase con todos sus estados.
 - Para crear o editar archivos usa siempre la herramienta de archivos, nunca bash con heredoc ni echo: las comillas invertidas se ejecutan como comandos. Tampoco `sed -i` para editar archivos del repo.
