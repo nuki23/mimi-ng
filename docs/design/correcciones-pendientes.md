@@ -74,3 +74,8 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Foco del campo:** el diseño no tiene anillo de foco; Mimi usa el de Input.
   - **Cambiar el tamaño:** el diseño vuelve a la página 1; Mimi mantiene visible el primer registro (como MatPaginator).
   - **Selector:** la separación con el panel es 8px (la de Select); el diseño, 10px.
+
+  Grupo 2, encontrado al detallar el plan (tanda B, 03/11/2026; antes de construir los componentes):
+  - **Number Input (G2.2), lectura del número:** el diseño interpreta el texto quitando todo lo que no es dígito, punto o signo y usando `parseFloat` (función `num()` de `F3 Slider OTP Numero Mascara`). Con un idioma de coma decimal (por ejemplo, `es-ES`), «1.250,5» se lee mal. Mimi tiene que leer con los separadores del idioma.
+  - **Input Mask (G2.4), valor guardado:** en el diseño, el estado guarda solo los dígitos y la máscara se aplica al mostrar (`mask[key]` en `mask()`). Qué guarda Mimi está pendiente de decidir (plan, G2.4).
+  - **Anillo de error (Number Input, Input Mask, Password, Input OTP, Tags Input):** los diseños del Grupo 2 usan `--mimi-destructive-soft` para el anillo de error; desde la T.1, el anillo es `--mimi-destructive-ring` (`--mimi-destructive-soft` queda como alias hasta la 1.0, spec 12).

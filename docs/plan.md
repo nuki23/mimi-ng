@@ -52,7 +52,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 3. Showcase: Fundamentos (`FOUNDATION_PACKAGES` y la tabla de paquetes), `INTRODUCTION_COMPONENTS` de Introducción, la landing y el README de la CLI (lista de componentes); `x-prompt` de `packages/cli/src/ui/schema.json`.
 4. `registry.json` y las pruebas de la CLI.
 5. Prueba real con el `.tgz` en 4 escenarios: npm nuevo, pnpm nuevo, actualización desde la versión anterior sin cambios y con un archivo modificado. En Windows, los proyectos de prueba en una ruta corta (el límite de 260 caracteres rompió `ng serve` con pnpm en la 0.2.0).
-6. Presupuestos de bundle (spec 10): JS inicial y CSS, crudo y gzip, antes y después.
+6. Presupuestos de bundle (spec 10): JS inicial y CSS global, crudo y gzip, antes y después.
 7. `docs/design/correcciones-pendientes.md` (D6) al día con lo del grupo.
 8. Mover el texto de las tareas hechas del grupo a `docs/historial/`.
 9. Checklist de release, que ejecuta el usuario: `npm publish`, etiqueta, release de GitHub, despliegue y prueba desde npm.
@@ -74,6 +74,7 @@ Pendientes sin grupo. No tienen versión propia: salen en la siguiente versión 
   - **Cambio que exige en Dialog:** poder bloquear Escape y el fondo con el diálogo abierto. Propuesta: `disableClose` como signal en `MimiDialogRef`, leído en el momento en que llega Escape o el clic (hoy se calcula al abrir). Es API pública nueva de Dialog: spec 4, página de Dialog y pruebas.
   - Depende de: G1.6, G1.7 (hechas).
 - [ ] M.2 Alinear Angular en la 22.2.x (trae #33974 del combobox, que salió en cdk y aria 22.2.4). **Regla:** todos los `@angular/*` del repo (core y el resto del framework, cdk, aria, cli y build) en la mayor versión que core, cdk, aria, cli y build tengan en común, verificada con `npm view <paquete> version` el día de la tarea. Así aria queda siempre igual a cdk (spec 2 y 4). Después, `pnpm dedupe`, para que las peers de ui-core no queden en la versión anterior (lo que pasó al subir a la 22.2.3, el 21/10/2026).
+  - Bloquea: G2.8 (Combobox: el arreglo #33974 hace falta; ver G2.8, «Base técnica»).
   - Dato del 03/11/2026 (`npm view`): `@angular/core` en 22.2.4 (salió el 29/10/2026); `@angular/cdk`, `@angular/aria` y `@angular/cli` en 22.2.5. Versión común: **22.2.4**. Cuando core llegue a la 22.2.5, se vuelve a alinear con la misma regla.
   - Criterios de hecho: `pnpm-lock.yaml` con una sola versión de cada `@angular/*`; `pnpm build`, `pnpm test` (incluidas las pruebas de alarma de aria) y `pnpm format:check` en verde; tabla de versiones de la spec 2 al día; bundle crudo y gzip antes y después.
 - [ ] M.3 Revisar rodeos con aria 22.2: MenuItem value opcional (#33715) y tokens exportados (#33607); quitar los que ya no hagan falta, con las pruebas de alarma.
@@ -93,10 +94,10 @@ Pendientes sin grupo. No tienen versión propia: salen en la siguiente versión 
 
 ## Grupo 2 → v0.3.0: entradas avanzadas
 
-Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendado (respeta las dependencias): G2.0 → G2.0b → G2.1 → 5.2 → G2.10 → G2.2 → G2.3 → G2.4 → G2.5 → G2.6 → G2.7 → G2.8 → G2.9 → G2.11 → G2.12 → 5.17 → G2.P. Con las dependencias cumplidas, el orden entre G2.2 a G2.5 se puede cambiar.
+Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendado (respeta las dependencias): G2.0 → G2.0b → G2.1 → 5.2 → G2.10 → G2.2 → G2.3 → G2.4a → G2.4b → G2.5 → G2.6 → G2.7 → G2.8 → G2.9 → G2.11 → G2.12 → 5.17 → G2.P. Con las dependencias cumplidas, el orden entre G2.2 a G2.5 se puede cambiar.
 
 - [ ] G2.0 Catálogo de tokens del Grupo 2 en la spec 13
-  - v0.3.0 · Tamaño M · Depende de: — · Bloquea: G2.0b, G2.1, G2.2, G2.3, G2.4, G2.5, G2.6, G2.7, G2.8, G2.9, G2.10, G2.11, G2.12
+  - v0.3.0 · Tamaño M · Depende de: — · Bloquea: G2.0b, G2.1, G2.2, G2.3, G2.4a, G2.4b, G2.5, G2.6, G2.7, G2.8, G2.9, G2.10, G2.11, G2.12
   - Estado: —
   - Leer antes: spec 13 completa («Niveles», «Nivel 3: por componente» —sobre todo las tablas de Select, Tabs, Toolbar y Pagination, las más recientes—, «Otros globales del diseño», «Reglas» y «Correcciones pendientes del diseño»); spec 6.2 (cascada; los colores de componente van en el CSS, no en el preset); spec 4, tabla del Grupo 2; la T.0 y la T.0b en `docs/historial/plan-grupo-1.md` (el precedente de esta tarea).
   - Diseño: `F3 Archivos Tags Toggle Color` (secciones «11 · Toggle Group · control segmentado» y «12 · Color Picker»; File Upload y Tags Input, por su nombre), `Color Picker`, `F3 Combobox Fechas Hora`, `F3 Slider OTP Numero Mascara`, `F5 Estructura` (sección «4 · Progress») y `mimi-variables-fase3.css`. Cada sección se ubica con grep por el nombre del componente; no se cargan los archivos completos.
@@ -127,7 +128,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - PENDIENTE DE DECIDIR: el keyframe `mimi-indet` del diseño de Progress, ¿se agrega al catálogo de la spec 13 como global o queda dentro de Progress?
     - PENDIENTE DE DECIDIR: Date Picker y Date Range, ¿una tabla o dos?
 - [ ] G2.0b Tokens globales del Grupo 2 en el tema
-  - v0.3.0 · Tamaño M · Depende de: G2.0 · Bloquea: G2.1, G2.2, G2.3, G2.4, G2.5, G2.6, G2.7, G2.8, G2.9, G2.10, G2.11, G2.12, 5.2
+  - v0.3.0 · Tamaño M · Depende de: G2.0 · Bloquea: G2.1, G2.2, G2.3, G2.4a, G2.4b, G2.5, G2.6, G2.7, G2.8, G2.9, G2.10, G2.11, G2.12, 5.2
   - Estado: —
   - Leer antes: la T.1 en `docs/historial/plan-grupo-1.md` (el precedente: tokens nuevos de `tokens-mimi.css` llevados a ui-core, con `types.ts`, `mimiThemeToCss` y `cn.ts`); spec 6.1 a 6.4 (variables, `@theme inline`, cascada, preset y `provideMimiTheme`); spec 11 (tema); spec 13, «Otros globales del diseño», «Derivados» y «Reglas»; spec 5 («Qué hace `mimi`»: el tema se actualiza solo si el usuario no lo modificó; si lo modificó, solo avisa); `contrast.spec.ts` (ui-core).
   - Diseño: `docs/design/tokens-mimi.css` (`:root` y `.dark`) y `mimi-variables-fase3.css`.
@@ -157,6 +158,10 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - Prueba de un componente con el tema sin los tokens nuevos: no queda transparente ni invisible.
     - Spec 6.1, 6.3 y 13 al día.
     - Presupuesto del CSS global, crudo y gzip, antes y después. Techo: aviso en 130 kB y error en 145 kB; la última medición (21/10/2026) fue 120,08 kB crudo y 17,67 kB gzip, así que quedan 9,92 kB hasta el aviso y 24,92 kB hasta el error.
+  - Estimación del CSS global del Grupo 2 (03/11/2026, para la decisión pendiente «CSS global por encima del aviso»):
+    - Lo que sumó el Grupo 1, según `docs/historial/plan-grupo-1.md` y `plan-plataforma.md`: los componentes con medición propia sumaron +4,47 kB (G1.5), +2,97 (G1.6), +0,69 (G1.7), +4,21 (G1.8), +3,30 (G1.9) y +6,39 (G1.10, de 108,84 a 115,23 kB crudo y de 16,39 a 17,13 kB gzip): 22,03 kB entre seis, **3,67 kB crudo de media por componente**. De punta a punta, el CSS global pasó de 73,99 kB (después de la 4.4) a 120,08 kB al cierre del grupo (+46,09 kB, que incluye también los tokens de la T.0b y las tareas sin medición propia). El dato de 89,22 kB en la G1.2 no está en el historial ni en la spec (no lo pude comprobar).
+    - Estimación para los 12 componentes del Grupo 2 (la G2.4 cuenta como uno): unos **+44 kB crudo** (12 × 3,67), con un rango de +8 a +77 kB si cada uno sumara como el menor (G1.7) o el mayor (G1.10). En gzip, con la proporción de la G1.10 (+0,74 kB gzip por +6,39 kB crudo), unos **+5 kB**. Sin contar lo que agregue la G2.0b.
+    - Resultado: unos 164 kB crudo al cerrar el grupo, por encima del aviso (130 kB) y del error (145 kB). El CSS global del showcase incluye las clases de todas las páginas de componentes (`@source` a ui-core); el proyecto de un usuario solo genera las de los componentes que copia.
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
   - Preguntas abiertas:
     - PENDIENTE DE DECIDIR: ¿algún global nuevo va por preset (`MimiThemePreset`) o todos solo en el CSS? Recomendación: solo en el CSS (son colores; spec 6.2: el color propio va en el CSS, con claro y oscuro), salvo que la G2.0 encuentre tamaños globales.
@@ -175,7 +180,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - PENDIENTE DE DECIDIR (base técnica). Opciones: (a) `FocusKeyManager` del CDK (`@angular/cdk/a11y`) para el foco itinerante de la selección simple, como mimi-toolbar (G1.10), y botones nativos en la múltiple; (b) `ngToolbarWidgetGroup` de aria dentro de un `ngToolbar` interno: arrastra los tres choques de aria/toolbar que encontró el spike de la G1.10 (Enter y Espacio sin clic, anillo de foco con el mouse, foco movido por código); (c) `ngListbox` de aria, que cambia los roles del diseño. Recomendación: (a), implementación propia siguiendo el patrón «Radio Group» de la APG, con el `FocusKeyManager` del CDK (API pública, ya usada en la G1.10). Nunca entry points `private` ni símbolos `_`/`ɵ`.
     - Nota: la comprobación de aria se hizo con `@angular/aria` 22.2.3 (la del repo el 03/11/2026). Si M.2 sube la versión antes de esta tarea, volver a comprobar qué exporta aria.
   - API pública propuesta:
-    - `<mimi-toggle-group [(value)] [multiple] [disabled] aria-label class>`. El modo múltiple se llama `multiple` (booleano), igual que en el Combobox (G2.8) (decidido el 03/11/2026). Cómo se tipa `value` en los dos modos: ver «Preguntas abiertas».
+    - `<mimi-toggle-group [(value)] [multiple] [disabled] aria-label class>`. El modo múltiple se llama `multiple` (booleano), igual que en el Combobox (G2.8) (decidido el 03/11/2026). Cómo se tipa `value` en los dos modos: «Convención de valor simple/múltiple» (plan, «Decisiones pendientes»).
     - Ítems del usuario: `<button mimiToggleGroupItem="valor" aria-label>` con texto o ícono por contenido proyectado (como `mimiToolbarItem`, G1.10).
     - `class` va al contenedor (la píldora), según la regla de la spec 4.
     - Estado: `data-state="on|off"` en cada ítem, `data-disabled`, `data-orientation` no (solo horizontal).
@@ -203,15 +208,11 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - Página del showcase con todos los estados y la tabla de API.
     - Spec 4 (catálogo y archivos) y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
     - `registry.json`, pruebas de la CLI y `ng g mimi toggle-group` probado en un proyecto limpio.
-    - Bundle: JS inicial y CSS, crudo y gzip, antes y después; el componente es lazy, así que el JS inicial solo suma la ruta y la sidebar (si crece más, explicar por qué).
+    - Bundle: JS inicial y CSS global, crudo y gzip, antes y después; el componente es lazy, así que el JS inicial solo suma la ruta y la sidebar (si crece más, explicar por qué).
   - Preguntas abiertas:
     - PENDIENTE DE DECIDIR: la base técnica (ver arriba).
     - PENDIENTE DE DECIDIR: en simple, ¿se puede dejar sin elección volviendo a pulsar la elegida? El diseño no lo muestra (al pulsar la elegida no cambia). Recomendación: no, como una radio.
-    - PENDIENTE DE DECIDIR: cómo se tipa `[(value)]` en los dos modos (la misma decisión vale para el Combobox, G2.8). Según la spec 8, un control propio se enlaza a los formularios por su `value` (`FormValueControl`).
-      - (a) Un solo `value`, `T | null` en simple y `T[]` en múltiple (tipo unión, o genérico según `multiple`). Signal Forms: `[formField]` funciona en los dos modos porque enlaza `value`, pero hay que comprobar con un spike si TypeScript acepta un campo `Field<T>` o `Field<T[]>` contra una unión, o si exige el mismo tipo exacto. `ngModel` y `formControlName`: funcionan (no comprueban el tipo en la plantilla). Riesgo: en múltiple, un valor que no es un arreglo (por ejemplo, `null` desde el formulario) hay que tratarlo como `[]`.
-      - (b) `value` (simple) y `values` (múltiple) separados. Signal Forms: `[formField]` solo enlaza `value`, así que el modo múltiple quedaría fuera de Signal Forms. `ngModel` y `formControlName`: igual, solo `value`. Descartada en la práctica.
-      - (c) Dos selectores sobre el mismo código (por ejemplo, `mimi-toggle-group` y `mimi-toggle-group[multiple]` como directivas distintas, o dos componentes). Signal Forms, `ngModel` y `formControlName`: cada uno con su tipo exacto (`T | null` y `T[]`), sin uniones. Costo: más API y dos tablas en la página.
-      - Recomendación: (a), con un spike corto de Signal Forms al empezar G2.1; si TypeScript no acepta la unión con `[formField]`, pasar a (c). Lo que salga se anota también en G2.8.
+    - Cómo se tipa `[(value)]` en simple y en múltiple: es la decisión compartida «Convención de valor simple/múltiple» (plan, «Decisiones pendientes»), que vale también para G2.7 y G2.8.
     - PENDIENTE DE DECIDIR: el nombre de la opción con el elegido en `primary` (el diseño la llama `solid`). Recomendación: `variant="solid"` (spec 4, «Variante y tono»), sin `tone` en esta versión.
     - PENDIENTE DE DECIDIR: ¿Toggle Group se puede usar dentro de mimi-toolbar? La toolbar ya tiene `kind="tool"` (una herramienta activa con `aria-pressed`) y la D6 anota que «un grupo de radio con nombre llegaría con los grupos». Recomendación: no en esta versión; anotarlo para la toolbar.
 - [ ] 5.2 Página «Tema» sencilla (después de la 0.2.0; spec 11, «Página "Tema"»). Ruta `/docs/theme`, lazy, en Primeros pasos. Cambia solo variables globales: color principal (unas muestras de color y un `<input type="color">` nativo, sin depender del Color Picker), radio, y claro/oscuro para previsualizar. Vista previa con algunos componentes reales. Botón para copiar el resultado como CSS (`:root` y `.dark`) y como preset de `provideMimiTheme()`. Usa el mismo sistema que el usuario: arma un `MimiThemePreset` y lo aplica con `applyMimiTheme` / `mimiThemeToCss`, sin otro camino ni variables propias. Sin guardar, sin cuentas y sin edición por componente. (Antes «Temas» con personalizador; el editor completo, Theme Studio, es un proyecto aparte: `docs/futuro/theme-studio.md`.)
@@ -246,13 +247,13 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - La página no cambia nada que no sea global (spec 11: sin tokens de componente).
     - Teclado completo y foco visible en todos los controles.
     - Spec 10 y 11 actualizadas (ruta, contenido y la densidad, que la spec 11 todavía no nombra).
-    - `pnpm build`, `pnpm test`, `pnpm format:check` en verde; bundle (JS inicial y CSS, crudo y gzip, antes y después).
+    - `pnpm build`, `pnpm test`, `pnpm format:check` en verde; bundle (JS inicial y CSS global, crudo y gzip, antes y después).
   - Preguntas abiertas:
     - PENDIENTE DE DECIDIR: el modo claro/oscuro de la vista previa, ¿cambia todo el sitio (el `ThemeService` del showcase) o solo el contenedor de la vista previa (clase `dark` en el contenedor)? Recomendación: solo el contenedor, para no cambiar el modo que eligió el usuario.
 - [ ] G2.2 Number Input. Diseño: `F3 Slider OTP Numero Mascara`.
   - v0.3.0 · Tamaño M · Depende de: G2.0, G2.0b (spec 4: `utils/control-styles` y `FormValueControl`) · Bloquea: —
   - Estado: —
-  - Leer antes: spec 4 (tabla del Grupo 2: inspiración PrimeNG InputNumber y HeroUI; «El valor vive en Mimi»); spec 8 (`FormValueControl`, `MIMI_FIELD_CONTROL`, `touch`, mensajes de error); spec 13 (su tabla, de la G2.0; la de Input como referencia de alturas); la 2.2 Input en `docs/historial/plan-fase-0-3.md` y la G1.5 Select en `docs/historial/plan-grupo-1.md` (control propio con `FormValueControl` y anillo en la caja); la G1.11 Pagination (botones con `aria-disabled` en los extremos y campo numérico con ↑/↓).
+  - Leer antes: spec 4 (tabla del Grupo 2: inspiración PrimeNG InputNumber y HeroUI; «El valor vive en Mimi»); spec 8 (`FormValueControl`, `MIMI_FIELD_CONTROL`, `touch`, mensajes de error); spec 13 (su tabla, de la G2.0; la de Input como referencia de alturas); la 2.2 Input en `docs/historial/plan-fase-0-3.md` y la G1.5 Select en `docs/historial/plan-grupo-1.md` (control propio con `FormValueControl` y anillo en la caja); la G1.11 Pagination (botones con `aria-disabled` en los extremos y campo numérico con ↑/↓); angular.dev, guide/forms/signals/custom-controls, «Value transformation» (`transformedValue()`: su ejemplo es justamente un `NumberInput` con `parse` y `format`, y los errores de lectura llegan a los `errors()` del campo).
   - Diseño: `F3 Slider OTP Numero Mascara`, sección «6 · Number Input» (marcado y la función `num()` del script). Lo que muestra:
     - Caja con botón −, un `<input>` con `role="spinbutton"`, `inputmode="decimal"`, `aria-valuemin`, `aria-valuemax` y `aria-valuenow`, y botón +. Botones de 30px, radio `--mimi-radius-sm`, íconos de 15px, `aria-label` «Disminuir <etiqueta>» y «Aumentar <etiqueta>», escala 0,88 al pulsar; en el límite, deshabilitados (opacidad 0,35 y cursor de no permitido).
     - Texto centrado, 14px, peso 500, `tabular-nums`. Con el foco muestra el número sin formato; sin el foco, formateado con `Intl.NumberFormat` (ejemplos `es-MX`: decimal con 2 decimales y moneda MXN).
@@ -281,13 +282,17 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - Funciona con `[formField]`, `formControlName` y `[(ngModel)]`, con pruebas (valor, `touch`, `disabled`, errores).
     - Teclado completo según el patrón decidido; foco visible en la caja.
     - Estados claro, oscuro, deshabilitado, error y solo lectura.
-    - Formato y lectura correctos en al menos `en-US`, `es-MX` y `es-ES` (prueba con coma decimal); `aria-valuetext` con el texto formateado.
+    - Idioma: `LOCALE_ID` de Angular por defecto y una entrada `locale` para cambiarlo, con prueba.
+    - Lectura con los separadores del idioma: en `es-ES`, «1.250,5» se interpreta como 1250,5 (prueba); también en `en-US` y `es-MX`.
+    - Se formatea al salir del campo, no mientras se escribe (para no mover el cursor), con prueba.
+    - `aria-valuenow`, `aria-valuemin`, `aria-valuemax` y `aria-valuetext` con el número formateado, con prueba.
+    - En los límites, − y + con `aria-disabled` (como Pagination, G1.11), sin `disabled` nativo: el foco no cae a `body` al llegar al límite con el teclado o el puntero (prueba).
     - Tokens registrados en `theme/types.ts` y `COMPONENT_PREFIX`, con prueba; tabla en `component-tokens.ts`; globales con valor de respaldo.
     - Textos con `provideMimiNumberInputText` y su versión `_ES`.
     - Página del showcase con todos los estados y la tabla de API.
     - Spec 4 y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
     - `registry.json`, pruebas de la CLI y `ng g mimi number-input` probado en un proyecto limpio.
-    - Bundle: JS inicial y CSS, crudo y gzip, antes y después (componente lazy: el JS inicial solo suma la ruta y la sidebar; si crece, explicar por qué).
+    - Bundle: JS inicial y CSS global, crudo y gzip, antes y después (componente lazy: el JS inicial solo suma la ruta y la sidebar; si crece, explicar por qué).
   - Preguntas abiertas:
     - PENDIENTE DE DECIDIR: la base técnica (ver arriba).
     - PENDIENTE DE DECIDIR: valor vacío. El diseño siempre tiene un número; ¿el campo vacío es `null` (y el formulario decide si es requerido) o se vuelve a `min`/0? Recomendación: `null`.
@@ -311,7 +316,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
   - Teclado y accesibilidad:
     - El botón de mostrar/ocultar es una parada de Tab después del input, con `aria-pressed`, y su nombre cambia con el estado. Pulsarlo no mueve el foco al input ni lo saca del botón (propuesta tuya; el diseño solo cambia el `type`).
     - El medidor se asocia al input con `aria-describedby` (como el diseño); el nivel es texto visible, y las barras, `aria-hidden`.
-    - Anuncios: PENDIENTE DE DECIDIR en preguntas (anunciar el nivel en cada tecla satura al lector).
+    - **Anuncios (decidido el 03/11/2026):** el medidor no anuncia cada pulsación. Anuncia solo cuando **cambia el nivel** (por ejemplo, de «Débil» a «Media»), una vez, con el `LiveAnnouncer` del CDK en modo `polite` (API documentada, la misma que usa Toast, G1.8): al escribir una contraseña completa son como mucho tres anuncios. El nivel y las reglas también quedan en `aria-describedby`, y el lector los lee al llegar al campo. Se documenta en la página.
     - En test: `type`, `aria-pressed`, nombre del botón, `aria-describedby`, niveles. A mano: NVDA y el autocompletado de un gestor de contraseñas (Chrome y uno externo).
   - Ejemplos del showcase: contraseña nueva con medidor (como el diseño), contraseña de inicio de sesión sin medidor (`autocomplete="current-password"`), los tres ejemplos del diseño (débil, media, fuerte), los estados (deshabilitado, con error «No coinciden.» con un validador), formularios, con `class`, claro y oscuro.
   - CLI: ítem `password` en `registry.json`, con `input` (registryDependencies), `utils/cn` y `utils/control-styles`; sin dependencias de npm; `x-prompt` y README de la CLI.
@@ -324,25 +329,27 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - `outline-none` en el input anula el anillo de foco (5.11): el anillo va en la caja (`focus-within`).
   - Criterios de hecho:
     - Funciona con `[formField]`, `formControlName` y `[(ngModel)]`, con pruebas (el valor sigue llegando al formulario al mostrar y ocultar).
-    - Mostrar/ocultar con el teclado y el puntero; `aria-pressed` y nombre del botón correctos; el foco no se mueve; foco visible.
+    - Mostrar/ocultar con el teclado y el puntero; `aria-pressed` correcto y el nombre accesible del botón cambia con el estado («Mostrar contraseña» / «Ocultar contraseña»); el foco no se mueve; foco visible. Con pruebas.
+    - `::-ms-reveal` oculto en el CSS del componente (un solo ojo en Edge).
+    - Anuncios: solo cuando cambia el nivel, con el `LiveAnnouncer` en `polite` (prueba que no anuncia en cada pulsación).
     - Estados claro, oscuro, deshabilitado, error y solo lectura.
     - Medidor con la heurística por defecto, documentada como orientativa, y con la función propia del usuario; prueba de los tres niveles del diseño.
-    - Probado a mano con el autocompletado de Chrome (guardar y rellenar).
+    - Prueba **manual** con un gestor de contraseñas real (el de Chrome y uno externo): guardar y rellenar, con el campo oculto y mostrado.
     - Tokens registrados en `theme/types.ts` y `COMPONENT_PREFIX`, con prueba; tabla en `component-tokens.ts`; globales con valor de respaldo.
     - Textos con `provideMimiPasswordText` y su versión `_ES`.
     - Página del showcase con todos los estados y la tabla de API.
     - Spec 4 y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
     - `registry.json`, pruebas de la CLI y `ng g mimi password` probado en un proyecto limpio.
-    - Bundle: JS inicial y CSS, crudo y gzip, antes y después (componente lazy).
+    - Bundle: JS inicial y CSS global, crudo y gzip, antes y después (componente lazy).
   - Preguntas abiertas:
     - PENDIENTE DE DECIDIR: cómo se calcula el medidor. Opciones: (a) la heurística del diseño por defecto (las cuatro reglas) y una función del usuario como entrada (`[strength]="miFuncion"`) que devuelve el nivel; (b) solo la función del usuario, sin heurística; (c) una biblioteca (descartada: dependencia nueva). Recomendación: (a), documentada como orientativa y no como medida de seguridad.
     - PENDIENTE DE DECIDIR: ¿las reglas («8 caracteres o más»…) se configuran (cuáles y su texto) o son fijas? Recomendación: configurables, con las cuatro del diseño por defecto.
-    - PENDIENTE DE DECIDIR: ¿se anuncia el nivel al escribir? Recomendación: no en cada tecla; el nivel queda en `aria-describedby` y el lector lo lee al llegar al campo.
+    - Decidido (03/11/2026): el nivel se anuncia solo cuando cambia (ver «Teclado y accesibilidad»).
     - PENDIENTE DE DECIDIR: la API (contenedor que proyecta el input, o una directiva `input[mimiPassword]` que inserta el botón al lado). Recomendación: el contenedor, como `mimi-form-field`.
 - [ ] G2.4 Input Mask. Diseño: `F3 Slider OTP Numero Mascara`.
-  - v0.3.0 · Tamaño L (propuesta de división en «Preguntas abiertas») · Depende de: G2.0, G2.0b, 2.2 (Input, hecha) · Bloquea: —
+  - v0.3.0 · Tarea paraguas (decidido el 03/11/2026: se divide en G2.4a y G2.4b, que tienen su propio tamaño y criterios). Se marca hecha cuando G2.4a y G2.4b lo estén. Lo que sigue (diseño, base técnica, trampas, preguntas) vale para las dos.
   - Estado: —
-  - Leer antes: spec 4 (tabla del Grupo 2: inspiración PrimeNG InputMask, depende de Input); spec 8 (campos nativos con directiva; Signal Forms y Reactive Forms; no envolver el `<input>`, CLAUDE.md regla 6; regla 7: el estado de Reactive Forms no es un signal); spec 13 (su tabla, de la G2.0); la 2.2 Input y la 2.11 FormField en `docs/historial/plan-fase-0-3.md`.
+  - Leer antes: spec 4 (tabla del Grupo 2: inspiración PrimeNG InputMask, depende de Input); spec 8 (campos nativos con directiva; Signal Forms y Reactive Forms; no envolver el `<input>`, CLAUDE.md regla 6; regla 7: el estado de Reactive Forms no es un signal); spec 13 (su tabla, de la G2.0); la 2.2 Input y la 2.11 FormField en `docs/historial/plan-fase-0-3.md`; angular.dev, guide/forms/signals/custom-controls, «Value transformation» (`transformedValue()`).
   - Diseño: `F3 Slider OTP Numero Mascara`, sección «7 · Input Mask» (marcado, `mask()` y `applyMask` del script). Lo que muestra:
     - Sintaxis: `0` es un dígito; el resto, literales (`(00) 0000 0000`, `00/00/0000`, `0000 0000 0000 0000`).
     - Un marcador de lo que falta (`ghost`, por ejemplo `DD/MM/AAAA`) dibujado debajo del texto, `aria-hidden`; `inputmode="numeric"`; `autocomplete` por campo (`tel-national`, `cc-number`).
@@ -352,7 +359,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
   - Objetivo: un campo de texto que da formato mientras se escribe (teléfono, fecha, tarjeta), sin perder el cursor y sin romper los formularios.
   - Alcance: incluye la sintaxis de dígitos del diseño, literales, el marcador de lo que falta, `inputmode` y `autocomplete` del usuario, formularios. Propuestas tuyas que el diseño **no** muestra (marcadas así): posición del cursor al escribir y borrar en medio, pegado, deshacer, composición de texto (IME). NO incluye en el componente: la marca de la tarjeta, Luhn ni la validación de fechas (son de la demo; ver preguntas).
   - Base técnica: ninguna. No hay patrón de aria ni de la APG: es un campo de texto nativo con una directiva (spec 8).
-  - API pública propuesta (PENDIENTE DE DECIDIR en los nombres): `<input mimiInput [mimiMask]="'(00) 0000 0000'" [mimiMaskPlaceholder]="'(55) 0000 0000'" inputmode="numeric" autocomplete="tel-national" formControlName="…" />`, directiva sobre el input nativo, compatible con `mimiInput`.
+  - API pública propuesta (PENDIENTE DE DECIDIR en los nombres, y depende de la pregunta del valor): con la opción (a), `<input mimiInput [mimiMask]="'(00) 0000 0000'" [mimiMaskPlaceholder]="'(55) 0000 0000'" inputmode="numeric" autocomplete="tel-national" formControlName="…" />`, directiva sobre el input nativo, compatible con `mimiInput`; con la opción (b), `<mimi-input-mask [mask] [placeholder] [inputmode] [autocomplete] formControlName="…" />`, control propio.
   - Formularios: campo nativo con directiva (spec 8). Pruebas con `[formField]`, `formControlName` y `[(ngModel)]`, escribiendo, pegando y con un valor que llega del formulario (con o sin máscara). Cómo convive con cada uno depende de la pregunta del valor (ver «Preguntas abiertas»).
   - Tokens: tabla en la spec 13 (tarea G2.0); probablemente solo el color del marcador (`muted-foreground`). Registrar en `theme/types.ts`, `COMPONENT_PREFIX` y `component-tokens.ts` lo que vaya al preset.
   - Teclado y accesibilidad: el teclado es el del campo nativo; la máscara no lo cambia. El marcador es `aria-hidden`: el formato esperado se dice con texto (`aria-describedby` al mensaje de ayuda, como el diseño). En test: escribir, borrar en medio, pegar, deshacer, IME (eventos `compositionstart`/`compositionend`). A mano: NVDA (que lea el valor, no el marcador) y un teclado de Android (envía `beforeinput`/`input`, no siempre `keydown` con la tecla).
@@ -365,21 +372,53 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - Con `[formField]`, Signal Forms escribe el valor en el input: la directiva tiene que formatear también lo que llega del formulario, no solo lo que se escribe.
     - CLAUDE.md, regla 7: para reaccionar al estado de Reactive Forms, `toSignal(control.events)`, nunca un `computed()` sobre el control.
     - El anillo de error del diseño usa `--mimi-destructive-soft` (nombre viejo): en Mimi es `--mimi-destructive-ring` (T.1).
-  - Criterios de hecho:
-    - Funciona con `[formField]`, `formControlName` y `[(ngModel)]`, con pruebas (escribir, pegar, valor desde el formulario, `disabled`, errores).
-    - Cursor correcto al escribir y al borrar en medio; pegado con y sin literales; IME sin reformatear a mitad; deshacer según lo que se decida. Con pruebas.
-    - Teclado nativo intacto; foco visible; estados claro, oscuro, deshabilitado, error y solo lectura.
-    - Tokens registrados en `theme/types.ts` y `COMPONENT_PREFIX` si los hay, con prueba; tabla en `component-tokens.ts`.
-    - Página del showcase con todos los estados y la tabla de API.
-    - Spec 4 y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
-    - `registry.json`, pruebas de la CLI y `ng g mimi input-mask` probado en un proyecto limpio.
-    - Bundle: JS inicial y CSS, crudo y gzip, antes y después (directiva lazy en el showcase).
+  - Criterios de hecho: los de G2.4a y G2.4b.
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR: ¿el modelo guarda el valor con máscara («(55) 1234 5678») o sin ella («5512345678»)? Con una directiva sobre el input nativo, Reactive Forms y `ngModel` leen lo que hay en el campo (con máscara); guardar sin máscara obligaría a reemplazar su `ControlValueAccessor` (prohibido, spec 8) o a hacer un control propio con `FormValueControl` que envuelva el input (va contra la regla 6 de CLAUDE.md y contra la dependencia «Input» de la spec 4). Opciones: (a) con máscara, y una función exportada para quitarla (`mimiUnmask`); (b) sin máscara, con un control propio; (c) con máscara por defecto y una salida (`(rawChange)`) con los dígitos. Recomendación: (a), por las reglas citadas; el diseño guarda solo dígitos en su estado, así que la diferencia va a `correcciones-pendientes.md`.
+    - PENDIENTE DE DECIDIR: ¿el modelo guarda el valor con máscara («(55) 1234 5678») o sin ella («5512345678»)? El diseño guarda solo los dígitos en su estado (anotado en `correcciones-pendientes.md`). Opciones:
+      - (a) Con máscara: directiva sobre el input nativo y una función exportada para quitarla (`mimiUnmask`). Reactive Forms y `ngModel` leen lo que hay en el campo (con máscara); guardar sin máscara así obligaría a reemplazar su `ControlValueAccessor` (prohibido, spec 8).
+      - (b) Sin máscara: control propio con `FormValueControl<string>` y un `<input>` interno.
+      - (c) Con máscara por defecto y una salida (`(rawChange)`) con los dígitos.
+      - Comprobación (a), 03/11/2026: Signal Forms **sí** trae una forma documentada de transformar el valor al leer y al escribir: `transformedValue()` de `@angular/forms/signals` (angular.dev, guide/forms/signals/custom-controls, «Value transformation»; existe en `@angular/forms` 22.2.3, comprobado en `types/signals.d.ts`). Recibe el `value` (model) del control y las funciones `parse` y `format`, y devuelve el valor crudo que se pinta; `parse` puede devolver un error (`{error}`), que llega a los `errors()` del campo y lo deja inválido. Es para **controles propios** (`FormValueControl`), no para una directiva sobre un input nativo. La guía dice también que un control propio de Signal Forms se usa con Reactive Forms y con formularios de plantilla «sin código de compatibilidad extra».
+      - Comprobación (b), qué se gana y qué se pierde frente al input nativo:
+        - Se gana: el modelo con los dígitos (lo que suele querer un backend, y lo que hace el diseño); `transformedValue()` documentado para separar lo que se pinta de lo que se guarda; una máscara incompleta puede ser un error de lectura del campo (`parse`), que bloquea el envío; el mismo mecanismo que usará Number Input (G2.2), que también pinta distinto de lo que guarda.
+        - Se pierde: el usuario ya no pone sus atributos en su propio `<input>`. `name` llega por `FormUiControl` (la interfaz que extiende `FormValueControl` tiene `name`, comprobado en `types/signals.d.ts`); `autocomplete`, `inputmode`, `aria-*` e `id` hay que reenviarlos al input interno como entradas (con la trampa de no pisar los del usuario, como el arreglo de Button antes de la G1.12). La validación nativa del navegador (`required`, `pattern`) deja de ser la del input del usuario: la reglas van en el esquema del formulario, como pide la guía. Y la dependencia «Input» de la spec 4 se cumple usando Input dentro, no sobre el input del usuario.
+        - Regla 6 de CLAUDE.md: prohíbe envolver un `<input>` nativo «de forma que rompa `formControlName` o `[(ngModel)]`». Un control propio con `FormValueControl` no los rompe (se ponen en el control, como el Select o el Number Input); la regla pide directivas para los elementos nativos que el usuario escribe, así que (b) es un control propio, no una directiva, y hay que decirlo en la spec 4 y en la spec 8.
+      - Recomendación (cambia respecto de la Tanda B, por la comprobación): (b). La guía de Angular trae el mecanismo para exactamente este caso, el modelo queda como lo muestra el diseño y Number Input usa el mismo camino. Si se prefiere que el usuario siga escribiendo su propio `<input>`, (a).
     - PENDIENTE DE DECIDIR: ¿más símbolos que `0` (letras, alfanumérico)? El diseño solo usa `0`. Recomendación: solo `0` en esta versión.
     - PENDIENTE DE DECIDIR: Ctrl+Z después de un reformateo: ¿se acepta que deshaga solo hasta el último cambio de Mimi, o se lleva una pila propia? Recomendación: aceptar el comportamiento del navegador y documentarlo.
     - PENDIENTE DE DECIDIR: marca de tarjeta, Luhn y validación de fecha: ¿parte de Mimi (validadores exportados) o solo en los ejemplos? Recomendación: solo en los ejemplos.
-    - PENDIENTE DE DECIDIR (tamaño L): dividir en G2.4a «Máscara de dígitos: directiva, cursor, pegado, IME y formularios» y G2.4b «Marcador de lo que falta, prefijo e ícono del diseño», con G2.4b dependiendo de G2.4a. Recomendación: dividir.
+- [ ] G2.4a Input Mask: máscara de dígitos (directiva o control según la pregunta del valor de G2.4, cursor, pegado, IME y formularios)
+  - v0.3.0 · Tamaño M · Depende de: G2.0, G2.0b, 2.2 (Input, hecha) · Bloquea: G2.4b
+  - Estado: —
+  - Leer antes, Diseño, Base técnica, Formularios, Tokens, Teclado y accesibilidad, CLI y Trampas: los de G2.4.
+  - Objetivo: el formato mientras se escribe, sin perder el cursor y sin romper los formularios.
+  - Alcance: incluye la sintaxis `0`, los literales, `inputmode` y `autocomplete`, el cursor al escribir y al borrar en medio, el pegado con y sin literales, la composición de texto (IME) y los tres sistemas de formularios. NO incluye: el marcador de lo que falta, el prefijo ni el ícono (G2.4b).
+  - Ejemplos del showcase: teléfono, fecha y tarjeta sin marcador ni prefijo; estados; formularios.
+  - Criterios de hecho:
+    - Funciona con `[formField]`, `formControlName` y `[(ngModel)]`, con pruebas (escribir, pegar, valor desde el formulario, `disabled`, errores), según lo que se decida del valor.
+    - Cursor correcto al escribir y al borrar en medio; pegado con y sin literales; IME sin reformatear a mitad; deshacer según lo que se decida. Con pruebas.
+    - Teclado nativo intacto; foco visible; estados claro, oscuro, deshabilitado, error y solo lectura.
+    - Tokens registrados en `theme/types.ts` y `COMPONENT_PREFIX` si los hay, con prueba; tabla en `component-tokens.ts`; globales con valor de respaldo.
+    - Página del showcase con los estados de esta parte y la tabla de API.
+    - Spec 4 y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
+    - `registry.json`, pruebas de la CLI y `ng g mimi input-mask` probado en un proyecto limpio.
+    - Bundle: JS inicial y CSS global, crudo y gzip, antes y después.
+  - Preguntas abiertas: las de G2.4.
+- [ ] G2.4b Input Mask: marcador de lo que falta, prefijo e ícono del diseño
+  - v0.3.0 · Tamaño S · Depende de: G2.4a · Bloquea: —
+  - Estado: —
+  - Leer antes, Diseño y Trampas: los de G2.4.
+  - Objetivo: lo que el diseño agrega alrededor de la máscara.
+  - Alcance: incluye el marcador de lo que falta (`aria-hidden`, color `muted-foreground`), el prefijo fijo (`+52`) y el ícono al principio. NO incluye la marca de la tarjeta ni el ícono de válido (son de los ejemplos; ver preguntas de G2.4).
+  - Teclado y accesibilidad: el marcador y el ícono son decorativos (`aria-hidden`); el prefijo, si cambia el significado del número, se dice en el nombre o en la ayuda (no solo visible).
+  - Ejemplos del showcase: los tres del diseño completos (teléfono con prefijo, fecha con ícono y validación, tarjeta con marca), con `class`, claro y oscuro.
+  - Criterios de hecho:
+    - El marcador sigue al texto escrito (el resto, en `muted-foreground`) sin desalinearse con letras de distinto ancho (`tabular-nums` o la fuente del diseño) y no lo lee el lector.
+    - Prefijo e ícono en su lugar en claro y oscuro, deshabilitado y error.
+    - Página del showcase con los tres ejemplos del diseño.
+    - Spec 4 al día.
+    - Bundle: JS inicial y CSS global, crudo y gzip, antes y después.
+  - Preguntas abiertas: las de G2.4.
 - [ ] G2.5 Input OTP. Diseño: `F3 Slider OTP Numero Mascara`.
   - v0.3.0 · Tamaño M · Depende de: G2.0, G2.0b (spec 4: `utils/control-styles`) · Bloquea: B.5
   - Estado: —
@@ -414,16 +453,154 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - Página del showcase con todos los estados y la tabla de API.
     - Spec 4 y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
     - `registry.json`, pruebas de la CLI y `ng g mimi input-otp` probado en un proyecto limpio.
-    - Bundle: JS inicial y CSS, crudo y gzip, antes y después (componente lazy).
+    - Bundle: JS inicial y CSS global, crudo y gzip, antes y después (componente lazy).
   - Preguntas abiertas:
     - PENDIENTE DE DECIDIR: un solo input real con casillas visuales (lo que muestra el diseño) o un input por casilla. Con un input, el lector lee un campo con el código entero, y el pegado, el borrado y el autocompletado del SMS funcionan sin código extra. Con varios inputs, el lector anuncia cada casilla como un campo aparte (cada una necesita su nombre, por ejemplo «Dígito 1 de 6»), y el pegado, el borrado hacia atrás y el autocompletado del SMS hay que reprogramarlos. Recomendación: un solo input real, como el diseño.
     - PENDIENTE DE DECIDIR: ¿solo dígitos o también letras (algunos códigos son alfanuméricos)? El diseño solo usa dígitos. Recomendación: dígitos por defecto y una opción para alfanumérico, con `inputmode` acorde.
 - [ ] G2.6 Tags Input. Diseño: `F3 Archivos Tags Toggle Color`.
-  - Depende de: G2.0, G2.0b, 2.4 (Badge, hecha), 2.2 (Input, hecha) · Bloquea: G2.8
+  - v0.3.0 · Tamaño M · Depende de: G2.0, G2.0b, 2.4 (Badge, hecha), 2.2 (Input, hecha) · Bloquea: G2.8
+  - Estado: —
+  - Leer antes: spec 4 (tabla del Grupo 2: inspiración HeroUI y PrimeNG Chips, depende de Badge e Input; «El valor vive en Mimi»); spec 8 (`FormValueControl`, `MIMI_FIELD_CONTROL`, `touch`); spec 13 (su tabla, de la G2.0; los globales `--mimi-chip` y `--mimi-chip-foreground`, que trae la G2.0b; la tabla de Badge); la 2.4 Badge y la 2.2 Input en `docs/historial/plan-fase-0-3.md`; la G1.8 Toast en `docs/historial/plan-grupo-1.md` (anuncios con el `LiveAnnouncer` del CDK).
+  - Diseño: `F3 Archivos Tags Toggle Color`, sección «10 · Tags Input» (marcado, `tags()`, `MAX_TAGS` y `tagStates` del script). Lo que muestra:
+    - Una caja con las etiquetas como chips («#angular», fondo `--mimi-chip`, texto `--mimi-chip-foreground`) y un botón de quitar en cada una (ícono `x` de 12px, `aria-label` «Quitar <etiqueta>», escala 0,85 al pulsar), y un `<input>` al final; un clic en la caja enfoca el input.
+    - Arriba a la derecha, el contador «3/5» (`tabular-nums`; en `warning-soft-foreground` al llegar al máximo).
+    - Agregar: Enter o una coma al final del texto. La etiqueta se normaliza: sin espacios a los lados, en minúsculas, sin `#` al principio ni la coma del final.
+    - Duplicado: no se agrega y el mensaje dice «"<etiqueta>" ya está en la lista.» (borde y anillo de error, `aria-invalid`).
+    - Máximo de 5: el input se deshabilita, el placeholder pasa a «Límite alcanzado», el borde va mezclado con `warning` y el mensaje dice «Llegaste al límite de 5 etiquetas. Quita una para agregar otra.».
+    - Backspace con el input vacío quita la última.
+    - Debajo, un mensaje en un elemento con `role="status"`: la ayuda («Enter o coma para agregar · Backspace quita la última»), el error o el aviso del límite.
+    - Estados: normal, hover, foco, deshabilitado, con error y límite alcanzado.
+  - Objetivo: escribir varias etiquetas en un campo, verlas como chips y quitarlas, con el teclado y en los tres sistemas de formularios.
+  - Alcance: incluye agregar con Enter y coma, quitar con el botón y con Backspace, duplicados, máximo con contador, normalización, estados del diseño y formularios. Propuestas tuyas, marcadas así: pegado de varias etiquetas a la vez (no está en el diseño), validación por etiqueta con su mensaje (el diseño solo muestra la de duplicados), navegación con flechas entre etiquetas (no está en el diseño), anuncio al agregar y quitar con el `LiveAnnouncer` (el diseño solo tiene la región `role="status"` del mensaje). NO incluye: sugerencias o autocompletado (eso es el Combobox múltiple, G2.8), etiquetas de colores.
+  - Base técnica: ninguna. `@angular/aria` 22.2.3 no tiene un patrón de etiquetas (exporta `accordion`, `combobox`, `grid`, `listbox`, `menu`, `tabs`, `toolbar` y `tree`) y la APG tampoco tiene uno exacto. Anuncios: el `LiveAnnouncer` de `@angular/cdk/a11y` (API documentada, la misma que usan Toast y Pagination).
+    - PENDIENTE DE DECIDIR: navegación con el teclado entre etiquetas. Opciones: (a) sin flechas: cada botón de quitar es una parada de Tab y Backspace quita la última (lo que muestra el diseño); (b) ← con el cursor al principio del input lleva el foco a la última etiqueta, ←/→ se mueven entre etiquetas (`FocusKeyManager` del CDK, como la G1.10) y Supr o Backspace quita la enfocada; (c) la lista de etiquetas como un `ngGrid` de aria. Recomendación: (a) en esta versión (es lo del diseño y no agrega un patrón propio), con (b) anotado para cuando lo pidan.
+  - API pública propuesta (PENDIENTE DE DECIDIR en los nombres): `<mimi-tags-input [(value)] [max] [separators] [allowDuplicates] [normalize] [validate] [disabled] [readonly] placeholder aria-label class>`. `value`: `string[]`. `normalize`: función; por defecto, la del diseño. `validate`: función que devuelve un mensaje o nada. `class` va a la caja. Estado: `data-state`, `data-invalid`, `data-full`.
+  - Formularios: control propio con `FormValueControl<string[]>` (spec 8) y `MIMI_FIELD_CONTROL`; pruebas con `[formField]`, `formControlName` y `[(ngModel)]` (agregar, quitar, valor desde el formulario, `disabled`, validadores del formulario como «al menos una»). `touch` al salir el foco de la caja. Lo que se escribe y no se agregó no es parte del valor.
+  - Tokens: tabla en la spec 13 (tarea G2.0); los globales `--mimi-chip` y `--mimi-chip-foreground` con valor de respaldo (G2.0b). Registrar en `theme/types.ts`, `COMPONENT_PREFIX` y `component-tokens.ts`.
+  - Teclado y accesibilidad: Enter y coma agregan; Backspace con el input vacío quita la última; Tab recorre el input y los botones de quitar (según la pregunta de la navegación). Cada botón con su nombre («Quitar angular»). El contador y el mensaje asociados al input con `aria-describedby`. Anuncios: al agregar y al quitar, con el `LiveAnnouncer` en `polite` («angular agregada», «angular quitada»); los errores y el límite, en la región `role="status"` del diseño. Al quitar con el botón, el foco va al input (no a `body`). En test: cada tecla, duplicado, máximo, anuncios, foco después de quitar. A mano: NVDA.
+  - Ejemplos del showcase: el del diseño (proyecto, máximo 5), los estados (deshabilitado, con error, límite alcanzado), formularios (los tres sistemas, con un validador «al menos una»), con `class`, claro y oscuro.
+  - CLI: ítem `tags-input` en `registry.json`, con `utils/cn`, `utils/control-styles` y `utils/field-state`; peer `@angular/cdk` (por el `LiveAnnouncer`) y `@angular/forms` si usa `field-state`; `x-prompt` y README de la CLI.
+  - Textos: sí. «Quitar {etiqueta}», «{etiqueta} ya está en la lista.», el aviso del límite, la ayuda y los anuncios → `MIMI_TAGS_INPUT_TEXT` (inglés) y `MIMI_TAGS_INPUT_TEXT_ES`, con `provideMimiTagsInputText`.
+  - Trampas conocidas:
+    - Un botón enfocado que desaparece (la etiqueta quitada) deja el foco en `body` (como el botón que se deshabilita, M.1): hay que mover el foco antes.
+    - Con el máximo alcanzado, el diseño deshabilita el input: si tenía el foco, el foco se pierde. Mejor `readonly` o `aria-disabled` en el input que `disabled` nativo.
+    - La coma del final se procesa en el evento `input` (el diseño lo hace con un `setTimeout`, que en zoneless no hace falta: el estado es de signals).
+    - El anillo de error del diseño usa `--mimi-destructive-soft` (nombre viejo): en Mimi es `--mimi-destructive-ring` (T.1).
+    - `outline-none` en el input anula el anillo de foco (5.11): el anillo va en la caja (`focus-within`).
+  - Criterios de hecho:
+    - Funciona con `[formField]`, `formControlName` y `[(ngModel)]`, con pruebas.
+    - Teclado completo según lo decidido; foco visible; el foco no cae a `body` al quitar una etiqueta (prueba).
+    - Estados claro, oscuro, deshabilitado, error, solo lectura y límite alcanzado.
+    - Duplicados, máximo, normalización y validación por etiqueta, con pruebas.
+    - Anuncios al agregar y quitar con el `LiveAnnouncer` (prueba con un `LiveAnnouncer` simulado).
+    - Tokens registrados en `theme/types.ts` y `COMPONENT_PREFIX`, con prueba; tabla en `component-tokens.ts`; globales con valor de respaldo.
+    - Textos con `provideMimiTagsInputText` y su versión `_ES`.
+    - Página del showcase con todos los estados y la tabla de API.
+    - Spec 4 y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
+    - `registry.json`, pruebas de la CLI y `ng g mimi tags-input` probado en un proyecto limpio.
+    - Bundle: JS inicial y CSS global, crudo y gzip, antes y después.
+  - Preguntas abiertas:
+    - PENDIENTE DE DECIDIR: navegación con el teclado entre etiquetas (ver «Base técnica»).
+    - PENDIENTE DE DECIDIR: la normalización del diseño (minúsculas y sin `#`) ¿es la de Mimi por defecto o solo la del ejemplo? Recomendación: por defecto solo quitar espacios a los lados; minúsculas y `#` en el ejemplo, con `normalize`.
+    - PENDIENTE DE DECIDIR: pegado de varias etiquetas (por ejemplo, «angular, diseño, ventas»): ¿se separan por los separadores y se agregan todas? Recomendación: sí, respetando duplicados y máximo, y anotarlo en `correcciones-pendientes.md`.
+    - PENDIENTE DE DECIDIR: ¿el chip es una pieza compartida con el Combobox múltiple (G2.8), por ejemplo un ítem `chip` de la CLI como el ítem `menu` de la G1.4? Recomendación: sí, extraerlo en esta tarea si la G2.8 lo va a usar (ver G2.8).
 - [ ] G2.7 Slider (rango doble). Diseño: `F3 Slider OTP Numero Mascara`.
-  - Depende de: G2.0, G2.0b, G1.2 (Tooltip, hecha) · Bloquea: G2.12
+  - v0.3.0 · Tamaño L (propuesta de división en «Preguntas abiertas») · Depende de: G2.0, G2.0b, G1.2 (Tooltip, hecha) · Bloquea: G2.12
+  - Estado: —
+  - Leer antes: spec 4 (tabla del Grupo 2: inspiración shadcn y HeroUI, **depende de Tooltip**; «El valor vive en Mimi»); spec 8 (`FormValueControl`); spec 13 (su tabla, de la G2.0; los globales `--mimi-track`, `--mimi-track-fill` y `--mimi-thumb` de la G2.0b; la tabla de Tooltip); la G1.2 Tooltip y la G1.10 mimi-toolbar en `docs/historial/plan-grupo-1.md` (cuándo abre el tooltip; foco por código); la decisión compartida «Convención de valor simple/múltiple» («Decisiones pendientes»).
+  - Diseño: `F3 Slider OTP Numero Mascara`, sección «4 · Slider» (marcado y la función `sl()` del script). Lo que muestra:
+    - Pulgares propios con `role="slider"` (no `<input type="range">`), `tabindex` 0 (−1 deshabilitado), `aria-labelledby` a la etiqueta, `aria-label` «Mínimo» y «Máximo» en el rango, `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext` (el valor formateado, por ejemplo «$300» o «3 personas»), `aria-disabled` y `aria-invalid`.
+    - Teclado: ← y ↓ restan un paso, → y ↑ suman uno; Re Pág y Av Pág, diez pasos; Inicio y Fin, mínimo y máximo.
+    - Puntero: `pointerdown` en la pista mueve el pulgar más cercano y lo arrastra con `setPointerCapture`; `touch-action: none` en la pista.
+    - Rango: dos pulgares que no se cruzan (el de abajo no pasa al de arriba y viceversa).
+    - Medidas: pista de 6px (`--mimi-track`, radio 999px), relleno `--mimi-track-fill` (`destructive` con error), pulgar de 20px con fondo `--mimi-thumb` y borde de 2px del color del relleno; foco con anillo de 2px del fondo y 4px de `ring`; al arrastrar, escala 1,12 y anillo `ring-soft` de 8px; marcas de 6px con su texto de 12px debajo.
+    - Burbuja con el valor: un `span` dentro del pulgar (no el componente Tooltip), con los colores `--mimi-tooltip`, que se ve al arrastrar, con el foco o siempre (ejemplo «tooltip fijo»).
+    - Ejemplos: «Volumen», «Precio por noche» (rango), «Tamaño del equipo» (con marcas), «Opacidad · tooltip fijo», hover, foco, deshabilitado y «Rango de edad» con error («El rango debe abarcar al menos 5 años.»).
+  - Objetivo: elegir un valor o un rango arrastrando o con el teclado, con marcas y el valor visible, en los tres sistemas de formularios.
+  - Alcance: incluye un valor y rango doble, `min`, `max`, `step`, marcas con texto, formato del valor, la burbuja, estados del diseño y formularios. Propuestas, no están en el diseño: orientación vertical, derecha a izquierda (RTL), distancia mínima entre pulgares (el ejemplo de error la pide como validación). NO incluye: más de dos pulgares, pasos no uniformes.
+  - Base técnica: `@angular/aria` 22.2.3 no tiene un patrón de slider (exporta `accordion`, `combobox`, `grid`, `listbox`, `menu`, `tabs`, `toolbar` y `tree`). Patrones de la APG: «Slider» y «Slider (Multi-Thumb)».
+    - PENDIENTE DE DECIDIR (la decisión central de la tarea). Opciones:
+      - (a) Un `<input type="range">` nativo: accesibilidad, teclado, RTL y táctil del navegador sin código; el paso nativo; marcas con `<datalist>` (casi sin estilo); el pulgar y la pista solo se estilan con pseudoelementos por navegador (`::-webkit-slider-thumb`, `::-moz-range-thumb`), así que la burbuja y el anillo del diseño son difíciles; **no sirve para el rango doble** (un input es un valor).
+      - (b) Dos `<input type="range">` nativos superpuestos para el rango: cada pulgar sigue siendo nativo y accesible; el cruce hay que impedirlo por código; el input de arriba recibe todos los clics, así que hace falta `pointer-events: none` en la pista y `auto` solo en los pulgares (con pseudoelementos, frágil entre navegadores); los mismos límites de estilo que (a).
+      - (c) Pulgares propios con `role="slider"` (lo que hace el diseño): estilo completo (burbuja, anillos, marcas); el teclado (flechas, Re Pág/Av Pág, Inicio/Fin), el RTL, la orientación vertical, el paso y el arrastre táctil (eventos de puntero y `touch-action: none`) los programa Mimi; el rango doble sale natural (dos pulgares y la regla de no cruzarse); más código y más pruebas.
+      - Recomendación: (c), implementación propia siguiendo los patrones «Slider» y «Slider (Multi-Thumb)» de la APG: es lo que muestra el diseño y la única opción que hace el rango doble sin trucos.
+  - API pública propuesta (PENDIENTE DE DECIDIR en los nombres): `<mimi-slider [(value)] [min] [max] [step] [marks] [format] [showValue] [disabled] aria-label class>`. El tipo de `value` (un número o un rango) y el nombre del modo de rango: «Convención de valor simple/múltiple» («Decisiones pendientes»). `format`: función que da el texto del valor (`aria-valuetext` y burbuja). `showValue`: cuándo se ve la burbuja (al arrastrar y con el foco, o siempre). `class` va al contenedor.
+  - Formularios: control propio con `FormValueControl` (spec 8; el tipo según la convención) y `MIMI_FIELD_CONTROL`; pruebas con `[formField]`, `formControlName` y `[(ngModel)]` (teclado, arrastre, valor desde el formulario fuera de rango, `disabled`, error de rango como validador del formulario). `touch` al soltar o al salir el foco.
+  - Tokens: tabla en la spec 13 (tarea G2.0); los globales `--mimi-track`, `--mimi-track-fill` y `--mimi-thumb` con valor de respaldo (G2.0b); la burbuja con los de Tooltip si se decide reutilizarlos. Registrar en `theme/types.ts`, `COMPONENT_PREFIX` y `component-tokens.ts`.
+  - Teclado y accesibilidad (APG «Slider» y «Slider (Multi-Thumb)»): las teclas del diseño; en RTL, ← y → se invierten (propuesta); en vertical, ↑ suma (propuesta). Cada pulgar es una parada de Tab. Nombre: `aria-labelledby` a la etiqueta y, en el rango, «Mínimo» y «Máximo» (textos). `aria-valuetext` con el valor formateado. La burbuja no se anuncia (el valor ya está en `aria-valuetext`). En test: cada tecla, que los pulgares no se crucen, paso y límites, arrastre simulado con eventos de puntero, RTL. A mano: NVDA (lee nombre y valor), táctil en un móvil.
+  - Ejemplos del showcase: los del diseño (volumen, precio por noche con rango, tamaño del equipo con marcas, opacidad con burbuja fija, deshabilitado, rango de edad con error), formularios, con `class`, claro y oscuro.
+  - CLI: ítem `slider` en `registry.json`, con `utils/cn`, `utils/control-styles` y `utils/field-state`; si se usa el Tooltip, `tooltip` en `registryDependencies` (y su peer `@angular/cdk`); `x-prompt` y README de la CLI.
+  - Textos: sí. «Mínimo» y «Máximo» (los nombres de los pulgares del rango) → `MIMI_SLIDER_TEXT` (inglés) y `MIMI_SLIDER_TEXT_ES`, con `provideMimiSliderText`.
+  - Trampas conocidas:
+    - El pulgar del diseño tiene `outline: none` y marca el foco con `box-shadow`; en Tailwind 4, `outline-none` anula `focus-visible:outline-2` (5.11, `focus-styles.spec.ts`): el foco visible tiene que quedar con una de las dos, comprobado.
+    - El foco movido por código y el arrastre: al empezar a arrastrar, el pulgar tiene que recibir el foco (el diseño no lo hace: solo marca el arrastre), para que el teclado siga desde ahí (lección del foco movido por código, G1.10).
+    - El valor vive en Mimi (spec 4): un valor fuera de rango que llega del formulario se pinta acotado sin reescribir el modelo (Pagination, G1.11).
+    - Mimi Tooltip (G1.2) abre con el puntero encima o con el foco de teclado, después de un retraso, no se muestra en táctil y no tiene un modo «siempre visible»: no hace lo que muestra la burbuja del diseño (ver preguntas).
+    - Deshabilitado: el diseño pone `tabindex="-1"` y `aria-disabled`; el foco no puede quedar en un pulgar que se deshabilita (M.1).
+  - Criterios de hecho:
+    - Funciona con `[formField]`, `formControlName` y `[(ngModel)]`, en un valor y en rango, con pruebas.
+    - Teclado completo según los patrones de la APG (flechas, Re Pág/Av Pág, Inicio/Fin), con RTL si se decide; foco visible en cada pulgar.
+    - Los pulgares del rango no se cruzan; el valor respeta `step`, `min` y `max`, con pruebas.
+    - Arrastre con el puntero y táctil (`touch-action: none`), con prueba de eventos de puntero y prueba manual en un móvil.
+    - `aria-valuenow`, `aria-valuemin`, `aria-valuemax` y `aria-valuetext` con el valor formateado; nombres «Mínimo» y «Máximo» en el rango.
+    - Estados claro, oscuro, deshabilitado y error.
+    - Tokens registrados en `theme/types.ts` y `COMPONENT_PREFIX`, con prueba; tabla en `component-tokens.ts`; globales con valor de respaldo.
+    - Textos con `provideMimiSliderText` y su versión `_ES`.
+    - Página del showcase con todos los estados y la tabla de API.
+    - Spec 4 y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
+    - `registry.json`, pruebas de la CLI y `ng g mimi slider` probado en un proyecto limpio.
+    - Bundle: JS inicial y CSS global, crudo y gzip, antes y después.
+  - Preguntas abiertas:
+    - PENDIENTE DE DECIDIR: la base técnica (ver arriba).
+    - PENDIENTE DE DECIDIR (**contradicción entre la spec y el diseño**): la spec 4 dice que el Slider depende de Tooltip, pero el diseño dibuja una burbuja propia que se ve al arrastrar, con el foco o siempre, y Mimi Tooltip no hace eso (ver «Trampas»). Opciones: (a) una burbuja propia con los tokens de Tooltip (`--mimi-tooltip`), y corregir la spec 4; (b) el Tooltip de Mimi, con lo que no se vería al arrastrar ni en táctil ni fija; (c) agregar a Tooltip un modo controlado (abierto mientras se arrastra) y usarlo. Recomendación: (a). No lo resuelvo: lo decide el usuario.
+    - PENDIENTE DE DECIDIR: orientación vertical y RTL (no están en el diseño). Recomendación: RTL sí (es corregir el sentido de las flechas y de la posición); vertical, más adelante.
+    - PENDIENTE DE DECIDIR: la distancia mínima entre pulgares del ejemplo de error, ¿es una entrada del Slider (`minRange`) o un validador del formulario? Recomendación: un validador del formulario (el diseño la muestra como error, no como límite del arrastre).
+    - PENDIENTE DE DECIDIR (tamaño L): dividir en G2.7a «Slider de un valor (teclado, arrastre, marcas, burbuja y formularios)» y G2.7b «Rango doble (dos pulgares sin cruce)», con G2.7b dependiendo de G2.7a; el Color Picker (G2.12) dependería solo de G2.7a. Recomendación: dividir.
 - [ ] G2.8 Combobox/Autocomplete (múltiple con chips). Diseño: `F3 Combobox Fechas Hora`.
-  - Depende de: G2.0, G2.0b, G1.1 (Popover, hecha), G1.5 (lógica de lista de Select, hecha), G2.6 · Bloquea: G3.3
+  - v0.3.0 · Tamaño L (propuesta de división en «Preguntas abiertas») · Depende de: G2.0, G2.0b, G1.1 (Popover, hecha), G1.5 (lógica de lista de Select, hecha), G2.6, M.2 · Bloquea: G3.3
+  - Estado: —
+  - Leer antes: spec 4 (tabla del Grupo 2: inspiración shadcn Combobox y PrimeNG AutoComplete; depende de Popover, la lógica de lista de Select y Tags Input; «Base técnica»; «Rodeos de aria»: los del Select valen aquí); spec 8 (`FormValueControl`); spec 13 (su tabla, de la G2.0; la de Select); la G1.5 Select y la G1.5b en `docs/historial/plan-grupo-1.md`; la G2.6 Tags Input (los chips); la decisión compartida «Convención de valor simple/múltiple» («Decisiones pendientes»); angular.dev, guide/aria/combobox («Autocomplete») y guide/aria/multiselect.
+  - Diseño: `F3 Combobox Fechas Hora`, sección «1 · Combobox / Autocomplete». Lo que muestra:
+    - Simple («Ciudad»): input con `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded` y `autocomplete="off"`, con ícono al principio y chevron; lista `role="listbox"` con opciones (`role="option"`, `aria-selected`) con la coincidencia resaltada (`<mark>`), un texto secundario y el check en la elegida; una opción «Crear "<texto>"» al final; «Sin coincidencias.».
+    - Múltiple («Tecnologías»): chips dentro del campo con botón de quitar, input con `role="combobox"`, lista con `aria-multiselectable="true"` y una casilla de check en cada opción; «Crear "<texto>"»; ayuda «Enter agrega · Backspace quita el último chip».
+    - Cargando: spinner en el campo y la lista con `aria-busy="true"`, «Buscando ciudades…» y renglones de carga.
+    - Sin resultados: bloque con `role="status"`, ícono, «Sin resultados para "Tokio"» y «Revisa la ortografía o crea la ciudad.».
+    - Estados: normal, hover, foco, deshabilitado y con error («Elige al menos una más.»); el múltiple cerrado muestra el primero y «+2».
+  - Objetivo: un campo donde se escribe para filtrar una lista y elegir una opción o varias (con chips), con opción de crear valores nuevos y búsqueda en el servidor.
+  - Alcance: incluye simple y múltiple, filtrado sin tildes ni mayúsculas (como Select), resaltado, crear un valor nuevo, carga asíncrona (`loading` y una salida con lo que se escribe), sin resultados, chips en el múltiple, el resumen «+N» cerrado, estados del diseño y formularios. Modo «lista» (`aria-autocomplete="list"`, el del diseño); el modo de autocompletar dentro del texto (`inline`) no está en el diseño (propuesta tuya). NO incluye: grupos de opciones (Select los tiene; el diseño no los muestra aquí), arrastrar chips.
+  - Base técnica: `@angular/aria` 22.2.3: Combobox + Listbox, como el Select (spec 4, «Base técnica»). Comprobado en `node_modules/@angular/aria`: el listbox tiene la entrada `multi` (selección múltiple), y angular.dev documenta el ejemplo «Autocomplete» del combobox y la guía «Multiselect». Sin entry points `private` ni símbolos `_`/`ɵ`.
+    - **Arreglo #33974 (comprobado el 03/11/2026 en GitHub, angular/components):** `ComboboxPopup` leía su entrada requerida `combobox` en `ngOnDestroy`, así que destruir el panel antes de su primera detección de cambios lanzaba `NG0950`. Se fusionó el 20/10/2026 y llega en aria 22.2.4; el repo tiene 22.2.3. El Select no lo sufre porque su panel no se destruye antes de tiempo (`preserveContent` y el popup por fuera del overlay, spec 4). El Combobox sí puede: un panel que se crea y se destruye en el mismo ciclo (resultados asíncronos, «Crear», cerrar muy rápido, pruebas). Por eso esta tarea depende de M.2.
+  - API pública propuesta (PENDIENTE DE DECIDIR en los nombres): `<mimi-combobox [(value)] [options] [multiple] [creatable] [loading] [filterWith] placeholder [disabled] aria-label class panelClass (searchChange) (create)>`. `multiple` (booleano; decidido el 03/11/2026, el mismo nombre que G2.1). El tipo de `value`: «Convención de valor simple/múltiple». `options` como en Select (`MimiOption` y `MimiOptionGroup`). `class` va al campo y `panelClass` al panel (regla de la spec 4, como Select).
+  - Formularios: control propio con `FormValueControl` (spec 8) y `MIMI_FIELD_CONTROL`; pruebas con `[formField]`, `formControlName` y `[(ngModel)]` en simple y en múltiple (elegir, quitar chip, crear, valor desde el formulario, `disabled`, error). Lo que se escribe en el campo no es el valor hasta que se elige o se crea. `touch` al salir el foco del campo y del panel (como Select).
+  - Tokens: tabla en la spec 13 (tarea G2.0); los de Select donde coincidan; los chips, los de la G2.6 (`--mimi-chip`). Registrar en `theme/types.ts`, `COMPONENT_PREFIX` y `component-tokens.ts`.
+  - Teclado y accesibilidad (APG «Combobox» con lista): ↓ abre y baja, ↑ sube, Enter elige (en múltiple, alterna y no cierra), Escape cierra (o borra lo escrito si está cerrado; ver preguntas), Alt+↓ y Alt+↑ como en Select; Backspace con el campo vacío quita el último chip (diseño); «Crear» se elige como una opción más. Anuncios: cantidad de resultados y «Sin resultados» con la región `role="status"` del diseño (o el `LiveAnnouncer`); al agregar y quitar un chip, como Tags Input. En test: cada tecla, filtrado, crear, carga, chips. A mano: NVDA (activa con `aria-activedescendant`, resultados anunciados).
+  - Ejemplos del showcase: ciudad (simple, con ícono y texto secundario), tecnologías (múltiple con chips), crear, carga desde un servidor simulado, sin resultados, los estados (deshabilitado, con error), formularios, con `class` y `panelClass`, claro y oscuro.
+  - CLI: ítem `combobox` en `registry.json`, con peers `@angular/aria` y `@angular/cdk` (la CLI instala aria en la versión exacta del cdk, spec 5), `cssImports` del overlay del CDK, `utils/overlay`, `utils/cn`, `utils/control-styles`, `utils/field-state` y lo que se decida compartir con Select y Tags Input (ver preguntas); `x-prompt` y README de la CLI.
+  - Textos: sí. «Crear "{texto}"», «Sin resultados para "{texto}"», la ayuda, «Cargando…» y los anuncios → `MIMI_COMBOBOX_TEXT` (inglés) y `MIMI_COMBOBOX_TEXT_ES`, con `provideMimiComboboxText` (o los de Select, si se comparten; ver preguntas).
+  - Trampas conocidas:
+    - Todos los rodeos de aria del Select valen aquí (spec 4, «Rodeos de aria»): el listbox no avisa al combobox al elegir; aria desmarca la opción elegida al volver a elegirla y vacía el valor al filtrar o con «cargando» (el valor vive en Mimi); aria vuelve a activar la opción elegida cuando cambian las opciones (`keepFirst`); el puntero no activa la opción; `preserveContent` para la animación de salida; el `ngComboboxPopup` por fuera del overlay. Cada uno con su prueba de alarma.
+    - #33974 (`NG0950` al destruir el panel antes de tiempo): por eso depende de M.2.
+    - El clic en el panel no tiene que mover el foco (`mousedown.preventDefault`, rodeo del Select); el diseño ya usa `onMouseDown` en las opciones.
+    - El anillo de error del diseño usa `--mimi-destructive-soft` (nombre viejo): en Mimi es `--mimi-destructive-ring` (T.1).
+    - Un chip que se quita con el foco encima deja el foco en `body` (ver G2.6).
+  - Criterios de hecho:
+    - Funciona con `[formField]`, `formControlName` y `[(ngModel)]`, en simple y en múltiple, con pruebas.
+    - Teclado completo según el patrón Combobox de la APG; foco visible; el foco no cae a `body` al quitar un chip.
+    - Estados claro, oscuro, deshabilitado, error, cargando y sin resultados.
+    - Crear un valor nuevo; búsqueda en el servidor con `loading`; filtrado sin tildes ni mayúsculas; resaltado. Con pruebas.
+    - Pruebas de alarma de aria para cada rodeo que use (como el Select, G1.5b).
+    - Tokens registrados en `theme/types.ts` y `COMPONENT_PREFIX`, con prueba; tabla en `component-tokens.ts`; globales con valor de respaldo.
+    - Textos con `provideMimiComboboxText` y su versión `_ES` (o los de Select, según se decida).
+    - Página del showcase con todos los estados y la tabla de API.
+    - Spec 4 (también «Rodeos de aria» si aparecen nuevos) y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
+    - `registry.json`, pruebas de la CLI y `ng g mimi combobox` probado en un proyecto limpio (aria y cdk en la misma versión, `@import` del overlay una sola vez).
+    - Bundle: JS inicial y CSS global, crudo y gzip, antes y después (componente lazy: aria y el CDK no pueden entrar al JS inicial).
+  - Preguntas abiertas:
+    - PENDIENTE DE DECIDIR: qué se comparte con Select y qué se extrae para no duplicar. Candidatos: el filtro sin tildes (`normalize()` de `select.ts`), `MimiSelectHighlight`, la lista interna `MimiSelectList` (con «cargando» y «sin resultados»), los tipos `MimiOption` y `MimiOptionGroup` y los textos de Select. Opciones: (a) extraerlos a un ítem compartido de la CLI (como el ítem `menu` que se sacó en la G1.4 para los dos menús), que usen Select y Combobox; (b) que el Combobox dependa del ítem `select` entero; (c) copiar lo necesario. Recomendación: (a); cambia archivos del Select, así que lleva sus pruebas y el aviso de actualización de la CLI (todo o nada, spec 5).
+    - PENDIENTE DE DECIDIR: qué se comparte con Tags Input (G2.6): el chip con su botón de quitar, Backspace para quitar el último y los anuncios. Recomendación: el chip como pieza compartida (ver la última pregunta de G2.6), sin reutilizar Tags Input entero (Tags Input no tiene lista).
+    - PENDIENTE DE DECIDIR: ¿crear un valor nuevo es parte de Mimi (`creatable` y una salida `(create)` con el texto, que el usuario agrega a `options`) o lo hace el usuario? Recomendación: `creatable` con `(create)`; Mimi no inventa la opción, la agrega el usuario.
+    - PENDIENTE DE DECIDIR: Escape con el panel cerrado, ¿borra lo escrito (APG) o no hace nada? Recomendación: borrar lo escrito, como la APG.
+    - PENDIENTE DE DECIDIR (tamaño L): dividir en G2.8a «Combobox simple (filtrado, crear, carga asíncrona y formularios)» y G2.8b «Combobox múltiple con chips», con G2.8b dependiendo de G2.8a y de G2.6. Recomendación: dividir.
 - [ ] G2.9 Date Picker y Date Range. Diseño: `F3 Combobox Fechas Hora`.
   - Depende de: G2.0, G2.0b, G1.1 (Popover, hecha), 2.1 (Button, hecha)
 - [ ] G2.10 Progress (barra y circular). Diseño: `F5 Estructura`.
@@ -463,7 +640,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - Página del showcase con todos los estados y la tabla de API.
     - Spec 4 y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
     - `registry.json`, pruebas de la CLI y `ng g mimi progress` probado en un proyecto limpio.
-    - Bundle: JS inicial y CSS, crudo y gzip, antes y después (componente lazy: el JS inicial solo suma la ruta y la sidebar).
+    - Bundle: JS inicial y CSS global, crudo y gzip, antes y después (componente lazy: el JS inicial solo suma la ruta y la sidebar).
   - Preguntas abiertas:
     - PENDIENTE DE DECIDIR: la base técnica (ver arriba).
     - PENDIENTE DE DECIDIR: un componente con `shape` o dos (`mimi-progress` y `mimi-progress-circle`). Recomendación: uno, con `shape`.
@@ -474,14 +651,14 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
 - [ ] G2.12 Color Picker. Diseño: `Color Picker` (en `F3 Archivos Tags Toggle Color`).
   - Depende de: G2.0, G2.0b, G1.1 (Popover, hecha), G2.7, 2.2 (Input, hecha)
 - [ ] 5.17 Revisión móvil componente por componente, después del Grupo 1: cómo se usa cada uno en pantallas chicas. Por ejemplo, en móvil el Select se abre como un panel flotante tipo modal en la parte superior, con buscador y más opciones visibles. mimi-toolbar (G1.10): una horizontal más ancha que la pantalla no se parte ni se achica; hoy el componente no hace nada y el ejemplo la pone en un contenedor con `overflow-x-auto` (los botones no se encogen).
-  - v0.3.0 · Tamaño L · Depende de: G2.1 a G2.12 · Bloquea: G2.P
+  - v0.3.0 · Tamaño L · Depende de: G2.1 a G2.12 (con G2.4a y G2.4b) · Bloquea: G2.P
   - Dato de la G1.5: la API del Select no depende del overlay; un panel tipo hoja o modal se puede hacer después cambiando la estrategia de posición y las clases del panel, sin tocar entradas ni salidas.
   - PENDIENTE DE DECIDIR: ¿qué cambios de API podría exigir la revisión (por ejemplo, el Select como panel modal en móvil), y alguno debe hacerse antes de la 0.3.0?
 - [ ] G2.P Puerta del Grupo 2 (v0.3.0): la lista de «Puerta del grupo» de «Cómo usar este plan», más:
   - CHANGELOG de la 0.3.0: explicar los tokens globales nuevos del Grupo 2 (G2.0b), que los componentes funcionan con un tema que no los tenga (usan valor de respaldo) y que, si el usuario modificó su tema, la CLI no lo actualiza y solo avisa.
   - Revisar la decisión de los Blocks (todos en la v0.4.0, con el Grupo 3; spec 4, «Blocks»).
   - Revisar con la respuesta real de los usuarios a la 0.2.0 si algo del Grupo 5 sube de prioridad.
-  - Depende de: G2.0, G2.0b, G2.1 a G2.12, 5.2, 5.17
+  - Depende de: G2.0, G2.0b, G2.1 a G2.12 (con G2.4a y G2.4b), 5.2, 5.17
 
 ## Grupo 3 y Blocks → v0.4.0: datos y pantallas
 
@@ -609,9 +786,79 @@ Solo las abiertas. Las ya tomadas están en `docs/historial/decisiones.md` y en 
 - [ ] Grupo 5: el criterio «según lo que pidan los usuarios» sigue abierto (antes, «se prioriza después de la 0.2.0»). Se revisa en la G2.P; la versión se decide en la G4.P.
 - [ ] Blocks: todos en la v0.4.0, con el Grupo 3 (decidido el 03/11/2026). Se revisa en la G2.P.
 - [ ] Versión de Mimi Effects: se decide en la G4.P.
-- [ ] Angular 22.2.x: alineación de versiones (ver M.2).
 - [ ] CLI y cdk anterior a `^22.2.0`: avisar o actualizar (ver M.4).
 - [ ] Cambios de API que pueda exigir la revisión móvil (ver 5.17).
+- [ ] **Convención de valor simple/múltiple** (afecta a G2.1 Toggle Group, G2.7 Slider y G2.8 Combobox; se decide antes de empezar G2.1). PENDIENTE DE DECIDIR: cómo se tipa `[(value)]` cuando un componente tiene dos modos: Toggle Group simple (`T | null`) o múltiple (`T[]`); Slider de un valor (`number`) o de rango (`[number, number]`); Combobox simple (`T | null`) o múltiple (`T[]`). Datos comprobados: según la spec 8 y angular.dev (guide/forms/signals/custom-controls), un control propio implementa `FormValueControl` y `[formField]` enlaza su `value` (model); la misma guía dice que esos controles funcionan con Reactive Forms y formularios de plantilla sin código extra. El modo múltiple se llama `multiple` (decidido el 03/11/2026, G2.1 y G2.8); en el Slider, el nombre del modo de rango es parte de esta decisión.
+  - (a) Un solo `value` cuyo tipo cambia con el modo (unión, o genérico según `multiple`/rango). Signal Forms: `[formField]` enlaza `value` en los dos modos; hay que comprobar con un spike si TypeScript acepta un campo `Field<T>` o `Field<T[]>` contra una unión, o si exige el tipo exacto. `ngModel` y `formControlName`: funcionan (la plantilla no comprueba el tipo). Riesgo: en múltiple, un valor que no es arreglo (por ejemplo, `null`) hay que tratarlo como `[]`.
+  - (b) Dos modelos: `value` (simple) y `values` (múltiple o rango). Signal Forms: `[formField]` solo enlaza `value`, así que el modo múltiple quedaría fuera; `ngModel` y `formControlName`: igual. Descartada en la práctica.
+  - (c) Dos selectores o componentes por modo (por ejemplo, `mimi-toggle-group` y `mimi-toggle-group[multiple]` como directivas distintas, o `mimi-slider` y `mimi-range-slider`), con el código compartido por dentro. Signal Forms, `ngModel` y `formControlName`: cada uno con su tipo exacto, sin uniones. Costo: más API y dos tablas en cada página.
+  - (d) Siempre arreglo (`T[]` también en simple; `[number]` en el Slider de un valor). Signal Forms y los demás: un solo tipo exacto. Costo: incómodo para el caso más común (el usuario quiere `T`, no `[T]`), y distinto de Select (G1.5, `T | null`).
+  - Recomendación: (a), con un spike corto de Signal Forms al empezar G2.1 (un campo `T` y otro `T[]` contra el mismo componente); si TypeScript no acepta la unión con `[formField]`, (c). Lo que se decida vale para las tres tareas.
+- [ ] **CSS global por encima del aviso** (afecta a todo el Grupo 2; se decide antes de empezar el grupo). La estimación de la G2.0b da unos 164 kB crudo al cerrar el grupo, por encima del aviso (130 kB) y del error (145 kB) de la spec 10. PENDIENTE DE DECIDIR: qué se hace si el CSS global pasa de 130 kB o se acerca a 145 kB. Opciones: (a) subir el presupuesto con una justificación escrita en la spec 10 (lo decide el usuario: CLAUDE.md, «Ningún presupuesto se sube sin que lo decida el usuario»); (b) reducir el CSS (por ejemplo, revisar clases repetidas o valores arbitrarios que generan una regla cada uno, o separar el CSS de las páginas del showcase del CSS global); (c) las dos, con un límite por componente. Recomendación: medir primero y no subir nada antes de ver los números reales; si el aviso salta, ver qué componente lo causa y si se puede reducir, y llevar la decisión al usuario con los datos. Cómo se mide: el informe de `pnpm build` de cada tarea (CSS global crudo y gzip antes y después, criterio de hecho de cada componente del Grupo 2), una tabla acumulada en la G2.P y, si el aviso salta, la lista de las reglas que más pesan en el CSS generado.
+
+### Índice de lo que está «PENDIENTE DE DECIDIR»
+
+Una línea por pregunta, con la tarea donde está escrita completa (opciones y recomendación). Se actualiza al terminar cada tanda del plan y cada vez que se decide algo (la línea se borra y la decisión queda en su tarea con la fecha). Al 03/11/2026 (tanda C): 51 preguntas. No cuenta las referencias «la base técnica (ver arriba)» ni «PENDIENTE DE DECIDIR en preguntas», que remiten a otra de la lista.
+
+**(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
+
+- Decisiones pendientes: convención de valor simple/múltiple: cómo se tipa `[(value)]` con dos modos (G2.1, G2.7, G2.8; antes de G2.1).
+- Decisiones pendientes: qué se hace si el CSS global pasa de 130 kB o se acerca a 145 kB (antes del Grupo 2).
+- G2.0b: ¿algún global nuevo va por preset (`MimiThemePreset`) o todos solo en el CSS?
+- G2.0: ¿el keyframe `mimi-indet` de Progress es global (spec 13) o queda dentro de Progress?
+- G2.0: Date Picker y Date Range, ¿una tabla de tokens o dos?
+- G2.6 (y G2.8): ¿el chip es una pieza compartida (ítem de la CLI) entre Tags Input y el Combobox múltiple?
+- G2.8: qué se comparte con Select (filtro, resaltado, lista interna, tipos y textos) y cómo (ítem compartido, depender de `select` o copiar); cambia archivos del Select.
+- G2.8: qué se comparte con Tags Input (chip, Backspace y anuncios).
+
+**(b) Se deciden al empezar su tarea.**
+
+- M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
+- G2.1: base técnica del foco itinerante (`FocusKeyManager` del CDK o `ngToolbarWidgetGroup` de aria).
+- G2.1: en simple, ¿se puede dejar sin elección pulsando la elegida?
+- G2.1: nombre de la variante con el elegido en `primary` (`variant="solid"`).
+- 5.2: el modo claro/oscuro de la vista previa, ¿cambia todo el sitio o solo el contenedor?
+- G2.2: base técnica (`input type="text"` con `role="spinbutton"` o `type="number"` nativo).
+- G2.2: nombres de la API.
+- G2.2: el campo vacío, ¿es `null` o vuelve a `min`/0?
+- G2.2: rueda del mouse, mantener pulsado, Re Pág/Av Pág e Inicio/Fin.
+- G2.2: ¿los botones −/+ son paradas de Tab?
+- G2.3: nombres de la API.
+- G2.3: cómo se calcula el medidor (heurística del diseño y función del usuario, solo función, o biblioteca).
+- G2.3: ¿las reglas del medidor se configuran o son fijas?
+- G2.3: la API (contenedor que proyecta el input o directiva `input[mimiPassword]`).
+- G2.4: ¿el modelo guarda el valor con máscara o sin ella? (decide si G2.4a es directiva o control propio).
+- G2.4: nombres de la API (dependen de la pregunta anterior).
+- G2.4: ¿más símbolos que `0` (letras, alfanumérico)?
+- G2.4: Ctrl+Z después de un reformateo: comportamiento del navegador o pila propia.
+- G2.4: marca de tarjeta, Luhn y fecha: ¿validadores de Mimi o solo ejemplos?
+- G2.5: nombres de la API.
+- G2.5: un input real con casillas visuales o un input por casilla.
+- G2.5: ¿solo dígitos o también letras?
+- G2.6: navegación con el teclado entre etiquetas (sin flechas, flechas con `FocusKeyManager`, u otra).
+- G2.6: nombres de la API.
+- G2.6: ¿la normalización del diseño (minúsculas y sin `#`) es la de Mimi por defecto?
+- G2.6: pegado de varias etiquetas, ¿se separan y se agregan todas?
+- G2.7: base técnica (`input type="range"` nativo, dos nativos superpuestos o pulgares propios con `role="slider"`).
+- G2.7: nombres de la API.
+- G2.7: contradicción entre la spec 4 («depende de Tooltip») y la burbuja propia del diseño.
+- G2.7: orientación vertical y RTL.
+- G2.7: ¿dividir en G2.7a (un valor) y G2.7b (rango doble)?
+- G2.8: nombres de la API.
+- G2.8: crear un valor nuevo, ¿`creatable` con `(create)` o lo hace el usuario?
+- G2.8: Escape con el panel cerrado, ¿borra lo escrito o no hace nada?
+- G2.8: ¿dividir en G2.8a (simple) y G2.8b (múltiple con chips)?
+- G2.10: base técnica (`div` con `role="progressbar"` o `<progress>` nativo).
+- G2.10: nombres de la API.
+- G2.10: ¿un componente con `shape` o dos?
+- G2.10: ¿el texto y el valor de arriba de la barra son parte del componente?
+- G2.10: con movimiento reducido, ¿el círculo indeterminado deja de girar o «late»?
+
+**(c) Se deciden solo si se llega a esa parte.**
+
+- G2.1: ¿Toggle Group dentro de mimi-toolbar? (solo si la toolbar llega a tener grupos con nombre).
+- G2.7: distancia mínima entre pulgares, ¿entrada `minRange` o validador del formulario? (solo con el rango doble).
+- 5.17: ¿qué cambios de API exige la revisión móvil y alguno va antes de la 0.3.0? (solo si la revisión los encuentra).
 
 ## Terminado
 
