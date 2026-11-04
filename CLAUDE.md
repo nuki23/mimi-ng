@@ -5,7 +5,7 @@ Librería de componentes UI para **Angular 22** + **Tailwind CSS 4**. Los compon
 ## Documentos del proyecto
 
 - `docs/spec.md`: especificación completa. Léela antes de crear o cambiar un componente, el tema o la CLI.
-- `docs/plan.md`: tareas por fase. Trabaja solo la tarea que se te pida y marca su casilla al terminar.
+- `docs/plan.md`: el índice de tareas (una línea por tarea, con su estado y el enlace a su detalle) y las reglas del plan. El detalle de cada tarea está en `docs/plan/` (una tarea detallada tiene su archivo con el ID como nombre, por ejemplo `docs/plan/grupo-2/G2.1.md`; las de una línea van en el archivo de su bloque). Para encontrar una tarea por su ID: el índice o `grep -rn "<ID>" docs/plan/`. Trabaja solo la tarea que se te pida y, al terminar, marca su casilla en su archivo de detalle **y** en el índice.
 - `docs/design/`: diseños y variables CSS de Claude Design. Colores, radios y sombras salen de aquí, nunca inventados. Lo que Mimi haga distinto del diseño, o sin diseño, se anota en `docs/design/correcciones-pendientes.md` (tarea D6 del plan).
 - `docs/historial/`: el texto completo de las tareas terminadas del plan. No se edita.
 - `docs/futuro/`: proyectos aparte que no se trabajan en mimi-ng (por ahora, `theme-studio.md`). No se toman como tareas.
@@ -62,8 +62,8 @@ packages/cli/       # @mimi-ng/cli (Angular Schematics)
 
 ## Forma de trabajar
 
-- Una tarea de `docs/plan.md` por vez. Antes de escribir código, propone un plan breve y **espera la aprobación**. Si el usuario pide un paso aparte («PASO A»), detente al terminarlo para que haga su commit.
-- Al terminar: `pnpm build`, `pnpm test` y `pnpm format` en verde (y `pnpm format:check`); marca la casilla en `docs/plan.md`, actualiza la spec si cambió algo y resume qué cambió, con la **lista de archivos** nuevos y modificados. Si algo no salió como se pidió (una decisión distinta, un valor que no está en el diseño, una regla que no cumpliste), dilo explícitamente.
+- Una tarea del plan por vez (índice en `docs/plan.md`, detalle en `docs/plan/`). Antes de escribir código, propone un plan breve y **espera la aprobación**. Si el usuario pide un paso aparte («PASO A»), detente al terminarlo para que haga su commit.
+- Al terminar: `pnpm build`, `pnpm test` y `pnpm format` en verde (y `pnpm format:check`); marca la casilla en el archivo de la tarea en `docs/plan/` y en el índice de `docs/plan.md`, actualiza la spec si cambió algo y resume qué cambió, con la **lista de archivos** nuevos y modificados. Si algo no salió como se pidió (una decisión distinta, un valor que no está en el diseño, una regla que no cumpliste), dilo explícitamente.
 - No hagas commits: los hace el usuario. Al terminar, avisa que toca commit y sugiere un mensaje breve, sin líneas de atribución.
 - **No publiques nada** (npm, tags, releases, despliegues): lo hace el usuario. Puedes darle los comandos.
 - No agregues dependencias que no estén en la spec sin preguntar.

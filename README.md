@@ -50,7 +50,7 @@ Más detalles en [`packages/cli/README.md`](packages/cli/README.md) y en la [pá
 apps/docs/          # Showcase: documentación y entorno de pruebas
 packages/ui-core/   # Código fuente de los componentes, el tema y las utilidades
 packages/cli/       # @mimi-ng/cli: schematics (init, ng-add, ui) y plantillas de ui-core
-docs/               # Especificación (spec.md), plan de tareas (plan.md) y diseños (design/)
+docs/               # Especificación (spec.md), plan de tareas (plan.md y plan/) y diseños (design/)
 angular.json        # Workspace de Angular con los proyectos "docs" y "ui-core"
 ```
 
@@ -96,7 +96,7 @@ Los errores y las sugerencias van en los [issues del repositorio](https://github
 ## Documentación del proyecto
 
 - [`docs/spec.md`](docs/spec.md): especificación completa.
-- [`docs/plan.md`](docs/plan.md): tareas por fase.
+- [`docs/plan.md`](docs/plan.md): índice de tareas, con el detalle de cada una en [`docs/plan/`](docs/plan/).
 - [`CHANGELOG.md`](CHANGELOG.md): cambios por versión.
 
 ## Licencia

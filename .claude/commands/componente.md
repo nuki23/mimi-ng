@@ -7,7 +7,7 @@ Crea el componente **$ARGUMENTS** de Mimi siguiendo estos pasos en orden. Cumple
 
 ## 1. Antes de escribir código
 
-1. Busca la tarea de $ARGUMENTS en `docs/plan.md` y **lee sus notas propias** (por ejemplo, la 2.1 pide `tabindex="-1"` en `a[mimiBtn]` con `aria-disabled` y reemplazar los botones del layout del showcase por `mimiBtn`). Cumple todas.
+1. Busca la tarea de $ARGUMENTS por su ID: su línea en el índice (`docs/plan.md`) enlaza a su detalle en `docs/plan/` (o `grep -rn "<ID>" docs/plan/`). **Lee sus notas propias** (por ejemplo, la 2.1 pide `tabindex="-1"` en `a[mimiBtn]` con `aria-disabled` y reemplazar los botones del layout del showcase por `mimiBtn`). Cumple todas.
 2. Lee en `docs/spec.md` el catálogo (sección 4), la tabla de tokens de $ARGUMENTS (sección 13) y todo lo que mencione a $ARGUMENTS: selector, variantes, tamaños, estados, formularios (sección 8).
 3. Revisa $ARGUMENTS en `docs/design/Mimi Componentes.dc.html`: medidas, estados (normal, hover, foco, deshabilitado, cargando, error…), claro y oscuro.
 4. Todo sale de ese diseño y de los tokens existentes (`packages/ui-core/src/lib/theme/theme-base.css`, clases de la spec 6.1). **No inventes valores.** Si falta algo o el diseño se contradice, pregúntame. Lo que al final quede distinto del diseño o sin diseño se anota en `docs/design/correcciones-pendientes.md` (tarea D6 del plan), en un apartado con el nombre del componente y su ID.
@@ -63,4 +63,4 @@ Crea el componente **$ARGUMENTS** de Mimi siguiendo estos pasos en orden. Cumple
 3. Revisa que el CSS generado no tenga colores fijos.
 4. Actualiza `docs/spec.md` si cambió algo (API, tokens nuevos: la tabla del componente en la sección 13).
 5. Registra en `docs/spec.md`, sección 4 (catálogo), los archivos del componente, sus dependencias de npm y los otros archivos de ui-core que necesita (utils, otros componentes). Servirá para el `registry.json` de la Fase 3.
-6. Marca la tarea en `docs/plan.md`, resume qué creaste y qué revisar en el navegador, en claro y oscuro, y avisa que toca commit con un mensaje sugerido y breve. No hagas el commit: lo hace el usuario.
+6. Marca la tarea en su archivo de `docs/plan/` y en el índice de `docs/plan.md` (las dos casillas iguales), resume qué creaste y qué revisar en el navegador, en claro y oscuro, y avisa que toca commit con un mensaje sugerido y breve. No hagas el commit: lo hace el usuario.
