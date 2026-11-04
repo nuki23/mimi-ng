@@ -64,6 +64,7 @@ packages/cli/       # @mimi-ng/cli (Angular Schematics)
 
 - Una tarea del plan por vez (índice en `docs/plan.md`, detalle en `docs/plan/`). Si el usuario pide un paso aparte («PASO A»), detente al terminarlo para que haga su commit.
 - Los comandos `/componente` (componentes), `/tarea` (todo lo demás) y `/cerrar-grupo` (la puerta de un grupo) siguen este protocolo.
+- Con «modo autónomo» en el prompt de la sesión, ver «Modo autónomo», abajo: reemplaza los pasos b y d.
 
 **Al empezar una tarea**
 
@@ -96,3 +97,34 @@ packages/cli/       # @mimi-ng/cli (Angular Schematics)
 - **Bundle:** cada vez que lo informes, da el tamaño crudo **y** el gzip, antes y después, con el JS y el CSS por separado (la salida de `apps/docs/scripts/check-initial-js.mjs`; la columna «Estimated transfer size» de `ng build` es brotli, no gzip). Si el JS inicial crece más de 1 kB, explica qué módulos entraron y por qué. Ningún presupuesto se sube sin que lo decida el usuario (spec 10).
 - **Servidores en segundo plano:** detén el `pnpm dev` que levantes para comprobar algo. Si un servidor se detuvo por falta de memoria, no lo vuelvas a levantar sin que lo pida.
 - **Privacidad:** las copias de respaldo del historial antiguo (`mimi-ng-respaldo-2026-09-30\` y el `.bundle`, fuera del repo) contienen el correo personal del autor: no las subas, compartas ni copies al repo. El `author` de `packages/cli/package.json` (el que se publica) es «Ariel O (https://github.com/nuki23)», sin correo: no agregues correos a ningún archivo, salvo la dirección noreply de GitHub del autor (`220945288+nuki23@users.noreply.github.com`), que es la que se usa en los commits.
+
+## Modo autónomo
+
+Se activa solo cuando el prompt de la sesión dice «modo autónomo». Mientras está activo, reemplaza los pasos **b** y **d** de «Forma de trabajar» y las reglas 1, 3 y 5 (la parte de «se avisa al usuario») de «Cómo usar este plan» (`docs/plan.md`). El resto del protocolo (a, c, e, f, g, h) sigue igual.
+
+**A1. Rama.** Una rama propia `auto/<grupo>-<AAAA-MM-DD>` (por ejemplo, `auto/grupo-2-2026-11-05`), creada desde `main` actualizado y sin upstream hacia `main`. Nunca se trabaja ni se hace commit en `main`.
+
+**A2. Orden.** Se sigue el «Orden recomendado» del grupo en `docs/plan.md` y se encadenan las tareas sin esperar la aprobación del plan ni respuestas del usuario. El plan breve del paso d se escribe igual, en el informe (A6), pero no se espera.
+
+**A3. Decisiones.** Toda «PENDIENTE DE DECIDIR» de la tarea se resuelve sola: si tiene «Recomendación», se adopta; si no, se elige la opción más simple y coherente con `docs/spec.md`. Se anota en la tarea como «Decidido por defecto (DD/MM/AAAA), pendiente de revisión del usuario», con una fila en `docs/auto/decisiones-por-defecto.md`, y la línea se quita del índice de `docs/plan/decisiones.md`. Si el plan y la spec no coinciden (regla 5 del plan), se decide igual, por la spec, y se registra igual. Los spikes se ejecutan; si fallan, se usa el plan B documentado en la tarea.
+
+**A4. Rupturas.** Hasta la 1.0 se permiten cambios de API. Todo lo que cambie algo publicado en la 0.2.0 se marca **RUPTURA** en el registro. El CHANGELOG no tiene sección «Sin publicar»: las rupturas las pasa al CHANGELOG la puerta del grupo, desde el registro.
+
+**A5. Commits.** Un commit por tarea en la rama, con las barreras de «Commit y push» (identidad noreply, `git add` de rutas concretas, nunca `-A` ni `.`, nunca `.vscode/`, sin atribución ni mención a Claude o a una IA, sin `--force`). Después de cada commit, push de la rama `auto/…` (nunca de otra). Fusionar a `main` lo hace siempre el usuario.
+
+**A6. Informe y criterios manuales.** El informe de cada tarea (plan breve, criterios de hecho con su evidencia, bundle crudo y gzip antes y después, CSS global, alertas, NO COMPROBADO y lista de archivos) va en `docs/auto/<rama sin «auto/»>.md` (por ejemplo, `docs/auto/grupo-2-2026-11-05.md`), una sección por tarea, y entra en el commit de la tarea. Antes de escribirlo se hace una revisión crítica propia: si la evidencia prueba de verdad cada criterio, si se salió del alcance, y los riesgos de bundle, accesibilidad, compatibilidad y privacidad.
+
+- **Criterio principal manual** (la tarea existe para algo que solo comprueba el usuario; por ejemplo, la 5.17a con teléfonos reales): se hace toda la parte automática, la tarea queda en `[~]` con la nota «a falta de comprobación del usuario» (en su archivo de detalle, en el índice y en su fila de «En curso»), se anota en «Pendiente del usuario» del informe y se sigue con la cadena. En modo autónomo, una tarea en ese estado cuenta como hecha para las dependencias de las siguientes.
+- **Criterio menor manual** (por ejemplo, una pasada con NVDA o una comprobación en un navegador real dentro de un componente): se informa como «NO COMPROBADO (manual, usuario)»; si todos los demás criterios están en verde, la tarea se marca `[x]` con la nota «pendiente de comprobación manual» y va a «Pendiente del usuario» del informe.
+- **Dependencia de otro bloque sin hacer** (por ejemplo, M.2 para la G2.8): se hace antes, como una tarea más de la cadena, si no cae en A7; si cae, se detiene.
+
+**A7. Cuándo se detiene** (deja el informe al día y avisa):
+
+- hace falta una dependencia de npm que no está en la spec;
+- habría que subir un presupuesto de bundle (se mide y se informa; no se sube);
+- un spike falla y la tarea no tiene plan B;
+- `pnpm build` o `pnpm test` siguen en rojo después de tres intentos;
+- algo exige publicar o usar una cuenta externa;
+- se llega a una puerta de grupo (`G<n>.P`): se hace su informe y se para.
+
+**A8. Siguen prohibidos:** push a `main`, fusionar a `main` (`gh pr merge` incluido), `--force`, publicar (npm, etiquetas, releases, despliegues), tocar los respaldos (`mimi-ng-respaldo-*`, `*.bundle`) y hacer commit de `.vscode/`. Los permisos del repo (`.claude/settings.json`) refuerzan algunas de estas reglas, pero son patrones de texto que se pueden esquivar: la regla vale aunque un comando no esté denegado. `.claude/settings.json` no se edita (está denegado); si hay que cambiarlo, lo hace el usuario.

@@ -15,11 +15,11 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 
 **Reglas**
 
-1. Una tarea por vez. Antes de escribir código, se propone un plan breve y se espera la aprobación (`CLAUDE.md`, «Forma de trabajar»).
+1. Una tarea por vez. Antes de escribir código, se propone un plan breve y se espera la aprobación (`CLAUDE.md`, «Forma de trabajar»), salvo en modo autónomo (`CLAUDE.md`, «Modo autónomo»).
 2. Antes de empezar, se leen de la tarea: «Leer antes», «Depende de», «Trampas conocidas» y «Criterios de hecho». Si una dependencia no está hecha, no se empieza.
-3. «PENDIENTE DE DECIDIR: …» significa que falta una decisión del usuario: se pregunta, no se supone.
+3. «PENDIENTE DE DECIDIR: …» significa que falta una decisión del usuario: se pregunta, no se supone, salvo en modo autónomo (ver «Decidido por defecto», abajo).
 4. Los IDs no se renumeran ni se reutilizan: el código y la spec los citan (por ejemplo, «plan, G1.5b» o «tarea 5.3»). Tampoco se reutilizan los de Theme Studio (T.2 a T.5, en `docs/futuro/theme-studio.md`). Una tarea nueva toma el siguiente número libre de su grupo; el mantenimiento sin grupo usa `M.<n>`; la puerta de cada grupo es `G<n>.P`.
-5. «Depende de» cita IDs. Para los componentes, la fuente de las dependencias es la tabla de su grupo en la spec 4, «Hoja de ruta»: si el plan y la spec no coinciden, se avisa al usuario en vez de elegir. Excepciones aprobadas por el usuario (dependencias de trabajo, no de componentes, que no van a la tabla de la spec 4): G2.7 y G2.8 dependen de G2.1 solo por el resultado del spike de la convención de valor; G2.1 depende de 5.17a (revisión móvil del Grupo 1); G2.8 depende de M.2 (provisional, por #33974).
+5. «Depende de» cita IDs. Para los componentes, la fuente de las dependencias es la tabla de su grupo en la spec 4, «Hoja de ruta»: si el plan y la spec no coinciden, se avisa al usuario en vez de elegir (en modo autónomo se decide por la spec y se registra como «Decidido por defecto»). Excepciones aprobadas por el usuario (dependencias de trabajo, no de componentes, que no van a la tabla de la spec 4): G2.7 y G2.8 dependen de G2.1 solo por el resultado del spike de la convención de valor; G2.1 depende de 5.17a (revisión móvil del Grupo 1); G2.8 depende de M.2 (provisional, por #33974).
 6. «Diseño:» indica el archivo de `docs/design/` sin el prefijo `Mimi ` ni la extensión `.dc.html` (los Blocks se llaman `Block <nombre>`).
 7. Lo que un componente haga distinto del diseño, o sin diseño, se anota en `docs/design/correcciones-pendientes.md` (tarea D6). Una decisión que sigue vigente va a la spec, no solo al plan.
 
@@ -29,6 +29,9 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 - `[~]` en curso: además, una fila en «En curso».
 - `[x]` hecha: solo cuando se cumplen **todos** sus «Criterios de hecho». Al cerrarla, su texto completo pasa a `docs/historial/plan-grupo-<n>.md` (o al archivo del historial que corresponda) y aquí queda una línea en «Terminado».
 - Con el plan dividido: al cerrar una tarea, su línea del índice pasa a «Terminado» y su archivo de `docs/plan/` se borra cuando su texto ya está en el historial (o, si va junto con su grupo, en la puerta del grupo).
+- En modo autónomo (`CLAUDE.md`, «Modo autónomo», A6): `[~]` con la nota «a falta de comprobación del usuario» cuando el criterio principal es manual (cuenta como hecha para las dependencias en ese modo), y `[x]` con la nota «pendiente de comprobación manual» cuando lo manual es un criterio menor.
+
+**Decidido por defecto.** En modo autónomo (`CLAUDE.md`), una «PENDIENTE DE DECIDIR» se resuelve sola, con la «Recomendación» de la tarea o, si no la hay, con la opción más simple y coherente con la spec. Se escribe en la tarea como «Decidido por defecto (DD/MM/AAAA), pendiente de revisión del usuario» y se registra en `docs/auto/decisiones-por-defecto.md`, con «RUPTURA» si cambia algo publicado. **No cuenta como PENDIENTE DE DECIDIR:** sale del índice de `docs/plan/decisiones.md` y no bloquea la tarea ni las siguientes. Si el usuario la cambia al revisarla, la fila se marca «Cambiada» y la corrección es una tarea nueva (`M.<n>`) o va en la tarea que corresponda.
 
 **Tamaños:** S, menos de una sesión; M, una sesión; L, más de una sesión o con un spike previo.
 
