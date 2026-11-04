@@ -130,17 +130,17 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - `pnpm format:check` en verde.
   - Preguntas abiertas:
     - Decidido (03/11/2026): los globales del Grupo 2 los lleva al tema la tarea G2.0b.
-    - PENDIENTE DE DECIDIR: el keyframe `mimi-indet` del diseño de Progress, ¿se agrega al catálogo de la spec 13 como global o queda dentro de Progress?
-    - PENDIENTE DE DECIDIR: Date Picker y Date Range, ¿una tabla o dos?
+    - Decidido (03/11/2026, el usuario): `mimi-indet` es global, en `theme-base.css` como `mimi-caret`, `mimi-bob` y `mimi-shake` (spec 13, «Otros globales del diseño»; lo agrega la G2.0b).
+    - PENDIENTE DE DECIDIR (al empezar la G2.9, no en esta tarea; lo dejó así el usuario el 03/11/2026): Date Picker y Date Range, ¿una tabla o dos? Mientras tanto, la G2.0 escribe sus tokens sin separarlos y lo marca como provisional en la spec 13; la G2.9 decide si se dividen.
 - [ ] G2.0b Tokens globales del Grupo 2 en el tema
   - v0.3.0 · Tamaño M · Depende de: G2.0 · Bloquea: G2.1, G2.2, G2.3, G2.4a, G2.4b, G2.5, G2.6, G2.7, G2.8, G2.9, G2.10, G2.11, G2.12, 5.2
   - Estado: —
   - Leer antes: la T.1 en `docs/historial/plan-grupo-1.md` (el precedente: tokens nuevos de `tokens-mimi.css` llevados a ui-core, con `types.ts`, `mimiThemeToCss` y `cn.ts`); spec 6.1 a 6.4 (variables, `@theme inline`, cascada, preset y `provideMimiTheme`); spec 11 (tema); spec 13, «Otros globales del diseño», «Derivados» y «Reglas»; spec 5 («Qué hace `mimi`»: el tema se actualiza solo si el usuario no lo modificó; si lo modificó, solo avisa); `contrast.spec.ts` (ui-core).
   - Diseño: `docs/design/tokens-mimi.css` (`:root` y `.dark`) y `mimi-variables-fase3.css`.
   - Objetivo: llevar a `packages/ui-core/src/lib/theme/theme-base.css` los globales del Grupo 2 que hoy solo están en el diseño y en la spec 13, para que los componentes del grupo no inventen ni repitan valores.
-  - Alcance: incluye, con sus valores en claro y oscuro (comprobado el 03/11/2026 en `tokens-mimi.css`): `--mimi-range`, `--mimi-track`, `--mimi-track-fill`, `--mimi-thumb`, `--mimi-chip`, `--mimi-chip-foreground`, `--mimi-dropzone`, `--mimi-dropzone-active`, `--mimi-dropzone-active-border`, `--mimi-strength-weak`, `--mimi-strength-medium`, `--mimi-strength-strong`, `--mimi-selection`; los keyframes `mimi-caret`, `mimi-bob` y `mimi-shake` (están en `tokens-mimi.css` y no en `theme-base.css`); y los que encuentre la G2.0 al hacer las tablas. Su exposición a Tailwind con `@theme inline` (spec 6.1), `MimiThemePreset` y `mimiThemeToCss` si alguno va por preset (spec 6.3 y 11). NO incluye: `--mimi-corner-shape` (es del Theme Studio, `docs/futuro/theme-studio.md`); `--mimi-input-hover`, que ya llegó en la G1.11.
+  - Alcance: incluye, con sus valores en claro y oscuro (comprobado el 03/11/2026 en `tokens-mimi.css`): `--mimi-range`, `--mimi-track`, `--mimi-track-fill`, `--mimi-thumb`, `--mimi-chip`, `--mimi-chip-foreground`, `--mimi-dropzone`, `--mimi-dropzone-active`, `--mimi-dropzone-active-border`, `--mimi-strength-weak`, `--mimi-strength-medium`, `--mimi-strength-strong`, `--mimi-selection`; los keyframes `mimi-caret`, `mimi-bob` y `mimi-shake` (están en `tokens-mimi.css` y no en `theme-base.css`) y `mimi-indet` (de `F5 Estructura`, para Progress; decidido el 03/11/2026: global, spec 13); y los que encuentre la G2.0 al hacer las tablas. Su exposición a Tailwind con `@theme inline` (spec 6.1). Ningún global nuevo va por preset (decidido el 03/11/2026, ver «Preguntas abiertas»): `MimiThemePreset` y `mimiThemeToCss` no cambian. NO incluye: `--mimi-corner-shape` (es del Theme Studio, `docs/futuro/theme-studio.md`); `--mimi-input-hover`, que ya llegó en la G1.11.
   - Base técnica: No aplica (CSS y tipos del tema).
-  - API pública propuesta: las variables `--mimi-*` nuevas y, si van por preset, sus claves en `MimiThemePreset` (spec 6.3).
+  - API pública propuesta: las variables `--mimi-*` nuevas y el keyframe `mimi-indet`, solo en el CSS (sin claves nuevas en `MimiThemePreset`).
   - Formularios: No aplica.
   - Tokens: es el objeto de la tarea.
   - Teclado y accesibilidad: contraste. Los pares de texto sobre fondo nuevos (por ejemplo, `--mimi-chip-foreground` sobre `--mimi-chip`) entran en `contrast.spec.ts` (4,5:1, claro y oscuro).
@@ -161,9 +161,11 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - Sin colores fijos (revisión del CSS generado, como pide `/componente`).
     - `contrast.spec.ts` con los pares nuevos que apliquen.
     - Prueba de un componente con el tema sin los tokens nuevos: no queda transparente ni invisible.
-    - Spec 6.1, 6.3 y 13 al día.
+    - Los keyframes `mimi-caret`, `mimi-bob`, `mimi-shake` y `mimi-indet` en `theme-base.css`, con el mismo cuerpo que el diseño.
+    - `MimiThemePreset` y `mimiThemeToCss` sin cambios (ningún global por preset).
+    - Spec 6.1 y 13 al día.
     - Presupuesto del CSS global y del `initial`, crudo y gzip, antes y después. Techos (`angular.json`): CSS global (budget `bundle` `styles`) aviso 130 kB y error 145 kB; `initial` aviso 475 kB y error 505 kB. Medición del 03/11/2026 (`pnpm build:docs`, igual que la del 21/10/2026 en el CSS): CSS global 120,08 kB crudo y 17,67 kB gzip; JS inicial 333,94 kB crudo y 105,24 kB gzip; `initial` 454,02 kB crudo. Quedan 9,92 kB hasta el aviso del CSS y 20,98 kB hasta el aviso del `initial`.
-  - Estimación del CSS global del Grupo 2 (03/11/2026, para la decisión pendiente «CSS global por encima del aviso»):
+  - Estimación del CSS global del Grupo 2 (03/11/2026; dato de partida de la decisión «Grupo 2: medir primero», spec 10):
     - Lo que sumó el Grupo 1, según `docs/historial/plan-grupo-1.md` y `plan-plataforma.md`: los componentes con medición propia sumaron +4,47 kB (G1.5), +2,97 (G1.6), +0,69 (G1.7), +4,21 (G1.8), +3,30 (G1.9) y +6,39 (G1.10, de 108,84 a 115,23 kB crudo y de 16,39 a 17,13 kB gzip): 22,03 kB entre seis, **3,67 kB crudo de media por componente**. De punta a punta, el CSS global pasó de 73,99 kB (después de la 4.4) a 120,08 kB al cierre del grupo (+46,09 kB, que incluye también los tokens de la T.0b y las tareas sin medición propia). El dato de 89,22 kB en la G1.2 no está en el historial ni en la spec (no lo pude comprobar).
     - Estimación para los 12 componentes del Grupo 2 (la G2.4 cuenta como uno): unos **+44 kB crudo** (12 × 3,67), con un rango de +8 a +77 kB si cada uno sumara como el menor (G1.7) o el mayor (G1.10). En gzip, con la proporción de la G1.10 (+0,74 kB gzip por +6,39 kB crudo), unos **+5 kB**. Sin contar lo que agregue la G2.0b.
     - Resultado en el CSS global: unos 164 kB crudo (rango 128 a 197 kB) y unos 22,7 kB gzip al cerrar el grupo, por encima del aviso (130 kB) y del error (145 kB).
@@ -171,7 +173,8 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - A quién afecta: los presupuestos son del sitio de documentación (`apps/docs`), no de los usuarios de Mimi. El CSS global del showcase incluye las clases de todas las páginas de componentes (`@source` a ui-core), y las páginas internas (`/dev/tokens`, `/dev/theme`). El proyecto de un usuario solo genera las clases de los componentes que copia.
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR: ¿algún global nuevo va por preset (`MimiThemePreset`) o todos solo en el CSS? Recomendación: solo en el CSS (son colores; spec 6.2: el color propio va en el CSS, con claro y oscuro), salvo que la G2.0 encuentre tamaños globales.
+    - Decidido (03/11/2026, el usuario): ningún global nuevo va por preset; todos solo en el CSS (son colores; spec 6.2: el color propio va en el CSS, con claro y oscuro). Si la G2.0 encuentra un tamaño global, se lleva al usuario antes de ponerlo en el preset.
+    - Decidido (03/11/2026, el usuario): presupuesto de CSS: medir primero, no subir nada ahora (spec 10, «Grupo 2: medir primero»).
 - [ ] G2.1 Toggle Group. Diseño: `F3 Archivos Tags Toggle Color`.
   - v0.3.0 · Tamaño M · Depende de: G2.0, G2.0b · Bloquea: 5.2
   - Estado: —
@@ -187,11 +190,12 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - PENDIENTE DE DECIDIR (base técnica). Opciones: (a) `FocusKeyManager` del CDK (`@angular/cdk/a11y`) para el foco itinerante de la selección simple, como mimi-toolbar (G1.10), y botones nativos en la múltiple; (b) `ngToolbarWidgetGroup` de aria dentro de un `ngToolbar` interno: arrastra los tres choques de aria/toolbar que encontró el spike de la G1.10 (Enter y Espacio sin clic, anillo de foco con el mouse, foco movido por código); (c) `ngListbox` de aria, que cambia los roles del diseño. Recomendación: (a), implementación propia siguiendo el patrón «Radio Group» de la APG, con el `FocusKeyManager` del CDK (API pública, ya usada en la G1.10). Nunca entry points `private` ni símbolos `_`/`ɵ`.
     - Nota: la comprobación de aria se hizo con `@angular/aria` 22.2.3 (la del repo el 03/11/2026). Si M.2 sube la versión antes de esta tarea, volver a comprobar qué exporta aria.
   - API pública propuesta:
-    - `<mimi-toggle-group [(value)] [multiple] [disabled] aria-label class>`. El modo múltiple se llama `multiple` (booleano), igual que en el Combobox (G2.8) (decidido el 03/11/2026). Cómo se tipa `value` en los dos modos: «Convención de valor simple/múltiple» (plan, «Decisiones pendientes»).
+    - `<mimi-toggle-group [(value)] [multiple] [disabled] aria-label class>`. El modo múltiple se llama `multiple` (booleano), igual que en el Combobox (G2.8) (decidido el 03/11/2026). Cómo se tipa `value` en los dos modos: spec 8, «Valor simple o múltiple» (decidido el 03/11/2026): un solo `value`, `T | null` en simple y `T[]` con `multiple`, si el spike del primer paso lo confirma.
     - Ítems del usuario: `<button mimiToggleGroupItem="valor" aria-label>` con texto o ícono por contenido proyectado (como `mimiToolbarItem`, G1.10).
     - `class` va al contenedor (la píldora), según la regla de la spec 4.
     - Estado: `data-state="on|off"` en cada ítem, `data-disabled`, `data-orientation` no (solo horizontal).
   - Formularios: control propio con `FormValueControl` (spec 8), nunca `ControlValueAccessor`; prueba con `[formField]`, `formControlName` y `[(ngModel)]` en simple y en múltiple; `touch` cuando el foco sale del grupo entero (como el Select, G1.5); `disabled` del formulario deshabilita el grupo.
+  - Primer paso: spike de Signal Forms (spec 8, «Valor simple o múltiple»). Un componente de prueba con un solo `value` cuyo tipo es `T | null` o `T[]` según `multiple`, enlazado con `[formField]` a un campo de tipo `T` y a otro de tipo `T[]`; comprobar que compila con la comprobación estricta de plantillas y que el valor se sincroniza en los dos. Si TypeScript no acepta la unión, se pasa a dos selectores (opción (c)) y se avisa al usuario antes de seguir. El resultado se anota en la spec 8 y vale para G2.7 y G2.8.
   - Tokens: tabla en la spec 13 (tarea G2.0). Registrar los que vayan al preset en `theme/types.ts` y el prefijo en `COMPONENT_PREFIX`, con prueba, y la tabla en `component-tokens.ts`. La curva del indicador del diseño es la misma que `--mimi-tabs-spring` (spec 13, Tabs): ver si se comparte.
   - Teclado y accesibilidad:
     - Simple (APG Radio Group): una parada de Tab (el elegido, o el primero si no hay); flechas con vuelta que mueven el foco y eligen; Espacio elige el enfocado; en RTL, ← y → se invierten.
@@ -209,6 +213,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - Los atributos ARIA del usuario en sus botones (por ejemplo, su `aria-label`) no se pisan con un binding de host que valga `null` (el arreglo de Button antes de la G1.12).
   - Criterios de hecho:
     - Simple y múltiple funcionan con `[formField]`, `formControlName` y `[(ngModel)]`, con pruebas.
+    - El resultado del spike de Signal Forms anotado en la spec 8 («Valor simple o múltiple»), con la opción que quedó ((a) o (c)).
     - Teclado completo según el patrón (simple y múltiple, con RTL); foco visible; estados claro, oscuro, deshabilitado y error (si el formulario lo marca).
     - Indicador alineado al elegido después de clic, teclado y cambio de valor desde fuera; sin transición con movimiento reducido.
     - Tokens registrados en `theme/types.ts` y `COMPONENT_PREFIX`, con prueba; tabla en `component-tokens.ts`.
@@ -219,7 +224,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
   - Preguntas abiertas:
     - PENDIENTE DE DECIDIR: la base técnica (ver arriba).
     - PENDIENTE DE DECIDIR: en simple, ¿se puede dejar sin elección volviendo a pulsar la elegida? El diseño no lo muestra (al pulsar la elegida no cambia). Recomendación: no, como una radio.
-    - Cómo se tipa `[(value)]` en simple y en múltiple: es la decisión compartida «Convención de valor simple/múltiple» (plan, «Decisiones pendientes»), que vale también para G2.7 y G2.8.
+    - Decidido (03/11/2026, el usuario): cómo se tipa `[(value)]` en simple y en múltiple. Opción (a): un solo `value` cuyo tipo cambia con el modo, con el spike del primer paso; si TypeScript no acepta la unión con `[formField]`, opción (c): dos selectores. Vale también para G2.7 y G2.8. Vive en la spec 8, «Valor simple o múltiple».
     - PENDIENTE DE DECIDIR: el nombre de la opción con el elegido en `primary` (el diseño la llama `solid`). Recomendación: `variant="solid"` (spec 4, «Variante y tono»), sin `tone` en esta versión.
     - PENDIENTE DE DECIDIR: ¿Toggle Group se puede usar dentro de mimi-toolbar? La toolbar ya tiene `kind="tool"` (una herramienta activa con `aria-pressed`) y la D6 anota que «un grupo de radio con nombre llegaría con los grupos». Recomendación: no en esta versión; anotarlo para la toolbar.
 - [ ] 5.2 Página «Tema» sencilla (después de la 0.2.0; spec 11, «Página "Tema"»). Ruta `/docs/theme`, lazy, en Primeros pasos. Cambia solo variables globales: color principal (unas muestras de color y un `<input type="color">` nativo, sin depender del Color Picker), radio, y claro/oscuro para previsualizar. Vista previa con algunos componentes reales. Botón para copiar el resultado como CSS (`:root` y `.dark`) y como preset de `provideMimiTheme()`. Usa el mismo sistema que el usuario: arma un `MimiThemePreset` y lo aplica con `applyMimiTheme` / `mimiThemeToCss`, sin otro camino ni variables propias. Sin guardar, sin cuentas y sin edición por componente. (Antes «Temas» con personalizador; el editor completo, Theme Studio, es un proyecto aparte: `docs/futuro/theme-studio.md`.)
@@ -468,7 +473,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - PENDIENTE DE DECIDIR: un solo input real con casillas visuales (lo que muestra el diseño) o un input por casilla. Con un input, el lector lee un campo con el código entero, y el pegado, el borrado y el autocompletado del SMS funcionan sin código extra. Con varios inputs, el lector anuncia cada casilla como un campo aparte (cada una necesita su nombre, por ejemplo «Dígito 1 de 6»), y el pegado, el borrado hacia atrás y el autocompletado del SMS hay que reprogramarlos. Recomendación: un solo input real, como el diseño.
     - PENDIENTE DE DECIDIR: ¿solo dígitos o también letras (algunos códigos son alfanuméricos)? El diseño solo usa dígitos. Recomendación: dígitos por defecto y una opción para alfanumérico, con `inputmode` acorde.
 - [ ] G2.6 Tags Input. Diseño: `F3 Archivos Tags Toggle Color`.
-  - v0.3.0 · Tamaño M · Depende de: G2.0, G2.0b, 2.4 (Badge, hecha), 2.2 (Input, hecha) · Bloquea: G2.8
+  - v0.3.0 · Tamaño M · Depende de: G2.0, G2.0b, 2.4 (Badge, hecha), 2.2 (Input, hecha) · Bloquea: G2.8 (esta tarea crea el ítem `chip` de la CLI y el util de anuncios que usa el Combobox múltiple; decidido el 03/11/2026)
   - Estado: —
   - Leer antes: spec 4 (tabla del Grupo 2: inspiración HeroUI y PrimeNG Chips, depende de Badge e Input; «El valor vive en Mimi»); spec 8 (`FormValueControl`, `MIMI_FIELD_CONTROL`, `touch`); spec 13 (su tabla, de la G2.0; los globales `--mimi-chip` y `--mimi-chip-foreground`, que trae la G2.0b; la tabla de Badge); la 2.4 Badge y la 2.2 Input en `docs/historial/plan-fase-0-3.md`; la G1.8 Toast en `docs/historial/plan-grupo-1.md` (anuncios con el `LiveAnnouncer` del CDK).
   - Diseño: `F3 Archivos Tags Toggle Color`, sección «10 · Tags Input» (marcado, `tags()`, `MAX_TAGS` y `tagStates` del script). Lo que muestra:
@@ -489,7 +494,8 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
   - Tokens: tabla en la spec 13 (tarea G2.0); los globales `--mimi-chip` y `--mimi-chip-foreground` con valor de respaldo (G2.0b). Registrar en `theme/types.ts`, `COMPONENT_PREFIX` y `component-tokens.ts`.
   - Teclado y accesibilidad: Enter y coma agregan; Backspace con el input vacío quita la última; Tab recorre el input y los botones de quitar (según la pregunta de la navegación). Cada botón con su nombre («Quitar angular»). El contador y el mensaje asociados al input con `aria-describedby`. Anuncios: al agregar y al quitar, con el `LiveAnnouncer` en `polite` («angular agregada», «angular quitada»); los errores y el límite, en la región `role="status"` del diseño. Al quitar con el botón, el foco va al input (no a `body`). En test: cada tecla, duplicado, máximo, anuncios, foco después de quitar. A mano: NVDA.
   - Ejemplos del showcase: el del diseño (proyecto, máximo 5), los estados (deshabilitado, con error, límite alcanzado), formularios (los tres sistemas, con un validador «al menos una»), con `class`, claro y oscuro.
-  - CLI: ítem `tags-input` en `registry.json`, con `utils/cn`, `utils/control-styles` y `utils/field-state`; peer `@angular/cdk` (por el `LiveAnnouncer`) y `@angular/forms` si usa `field-state`; `x-prompt` y README de la CLI.
+  - CLI: ítem `tags-input` en `registry.json`, con `chip` (registryDependencies), `utils/cn`, `utils/control-styles` y `utils/field-state`; peer `@angular/cdk` (por el `LiveAnnouncer`) y `@angular/forms` si usa `field-state`; `x-prompt` y README de la CLI.
+    - Ítem nuevo `chip` (decidido el 03/11/2026, como el ítem `menu` de la G1.4): el chip con su botón de quitar y la lógica de quitar (botón y Backspace con el campo vacío), y un util pequeño de anuncios (agregado y quitado, con el `LiveAnnouncer`) que usan Tags Input y el Combobox múltiple (G2.8). Peer `@angular/cdk` por el `LiveAnnouncer`. Los nombres de los archivos y del util se proponen al empezar la tarea. No sale solo en el `x-prompt` si es una pieza interna (como `menu`): se decide al empezar.
   - Textos: sí. «Quitar {etiqueta}», «{etiqueta} ya está en la lista.», el aviso del límite, la ayuda y los anuncios → `MIMI_TAGS_INPUT_TEXT` (inglés) y `MIMI_TAGS_INPUT_TEXT_ES`, con `provideMimiTagsInputText`.
   - Trampas conocidas:
     - Un botón enfocado que desaparece (la etiqueta quitada) deja el foco en `body` (como el botón que se deshabilita, M.1): hay que mover el foco antes.
@@ -507,17 +513,18 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - Textos con `provideMimiTagsInputText` y su versión `_ES`.
     - Página del showcase con todos los estados y la tabla de API.
     - Spec 4 y 13 al día; diferencias con el diseño en `correcciones-pendientes.md`.
+    - Ítem `chip` en `registry.json` (chip, lógica de quitar y util de anuncios), con sus pruebas, y Tags Input usándolo.
     - `registry.json`, pruebas de la CLI y `ng g mimi tags-input` probado en un proyecto limpio.
     - Bundle: JS inicial y CSS global, crudo y gzip, antes y después.
   - Preguntas abiertas:
     - PENDIENTE DE DECIDIR: navegación con el teclado entre etiquetas (ver «Base técnica»).
     - PENDIENTE DE DECIDIR: la normalización del diseño (minúsculas y sin `#`) ¿es la de Mimi por defecto o solo la del ejemplo? Recomendación: por defecto solo quitar espacios a los lados; minúsculas y `#` en el ejemplo, con `normalize`.
     - PENDIENTE DE DECIDIR: pegado de varias etiquetas (por ejemplo, «angular, diseño, ventas»): ¿se separan por los separadores y se agregan todas? Recomendación: sí, respetando duplicados y máximo, y anotarlo en `correcciones-pendientes.md`.
-    - PENDIENTE DE DECIDIR: ¿el chip es una pieza compartida con el Combobox múltiple (G2.8), por ejemplo un ítem `chip` de la CLI como el ítem `menu` de la G1.4? Recomendación: sí, extraerlo en esta tarea si la G2.8 lo va a usar (ver G2.8).
+    - Decidido (03/11/2026, el usuario): el chip es un ítem `chip` de la CLI (como `menu`), que usan Tags Input y el Combobox múltiple (G2.8). Se comparten el chip y su lógica de quitar (Backspace y botón); los anuncios, con un util pequeño que usan los dos. Se crea en esta tarea (ver «CLI»).
 - [ ] G2.7 Slider (rango doble). Diseño: `F3 Slider OTP Numero Mascara`.
   - v0.3.0 · Tamaño L (propuesta de división en «Preguntas abiertas») · Depende de: G2.0, G2.0b, G1.2 (Tooltip, hecha: solo sus tokens `--mimi-tooltip`, para la burbuja) · Bloquea: G2.12
   - Estado: —
-  - Leer antes: spec 4 (tabla del Grupo 2: inspiración shadcn y HeroUI; dice «depende de Tooltip», que se corrige en esta tarea; «El valor vive en Mimi»); spec 8 (`FormValueControl`); spec 13 (su tabla, de la G2.0; los globales `--mimi-track`, `--mimi-track-fill` y `--mimi-thumb` de la G2.0b; la tabla de Tooltip); la G1.2 Tooltip y la G1.10 mimi-toolbar en `docs/historial/plan-grupo-1.md` (cuándo abre el tooltip; foco por código); la decisión compartida «Convención de valor simple/múltiple» («Decisiones pendientes»).
+  - Leer antes: spec 4 (tabla del Grupo 2: inspiración shadcn y HeroUI; dice «depende de Tooltip», que se corrige en esta tarea; «El valor vive en Mimi»); spec 8 (`FormValueControl`); spec 13 (su tabla, de la G2.0; los globales `--mimi-track`, `--mimi-track-fill` y `--mimi-thumb` de la G2.0b; la tabla de Tooltip); la G1.2 Tooltip y la G1.10 mimi-toolbar en `docs/historial/plan-grupo-1.md` (cuándo abre el tooltip; foco por código); la convención de valor de la spec 8, «Valor simple o múltiple» (decidida el 03/11/2026), con el resultado del spike de la G2.1.
   - Diseño: `F3 Slider OTP Numero Mascara`, sección «4 · Slider» (marcado y la función `sl()` del script). Lo que muestra:
     - Pulgares propios con `role="slider"` (no `<input type="range">`), `tabindex` 0 (−1 deshabilitado), `aria-labelledby` a la etiqueta, `aria-label` «Mínimo» y «Máximo» en el rango, `aria-valuemin`, `aria-valuemax`, `aria-valuenow`, `aria-valuetext` (el valor formateado, por ejemplo «$300» o «3 personas»), `aria-disabled` y `aria-invalid`.
     - Teclado: ← y ↓ restan un paso, → y ↑ suman uno; Re Pág y Av Pág, diez pasos; Inicio y Fin, mínimo y máximo.
@@ -543,7 +550,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
         - Estilado entre navegadores: (d) no estila el input (es invisible), así que no hay pseudoelementos por navegador; lo que se ve lo dibuja Mimi, como en (c). Hay que mantener alineados el input invisible y el pulgar dibujado (el ancho del pulgar cambia dónde cae cada valor en el input nativo).
         - Accesibilidad: (d): el lector anuncia un control de rango nativo, con `aria-valuetext` puesto en el input; (c): `role="slider"` con todos los `aria-value*` puestos por Mimi.
       - Recomendación: (d) si el spike del primer día muestra que el cruce de pulgares y la elección del pulgar con el puntero funcionan en Chrome, Firefox y Safari (táctil incluido); si no, (c), la de la Tanda C. (a) y (b) quedan descartadas por el estilo (pseudoelementos) y porque (a) no hace el rango doble. Cambia respecto de la Tanda C: (d) da teclado, RTL y táctil nativos sin el problema de estilado de (a) y (b).
-  - API pública propuesta (PENDIENTE DE DECIDIR en los nombres): `<mimi-slider [(value)] [min] [max] [step] [marks] [format] [showValue] [disabled] aria-label class>`. El tipo de `value` (un número o un rango) y el nombre del modo de rango: «Convención de valor simple/múltiple» («Decisiones pendientes»). `format`: función que da el texto del valor (`aria-valuetext` y burbuja). `showValue`: cuándo se ve la burbuja (al arrastrar y con el foco, o siempre). `class` va al contenedor.
+  - API pública propuesta (PENDIENTE DE DECIDIR en los nombres): `<mimi-slider [(value)] [min] [max] [step] [marks] [format] [showValue] [disabled] aria-label class>`. El tipo de `value` (un número o un rango): spec 8, «Valor simple o múltiple» (decidido el 03/11/2026; con el resultado del spike de la G2.1). El nombre del modo de rango se propone al empezar esta tarea, dentro de esa convención. `format`: función que da el texto del valor (`aria-valuetext` y burbuja). `showValue`: cuándo se ve la burbuja (al arrastrar y con el foco, o siempre). `class` va al contenedor.
   - Formularios: control propio con `FormValueControl` (spec 8; el tipo según la convención) y `MIMI_FIELD_CONTROL`; pruebas con `[formField]`, `formControlName` y `[(ngModel)]` (teclado, arrastre, valor desde el formulario fuera de rango, `disabled`, error de rango como validador del formulario). `touch` al soltar o al salir el foco.
   - Tokens: tabla en la spec 13 (tarea G2.0); los globales `--mimi-track`, `--mimi-track-fill` y `--mimi-thumb` con valor de respaldo (G2.0b); la burbuja con los de Tooltip (`--mimi-tooltip`, decidido). Registrar en `theme/types.ts`, `COMPONENT_PREFIX` y `component-tokens.ts`.
   - Teclado y accesibilidad (APG «Slider» y «Slider (Multi-Thumb)»): las teclas del diseño; en RTL, ← y → se invierten (propuesta); en vertical, ↑ suma (propuesta). Cada pulgar es una parada de Tab. Nombre: `aria-labelledby` a la etiqueta y, en el rango, «Mínimo» y «Máximo» (textos). `aria-valuetext` con el valor formateado. La burbuja no se anuncia (el valor ya está en `aria-valuetext`). En test: cada tecla, que los pulgares no se crucen, paso y límites, arrastre simulado con eventos de puntero, RTL. A mano: NVDA (lee nombre y valor), táctil en un móvil.
@@ -578,9 +585,9 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - PENDIENTE DE DECIDIR: la distancia mínima entre pulgares del ejemplo de error, ¿es una entrada del Slider (`minRange`) o un validador del formulario? Recomendación: un validador del formulario (el diseño la muestra como error, no como límite del arrastre).
     - PENDIENTE DE DECIDIR (tamaño L): dividir en G2.7a «Slider de un valor (teclado, arrastre, marcas, burbuja y formularios)» y G2.7b «Rango doble (dos pulgares sin cruce)», con G2.7b dependiendo de G2.7a; el Color Picker (G2.12) dependería solo de G2.7a. Recomendación: dividir.
 - [ ] G2.8 Combobox/Autocomplete (múltiple con chips). Diseño: `F3 Combobox Fechas Hora`.
-  - v0.3.0 · Tamaño L (propuesta de división en «Preguntas abiertas») · Depende de: G2.0, G2.0b, G1.1 (Popover, hecha), G1.5 (lógica de lista de Select, hecha), G2.6, M.2 (provisional: se quita si el spike del primer paso no reproduce #33974) · Bloquea: G3.3, M.9
+  - v0.3.0 · Tamaño L (propuesta de división en «Preguntas abiertas») · Depende de: G2.0, G2.0b, G1.1 (Popover, hecha), G1.5 (lógica de lista de Select, hecha), G2.6 (los ítems `chip` y el util de anuncios), M.2 (provisional: se quita si el spike del primer paso no reproduce #33974) · Bloquea: G3.3, M.9
   - Estado: —
-  - Leer antes: spec 4 (tabla del Grupo 2: inspiración shadcn Combobox y PrimeNG AutoComplete; depende de Popover, la lógica de lista de Select y Tags Input; «Base técnica»; «Rodeos de aria»: los del Select valen aquí); spec 8 (`FormValueControl`); spec 13 (su tabla, de la G2.0; la de Select); la G1.5 Select y la G1.5b en `docs/historial/plan-grupo-1.md`; la G2.6 Tags Input (los chips); la decisión compartida «Convención de valor simple/múltiple» («Decisiones pendientes»); angular.dev, guide/aria/combobox («Autocomplete») y guide/aria/multiselect.
+  - Leer antes: spec 4 (tabla del Grupo 2: inspiración shadcn Combobox y PrimeNG AutoComplete; depende de Popover, la lógica de lista de Select y Tags Input; «Base técnica»; «Rodeos de aria»: los del Select valen aquí); spec 8 (`FormValueControl`); spec 13 (su tabla, de la G2.0; la de Select); la G1.5 Select y la G1.5b en `docs/historial/plan-grupo-1.md`; la G2.6 Tags Input (el ítem `chip` y el util de anuncios); la convención de valor de la spec 8, «Valor simple o múltiple» (decidida el 03/11/2026), con el resultado del spike de la G2.1; angular.dev, guide/aria/combobox («Autocomplete») y guide/aria/multiselect.
   - Diseño: `F3 Combobox Fechas Hora`, sección «1 · Combobox / Autocomplete». Lo que muestra:
     - Simple («Ciudad»): input con `role="combobox"`, `aria-autocomplete="list"`, `aria-expanded` y `autocomplete="off"`, con ícono al principio y chevron; lista `role="listbox"` con opciones (`role="option"`, `aria-selected`) con la coincidencia resaltada (`<mark>`), un texto secundario y el check en la elegida; una opción «Crear "<texto>"» al final; «Sin coincidencias.».
     - Múltiple («Tecnologías»): chips dentro del campo con botón de quitar, input con `role="combobox"`, lista con `aria-multiselectable="true"` y una casilla de check en cada opción; «Crear "<texto>"»; ayuda «Enter agrega · Backspace quita el último chip».
@@ -595,12 +602,12 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
       - Si se reproduce en 22.2.3 y se arregla en 22.2.4: la dependencia de M.2 se queda, y M.2 se hace antes de seguir.
       - Si **no** se reproduce: se quita M.2 de «Depende de» de esta tarea y G2.8 del «Bloquea» de M.2, y se anota aquí el resultado del spike con la fecha.
       - Si se reproduce y 22.2.4 no lo arregla: se detiene la tarea y se lleva al usuario (un rodeo nuevo en «Rodeos de aria» de la spec 4).
-  - API pública propuesta (PENDIENTE DE DECIDIR en los nombres): `<mimi-combobox [(value)] [options] [multiple] [creatable] [loading] [filterWith] placeholder [disabled] aria-label class panelClass (searchChange) (create)>`. `multiple` (booleano; decidido el 03/11/2026, el mismo nombre que G2.1). El tipo de `value`: «Convención de valor simple/múltiple». `options` como en Select (`MimiOption` y `MimiOptionGroup`). `class` va al campo y `panelClass` al panel (regla de la spec 4, como Select).
+  - API pública propuesta (PENDIENTE DE DECIDIR en los nombres): `<mimi-combobox [(value)] [options] [multiple] [creatable] [loading] [filterWith] placeholder [disabled] aria-label class panelClass (searchChange) (create)>`. `multiple` (booleano; decidido el 03/11/2026, el mismo nombre que G2.1). El tipo de `value`: spec 8, «Valor simple o múltiple» (decidido el 03/11/2026; `T | null` o `T[]`, con el resultado del spike de la G2.1). `options` como en Select (`MimiOption` y `MimiOptionGroup`). `class` va al campo y `panelClass` al panel (regla de la spec 4, como Select).
   - Formularios: control propio con `FormValueControl` (spec 8) y `MIMI_FIELD_CONTROL`; pruebas con `[formField]`, `formControlName` y `[(ngModel)]` en simple y en múltiple (elegir, quitar chip, crear, valor desde el formulario, `disabled`, error). Lo que se escribe en el campo no es el valor hasta que se elige o se crea. `touch` al salir el foco del campo y del panel (como Select).
   - Tokens: tabla en la spec 13 (tarea G2.0); los de Select donde coincidan; los chips, los de la G2.6 (`--mimi-chip`). Registrar en `theme/types.ts`, `COMPONENT_PREFIX` y `component-tokens.ts`.
   - Teclado y accesibilidad (APG «Combobox» con lista): ↓ abre y baja, ↑ sube, Enter elige (en múltiple, alterna y no cierra), Escape cierra (o borra lo escrito si está cerrado; ver preguntas), Alt+↓ y Alt+↑ como en Select; Backspace con el campo vacío quita el último chip (diseño); «Crear» se elige como una opción más. Anuncios: cantidad de resultados y «Sin resultados» con la región `role="status"` del diseño (o el `LiveAnnouncer`); al agregar y quitar un chip, como Tags Input. En test: cada tecla, filtrado, crear, carga, chips. A mano: NVDA (activa con `aria-activedescendant`, resultados anunciados).
   - Ejemplos del showcase: ciudad (simple, con ícono y texto secundario), tecnologías (múltiple con chips), crear, carga desde un servidor simulado, sin resultados, los estados (deshabilitado, con error), formularios, con `class` y `panelClass`, claro y oscuro.
-  - CLI: ítem `combobox` en `registry.json`, con peers `@angular/aria` y `@angular/cdk` (la CLI instala aria en la versión exacta del cdk, spec 5), `cssImports` del overlay del CDK, `utils/overlay`, `utils/cn`, `utils/control-styles`, `utils/field-state`, las utilidades nuevas de lista (ver «Preguntas abiertas»: filtro, resaltado y lista) y lo que se decida compartir con Tags Input; sin depender del ítem `select`; `x-prompt` y README de la CLI.
+  - CLI: ítem `combobox` en `registry.json`, con peers `@angular/aria` y `@angular/cdk` (la CLI instala aria en la versión exacta del cdk, spec 5), `cssImports` del overlay del CDK, `utils/overlay`, `utils/cn`, `utils/control-styles`, `utils/field-state`, las utilidades nuevas de lista (ver «Preguntas abiertas»: filtro, resaltado y lista) y el ítem `chip` de la G2.6 (registryDependencies: el chip, la lógica de quitar y el util de anuncios; decidido el 03/11/2026); sin depender del ítem `select` ni del ítem `tags-input`; `x-prompt` y README de la CLI.
   - Textos: sí. «Crear "{texto}"», «Sin resultados para "{texto}"», la ayuda, «Cargando…» y los anuncios → `MIMI_COMBOBOX_TEXT` (inglés) y `MIMI_COMBOBOX_TEXT_ES`, con `provideMimiComboboxText` (los de Select no se tocan en la 0.3.0).
   - Trampas conocidas:
     - Todos los rodeos de aria del Select valen aquí (spec 4, «Rodeos de aria»): el listbox no avisa al combobox al elegir; aria desmarca la opción elegida al volver a elegirla y vacía el valor al filtrar o con «cargando» (el valor vive en Mimi); aria vuelve a activar la opción elegida cuando cambian las opciones (`keepFirst`); el puntero no activa la opción; `preserveContent` para la animación de salida; el `ngComboboxPopup` por fuera del overlay. Cada uno con su prueba de alarma.
@@ -626,7 +633,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
   - Preguntas abiertas:
     - Decidido (03/11/2026, el usuario): **los archivos de Select no se tocan en la 0.3.0.** El Combobox usa utilidades nuevas (filtro sin tildes, resaltado de la coincidencia y lista con «cargando» y «sin resultados»), hechas a partir de lo que hoy está en `select.ts` (`normalize()`, `MimiSelectHighlight`, `MimiSelectList`). Una tarea aparte, la M.9, migra el Select a esas utilidades después, con nota en el CHANGELOG. Hasta la M.9, el código queda repetido en Select y en las utilidades nuevas.
     - PENDIENTE DE DECIDIR: dónde viven las utilidades nuevas y qué incluyen. Opciones: (a) un ítem compartido de la CLI (como el ítem `menu` que se sacó en la G1.4 para los dos menús), con el filtro, el resaltado, la lista y los tipos de opción (`MimiOption`, `MimiOptionGroup`, hoy en Select), que el Select adopta en la M.9; (b) archivos dentro de `utils/`. Recomendación: (a), con nombres que no choquen con los de Select (que sigue exportando los suyos hasta la M.9).
-    - PENDIENTE DE DECIDIR: qué se comparte con Tags Input (G2.6): el chip con su botón de quitar, Backspace para quitar el último y los anuncios. Recomendación: el chip como pieza compartida (ver la última pregunta de G2.6), sin reutilizar Tags Input entero (Tags Input no tiene lista).
+    - Decidido (03/11/2026, el usuario): con Tags Input (G2.6) se comparten el chip y su lógica de quitar (Backspace y botón), en el ítem `chip` de la CLI, y los anuncios, con un util pequeño que usan los dos. No se reutiliza Tags Input entero (no tiene lista).
     - PENDIENTE DE DECIDIR: ¿crear un valor nuevo es parte de Mimi (`creatable` y una salida `(create)` con el texto, que el usuario agrega a `options`) o lo hace el usuario? Recomendación: `creatable` con `(create)`; Mimi no inventa la opción, la agrega el usuario.
     - PENDIENTE DE DECIDIR: Escape con el panel cerrado, ¿borra lo escrito (APG) o no hace nada? Recomendación: borrar lo escrito, como la APG.
     - PENDIENTE DE DECIDIR (tamaño L): dividir en G2.8a «Combobox simple (filtrado, crear, carga asíncrona y formularios)» y G2.8b «Combobox múltiple con chips», con G2.8b dependiendo de G2.8a y de G2.6. Recomendación: dividir.
@@ -683,11 +690,12 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
       - Recomendación: (b), con dos funciones exportadas para convertir de y a `Date` (por ejemplo, `toMimiDate` y `fromMimiDate`), y revisar (c) cuando Temporal sea Baseline. El rango: `{ start, end }` con el mismo tipo.
     - PENDIENTE DE DECIDIR: **cómo se localiza**. Opciones: (a) `Intl.DateTimeFormat` con el idioma de `LOCALE_ID` y una entrada `locale` (como la G2.2) para los nombres de meses y días y el formato del disparador, con `format` (opciones de `Intl.DateTimeFormat`); (b) `DatePipe` / `formatDate` de `@angular/common`, que necesitan registrar los datos del idioma con `registerLocaleData`. Recomendación: (a), sin datos de idioma registrados, igual que el Number Input; el primer día de la semana según la trampa de arriba.
     - PENDIENTE DE DECIDIR: la cuadrícula (ver «Base técnica»).
-    - PENDIENTE DE DECIDIR: ¿Date Range es un componente aparte (`mimi-date-range`) o un modo del Date Picker? Si es un modo, entra en la «Convención de valor simple/múltiple» («Decisiones pendientes»). Recomendación: componente aparte (el diseño los muestra distintos: el rango tiene atajos y la cuenta de días), compartiendo el calendario por dentro.
+    - PENDIENTE DE DECIDIR: ¿Date Range es un componente aparte (`mimi-date-range`) o un modo del Date Picker? Si es un modo, sigue la convención de la spec 8, «Valor simple o múltiple». Recomendación: componente aparte (el diseño los muestra distintos: el rango tiene atajos y la cuenta de días), compartiendo el calendario por dentro.
     - PENDIENTE DE DECIDIR: ¿un `mimi-calendar` suelto (el calendario sin panel, como shadcn Calendar)? Recomendación: sí, es la pieza que usan los dos y no cuesta más API.
     - PENDIENTE DE DECIDIR: ¿se puede escribir la fecha a mano? El diseño usa un botón. Opciones: (a) solo el botón, como el diseño; (b) un campo para escribir con el calendario al lado (podría usar Input Mask, G2.4). Recomendación: (a) en la 0.3.0, y anotar (b) para más adelante.
     - PENDIENTE DE DECIDIR: en el rango, el valor mientras solo está elegido el inicio: ¿`{ start, end: null }` en el modelo (el formulario lo ve incompleto) o el modelo no cambia hasta tener los dos? Recomendación: no cambiar el modelo hasta tener los dos extremos (lo que se ve en el panel vive en Mimi).
     - PENDIENTE DE DECIDIR: ¿atajos por defecto en el rango (los seis del diseño) o solo los del usuario? Recomendación: solo los del usuario, con los del diseño en el ejemplo (dependen de qué es «hoy» y del negocio).
+    - PENDIENTE DE DECIDIR (al empezar esta tarea; viene de la G2.0): ¿una tabla de tokens para Date Picker y Date Range o dos? La G2.0 los deja juntos y marcados como provisionales. Recomendación: decidirlo junto con «¿Date Range es un componente aparte?»: si es aparte, dos tablas.
     - PENDIENTE DE DECIDIR (tamaño L): dividir en G2.9a «Calendario y Date Picker (una fecha: cuadrícula, teclado, idioma, vistas de meses y años, formularios)» y G2.9b «Date Range (rango, banda, atajos y cuenta de días)», con G2.9b dependiendo de G2.9a. Recomendación: dividir.
 - [ ] G2.10 Progress (barra y circular). Diseño: `F5 Estructura`.
   - v0.3.0 · Tamaño M · Depende de: G2.0, G2.0b · Bloquea: G2.11, G4.3
@@ -705,7 +713,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - PENDIENTE DE DECIDIR: implementación propia con el rol `progressbar`. Opciones: (a) un `div` con `role="progressbar"` y los `aria-value*` (como el diseño y el ejemplo de angular.dev); (b) el `<progress>` nativo, que no permite el círculo ni el estilo del diseño sin trucos. Recomendación: (a).
   - API pública propuesta (PENDIENTE DE DECIDIR en los nombres): `<mimi-progress [value] [max] [tone] [shape] [size] aria-label class>`. `value` `null` = indeterminado; `max` por defecto 100; `tone`: `primary` (por defecto), `success`, `warning`, `info` o `danger` (lista común de la spec 4; el diseño escribe `destructive`); `shape`: barra o círculo; `size` solo para el círculo (76px y 44px del diseño). `class` va al elemento con el rol. Estado: `data-state="determinate|indeterminate"`, `data-tone`.
   - Formularios: No aplica (no es un control).
-  - Tokens: tabla en la spec 13 (tarea G2.0). Usa los globales `--mimi-track` y `--mimi-track-fill`, que hoy no están en `theme-base.css` (ver la pregunta de la G2.0). Registrar en `theme/types.ts`, `COMPONENT_PREFIX` y `component-tokens.ts`; si la animación se registra como utilidad (como `animate-mimi-pulse` de Skeleton), también en `cn.ts` con su prueba.
+  - Tokens: tabla en la spec 13 (tarea G2.0). Usa los globales `--mimi-track` y `--mimi-track-fill`, que hoy no están en `theme-base.css` (los lleva la G2.0b), y el keyframe global `mimi-indet` (decidido el 03/11/2026: en `theme-base.css`, lo agrega la G2.0b; spec 13). Registrar en `theme/types.ts`, `COMPONENT_PREFIX` y `component-tokens.ts`; si la animación se registra como utilidad (como `animate-mimi-pulse` de Skeleton), también en `cn.ts` con su prueba.
   - Teclado y accesibilidad: no recibe el foco (no es interactivo). `aria-label` o `aria-labelledby` obligatorio, con aviso en desarrollo «[Mimi] Progress: …» si falta. `aria-valuenow` solo si es determinado; `aria-busy="true"` si es indeterminado (como el diseño). Movimiento reducido: la barra indeterminada «late» (la nota del diseño) y el círculo deja de girar (ver preguntas). **Anuncios (decidido el 03/11/2026):** Progress no anuncia nada por su cuenta: sin `aria-live` y sin `LiveAnnouncer`, ni en cada cambio de valor ni al llegar al 100 %. El valor se lee cuando el lector llega a la barra (`aria-valuenow`); el final de la tarea lo comunica la aplicación (por ejemplo, con un Toast, que sí anuncia, G1.8). Así una barra que avanza muchas veces por segundo no satura al lector. Se documenta en la página. En test: roles, atributos y el cambio a indeterminado. A mano: NVDA lee el nombre y el porcentaje.
   - Ejemplos del showcase: barra determinada (con botones − y +, como el diseño), barra indeterminada, los cuatro tonos, los círculos del diseño (determinado, `success`, `warning`, pequeño e indeterminado), con `class`, claro y oscuro, y movimiento reducido.
   - CLI: ítem `progress` en `registry.json`, con `utils/cn`; sin dependencias de npm ni `cssImports`; `x-prompt` de `ui/schema.json` y README de la CLI.
@@ -828,14 +836,125 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
     - PENDIENTE DE DECIDIR: ¿paleta por defecto (los 16 colores del diseño) o solo la del usuario (`swatches`)? Recomendación: solo la del usuario, con los del diseño en el ejemplo (una paleta por defecto serían colores fijos en el componente).
     - PENDIENTE DE DECIDIR: la paleta y los recientes, ¿cada muestra es una parada de Tab (el diseño) o un grupo con flechas (una parada)? Recomendación: un grupo con flechas (`FocusKeyManager`, como la G1.10): con 16 + 8 muestras, Tab pasaría por 24 botones.
 - [ ] 5.17 Revisión móvil componente por componente, después del Grupo 1: cómo se usa cada uno en pantallas chicas. Por ejemplo, en móvil el Select se abre como un panel flotante tipo modal en la parte superior, con buscador y más opciones visibles. mimi-toolbar (G1.10): una horizontal más ancha que la pantalla no se parte ni se achica; hoy el componente no hace nada y el ejemplo la pone en un contenedor con `overflow-x-auto` (los botones no se encogen).
-  - v0.3.0 · Tamaño L · Depende de: G2.1 a G2.12 (con G2.4a y G2.4b) · Bloquea: G2.P
+  - v0.3.0 · Tamaño L (propuesta de división en «Preguntas abiertas») · Depende de: G2.1 a G2.12 (con G2.4a y G2.4b) · Bloquea: G2.P
+  - Estado: —
+  - Leer antes: spec 4 (cada componente: «Táctil», «Scroll» y tamaños); spec 10, «Panel móvil» (el showcase en pantallas chicas); la G1.1 Popover, la G1.2 Tooltip, la G1.4 Context Menu y la G1.6 Dialog en `docs/historial/plan-grupo-1.md`; `docs/design/correcciones-pendientes.md` (Dialog: márgenes en pantallas chicas; Toast: ancho en móvil; Tabs: cuatro pestañas a 360px); WCAG 2.2, criterios 2.5.8 y 2.5.5 (abajo).
+  - Diseño: no hay diseños móviles de los componentes en `docs/design/` (los de Grupo 1 y 2 están dibujados en escritorio). Lo que se encuentre se anota en `correcciones-pendientes.md`.
+  - Objetivo: comprobar cómo se usa cada componente del Grupo 1 y del Grupo 2 en una pantalla de teléfono, con el dedo y el teclado virtual, y anotar qué se arregla ya, qué cambia la API y qué espera a otra versión.
+  - Alcance: incluye los componentes del Grupo 1 (G1.1 a G1.11) y del Grupo 2 (G2.1 a G2.12), con las comprobaciones de la lista de abajo y su resultado en la tabla. Los arreglos pequeños sin cambio de API (clases, márgenes, tamaños de objetivo) se hacen en esta tarea. NO incluye: los componentes básicos de la 0.1.0 (Button, Input, Checkbox, Switch…; ver preguntas), diseños móviles nuevos, los cambios de API (se anotan y se deciden aparte, ver preguntas), los Blocks.
+  - **Qué significa «revisar» (propuesta del usuario, 03/11/2026):** estas comprobaciones, en cada componente donde apliquen:
+    - **C1 · 360 px de ancho:** la página del componente y sus ejemplos en un viewport de 360 px: sin scroll horizontal de la página, sin contenido cortado, textos que se cortan con puntos suspensivos donde el diseño lo pide.
+    - **C2 · Tamaño del objetivo táctil.** Comprobado el 03/11/2026 en la guía de la W3C (Understanding WCAG 2.2):
+      - **2.5.8 Target Size (Minimum), nivel AA:** «The size of the target for pointer inputs is at least 24 by 24 CSS pixels», salvo estas excepciones: **Spacing** (un objetivo más chico vale si un círculo de 24 px centrado en él no toca otro objetivo ni el círculo de otro objetivo chico), **Equivalent** (la misma función está en otro control de la página que cumple), **Inline** (está en una frase o lo limita el alto de línea del texto), **User agent control** (el tamaño lo pone el navegador y el autor no lo cambia) y **Essential** (esa presentación es esencial o exigida por ley).
+      - **2.5.5 Target Size (Enhanced), nivel AAA:** «at least 44 by 44 CSS pixels», con las excepciones Equivalent (otro control de 44 × 44 en la página), Inline, User agent control y Essential (sin la de espaciado).
+      - Se mide cada objetivo (botones de quitar, X de cerrar, muestras, días, flechas, pulgares) y se anota el tamaño y si cumple 2.5.8 directo o por una excepción (cuál).
+    - **C3 · Paneles en pantallas pequeñas:** posición y tamaño del panel en 360 px (Select, Dropdown Menu, Context Menu, Popover, Date Picker y Date Range, Combobox, Color Picker): que no se salga de la pantalla (margen de 8 px, `MIMI_VIEWPORT_MARGIN`), que voltee si no cabe, que su alto deje ver lo necesario y que se pueda desplazar por dentro.
+    - **C4 · Teclado virtual:** al enfocar un campo (Input del formulario, buscador del Select, Combobox, Number Input, Input Mask, Input OTP, Tags Input, el campo del Color Picker), el teclado virtual no tapa el campo ni el panel abierto; el panel se reposiciona cuando cambia el alto visible.
+    - **C5 · Lo que depende del puntero:** nada importante queda solo en el hover. Tooltip no se muestra en táctil (spec 4, G1.2: «no hay hover y la pulsación larga choca con el sistema»): lo que diga un tooltip tiene que estar también en el nombre accesible o en el texto (por ejemplo, mimi-toolbar con solo íconos).
+    - **C6 · Pulsación larga del Context Menu:** spec 4 (G1.4): Mimi no tiene pulsación larga propia; Android dispara `contextmenu` y abre el menú; iOS no. Comprobar los dos y anotar el resultado en iOS (sin menú) como límite conocido o como cambio.
+    - **C7 · Arrastre:** Slider (pulgares) y Color Picker (área y tono) con el dedo: que arrastrar no desplace la página (`touch-action: none`) y que el pulgar siga al dedo. File Upload: en un teléfono no se arrastran archivos; la zona de soltar abre el selector del sistema.
+    - **C8 · Desplazamiento y bloqueo de scroll:** Dialog (y Confirm): con contenido largo, el cuerpo se desplaza y el encabezado y el pie quedan fijos (spec 4, G1.6); la página de atrás no se desplaza mientras está abierto (bloqueo de scroll del CDK, también en iOS); con el teclado virtual abierto, el botón de acción se alcanza.
+  - Cómo se comprueba: el modo de dispositivo de Chrome DevTools a 360 px para C1, C2 y C3, y al menos un teléfono Android y un iPhone reales para C4 a C8 (PENDIENTE DE DECIDIR cuáles; quién: el usuario, como la M.5).
+  - Tabla de resultados (se completa durante la tarea; las comprobaciones que aplican a cada componente son una propuesta):
+
+    | Componente           | Comprobaciones     | Resultado | Arreglo o anotación |
+    | -------------------- | ------------------ | --------- | ------------------- |
+    | Popover (G1.1)       | C1, C2, C3, C4     |           |                     |
+    | Tooltip (G1.2)       | C2, C5             |           |                     |
+    | Dropdown Menu (G1.3) | C1, C2, C3         |           |                     |
+    | Context Menu (G1.4)  | C2, C3, C6         |           |                     |
+    | Select (G1.5)        | C1, C2, C3, C4     |           |                     |
+    | Dialog (G1.6)        | C1, C2, C4, C8     |           |                     |
+    | Confirm (G1.7)       | C1, C2, C8         |           |                     |
+    | Toast (G1.8)         | C1, C2, C4         |           |                     |
+    | Tabs (G1.9)          | C1, C2             |           |                     |
+    | mimi-toolbar (G1.10) | C1, C2, C5         |           |                     |
+    | Pagination (G1.11)   | C1, C2, C3, C4     |           |                     |
+    | Toggle Group (G2.1)  | C1, C2             |           |                     |
+    | Number Input (G2.2)  | C1, C2, C4         |           |                     |
+    | Password (G2.3)      | C1, C2, C4         |           |                     |
+    | Input Mask (G2.4)    | C1, C4             |           |                     |
+    | Input OTP (G2.5)     | C1, C2, C4         |           |                     |
+    | Tags Input (G2.6)    | C1, C2, C4         |           |                     |
+    | Slider (G2.7)        | C1, C2, C7         |           |                     |
+    | Combobox (G2.8)      | C1, C2, C3, C4     |           |                     |
+    | Date Picker (G2.9)   | C1, C2, C3         |           |                     |
+    | Date Range (G2.9)    | C1, C2, C3         |           |                     |
+    | Progress (G2.10)     | C1                 |           |                     |
+    | File Upload (G2.11)  | C1, C2, C7         |           |                     |
+    | Color Picker (G2.12) | C1, C2, C3, C4, C7 |           |                     |
+
+  - Cuántos son: **24 filas** (11 del Grupo 1 y 13 del Grupo 2, con Date Picker y Date Range por separado) y **73 comprobaciones** en total según la tabla (35 del Grupo 1 y 38 del Grupo 2); 20 de ellas (C4 a C8) piden un teléfono real. Es más que una sesión de trabajo: ver la propuesta de división.
+  - Base técnica: no aplica (revisión). Si un arreglo necesita saber cuánto mide la parte visible con el teclado abierto, la API del navegador es `window.visualViewport`; comprobar al empezar qué hace ya el CDK Overlay con ella.
+  - API pública propuesta: no aplica; los cambios de API que salgan van a las preguntas.
+  - Formularios: no aplica (los formularios se prueban en cada tarea).
+  - Tokens: no aplica, salvo que un arreglo de tamaño de objetivo pida un token (se anota en la spec 13).
+  - Teclado y accesibilidad: es el objeto de la tarea (C2, C4, C5).
+  - Ejemplos del showcase: los existentes; si un ejemplo no cabe en 360 px por el ejemplo (no por el componente), se arregla el ejemplo.
+  - CLI: no aplica, salvo que un arreglo cambie un archivo de un componente: entonces, `registry.json` y las pruebas de la CLI.
+  - Textos: no aplica.
+  - Trampas conocidas:
+    - mimi-toolbar (G1.10): una horizontal más ancha que la pantalla no se parte ni se achica (lo dice la línea de arriba): decidir si se documenta o se cambia.
+    - El viewport de 360 px de DevTools no reproduce el teclado virtual ni el bloqueo de scroll de iOS: C4 y C8 solo valen en un teléfono real.
+    - Cambiar un tamaño de objetivo en un componente ya publicado (Grupo 1) es un cambio para quien lo copió: la CLI lo actualiza solo si no lo modificó (todo o nada, spec 5), y va en el CHANGELOG.
+  - Criterios de hecho:
+    - La tabla completa: cada fila con su resultado y, si no cumple, el arreglo hecho o la anotación (con el destino: esta versión, otra versión o `correcciones-pendientes.md`).
+    - C2: todos los objetivos cumplen 2.5.8 (directo o por una excepción anotada), según lo que se decida del nivel (ver preguntas).
+    - Los arreglos hechos, con sus pruebas (por ejemplo, el tamaño mínimo de un objetivo) y la spec 4 al día.
+    - Los cambios de API encontrados, en una lista con la decisión del usuario (antes de la 0.3.0 o después).
+    - `pnpm build`, `pnpm test` y `pnpm format:check` en verde; bundle: JS inicial y CSS global, crudo y gzip, antes y después (si hubo arreglos).
   - Dato de la G1.5: la API del Select no depende del overlay; un panel tipo hoja o modal se puede hacer después cambiando la estrategia de posición y las clases del panel, sin tocar entradas ni salidas.
-  - PENDIENTE DE DECIDIR: ¿qué cambios de API podría exigir la revisión (por ejemplo, el Select como panel modal en móvil), y alguno debe hacerse antes de la 0.3.0?
+  - Preguntas abiertas:
+    - PENDIENTE DE DECIDIR: ¿qué cambios de API podría exigir la revisión (por ejemplo, el Select como panel modal en móvil), y alguno debe hacerse antes de la 0.3.0 o va a una versión siguiente? Se decide con la lista del criterio de hecho.
+    - PENDIENTE DE DECIDIR: el nivel del tamaño de objetivo: ¿2.5.8 (AA, 24 × 24) como obligatorio y 2.5.5 (AAA, 44 × 44) como recomendación, o 2.5.5 obligatorio? Recomendación: 2.5.8 obligatorio (es el nivel AA que Mimi sigue en contraste) y anotar dónde no se llega a 44.
+    - PENDIENTE DE DECIDIR: ¿qué teléfonos reales (Android e iPhone, con qué navegador) y quién los prueba?
+    - PENDIENTE DE DECIDIR: ¿se suman los componentes básicos de la 0.1.0 (por ejemplo, el tamaño del objetivo de Checkbox, Switch y Button pequeño)? Recomendación: solo C1 y C2 para ellos, en una fila cada uno.
+    - PENDIENTE DE DECIDIR (tamaño L): dividir en 5.17a «Revisión móvil del Grupo 1» (11 componentes publicados en la 0.2.0; no depende del Grupo 2 y se puede hacer antes) y 5.17b «Revisión móvil del Grupo 2» (13, después de G2.12). Recomendación: dividir, y hacer la 5.17a pronto: sus cambios de API, si los hay, llegan a tiempo para la 0.3.0.
 - [ ] G2.P Puerta del Grupo 2 (v0.3.0): la lista de «Puerta del grupo» de «Cómo usar este plan», más:
-  - CHANGELOG de la 0.3.0: explicar los tokens globales nuevos del Grupo 2 (G2.0b), que los componentes funcionan con un tema que no los tenga (usan valor de respaldo) y que, si el usuario modificó su tema, la CLI no lo actualiza y solo avisa.
-  - Revisar la decisión de los Blocks (todos en la v0.4.0, con el Grupo 3; spec 4, «Blocks»).
-  - Revisar con la respuesta real de los usuarios a la 0.2.0 si algo del Grupo 5 sube de prioridad.
-  - Depende de: G2.0, G2.0b, G2.1 a G2.12 (con G2.4a y G2.4b), 5.2, 5.17
+  - v0.3.0 · Tamaño L (cierre del grupo y preparación de la release) · Depende de: G2.0, G2.0b, G2.1 a G2.12 (con G2.4a y G2.4b), 5.2, 5.17 · Bloquea: G3.1, G3.2, G3.3, G3.4, B.1 (el Grupo 3 y los Blocks dependen de esta puerta)
+  - Estado: —
+  - Leer antes: «Puerta del grupo» en «Cómo usar este plan» (los nueve puntos generales); la G1.12 y la publicación de la 0.2.0 en `docs/historial/plan-grupo-1.md` (el precedente: CHANGELOG, pruebas reales con el `.tgz`, Fundamentos); spec 5 («Qué hace `mimi`»: todo o nada, el tema modificado solo avisa); spec 10 («Grupo 2: medir primero»); spec 12 (política de versiones y compatibilidad); «Decididas» en «Decisiones pendientes».
+  - Diseño: no aplica (salvo D6).
+  - Objetivo: dejar el Grupo 2 listo para publicar la 0.3.0: documentación, CHANGELOG, pruebas reales de la CLI, presupuestos y decisiones de grupo revisadas, y el texto del grupo en el historial.
+  - Alcance: los nueve puntos de la puerta general y lo específico del Grupo 2 (abajo). NO incluye publicar: `npm publish`, la etiqueta, la release de GitHub y el despliegue los hace el usuario (CLAUDE.md).
+  - Lo específico del Grupo 2 (además de la puerta general):
+    - **CHANGELOG de la 0.3.0**, con la sección «Cómo actualizar desde la 0.2.0»: los componentes nuevos; los tokens globales nuevos del tema (G2.0b) y el keyframe `mimi-indet`; que los componentes funcionan con un tema que no los tenga (usan valor de respaldo); que, si el usuario modificó su tema (`theme-base.css`), la CLI no lo actualiza y solo avisa, y qué copiar a mano; los ítems internos nuevos (`chip` y las utilidades de lista del Combobox); lo que cambie en componentes ya publicados por la 5.17 (por ejemplo, tamaños de objetivo), y si la M.9 (Select con las utilidades nuevas) entra en esta versión o no.
+    - **Tabla acumulada del CSS global y del `initial`**, crudo y gzip, una fila por componente del grupo (de los informes de bundle de cada tarea), desde la medición de partida del 03/11/2026 (CSS global 120,08 / 17,67 kB; JS inicial 333,94 / 105,24 kB; `initial` 454,02 kB). Si el CSS global o el `initial` quedan cerca del error (145 kB y 505 kB), el usuario decide con esta tabla y el gzip real (spec 10, «Grupo 2: medir primero»).
+    - **Convención de valor simple/múltiple** (spec 8, «Valor simple o múltiple»): el resultado del spike de la G2.1 anotado en la spec 8; G2.1, G2.7 y G2.8 con la misma forma (la opción (a) o, si el spike falló, la (c)); el nombre del modo de rango del Slider en la spec 4.
+    - **Grupo 5:** revisar, con la respuesta real de los usuarios a la 0.2.0 (issues, descargas, comentarios: lo que el usuario traiga), si algo del Grupo 5 sube de prioridad.
+    - **Blocks:** decidir si la 0.4.0 con el Grupo 3 y todos los Blocks sigue siendo demasiado grande (spec 4, «Blocks»; «Decisiones pendientes»).
+    - **Pruebas reales con el `.tgz` en 4 escenarios** (punto 5 de la puerta): npm nuevo, pnpm nuevo, actualización desde la 0.2.0 sin cambios y con un archivo modificado (también con el `theme-base.css` modificado: la CLI solo avisa), con los proyectos en una ruta corta en Windows.
+    - **Fundamentos y los conteos:** `FOUNDATION_PACKAGES` y la tabla de paquetes de Fundamentos, `INTRODUCTION_COMPONENTS` de Introducción, la landing, el README de la CLI (lista de componentes) y el `x-prompt` de `packages/cli/src/ui/schema.json`; cada lugar que diga cuántos componentes hay, con el número que dé el catálogo de la spec 4 al cerrar el grupo.
+    - **D6 al día:** `docs/design/correcciones-pendientes.md` con un apartado por cada componente del Grupo 2 y lo que encontró la 5.17.
+    - **Checklist de release que hace el usuario** (punto 9 de la puerta): Mimi deja escritos los comandos (`npm publish`, etiqueta `v0.3.0`, release de GitHub, despliegue, prueba desde npm); el usuario los ejecuta.
+    - **Mover el grupo al historial** (al terminar): el texto completo de las tareas del Grupo 2, de la 5.2, de la 5.17 y de esta puerta, y la sección «Decididas (03/11/2026)» de «Decisiones pendientes», pasan a `docs/historial/plan-grupo-2.md`; en «Terminado» queda una línea por tarea; se actualiza la línea «Historial» de «Cómo usar este plan».
+  - Base técnica: no aplica.
+  - API pública propuesta: no aplica.
+  - Formularios: no aplica.
+  - Tokens: spec 13 completa con las tablas del grupo (punto 1 de la puerta).
+  - Teclado y accesibilidad: lo de cada tarea; si hubo una pasada con NVDA (M.5) o con teléfonos (5.17), anotarla en la sección de accesibilidad de Fundamentos.
+  - Ejemplos del showcase: no aplica (los de cada componente).
+  - CLI: `registry.json` y pruebas de la CLI (punto 4); los 4 escenarios.
+  - Textos: no aplica.
+  - Trampas conocidas:
+    - La ruta larga en Windows rompió `ng serve` con pnpm en la 0.2.0 (límite de 260 caracteres): proyectos de prueba en una ruta corta.
+    - El conteo de componentes aparece en varios sitios (Introducción, landing, README, `x-prompt`): si se olvida uno, quedan distintos.
+    - El historial no se edita después de escrito (CLAUDE.md): mover el texto del grupo es lo último, cuando todo lo demás está hecho.
+  - Criterios de hecho:
+    - Los nueve puntos de la puerta general hechos.
+    - CHANGELOG 0.3.0 con «Cómo actualizar desde la 0.2.0» y la nota de los tokens del tema.
+    - La tabla acumulada del CSS global y del `initial` en esta tarea (o en la spec 10), con la decisión del usuario si algún componente quedó cerca del error.
+    - El resultado del spike de la convención de valor en la spec 8, y las tres tareas con la misma forma.
+    - Grupo 5 y Blocks revisados, con la decisión del usuario anotada en «Decisiones pendientes».
+    - Los 4 escenarios probados con el `.tgz`, con el resultado anotado.
+    - Fundamentos, Introducción, landing, README y `x-prompt` al día y con el mismo conteo.
+    - D6 al día.
+    - Los comandos del checklist de release escritos para el usuario.
+    - El Grupo 2 movido a `docs/historial/plan-grupo-2.md` y una línea por tarea en «Terminado».
+    - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
+  - Preguntas abiertas:
+    - PENDIENTE DE DECIDIR: ¿la M.9 (Select con las utilidades de lista del Combobox) entra en la 0.3.0 o en una versión siguiente? Recomendación: la siguiente, como dice su origen (Select no se toca en la 0.3.0).
+    - PENDIENTE DE DECIDIR: ¿dónde queda la tabla acumulada del CSS: en esta tarea (y luego en el historial) o en la spec 10, junto a la historia de los presupuestos? Recomendación: un resumen en la spec 10 (antes y después del grupo) y la tabla completa en el historial.
 
 ## Grupo 3 y Blocks → v0.4.0: datos y pantallas
 
@@ -958,39 +1077,38 @@ Cambios que rompen, acumulados para la 1.0 (spec, sección 12, «Compatibilidad 
 
 ## Decisiones pendientes
 
-Solo las abiertas. Las ya tomadas están en `docs/historial/decisiones.md` y en la spec.
+Primero las abiertas. Debajo, «Decididas», las del Grupo 2 tomadas hace poco (hasta que la G2.P las lleve a `docs/historial/plan-grupo-2.md`). Las anteriores están en `docs/historial/decisiones.md` y en la spec.
 
 - [ ] Grupo 5: el criterio «según lo que pidan los usuarios» sigue abierto (antes, «se prioriza después de la 0.2.0»). Se revisa en la G2.P; la versión se decide en la G4.P.
 - [ ] Blocks: todos en la v0.4.0, con el Grupo 3 (decidido el 03/11/2026). Se revisa en la G2.P.
 - [ ] Versión de Mimi Effects: se decide en la G4.P.
 - [ ] CLI y cdk anterior a `^22.2.0`: avisar o actualizar (ver M.4).
 - [ ] Cambios de API que pueda exigir la revisión móvil (ver 5.17).
-- [ ] **Convención de valor simple/múltiple** (afecta a G2.1 Toggle Group, G2.7 Slider y G2.8 Combobox; se decide antes de empezar G2.1). PENDIENTE DE DECIDIR: cómo se tipa `[(value)]` cuando un componente tiene dos modos: Toggle Group simple (`T | null`) o múltiple (`T[]`); Slider de un valor (`number`) o de rango (`[number, number]`); Combobox simple (`T | null`) o múltiple (`T[]`). Datos comprobados: según la spec 8 y angular.dev (guide/forms/signals/custom-controls), un control propio implementa `FormValueControl` y `[formField]` enlaza su `value` (model); la misma guía dice que esos controles funcionan con Reactive Forms y formularios de plantilla sin código extra. El modo múltiple se llama `multiple` (decidido el 03/11/2026, G2.1 y G2.8); en el Slider, el nombre del modo de rango es parte de esta decisión.
-  - (a) Un solo `value` cuyo tipo cambia con el modo (unión, o genérico según `multiple`/rango). Signal Forms: `[formField]` enlaza `value` en los dos modos; hay que comprobar con un spike si TypeScript acepta un campo `Field<T>` o `Field<T[]>` contra una unión, o si exige el tipo exacto. `ngModel` y `formControlName`: funcionan (la plantilla no comprueba el tipo). Riesgo: en múltiple, un valor que no es arreglo (por ejemplo, `null`) hay que tratarlo como `[]`.
-  - (b) Dos modelos: `value` (simple) y `values` (múltiple o rango). Signal Forms: `[formField]` solo enlaza `value`, así que el modo múltiple quedaría fuera; `ngModel` y `formControlName`: igual. Descartada en la práctica.
-  - (c) Dos selectores o componentes por modo (por ejemplo, `mimi-toggle-group` y `mimi-toggle-group[multiple]` como directivas distintas, o `mimi-slider` y `mimi-range-slider`), con el código compartido por dentro. Signal Forms, `ngModel` y `formControlName`: cada uno con su tipo exacto, sin uniones. Costo: más API y dos tablas en cada página.
-  - (d) Siempre arreglo (`T[]` también en simple; `[number]` en el Slider de un valor). Signal Forms y los demás: un solo tipo exacto. Costo: incómodo para el caso más común (el usuario quiere `T`, no `[T]`), y distinto de Select (G1.5, `T | null`).
-  - Recomendación: (a), con un spike corto de Signal Forms al empezar G2.1 (un campo `T` y otro `T[]` contra el mismo componente); si TypeScript no acepta la unión con `[formField]`, (c). Lo que se decida vale para las tres tareas.
-- [ ] **CSS global e `initial` por encima del aviso** (afecta a todo el Grupo 2; se decide antes de empezar el grupo). La estimación de la G2.0b da unos 164 kB crudo de CSS global y unos 498 kB de `initial` al cerrar el grupo, por encima de los avisos (130 kB y 475 kB) de la spec 10. El budget `initial` suma el JS inicial y el CSS global (spec 10, «Regla del `initial`»), así que el CSS lo arrastra. Los presupuestos son del **sitio de documentación**, no de los usuarios de Mimi: un proyecto que copia componentes solo genera el CSS de esos componentes.
-  - Política propuesta por el usuario (03/11/2026), PENDIENTE DE DECIDIR los números: se mide el **gzip real** del CSS global en cada tarea. Si se mantiene bajo un límite de gzip (a definir con las mediciones; el usuario dio como ejemplo «menos de 30 kB»), se suben los techos del CSS global **y** del `initial` (con la misma regla de la spec 10: el `initial` es la suma de los techos del JS inicial y del CSS global), con la justificación escrita en la spec 10. Si el gzip pasa ese límite, se reduce el CSS antes de subir nada (por ejemplo, revisar clases repetidas o valores arbitrarios que generan una regla cada uno, o separar el CSS de las páginas internas del showcase).
-  - Los números (límite de gzip y techos nuevos) los decide el usuario con las mediciones; el plan no los propone (CLAUDE.md: «Ningún presupuesto se sube sin que lo decida el usuario»).
-  - Cómo se mide: el informe de `pnpm build:docs` de cada tarea (`check-initial-js.mjs` da el JS inicial y el CSS global, crudo y gzip; el `initial` es su suma en crudo), una tabla acumulada en la G2.P y, si un aviso salta, la lista de las reglas que más pesan en el CSS generado. Medición de partida (03/11/2026): CSS global 120,08 / 17,67 kB, JS inicial 333,94 / 105,24 kB (crudo / gzip), `initial` 454,02 kB.
+
+### Decididas (03/11/2026)
+
+Decisiones tomadas por el usuario el 03/11/2026 sobre preguntas que estaban aquí o en las tareas del Grupo 2. Cada una queda escrita en su tarea; las que siguen vigentes como regla, en la spec. Pasan al historial al cerrar el grupo (G2.P), con el texto de las tareas del grupo (`docs/historial/plan-grupo-2.md`).
+
+- [x] **Convención de valor simple/múltiple** (G2.1, G2.7 y G2.8). Decidió el usuario: opción (a), un solo `value` cuyo tipo cambia con el modo, con un spike de Signal Forms al empezar G2.1 (un campo `T` y otro `T[]` contra el mismo componente); si TypeScript no acepta la unión con `[formField]`, opción (c), dos selectores. El nombre del modo de rango del Slider se propone al empezar G2.7, dentro de la misma convención. Vive en la spec 8, «Valor simple o múltiple». Descartadas: (b) `value` y `values` (`[formField]` solo enlaza `value`) y (d) siempre arreglo (incómodo en simple y distinto de Select).
+- [x] **Presupuesto del CSS global y del `initial` en el Grupo 2.** Decidió el usuario: medir primero y no subir ningún presupuesto ahora. El aviso (CSS global 130 kB, `initial` 475 kB) no rompe el build; solo el error (145 kB y 505 kB) lo rompe. Cuando un componente deje el CSS global cerca del error, el usuario decide con la tabla acumulada de la G2.P y el gzip real. Ningún presupuesto se sube sin su decisión. Vive en la spec 10, «Grupo 2: medir primero». Datos de partida (03/11/2026, `pnpm build:docs`): CSS global 120,08 / 17,67 kB, JS inicial 333,94 / 105,24 kB (crudo / gzip), `initial` 454,02 kB; estimación al cerrar el grupo: unos 164 kB de CSS global y unos 498 kB de `initial` (G2.0b). La política que el usuario propuso en la tanda D (subir los techos si el gzip se mantiene bajo) queda para cuando se llegue cerca del error, con los números reales.
+- [x] **Globales del Grupo 2 por preset** (G2.0b). Decidió el usuario: ningún global nuevo va por preset; todos solo en el CSS.
+- [x] **`mimi-indet`** (G2.0 y G2.10). Decidió el usuario: global, en `theme-base.css`, como `mimi-caret`, `mimi-bob` y `mimi-shake`; entra en el alcance de la G2.0b. Vive en la spec 13, «Otros globales del diseño».
+- [x] **Chip compartido** (G2.6 y G2.8). Decidió el usuario: un ítem `chip` de la CLI (como `menu`), que crea la G2.6 y usan Tags Input y el Combobox múltiple.
+- [x] **Combobox y Select** (G2.8). Decidió el usuario: el Combobox usa utilidades nuevas (filtro, resaltado y lista); Select no se toca en la 0.3.0; la M.9 lo migra después.
+- [x] **Combobox y Tags Input** (G2.6 y G2.8). Decidió el usuario: se comparten el chip y su lógica de quitar (Backspace y botón), en el ítem `chip`; los anuncios, con un util pequeño que usan los dos.
+- No decidida a propósito: las tablas de tokens de Date Picker y Date Range (¿una o dos?) quedan para el inicio de la G2.9 (pregunta de la G2.0).
 
 ### Índice de lo que está «PENDIENTE DE DECIDIR»
 
-Una línea por pregunta, con la tarea donde está escrita completa (opciones y recomendación). Se actualiza al terminar cada tanda del plan y cada vez que se decide algo (la línea se borra y la decisión queda en su tarea con la fecha). Al 03/11/2026 (tanda D): 74 preguntas (51 de la tanda C, menos la contradicción del Slider con Tooltip, ya decidida, más 10 de G2.9, 5 de G2.11 y 9 de G2.12; la pregunta del Combobox sobre Select se decidió y la reemplaza otra sobre dónde viven las utilidades nuevas). No cuenta las referencias «la base técnica (ver arriba)» ni «PENDIENTE DE DECIDIR en preguntas», que remiten a otra de la lista.
+Una línea por pregunta, con la tarea donde está escrita completa (opciones y recomendación). Se actualiza al terminar cada tanda del plan y cada vez que se decide algo (la línea se borra y la decisión queda en su tarea con la fecha). Al 03/11/2026 (tanda E): 75 preguntas, 71 en (b) y 4 en (c). Cuentas: la tanda D dejó 74; el usuario decidió cinco (convención de valor, globales por preset, `mimi-indet`, chip compartido y lo que se comparte con Tags Input; ver «Decididas»), y la tanda E suma cuatro de la 5.17 y dos de la G2.P. La pregunta de las tablas de tokens de Date Picker pasó de (a) a (b), al inicio de la G2.9, y la del presupuesto, de (a) a (c), para cuando un componente se acerque al error. No cuenta las referencias «la base técnica (ver arriba)» ni «PENDIENTE DE DECIDIR en preguntas», que remiten a otra de la lista.
 
 **(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
 
-- Decisiones pendientes: convención de valor simple/múltiple: cómo se tipa `[(value)]` con dos modos (G2.1, G2.7, G2.8; antes de G2.1).
-- Decisiones pendientes: los números de la política del presupuesto (límite de gzip del CSS global y techos nuevos del CSS global y del `initial`), con las mediciones (antes del Grupo 2).
-- G2.0b: ¿algún global nuevo va por preset (`MimiThemePreset`) o todos solo en el CSS?
-- G2.0: ¿el keyframe `mimi-indet` de Progress es global (spec 13) o queda dentro de Progress?
-- G2.0: Date Picker y Date Range, ¿una tabla de tokens o dos?
-- G2.6 (y G2.8): ¿el chip es una pieza compartida (ítem de la CLI) entre Tags Input y el Combobox múltiple?
-- G2.8: qué se comparte con Tags Input (chip, Backspace y anuncios).
+- Ninguna por ahora: las siete compartidas se decidieron el 03/11/2026 (ver «Decididas»).
 
 **(b) Se deciden al empezar su tarea.**
+
+- G2.9 (pregunta escrita en la G2.0): Date Picker y Date Range, ¿una tabla de tokens o dos? (el usuario la dejó para el inicio de la G2.9).
 
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
 - G2.1: base técnica del foco itinerante (`FocusKeyManager` del CDK o `ngToolbarWidgetGroup` de aria).
@@ -1056,11 +1174,18 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 - G2.12: el borde y las sombras fijos de los pulgares: ¿excepción documentada o tokens del componente?
 - G2.12: ¿paleta por defecto o solo la del usuario?
 - G2.12: la paleta y los recientes, ¿una parada de Tab por muestra o un grupo con flechas?
+- 5.17: el nivel del tamaño de objetivo (2.5.8 AA obligatorio o 2.5.5 AAA).
+- 5.17: qué teléfonos reales y quién los prueba.
+- 5.17: ¿se suman los componentes básicos de la 0.1.0?
+- 5.17: ¿dividir en 5.17a (Grupo 1) y 5.17b (Grupo 2)?
+- G2.P: ¿la M.9 entra en la 0.3.0 o en una versión siguiente?
+- G2.P: ¿dónde queda la tabla acumulada del CSS (esta tarea e historial, o la spec 10)?
 
 **(c) Se deciden solo si se llega a esa parte.**
 
 - G2.1: ¿Toggle Group dentro de mimi-toolbar? (solo si la toolbar llega a tener grupos con nombre).
 - G2.7: distancia mínima entre pulgares, ¿entrada `minRange` o validador del formulario? (solo con el rango doble).
+- Grupo 2 (cualquier tarea o la G2.P): si un componente deja el CSS global cerca del error (145 kB) o el `initial` cerca de 505 kB, qué se hace (reducir o subir un techo); decide el usuario con la tabla acumulada y el gzip real (spec 10, «Grupo 2: medir primero»).
 - 5.17: ¿qué cambios de API exige la revisión móvil y alguno va antes de la 0.3.0? (solo si la revisión los encuentra).
 
 ## Terminado
