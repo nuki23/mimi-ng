@@ -41,9 +41,9 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 | ---------------------- | ----------------- | -------------------------------------------------------------------------------------------- |
 | Node.js                | 24.15.0           | Angular 22 exige `^22.22.3 \|\| ^24.15.0 \|\| ^26.0.0`                                       |
 | pnpm                   | 12.5.1            | Fijada en `packageManager` del `package.json` raíz                                           |
-| Angular (framework)    | 22.2.3            | `@angular/core`, `common`, `compiler`, `compiler-cli`, `forms`, `platform-browser`, `router` |
-| Angular (herramientas) | 22.2.3            | `@angular/cli`, `@angular/build` (se versionan aparte del framework)                         |
-| Angular CDK y Aria     | 22.2.3            | `@angular/cdk`, `@angular/aria` (aria exige la misma versión exacta que cdk)                 |
+| Angular (framework)    | 22.2.4            | `@angular/core`, `common`, `compiler`, `compiler-cli`, `forms`, `platform-browser`, `router` |
+| Angular (herramientas) | 22.2.4            | `@angular/cli`, `@angular/build` (se versionan aparte del framework)                         |
+| Angular CDK y Aria     | 22.2.4            | `@angular/cdk`, `@angular/aria` (aria exige la misma versión exacta que cdk)                 |
 | TypeScript             | 6.0.3             | Angular 22 exige `>=6.0.0 <6.1.0`                                                            |
 | Tailwind CSS           | 4.3.3             | Con `@tailwindcss/postcss`                                                                   |
 | Vitest                 | 4.1.11            | Pruebas de docs y ui-core con `ng test` (con jsdom)                                          |
@@ -53,6 +53,8 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 El showcase se despliega con wrangler 4 (`npx wrangler@4 deploy`, sin instalarlo como dependencia) y Node 24.18.0 (`.node-version`); ver sección 10, «Despliegue».
 
 pnpm 11+ bloquea los scripts de instalación: los autorizados están en `allowBuilds` de `pnpm-workspace.yaml` (`@parcel/watcher`, `esbuild`, `lmdb`, `msgpackr-extract`).
+
+**Versiones de Angular fijas (M.2, 05/11/2026).** Todos los `@angular/*` del `package.json` raíz van en una versión exacta (sin `^`): la mayor que core, cdk, aria, cli y build tienen en común (`npm view <paquete> version`). Con `^`, `pnpm dedupe` sube cdk, aria, cli y build a su última versión (22.2.6 y 22.2.5 el 05/11/2026) y deja a aria y cdk por delante de core. `@angular-devkit/core`, `@angular-devkit/schematics` y `@schematics/angular` siguen a `@angular/cli` con `overrides` en `pnpm-workspace.yaml`, porque `packages/cli` los declara con `^22.0.0` (el rango que se publica, que no cambia). Al subir Angular se cambian los dos sitios.
 
 ## 3. Estructura del monorepo
 

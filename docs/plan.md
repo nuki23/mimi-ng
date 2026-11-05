@@ -85,7 +85,7 @@ Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propia: salen en la siguiente versión que se publique.
 
 - [ ] M.1 Confirm con acción asíncrona · sin versión · — · depende: G1.6, G1.7 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.2 Alinear Angular en la 22.2.x · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.2 Alinear Angular en la 22.2.x · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.3 Revisar rodeos con aria 22.2 · sin versión · — · depende: M.2 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.4 Aviso de la CLI con un cdk anterior a `^22.2.0` · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.5 Pasada con NVDA por los componentes con overlays · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
