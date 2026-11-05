@@ -27,3 +27,4 @@ export * from './lib/components/tabs';
 export * from './lib/components/toolbar';
 export * from './lib/components/pagination';
 export * from './lib/components/toggle-group';
+export * from './lib/components/progress';

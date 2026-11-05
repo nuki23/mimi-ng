@@ -376,6 +376,18 @@ export interface MimiToggleGroupTokens {
 }
 
 /**
+ * Progress. La pista y la parte llena van en el CSS (`--mimi-progress-track`, `-fill`).
+ */
+export interface MimiProgressTokens {
+  /** Grosor de la barra (8px). */
+  height?: string;
+  /** Tamaño del círculo `default` (76px). */
+  circleSize?: string;
+  /** Grosor del trazo del círculo `default`, en unidades del viewBox de 36 (3). */
+  circleWidth?: string | number;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -402,6 +414,7 @@ export interface MimiComponentTokens {
   toolbar?: MimiToolbarTokens;
   pagination?: MimiPaginationTokens;
   toggleGroup?: MimiToggleGroupTokens;
+  progress?: MimiProgressTokens;
 }
 
 export interface MimiThemePreset {

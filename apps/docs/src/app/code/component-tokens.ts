@@ -39,7 +39,8 @@ export type TokenComponent =
   | 'tabs'
   | 'toolbar'
   | 'pagination'
-  | 'toggleGroup';
+  | 'toggleGroup'
+  | 'progress';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -65,6 +66,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   toolbar: 'toolbar',
   pagination: 'pagination',
   toggleGroup: 'toggle-group',
+  progress: 'progress',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1150,6 +1152,40 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-shadow-neutral',
       preset: false,
       description: 'Sombra del indicador y de cada elegido.',
+    },
+  ],
+  progress: [
+    {
+      name: '--mimi-progress-height',
+      default: '8px',
+      preset: true,
+      description: 'Grosor de la barra.',
+    },
+    {
+      name: '--mimi-progress-circle-size',
+      default: '76px',
+      preset: true,
+      description: 'Tamaño del círculo (el sm mide 44px).',
+    },
+    {
+      name: '--mimi-progress-circle-width',
+      default: '3',
+      preset: true,
+      description: 'Grosor del trazo del círculo, en unidades del viewBox de 36 (el sm usa 4).',
+    },
+    {
+      name: '--mimi-progress-track',
+      default: 'track',
+      inherits: '--mimi-track',
+      preset: false,
+      description: 'Pista (la parte vacía).',
+    },
+    {
+      name: '--mimi-progress-fill',
+      default: 'primary',
+      inherits: '--mimi-primary',
+      preset: false,
+      description: 'Parte llena con el tono primary (los otros tonos usan su color).',
     },
   ],
 };

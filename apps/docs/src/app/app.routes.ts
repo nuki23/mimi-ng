@@ -120,6 +120,12 @@ export const routes: Routes = [
           import('./pages/docs/components/toolbar/toolbar-page').then((m) => m.ToolbarPage),
       },
       {
+        path: 'components/progress',
+        title: 'Progress · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/progress/progress-page').then((m) => m.ProgressPage),
+      },
+      {
         path: 'components/toggle-group',
         title: 'Toggle Group · Mimi',
         loadComponent: () =>

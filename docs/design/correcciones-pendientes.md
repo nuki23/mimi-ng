@@ -103,3 +103,10 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **`solid` en simple:** el diseño solo la muestra en múltiple. En simple, Mimi pinta el indicador en `primary` con el texto en `primary-foreground`.
   - **Múltiple:** el diseño usa columnas del ancho de cada botón (`auto`) solo en «Texto e ícono»; Mimi lo hace así en todo grupo múltiple (no hay indicador que necesite columnas iguales). En simple, columnas iguales (el ancho del botón más ancho).
   - **Foco visible:** el diseño no lo muestra. Mimi usa el contorno `ring` de los botones (2px, separado 2px).
+
+  Progress (G2.10):
+  - **Movimiento reducido:** el diseño dice que la barra indeterminada «late» pero no cómo. Mimi la pone a ancho completo con `mimi-pulse` (1,6 s). El círculo indeterminado también late (el diseño no lo dice).
+  - **Barra de tonos de 6px:** en el diseño es otra altura; en Mimi se hace con `class="h-1.5"` (sin tamaño ni token propio).
+  - **Círculo pequeño:** 44px, trazo 4 y texto de 11px sin token (el grande sí tiene `--mimi-progress-circle-size` y `-width`).
+  - **Valor del círculo pequeño:** el diseño muestra «40» sin el signo; Mimi también lo quita en `sm`.
+  - **RTL:** la barra indeterminada cruza de derecha a izquierda (`rtl:-scale-x-100`); el diseño no muestra RTL.

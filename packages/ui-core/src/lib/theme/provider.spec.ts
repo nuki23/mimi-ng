@@ -349,6 +349,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           fontSize: '14px',
           spring: 'ease',
         },
+        progress: { height: '6px', circleSize: '64px', circleWidth: 4 },
       },
     });
     for (const line of [
@@ -419,6 +420,9 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-toggle-group-icon-width: 40px;',
       '--mimi-toggle-group-font-size: 14px;',
       '--mimi-toggle-group-spring: ease;',
+      '--mimi-progress-height: 6px;',
+      '--mimi-progress-circle-size: 64px;',
+      '--mimi-progress-circle-width: 4;',
     ]) {
       expect(css).toContain(line);
     }

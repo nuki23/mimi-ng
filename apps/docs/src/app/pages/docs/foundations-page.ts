@@ -15,6 +15,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   badge: [],
   button: [],
   card: [],
+  progress: [],
   separator: [],
   skeleton: [],
   input: ['forms'],

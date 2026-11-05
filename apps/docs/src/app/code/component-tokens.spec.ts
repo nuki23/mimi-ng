@@ -37,6 +37,7 @@ const FOLDER: Record<TokenComponent, string> = {
   toolbar: 'toolbar',
   pagination: 'pagination',
   toggleGroup: 'toggle-group',
+  progress: 'progress',
 };
 
 /**

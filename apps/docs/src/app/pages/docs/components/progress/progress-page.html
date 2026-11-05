@@ -1,0 +1,121 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Progress</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    El avance de una tarea, determinado o indeterminado, en barra o en círculo.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="progress" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="bar" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Barra</h3>
+  <p class="text-pretty">
+    El texto y el valor de arriba son tuyos; la barra los toma como nombre con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-labelledby</code>.
+  </p>
+  <app-code-preview [code]="source.bar">
+    <app-progress-bar-example />
+  </app-code-preview>
+
+  <h3 id="indeterminate" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Indeterminada</h3>
+  <p class="text-pretty">
+    Sin <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">value</code>, un
+    tramo cruza la barra. Con «reducir movimiento», la barra late en lugar de desplazarse.
+  </p>
+  <app-code-preview [code]="source.indeterminate">
+    <app-progress-indeterminate-example />
+  </app-code-preview>
+
+  <h3 id="tones" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tonos</h3>
+  <app-code-preview [code]="source.tones">
+    <app-progress-tones-example />
+  </app-code-preview>
+
+  <h3 id="circle" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Círculo</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">shape="circle"</code>
+    muestra el valor dentro;
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">size="sm"</code> mide
+    44px. El indeterminado gira (con «reducir movimiento», late).
+  </p>
+  <app-code-preview [code]="source.circle">
+    <app-progress-circle-example />
+  </app-code-preview>
+
+  <h3 id="custom" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Personalizar con class</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> va al
+    elemento con el rol (la pista o el círculo) y gana. Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">max</code>, el valor
+    puede ser cualquier escala (7 de 12).
+  </p>
+  <app-code-preview [code]="source.custom">
+    <app-progress-custom-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Accesibilidad</h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >role="progressbar"</code
+      >
+      con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-valuemin</code>,
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-valuemax</code>
+      y, si es determinado,
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-valuenow</code>;
+      el indeterminado lleva
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-busy="true"</code
+      >. No recibe el foco.
+    </li>
+    <li>
+      <strong>No anuncia los cambios:</strong> el lector lee el valor cuando llega a la barra. Si la
+      tarea termina o falla, avísalo tú (por ejemplo, con un Toast). Así una barra que avanza muchas
+      veces por segundo no satura al lector.
+    </li>
+    <li>Con «reducir movimiento», el indeterminado late y el avance no se anima.</li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Entrada</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    Estado en atributos:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >data-state="determinate|indeterminate"</code
+    >, <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-tone</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-shape</code> y, en
+    el círculo,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-size</code>.
+  </p>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="progress" />
+</article>

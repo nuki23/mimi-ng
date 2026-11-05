@@ -164,6 +164,11 @@
       },
       "registryDependencies": ["button", "input", "select", "utils/cn"]
     },
+    "progress": {
+      "type": "component",
+      "files": ["components/progress/progress.ts", "components/progress/index.ts"],
+      "registryDependencies": ["utils/cn"]
+    },
     "toggle-group": {
       "type": "component",
       "files": ["components/toggle-group/toggle-group.ts", "components/toggle-group/index.ts"],

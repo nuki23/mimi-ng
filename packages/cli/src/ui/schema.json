@@ -72,6 +72,10 @@
             "label": "popover"
           },
           {
+            "value": "progress",
+            "label": "progress"
+          },
+          {
             "value": "select",
             "label": "select"
           },
