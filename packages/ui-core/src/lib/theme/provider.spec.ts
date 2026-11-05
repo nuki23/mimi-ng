@@ -378,6 +378,15 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           itemRadius: '6px',
           thumbSize: '36px',
         },
+        colorPicker: {
+          radius: '10px',
+          width: '300px',
+          padding: '16px',
+          areaHeight: '180px',
+          areaRadius: '4px',
+          hueHeight: '14px',
+          swatchGap: '8px',
+        },
       },
     });
     for (const line of [
@@ -491,6 +500,13 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-upload-icon-size: 40px;',
       '--mimi-upload-item-radius: 6px;',
       '--mimi-upload-thumb-size: 36px;',
+      '--mimi-color-picker-radius: 10px;',
+      '--mimi-color-picker-width: 300px;',
+      '--mimi-color-picker-padding: 16px;',
+      '--mimi-color-picker-area-height: 180px;',
+      '--mimi-color-picker-area-radius: 4px;',
+      '--mimi-color-picker-hue-height: 14px;',
+      '--mimi-color-picker-swatch-gap: 8px;',
     ]) {
       expect(css).toContain(line);
     }

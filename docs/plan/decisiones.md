@@ -40,15 +40,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 **(b) Se deciden al empezar su tarea.**
 
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
-- G2.12: nombres de la API.
-- G2.12: el formato del valor (siempre hex, el formato elegido o un objeto).
-- G2.12: los espacios de color (HSV como el diseño u OKLCH).
-- G2.12: el disparador (panel y disparador, solo disparador o solo panel).
-- G2.12: ¿el tono usa el Slider de Mimi o un control propio?
-- G2.12: el área de dos dimensiones, ¿un `role="slider"` o dos?
-- G2.12: el borde y las sombras fijos de los pulgares: ¿excepción documentada o tokens del componente?
-- G2.12: ¿paleta por defecto o solo la del usuario?
-- G2.12: la paleta y los recientes, ¿una parada de Tab por muestra o un grupo con flechas?
 - G2.P: ¿la M.9 entra en la 0.3.0 o en una versión siguiente?
 - G2.P: ¿dónde queda la tabla acumulada del CSS (esta tarea e historial, o la spec 10)?
 

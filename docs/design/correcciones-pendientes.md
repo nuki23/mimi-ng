@@ -195,3 +195,13 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **La lista es de la app:** `mimi-file-item` recibe el estado; la subida simulada del diseño está en el ejemplo.
   - **Tamaño con el idioma:** `Intl.NumberFormat` con `LOCALE_ID` («2,4 MB» en `es`; el diseño, «2.4 MB»).
   - **Anuncios:** no están en el diseño.
+
+  Color Picker (G2.12):
+  - **Disparador:** el diseño solo dibuja el panel; `mimi-color-input` (la caja de Input con la muestra y el valor, y el panel en un Popover) es propuesta de Mimi, sin diseño.
+  - **Colores fijos de los pulgares y las muestras:** el borde blanco y las sombras del diseño son tokens del componente (`--mimi-color-picker-thumb-border`, `-thumb-shadow`, `-swatch-border`) con el valor del diseño.
+  - **`aria-valuenow` en el área:** el diseño no lo pone; ARIA lo pide en un `slider`, así que Mimi da la saturación (y las dos en `aria-valuetext`).
+  - **Foco:** el contorno de los botones (2px separado), en el área, el tono y las muestras.
+  - **Paleta:** el diseño trae 16 colores fijos; en Mimi la paleta es de la app (`swatches`) y los 16 están en el ejemplo.
+  - **Muestras:** una parada de Tab por grupo y flechas (el diseño: Tab por cada una).
+  - **Tono y recorte:** Re Pág/Av Pág e Inicio/Fin en el tono; aviso cuando un OKLCH se recorta a sRGB. No están en el diseño.
+  - **Panel suelto sin fondo:** el panel del diseño tiene fondo, borde y sombra; el `mimi-color-picker` suelto no los trae (los pone la app, como en el ejemplo); el del disparador, sí.

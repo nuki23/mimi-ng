@@ -534,6 +534,28 @@ export interface MimiFileUploadTokens {
 }
 
 /**
+ * Color Picker. Fondo, sombra, el borde y la sombra de los pulgares y el borde de las muestras
+ * van en el CSS (`--mimi-color-picker-bg`, `-shadow`, `-thumb-border`, `-thumb-shadow`,
+ * `-swatch-border`).
+ */
+export interface MimiColorPickerTokens {
+  /** Radio del panel (el global `radius`). */
+  radius?: string;
+  /** Ancho del panel (280px). */
+  width?: string;
+  /** Relleno y separación (12px). */
+  padding?: string;
+  /** Alto del área de saturación (150px). */
+  areaHeight?: string;
+  /** Radio del área (el global `radius-sm`). */
+  areaRadius?: string;
+  /** Alto de la barra de tono (12px). */
+  hueHeight?: string;
+  /** Separación de las muestras (6px). */
+  swatchGap?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -571,6 +593,7 @@ export interface MimiComponentTokens {
   combobox?: MimiComboboxTokens;
   date?: MimiDateTokens;
   fileUpload?: MimiFileUploadTokens;
+  colorPicker?: MimiColorPickerTokens;
 }
 
 export interface MimiThemePreset {

@@ -44,6 +44,10 @@
             "label": "checkbox"
           },
           {
+            "value": "color-picker",
+            "label": "color-picker"
+          },
+          {
             "value": "combobox",
             "label": "combobox"
           },

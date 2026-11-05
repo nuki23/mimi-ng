@@ -186,6 +186,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'components/color-picker',
+        title: 'Color Picker · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/color-picker/color-picker-page').then(
+            (m) => m.ColorPickerPage,
+          ),
+      },
+      {
         path: 'components/tags-input',
         title: 'Tags Input · Mimi',
         loadComponent: () =>

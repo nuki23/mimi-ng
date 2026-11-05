@@ -49,6 +49,7 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   combobox: 'combobox',
   date: ['calendar', 'date-picker', 'date-range'],
   fileUpload: 'file-upload',
+  colorPicker: 'color-picker',
 };
 
 /**

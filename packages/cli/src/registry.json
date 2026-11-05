@@ -324,6 +324,25 @@
         "utils/field-state"
       ]
     },
+    "color-picker": {
+      "type": "component",
+      "files": [
+        "components/color-picker/color-picker.ts",
+        "components/color-picker/color-picker-texts.ts",
+        "components/color-picker/color.ts",
+        "components/color-picker/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "input",
+        "popover",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state"
+      ]
+    },
     "tags-input": {
       "type": "component",
       "files": [

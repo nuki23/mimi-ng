@@ -50,7 +50,8 @@ export type TokenComponent =
   | 'slider'
   | 'combobox'
   | 'date'
-  | 'fileUpload';
+  | 'fileUpload'
+  | 'colorPicker';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -87,6 +88,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   combobox: 'combobox',
   date: 'date',
   fileUpload: 'upload',
+  colorPicker: 'color-picker',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1683,6 +1685,84 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       default: '44px',
       preset: true,
       description: 'Miniatura de cada fila.',
+    },
+  ],
+  colorPicker: [
+    {
+      name: '--mimi-color-picker-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo del panel (en el disparador).',
+    },
+    {
+      name: '--mimi-color-picker-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra del panel (en el disparador).',
+    },
+    {
+      name: '--mimi-color-picker-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio del panel.',
+    },
+    {
+      name: '--mimi-color-picker-width',
+      default: '280px',
+      preset: true,
+      description: 'Ancho del panel.',
+    },
+    {
+      name: '--mimi-color-picker-padding',
+      default: '12px',
+      preset: true,
+      description: 'Relleno y separación.',
+    },
+    {
+      name: '--mimi-color-picker-area-height',
+      default: '150px',
+      preset: true,
+      description: 'Alto del área de saturación.',
+    },
+    {
+      name: '--mimi-color-picker-area-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio del área.',
+    },
+    {
+      name: '--mimi-color-picker-hue-height',
+      default: '12px',
+      preset: true,
+      description: 'Alto de la barra de tono.',
+    },
+    {
+      name: '--mimi-color-picker-swatch-gap',
+      default: '6px',
+      preset: true,
+      description: 'Separación de las muestras.',
+    },
+    {
+      name: '--mimi-color-picker-thumb-border',
+      default: 'oklch(1 0 0)',
+      preset: false,
+      description: 'Borde de los pulgares (se ve sobre cualquier color).',
+    },
+    {
+      name: '--mimi-color-picker-thumb-shadow',
+      default: '0 0 0 1px oklch(0 0 0 / .25), 0 2px 4px oklch(0 0 0 / .3)',
+      preset: false,
+      description: 'Sombra de los pulgares.',
+    },
+    {
+      name: '--mimi-color-picker-swatch-border',
+      default: 'oklch(0 0 0 / .1)',
+      preset: false,
+      description: 'Borde interior de las muestras.',
     },
   ],
 };
