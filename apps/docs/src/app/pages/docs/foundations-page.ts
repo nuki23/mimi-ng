@@ -40,6 +40,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   combobox: ['forms', 'cdk', 'aria'],
   calendar: ['cdk'],
   'date-picker': ['forms', 'cdk'],
+  'date-range': ['forms', 'cdk'],
   'dropdown-menu': ['cdk', 'aria'],
   'context-menu': ['cdk', 'aria'],
   tabs: ['cdk', 'aria'],

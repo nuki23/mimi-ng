@@ -43,6 +43,7 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'confirm', name: 'Confirm' },
   { id: 'context-menu', name: 'Context Menu' },
   { id: 'date-picker', name: 'Date Picker' },
+  { id: 'date-range', name: 'Date Range' },
   { id: 'dialog', name: 'Dialog' },
   { id: 'dropdown-menu', name: 'Dropdown Menu' },
   { id: 'form-field', name: 'FormField' },

@@ -172,6 +172,12 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'components/date-range',
+        title: 'Date Range · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/date-range/date-range-page').then((m) => m.DateRangePage),
+      },
+      {
         path: 'components/tags-input',
         title: 'Tags Input · Mimi',
         loadComponent: () =>

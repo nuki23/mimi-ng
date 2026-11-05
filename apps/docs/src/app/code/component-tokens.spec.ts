@@ -47,7 +47,7 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   tagsInput: 'tags-input',
   slider: 'slider',
   combobox: 'combobox',
-  date: ['calendar', 'date-picker'],
+  date: ['calendar', 'date-picker', 'date-range'],
 };
 
 /**

@@ -60,6 +60,10 @@
             "label": "date-picker"
           },
           {
+            "value": "date-range",
+            "label": "date-range"
+          },
+          {
             "value": "dialog",
             "label": "dialog"
           },

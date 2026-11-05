@@ -180,3 +180,10 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Foco al abrir:** el diseño no lo define; Mimi lo lleva al día elegido o a hoy (el Popover enfoca el elemento con `autofocus`).
   - **«Ir a hoy»:** el diseño cambia el mes; Mimi además lleva el foco a hoy.
   - **Calendario suelto:** no está en el diseño.
+
+  Date Range (G2.9b):
+  - **Botones de mes:** el diseño los llama «Mes anterior» y «Mes siguiente»; Mimi usa los del calendario («Anterior», «Siguiente»).
+  - **Atajos:** el diseño trae seis fijos; en Mimi son de la app (`presets`), y los seis del diseño están en el ejemplo.
+  - **Fecha del botón:** con `Intl`, «24 sept 2026 – 30 sept 2026» (el diseño, «24 sep 2026 – 30 sep 2026»).
+  - **Cerrar con solo el inicio:** el diseño no lo define; Mimi lo descarta y el valor no cambia.
+  - **Límites:** se llaman `minDate` y `maxDate` (no `min`/`max`, que en un control de formulario tendrían el tipo del valor).

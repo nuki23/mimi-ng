@@ -1614,5 +1614,11 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       preset: true,
       description: 'Relleno del panel.',
     },
+    {
+      name: '--mimi-date-presets-width',
+      default: '130px',
+      preset: true,
+      description: 'Columna de atajos (Date Range).',
+    },
   ],
 };

@@ -290,6 +290,21 @@
         "utils/field-state"
       ]
     },
+    "date-range": {
+      "type": "component",
+      "files": ["components/date-range/date-range.ts", "components/date-range/index.ts"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "calendar",
+        "date-picker",
+        "popover",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state"
+      ]
+    },
     "tags-input": {
       "type": "component",
       "files": [
