@@ -95,7 +95,9 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.8 La CLI y los bloqueos de «todo o nada» · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.9 Migrar Select a las utilidades de lista del Combobox · sin versión · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.10 Script `check-plan` (casillas del índice y del detalle, enlaces, IDs) · sin versión · — · depende: la reorganización del plan (PASO 4) · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.11 La CLI y `--overwrite` con la misma versión (¿intencional o error?) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.11 La CLI y `--overwrite` con la misma versión (era un error; corregido) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.13 Bajar `main` del showcase (rutas de docs diferidas y menú móvil al abrir) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.12 Pruebas deterministas con temporizadores y animaciones (Dialog, Toast, docs bajo carga) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño

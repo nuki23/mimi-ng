@@ -614,6 +614,17 @@ describe('ui: modificados según .mimi/base (no según la plantilla)', () => {
     expect(logs.map((l) => l.message)).toContain('Nada que hacer: los archivos ya están al día.');
   });
 
+  it('M.11: con --overwrite, reemplaza también lo de la misma versión (distinto de la plantilla)', async () => {
+    const { run, tree, logs } = await withButtonFormatted();
+    const result = await run('mimi', { components: ['button'], overwrite: true }, tree);
+    for (const name of BUTTON) {
+      const original = template(`components/button/${name}`);
+      expect(result.readContent(`/${UI}/button/${name}`)).toBe(original);
+      expect(result.readContent(`/.mimi/base/button/${name}`)).toBe(original);
+    }
+    expect(logs.map((l) => l.message)).toContain('Reemplazado (--overwrite):');
+  });
+
   it('igual a su base pero de una versión anterior: lo actualiza y lo dice', async () => {
     const { run, tree, warnings, logs } = await withButtonFormatted();
     const manifest = json(tree, '/.mimi/manifest.json');
