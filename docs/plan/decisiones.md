@@ -41,9 +41,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 - G2.9 (pregunta escrita en la G2.0): Date Picker y Date Range, ¿una tabla de tokens o dos? (el usuario la dejó para el inicio de la G2.9).
 
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
-- G2.1: base técnica del foco itinerante (`FocusKeyManager` del CDK o `ngToolbarWidgetGroup` de aria).
-- G2.1: en simple, ¿se puede dejar sin elección pulsando la elegida?
-- G2.1: nombre de la variante con el elegido en `primary` (`variant="solid"`).
 - 5.2: el modo claro/oscuro de la vista previa, ¿cambia todo el sitio o solo el contenedor?
 - G2.2: base técnica (`input type="text"` con `role="spinbutton"` o `type="number"` nativo).
 - G2.2: nombres de la API.
@@ -109,7 +106,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(c) Se deciden solo si se llega a esa parte.**
 
-- G2.1: ¿Toggle Group dentro de mimi-toolbar? (solo si la toolbar llega a tener grupos con nombre).
 - G2.7: distancia mínima entre pulgares, ¿entrada `minRange` o validador del formulario? (solo con el rango doble).
 - Grupo 2 (cualquier tarea o la G2.P): si un componente deja el CSS global cerca del error (145 kB) o el `initial` cerca de 505 kB, qué se hace (reducir o subir un techo); decide el usuario con la tabla acumulada y el gzip real (spec 10, «Grupo 2: medir primero»).
 - 5.17: ¿qué cambios de API exige la revisión móvil y a qué versión van (en la 5.17a: 0.3.0 o 0.2.1)? (solo si la revisión los encuentra).

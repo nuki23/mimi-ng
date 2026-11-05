@@ -164,6 +164,18 @@
       },
       "registryDependencies": ["button", "input", "select", "utils/cn"]
     },
+    "toggle-group": {
+      "type": "component",
+      "files": ["components/toggle-group/toggle-group.ts", "components/toggle-group/index.ts"],
+      "dependencies": {
+        "class-variance-authority": "^0.7.1"
+      },
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.0",
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles"]
+    },
     "toolbar": {
       "type": "component",
       "files": ["components/toolbar/toolbar.ts", "components/toolbar/index.ts"],

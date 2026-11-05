@@ -53,6 +53,7 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'tabs', name: 'Tabs' },
   { id: 'textarea', name: 'Textarea' },
   { id: 'toast', name: 'Toast' },
+  { id: 'toggle-group', name: 'Toggle Group' },
   { id: 'toolbar', name: 'Toolbar' },
   { id: 'tooltip', name: 'Tooltip' },
 ];

@@ -36,6 +36,7 @@ const FOLDER: Record<TokenComponent, string> = {
   tabs: 'tabs',
   toolbar: 'toolbar',
   pagination: 'pagination',
+  toggleGroup: 'toggle-group',
 };
 
 /**
@@ -55,6 +56,9 @@ const GLOBALS = new Set([
   // Cuántas pestañas hay y cuál se pinta: las escribe Tabs para colocar el indicador.
   '--mimi-tabs-count',
   '--mimi-tabs-index',
+  // Lo mismo en Toggle Group (G2.1).
+  '--mimi-toggle-group-count',
+  '--mimi-toggle-group-index',
 ]);
 
 /** Código del componente (sin pruebas). */

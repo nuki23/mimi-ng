@@ -55,6 +55,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Tabs', path: '/docs/components/tabs', status: 'ready' },
       { title: 'Toolbar', path: '/docs/components/toolbar', status: 'ready' },
       { title: 'Pagination', path: '/docs/components/pagination', status: 'ready' },
+      { title: 'Toggle Group', path: '/docs/components/toggle-group', status: 'ready' },
     ],
   },
 ];

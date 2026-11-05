@@ -28,6 +28,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   confirm: ['cdk'],
   toast: ['cdk'],
   toolbar: ['cdk'],
+  'toggle-group': ['forms', 'cdk'],
   select: ['forms', 'cdk', 'aria'],
   'dropdown-menu': ['cdk', 'aria'],
   'context-menu': ['cdk', 'aria'],

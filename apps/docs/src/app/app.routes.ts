@@ -115,6 +115,14 @@ export const routes: Routes = [
           import('./pages/docs/components/toolbar/toolbar-page').then((m) => m.ToolbarPage),
       },
       {
+        path: 'components/toggle-group',
+        title: 'Toggle Group · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/toggle-group/toggle-group-page').then(
+            (m) => m.ToggleGroupPage,
+          ),
+      },
+      {
         path: 'components/toast',
         title: 'Toast · Mimi',
         loadComponent: () =>

@@ -96,3 +96,10 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Sin diseños móviles:** ningún componente tiene diseño para pantallas chicas. Mimi usa en móvil los paneles de escritorio, anclados y dentro de la pantalla (spec 4, «Paneles en pantallas chicas»). Si se quiere una hoja inferior o un panel modal en móvil (Select, Combobox, Date Picker), diseñarla.
   - **Alineación de los paneles:** cuando la alineación pedida no cabe, el panel se alinea al otro extremo o al centro del disparador antes de cambiar de lado. El diseño no muestra el caso.
   - **Tamaño de objetivo:** Switch (36 × 20px) y Checkbox (16 × 16px) cumplen 2.5.8 (AA) solo por espaciado; ninguno llega a 44 × 44 (2.5.5). Si se quiere un área táctil mayor, definirla en el diseño.
+
+  Toggle Group (G2.1):
+  - **Presión al pulsar:** el diseño usa 0,93; Mimi usa `--mimi-press-scale-sm` (0,9; con movimiento reducido, 1).
+  - **Error del formulario:** no está en el diseño. Mimi pone un borde `destructive` de 1px al grupo (`data-invalid`) cuando es inválido y se tocó.
+  - **`solid` en simple:** el diseño solo la muestra en múltiple. En simple, Mimi pinta el indicador en `primary` con el texto en `primary-foreground`.
+  - **Múltiple:** el diseño usa columnas del ancho de cada botón (`auto`) solo en «Texto e ícono»; Mimi lo hace así en todo grupo múltiple (no hay indicador que necesite columnas iguales). En simple, columnas iguales (el ancho del botón más ancho).
+  - **Foco visible:** el diseño no lo muestra. Mimi usa el contorno `ring` de los botones (2px, separado 2px).

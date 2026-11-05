@@ -38,7 +38,8 @@ export type TokenComponent =
   | 'toast'
   | 'tabs'
   | 'toolbar'
-  | 'pagination';
+  | 'pagination'
+  | 'toggleGroup';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -63,6 +64,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   tabs: 'tabs',
   toolbar: 'toolbar',
   pagination: 'pagination',
+  toggleGroup: 'toggle-group',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1062,6 +1064,92 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-destructive',
       preset: false,
       description: 'Borde del campo y globo «Entre 1 y N» con una página inválida.',
+    },
+  ],
+  toggleGroup: [
+    {
+      name: '--mimi-toggle-group-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio de cada botón y del indicador; el del grupo es radio + relleno.',
+    },
+    {
+      name: '--mimi-toggle-group-padding',
+      default: '3px',
+      preset: true,
+      description: 'Relleno del grupo.',
+    },
+    {
+      name: '--mimi-toggle-group-gap',
+      default: '2px',
+      preset: true,
+      description: 'Separación entre botones.',
+    },
+    {
+      name: '--mimi-toggle-group-item-height',
+      default: '32px',
+      preset: true,
+      description: 'Alto de cada botón.',
+    },
+    {
+      name: '--mimi-toggle-group-item-px',
+      default: '12px',
+      preset: true,
+      description: 'Relleno horizontal de cada botón.',
+    },
+    {
+      name: '--mimi-toggle-group-icon-width',
+      default: '44px',
+      preset: true,
+      description: 'Ancho mínimo de cada botón (el de uno solo con ícono).',
+    },
+    {
+      name: '--mimi-toggle-group-font-size',
+      default: '13.5px',
+      preset: true,
+      description: 'Tamaño de texto.',
+    },
+    {
+      name: '--mimi-toggle-group-spring',
+      default: 'cubic-bezier(.3, 1.35, .5, 1)',
+      preset: true,
+      description: 'Curva del indicador al deslizarse (la de Tabs).',
+    },
+    {
+      name: '--mimi-toggle-group-bg',
+      default: 'muted',
+      inherits: '--mimi-muted',
+      preset: false,
+      description: 'Fondo del grupo.',
+    },
+    {
+      name: '--mimi-toggle-group-fg',
+      default: 'muted-foreground',
+      inherits: '--mimi-muted-foreground',
+      preset: false,
+      description: 'Texto de los botones sin elegir.',
+    },
+    {
+      name: '--mimi-toggle-group-active-fg',
+      default: 'foreground',
+      inherits: '--mimi-foreground',
+      preset: false,
+      description: 'Texto del elegido y en hover.',
+    },
+    {
+      name: '--mimi-toggle-group-indicator',
+      default: 'card',
+      inherits: '--mimi-card',
+      preset: false,
+      description: 'Fondo del indicador (simple) y de cada elegido (múltiple).',
+    },
+    {
+      name: '--mimi-toggle-group-indicator-shadow',
+      default: 'shadow-neutral',
+      inherits: '--mimi-shadow-neutral',
+      preset: false,
+      description: 'Sombra del indicador y de cada elegido.',
     },
   ],
 };

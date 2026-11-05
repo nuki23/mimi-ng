@@ -339,6 +339,16 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
         tabs: { height: '40px', spring: 'ease-out' },
         toolbar: { itemSize: '36px', blur: '8px' },
         pagination: { itemSize: '28px', inputWidth: '48px', blur: '6px' },
+        toggleGroup: {
+          radius: '8px',
+          padding: '4px',
+          gap: '3px',
+          itemHeight: '36px',
+          itemPx: '14px',
+          iconWidth: '40px',
+          fontSize: '14px',
+          spring: 'ease',
+        },
       },
     });
     for (const line of [
@@ -401,6 +411,14 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-pagination-item-size: 28px;',
       '--mimi-pagination-input-width: 48px;',
       '--mimi-pagination-blur: 6px;',
+      '--mimi-toggle-group-radius: 8px;',
+      '--mimi-toggle-group-padding: 4px;',
+      '--mimi-toggle-group-gap: 3px;',
+      '--mimi-toggle-group-item-height: 36px;',
+      '--mimi-toggle-group-item-px: 14px;',
+      '--mimi-toggle-group-icon-width: 40px;',
+      '--mimi-toggle-group-font-size: 14px;',
+      '--mimi-toggle-group-spring: ease;',
     ]) {
       expect(css).toContain(line);
     }

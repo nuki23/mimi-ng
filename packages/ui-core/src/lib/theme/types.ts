@@ -353,6 +353,29 @@ export interface MimiPaginationTokens {
 }
 
 /**
+ * Toggle Group. Fondo, textos, indicador y su sombra van en el CSS (`--mimi-toggle-group-bg`,
+ * `-fg`, `-active-fg`, `-indicator`, `-indicator-shadow`).
+ */
+export interface MimiToggleGroupTokens {
+  /** Radio de cada ítem y del indicador (el global `radius`); el del grupo es radio + relleno. */
+  radius?: string;
+  /** Relleno del grupo (3px). */
+  padding?: string;
+  /** Separación entre ítems (2px). */
+  gap?: string;
+  /** Alto de cada ítem (32px). */
+  itemHeight?: string;
+  /** Relleno horizontal de cada ítem (12px). */
+  itemPx?: string;
+  /** Ancho mínimo de un ítem (el de uno solo con ícono, 44px). */
+  iconWidth?: string;
+  /** Tamaño de texto (13.5px). */
+  fontSize?: string;
+  /** Curva del indicador (`cubic-bezier(.3, 1.35, .5, 1)`, la de Tabs). */
+  spring?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -378,6 +401,7 @@ export interface MimiComponentTokens {
   tabs?: MimiTabsTokens;
   toolbar?: MimiToolbarTokens;
   pagination?: MimiPaginationTokens;
+  toggleGroup?: MimiToggleGroupTokens;
 }
 
 export interface MimiThemePreset {
