@@ -40,6 +40,7 @@ const FOLDER: Record<TokenComponent, string> = {
   progress: 'progress',
   numberInput: 'number-input',
   password: 'password',
+  inputMask: 'input-mask',
 };
 
 /**

@@ -421,6 +421,19 @@ export interface MimiPasswordTokens {
 }
 
 /**
+ * Input Mask. El color del marcador y el fondo del prefijo van en el CSS
+ * (`--mimi-mask-placeholder`, `-prefix-bg`); la caja usa los tokens de Input.
+ */
+export interface MimiInputMaskTokens {
+  /** Separación entre el prefijo, el ícono y el texto (8px). */
+  gap?: string;
+  /** Alto del prefijo (26px). */
+  prefixHeight?: string;
+  /** Radio del prefijo (el global `radius-sm`). */
+  prefixRadius?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -450,6 +463,7 @@ export interface MimiComponentTokens {
   progress?: MimiProgressTokens;
   numberInput?: MimiNumberInputTokens;
   password?: MimiPasswordTokens;
+  inputMask?: MimiInputMaskTokens;
 }
 
 export interface MimiThemePreset {

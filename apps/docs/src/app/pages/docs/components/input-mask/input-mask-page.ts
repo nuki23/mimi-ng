@@ -92,6 +92,13 @@ export class InputMaskPage {
       description: 'Texto con el campo vacío.',
     },
     {
+      name: 'ghost',
+      type: 'string',
+      default: "''",
+      description:
+        'Marcador de lo que falta (DD/MM/AAAA), debajo de lo escrito. Decorativo: di el formato con texto en aria-describedby.',
+    },
+    {
       name: 'aria-label / aria-labelledby / aria-describedby / id',
       type: 'string',
       default: '—',
@@ -107,7 +114,7 @@ export class InputMaskPage {
       name: 'class',
       type: 'string',
       default: "''",
-      description: 'Clases del input, mezcladas con cn(): tus clases ganan.',
+      description: 'Clases de la caja, mezcladas con cn(): tus clases ganan.',
     },
   ];
 }

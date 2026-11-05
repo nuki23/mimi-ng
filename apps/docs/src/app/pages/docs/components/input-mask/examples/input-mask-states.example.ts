@@ -14,13 +14,13 @@ import { MimiInputMask } from '@/components/ui/input-mask';
         <span class="text-xs text-muted-foreground">Solo lectura</span>
         <mimi-input-mask aria-label="Solo lectura" mask="00/00/0000" value="24122026" readonly />
       </div>
-      <!-- class va al input: más ancho entre letras. -->
+      <!-- class va a la caja: más angosta y redonda. -->
       <div class="flex flex-col gap-1.5 sm:col-span-2">
         <span class="text-xs text-muted-foreground">Con class</span>
         <mimi-input-mask
           aria-label="Código"
           mask="000-000"
-          class="text-center tracking-[0.3em]"
+          class="max-w-48 rounded-full"
           value="482913"
         />
       </div>

@@ -3,7 +3,13 @@ import { TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { disabled, form, FormField, required } from '@angular/forms/signals';
 import { MimiFormField } from '@/components/ui/form-field';
-import { MimiInputMask, mimiApplyMask, mimiMaskLength, mimiUnmask } from './input-mask';
+import {
+  MimiInputMask,
+  MimiInputMaskImports,
+  mimiApplyMask,
+  mimiMaskLength,
+  mimiUnmask,
+} from './input-mask';
 
 const PHONE = '(00) 0000 0000';
 
@@ -173,14 +179,76 @@ describe('MimiInputMask', () => {
     expect(input('plain').getAttribute('aria-label')).toBe('Teléfono');
   });
 
-  it('solo lectura y class del usuario en el input', async () => {
-    const { host, input, fixture } = await setup();
+  it('solo lectura; class del usuario en la caja (G2.4b); el anillo, con focus-within', async () => {
+    const { host, input, fixture, root } = await setup();
     host.ro.set(true);
     host.extra.set('h-12 rounded-none');
     await settle(fixture);
+    const box = root.querySelector<HTMLElement>('[data-test="plain"]')!;
     expect(input('plain').readOnly).toBe(true);
-    expect(input('plain').className).toContain('h-12');
-    expect(input('plain').className).not.toContain('h-[var(--mimi-input-height');
+    expect(box.className).toContain('h-12');
+    expect(box.className).not.toContain('h-[var(--mimi-input-height');
+    expect(box.className).toContain('focus-within:ring-3');
+  });
+
+  it('G2.4b: el marcador sigue a lo escrito y es aria-hidden; prefijo e ícono en su lugar', async () => {
+    @Component({
+      imports: [MimiInputMaskImports],
+      template: `
+        <mimi-input-mask aria-label="Fecha" mask="00/00/0000" ghost="DD/MM/AAAA" [(value)]="date">
+          <svg mimiMaskStart data-test="icon"></svg>
+        </mimi-input-mask>
+        <mimi-input-mask aria-label="Teléfono" mask="00 0000 0000" [disabled]="off()">
+          <span mimiMaskPrefix data-test="prefix">+52</span>
+          <span mimiMaskEnd data-test="end">✓</span>
+        </mimi-input-mask>
+      `,
+    })
+    class SlotsHost {
+      readonly date = signal('');
+      readonly off = signal(false);
+    }
+    const fixture = TestBed.createComponent(SlotsHost);
+    document.body.appendChild(fixture.nativeElement);
+    await settle(fixture);
+    const root = fixture.nativeElement as HTMLElement;
+    const [dateBox, phoneBox] = Array.from(root.querySelectorAll<HTMLElement>('mimi-input-mask'));
+    const ghost = () => dateBox.querySelector<HTMLElement>('[data-slot="ghost"]')!;
+    expect(ghost().getAttribute('aria-hidden')).toBe('true');
+    expect(ghost().textContent).toBe('DD/MM/AAAA');
+    const el = dateBox.querySelector('input')!;
+    el.focus();
+    el.value = '311';
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    await settle(fixture);
+    // Lo escrito («31/1») va transparente y el resto del marcador, en el color del placeholder.
+    const [typed, rest] = Array.from(ghost().children);
+    expect(typed.textContent).toBe('31/1');
+    expect(typed.className).toContain('text-transparent');
+    expect(rest.textContent).toBe('M/AAAA');
+    expect(rest.className).toContain('--mimi-mask-placeholder');
+    // El texto y el marcador usan la misma letra (cifras tabulares).
+    expect(ghost().className).toContain('tabular-nums');
+    expect(el.className).toContain('tabular-nums');
+    // El ícono va antes del campo; el prefijo es un chip; el final, después.
+    const icon = root.querySelector('[data-test="icon"]')!;
+    expect(icon.getAttribute('data-slot')).toBe('start');
+    expect(icon.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    const prefix = root.querySelector<HTMLElement>('[data-test="prefix"]')!;
+    expect(prefix.className).toContain('bg-[color:var(--mimi-mask-prefix-bg,var(--mimi-muted))]');
+    const phone = phoneBox.querySelector('input')!;
+    expect(prefix.compareDocumentPosition(phone) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(
+      phone.compareDocumentPosition(root.querySelector('[data-test="end"]')!) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    // Un clic en el prefijo lleva el foco al campo; deshabilitado, la caja lo marca.
+    prefix.click();
+    expect(document.activeElement).toBe(phone);
+    fixture.componentInstance.off.set(true);
+    await settle(fixture);
+    expect(phoneBox.hasAttribute('data-disabled')).toBe(true);
+    (document.activeElement as HTMLElement).blur();
   });
 
   it('Reactive Forms: dígitos en el control, nombre y error por mimi-form-field', async () => {

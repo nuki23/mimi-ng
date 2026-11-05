@@ -358,6 +358,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           buttonRadius: '4px',
         },
         password: { toggleSize: '36px', toggleRadius: '6px', meterHeight: '4px', meterGap: '3px' },
+        inputMask: { gap: '6px', prefixHeight: '24px', prefixRadius: '4px' },
       },
     });
     for (const line of [
@@ -440,6 +441,9 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-password-toggle-radius: 6px;',
       '--mimi-password-meter-height: 4px;',
       '--mimi-password-meter-gap: 3px;',
+      '--mimi-mask-gap: 6px;',
+      '--mimi-mask-prefix-height: 24px;',
+      '--mimi-mask-prefix-radius: 4px;',
     ]) {
       expect(css).toContain(line);
     }

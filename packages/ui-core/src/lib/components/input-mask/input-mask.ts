@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  Directive,
   ElementRef,
   booleanAttribute,
   computed,
@@ -11,7 +12,6 @@ import {
   viewChild,
 } from '@angular/core';
 import { type FormValueControl, transformedValue } from '@angular/forms/signals';
-import { inputVariants } from '@/components/ui/input';
 import { cn } from '@/components/ui/utils/cn';
 import {
   MIMI_FIELD_CONTROL,
@@ -64,6 +64,68 @@ function caretAfterDigits(masked: string, count: number): number {
 }
 
 /**
+ * La caja (como Input: alto, radio, borde, hover, foco y error) con el input sin su propia caja
+ * adentro, para poder poner el prefijo y los íconos al lado (G2.4b).
+ */
+const BOX_CLASSES = cn(
+  'relative flex w-full min-w-0 cursor-text items-center gap-[var(--mimi-mask-gap,8px)] px-3 font-sans text-foreground mimi-transition',
+  'h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))]',
+  'border border-input bg-input-background',
+  'not-data-[disabled]:hover:border-input-hover',
+  'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft',
+  'data-[invalid]:border-destructive data-[invalid]:focus-within:border-destructive data-[invalid]:focus-within:ring-destructive-ring',
+  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
+);
+
+/** El texto: 14px, cifras tabulares y un poco de espacio, como el diseño (el marcador igual). */
+const TEXT = 'text-sm tabular-nums tracking-[.02em] whitespace-pre';
+const INPUT_CLASSES = cn(
+  'relative h-full w-full min-w-0 border-0 bg-transparent p-0 text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed',
+  TEXT,
+);
+const GHOST_CLASSES = cn('pointer-events-none absolute inset-0 flex items-center', TEXT);
+
+/** Prefijo fijo dentro de la caja (`+52`): un chip `muted`. */
+@Directive({
+  selector: '[mimiMaskPrefix]',
+  host: { 'data-slot': 'prefix', '[class]': 'classes()' },
+})
+export class MimiMaskPrefix {
+  readonly userClass = input('', { alias: 'class' });
+  protected readonly classes = computed(() =>
+    cn(
+      'inline-flex shrink-0 items-center gap-1.5 -ms-1.5 px-2 text-[13px] font-semibold text-foreground',
+      'h-[var(--mimi-mask-prefix-height,26px)] rounded-[var(--mimi-mask-prefix-radius,var(--mimi-radius-sm))] bg-[color:var(--mimi-mask-prefix-bg,var(--mimi-muted))]',
+      this.userClass(),
+    ),
+  );
+}
+
+/** Algo al principio de la caja (un ícono): `muted-foreground`, íconos de 16px. */
+@Directive({
+  selector: '[mimiMaskStart]',
+  host: { 'data-slot': 'start', '[class]': 'classes()' },
+})
+export class MimiMaskStart {
+  readonly userClass = input('', { alias: 'class' });
+  protected readonly classes = computed(() =>
+    cn('inline-flex shrink-0 items-center text-muted-foreground [&_svg]:size-4', this.userClass()),
+  );
+}
+
+/** Algo al final de la caja (la marca de la tarjeta, un ícono de válido). */
+@Directive({
+  selector: '[mimiMaskEnd]',
+  host: { 'data-slot': 'end', '[class]': 'classes()' },
+})
+export class MimiMaskEnd {
+  readonly userClass = input('', { alias: 'class' });
+  protected readonly classes = computed(() =>
+    cn('inline-flex shrink-0 items-center [&_svg]:size-4', this.userClass()),
+  );
+}
+
+/**
  * Input Mask:
  *
  * ```html
@@ -78,35 +140,50 @@ function caretAfterDigits(masked: string, count: number): number {
 @Component({
   selector: 'mimi-input-mask',
   template: `
-    <input
-      #field
-      type="text"
-      [class]="inputClasses()"
-      [id]="controlId()"
-      [value]="raw()"
-      [disabled]="disabled()"
-      [readOnly]="readonly()"
-      [attr.inputmode]="inputmode()"
-      [attr.autocomplete]="autocomplete() || null"
-      [attr.placeholder]="placeholder() || null"
-      [attr.maxlength]="mask().length"
-      [attr.aria-label]="ariaLabel() || null"
-      [attr.aria-labelledby]="ariaLabelledby() || null"
-      [attr.aria-describedby]="ariaDescribedby() || null"
-      [attr.aria-invalid]="showInvalid() || null"
-      [attr.aria-required]="required() || null"
-      [attr.data-invalid]="showInvalid() ? '' : null"
-      (input)="onInput()"
-      (keydown)="onKeydown($event)"
-      (compositionstart)="composing = true"
-      (compositionend)="composing = false; onInput()"
-      (blur)="touch.emit()"
-    />
+    <ng-content select="[mimiMaskPrefix], [mimiMaskStart]" />
+    <span class="relative flex h-full min-w-0 flex-1 items-center">
+      @if (ghostRest()) {
+        <!-- El marcador de lo que falta: debajo del texto, con lo escrito transparente. -->
+        <span aria-hidden="true" data-slot="ghost" [class]="ghostClasses"
+          ><span class="text-transparent">{{ raw() }}</span
+          ><span
+            class="text-[color:var(--mimi-mask-placeholder,var(--mimi-input-placeholder,var(--mimi-muted-foreground)))]"
+            >{{ ghostRest() }}</span
+          ></span
+        >
+      }
+      <input
+        #field
+        type="text"
+        [class]="inputClasses"
+        [id]="controlId()"
+        [value]="raw()"
+        [disabled]="disabled()"
+        [readOnly]="readonly()"
+        [attr.inputmode]="inputmode()"
+        [attr.autocomplete]="autocomplete() || null"
+        [attr.placeholder]="placeholder() || null"
+        [attr.maxlength]="mask().length"
+        [attr.aria-label]="ariaLabel() || null"
+        [attr.aria-labelledby]="ariaLabelledby() || null"
+        [attr.aria-describedby]="ariaDescribedby() || null"
+        [attr.aria-invalid]="showInvalid() || null"
+        [attr.aria-required]="required() || null"
+        (input)="onInput()"
+        (keydown)="onKeydown($event)"
+        (compositionstart)="composing = true"
+        (compositionend)="composing = false; onInput()"
+        (blur)="touch.emit()"
+      />
+    </span>
+    <ng-content select="[mimiMaskEnd]" />
   `,
   host: {
-    class: 'relative flex w-full min-w-0',
+    '[class]': 'boxClasses()',
     '[attr.data-state]': 'complete() ? "complete" : digits() ? "partial" : "empty"',
+    '[attr.data-invalid]': 'showInvalid() ? "" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
+    '(click)': 'focusField($event)',
     // El nombre y el id van al input de dentro.
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
@@ -125,6 +202,12 @@ export class MimiInputMask implements FormValueControl<string>, MimiFieldControl
   readonly inputmode = input('numeric');
   readonly autocomplete = input<string>();
   readonly placeholder = input('');
+  /**
+   * Marcador de lo que falta, del largo de la máscara (por ejemplo, `DD/MM/AAAA`): se ve debajo
+   * de lo escrito, en el color del placeholder. Decorativo (`aria-hidden`): di el formato con
+   * texto en `aria-describedby`.
+   */
+  readonly ghost = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
@@ -137,7 +220,7 @@ export class MimiInputMask implements FormValueControl<string>, MimiFieldControl
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
   readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
-  /** Clases del input, mezcladas con `cn()` (gana la del usuario). */
+  /** Clases de la caja, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
 
   /** Se emite al salir del campo: marca el control como tocado. */
@@ -170,9 +253,21 @@ export class MimiInputMask implements FormValueControl<string>, MimiFieldControl
     () => this.digits().length === mimiMaskLength(this.mask()),
   );
 
-  protected readonly inputClasses = computed(() =>
-    cn(inputVariants({ size: 'default' }), 'tabular-nums', this.userClass()),
-  );
+  /** Lo que falta del marcador: lo que está después de lo escrito. */
+  protected readonly ghostRest = computed(() => {
+    const ghost = this.ghost();
+    return ghost ? ghost.slice(this.raw().length) : '';
+  });
+
+  protected readonly boxClasses = computed(() => cn(BOX_CLASSES, this.userClass()));
+  protected readonly inputClasses = INPUT_CLASSES;
+  protected readonly ghostClasses = GHOST_CLASSES;
+
+  /** Un clic en la caja (el prefijo, el ícono o el relleno) lleva el foco al campo. */
+  protected focusField(event: MouseEvent): void {
+    const el = this.field().nativeElement;
+    if (event.target !== el && !el.disabled) el.focus();
+  }
 
   /** Durante la composición de texto (IME) no se reformatea. */
   protected composing = false;
@@ -214,3 +309,11 @@ export class MimiInputMask implements FormValueControl<string>, MimiFieldControl
     if (el.ownerDocument.activeElement === el) el.setSelectionRange(caret, caret);
   }
 }
+
+/** Todas las piezas de Input Mask, para importarlas juntas. */
+export const MimiInputMaskImports = [
+  MimiInputMask,
+  MimiMaskPrefix,
+  MimiMaskStart,
+  MimiMaskEnd,
+] as const;

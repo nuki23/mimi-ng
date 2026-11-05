@@ -42,7 +42,8 @@ export type TokenComponent =
   | 'toggleGroup'
   | 'progress'
   | 'numberInput'
-  | 'password';
+  | 'password'
+  | 'inputMask';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -71,6 +72,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   progress: 'progress',
   numberInput: 'number',
   password: 'password',
+  inputMask: 'mask',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1273,6 +1275,41 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-track',
       preset: false,
       description: 'Barra vacía (los niveles usan --mimi-strength-weak, -medium y -strong).',
+    },
+  ],
+  inputMask: [
+    {
+      name: '--mimi-mask-gap',
+      default: '8px',
+      preset: true,
+      description: 'Separación entre el prefijo, el ícono y el texto.',
+    },
+    {
+      name: '--mimi-mask-prefix-height',
+      default: '26px',
+      preset: true,
+      description: 'Alto del prefijo.',
+    },
+    {
+      name: '--mimi-mask-prefix-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio del prefijo.',
+    },
+    {
+      name: '--mimi-mask-placeholder',
+      default: 'input-placeholder',
+      inherits: '--mimi-input-placeholder',
+      preset: false,
+      description: 'Color del marcador de lo que falta.',
+    },
+    {
+      name: '--mimi-mask-prefix-bg',
+      default: 'muted',
+      inherits: '--mimi-muted',
+      preset: false,
+      description: 'Fondo del prefijo.',
     },
   ],
 };

@@ -170,7 +170,7 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["input", "utils/cn", "utils/field-state"]
+      "registryDependencies": ["utils/cn", "utils/field-state"]
     },
     "number-input": {
       "type": "component",
