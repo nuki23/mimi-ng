@@ -24,6 +24,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   checkbox: ['forms'],
   'form-field': ['forms'],
   'number-input': ['forms'],
+  'input-mask': ['forms'],
   password: ['forms', 'cdk'],
   popover: ['cdk'],
   tooltip: ['cdk'],

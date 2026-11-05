@@ -41,11 +41,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 - G2.9 (pregunta escrita en la G2.0): Date Picker y Date Range, ¿una tabla de tokens o dos? (el usuario la dejó para el inicio de la G2.9).
 
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
-- G2.4: ¿el modelo guarda el valor con máscara o sin ella? (decide si G2.4a es directiva o control propio).
-- G2.4: nombres de la API (dependen de la pregunta anterior).
-- G2.4: ¿más símbolos que `0` (letras, alfanumérico)?
-- G2.4: Ctrl+Z después de un reformateo: comportamiento del navegador o pila propia.
-- G2.4: marca de tarjeta, Luhn y fecha: ¿validadores de Mimi o solo ejemplos?
 - G2.5: nombres de la API.
 - G2.5: un input real con casillas visuales o un input por casilla.
 - G2.5: ¿solo dígitos o también letras?

@@ -1,0 +1,216 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  booleanAttribute,
+  computed,
+  inject,
+  input,
+  model,
+  output,
+  viewChild,
+} from '@angular/core';
+import { type FormValueControl, transformedValue } from '@angular/forms/signals';
+import { inputVariants } from '@/components/ui/input';
+import { cn } from '@/components/ui/utils/cn';
+import {
+  MIMI_FIELD_CONTROL,
+  injectFieldState,
+  type MimiFieldControl,
+} from '@/components/ui/utils/field-state';
+
+/*
+ * Input Mask (docs/design/Mimi F3 Slider OTP Numero Mascara.dc.html, «7 · Input Mask»; prefijo
+ * de tokens `mask`, spec 13). Control propio con `FormValueControl<string>`: el modelo guarda
+ * **solo los dígitos** («5512345678») y el campo muestra la máscara («(55) 1234 5678»), como el
+ * diseño (decidido por defecto en la G2.4, opción (b)). Usa `transformedValue()` de Signal Forms.
+ *
+ * Sintaxis: `0` es un dígito; cualquier otro carácter es un literal.
+ */
+
+/** Cuántos dígitos caben en la máscara. */
+export function mimiMaskLength(mask: string): number {
+  return [...mask].filter((c) => c === '0').length;
+}
+
+/**
+ * Aplica la máscara a unos dígitos. Un literal se escribe solo si después viene un dígito
+ * («(5», no «(5) »): así borrar hacia atrás no se traba en los literales.
+ */
+export function mimiApplyMask(mask: string, digits: string): string {
+  let out = '';
+  let i = 0;
+  for (const slot of mask) {
+    if (i >= digits.length) break;
+    if (slot === '0') out += digits[i++];
+    else out += slot;
+  }
+  return out;
+}
+
+/** Los dígitos de un texto (con o sin literales), hasta lo que cabe en la máscara. */
+export function mimiUnmask(mask: string, text: string): string {
+  return (text.match(/\d/g) ?? []).join('').slice(0, mimiMaskLength(mask));
+}
+
+/** Posición en el texto con máscara justo después del dígito número `count` (0: al principio). */
+function caretAfterDigits(masked: string, count: number): number {
+  if (count <= 0) return 0;
+  let seen = 0;
+  for (let i = 0; i < masked.length; i++) {
+    if (/\d/.test(masked[i]) && ++seen === count) return i + 1;
+  }
+  return masked.length;
+}
+
+/**
+ * Input Mask:
+ *
+ * ```html
+ * <mimi-input-mask mask="(00) 0000 0000" autocomplete="tel-national" aria-label="Teléfono"
+ *   formControlName="phone" />   <!-- el valor: '5512345678' -->
+ * ```
+ *
+ * Implementa `FormValueControl<string>`: funciona con `[formField]`, `formControlName` y
+ * `[(ngModel)]`. Con Signal Forms, una máscara incompleta deja el campo inválido (error `mask`);
+ * con Reactive Forms y `ngModel`, agrega un validador (por ejemplo, `Validators.minLength`).
+ */
+@Component({
+  selector: 'mimi-input-mask',
+  template: `
+    <input
+      #field
+      type="text"
+      [class]="inputClasses()"
+      [id]="controlId()"
+      [value]="raw()"
+      [disabled]="disabled()"
+      [readOnly]="readonly()"
+      [attr.inputmode]="inputmode()"
+      [attr.autocomplete]="autocomplete() || null"
+      [attr.placeholder]="placeholder() || null"
+      [attr.maxlength]="mask().length"
+      [attr.aria-label]="ariaLabel() || null"
+      [attr.aria-labelledby]="ariaLabelledby() || null"
+      [attr.aria-describedby]="ariaDescribedby() || null"
+      [attr.aria-invalid]="showInvalid() || null"
+      [attr.aria-required]="required() || null"
+      [attr.data-invalid]="showInvalid() ? '' : null"
+      (input)="onInput()"
+      (keydown)="onKeydown($event)"
+      (compositionstart)="composing = true"
+      (compositionend)="composing = false; onInput()"
+      (blur)="touch.emit()"
+    />
+  `,
+  host: {
+    class: 'relative flex w-full min-w-0',
+    '[attr.data-state]': 'complete() ? "complete" : digits() ? "partial" : "empty"',
+    '[attr.data-disabled]': 'disabled() ? "" : null',
+    // El nombre y el id van al input de dentro.
+    '[attr.aria-label]': 'null',
+    '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
+    '[attr.id]': 'null',
+  },
+  providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiInputMask }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class MimiInputMask implements FormValueControl<string>, MimiFieldControl {
+  /** Solo los dígitos. Con `[(value)]` o un formulario. */
+  readonly value = model('');
+  /** La máscara: `0` es un dígito; lo demás, literales. Por ejemplo, `(00) 0000 0000`. */
+  readonly mask = input.required<string>();
+  /** `numeric` por defecto (teclado de números en el móvil). */
+  readonly inputmode = input('numeric');
+  readonly autocomplete = input<string>();
+  readonly placeholder = input('');
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly readonly = input(false, { transform: booleanAttribute });
+  /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
+  readonly invalid = input(false, { transform: booleanAttribute });
+  readonly touched = input(false, { transform: booleanAttribute });
+  readonly dirty = input(false, { transform: booleanAttribute });
+  readonly required = input(false, { transform: booleanAttribute });
+  /** id del input, para un `<label for>`. */
+  readonly id = input<string>();
+  readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
+  readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
+  /** Clases del input, mezcladas con `cn()` (gana la del usuario). */
+  readonly userClass = input('', { alias: 'class' });
+
+  /** Se emite al salir del campo: marca el control como tocado. */
+  readonly touch = output<void>();
+
+  private readonly field = viewChild.required<ElementRef<HTMLInputElement>>('field');
+
+  /** Estado del formulario, para mimi-form-field. */
+  readonly fieldState = injectFieldState();
+  get controlElement(): HTMLElement {
+    return this.field().nativeElement;
+  }
+
+  private static nextId = 0;
+  private readonly baseId = `mimi-input-mask-${MimiInputMask.nextId++}`;
+  protected readonly controlId = computed(() => this.id() || this.baseId);
+  readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
+
+  /** Lo que se pinta: el valor con la máscara. Con Signal Forms, una máscara incompleta es un error. */
+  protected readonly raw = transformedValue(this.value, {
+    parse: (text: string) => {
+      const digits = mimiUnmask(this.mask(), text);
+      const incomplete = digits.length > 0 && digits.length < mimiMaskLength(this.mask());
+      return incomplete ? { value: digits, error: { kind: 'mask' } } : { value: digits };
+    },
+    format: (digits: string) => mimiApplyMask(this.mask(), mimiUnmask(this.mask(), digits ?? '')),
+  });
+  protected readonly digits = computed(() => mimiUnmask(this.mask(), this.value() ?? ''));
+  protected readonly complete = computed(
+    () => this.digits().length === mimiMaskLength(this.mask()),
+  );
+
+  protected readonly inputClasses = computed(() =>
+    cn(inputVariants({ size: 'default' }), 'tabular-nums', this.userClass()),
+  );
+
+  /** Durante la composición de texto (IME) no se reformatea. */
+  protected composing = false;
+
+  /** Reformatea lo escrito o pegado y repone el cursor después del mismo dígito. */
+  protected onInput(): void {
+    if (this.composing) return;
+    const el = this.field().nativeElement;
+    const caret = el.selectionStart ?? el.value.length;
+    const digitsBefore = (el.value.slice(0, caret).match(/\d/g) ?? []).length;
+    this.write(mimiUnmask(this.mask(), el.value), digitsBefore);
+  }
+
+  /** Borrar sobre un literal borra el dígito de al lado (si no, el literal vuelve y se traba). */
+  protected onKeydown(event: KeyboardEvent): void {
+    if (event.key !== 'Backspace' && event.key !== 'Delete') return;
+    const el = this.field().nativeElement;
+    const start = el.selectionStart ?? 0;
+    if (start !== el.selectionEnd || this.readonly()) return;
+    const text = el.value;
+    const back = event.key === 'Backspace';
+    const neighbor = back ? text[start - 1] : text[start];
+    if (neighbor === undefined || /\d/.test(neighbor)) return;
+    // Hay un literal pegado al cursor: se salta y se borra el dígito siguiente en esa dirección.
+    const before = (text.slice(0, start).match(/\d/g) ?? []).length;
+    const digits = mimiUnmask(this.mask(), text);
+    const index = back ? before - 1 : before;
+    if (index < 0 || index >= digits.length) return;
+    event.preventDefault();
+    this.write(digits.slice(0, index) + digits.slice(index + 1), back ? before - 1 : before);
+  }
+
+  private write(digits: string, digitsBefore: number): void {
+    const el = this.field().nativeElement;
+    const masked = mimiApplyMask(this.mask(), digits);
+    this.raw.set(masked);
+    if (el.value !== masked) el.value = masked;
+    const caret = caretAfterDigits(masked, Math.min(digitsBefore, digits.length));
+    if (el.ownerDocument.activeElement === el) el.setSelectionRange(caret, caret);
+  }
+}

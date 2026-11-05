@@ -59,6 +59,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Progress', path: '/docs/components/progress', status: 'ready' },
       { title: 'Number Input', path: '/docs/components/number-input', status: 'ready' },
       { title: 'Password', path: '/docs/components/password', status: 'ready' },
+      { title: 'Input Mask', path: '/docs/components/input-mask', status: 'ready' },
     ],
   },
 ];

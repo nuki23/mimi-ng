@@ -164,6 +164,14 @@
       },
       "registryDependencies": ["button", "input", "select", "utils/cn"]
     },
+    "input-mask": {
+      "type": "component",
+      "files": ["components/input-mask/input-mask.ts", "components/input-mask/index.ts"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["input", "utils/cn", "utils/field-state"]
+    },
     "number-input": {
       "type": "component",
       "files": [

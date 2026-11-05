@@ -113,7 +113,7 @@ Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4
 - [x] G2.2 Number Input (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.2.md](plan/grupo-2/G2.2.md)
 - [x] G2.3 Password (pendiente de comprobación manual: gestores de contraseñas, NVDA y navegador) · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.3.md](plan/grupo-2/G2.3.md)
 - [ ] G2.4 Input Mask (paraguas de G2.4a y G2.4b) · v0.3.0 · paraguas · depende: las de G2.4a y G2.4b · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
-- [ ] G2.4a Input Mask: máscara de dígitos · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
+- [x] G2.4a Input Mask: máscara de dígitos (pendiente de comprobación manual: NVDA, Android y navegador) · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
 - [ ] G2.4b Input Mask: marcador, prefijo e ícono · v0.3.0 · S · depende: G2.4a · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
 - [ ] G2.5 Input OTP · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.5.md](plan/grupo-2/G2.5.md)
 - [ ] G2.6 Tags Input · v0.3.0 · M · depende: G2.0, G2.0b, 2.4, 2.2 · [docs/plan/grupo-2/G2.6.md](plan/grupo-2/G2.6.md)

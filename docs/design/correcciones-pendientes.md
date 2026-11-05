@@ -124,3 +124,8 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Presión del ojo:** 0,9 (`--mimi-press-scale-sm`); el diseño, 0,88.
   - **Deshabilitado y solo lectura:** el diseño solo muestra el campo deshabilitado; Mimi deshabilita también el botón. Solo lectura no tiene diseño: el botón sigue funcionando (mostrar no cambia el valor).
   - **Reglas propias y sin reglas:** no están en el diseño.
+
+  Input Mask (G2.4a):
+  - **Cursor, borrar sobre un literal, pegado e IME:** el diseño no los muestra. Mimi deja el cursor después del mismo dígito, borra el dígito vecino al borrar sobre un literal, acepta pegar con o sin literales y no reformatea durante la composición.
+  - **Literales al final:** el diseño (`applyMask`) los agrega mientras haya dígitos; Mimi escribe un literal solo si le sigue un dígito («(5», no «(5) »), para que borrar no se trabe.
+  - **Solo lectura:** no está en el diseño (el input nativo `readonly`).
