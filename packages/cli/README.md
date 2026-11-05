@@ -76,6 +76,7 @@ export class App {}
 - **Date Range**: `ng g mimi date-range` · [documentación](https://ng.mimiworks.dev/docs/components/date-range)
 - **Dialog**: `ng g mimi dialog` · [documentación](https://ng.mimiworks.dev/docs/components/dialog)
 - **Dropdown Menu**: `ng g mimi dropdown-menu` · [documentación](https://ng.mimiworks.dev/docs/components/dropdown-menu)
+- **File Upload**: `ng g mimi file-upload` · [documentación](https://ng.mimiworks.dev/docs/components/file-upload)
 - **FormField**: `ng g mimi form-field` · [documentación](https://ng.mimiworks.dev/docs/components/form-field)
 - **Input**: `ng g mimi input` · [documentación](https://ng.mimiworks.dev/docs/components/input)
 - **Input Mask**: `ng g mimi input-mask` · [documentación](https://ng.mimiworks.dev/docs/components/input-mask)

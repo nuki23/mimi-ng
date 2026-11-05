@@ -187,3 +187,11 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Fecha del botón:** con `Intl`, «24 sept 2026 – 30 sept 2026» (el diseño, «24 sep 2026 – 30 sep 2026»).
   - **Cerrar con solo el inicio:** el diseño no lo define; Mimi lo descarta y el valor no cambia.
   - **Límites:** se llaman `minDate` y `maxDate` (no `min`/`max`, que en un control de formulario tendrían el tipo del valor).
+
+  File Upload (G2.11):
+  - **La zona es un `<button>`** (el diseño, un `div` con `role="button"`), con el mismo contenido.
+  - **Nombres al arrastrar:** el diseño muestra «portada.jpg, contrato.pdf y 1 más»; el navegador no da los nombres hasta soltar, así que Mimi muestra solo la cantidad («Suelta para subir 3 archivos»).
+  - **Rechazados:** en el diseño, un archivo de más de 10 MB entra a la lista con su error; en Mimi no entra en el valor (sale por `(rejected)`) y la app decide si lo muestra.
+  - **La lista es de la app:** `mimi-file-item` recibe el estado; la subida simulada del diseño está en el ejemplo.
+  - **Tamaño con el idioma:** `Intl.NumberFormat` con `LOCALE_ID` («2,4 MB» en `es`; el diseño, «2.4 MB»).
+  - **Anuncios:** no están en el diseño.

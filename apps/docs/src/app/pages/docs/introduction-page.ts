@@ -46,6 +46,7 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'date-range', name: 'Date Range' },
   { id: 'dialog', name: 'Dialog' },
   { id: 'dropdown-menu', name: 'Dropdown Menu' },
+  { id: 'file-upload', name: 'File Upload' },
   { id: 'form-field', name: 'FormField' },
   { id: 'input', name: 'Input' },
   { id: 'input-mask', name: 'Input Mask' },

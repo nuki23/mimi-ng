@@ -126,7 +126,7 @@ Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4
   - [x] G2.9a Calendario y Date Picker · v0.3.0 · M · depende: las de G2.9 · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
   - [x] G2.9b Date Range · v0.3.0 · M · depende: G2.9a · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
 - [x] G2.10 Progress (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.10.md](plan/grupo-2/G2.10.md)
-- [ ] G2.11 File Upload · v0.3.0 · M · depende: G2.0, G2.0b, 2.1, G2.10 · [docs/plan/grupo-2/G2.11.md](plan/grupo-2/G2.11.md)
+- [x] G2.11 File Upload · v0.3.0 · M · depende: G2.0, G2.0b, 2.1, G2.10 · [docs/plan/grupo-2/G2.11.md](plan/grupo-2/G2.11.md)
 - [ ] G2.12 Color Picker · v0.3.0 · M · depende: G2.0, G2.0b, G1.1, G2.7, 2.2 · [docs/plan/grupo-2/G2.12.md](plan/grupo-2/G2.12.md)
 - [ ] 5.17 Revisión móvil (paraguas de 5.17a y 5.17b) · v0.3.0 · paraguas · depende: las de 5.17a y 5.17b · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
 - [~] 5.17a Revisión móvil del Grupo 1 (antes de G2.1), a falta de comprobación del usuario (C4 a C8 en teléfonos) · v0.3.0 o 0.2.1 · M · depende: — · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)

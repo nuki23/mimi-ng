@@ -40,3 +40,4 @@ export * from './lib/components/combobox';
 export * from './lib/components/calendar';
 export * from './lib/components/date-picker';
 export * from './lib/components/date-range';
+export * from './lib/components/file-upload';

@@ -49,7 +49,8 @@ export type TokenComponent =
   | 'tagsInput'
   | 'slider'
   | 'combobox'
-  | 'date';
+  | 'date'
+  | 'fileUpload';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -85,6 +86,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   slider: 'slider',
   combobox: 'combobox',
   date: 'date',
+  fileUpload: 'upload',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1619,6 +1621,68 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       default: '130px',
       preset: true,
       description: 'Columna de atajos (Date Range).',
+    },
+  ],
+  fileUpload: [
+    {
+      name: '--mimi-upload-bg',
+      default: 'dropzone',
+      inherits: '--mimi-dropzone',
+      preset: false,
+      description: 'Fondo de la zona.',
+    },
+    {
+      name: '--mimi-upload-border',
+      default: 'input',
+      inherits: '--mimi-input',
+      preset: false,
+      description: 'Borde discontinuo.',
+    },
+    {
+      name: '--mimi-upload-active-bg',
+      default: 'dropzone-active',
+      inherits: '--mimi-dropzone-active',
+      preset: false,
+      description: 'Fondo con archivos encima.',
+    },
+    {
+      name: '--mimi-upload-active-border',
+      default: 'dropzone-active-border',
+      inherits: '--mimi-dropzone-active-border',
+      preset: false,
+      description: 'Borde con archivos encima.',
+    },
+    {
+      name: '--mimi-upload-radius',
+      default: 'radius-card',
+      inherits: '--mimi-radius-card',
+      preset: true,
+      description: 'Radio de la zona.',
+    },
+    {
+      name: '--mimi-upload-height',
+      default: '176px',
+      preset: true,
+      description: 'Alto de la zona.',
+    },
+    {
+      name: '--mimi-upload-icon-size',
+      default: '44px',
+      preset: true,
+      description: 'Círculo del ícono.',
+    },
+    {
+      name: '--mimi-upload-item-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio de cada fila.',
+    },
+    {
+      name: '--mimi-upload-thumb-size',
+      default: '44px',
+      preset: true,
+      description: 'Miniatura de cada fila.',
     },
   ],
 };

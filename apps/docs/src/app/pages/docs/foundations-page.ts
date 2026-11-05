@@ -41,6 +41,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   calendar: ['cdk'],
   'date-picker': ['forms', 'cdk'],
   'date-range': ['forms', 'cdk'],
+  'file-upload': ['forms', 'cdk'],
   'dropdown-menu': ['cdk', 'aria'],
   'context-menu': ['cdk', 'aria'],
   tabs: ['cdk', 'aria'],
@@ -114,6 +115,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiDatePickerText',
     spanish: 'MIMI_DATE_PICKER_TEXT_ES',
     file: 'calendar/calendar-texts',
+  },
+  {
+    component: 'File Upload',
+    provider: 'provideMimiFileUploadText',
+    spanish: 'MIMI_FILE_UPLOAD_TEXT_ES',
+    file: 'file-upload/file-upload-texts',
   },
   {
     component: 'Slider',

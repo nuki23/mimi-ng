@@ -371,6 +371,13 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           optionRadius: '4px',
         },
         date: { cellSize: '40px', cellRadius: '50%', padding: '16px', presetsWidth: '150px' },
+        fileUpload: {
+          radius: '8px',
+          height: '140px',
+          iconSize: '40px',
+          itemRadius: '6px',
+          thumbSize: '36px',
+        },
       },
     });
     for (const line of [
@@ -479,6 +486,11 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-date-cell-radius: 50%;',
       '--mimi-date-padding: 16px;',
       '--mimi-date-presets-width: 150px;',
+      '--mimi-upload-radius: 8px;',
+      '--mimi-upload-height: 140px;',
+      '--mimi-upload-icon-size: 40px;',
+      '--mimi-upload-item-radius: 6px;',
+      '--mimi-upload-thumb-size: 36px;',
     ]) {
       expect(css).toContain(line);
     }

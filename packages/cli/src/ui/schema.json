@@ -72,6 +72,10 @@
             "label": "dropdown-menu"
           },
           {
+            "value": "file-upload",
+            "label": "file-upload"
+          },
+          {
             "value": "form-field",
             "label": "form-field"
           },

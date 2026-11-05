@@ -517,6 +517,23 @@ export interface MimiDateTokens {
 }
 
 /**
+ * File Upload. Fondos y bordes de la zona van en el CSS (`--mimi-upload-bg`, `-border`,
+ * `-active-bg`, `-active-border`).
+ */
+export interface MimiFileUploadTokens {
+  /** Radio de la zona (el global `radius-card`). */
+  radius?: string;
+  /** Alto mínimo de la zona (176px). */
+  height?: string;
+  /** Círculo del ícono (44px). */
+  iconSize?: string;
+  /** Radio de cada fila (el global `radius`). */
+  itemRadius?: string;
+  /** Miniatura de cada fila (44px). */
+  thumbSize?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -553,6 +570,7 @@ export interface MimiComponentTokens {
   slider?: MimiSliderTokens;
   combobox?: MimiComboboxTokens;
   date?: MimiDateTokens;
+  fileUpload?: MimiFileUploadTokens;
 }
 
 export interface MimiThemePreset {

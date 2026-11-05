@@ -40,11 +40,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 **(b) Se deciden al empezar su tarea.**
 
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
-- G2.11: nombres y forma de la API.
-- G2.11: hasta dónde llega Mimi y cómo recibe el estado de la subida (un componente, dos piezas o una función `upload`).
-- G2.11: un archivo rechazado, ¿entra en el valor marcado como error o queda fuera?
-- G2.11: la zona de soltar, ¿`div` con `role="button"` o `<button>` nativo?
-- G2.11: ¿el ícono y el color por tipo de archivo son del componente o del ejemplo?
 - G2.12: nombres de la API.
 - G2.12: el formato del valor (siempre hex, el formato elegido o un objeto).
 - G2.12: los espacios de color (HSV como el diseño u OKLCH).

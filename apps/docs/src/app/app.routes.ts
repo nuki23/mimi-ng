@@ -178,6 +178,14 @@ export const routes: Routes = [
           import('./pages/docs/components/date-range/date-range-page').then((m) => m.DateRangePage),
       },
       {
+        path: 'components/file-upload',
+        title: 'File Upload · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/file-upload/file-upload-page').then(
+            (m) => m.FileUploadPage,
+          ),
+      },
+      {
         path: 'components/tags-input',
         title: 'Tags Input · Mimi',
         loadComponent: () =>

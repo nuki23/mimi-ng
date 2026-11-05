@@ -305,6 +305,25 @@
         "utils/field-state"
       ]
     },
+    "file-upload": {
+      "type": "component",
+      "files": [
+        "components/file-upload/file-upload.ts",
+        "components/file-upload/file-upload-texts.ts",
+        "components/file-upload/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.0",
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "button",
+        "progress",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state"
+      ]
+    },
     "tags-input": {
       "type": "component",
       "files": [
