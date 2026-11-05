@@ -105,7 +105,7 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
 Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4a y G2.4b están dentro de `G2.4.md`; 5.17a y 5.17b, dentro de `5.17.md`.
 
 - [x] G2.0 Catálogo de tokens del Grupo 2 en la spec 13 (pendiente de comprobación manual: aprobación de las tablas) · v0.3.0 · M · depende: — · [docs/plan/grupo-2/G2.0.md](plan/grupo-2/G2.0.md)
-- [ ] G2.0b Tokens globales del Grupo 2 en el tema · v0.3.0 · M · depende: G2.0 · [docs/plan/grupo-2/G2.0b.md](plan/grupo-2/G2.0b.md)
+- [x] G2.0b Tokens globales del Grupo 2 en el tema · v0.3.0 · M · depende: G2.0 · [docs/plan/grupo-2/G2.0b.md](plan/grupo-2/G2.0b.md)
 - [ ] G2.1 Toggle Group · v0.3.0 · M · depende: G2.0, G2.0b, 5.17a · [docs/plan/grupo-2/G2.1.md](plan/grupo-2/G2.1.md)
 - [ ] 5.2 Página «Tema» sencilla · v0.3.0 · M · depende: G2.1, G2.0b · [docs/plan/grupo-2/5.2.md](plan/grupo-2/5.2.md)
 - [ ] G2.2 Number Input · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.2.md](plan/grupo-2/G2.2.md)

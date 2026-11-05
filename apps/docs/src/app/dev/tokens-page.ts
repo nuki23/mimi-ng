@@ -50,6 +50,20 @@ export class TokensPage {
     { name: 'ring', class: 'bg-ring' },
     { name: 'ring-soft', class: 'bg-ring-soft' },
     { name: 'switch-off', class: 'bg-switch-off' },
+    // Grupo 2 (G2.0b)
+    { name: 'range', class: 'bg-range' },
+    { name: 'track', class: 'bg-track' },
+    { name: 'track-fill', class: 'bg-track-fill' },
+    { name: 'thumb', class: 'bg-thumb' },
+    { name: 'chip', class: 'bg-chip' },
+    { name: 'chip-foreground', class: 'bg-chip-foreground' },
+    { name: 'dropzone', class: 'bg-dropzone' },
+    { name: 'dropzone-active', class: 'bg-dropzone-active' },
+    { name: 'dropzone-active-border', class: 'bg-dropzone-active-border' },
+    { name: 'strength-weak', class: 'bg-strength-weak' },
+    { name: 'strength-medium', class: 'bg-strength-medium' },
+    { name: 'strength-strong', class: 'bg-strength-strong' },
+    { name: 'selection', class: 'bg-selection' },
   ];
 
   protected readonly radii: Sample[] = [

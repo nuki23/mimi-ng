@@ -214,6 +214,22 @@
   --mimi-destructive-border: color-mix(in oklch, var(--mimi-destructive) 55%, transparent);
   --mimi-destructive-subtle: color-mix(in oklch, var(--mimi-destructive) 10%, transparent);
 
+  /* Entradas avanzadas, Grupo 2 (tokens-mimi.css; G2.0b). Los componentes los leen con valor
+     de respaldo, var(--mimi-track, …), para funcionar con un tema anterior a la 0.3.0. */
+  --mimi-range: color-mix(in oklab, var(--mimi-primary) 9%, var(--mimi-background));
+  --mimi-track: color-mix(in oklab, var(--mimi-foreground) 12%, var(--mimi-background));
+  --mimi-track-fill: var(--mimi-primary);
+  --mimi-thumb: oklch(1 0 0);
+  --mimi-chip: var(--mimi-secondary);
+  --mimi-chip-foreground: var(--mimi-secondary-foreground);
+  --mimi-dropzone: color-mix(in oklab, var(--mimi-muted) 55%, var(--mimi-background));
+  --mimi-dropzone-active: var(--mimi-info-soft);
+  --mimi-dropzone-active-border: var(--mimi-info);
+  --mimi-strength-weak: var(--mimi-destructive);
+  --mimi-strength-medium: var(--mimi-warning);
+  --mimi-strength-strong: var(--mimi-success);
+  --mimi-selection: var(--mimi-info);
+
   color-scheme: light;
 }
 
@@ -385,6 +401,21 @@
   --mimi-destructive-border: color-mix(in oklch, var(--mimi-destructive) 55%, transparent);
   --mimi-destructive-subtle: color-mix(in oklch, var(--mimi-destructive) 10%, transparent);
 
+  /* Entradas avanzadas: se repiten las que mezclan otros tokens, por si .dark no está en <html>. */
+  --mimi-range: color-mix(in oklab, var(--mimi-primary) 14%, var(--mimi-background));
+  --mimi-track: color-mix(in oklab, var(--mimi-foreground) 16%, var(--mimi-background));
+  --mimi-track-fill: var(--mimi-primary);
+  --mimi-thumb: oklch(0.985 0 0);
+  --mimi-chip: var(--mimi-secondary);
+  --mimi-chip-foreground: var(--mimi-secondary-foreground);
+  --mimi-dropzone: color-mix(in oklab, var(--mimi-muted) 50%, var(--mimi-background));
+  --mimi-dropzone-active: var(--mimi-info-soft);
+  --mimi-dropzone-active-border: var(--mimi-info);
+  --mimi-strength-weak: var(--mimi-destructive);
+  --mimi-strength-medium: var(--mimi-warning);
+  --mimi-strength-strong: var(--mimi-success);
+  --mimi-selection: var(--mimi-info);
+
   color-scheme: dark;
 }
 
@@ -469,6 +500,19 @@
   --color-ring-soft: var(--mimi-ring-soft);
   --color-overlay: var(--mimi-overlay);
   --color-switch-off: var(--mimi-switch-off);
+  --color-range: var(--mimi-range);
+  --color-track: var(--mimi-track);
+  --color-track-fill: var(--mimi-track-fill);
+  --color-thumb: var(--mimi-thumb);
+  --color-chip: var(--mimi-chip);
+  --color-chip-foreground: var(--mimi-chip-foreground);
+  --color-dropzone: var(--mimi-dropzone);
+  --color-dropzone-active: var(--mimi-dropzone-active);
+  --color-dropzone-active-border: var(--mimi-dropzone-active-border);
+  --color-strength-weak: var(--mimi-strength-weak);
+  --color-strength-medium: var(--mimi-strength-medium);
+  --color-strength-strong: var(--mimi-strength-strong);
+  --color-selection: var(--mimi-selection);
 
   --radius-sm: var(--mimi-radius-sm);
   --radius-md: calc(var(--mimi-radius) - 2px);
@@ -535,5 +579,38 @@
 @keyframes mimi-pulse {
   50% {
     opacity: 0.45;
+  }
+}
+
+/* Grupo 2 (tokens-mimi.css y, mimi-indet, F5 Estructura; G2.0b) */
+@keyframes mimi-caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes mimi-bob {
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes mimi-shake {
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes mimi-indet {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(260%);
   }
 }
