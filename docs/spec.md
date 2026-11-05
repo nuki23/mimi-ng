@@ -1546,7 +1546,7 @@ Catálogo de los tokens del tema Mimi en tres niveles (tarea T.0). Va al final p
 
 **Fuentes** (en `docs/design/`): `mimi-tokens-data.js`, la hoja de tokens en datos (se ve en `Mimi Tokens.dc.html`); `tokens-mimi.css`, con los globales y los compartidos en claro y oscuro; y `mimi-variables-componentes.css`, con los tokens por componente. Ningún valor de esta sección se inventa: lo que la hoja no defina, se pregunta.
 
-**Cobertura:** la hoja cubre 21 componentes: los 11 de la 0.1.0 y los del Grupo 1. Los Grupos 2 a 5 agregan sus tokens (y su tabla aquí) con cada tanda de diseño, antes de construirlos.
+**Cobertura:** la hoja cubre 21 componentes: los 11 de la 0.1.0 y los del Grupo 1. Los 12 del Grupo 2 (y el chip compartido) tienen su tabla desde la G2.0 (04/11/2026), sacada de los diseños de la Fase 3 y de `F5 Estructura` (la hoja no los tiene): 33 componentes en total. Los Grupos 3 a 5 agregan sus tokens (y su tabla aquí) con cada tanda de diseño, antes de construirlos.
 
 ### Niveles
 
@@ -1649,7 +1649,7 @@ Los usan varios componentes para quedar alineados. Los tamaños (SM, MD y LG) lo
 
 ### Nivel 3: por componente
 
-Una tabla por componente (21: los de la 0.1.0 y los del Grupo 1). «Hereda de» indica el token del que toma su valor; si está vacío, el valor por defecto es propio. Los valores en px se pasan a rem al llevarlos a ui-core (16px = 1rem), como en `tokens-mimi.css`. Los Grupos 2 a 5 agregan sus tablas con cada tanda de diseño.
+Una tabla por componente (21: los de la 0.1.0 y los del Grupo 1; más las del Grupo 2, propuestas en la G2.0). «Hereda de» indica el token del que toma su valor; si está vacío, el valor por defecto es propio. Los valores en px se pasan a rem al llevarlos a ui-core (16px = 1rem), como en `tokens-mimi.css`. Los Grupos 2 a 5 agregan sus tablas con cada tanda de diseño.
 
 #### Button (`btn`)
 
@@ -1928,6 +1928,223 @@ Implementado en la G1.10. En el preset (`MimiToolbarTokens`): `itemSize` y `blur
 
 Implementado en la G1.11. La hoja decía `40px`, `56px` y `20px`; el diseño final (`Mimi Pagination.dc.html`) usa el alto de control (32px en `sm`, 40px en `default`), un campo de 44/52px y 16px sobre el borde: manda el diseño final (corrección pendiente en `mimi-variables-componentes.css`, plan D6). `--mimi-pagination-offset` no lo usa el componente: la variante flotante solo pone la sombra y la posición va en `class` (decidido en la G1.11). En el preset (`MimiPaginationTokens`): `itemSize`, `inputWidth` y `blur`; los colores y la sombra van en el CSS. **Distinto del diseño o fuera de él** (plan, D6): escala al pulsar 0,9 (`--mimi-press-scale-sm`; el diseño, 0,88), deshabilitados con 0,5 de opacidad y sin cursor de no permitido (el diseño, 0,35 y `not-allowed`), anillo de foco del campo (el diseño no lo define), y al cambiar el tamaño se mantiene visible el primer registro (el diseño vuelve a la página 1).
 
+#### Grupo 2 (propuestas de la G2.0)
+
+Tablas escritas en la G2.0 (04/11/2026, modo autónomo) a partir del diseño: **cada tabla está pendiente de la aprobación del usuario** (plan, G2.0) y la cierra su componente al implementarlo, como las del Grupo 1. Diseños: `F3 Archivos Tags Toggle Color` (§9 File Upload, §10 Tags Input, §11 Toggle Group, §12 Color Picker), `Color Picker`, `F3 Slider OTP Numero Mascara` (§4 Slider, §5 Input OTP, §6 Number Input, §7 Input Mask, §8 Password), `F3 Combobox Fechas Hora` (§1 Combobox, §2 Date Picker y Date Range) y `F5 Estructura` (§4 Progress). Reglas comunes:
+
+- **Campos** (Number Input, Password, Input Mask, Tags Input, Combobox, el disparador del Date Picker): el diseño usa los mismos estados que Input: fondo `--mimi-input-background`, borde `--mimi-input`, hover `--mimi-input-hover`, foco `--mimi-ring` con `0 0 0 3px var(--mimi-ring-soft)`, error `--mimi-destructive` con el anillo de error y deshabilitado con `--mimi-disabled-opacity`. No se repiten en cada tabla: los colores de borde y fondo heredan de los tokens de Input cuando el componente es una directiva sobre `input[mimiInput]`, y de los globales cuando es un control propio.
+- **Anillo de error:** el diseño lo escribe `--mimi-destructive-soft`; en Mimi es `--mimi-destructive-ring` (`--mimi-destructive-soft` es el alias de la 0.1.0 que se quita en la 1.0).
+- **Preset:** los tamaños van en `components.<nombre>`; los colores y las sombras, solo en el CSS (sección 6.2). La columna «Preset» de cada tabla es la propuesta.
+- **Prefijos** comprobados con grep el 04/11/2026: ninguno es un global ni el de otro componente. `chip` convive con los globales `--mimi-chip` y `--mimi-chip-foreground` como `card` con `--mimi-card` (los tokens del componente terminan en `-bg`, `-fg`, `-height`…, nunca en `-foreground`). No se usan `track`, `range`, `thumb` ni `input` como prefijo (son globales, o el de Input).
+
+##### Toggle Group (`toggle-group`)
+
+Diseño: `F3 Archivos Tags Toggle Color`, §11.
+
+| Variable                               | Qué controla                    | Hereda de                 | Valor por defecto               | Preset |
+| -------------------------------------- | ------------------------------- | ------------------------- | ------------------------------- | ------ |
+| `--mimi-toggle-group-bg`               | Fondo del grupo                 | `--mimi-muted`            | —                               | No     |
+| `--mimi-toggle-group-fg`               | Ítem sin elegir                 | `--mimi-muted-foreground` | —                               | No     |
+| `--mimi-toggle-group-active-fg`        | Ítem elegido y hover            | `--mimi-foreground`       | —                               | No     |
+| `--mimi-toggle-group-indicator`        | Indicador (simple) y presionado | `--mimi-card`             | —                               | No     |
+| `--mimi-toggle-group-indicator-shadow` | Sombra del indicador            | `--mimi-shadow-neutral`   | —                               | No     |
+| `--mimi-toggle-group-radius`           | Radio del ítem                  | `--mimi-radius`           | —                               | Sí     |
+| `--mimi-toggle-group-padding`          | Relleno del grupo               | —                         | `3px`                           | Sí     |
+| `--mimi-toggle-group-gap`              | Separación entre ítems          | —                         | `2px`                           | Sí     |
+| `--mimi-toggle-group-item-height`      | Alto del ítem                   | —                         | `32px`                          | Sí     |
+| `--mimi-toggle-group-item-px`          | Relleno horizontal del ítem     | —                         | `12px`                          | Sí     |
+| `--mimi-toggle-group-icon-width`       | Ancho del ítem solo con ícono   | —                         | `44px`                          | Sí     |
+| `--mimi-toggle-group-font-size`        | Tamaño de texto                 | —                         | `13.5px`                        | Sí     |
+| `--mimi-toggle-group-spring`           | Curva del indicador             | —                         | `cubic-bezier(.3, 1.35, .5, 1)` | Sí     |
+
+El radio del grupo es `radio + padding` (el diseño, `calc(var(--mimi-radius) + 3px)`), sin token propio. El indicador se desliza en 0,45 s (como Tabs, sin token). Peso 500 sin elegir y 600 elegido; íconos de 16px; separación ícono-texto 6px. La variante con el elegido en `primary` (el grupo «Texto e ícono · múltiple») usa `--mimi-primary`, `--mimi-primary-foreground` y `--mimi-shadow-primary` sin token propio, como los tonos de Button; su nombre lo decide la G2.1. **Distinto del diseño o fuera de él** (D6): la presión del diseño es 0,93 (Mimi usa un token de escala existente, lo decide la G2.1); el diseño solo desliza el indicador en simple: en múltiple, cada ítem elegido tiene su fondo.
+
+##### Number Input (`number`)
+
+Diseño: `F3 Slider OTP Numero Mascara`, §6.
+
+| Variable                      | Qué controla            | Hereda de               | Valor por defecto | Preset |
+| ----------------------------- | ----------------------- | ----------------------- | ----------------- | ------ |
+| `--mimi-number-height`        | Altura                  | `--mimi-control-height` | —                 | Sí     |
+| `--mimi-number-radius`        | Radio                   | `--mimi-radius`         | —                 | Sí     |
+| `--mimi-number-px`            | Relleno horizontal      | —                       | `4px`             | Sí     |
+| `--mimi-number-button-size`   | Botones − y +           | —                       | `30px`            | Sí     |
+| `--mimi-number-button-radius` | Radio de los botones    | `--mimi-radius-sm`      | —                 | Sí     |
+| `--mimi-number-button-hover`  | Fondo del botón (hover) | `--mimi-accent`         | —                 | No     |
+
+Texto de 14px, peso 500, cifras tabulares y centrado; íconos de 15px (el diseño; los controles usan `--mimi-icon-size`, 16px: lo decide la G2.2). Botón deshabilitado en el mínimo o el máximo; presión 0,88 en el diseño. Campo y estados: los de Input (ver arriba).
+
+##### Password (`password`)
+
+Diseño: `F3 Slider OTP Numero Mascara`, §8.
+
+| Variable                        | Qué controla                      | Hereda de          | Valor por defecto | Preset |
+| ------------------------------- | --------------------------------- | ------------------ | ----------------- | ------ |
+| `--mimi-password-toggle-size`   | Botón de mostrar u ocultar        | —                  | `32px`            | Sí     |
+| `--mimi-password-toggle-radius` | Radio del botón                   | `--mimi-radius-sm` | —                 | Sí     |
+| `--mimi-password-toggle-hover`  | Fondo del botón (hover)           | `--mimi-accent`    | —                 | No     |
+| `--mimi-password-meter-height`  | Alto de cada segmento del medidor | —                  | `6px`             | Sí     |
+| `--mimi-password-meter-gap`     | Separación entre segmentos        | —                  | `4px`             | Sí     |
+| `--mimi-password-meter-track`   | Segmento vacío                    | `--mimi-track`     | —                 | No     |
+
+Campo: relleno `0 4px 0 12px` (el de Input a la izquierda, 4px a la derecha para el botón) y separación de 6px. El medidor tiene 4 segmentos con los globales `--mimi-strength-weak`, `-medium` y `-strong` (sin token propio), la etiqueta del nivel en `<tono>-soft-foreground` (13px, 600, 48px de ancho mínimo) y la lista de reglas en dos columnas (12,5px, ícono de 14px, `success-soft-foreground` cuando se cumple). La galería de la derecha usa campos de 36px y segmentos de 5px: son miniaturas, no un tamaño.
+
+##### Input Mask (`mask`)
+
+Diseño: `F3 Slider OTP Numero Mascara`, §7.
+
+| Variable                    | Qué controla                     | Hereda de                  | Valor por defecto | Preset |
+| --------------------------- | -------------------------------- | -------------------------- | ----------------- | ------ |
+| `--mimi-mask-placeholder`   | Parte de la máscara sin escribir | `--mimi-input-placeholder` | —                 | No     |
+| `--mimi-mask-gap`           | Separación con prefijo e ícono   | —                          | `8px`             | Sí     |
+| `--mimi-mask-prefix-bg`     | Fondo del prefijo                | `--mimi-muted`             | —                 | No     |
+| `--mimi-mask-prefix-height` | Alto del prefijo                 | —                          | `26px`            | Sí     |
+| `--mimi-mask-prefix-radius` | Radio del prefijo                | `--mimi-radius-sm`         | —                 | Sí     |
+
+Campo: el de Input (relleno de 12px; texto de 14px con cifras tabulares y `letter-spacing: .02em`). Prefijo con `margin-left: -6px`, relleno de 8px y texto de 13px/600; ícono de 16px en `muted-foreground`; marca de tarjeta de 22px con radio fijo de 5px (fuera de los tokens: D6); ícono de válido en `success-soft-foreground`.
+
+##### Input OTP (`otp`)
+
+Diseño: `F3 Slider OTP Numero Mascara`, §5.
+
+| Variable               | Qué controla                | Hereda de                 | Valor por defecto | Preset |
+| ---------------------- | --------------------------- | ------------------------- | ----------------- | ------ |
+| `--mimi-otp-width`     | Ancho de la casilla         | —                         | `46px`            | Sí     |
+| `--mimi-otp-height`    | Alto de la casilla          | —                         | `54px`            | Sí     |
+| `--mimi-otp-gap`       | Separación                  | —                         | `8px`             | Sí     |
+| `--mimi-otp-radius`    | Radio                       | `--mimi-radius`           | —                 | Sí     |
+| `--mimi-otp-font-size` | Tamaño del carácter         | —                         | `22px`            | Sí     |
+| `--mimi-otp-bg`        | Fondo de la casilla         | `--mimi-input-background` | —                 | No     |
+| `--mimi-otp-border`    | Borde                       | `--mimi-input`            | —                 | No     |
+| `--mimi-otp-separator` | Guion separador             | `--mimi-border`           | —                 | No     |
+| `--mimi-otp-caret`     | Cursor de la casilla activa | `--mimi-foreground`       | —                 | No     |
+
+Carácter de peso 600 con cifras tabulares. Separador de 12×2px. Cursor de 2×22px con `mimi-caret 1s steps(1) infinite`. Completo: borde `--mimi-success` con anillo `--mimi-success-ring`; error: borde y anillo de error y `mimi-shake` en la fila. La galería de estados usa casillas de 38×46px (19px, separación de 6px): miniaturas, no un tamaño.
+
+##### Tags Input (`tags`) y chip (`chip`)
+
+Diseño: `F3 Archivos Tags Toggle Color`, §10 (el chip, también en `F3 Combobox Fechas Hora`, §1, múltiple). El chip es el ítem compartido `chip` de la CLI (decidido el 03/11/2026): lo usan Tags Input y el Combobox múltiple.
+
+| Variable                      | Qué controla                    | Hereda de | Valor por defecto                                                 | Preset |
+| ----------------------------- | ------------------------------- | --------- | ----------------------------------------------------------------- | ------ |
+| `--mimi-tags-gap`             | Separación entre chips          | —         | `6px`                                                             | Sí     |
+| `--mimi-tags-padding`         | Relleno de la caja              | —         | `5px 10px 5px 6px`                                                | Sí     |
+| `--mimi-tags-input-min-width` | Ancho mínimo del campo de texto | —         | `120px`                                                           | Sí     |
+| `--mimi-tags-full-border`     | Borde con el límite alcanzado   | —         | `color-mix(in oklab, var(--mimi-warning) 70%, var(--mimi-input))` | No     |
+
+| Variable                  | Qué controla    | Hereda de                | Valor por defecto | Preset |
+| ------------------------- | --------------- | ------------------------ | ----------------- | ------ |
+| `--mimi-chip-bg`          | Fondo           | `--mimi-chip`            | —                 | No     |
+| `--mimi-chip-fg`          | Texto           | `--mimi-chip-foreground` | —                 | No     |
+| `--mimi-chip-height`      | Alto            | —                        | `26px`            | Sí     |
+| `--mimi-chip-radius`      | Radio           | `--mimi-badge-radius`    | —                 | Sí     |
+| `--mimi-chip-font-size`   | Tamaño de texto | —                        | `13px`            | Sí     |
+| `--mimi-chip-remove-size` | Botón de quitar | —                        | `18px`            | Sí     |
+
+Caja: alto mínimo `--mimi-control-height`, campo de texto de 28px. Chip: relleno `0 4px 0 10px`, peso 500, separación de 4px; botón de quitar redondo con ícono de 12px, opacidad 0,7 (1 en hover) y fondo `color-mix(in oklab, var(--mimi-foreground) 12%, transparent)` en hover (en el Combobox, `muted-foreground` → `foreground` en vez de la opacidad: D6 elige uno). Chip con error: `--mimi-destructive-soft` / `-soft-foreground` (es decir, `destructive-soft-bg` en Mimi). Contador en `muted-foreground` y en `warning-soft-foreground` con el límite.
+
+##### Slider (`slider`)
+
+Diseño: `F3 Slider OTP Numero Mascara`, §4.
+
+| Variable                     | Qué controla                   | Hereda de               | Valor por defecto | Preset |
+| ---------------------------- | ------------------------------ | ----------------------- | ----------------- | ------ |
+| `--mimi-slider-track`        | Pista                          | `--mimi-track`          | —                 | No     |
+| `--mimi-slider-fill`         | Parte llena y borde del pulgar | `--mimi-track-fill`     | —                 | No     |
+| `--mimi-slider-thumb`        | Fondo del pulgar               | `--mimi-thumb`          | —                 | No     |
+| `--mimi-slider-thumb-shadow` | Sombra del pulgar              | `--mimi-shadow-neutral` | —                 | No     |
+| `--mimi-slider-height`       | Grosor de la pista             | —                       | `6px`             | Sí     |
+| `--mimi-slider-thumb-size`   | Tamaño del pulgar              | —                       | `20px`            | Sí     |
+
+Área táctil de 20px de alto; borde del pulgar de 2px con el color de la parte llena (`--mimi-destructive` con error). Hover: `0 0 0 6px var(--mimi-ring-soft)`; arrastre: 8px y escala 1,12; foco: `0 0 0 2px var(--mimi-background), 0 0 0 4px var(--mimi-ring)`. Marcas: puntos de 6px (`primary-foreground` dentro del rango, `foreground` al 30 % fuera) y etiquetas de 12px a 26px de la pista. Burbuja del valor: colores de Tooltip, radio fijo de 7px (Tooltip usa 8px: D6), relleno `4px 8px`, 12px/600, flecha de 7px y 10px sobre el pulgar.
+
+##### Combobox (`combobox`)
+
+Diseño: `F3 Combobox Fechas Hora`, §1.
+
+| Variable                          | Qué controla                | Hereda de               | Valor por defecto | Preset |
+| --------------------------------- | --------------------------- | ----------------------- | ----------------- | ------ |
+| `--mimi-combobox-height`          | Altura del campo            | `--mimi-control-height` | —                 | Sí     |
+| `--mimi-combobox-radius`          | Radio del campo y del panel | `--mimi-radius`         | —                 | Sí     |
+| `--mimi-combobox-menu-bg`         | Fondo del panel             | `--mimi-popover`        | —                 | No     |
+| `--mimi-combobox-menu-shadow`     | Sombra del panel            | `--mimi-shadow-popover` | —                 | No     |
+| `--mimi-combobox-menu-max-height` | Alto máximo del panel       | —                       | `228px`           | Sí     |
+| `--mimi-combobox-option-height`   | Alto mínimo de opción       | —                       | `34px`            | Sí     |
+| `--mimi-combobox-option-radius`   | Radio de opción             | `--mimi-radius-sm`      | —                 | Sí     |
+| `--mimi-combobox-option-hover`    | Opción activa               | `--mimi-accent`         | —                 | No     |
+
+Campo con relleno `0 10px 0 12px`, separación de 8px e íconos de 16px en `muted-foreground` (el chevron gira en 0,2 s). Panel a 2px del campo, relleno de 4px, separación de 1px y borde `--mimi-border`. Coincidencia: peso 700 y subrayado a 3px. «Crear…»: `info-soft-foreground`, hover `info-soft`, línea superior `--mimi-border`. Múltiple: la caja de Tags Input con chips (`chip`) y una casilla de 16px por opción (borde `--mimi-input`, marcada `--mimi-primary`). Cargando: `mimi-spin` 0,8 s y dos líneas de esqueleto de 26px. Sin resultados: ícono de 20px, título 14px/600 y texto 13px.
+
+##### Date Picker y Date Range (`date`, provisional)
+
+Diseño: `F3 Combobox Fechas Hora`, §2. **Provisional:** una sola tabla para los dos; la G2.9 decide si se dividen (pregunta de la G2.0).
+
+| Variable                    | Qué controla              | Hereda de                   | Valor por defecto | Preset |
+| --------------------------- | ------------------------- | --------------------------- | ----------------- | ------ |
+| `--mimi-date-cell-size`     | Tamaño del día            | —                           | `36px`            | Sí     |
+| `--mimi-date-cell-radius`   | Radio del día             | `--mimi-radius-sm`          | —                 | Sí     |
+| `--mimi-date-cell-hover`    | Día en hover              | `--mimi-accent`             | —                 | No     |
+| `--mimi-date-selected-bg`   | Día elegido               | `--mimi-primary`            | —                 | No     |
+| `--mimi-date-selected-fg`   | Texto del día elegido     | `--mimi-primary-foreground` | —                 | No     |
+| `--mimi-date-range`         | Banda del rango           | `--mimi-range`              | —                 | No     |
+| `--mimi-date-today-ring`    | Borde del día de hoy      | `--mimi-border`             | —                 | No     |
+| `--mimi-date-menu-bg`       | Fondo del panel           | `--mimi-popover`            | —                 | No     |
+| `--mimi-date-menu-shadow`   | Sombra del panel          | `--mimi-shadow-popover`     | —                 | No     |
+| `--mimi-date-padding`       | Relleno del panel         | —                           | `12px`            | Sí     |
+| `--mimi-date-presets-width` | Columna de atajos (rango) | —                           | `130px`           | Sí     |
+
+Día de 13,5px con cifras tabulares (600 si está elegido o es hoy); hoy lleva además un punto de 4px. Fuera del mes: opacidad 0,55 y `muted-foreground`; deshabilitado: 0,38 y tachado (el diseño no usa `--mimi-disabled-opacity`: D6). Encabezado de días de 28px (12px/500, `muted-foreground`); filas separadas 2px. Botones de mes anterior y siguiente de 30px con borde; título 14px/600. Vista de meses y años: 3 columnas de 44px de alto (252px de ancho). Pie con «Ir a hoy» de 28px. Rango: atajos de 32px (13px, elegido en `accent`) y la banda con el radio del día en sus extremos.
+
+##### Progress (`progress`)
+
+Diseño: `F5 Estructura`, §4.
+
+| Variable                       | Qué controla               | Hereda de        | Valor por defecto | Preset |
+| ------------------------------ | -------------------------- | ---------------- | ----------------- | ------ |
+| `--mimi-progress-track`        | Pista                      | `--mimi-track`   | —                 | No     |
+| `--mimi-progress-fill`         | Parte llena                | `--mimi-primary` | —                 | No     |
+| `--mimi-progress-height`       | Grosor de la barra         | —                | `8px`             | Sí     |
+| `--mimi-progress-circle-size`  | Tamaño del círculo         | —                | `76px`            | Sí     |
+| `--mimi-progress-circle-width` | Grosor del círculo (de 36) | —                | `3`               | Sí     |
+
+Barra redonda (999px). El llenado anima el ancho en 0,35 s con `cubic-bezier(.2,.8,.2,1)`; el círculo, el trazo en 0,4 s con la misma curva. Indeterminada: un tramo del 40 % con `mimi-indet 1.4s cubic-bezier(.4,0,.2,1) infinite` («con reducir movimiento late en vez de desplazarse», dice el diseño); círculo indeterminado: tramo de 28/100 con `mimi-spin 1s linear infinite`. Con tono, el llenado es `--mimi-<tono>` y el número `<tono>-soft-foreground`. Tamaños del diseño: barra de 8px y de 6px (la de tonos); círculo de 76px (trazo 3, texto 16px) y de 44px (trazo 4, texto 11px), texto 700. La parte llena usa `primary` como el diseño, no `--mimi-track-fill` (que hoy vale lo mismo).
+
+##### File Upload (`upload`)
+
+Diseño: `F3 Archivos Tags Toggle Color`, §9.
+
+| Variable                      | Qué controla                | Hereda de                       | Valor por defecto | Preset |
+| ----------------------------- | --------------------------- | ------------------------------- | ----------------- | ------ |
+| `--mimi-upload-bg`            | Fondo de la zona            | `--mimi-dropzone`               | —                 | No     |
+| `--mimi-upload-border`        | Borde discontinuo           | `--mimi-input`                  | —                 | No     |
+| `--mimi-upload-active-bg`     | Fondo con archivo encima    | `--mimi-dropzone-active`        | —                 | No     |
+| `--mimi-upload-active-border` | Borde con archivo encima    | `--mimi-dropzone-active-border` | —                 | No     |
+| `--mimi-upload-radius`        | Radio de la zona            | `--mimi-radius-card`            | —                 | Sí     |
+| `--mimi-upload-height`        | Alto de la zona             | —                               | `176px`           | Sí     |
+| `--mimi-upload-icon-size`     | Círculo del ícono           | —                               | `44px`            | Sí     |
+| `--mimi-upload-item-radius`   | Radio de la fila de archivo | `--mimi-radius`                 | —                 | Sí     |
+| `--mimi-upload-thumb-size`    | Miniatura de la fila        | —                               | `44px`            | Sí     |
+
+Zona: borde de 2px (discontinuo; continuo con archivo encima), relleno 16px, separación 8px, hover `--mimi-input-hover`, presión 0,985; con archivo encima, `--mimi-glow-info`, escala 1,01 y el ícono (22px, círculo `--mimi-info` / `info-foreground`; en reposo `--mimi-muted` / `foreground`) con `mimi-bob 1s ease-in-out infinite`. Título 14px/600 y texto 12,5px. Fila: `--mimi-card`, borde `--mimi-border` (error: `color-mix(in oklab, var(--mimi-destructive) 45%, var(--mimi-border))`), `--mimi-shadow-neutral`, relleno 10px, separación 12px; filas separadas 8px. Progreso de 5px (el de Progress con otro grosor). Botones de 30px: quitar (hover `destructive-soft-bg`) y reintentar (borde, hover `accent`).
+
+##### Color Picker (`color-picker`)
+
+Diseño: `Color Picker` (y `F3 Archivos Tags Toggle Color`, §12).
+
+| Variable                          | Qué controla                | Hereda de               | Valor por defecto | Preset |
+| --------------------------------- | --------------------------- | ----------------------- | ----------------- | ------ |
+| `--mimi-color-picker-bg`          | Fondo del panel             | `--mimi-popover`        | —                 | No     |
+| `--mimi-color-picker-shadow`      | Sombra del panel            | `--mimi-shadow-popover` | —                 | No     |
+| `--mimi-color-picker-radius`      | Radio del panel             | `--mimi-radius`         | —                 | Sí     |
+| `--mimi-color-picker-width`       | Ancho del panel             | —                       | `280px`           | Sí     |
+| `--mimi-color-picker-padding`     | Relleno y separación        | —                       | `12px`            | Sí     |
+| `--mimi-color-picker-area-height` | Alto del área de saturación | —                       | `150px`           | Sí     |
+| `--mimi-color-picker-area-radius` | Radio del área              | `--mimi-radius-sm`      | —                 | Sí     |
+| `--mimi-color-picker-hue-height`  | Alto de la barra de tono    | —                       | `12px`            | Sí     |
+| `--mimi-color-picker-swatch-gap`  | Separación de las muestras  | —                       | `6px`             | Sí     |
+
+Pulgares de 14px (área) y 16px (tono) con borde blanco de 2px y sombras fijas (`oklch(0 0 0 / .25)` y `/ .3`): colores fijos pendientes de decidir en la G2.12. Muestra actual de 28px; selector de formato con ítems de 28px (11,5px) sobre `--mimi-muted`; campo de texto de 32px en `--mimi-font-mono` 12px. Paleta y recientes en 8 columnas: muestras redondas (recientes con `--mimi-radius-sm`), hover 1,12, presión 0,9; la elegida con `0 0 0 2px var(--mimi-popover), 0 0 0 4px var(--mimi-foreground)`. Títulos de 11px/600 en mayúsculas.
+
 **En ui-core desde la T.1:** los tonos con sus derivados, sombras y glow, `destructive-ring`, `destructive-soft-bg` y `destructive-soft-foreground`, `tooltip`, `glass`, `overlay-blur`, `glass-blur`, `soft-mix`, `shadow-popover` y los compartidos (foco, deshabilitado, íconos); `overlay` y `popover` en oscuro con los valores del diseño. Lo demás de `tokens-mimi.css` (rango, pista, chips, zona de arrastre, fuerza, selección, `corner-shape`, `input-hover` y los keyframes de la Fase 3 y de Effects) entra con su componente. `--mimi-input-hover` entró con Pagination (G1.11), con el valor de `tokens-mimi.css` y el color `input-hover` en `@theme inline`.
 
 **Hovers corregidos por contraste (V.1):** en claro, `--mimi-success-hover`, `--mimi-info-hover` y `--mimi-destructive-hover` mezclan el tono al 88 % con `foreground` (el diseño los mezcla con `background` y no pasaban AA). Corrección de Mimi pendiente de pasar al diseño (plan, D6); también en `tokens-mimi.css`. La prueba `contrast.spec.ts` (ui-core) lee `theme-base.css` y falla si un texto queda por debajo de 4,5:1 sobre su fondo, en reposo o en hover, en claro u oscuro.
@@ -1957,7 +2174,7 @@ Están en `tokens-mimi.css` (valores en claro y oscuro) y no tienen fila propia 
 ### Reglas
 
 - **Obligatorio en cada componente nuevo:** registrar sus tokens en `MimiComponentTokens` (`theme/types.ts`) y su prefijo en `COMPONENT_PREFIX` (`theme/provider.ts`), con prueba en `provider.spec.ts`; tener su tabla en esta sección; y agregarlo a `apps/docs/src/app/code/component-tokens.ts`, la única lista de variables por componente (de ahí sale la tabla «Variables CSS» de su página, y `component-tokens.spec.ts` la compara con el código). Es un paso del comando `/componente`. **Motivo:** este sistema (los tres niveles, la cascada de la sección 6.2, el preset y `component-tokens.ts`) es el contrato que usará el Theme Studio, un proyecto aparte (`docs/futuro/theme-studio.md`). El Studio no define variables propias: edita las que Mimi expone. Un componente sin tokens registrados no se podrá personalizar ni con el preset ni con el Studio.
-- **Prefijos:** los de la hoja son `btn`, `input`, `textarea`, `badge`, `card`, `avatar`, `switch`, `checkbox`, `field` (FormField), `separator`, `skeleton`, `select`, `dialog`, `confirm`, `toast`, `tooltip`, `popover`, `menu` (Dropdown y Context Menu comparten), `tabs`, `toolbar` y `pagination`. En el código de la 0.1.0 solo están registrados `btn`, `input` y `card`.
+- **Prefijos:** los de la hoja son `btn`, `input`, `textarea`, `badge`, `card`, `avatar`, `switch`, `checkbox`, `field` (FormField), `separator`, `skeleton`, `select`, `dialog`, `confirm`, `toast`, `tooltip`, `popover`, `menu` (Dropdown y Context Menu comparten), `tabs`, `toolbar` y `pagination`. Los del Grupo 2 (G2.0): `toggle-group`, `number` (Number Input), `password`, `mask` (Input Mask), `otp`, `tags`, `chip` (compartido por Tags Input y Combobox), `slider`, `combobox`, `date` (Date Picker y Date Range, provisional), `progress`, `upload` (File Upload) y `color-picker`. En el código de la 0.1.0 solo están registrados `btn`, `input` y `card`.
 - **Nombres de los derivados:** `<tono>-soft` es el fondo suave, `<tono>-ring` el anillo y `<tono>-hover` el hover. El `--mimi-destructive-soft` de ui-core (un anillo, anterior a la convención) pasa a `--mimi-destructive-ring` en la tarea T.1; el fondo suave de destructive es `--mimi-destructive-soft-bg`.
 - **Diferencias entre el código de la 0.1.0 y la hoja** (se resuelven en T.0b, cuidando los presets que ya usan los nombres viejos):
   - Button: el código usa `--mimi-btn-padding-x`, `--mimi-btn-border-width`, `--mimi-btn-letter-spacing`, `--mimi-btn-focus-ring-width` y `--mimi-btn-height-sm`/`-lg`; la hoja usa `px`, `border` (color), `gap`, `bg`, `fg`, `bg-hover`, `shadow`, `shadow-hover`, `ring` y `press-scale`.

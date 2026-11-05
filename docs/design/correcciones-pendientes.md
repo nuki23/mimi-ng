@@ -79,3 +79,15 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Number Input (G2.2), lectura del número:** el diseño interpreta el texto quitando todo lo que no es dígito, punto o signo y usando `parseFloat` (función `num()` de `F3 Slider OTP Numero Mascara`). Con un idioma de coma decimal (por ejemplo, `es-ES`), «1.250,5» se lee mal. Mimi tiene que leer con los separadores del idioma.
   - **Input Mask (G2.4), valor guardado:** en el diseño, el estado guarda solo los dígitos y la máscara se aplica al mostrar (`mask[key]` en `mask()`). Qué guarda Mimi está pendiente de decidir (plan, G2.4).
   - **Anillo de error (Number Input, Input Mask, Password, Input OTP, Tags Input):** los diseños del Grupo 2 usan `--mimi-destructive-soft` para el anillo de error; desde la T.1, el anillo es `--mimi-destructive-ring` (`--mimi-destructive-soft` queda como alias hasta la 1.0, spec 12).
+
+  Grupo 2 (G2.0), al escribir las tablas de tokens (04/11/2026, spec 13, «Grupo 2»):
+  - **La hoja de tokens no tiene el Grupo 2:** `mimi-tokens-data.js` y `mimi-variables-componentes.css` no traen tokens por componente del Grupo 2. Las tablas de la spec 13 salen de las medidas en línea de los `.dc.html`. Agregarlas a la hoja.
+  - **Presiones distintas:** Toggle Group 0,93; Number Input y Password 0,88; File Upload 0,985; Color Picker 0,9 y 0,94; Date Picker 0,9, 0,94 y 0,96. Mimi usa `--mimi-press-scale` o `--mimi-press-scale-sm`; cada componente anota cuál.
+  - **Radios fijos:** marca de tarjeta del Input Mask (5px) y burbuja del Slider (7px; Tooltip usa 8px).
+  - **Íconos de 15px** en los botones de Number Input y en el ojo de la galería de Password; los controles usan `--mimi-icon-size` (16px).
+  - **Deshabilitado del Date Picker:** opacidad 0,38 y tachado; el resto de Mimi usa `--mimi-disabled-opacity` (0,5).
+  - **Botón de quitar del chip:** en Tags Input baja la opacidad a 0,7; en el Combobox usa `muted-foreground`. Elegir uno (el chip es compartido).
+  - **Color Picker:** pulgares con borde `#fff` y sombras `oklch(0 0 0 / .25)` y `/ .3`, y el degradado con `#000` y `#fff` (este último es inherente al área de saturación). Los pulgares quedan pendientes de la G2.12.
+  - **Progress:** la parte llena usa `--mimi-primary` y no `--mimi-track-fill` (que vale lo mismo). Decidir si Progress sigue a `track-fill`.
+  - **Miniaturas de estados:** las galerías de Input OTP (38×46px) y Password (campo de 36px, medidor de 5px) no son un tamaño; si se quiere un tamaño `sm`, diseñarlo.
+  - **`--mimi-selection`:** solo lo usa `Theme Studio`; ningún componente del Grupo 2 lo usa. Se lleva al tema igual (G2.0b).
