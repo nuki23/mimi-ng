@@ -104,9 +104,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 - G2.12: el borde y las sombras fijos de los pulgares: ¿excepción documentada o tokens del componente?
 - G2.12: ¿paleta por defecto o solo la del usuario?
 - G2.12: la paleta y los recientes, ¿una parada de Tab por muestra o un grupo con flechas?
-- 5.17 (al empezar la 5.17a): el nivel del tamaño de objetivo (2.5.8 AA obligatorio o 2.5.5 AAA).
-- 5.17 (al empezar la 5.17a): qué teléfonos reales y quién los prueba.
-- 5.17 (al empezar la 5.17a): ¿se suman los componentes básicos de la 0.1.0?
 - G2.P: ¿la M.9 entra en la 0.3.0 o en una versión siguiente?
 - G2.P: ¿dónde queda la tabla acumulada del CSS (esta tarea e historial, o la spec 10)?
 

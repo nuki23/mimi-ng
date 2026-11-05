@@ -91,3 +91,8 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Progress:** la parte llena usa `--mimi-primary` y no `--mimi-track-fill` (que vale lo mismo). Decidir si Progress sigue a `track-fill`.
   - **Miniaturas de estados:** las galerías de Input OTP (38×46px) y Password (campo de 36px, medidor de 5px) no son un tamaño; si se quiere un tamaño `sm`, diseñarlo.
   - **`--mimi-selection`:** solo lo usa `Theme Studio`; ningún componente del Grupo 2 lo usa. Se lleva al tema igual (G2.0b).
+
+  Revisión móvil del Grupo 1 (5.17a, 04/11/2026):
+  - **Sin diseños móviles:** ningún componente tiene diseño para pantallas chicas. Mimi usa en móvil los paneles de escritorio, anclados y dentro de la pantalla (spec 4, «Paneles en pantallas chicas»). Si se quiere una hoja inferior o un panel modal en móvil (Select, Combobox, Date Picker), diseñarla.
+  - **Alineación de los paneles:** cuando la alineación pedida no cabe, el panel se alinea al otro extremo o al centro del disparador antes de cambiar de lado. El diseño no muestra el caso.
+  - **Tamaño de objetivo:** Switch (36 × 20px) y Checkbox (16 × 16px) cumplen 2.5.8 (AA) solo por espaciado; ninguno llega a 44 × 44 (2.5.5). Si se quiere un área táctil mayor, definirla en el diseño.

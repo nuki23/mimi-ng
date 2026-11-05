@@ -707,10 +707,15 @@ describe('MimiSelect', () => {
     const select = fixture.debugElement.query(By.directive(MimiSelect))
       .componentInstance as unknown as { positions(): ConnectedPosition[] };
     const pane = () => panel()!.closest<HTMLElement>('.cdk-overlay-pane')!;
-    // Por defecto: debajo, al inicio y con el ancho del disparador; si no cabe, encima.
+    // Por defecto: debajo, al inicio y con el ancho del disparador; si no cabe, encima. Con las
+    // otras alineaciones de cada lado (5.17a), sin pasar a los costados.
     expect(select.positions().map((p) => [p.overlayY, p.originX])).toEqual([
       ['top', 'start'],
+      ['top', 'end'],
+      ['top', 'center'],
       ['bottom', 'start'],
+      ['bottom', 'end'],
+      ['bottom', 'center'],
     ]);
     await open('plain');
     expect(pane().style.width).not.toBe('');
@@ -721,7 +726,11 @@ describe('MimiSelect', () => {
     await settle(fixture);
     expect(select.positions().map((p) => [p.overlayY, p.originX])).toEqual([
       ['bottom', 'end'],
+      ['bottom', 'start'],
+      ['bottom', 'center'],
       ['top', 'end'],
+      ['top', 'start'],
+      ['top', 'center'],
     ]);
     await open('plain');
     // Sin matchWidth, el CDK no le fija el ancho del disparador.

@@ -36,9 +36,21 @@ function connectedPosition(
     : { originX: 'start', originY: y, overlayX: 'end', overlayY: y, offsetX: -offset };
 }
 
+/** Las otras alineaciones, en orden de preferencia (la opuesta antes que el centro). */
+const FALLBACK_ALIGNS: Record<MimiOverlayAlign, MimiOverlayAlign[]> = {
+  start: ['end', 'center'],
+  end: ['start', 'center'],
+  center: ['start', 'end'],
+};
+
 /**
- * Posiciones para el CDK, en orden de preferencia: el lado y la alineación pedidos, el lado
- * opuesto y, por último, los otros dos lados centrados. `offset` es la separación con el trigger.
+ * Posiciones para el CDK, en orden de preferencia: el lado pedido con la alineación pedida y
+ * después con las otras dos; el lado opuesto, igual; y, por último, los otros dos lados
+ * centrados. `offset` es la separación con el trigger.
+ *
+ * Las otras alineaciones del mismo lado (5.17a) evitan que en una pantalla chica el panel se
+ * salga por un costado: en 360px, un menú de 240px alineado al inicio de un trigger cercano al
+ * borde derecho no cabía en ninguna de las cuatro posiciones de antes y el CDK lo dejaba fuera.
  */
 export function mimiConnectedPositions(
   side: MimiOverlaySide,
@@ -47,9 +59,10 @@ export function mimiConnectedPositions(
 ): ConnectedPosition[] {
   const others: MimiOverlaySide[] =
     side === 'top' || side === 'bottom' ? ['right', 'left'] : ['bottom', 'top'];
+  const aligns = [align, ...FALLBACK_ALIGNS[align]];
   return [
-    connectedPosition(side, align, offset),
-    connectedPosition(OPPOSITE[side], align, offset),
+    ...aligns.map((a) => connectedPosition(side, a, offset)),
+    ...aligns.map((a) => connectedPosition(OPPOSITE[side], a, offset)),
     ...others.map((other) => connectedPosition(other, 'center', offset)),
   ];
 }

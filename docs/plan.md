@@ -76,7 +76,9 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 ## En curso
 
-Nada en curso. Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
+Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
+
+- 5.17a · auto/grupo-2-2026-11-04 · Claude Code (modo autónomo) · 04/11/2026 — a falta de comprobación del usuario (C4 a C8 en un Android y un iPhone reales)
 
 ## Mantenimiento
 
@@ -122,7 +124,7 @@ Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4
 - [ ] G2.11 File Upload · v0.3.0 · M · depende: G2.0, G2.0b, 2.1, G2.10 · [docs/plan/grupo-2/G2.11.md](plan/grupo-2/G2.11.md)
 - [ ] G2.12 Color Picker · v0.3.0 · M · depende: G2.0, G2.0b, G1.1, G2.7, 2.2 · [docs/plan/grupo-2/G2.12.md](plan/grupo-2/G2.12.md)
 - [ ] 5.17 Revisión móvil (paraguas de 5.17a y 5.17b) · v0.3.0 · paraguas · depende: las de 5.17a y 5.17b · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
-- [ ] 5.17a Revisión móvil del Grupo 1 (antes de G2.1) · v0.3.0 o 0.2.1 · M · depende: — · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
+- [~] 5.17a Revisión móvil del Grupo 1 (antes de G2.1), a falta de comprobación del usuario (C4 a C8 en teléfonos) · v0.3.0 o 0.2.1 · M · depende: — · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
 - [ ] 5.17b Revisión móvil del Grupo 2 · v0.3.0 · M · depende: 5.17a, G2.1 a G2.12 · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
 - [ ] G2.P Puerta del Grupo 2 · v0.3.0 · L · depende: G2.0 a G2.12, 5.2, 5.17a, 5.17b · [docs/plan/grupo-2/G2.P.md](plan/grupo-2/G2.P.md)
 
