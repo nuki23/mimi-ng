@@ -23,6 +23,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   switch: ['forms'],
   checkbox: ['forms'],
   'form-field': ['forms'],
+  'number-input': ['forms'],
   popover: ['cdk'],
   tooltip: ['cdk'],
   dialog: ['cdk'],
@@ -68,6 +69,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiToastText',
     spanish: 'MIMI_TOAST_TEXT_ES',
     file: 'toast/toast-texts',
+  },
+  {
+    component: 'Number Input',
+    provider: 'provideMimiNumberInputText',
+    spanish: 'MIMI_NUMBER_INPUT_TEXT_ES',
+    file: 'number-input/number-input-texts',
   },
   {
     component: 'Pagination',

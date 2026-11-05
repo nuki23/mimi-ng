@@ -110,3 +110,11 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Círculo pequeño:** 44px, trazo 4 y texto de 11px sin token (el grande sí tiene `--mimi-progress-circle-size` y `-width`).
   - **Valor del círculo pequeño:** el diseño muestra «40» sin el signo; Mimi también lo quita en `sm`.
   - **RTL:** la barra indeterminada cruza de derecha a izquierda (`rtl:-scale-x-100`); el diseño no muestra RTL.
+
+  Number Input (G2.2):
+  - **Botones en el límite:** el diseño los deshabilita (`disabled`, opacidad 0,35 y cursor de no permitido); Mimi usa `aria-disabled` (si no, el foco cae a `body`) con `--mimi-disabled-opacity` (0,5).
+  - **Presión:** 0,9 (`--mimi-press-scale-sm`); el diseño, 0,88.
+  - **Enter:** el diseño sale del campo; Mimi confirma lo escrito y deja el foco en el campo (mover el foco sin pedirlo desorienta con el teclado).
+  - **No están en el diseño:** Re Pág/Av Pág (diez pasos), Inicio/Fin (los límites), mantener pulsado − o + (repite) y el campo vacío (`null`, con `placeholder`). La rueda del mouse no cambia el valor (decidido por defecto).
+  - **Lectura:** el diseño quita todo lo que no es dígito, punto o signo; Mimi lee con los separadores del idioma (ya anotado en la tanda B).
+  - **Solo lectura:** no está en el diseño; los botones quedan con `aria-disabled` y el teclado no cambia el valor.

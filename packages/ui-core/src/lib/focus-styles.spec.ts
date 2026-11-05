@@ -54,6 +54,10 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
     count: 2,
     why: 'Panel y contenedor del cdk: reciben el foco al abrir (autoFocus) para que el lector lea el título.',
   },
+  'components/number-input/number-input.ts': {
+    count: 1,
+    why: 'Input de dentro: el anillo lo pinta la caja con focus-within (como Select).',
+  },
   'components/toast/toast.ts': {
     count: 1,
     why: 'La región de los toasts (tabindex="-1"): F8 lleva el foco a un toast, que tiene su anillo.',

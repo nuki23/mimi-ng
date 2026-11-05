@@ -388,6 +388,23 @@ export interface MimiProgressTokens {
 }
 
 /**
+ * Number Input. El fondo del botón en hover va en el CSS (`--mimi-number-button-hover`); el
+ * borde, el fondo y los anillos son los de Input (globales).
+ */
+export interface MimiNumberInputTokens {
+  /** Altura (el alto de control). */
+  height?: string;
+  /** Radio de la caja (el global `radius`). */
+  radius?: string;
+  /** Relleno horizontal de la caja (4px). */
+  px?: string;
+  /** Tamaño de los botones − y + (30px). */
+  buttonSize?: string;
+  /** Radio de los botones (el global `radius-sm`). */
+  buttonRadius?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -415,6 +432,7 @@ export interface MimiComponentTokens {
   pagination?: MimiPaginationTokens;
   toggleGroup?: MimiToggleGroupTokens;
   progress?: MimiProgressTokens;
+  numberInput?: MimiNumberInputTokens;
 }
 
 export interface MimiThemePreset {

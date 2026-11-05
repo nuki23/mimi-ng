@@ -57,6 +57,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Pagination', path: '/docs/components/pagination', status: 'ready' },
       { title: 'Toggle Group', path: '/docs/components/toggle-group', status: 'ready' },
       { title: 'Progress', path: '/docs/components/progress', status: 'ready' },
+      { title: 'Number Input', path: '/docs/components/number-input', status: 'ready' },
     ],
   },
 ];

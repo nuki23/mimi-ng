@@ -38,6 +38,7 @@ const FOLDER: Record<TokenComponent, string> = {
   pagination: 'pagination',
   toggleGroup: 'toggle-group',
   progress: 'progress',
+  numberInput: 'number-input',
 };
 
 /**

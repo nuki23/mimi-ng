@@ -40,7 +40,8 @@ export type TokenComponent =
   | 'toolbar'
   | 'pagination'
   | 'toggleGroup'
-  | 'progress';
+  | 'progress'
+  | 'numberInput';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -67,6 +68,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   pagination: 'pagination',
   toggleGroup: 'toggle-group',
   progress: 'progress',
+  numberInput: 'number',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1186,6 +1188,48 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-primary',
       preset: false,
       description: 'Parte llena con el tono primary (los otros tonos usan su color).',
+    },
+  ],
+  numberInput: [
+    {
+      name: '--mimi-number-height',
+      default: 'control-height',
+      inherits: '--mimi-control-height',
+      preset: true,
+      description: 'Altura de la caja (alineada con Input y Button).',
+    },
+    {
+      name: '--mimi-number-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio de la caja.',
+    },
+    {
+      name: '--mimi-number-px',
+      default: '4px',
+      preset: true,
+      description: 'Relleno horizontal de la caja.',
+    },
+    {
+      name: '--mimi-number-button-size',
+      default: '30px',
+      preset: true,
+      description: 'Tamaño de los botones − y +.',
+    },
+    {
+      name: '--mimi-number-button-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio de los botones.',
+    },
+    {
+      name: '--mimi-number-button-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo de un botón con el puntero encima.',
     },
   ],
 };

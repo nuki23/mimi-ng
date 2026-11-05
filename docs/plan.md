@@ -110,7 +110,7 @@ Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4
 - [x] G2.0b Tokens globales del Grupo 2 en el tema · v0.3.0 · M · depende: G2.0 · [docs/plan/grupo-2/G2.0b.md](plan/grupo-2/G2.0b.md)
 - [x] G2.1 Toggle Group (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b, 5.17a · [docs/plan/grupo-2/G2.1.md](plan/grupo-2/G2.1.md)
 - [x] 5.2 Página «Tema» sencilla (pendiente de comprobación manual: teclado, lector y contraste en navegador) · v0.3.0 · M · depende: G2.1, G2.0b · [docs/plan/grupo-2/5.2.md](plan/grupo-2/5.2.md)
-- [ ] G2.2 Number Input · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.2.md](plan/grupo-2/G2.2.md)
+- [x] G2.2 Number Input (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.2.md](plan/grupo-2/G2.2.md)
 - [ ] G2.3 Password · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.3.md](plan/grupo-2/G2.3.md)
 - [ ] G2.4 Input Mask (paraguas de G2.4a y G2.4b) · v0.3.0 · paraguas · depende: las de G2.4a y G2.4b · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
 - [ ] G2.4a Input Mask: máscara de dígitos · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)

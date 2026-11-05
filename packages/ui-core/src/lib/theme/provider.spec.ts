@@ -350,6 +350,13 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           spring: 'ease',
         },
         progress: { height: '6px', circleSize: '64px', circleWidth: 4 },
+        numberInput: {
+          height: '44px',
+          radius: '8px',
+          px: '6px',
+          buttonSize: '34px',
+          buttonRadius: '4px',
+        },
       },
     });
     for (const line of [
@@ -423,6 +430,11 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-progress-height: 6px;',
       '--mimi-progress-circle-size: 64px;',
       '--mimi-progress-circle-width: 4;',
+      '--mimi-number-height: 44px;',
+      '--mimi-number-radius: 8px;',
+      '--mimi-number-px: 6px;',
+      '--mimi-number-button-size: 34px;',
+      '--mimi-number-button-radius: 4px;',
     ]) {
       expect(css).toContain(line);
     }

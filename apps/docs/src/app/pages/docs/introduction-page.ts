@@ -44,6 +44,7 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'dropdown-menu', name: 'Dropdown Menu' },
   { id: 'form-field', name: 'FormField' },
   { id: 'input', name: 'Input' },
+  { id: 'number-input', name: 'Number Input' },
   { id: 'pagination', name: 'Pagination' },
   { id: 'popover', name: 'Popover' },
   { id: 'progress', name: 'Progress' },

@@ -120,6 +120,14 @@ export const routes: Routes = [
           import('./pages/docs/components/toolbar/toolbar-page').then((m) => m.ToolbarPage),
       },
       {
+        path: 'components/number-input',
+        title: 'Number Input · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/number-input/number-input-page').then(
+            (m) => m.NumberInputPage,
+          ),
+      },
+      {
         path: 'components/progress',
         title: 'Progress · Mimi',
         loadComponent: () =>

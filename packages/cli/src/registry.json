@@ -164,6 +164,18 @@
       },
       "registryDependencies": ["button", "input", "select", "utils/cn"]
     },
+    "number-input": {
+      "type": "component",
+      "files": [
+        "components/number-input/number-input.ts",
+        "components/number-input/number-input-texts.ts",
+        "components/number-input/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/field-state"]
+    },
     "progress": {
       "type": "component",
       "files": ["components/progress/progress.ts", "components/progress/index.ts"],
