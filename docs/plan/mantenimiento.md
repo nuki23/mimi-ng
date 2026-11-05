@@ -38,4 +38,9 @@ Pendientes sin grupo. No tienen versión propia: salen en la siguiente versión 
     - Los enlaces del índice apuntan a archivos que existen.
     - `pnpm check:plan` en verde sobre el plan de ese día, con una prueba de cada falla (un ID duplicado, una casilla distinta, un enlace roto).
     - `CLAUDE.md` dice cuándo correrlo (al marcar una tarea y antes de cada commit del plan).
+- [ ] M.11 La CLI y `--overwrite` con la misma versión. Origen: G2.4b (04/11/2026, modo autónomo): con un ítem ya instalado en la 0.2.0 sin modificar, una plantilla distinta con la misma versión (0.2.0) no se copia, ni con `--overwrite`; la prueba se hizo en un proyecto limpio nuevo. Registrada a pedido del usuario (05/11/2026).
+  - Lo que se ve en el código (sin confirmar): en `packages/cli/src/utils/write-files.ts`, `stateOf()` devuelve `formatted` cuando el archivo del proyecto es igual a su copia en `.mimi/base/` y la versión del manifiesto es la misma que la de la CLI; el caso `formatted` solo informa «sin cambios» y no mira `overwrite` (el reemplazo forzado solo se aplica a `modified` y `modifiedOld`).
+  - Qué hay que decidir: si es intencional (con la misma versión, el contenido publicado no cambia, así que la diferencia solo puede venir del formateo del proyecto) o un error (`--overwrite` debería reemplazar siempre). Si es intencional, se documenta en la spec 5 y en la ayuda de `--overwrite`; si es un error, `formatted` con `--overwrite` reemplaza, con su prueba.
+  - No se sube la versión del paquete: eso lo hace el usuario.
+  - Depende de: — · Bloquea: — (afecta a las pruebas en proyectos limpios de la G2.P).
 - [ ] 0.1.1-3 `pnpm publish` da 404 aunque `npm whoami` funciona (pnpm 12 no usa la sesión de `npm login`). Mientras se resuelve, publicar con `npm publish` desde `packages/cli`. Investigar cómo autentica pnpm 12.
