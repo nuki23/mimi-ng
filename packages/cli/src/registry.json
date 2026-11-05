@@ -172,6 +172,14 @@
       },
       "registryDependencies": ["utils/cn", "utils/field-state"]
     },
+    "input-otp": {
+      "type": "component",
+      "files": ["components/input-otp/input-otp.ts", "components/input-otp/index.ts"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/field-state"]
+    },
     "number-input": {
       "type": "component",
       "files": [

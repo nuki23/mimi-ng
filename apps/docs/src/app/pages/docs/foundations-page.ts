@@ -25,6 +25,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   'form-field': ['forms'],
   'number-input': ['forms'],
   'input-mask': ['forms'],
+  'input-otp': ['forms'],
   password: ['forms', 'cdk'],
   popover: ['cdk'],
   tooltip: ['cdk'],

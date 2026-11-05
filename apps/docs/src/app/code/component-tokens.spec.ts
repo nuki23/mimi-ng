@@ -41,6 +41,7 @@ const FOLDER: Record<TokenComponent, string> = {
   numberInput: 'number-input',
   password: 'password',
   inputMask: 'input-mask',
+  inputOtp: 'input-otp',
 };
 
 /**

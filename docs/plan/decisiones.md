@@ -41,9 +41,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 - G2.9 (pregunta escrita en la G2.0): Date Picker y Date Range, ¿una tabla de tokens o dos? (el usuario la dejó para el inicio de la G2.9).
 
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
-- G2.5: nombres de la API.
-- G2.5: un input real con casillas visuales o un input por casilla.
-- G2.5: ¿solo dígitos o también letras?
 - G2.6: navegación con el teclado entre etiquetas (sin flechas, flechas con `FocusKeyManager`, u otra).
 - G2.6: nombres de la API.
 - G2.6: ¿la normalización del diseño (minúsculas y sin `#`) es la de Mimi por defecto?

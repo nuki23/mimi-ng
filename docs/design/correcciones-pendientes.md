@@ -134,3 +134,9 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Marcador:** en el diseño es el texto completo de la máscara rellenado con lo escrito (`typed` + `rest`); Mimi recibe el marcador entero (`ghost`, por ejemplo `DD/MM/AAAA`) y muestra lo que falta después de lo escrito. Si `ghost` y la máscara tienen distinto largo, el marcador se corta o queda corto (responsabilidad del usuario).
   - **Clic en el prefijo o el ícono:** el diseño no lo define; Mimi lleva el foco al campo.
   - **Marca de la tarjeta:** radio fijo de 5px en el diseño; en Mimi es del ejemplo.
+
+  Input OTP (G2.5):
+  - **«Completo»:** en el diseño, el borde verde aparece cuando el código está completo y es correcto; Mimi lo pinta con `success`, que pone la app al verificar (llenar las casillas no basta).
+  - **Separador opcional y otras longitudes:** el diseño muestra 6 casillas con el guion después de la tercera; en Mimi el guion va donde diga `separatorAfter` y, sin él, no hay.
+  - **Alfanumérico:** no está en el diseño.
+  - **Casilla activa con el código completo:** el diseño no lo muestra; Mimi deja el anillo en la última casilla.

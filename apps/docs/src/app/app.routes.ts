@@ -126,6 +126,12 @@ export const routes: Routes = [
           import('./pages/docs/components/input-mask/input-mask-page').then((m) => m.InputMaskPage),
       },
       {
+        path: 'components/input-otp',
+        title: 'Input OTP · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/input-otp/input-otp-page').then((m) => m.InputOtpPage),
+      },
+      {
         path: 'components/number-input',
         title: 'Number Input · Mimi',
         loadComponent: () =>

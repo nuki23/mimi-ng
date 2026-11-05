@@ -45,6 +45,7 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'form-field', name: 'FormField' },
   { id: 'input', name: 'Input' },
   { id: 'input-mask', name: 'Input Mask' },
+  { id: 'input-otp', name: 'Input OTP' },
   { id: 'number-input', name: 'Number Input' },
   { id: 'pagination', name: 'Pagination' },
   { id: 'password', name: 'Password' },

@@ -434,6 +434,23 @@ export interface MimiInputMaskTokens {
 }
 
 /**
+ * Input OTP. Fondo, borde, separador y cursor van en el CSS (`--mimi-otp-bg`, `-border`,
+ * `-separator`, `-caret`).
+ */
+export interface MimiInputOtpTokens {
+  /** Ancho de la casilla (46px). */
+  width?: string;
+  /** Alto de la casilla (54px). */
+  height?: string;
+  /** Separación entre casillas (8px). */
+  gap?: string;
+  /** Radio (el global `radius`). */
+  radius?: string;
+  /** Tamaño del carácter (22px). */
+  fontSize?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -464,6 +481,7 @@ export interface MimiComponentTokens {
   numberInput?: MimiNumberInputTokens;
   password?: MimiPasswordTokens;
   inputMask?: MimiInputMaskTokens;
+  inputOtp?: MimiInputOtpTokens;
 }
 
 export interface MimiThemePreset {

@@ -68,6 +68,10 @@
             "label": "input-mask"
           },
           {
+            "value": "input-otp",
+            "label": "input-otp"
+          },
+          {
             "value": "number-input",
             "label": "number-input"
           },

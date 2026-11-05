@@ -93,6 +93,7 @@ const COMPONENT_PREFIX: Record<keyof MimiComponentTokens, string> = {
   numberInput: 'number',
   password: 'password',
   inputMask: 'mask',
+  inputOtp: 'otp',
 };
 
 /** Nombres de la 0.1.0 que siguen funcionando hasta la 1.0 (spec 12): ruta → qué usar. */

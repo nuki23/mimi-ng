@@ -31,3 +31,4 @@ export * from './lib/components/progress';
 export * from './lib/components/number-input';
 export * from './lib/components/password';
 export * from './lib/components/input-mask';
+export * from './lib/components/input-otp';

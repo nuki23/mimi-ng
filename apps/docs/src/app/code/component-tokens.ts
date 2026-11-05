@@ -43,7 +43,8 @@ export type TokenComponent =
   | 'progress'
   | 'numberInput'
   | 'password'
-  | 'inputMask';
+  | 'inputMask'
+  | 'inputOtp';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -73,6 +74,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   numberInput: 'number',
   password: 'password',
   inputMask: 'mask',
+  inputOtp: 'otp',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1310,6 +1312,67 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-muted',
       preset: false,
       description: 'Fondo del prefijo.',
+    },
+  ],
+  inputOtp: [
+    {
+      name: '--mimi-otp-width',
+      default: '46px',
+      preset: true,
+      description: 'Ancho de la casilla.',
+    },
+    {
+      name: '--mimi-otp-height',
+      default: '54px',
+      preset: true,
+      description: 'Alto de la casilla.',
+    },
+    {
+      name: '--mimi-otp-gap',
+      default: '8px',
+      preset: true,
+      description: 'Separación entre casillas.',
+    },
+    {
+      name: '--mimi-otp-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio de la casilla.',
+    },
+    {
+      name: '--mimi-otp-font-size',
+      default: '22px',
+      preset: true,
+      description: 'Tamaño del carácter.',
+    },
+    {
+      name: '--mimi-otp-bg',
+      default: 'input-background',
+      inherits: '--mimi-input-background',
+      preset: false,
+      description: 'Fondo de la casilla.',
+    },
+    {
+      name: '--mimi-otp-border',
+      default: 'input',
+      inherits: '--mimi-input',
+      preset: false,
+      description: 'Borde de la casilla en reposo.',
+    },
+    {
+      name: '--mimi-otp-separator',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'Guion separador.',
+    },
+    {
+      name: '--mimi-otp-caret',
+      default: 'foreground',
+      inherits: '--mimi-foreground',
+      preset: false,
+      description: 'Cursor de la casilla activa.',
     },
   ],
 };
