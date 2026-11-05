@@ -501,6 +501,22 @@ export interface MimiComboboxTokens {
 }
 
 /**
+ * Calendario, Date Picker y Date Range (una tabla, decidido por defecto en la G2.9). Los colores
+ * van en el CSS (`--mimi-date-cell-hover`, `-selected-bg`, `-selected-fg`, `-range`,
+ * `-today-ring`, `-menu-bg`, `-menu-shadow`).
+ */
+export interface MimiDateTokens {
+  /** Tamaño de cada día (36px). */
+  cellSize?: string;
+  /** Radio de cada día (el global `radius-sm`). */
+  cellRadius?: string;
+  /** Relleno del panel (12px). */
+  padding?: string;
+  /** Ancho de la columna de atajos del rango (130px). */
+  presetsWidth?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -536,6 +552,7 @@ export interface MimiComponentTokens {
   tagsInput?: MimiTagsInputTokens;
   slider?: MimiSliderTokens;
   combobox?: MimiComboboxTokens;
+  date?: MimiDateTokens;
 }
 
 export interface MimiThemePreset {

@@ -37,3 +37,5 @@ export * from './lib/components/tags-input';
 export * from './lib/components/slider';
 export * from './lib/components/option-list';
 export * from './lib/components/combobox';
+export * from './lib/components/calendar';
+export * from './lib/components/date-picker';

@@ -171,3 +171,12 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Escape cerrado:** el diseño no lo define; en el múltiple Mimi solo vacía lo escrito (no quita los chips).
   - **Ayuda:** el diseño la escribe a mano debajo del campo; en Mimi es parte del componente en el múltiple (`hint`), en el `aria-describedby` del campo.
   - **Anuncios al agregar y quitar:** no están en el diseño (los de Tags Input).
+
+  Date Picker y calendario (G2.9a):
+  - **Teclado de la APG en la cuadrícula:** el diseño usa un botón por día con Tab; Mimi usa una cuadrícula (`role="grid"`) con una sola parada de Tab y las teclas de la APG.
+  - **Días no disponibles:** el diseño los pone `disabled`; en Mimi llevan `aria-disabled` y reciben el foco (si no, las flechas no podrían pasar por ellos), con el mismo aspecto (0,38, tachado).
+  - **Idioma:** el diseño escribe meses y días en español y empieza el lunes; en Mimi salen de `Intl` con el idioma. Con `es`, el título es «Septiembre de 2026» (el diseño, «Septiembre 2026») y la fecha del botón «30 sept 2026» (el diseño, «30 sep 2026»).
+  - **Nombre del botón del título:** el diseño usa solo «Cambiar vista»; Mimi usa «Septiembre de 2026, Cambiar vista» (el nombre contiene el texto visible).
+  - **Foco al abrir:** el diseño no lo define; Mimi lo lleva al día elegido o a hoy (el Popover enfoca el elemento con `autofocus`).
+  - **«Ir a hoy»:** el diseño cambia el mes; Mimi además lleva el foco a hoy.
+  - **Calendario suelto:** no está en el diseño.

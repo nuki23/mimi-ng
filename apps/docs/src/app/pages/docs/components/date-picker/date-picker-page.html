@@ -1,0 +1,124 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Date Picker</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Un botón con la fecha que abre un calendario. En el idioma de la app, con fechas no disponibles
+    y en los tres sistemas de formularios.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="date-picker" />
+  <p class="text-pretty">
+    Instala también el calendario (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >calendar</code
+    >, que se puede usar suelto) y Popover, y usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>.
+  </p>
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <p class="text-pretty">
+    La fecha es una cadena ISO sin hora (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >'2026-09-30'</code
+    >): no cambia de día con la zona horaria, va directo a JSON y se compara como texto. Para
+    convertir de y a
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">Date</code>:
+  </p>
+  <app-code-block [code]="convert" lang="typescript" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="delivery" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Solo días hábiles desde hoy
+  </h3>
+  <app-code-preview [code]="source.delivery">
+    <app-date-picker-delivery-example />
+  </app-code-preview>
+
+  <h3 id="locale" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Otro idioma, min y max</h3>
+  <app-code-preview [code]="source.locale">
+    <app-date-picker-locale-example />
+  </app-code-preview>
+
+  <h3 id="forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Formularios y estados</h3>
+  <p class="text-pretty">
+    La primera fecha es un sábado que llega del formulario: se muestra y el formulario marca el
+    error.
+  </p>
+  <app-code-preview [code]="source.forms">
+    <app-date-picker-forms-example />
+  </app-code-preview>
+
+  <h3 id="calendar" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Calendario suelto</h3>
+  <app-code-preview [code]="source.calendar">
+    <app-date-picker-calendar-example />
+  </app-code-preview>
+
+  <h3 id="texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textos</h3>
+  <p class="text-pretty">
+    Los nombres de meses y días salen del idioma (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >Intl.DateTimeFormat</code
+    >); los textos de los botones, de aquí.
+  </p>
+  <app-code-block [code]="texts" lang="angular-ts" />
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Teclado y accesibilidad
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      El botón abre un diálogo con el foco en la fecha elegida o en hoy; Escape cierra y el foco
+      vuelve al botón.
+    </li>
+    <li>
+      En la cuadrícula (una sola parada de Tab): ← y → un día, ↑ y ↓ una semana, Inicio y Fin el
+      principio y el fin de la semana, Re Pág y Av Pág un mes, con Mayús un año; Enter o Espacio
+      eligen.
+    </li>
+    <li>
+      Cada día se lee completo («30 de septiembre de 2026»); hoy lleva
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-current="date"</code
+      >, y los no disponibles se anuncian como tales y reciben el foco, pero no se eligen. El cambio
+      de mes se anuncia.
+    </li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Entrada</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-calendar</code>
+    tiene las mismas entradas de fechas e idioma, con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(value)]</code> y la
+    salida
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(datePick)</code>.
+  </p>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="date" />
+</article>

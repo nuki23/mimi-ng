@@ -14,7 +14,8 @@ const tokensFs = tokensNode.getBuiltinModule('node:fs') as {
 };
 const LIB = `${tokensNode.cwd()}/packages/ui-core/src/lib`;
 
-const FOLDER: Record<TokenComponent, string> = {
+/** Carpeta del componente; una lista si la tabla es de varios (el calendario y sus campos). */
+const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   avatar: 'avatar',
   badge: 'badge',
   button: 'button',
@@ -46,6 +47,7 @@ const FOLDER: Record<TokenComponent, string> = {
   tagsInput: 'tags-input',
   slider: 'slider',
   combobox: 'combobox',
+  date: ['calendar', 'date-picker'],
 };
 
 /**
@@ -74,11 +76,15 @@ const GLOBALS = new Set([
 
 /** Código del componente (sin pruebas). */
 function source(component: TokenComponent): string {
-  const dir = `${LIB}/components/${FOLDER[component]}`;
-  return tokensFs
-    .readdirSync(dir)
-    .filter((f) => f.endsWith('.ts') && !f.endsWith('.spec.ts'))
-    .map((f) => tokensFs.readFileSync(`${dir}/${f}`, 'utf8'))
+  const folders = FOLDER[component];
+  return (typeof folders === 'string' ? [folders] : folders)
+    .flatMap((folder) => {
+      const dir = `${LIB}/components/${folder}`;
+      return tokensFs
+        .readdirSync(dir)
+        .filter((f) => f.endsWith('.ts') && !f.endsWith('.spec.ts'))
+        .map((f) => tokensFs.readFileSync(`${dir}/${f}`, 'utf8'));
+    })
     .join('\n');
 }
 const themeBase = tokensFs.readFileSync(`${LIB}/theme/theme-base.css`, 'utf8');

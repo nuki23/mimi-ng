@@ -39,19 +39,7 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(b) Se deciden al empezar su tarea.**
 
-- G2.9 (pregunta escrita en la G2.0): Date Picker y Date Range, ¿una tabla de tokens o dos? (el usuario la dejó para el inicio de la G2.9).
-
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
-- G2.9: la cuadrícula (`ngGrid` de aria o propia con `FocusKeyManager`).
-- G2.9: nombres de la API.
-- G2.9: cómo se guarda la fecha (`Date`, cadena ISO, `Temporal.PlainDate` o un adaptador).
-- G2.9: cómo se localiza (`Intl.DateTimeFormat` con `LOCALE_ID` y `locale`, o `DatePipe` con datos registrados).
-- G2.9: ¿Date Range es un componente aparte o un modo del Date Picker?
-- G2.9: ¿un `mimi-calendar` suelto?
-- G2.9: ¿se puede escribir la fecha a mano?
-- G2.9: en el rango, ¿el modelo cambia con solo el inicio elegido?
-- G2.9: ¿atajos por defecto en el rango o solo los del usuario?
-- G2.9: ¿dividir en G2.9a (calendario y una fecha) y G2.9b (rango)?
 - G2.11: nombres y forma de la API.
 - G2.11: hasta dónde llega Mimi y cómo recibe el estado de la subida (un componente, dos piezas o una función `upload`).
 - G2.11: un archivo rechazado, ¿entra en el valor marcado como error o queda fuera?

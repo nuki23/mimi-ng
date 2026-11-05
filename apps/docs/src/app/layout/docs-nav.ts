@@ -64,6 +64,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Tags Input', path: '/docs/components/tags-input', status: 'ready' },
       { title: 'Slider', path: '/docs/components/slider', status: 'ready' },
       { title: 'Combobox', path: '/docs/components/combobox', status: 'ready' },
+      { title: 'Date Picker', path: '/docs/components/date-picker', status: 'ready' },
     ],
   },
 ];

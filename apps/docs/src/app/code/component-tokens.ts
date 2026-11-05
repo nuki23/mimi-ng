@@ -48,7 +48,8 @@ export type TokenComponent =
   | 'chip'
   | 'tagsInput'
   | 'slider'
-  | 'combobox';
+  | 'combobox'
+  | 'date';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -83,6 +84,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   tagsInput: 'tags',
   slider: 'slider',
   combobox: 'combobox',
+  date: 'date',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1541,6 +1543,76 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-accent',
       preset: false,
       description: 'Opción activa.',
+    },
+  ],
+  date: [
+    {
+      name: '--mimi-date-cell-size',
+      default: '36px',
+      preset: true,
+      description: 'Tamaño del día.',
+    },
+    {
+      name: '--mimi-date-cell-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio del día.',
+    },
+    {
+      name: '--mimi-date-cell-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Día en hover.',
+    },
+    {
+      name: '--mimi-date-selected-bg',
+      default: 'primary',
+      inherits: '--mimi-primary',
+      preset: false,
+      description: 'Día elegido.',
+    },
+    {
+      name: '--mimi-date-selected-fg',
+      default: 'primary-foreground',
+      inherits: '--mimi-primary-foreground',
+      preset: false,
+      description: 'Texto del día elegido.',
+    },
+    {
+      name: '--mimi-date-range',
+      default: 'range',
+      inherits: '--mimi-range',
+      preset: false,
+      description: 'Banda del rango.',
+    },
+    {
+      name: '--mimi-date-today-ring',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'Borde del día de hoy.',
+    },
+    {
+      name: '--mimi-date-menu-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo del panel.',
+    },
+    {
+      name: '--mimi-date-menu-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra del panel.',
+    },
+    {
+      name: '--mimi-date-padding',
+      default: '12px',
+      preset: true,
+      description: 'Relleno del panel.',
     },
   ],
 };

@@ -263,6 +263,33 @@
         "utils/overlay"
       ]
     },
+    "calendar": {
+      "type": "component",
+      "files": [
+        "components/calendar/calendar.ts",
+        "components/calendar/calendar-texts.ts",
+        "components/calendar/dates.ts",
+        "components/calendar/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles"]
+    },
+    "date-picker": {
+      "type": "component",
+      "files": ["components/date-picker/date-picker.ts", "components/date-picker/index.ts"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "calendar",
+        "popover",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state"
+      ]
+    },
     "tags-input": {
       "type": "component",
       "files": [

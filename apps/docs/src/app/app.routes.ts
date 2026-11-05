@@ -164,6 +164,14 @@ export const routes: Routes = [
           import('./pages/docs/components/combobox/combobox-page').then((m) => m.ComboboxPage),
       },
       {
+        path: 'components/date-picker',
+        title: 'Date Picker · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/date-picker/date-picker-page').then(
+            (m) => m.DatePickerPage,
+          ),
+      },
+      {
         path: 'components/tags-input',
         title: 'Tags Input · Mimi',
         loadComponent: () =>

@@ -278,7 +278,10 @@ export class MimiPopover {
     this.arrowOffset.set(trigger && panel ? mimiArrowOffset(trigger, panel, side) : null);
   }
 
-  /** Al abrir, el foco va al primer elemento enfocable del panel o, si no hay, al panel. */
+  /**
+   * Al abrir, el foco va al elemento con `autofocus` del panel (el día elegido del calendario,
+   * G2.9) o, si no hay, al primer elemento enfocable o al panel.
+   */
   private focusPanel(): void {
     afterNextRender(
       {
@@ -286,9 +289,14 @@ export class MimiPopover {
           const panel = this.panel()?.nativeElement;
           if (!panel || this.state() !== 'open') return;
           this.warnMissingLabel();
-          const first = Array.from(panel.querySelectorAll<HTMLElement>('*')).find(
-            (element) => this.checker.isFocusable(element) && this.checker.isTabbable(element),
-          );
+          const preferred = panel.querySelector<HTMLElement>('[autofocus]');
+          const first =
+            preferred && this.checker.isFocusable(preferred)
+              ? preferred
+              : Array.from(panel.querySelectorAll<HTMLElement>('*')).find(
+                  (element) =>
+                    this.checker.isFocusable(element) && this.checker.isTabbable(element),
+                );
           (first ?? panel).focus();
         },
       },

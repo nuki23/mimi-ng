@@ -32,6 +32,10 @@
             "label": "button"
           },
           {
+            "value": "calendar",
+            "label": "calendar"
+          },
+          {
             "value": "card",
             "label": "card"
           },
@@ -50,6 +54,10 @@
           {
             "value": "context-menu",
             "label": "context-menu"
+          },
+          {
+            "value": "date-picker",
+            "label": "date-picker"
           },
           {
             "value": "dialog",

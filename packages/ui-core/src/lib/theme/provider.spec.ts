@@ -370,6 +370,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           optionHeight: '36px',
           optionRadius: '4px',
         },
+        date: { cellSize: '40px', cellRadius: '50%', padding: '16px', presetsWidth: '150px' },
       },
     });
     for (const line of [
@@ -474,6 +475,10 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-combobox-menu-max-height: 300px;',
       '--mimi-combobox-option-height: 36px;',
       '--mimi-combobox-option-radius: 4px;',
+      '--mimi-date-cell-size: 40px;',
+      '--mimi-date-cell-radius: 50%;',
+      '--mimi-date-padding: 16px;',
+      '--mimi-date-presets-width: 150px;',
     ]) {
       expect(css).toContain(line);
     }

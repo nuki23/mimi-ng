@@ -147,7 +147,7 @@ describe('mimi (alias ui)', () => {
       '"buton" no es un componente de Mimi. ¿Quisiste decir button?',
     );
     await expect(run('mimi', { components: ['zzz'] }, tree)).rejects.toThrow(
-      /"zzz" no es un componente de Mimi\.\nDisponibles: avatar, badge, button, card/,
+      /"zzz" no es un componente de Mimi\.\nDisponibles: avatar, badge, button, calendar, card/,
     );
     await expect(run('mimi', { components: ['form'] }, tree)).rejects.toThrow(
       '¿Quisiste decir form-field?',
