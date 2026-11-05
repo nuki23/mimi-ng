@@ -484,6 +484,23 @@ export interface MimiSliderTokens {
 }
 
 /**
+ * Combobox. El fondo y la sombra del panel y la opción activa van en el CSS
+ * (`--mimi-combobox-menu-bg`, `-menu-shadow`, `-option-hover`).
+ */
+export interface MimiComboboxTokens {
+  /** Alto del campo (el global `control-height`). */
+  height?: string;
+  /** Radio del campo y del panel (el global `radius`). */
+  radius?: string;
+  /** Alto máximo del panel (228px). */
+  menuMaxHeight?: string;
+  /** Alto mínimo de cada opción (34px). */
+  optionHeight?: string;
+  /** Radio de cada opción (el global `radius-sm`). */
+  optionRadius?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -518,6 +535,7 @@ export interface MimiComponentTokens {
   chip?: MimiChipTokens;
   tagsInput?: MimiTagsInputTokens;
   slider?: MimiSliderTokens;
+  combobox?: MimiComboboxTokens;
 }
 
 export interface MimiThemePreset {

@@ -38,6 +38,7 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'button', name: 'Button' },
   { id: 'card', name: 'Card' },
   { id: 'checkbox', name: 'Checkbox' },
+  { id: 'combobox', name: 'Combobox' },
   { id: 'confirm', name: 'Confirm' },
   { id: 'context-menu', name: 'Context Menu' },
   { id: 'dialog', name: 'Dialog' },

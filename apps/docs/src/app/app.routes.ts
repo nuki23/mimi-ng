@@ -158,6 +158,12 @@ export const routes: Routes = [
           import('./pages/docs/components/slider/slider-page').then((m) => m.SliderPage),
       },
       {
+        path: 'components/combobox',
+        title: 'Combobox · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/combobox/combobox-page').then((m) => m.ComboboxPage),
+      },
+      {
         path: 'components/tags-input',
         title: 'Tags Input · Mimi',
         loadComponent: () =>

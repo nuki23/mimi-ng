@@ -47,7 +47,8 @@ export type TokenComponent =
   | 'inputOtp'
   | 'chip'
   | 'tagsInput'
-  | 'slider';
+  | 'slider'
+  | 'combobox';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -81,6 +82,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   chip: 'chip',
   tagsInput: 'tags',
   slider: 'slider',
+  combobox: 'combobox',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1483,6 +1485,62 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-shadow-neutral',
       preset: false,
       description: 'Sombra del pulgar.',
+    },
+  ],
+  combobox: [
+    {
+      name: '--mimi-combobox-height',
+      default: 'control-height',
+      inherits: '--mimi-control-height',
+      preset: true,
+      description: 'Alto del campo.',
+    },
+    {
+      name: '--mimi-combobox-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio del campo y del panel.',
+    },
+    {
+      name: '--mimi-combobox-menu-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo del panel.',
+    },
+    {
+      name: '--mimi-combobox-menu-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra del panel.',
+    },
+    {
+      name: '--mimi-combobox-menu-max-height',
+      default: '228px',
+      preset: true,
+      description: 'Alto máximo del panel.',
+    },
+    {
+      name: '--mimi-combobox-option-height',
+      default: '34px',
+      preset: true,
+      description: 'Alto mínimo de cada opción.',
+    },
+    {
+      name: '--mimi-combobox-option-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio de cada opción.',
+    },
+    {
+      name: '--mimi-combobox-option-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Opción activa.',
     },
   ],
 };

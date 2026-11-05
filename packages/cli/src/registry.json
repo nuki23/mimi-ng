@@ -49,6 +49,14 @@
       },
       "registryDependencies": ["utils/cn", "utils/control-styles"]
     },
+    "option-list": {
+      "type": "util",
+      "files": ["components/option-list/option-list.ts", "components/option-list/index.ts"],
+      "peerDependencies": {
+        "@angular/aria": "^22.2.0"
+      },
+      "registryDependencies": ["utils/cn"]
+    },
     "theme": {
       "type": "theme",
       "files": ["theme/theme-base.css", "theme/types.ts", "theme/provider.ts", "theme/index.ts"]
@@ -233,6 +241,21 @@
         "@angular/forms": "^22.0.0"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+    },
+    "combobox": {
+      "type": "component",
+      "files": [
+        "components/combobox/combobox.ts",
+        "components/combobox/combobox-texts.ts",
+        "components/combobox/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/aria": "^22.2.0",
+        "@angular/cdk": "^22.2.0",
+        "@angular/forms": "^22.0.0"
+      },
+      "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
+      "registryDependencies": ["option-list", "utils/cn", "utils/field-state", "utils/overlay"]
     },
     "tags-input": {
       "type": "component",

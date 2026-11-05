@@ -154,3 +154,13 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **RTL:** no está en el diseño (las flechas y la posición se invierten).
   - **Vertical:** no está en el diseño ni en Mimi (más adelante).
   - **Nombres del rango:** el diseño usa «Mínimo» y «Máximo» con `aria-labelledby`; Mimi junta la etiqueta y el nombre en el `aria-label` («Precio por noche, Mínimo»).
+
+  Combobox (G2.8a, simple):
+  - **Sin coincidencias:** el diseño simple muestra «Sin coincidencias.» dentro de la lista, y el bloque de «Sin resultados» con ícono, título y detalle aparte; Mimi usa siempre el bloque (`role="status"`), con un detalle genérico en los textos (el del diseño, «crea la ciudad», es del ejemplo).
+  - **Cargando:** el texto del diseño («Buscando ciudades…») es del ejemplo; el texto por defecto es «Buscando…».
+  - **Escape con el panel cerrado:** el diseño no lo define; Mimi vacía el campo y quita el valor (APG).
+  - **Al salir sin elegir:** el diseño no lo define; Mimi vuelve al texto de la opción elegida, y con el campo vacío quita el valor.
+  - **Clic en el campo:** el diseño abre al enfocar (`onFocus`); Mimi abre con el clic, la flecha o al escribir, no al llegar con Tab (APG).
+  - **«Crear»:** el diseño agrega la opción él mismo; en Mimi la agrega la app (`(create)`), y el Combobox la elige en cuanto aparece.
+  - **Anuncio de la cantidad de resultados:** no está en el diseño.
+  - **Ícono del principio:** en el diseño es parte del campo; en Mimi lo pone el usuario (`[mimiComboboxStart]`).

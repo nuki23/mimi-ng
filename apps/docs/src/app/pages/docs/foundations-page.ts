@@ -37,6 +37,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   toolbar: ['cdk'],
   'toggle-group': ['forms', 'cdk'],
   select: ['forms', 'cdk', 'aria'],
+  combobox: ['forms', 'cdk', 'aria'],
   'dropdown-menu': ['cdk', 'aria'],
   'context-menu': ['cdk', 'aria'],
   tabs: ['cdk', 'aria'],
@@ -98,6 +99,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiChipText',
     spanish: 'MIMI_CHIP_TEXT_ES',
     file: 'chip/chip-texts',
+  },
+  {
+    component: 'Combobox',
+    provider: 'provideMimiComboboxText',
+    spanish: 'MIMI_COMBOBOX_TEXT_ES',
+    file: 'combobox/combobox-texts',
   },
   {
     component: 'Slider',

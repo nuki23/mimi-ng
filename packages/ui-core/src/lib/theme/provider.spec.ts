@@ -363,6 +363,13 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
         chip: { height: '24px', radius: '6px', fontSize: '12px', removeSize: '16px' },
         tagsInput: { gap: '4px', padding: '4px', inputMinWidth: '80px' },
         slider: { height: '4px', thumbSize: '18px' },
+        combobox: {
+          height: '44px',
+          radius: '8px',
+          menuMaxHeight: '300px',
+          optionHeight: '36px',
+          optionRadius: '4px',
+        },
       },
     });
     for (const line of [
@@ -462,6 +469,11 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-tags-input-min-width: 80px;',
       '--mimi-slider-height: 4px;',
       '--mimi-slider-thumb-size: 18px;',
+      '--mimi-combobox-height: 44px;',
+      '--mimi-combobox-radius: 8px;',
+      '--mimi-combobox-menu-max-height: 300px;',
+      '--mimi-combobox-option-height: 36px;',
+      '--mimi-combobox-option-radius: 4px;',
     ]) {
       expect(css).toContain(line);
     }

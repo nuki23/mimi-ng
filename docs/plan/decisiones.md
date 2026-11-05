@@ -42,11 +42,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 - G2.9 (pregunta escrita en la G2.0): Date Picker y Date Range, ¿una tabla de tokens o dos? (el usuario la dejó para el inicio de la G2.9).
 
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
-- G2.8: dónde viven las utilidades nuevas de lista (ítem compartido de la CLI o `utils/`) y qué incluyen.
-- G2.8: nombres de la API.
-- G2.8: crear un valor nuevo, ¿`creatable` con `(create)` o lo hace el usuario?
-- G2.8: Escape con el panel cerrado, ¿borra lo escrito o no hace nada?
-- G2.8: ¿dividir en G2.8a (simple) y G2.8b (múltiple con chips)?
 - G2.9: la cuadrícula (`ngGrid` de aria o propia con `FocusKeyManager`).
 - G2.9: nombres de la API.
 - G2.9: cómo se guarda la fecha (`Date`, cadena ISO, `Temporal.PlainDate` o un adaptador).

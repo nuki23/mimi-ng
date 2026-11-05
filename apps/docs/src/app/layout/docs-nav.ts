@@ -63,6 +63,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Input OTP', path: '/docs/components/input-otp', status: 'ready' },
       { title: 'Tags Input', path: '/docs/components/tags-input', status: 'ready' },
       { title: 'Slider', path: '/docs/components/slider', status: 'ready' },
+      { title: 'Combobox', path: '/docs/components/combobox', status: 'ready' },
     ],
   },
 ];

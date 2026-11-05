@@ -45,6 +45,7 @@ const FOLDER: Record<TokenComponent, string> = {
   chip: 'chip',
   tagsInput: 'tags-input',
   slider: 'slider',
+  combobox: 'combobox',
 };
 
 /**

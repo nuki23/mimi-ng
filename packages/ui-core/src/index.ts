@@ -35,3 +35,5 @@ export * from './lib/components/input-otp';
 export * from './lib/components/chip';
 export * from './lib/components/tags-input';
 export * from './lib/components/slider';
+export * from './lib/components/option-list';
+export * from './lib/components/combobox';
