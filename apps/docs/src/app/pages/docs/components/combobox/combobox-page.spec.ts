@@ -24,7 +24,7 @@ describe('ComboboxPage', () => {
     const el = fixture.nativeElement as HTMLElement;
 
     const previews = examples(fixture);
-    expect(previews.length).toBe(5);
+    expect(previews.length).toBe(6);
     for (const { example, code } of previews) {
       expect(example?.querySelector('mimi-combobox input[role="combobox"]')).not.toBeNull();
       expect(code).toContain("from '@/components/ui/combobox';");
@@ -43,6 +43,10 @@ describe('ComboboxPage', () => {
     );
     expect(values).toContain('Diseño');
     expect(values).toContain('Python');
+    // El múltiple: chips con el texto de quitar en español.
+    expect(
+      el.querySelector('mimi-combobox mimi-chip [data-slot="remove"]')!.getAttribute('aria-label'),
+    ).toBe('Quitar Angular');
     expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
       'installation',
       'usage',

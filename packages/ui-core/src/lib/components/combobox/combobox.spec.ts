@@ -74,6 +74,43 @@ const FLAT: MimiListOption<string>[] = [
       [(ngModel)]="model"
       [options]="flat"
     />
+
+    <mimi-combobox
+      data-test="multi"
+      aria-label="Tecnologías"
+      placeholder="Agrega tecnologías"
+      multiple
+      [(value)]="techs"
+      [options]="techOptions()"
+      [creatable]="creatable()"
+      [hint]="multiHint()"
+      (create)="onCreateTech($event)"
+      (searchChange)="queries.push($event)"
+    />
+    <form [formGroup]="multiGroup">
+      <mimi-combobox
+        data-test="multi-reactive"
+        aria-label="Reactive"
+        multiple
+        formControlName="techs"
+        [options]="flat"
+      />
+    </form>
+    <mimi-combobox
+      data-test="multi-signal"
+      aria-label="Signal"
+      multiple
+      [formField]="multiForm.techs"
+      [options]="flat"
+    />
+    <mimi-combobox
+      data-test="multi-ng-model"
+      aria-label="NgModel"
+      multiple
+      name="t"
+      [(ngModel)]="techModel"
+      [options]="flat"
+    />
   `,
 })
 class Host {
@@ -105,6 +142,28 @@ class Host {
     disabled(p.number, () => this.locked());
   });
   readonly model = signal<string | null>(null);
+
+  readonly techOptions = signal<MimiListOption<string>[]>([
+    { label: 'Angular', value: 'ng' },
+    { label: 'React', value: 're' },
+    { label: 'Svelte', value: 'sv' },
+    { label: 'Vue', value: 'vu' },
+  ]);
+  readonly techs = signal<string[]>(['ng']);
+  readonly multiHint = signal<string | undefined>(undefined);
+  onCreateTech(text: string): void {
+    this.created.push(text);
+    this.techOptions.update((list) => [...list, { label: text, value: text.toLowerCase() }]);
+  }
+  readonly multiGroup = new FormGroup({
+    techs: new FormControl<string[]>([], {
+      nonNullable: true,
+      validators: Validators.minLength(2),
+    }),
+  });
+  readonly multiData = signal<{ techs: string[] }>({ techs: [] });
+  readonly multiForm = form(this.multiData, (p) => required(p.techs));
+  readonly techModel = signal<string[]>(['2']);
 }
 
 /** aria reenvía las teclas y cierra en tareas posteriores al render. */
@@ -503,6 +562,166 @@ describe('MimiCombobox', () => {
     )[0].componentInstance as MimiCombobox;
     combobox.focus();
     expect(document.activeElement).toBe(input('plain'));
+  });
+
+  describe('múltiple (G2.8b)', () => {
+    const chipLabels = (el: HTMLElement) =>
+      Array.from(el.querySelectorAll('mimi-chip')).map((c) => c.textContent?.trim());
+
+    it('chips en la caja, lista aria-multiselectable con casilla, sin placeholder con chips', async () => {
+      const { host, box, input, press, listbox, option } = await setup();
+      expect(chipLabels(host('multi'))).toEqual(['Angular']);
+      expect(box('multi').classList).toContain('flex-wrap');
+      expect(box('multi').classList).toContain(
+        'min-h-[var(--mimi-combobox-height,var(--mimi-control-height,2.5rem))]',
+      );
+      expect(input('multi').hasAttribute('placeholder')).toBe(false);
+      const el = input('multi');
+      el.focus();
+      await press(el, 'ArrowDown');
+      expect(listbox().getAttribute('aria-multiselectable')).toBe('true');
+      expect(option('Angular').getAttribute('aria-selected')).toBe('true');
+      expect(option('Angular').querySelector('[data-slot="checkbox"]')!.classList).toContain(
+        'bg-primary',
+      );
+      expect(option('React').getAttribute('aria-selected')).toBe('false');
+      expect(option('React').querySelector('[data-slot="checkbox"] svg')).toBeNull();
+    });
+
+    it('Enter alterna sin cerrar y vacía lo escrito; el clic también', async () => {
+      const { h, fixture, input, type, press, option, panel } = await setup();
+      await type('multi', 'sve');
+      const el = input('multi');
+      await press(el, 'Enter');
+      expect(h.techs()).toEqual(['ng', 'sv']);
+      expect(el.value).toBe('');
+      expect(el.getAttribute('aria-expanded')).toBe('true');
+      expect(h.queries.at(-1)).toBe('');
+      option('Angular').click();
+      await settle(fixture);
+      expect(h.techs()).toEqual(['sv']);
+      expect(panel()).not.toBeNull();
+    });
+
+    it('Backspace con el campo vacío quita el último chip; con texto, no', async () => {
+      const { h, fixture, input, type, press } = await setup();
+      h.techs.set(['ng', 're']);
+      await settle(fixture);
+      await type('multi', 'x');
+      await press(input('multi'), 'Backspace');
+      expect(h.techs()).toEqual(['ng', 're']);
+      await type('multi', '');
+      await press(input('multi'), 'Backspace');
+      expect(h.techs()).toEqual(['ng']);
+    });
+
+    it('el botón de quitar quita el chip y deja el foco en el campo, no en body', async () => {
+      const { h, fixture, host, input } = await setup();
+      h.techs.set(['ng', 're']);
+      input('multi').focus();
+      await settle(fixture);
+      const remove = host('multi').querySelectorAll<HTMLButtonElement>('[data-slot="remove"]')[1];
+      expect(remove.getAttribute('aria-label')).toBe('Remove React');
+      remove.focus();
+      remove.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true }));
+      remove.click();
+      await settle(fixture);
+      expect(h.techs()).toEqual(['ng']);
+      expect(document.activeElement).toBe(input('multi'));
+      // Quitar un chip no abre el panel.
+      expect(input('multi').getAttribute('aria-expanded')).toBe('false');
+    });
+
+    it('cerrado y sin foco: el primer chip y «+N»; con el foco, todos', async () => {
+      const { h, fixture, host, input, blur } = await setup();
+      h.techs.set(['ng', 're', 'vu']);
+      await settle(fixture);
+      input('multi').focus();
+      await settle(fixture);
+      expect(chipLabels(host('multi'))).toEqual(['Angular', 'React', 'Vue']);
+      await blur('multi');
+      expect(chipLabels(host('multi'))).toEqual(['Angular']);
+      expect(host('multi').querySelector('[data-slot="more"]')!.textContent?.trim()).toBe('+2');
+      input('multi').dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
+      await settle(fixture);
+      expect(chipLabels(host('multi'))).toEqual(['Angular', 'React', 'Vue']);
+      expect(host('multi').querySelector('[data-slot="more"]')).toBeNull();
+    });
+
+    it('la ayuda describe al campo; hint la cambia y vacía la quita', async () => {
+      const { h, fixture, host, input } = await setup();
+      const help = host('multi').querySelector<HTMLElement>('[data-slot="help"]')!;
+      expect(help.textContent?.trim()).toBe('Enter agrega · Backspace quita el último chip');
+      expect(input('multi').getAttribute('aria-describedby')).toBe(help.id);
+      expect(host('plain').querySelector('[data-slot="help"]')).toBeNull();
+      h.multiHint.set('');
+      await settle(fixture);
+      expect(host('multi').querySelector('[data-slot="help"]')).toBeNull();
+      expect(input('multi').hasAttribute('aria-describedby')).toBe(false);
+    });
+
+    it('creatable: agrega la opción nueva a los chips cuando la app la suma', async () => {
+      const { h, fixture, input, type, press } = await setup();
+      h.creatable.set(true);
+      await settle(fixture);
+      await type('multi', 'Solid');
+      await press(input('multi'), 'Enter');
+      expect(h.created).toEqual(['Solid']);
+      expect(h.techs()).toEqual(['ng', 'solid']);
+      expect(input('multi').value).toBe('');
+    });
+
+    it('Escape cerrado vacía lo escrito pero no quita los chips; al salir, lo escrito se descarta', async () => {
+      const { h, input, type, press, blur } = await setup();
+      await type('multi', 'Re');
+      await press(input('multi'), 'Escape');
+      await press(input('multi'), 'Escape');
+      expect(input('multi').value).toBe('');
+      expect(h.techs()).toEqual(['ng']);
+      await type('multi', 'Vu');
+      await blur('multi');
+      expect(input('multi').value).toBe('');
+      expect(h.techs()).toEqual(['ng']);
+    });
+
+    it('Reactive Forms: alterna, valida minLength y marca tocado', async () => {
+      const { h, fixture, box, input, type, press, blur } = await setup();
+      await type('multi-reactive', 'uno');
+      await press(input('multi-reactive'), 'Enter');
+      expect(h.multiGroup.value.techs).toEqual(['1']);
+      await blur('multi-reactive');
+      expect(h.multiGroup.controls.techs.invalid).toBe(true);
+      expect(box('multi-reactive').hasAttribute('data-invalid')).toBe(true);
+      h.multiGroup.controls.techs.setValue(['1', '2']);
+      await settle(fixture);
+      expect(box('multi-reactive').hasAttribute('data-invalid')).toBe(false);
+    });
+
+    it('Signal Forms y ngModel con un arreglo', async () => {
+      const { h, fixture, host, input, type, press } = await setup();
+      expect(input('multi-signal').getAttribute('aria-required')).toBe('true');
+      await type('multi-signal', 'dos');
+      await press(input('multi-signal'), 'Enter');
+      expect(h.multiData().techs).toEqual(['2']);
+      expect(chipLabels(host('multi-ng-model'))).toEqual(['Dos']);
+      await type('multi-ng-model', 'uno');
+      await press(input('multi-ng-model'), 'Enter');
+      expect(h.techModel()).toEqual(['2', '1']);
+      h.techModel.set([]);
+      await settle(fixture);
+      expect(chipLabels(host('multi-ng-model'))).toEqual([]);
+    });
+
+    it('en desarrollo avisa si value no tiene la forma del modo', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+      const { h, fixture } = await setup();
+      h.techs.set('ng' as unknown as string[]);
+      await settle(fixture);
+      expect(warn).toHaveBeenCalledWith(
+        '[Mimi] Combobox: con multiple, value tiene que ser un arreglo.',
+      );
+      warn.mockRestore();
+    });
   });
 
   describe('alarmas de aria (rodeos, spec 4)', () => {

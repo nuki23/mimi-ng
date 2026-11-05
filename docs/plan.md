@@ -79,7 +79,6 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
 - 5.17a · auto/grupo-2-2026-11-04 · Claude Code (modo autónomo) · 04/11/2026 — a falta de comprobación del usuario (C4 a C8 en un Android y un iPhone reales)
-- G2.8 (G2.8a hecha; falta G2.8b) · auto/grupo-2-2026-11-04 · Claude Code (modo autónomo) · 05/11/2026
 
 ## Mantenimiento
 
@@ -120,9 +119,9 @@ Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4
 - [x] G2.5 Input OTP (pendiente de comprobación manual: NVDA, SMS y navegador) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.5.md](plan/grupo-2/G2.5.md)
 - [x] G2.6 Tags Input (pendiente de comprobación manual: NVDA y navegador) · v0.3.0 · M · depende: G2.0, G2.0b, 2.4, 2.2 · [docs/plan/grupo-2/G2.6.md](plan/grupo-2/G2.6.md)
 - [x] G2.7 Slider (rango doble) (pendiente de comprobación manual: NVDA, táctil y navegador) · v0.3.0 · L · depende: G2.0, G2.0b, G1.2, G2.1 · [docs/plan/grupo-2/G2.7.md](plan/grupo-2/G2.7.md)
-- [~] G2.8 Combobox/Autocomplete (paraguas de G2.8a y G2.8b) · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, G1.5, G2.6, G2.1, M.2 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
+- [x] G2.8 Combobox/Autocomplete (paraguas de G2.8a y G2.8b) · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, G1.5, G2.6, G2.1, M.2 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
   - [x] G2.8a Combobox simple · v0.3.0 · M · depende: las de G2.8 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
-  - [ ] G2.8b Combobox múltiple con chips · v0.3.0 · M · depende: G2.8a, G2.6 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
+  - [x] G2.8b Combobox múltiple con chips · v0.3.0 · M · depende: G2.8a, G2.6 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
 - [ ] G2.9 Date Picker y Date Range · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, 2.1 · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
 - [x] G2.10 Progress (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.10.md](plan/grupo-2/G2.10.md)
 - [ ] G2.11 File Upload · v0.3.0 · M · depende: G2.0, G2.0b, 2.1, G2.10 · [docs/plan/grupo-2/G2.11.md](plan/grupo-2/G2.11.md)

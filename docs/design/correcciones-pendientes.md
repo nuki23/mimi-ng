@@ -164,3 +164,10 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **«Crear»:** el diseño agrega la opción él mismo; en Mimi la agrega la app (`(create)`), y el Combobox la elige en cuanto aparece.
   - **Anuncio de la cantidad de resultados:** no está en el diseño.
   - **Ícono del principio:** en el diseño es parte del campo; en Mimi lo pone el usuario (`[mimiComboboxStart]`).
+
+  Combobox (G2.8b, múltiple):
+  - **Chips:** los del ítem `chip` (los de Tags Input: botón de quitar con opacidad 0,7, presión 0,9); el diseño del Combobox usa `muted-foreground` y 0,85 (ver Tags Input).
+  - **Resumen «+N»:** el diseño lo muestra en la fila de estados (un chip de 24px sin botón y «+2»); Mimi lo aplica con el campo cerrado y sin foco, con el chip normal (26px, con su botón de quitar).
+  - **Escape cerrado:** el diseño no lo define; en el múltiple Mimi solo vacía lo escrito (no quita los chips).
+  - **Ayuda:** el diseño la escribe a mano debajo del campo; en Mimi es parte del componente en el múltiple (`hint`), en el `aria-describedby` del campo.
+  - **Anuncios al agregar y quitar:** no están en el diseño (los de Tags Input).

@@ -13,7 +13,7 @@
     Instala también las utilidades de lista (<code
       class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
       >option-list</code
-    >: el filtro, el resaltado y la lista) y usa
+    >: el filtro, el resaltado y la lista), el chip (el de Tags Input, para el múltiple) y usa
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/aria</code>
     y <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>.
   </p>
@@ -31,6 +31,15 @@
   </p>
   <app-code-preview [code]="source.city">
     <app-combobox-city-example />
+  </app-code-preview>
+
+  <h3 id="multiple" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Múltiple con chips</h3>
+  <p class="text-pretty">
+    Enter agrega o quita la opción activa sin cerrar; Backspace con el campo vacío quita el último
+    chip. Al salir, si hay más de uno, se ve el primero y «+N».
+  </p>
+  <app-code-preview [code]="source.multiple">
+    <app-combobox-multiple-example />
   </app-code-preview>
 
   <h3 id="create" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Crear un valor nuevo</h3>
@@ -76,6 +85,14 @@
     <li>
       Al salir, lo escrito sin elegir se descarta y vuelve el texto de la opción elegida; con el
       campo vacío, se quita el valor.
+    </li>
+    <li>
+      Múltiple: la lista es
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-multiselectable</code
+      >; Enter alterna sin cerrar; Backspace con el campo vacío quita el último chip; Escape cerrado
+      solo vacía lo escrito. Cada chip tiene su botón «Quitar …» (el foco vuelve al campo) y el
+      lector anuncia lo que se agrega y se quita. La ayuda de debajo describe al campo.
     </li>
   </ul>
 

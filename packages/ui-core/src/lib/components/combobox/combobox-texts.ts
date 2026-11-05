@@ -19,6 +19,10 @@ export interface MimiComboboxText {
   loading: string;
   /** Anuncio con la cantidad de resultados al escribir. */
   results: (count: number) => string;
+  /** Ayuda debajo del campo, en el múltiple. */
+  help: string;
+  /** Chips ocultos con el múltiple cerrado y sin foco: «+2». */
+  more: (count: number) => string;
 }
 
 /** Textos predeterminados (inglés). */
@@ -29,6 +33,8 @@ export const MIMI_COMBOBOX_TEXT_EN: MimiComboboxText = {
   noOptions: 'No options',
   loading: 'Searching…',
   results: (count) => `${count} ${count === 1 ? 'result' : 'results'}`,
+  help: 'Enter adds · Backspace removes the last one',
+  more: (count) => `+${count}`,
 };
 
 /** Textos en español: `provideMimiComboboxText(MIMI_COMBOBOX_TEXT_ES)`. */
@@ -39,6 +45,8 @@ export const MIMI_COMBOBOX_TEXT_ES: MimiComboboxText = {
   noOptions: 'Sin opciones',
   loading: 'Buscando…',
   results: (count) => `${count} ${count === 1 ? 'resultado' : 'resultados'}`,
+  help: 'Enter agrega · Backspace quita el último chip',
+  more: (count) => `+${count}`,
 };
 
 /** Textos activos. Sin `provideMimiComboboxText`, los predeterminados en inglés. */

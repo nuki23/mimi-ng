@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { MIMI_CHIP_TEXT_ES, provideMimiChipText } from '@/components/ui/chip';
 import { MIMI_COMBOBOX_TEXT_ES, provideMimiComboboxText } from '@/components/ui/combobox';
 import { MIMI_ERROR_MESSAGES_ES, provideMimiErrorMessages } from '@/components/ui/form-field';
 import { CodeBlock } from '../../../../code/code-block';
@@ -10,6 +11,7 @@ import { ComboboxCityExample } from './examples/combobox-city.example';
 import { ComboboxCreateExample } from './examples/combobox-create.example';
 import { ComboboxCustomExample } from './examples/combobox-custom.example';
 import { ComboboxFormsExample } from './examples/combobox-forms.example';
+import { ComboboxMultipleExample } from './examples/combobox-multiple.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -22,6 +24,8 @@ import createSource from './examples/combobox-create.example' with { loader: 'te
 import customSource from './examples/combobox-custom.example' with { loader: 'text' };
 // @ts-expect-error
 import formsSource from './examples/combobox-forms.example' with { loader: 'text' };
+// @ts-expect-error
+import multipleSource from './examples/combobox-multiple.example' with { loader: 'text' };
 
 interface ApiRow {
   name: string;
@@ -39,6 +43,7 @@ interface ApiRow {
     CssVariables,
     InstallCommand,
     ComboboxCityExample,
+    ComboboxMultipleExample,
     ComboboxCreateExample,
     ComboboxAsyncExample,
     ComboboxFormsExample,
@@ -46,6 +51,7 @@ interface ApiRow {
   ],
   providers: [
     provideMimiComboboxText(MIMI_COMBOBOX_TEXT_ES),
+    provideMimiChipText(MIMI_CHIP_TEXT_ES),
     provideMimiErrorMessages(MIMI_ERROR_MESSAGES_ES),
   ],
   templateUrl: './combobox-page.html',
@@ -54,6 +60,7 @@ interface ApiRow {
 export class ComboboxPage {
   protected readonly source = {
     city: citySource as string,
+    multiple: multipleSource as string,
     create: createSource as string,
     async: asyncSource as string,
     forms: formsSource as string,
@@ -83,17 +90,34 @@ export class ComboboxPage {
     '  MIMI_COMBOBOX_TEXT_ES,',
     '  provideMimiComboboxText,',
     "} from '@/components/ui/combobox/combobox-texts';",
+    "import { MIMI_CHIP_TEXT_ES, provideMimiChipText } from '@/components/ui/chip/chip-texts';",
     '',
-    'providers: [provideMimiComboboxText(MIMI_COMBOBOX_TEXT_ES)]',
+    'providers: [',
+    '  provideMimiComboboxText(MIMI_COMBOBOX_TEXT_ES),',
+    '  provideMimiChipText(MIMI_CHIP_TEXT_ES), // múltiple: «Quitar …» y los anuncios',
+    ']',
   ].join('\n');
 
   protected readonly api: ApiRow[] = [
     {
       name: 'value',
-      type: 'T | null',
+      type: 'T | null · T[]',
       default: 'null',
       description:
-        'La opción elegida. Admite [(value)], [formField], formControlName y [(ngModel)]. Lo escrito no es el valor hasta que se elige.',
+        'La opción elegida o, con multiple, las elegidas. Admite [(value)], [formField], formControlName y [(ngModel)]. Lo escrito no es el valor hasta que se elige.',
+    },
+    {
+      name: 'multiple',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Varias opciones, como chips. Enter alterna sin cerrar; Backspace con el campo vacío quita el último; cerrado y sin foco, el primer chip y «+N».',
+    },
+    {
+      name: 'hint',
+      type: 'string',
+      default: 'la ayuda',
+      description: 'Ayuda debajo del campo en el múltiple; vacía, sin ayuda.',
     },
     {
       name: 'options',

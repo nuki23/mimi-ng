@@ -255,7 +255,13 @@
         "@angular/forms": "^22.0.0"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["option-list", "utils/cn", "utils/field-state", "utils/overlay"]
+      "registryDependencies": [
+        "chip",
+        "option-list",
+        "utils/cn",
+        "utils/field-state",
+        "utils/overlay"
+      ]
     },
     "tags-input": {
       "type": "component",
