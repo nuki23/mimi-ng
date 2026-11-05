@@ -152,6 +152,12 @@ export const routes: Routes = [
           import('./pages/docs/components/progress/progress-page').then((m) => m.ProgressPage),
       },
       {
+        path: 'components/tags-input',
+        title: 'Tags Input · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/tags-input/tags-input-page').then((m) => m.TagsInputPage),
+      },
+      {
         path: 'components/toggle-group',
         title: 'Toggle Group · Mimi',
         loadComponent: () =>

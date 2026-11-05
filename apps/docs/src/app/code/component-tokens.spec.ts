@@ -42,6 +42,8 @@ const FOLDER: Record<TokenComponent, string> = {
   password: 'password',
   inputMask: 'input-mask',
   inputOtp: 'input-otp',
+  chip: 'chip',
+  tagsInput: 'tags-input',
 };
 
 /**
@@ -52,6 +54,8 @@ const GLOBALS = new Set([
   '--mimi-input-background',
   '--mimi-switch-off',
   '--mimi-card-foreground',
+  // Global del Grupo 2 (G2.0b) que el chip lee como respaldo.
+  '--mimi-chip-foreground',
   '--mimi-popover-foreground',
   '--mimi-popover-arrow-offset',
   '--mimi-tooltip-foreground',

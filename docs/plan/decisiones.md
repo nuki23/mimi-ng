@@ -41,10 +41,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 - G2.9 (pregunta escrita en la G2.0): Date Picker y Date Range, ¿una tabla de tokens o dos? (el usuario la dejó para el inicio de la G2.9).
 
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
-- G2.6: navegación con el teclado entre etiquetas (sin flechas, flechas con `FocusKeyManager`, u otra).
-- G2.6: nombres de la API.
-- G2.6: ¿la normalización del diseño (minúsculas y sin `#`) es la de Mimi por defecto?
-- G2.6: pegado de varias etiquetas, ¿se separan y se agregan todas?
 - G2.7: base técnica (`input type="range"` nativo, dos nativos superpuestos, pulgares propios con `role="slider"` o un nativo invisible por pulgar como Angular Material).
 - G2.7: nombres de la API.
 - G2.7: orientación vertical y RTL.

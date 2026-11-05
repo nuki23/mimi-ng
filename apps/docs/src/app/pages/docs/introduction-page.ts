@@ -56,6 +56,7 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'skeleton', name: 'Skeleton' },
   { id: 'switch', name: 'Switch' },
   { id: 'tabs', name: 'Tabs' },
+  { id: 'tags-input', name: 'Tags Input' },
   { id: 'textarea', name: 'Textarea' },
   { id: 'toast', name: 'Toast' },
   { id: 'toggle-group', name: 'Toggle Group' },

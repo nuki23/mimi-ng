@@ -37,6 +37,18 @@
       },
       "registryDependencies": ["utils/cn", "utils/overlay"]
     },
+    "chip": {
+      "type": "util",
+      "files": [
+        "components/chip/chip.ts",
+        "components/chip/chip-texts.ts",
+        "components/chip/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles"]
+    },
     "theme": {
       "type": "theme",
       "files": ["theme/theme-base.css", "theme/types.ts", "theme/provider.ts", "theme/index.ts"]
@@ -208,6 +220,18 @@
       "type": "component",
       "files": ["components/progress/progress.ts", "components/progress/index.ts"],
       "registryDependencies": ["utils/cn"]
+    },
+    "tags-input": {
+      "type": "component",
+      "files": [
+        "components/tags-input/tags-input.ts",
+        "components/tags-input/tags-input-texts.ts",
+        "components/tags-input/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["chip", "utils/cn", "utils/field-state"]
     },
     "toggle-group": {
       "type": "component",

@@ -450,6 +450,28 @@ export interface MimiInputOtpTokens {
   fontSize?: string;
 }
 
+/** Chip (Tags Input y Combobox). Los colores van en el CSS (`--mimi-chip-bg`, `-fg`). */
+export interface MimiChipTokens {
+  /** Alto (26px). */
+  height?: string;
+  /** Radio (el global `badge-radius`). */
+  radius?: string;
+  /** Tamaño de texto (13px). */
+  fontSize?: string;
+  /** Botón de quitar (18px). */
+  removeSize?: string;
+}
+
+/** Tags Input. El borde con el límite alcanzado va en el CSS (`--mimi-tags-full-border`). */
+export interface MimiTagsInputTokens {
+  /** Separación entre chips (6px). */
+  gap?: string;
+  /** Relleno de la caja (`5px 10px 5px 6px`). */
+  padding?: string;
+  /** Ancho mínimo del campo de texto (120px). */
+  inputMinWidth?: string;
+}
+
 /**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
@@ -482,6 +504,8 @@ export interface MimiComponentTokens {
   password?: MimiPasswordTokens;
   inputMask?: MimiInputMaskTokens;
   inputOtp?: MimiInputOtpTokens;
+  chip?: MimiChipTokens;
+  tagsInput?: MimiTagsInputTokens;
 }
 
 export interface MimiThemePreset {

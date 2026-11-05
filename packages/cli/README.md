@@ -87,6 +87,7 @@ export class App {}
 - **Switch**: `ng g mimi switch` · [documentación](https://ng.mimiworks.dev/docs/components/switch)
 - **Tabs**: `ng g mimi tabs` · [documentación](https://ng.mimiworks.dev/docs/components/tabs)
 - **Textarea**: `ng g mimi textarea` · [documentación](https://ng.mimiworks.dev/docs/components/input)
+- **Tags Input**: `ng g mimi tags-input` · [documentación](https://ng.mimiworks.dev/docs/components/tags-input)
 - **Toast**: `ng g mimi toast` · [documentación](https://ng.mimiworks.dev/docs/components/toast)
 - **Toggle Group**: `ng g mimi toggle-group` · [documentación](https://ng.mimiworks.dev/docs/components/toggle-group)
 - **Toolbar**: `ng g mimi toolbar` · [documentación](https://ng.mimiworks.dev/docs/components/toolbar)

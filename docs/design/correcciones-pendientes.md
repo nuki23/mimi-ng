@@ -140,3 +140,10 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Separador opcional y otras longitudes:** el diseño muestra 6 casillas con el guion después de la tercera; en Mimi el guion va donde diga `separatorAfter` y, sin él, no hay.
   - **Alfanumérico:** no está en el diseño.
   - **Casilla activa con el código completo:** el diseño no lo muestra; Mimi deja el anillo en la última casilla.
+
+  Tags Input y chip (G2.6):
+  - **Contador:** el diseño lo pone arriba, junto a la etiqueta; Mimi lo pone debajo, a la derecha del mensaje (la etiqueta es del usuario).
+  - **Límite alcanzado:** el diseño deshabilita el campo; Mimi lo deja en solo lectura (si no, el foco se pierde).
+  - **Pegado de varias etiquetas y validación propia:** no están en el diseño.
+  - **Botón de quitar:** Mimi usa el de Tags Input (opacidad 0,7) también para el Combobox (el diseño del Combobox usa `muted-foreground`). Presión 0,9 (`--mimi-press-scale-sm`; el diseño, 0,85).
+  - **Anuncios al agregar y quitar:** no están en el diseño.

@@ -61,6 +61,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Password', path: '/docs/components/password', status: 'ready' },
       { title: 'Input Mask', path: '/docs/components/input-mask', status: 'ready' },
       { title: 'Input OTP', path: '/docs/components/input-otp', status: 'ready' },
+      { title: 'Tags Input', path: '/docs/components/tags-input', status: 'ready' },
     ],
   },
 ];

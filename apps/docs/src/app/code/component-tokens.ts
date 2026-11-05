@@ -44,7 +44,9 @@ export type TokenComponent =
   | 'numberInput'
   | 'password'
   | 'inputMask'
-  | 'inputOtp';
+  | 'inputOtp'
+  | 'chip'
+  | 'tagsInput';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -75,6 +77,8 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   password: 'password',
   inputMask: 'mask',
   inputOtp: 'otp',
+  chip: 'chip',
+  tagsInput: 'tags',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1373,6 +1377,68 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-foreground',
       preset: false,
       description: 'Cursor de la casilla activa.',
+    },
+  ],
+  chip: [
+    { name: '--mimi-chip-height', default: '26px', preset: true, description: 'Alto.' },
+    {
+      name: '--mimi-chip-radius',
+      default: 'badge-radius',
+      inherits: '--mimi-badge-radius',
+      preset: true,
+      description: 'Radio.',
+    },
+    {
+      name: '--mimi-chip-font-size',
+      default: '13px',
+      preset: true,
+      description: 'Tamaño de texto.',
+    },
+    {
+      name: '--mimi-chip-remove-size',
+      default: '18px',
+      preset: true,
+      description: 'Botón de quitar.',
+    },
+    {
+      name: '--mimi-chip-bg',
+      default: 'chip',
+      inherits: '--mimi-chip',
+      preset: false,
+      description: 'Fondo.',
+    },
+    {
+      name: '--mimi-chip-fg',
+      default: 'chip-foreground',
+      inherits: '--mimi-chip-foreground',
+      preset: false,
+      description: 'Texto.',
+    },
+  ],
+  tagsInput: [
+    {
+      name: '--mimi-tags-gap',
+      default: '6px',
+      preset: true,
+      description: 'Separación entre chips.',
+    },
+    {
+      name: '--mimi-tags-padding',
+      default: '5px 10px 5px 6px',
+      preset: true,
+      description: 'Relleno de la caja.',
+    },
+    {
+      name: '--mimi-tags-input-min-width',
+      default: '120px',
+      preset: true,
+      description: 'Ancho mínimo del campo de texto.',
+    },
+    {
+      name: '--mimi-tags-full-border',
+      default: 'warning 70 % sobre input',
+      preset: false,
+      description: 'Borde con el límite alcanzado.',
     },
   ],
 };

@@ -32,3 +32,5 @@ export * from './lib/components/number-input';
 export * from './lib/components/password';
 export * from './lib/components/input-mask';
 export * from './lib/components/input-otp';
+export * from './lib/components/chip';
+export * from './lib/components/tags-input';

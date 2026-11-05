@@ -360,6 +360,8 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
         password: { toggleSize: '36px', toggleRadius: '6px', meterHeight: '4px', meterGap: '3px' },
         inputMask: { gap: '6px', prefixHeight: '24px', prefixRadius: '4px' },
         inputOtp: { width: '40px', height: '48px', gap: '6px', radius: '8px', fontSize: '20px' },
+        chip: { height: '24px', radius: '6px', fontSize: '12px', removeSize: '16px' },
+        tagsInput: { gap: '4px', padding: '4px', inputMinWidth: '80px' },
       },
     });
     for (const line of [
@@ -450,6 +452,13 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-otp-gap: 6px;',
       '--mimi-otp-radius: 8px;',
       '--mimi-otp-font-size: 20px;',
+      '--mimi-chip-height: 24px;',
+      '--mimi-chip-radius: 6px;',
+      '--mimi-chip-font-size: 12px;',
+      '--mimi-chip-remove-size: 16px;',
+      '--mimi-tags-gap: 4px;',
+      '--mimi-tags-padding: 4px;',
+      '--mimi-tags-input-min-width: 80px;',
     ]) {
       expect(css).toContain(line);
     }

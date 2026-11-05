@@ -62,6 +62,10 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
     count: 1,
     why: 'Input real transparente: el foco se ve en la casilla activa (borde y halo ring), como el diseño.',
   },
+  'components/tags-input/tags-input.ts': {
+    count: 1,
+    why: 'Campo de dentro: el anillo lo pinta la caja con focus-within.',
+  },
   'components/number-input/number-input.ts': {
     count: 1,
     why: 'Input de dentro: el anillo lo pinta la caja con focus-within (como Select).',

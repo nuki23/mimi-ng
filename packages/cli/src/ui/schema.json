@@ -112,6 +112,10 @@
             "label": "tabs"
           },
           {
+            "value": "tags-input",
+            "label": "tags-input"
+          },
+          {
             "value": "textarea",
             "label": "textarea"
           },

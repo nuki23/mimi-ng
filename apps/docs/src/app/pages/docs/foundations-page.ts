@@ -26,6 +26,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   'number-input': ['forms'],
   'input-mask': ['forms'],
   'input-otp': ['forms'],
+  'tags-input': ['forms', 'cdk'],
   password: ['forms', 'cdk'],
   popover: ['cdk'],
   tooltip: ['cdk'],
@@ -84,6 +85,18 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiPasswordText',
     spanish: 'MIMI_PASSWORD_TEXT_ES',
     file: 'password/password-texts',
+  },
+  {
+    component: 'Tags Input',
+    provider: 'provideMimiTagsInputText',
+    spanish: 'MIMI_TAGS_INPUT_TEXT_ES',
+    file: 'tags-input/tags-input-texts',
+  },
+  {
+    component: 'Chip (Tags Input y Combobox)',
+    provider: 'provideMimiChipText',
+    spanish: 'MIMI_CHIP_TEXT_ES',
+    file: 'chip/chip-texts',
   },
   {
     component: 'Pagination',
