@@ -41,7 +41,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 - G2.9 (pregunta escrita en la G2.0): Date Picker y Date Range, ¿una tabla de tokens o dos? (el usuario la dejó para el inicio de la G2.9).
 
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
-- 5.2: el modo claro/oscuro de la vista previa, ¿cambia todo el sitio o solo el contenedor?
 - G2.2: base técnica (`input type="text"` con `role="spinbutton"` o `type="number"` nativo).
 - G2.2: nombres de la API.
 - G2.2: el campo vacío, ¿es `null` o vuelve a `min`/0?

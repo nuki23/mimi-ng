@@ -31,6 +31,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/docs/foundations-page').then((m) => m.FoundationsPage),
       },
       {
+        path: 'theme',
+        title: 'Tema · Mimi',
+        loadComponent: () => import('./pages/docs/theme/theme-page').then((m) => m.ThemePage),
+      },
+      {
         path: 'components/button',
         title: 'Button · Mimi',
         loadComponent: () =>
