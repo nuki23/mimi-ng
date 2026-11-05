@@ -129,3 +129,8 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Cursor, borrar sobre un literal, pegado e IME:** el diseño no los muestra. Mimi deja el cursor después del mismo dígito, borra el dígito vecino al borrar sobre un literal, acepta pegar con o sin literales y no reformatea durante la composición.
   - **Literales al final:** el diseño (`applyMask`) los agrega mientras haya dígitos; Mimi escribe un literal solo si le sigue un dígito («(5», no «(5) »), para que borrar no se trabe.
   - **Solo lectura:** no está en el diseño (el input nativo `readonly`).
+
+  Input Mask (G2.4b):
+  - **Marcador:** en el diseño es el texto completo de la máscara rellenado con lo escrito (`typed` + `rest`); Mimi recibe el marcador entero (`ghost`, por ejemplo `DD/MM/AAAA`) y muestra lo que falta después de lo escrito. Si `ghost` y la máscara tienen distinto largo, el marcador se corta o queda corto (responsabilidad del usuario).
+  - **Clic en el prefijo o el ícono:** el diseño no lo define; Mimi lleva el foco al campo.
+  - **Marca de la tarjeta:** radio fijo de 5px en el diseño; en Mimi es del ejemplo.
