@@ -24,6 +24,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   checkbox: ['forms'],
   'form-field': ['forms'],
   'number-input': ['forms'],
+  password: ['forms', 'cdk'],
   popover: ['cdk'],
   tooltip: ['cdk'],
   dialog: ['cdk'],
@@ -75,6 +76,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiNumberInputText',
     spanish: 'MIMI_NUMBER_INPUT_TEXT_ES',
     file: 'number-input/number-input-texts',
+  },
+  {
+    component: 'Password',
+    provider: 'provideMimiPasswordText',
+    spanish: 'MIMI_PASSWORD_TEXT_ES',
+    file: 'password/password-texts',
   },
   {
     component: 'Pagination',

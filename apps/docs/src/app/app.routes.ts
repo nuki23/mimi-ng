@@ -128,6 +128,12 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'components/password',
+        title: 'Password · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/password/password-page').then((m) => m.PasswordPage),
+      },
+      {
         path: 'components/progress',
         title: 'Progress · Mimi',
         loadComponent: () =>

@@ -118,3 +118,9 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **No están en el diseño:** Re Pág/Av Pág (diez pasos), Inicio/Fin (los límites), mantener pulsado − o + (repite) y el campo vacío (`null`, con `placeholder`). La rueda del mouse no cambia el valor (decidido por defecto).
   - **Lectura:** el diseño quita todo lo que no es dígito, punto o signo; Mimi lee con los separadores del idioma (ya anotado en la tanda B).
   - **Solo lectura:** no está en el diseño; los botones quedan con `aria-disabled` y el teclado no cambia el valor.
+
+  Password (G2.3):
+  - **Heurística con otras reglas:** el diseño cuenta cuatro reglas (0–1 débil, 2–3 media, 4 fuerte); Mimi la generaliza a cualquier lista (todas, fuerte; al menos la mitad, media; menos, débil).
+  - **Presión del ojo:** 0,9 (`--mimi-press-scale-sm`); el diseño, 0,88.
+  - **Deshabilitado y solo lectura:** el diseño solo muestra el campo deshabilitado; Mimi deshabilita también el botón. Solo lectura no tiene diseño: el botón sigue funcionando (mostrar no cambia el valor).
+  - **Reglas propias y sin reglas:** no están en el diseño.

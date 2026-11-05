@@ -41,7 +41,8 @@ export type TokenComponent =
   | 'pagination'
   | 'toggleGroup'
   | 'progress'
-  | 'numberInput';
+  | 'numberInput'
+  | 'password';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -69,6 +70,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   toggleGroup: 'toggle-group',
   progress: 'progress',
   numberInput: 'number',
+  password: 'password',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1230,6 +1232,47 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-accent',
       preset: false,
       description: 'Fondo de un botón con el puntero encima.',
+    },
+  ],
+  password: [
+    {
+      name: '--mimi-password-toggle-size',
+      default: '32px',
+      preset: true,
+      description: 'Tamaño del botón de mostrar u ocultar.',
+    },
+    {
+      name: '--mimi-password-toggle-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio del botón.',
+    },
+    {
+      name: '--mimi-password-meter-height',
+      default: '6px',
+      preset: true,
+      description: 'Alto de cada barra del medidor.',
+    },
+    {
+      name: '--mimi-password-meter-gap',
+      default: '4px',
+      preset: true,
+      description: 'Separación entre las barras.',
+    },
+    {
+      name: '--mimi-password-toggle-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo del botón con el puntero encima.',
+    },
+    {
+      name: '--mimi-password-meter-track',
+      default: 'track',
+      inherits: '--mimi-track',
+      preset: false,
+      description: 'Barra vacía (los niveles usan --mimi-strength-weak, -medium y -strong).',
     },
   ],
 };

@@ -176,6 +176,18 @@
       },
       "registryDependencies": ["utils/cn", "utils/field-state"]
     },
+    "password": {
+      "type": "component",
+      "files": [
+        "components/password/password.ts",
+        "components/password/password-texts.ts",
+        "components/password/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.0"
+      },
+      "registryDependencies": ["input", "utils/cn", "utils/control-styles"]
+    },
     "progress": {
       "type": "component",
       "files": ["components/progress/progress.ts", "components/progress/index.ts"],

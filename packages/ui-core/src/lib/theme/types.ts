@@ -405,6 +405,22 @@ export interface MimiNumberInputTokens {
 }
 
 /**
+ * Password. El hover del botón y la pista del medidor van en el CSS
+ * (`--mimi-password-toggle-hover`, `-meter-track`); los colores de los niveles son los globales
+ * `--mimi-strength-*`.
+ */
+export interface MimiPasswordTokens {
+  /** Botón de mostrar u ocultar (32px). */
+  toggleSize?: string;
+  /** Radio del botón (el global `radius-sm`). */
+  toggleRadius?: string;
+  /** Alto de cada barra del medidor (6px). */
+  meterHeight?: string;
+  /** Separación entre barras (4px). */
+  meterGap?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -433,6 +449,7 @@ export interface MimiComponentTokens {
   toggleGroup?: MimiToggleGroupTokens;
   progress?: MimiProgressTokens;
   numberInput?: MimiNumberInputTokens;
+  password?: MimiPasswordTokens;
 }
 
 export interface MimiThemePreset {

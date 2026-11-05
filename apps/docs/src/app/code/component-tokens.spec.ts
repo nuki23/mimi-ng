@@ -39,6 +39,7 @@ const FOLDER: Record<TokenComponent, string> = {
   toggleGroup: 'toggle-group',
   progress: 'progress',
   numberInput: 'number-input',
+  password: 'password',
 };
 
 /**

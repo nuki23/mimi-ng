@@ -357,6 +357,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           buttonSize: '34px',
           buttonRadius: '4px',
         },
+        password: { toggleSize: '36px', toggleRadius: '6px', meterHeight: '4px', meterGap: '3px' },
       },
     });
     for (const line of [
@@ -435,6 +436,10 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-number-px: 6px;',
       '--mimi-number-button-size: 34px;',
       '--mimi-number-button-radius: 4px;',
+      '--mimi-password-toggle-size: 36px;',
+      '--mimi-password-toggle-radius: 6px;',
+      '--mimi-password-meter-height: 4px;',
+      '--mimi-password-meter-gap: 3px;',
     ]) {
       expect(css).toContain(line);
     }

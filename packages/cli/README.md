@@ -76,6 +76,7 @@ export class App {}
 - **Input**: `ng g mimi input` · [documentación](https://ng.mimiworks.dev/docs/components/input)
 - **Number Input**: `ng g mimi number-input` · [documentación](https://ng.mimiworks.dev/docs/components/number-input)
 - **Pagination**: `ng g mimi pagination` · [documentación](https://ng.mimiworks.dev/docs/components/pagination)
+- **Password**: `ng g mimi password` · [documentación](https://ng.mimiworks.dev/docs/components/password)
 - **Popover**: `ng g mimi popover` · [documentación](https://ng.mimiworks.dev/docs/components/popover)
 - **Progress**: `ng g mimi progress` · [documentación](https://ng.mimiworks.dev/docs/components/progress)
 - **Select**: `ng g mimi select` · [documentación](https://ng.mimiworks.dev/docs/components/select)

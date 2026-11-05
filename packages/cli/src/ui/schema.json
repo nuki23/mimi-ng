@@ -72,6 +72,10 @@
             "label": "pagination"
           },
           {
+            "value": "password",
+            "label": "password"
+          },
+          {
             "value": "popover",
             "label": "popover"
           },
