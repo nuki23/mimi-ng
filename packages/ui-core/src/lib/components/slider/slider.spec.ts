@@ -234,10 +234,12 @@ describe('MimiSlider', () => {
     expect(t.className).toContain('var(--mimi-thumb,var(--mimi-background))');
     const track = part('single').querySelector('[data-slot="track"]')!;
     expect(track.className).toContain('var(--mimi-track,var(--mimi-input))');
+    // El anfitrión (todo el objetivo del puntero) mide 24px de alto (2.5.8, 5.17b).
+    expect(part('single').classList).toContain('h-6');
     host.extra.set('h-8');
     await settle(fixture);
     expect(part('single').className).toContain('h-8');
-    expect(part('single').className).not.toContain('h-5');
+    expect(part('single').className).not.toContain('h-6');
   });
 
   it('Reactive Forms, Signal Forms (rango) y ngModel', async () => {

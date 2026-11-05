@@ -308,7 +308,9 @@ export class MimiSlider implements FormValueControl<MimiSliderValue>, MimiFieldC
 
   protected readonly classes = computed(() =>
     cn(
-      'relative flex h-5 w-full touch-none items-center select-none',
+      // 24px de alto: todo el anfitrión recibe el puntero (va el pulgar más cercano), así el
+      // objetivo táctil cumple 2.5.8 aunque los dos pulgares estén juntos (5.17b).
+      'relative flex h-6 w-full touch-none items-center select-none',
       this.markList().some((m) => m.label) && 'mb-6',
       this.disabled()
         ? 'cursor-not-allowed opacity-[var(--mimi-disabled-opacity,0.5)]'
