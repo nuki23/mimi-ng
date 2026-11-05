@@ -473,6 +473,17 @@ export interface MimiTagsInputTokens {
 }
 
 /**
+ * Slider. Pista, relleno, pulgar y su sombra van en el CSS (`--mimi-slider-track`, `-fill`,
+ * `-thumb`, `-thumb-shadow`); la burbuja usa los colores de Tooltip.
+ */
+export interface MimiSliderTokens {
+  /** Grosor de la pista (6px). */
+  height?: string;
+  /** Tamaño del pulgar (20px). */
+  thumbSize?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -506,6 +517,7 @@ export interface MimiComponentTokens {
   inputOtp?: MimiInputOtpTokens;
   chip?: MimiChipTokens;
   tagsInput?: MimiTagsInputTokens;
+  slider?: MimiSliderTokens;
 }
 
 export interface MimiThemePreset {

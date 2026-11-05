@@ -34,3 +34,4 @@ export * from './lib/components/input-mask';
 export * from './lib/components/input-otp';
 export * from './lib/components/chip';
 export * from './lib/components/tags-input';
+export * from './lib/components/slider';

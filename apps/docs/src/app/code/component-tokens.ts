@@ -46,7 +46,8 @@ export type TokenComponent =
   | 'inputMask'
   | 'inputOtp'
   | 'chip'
-  | 'tagsInput';
+  | 'tagsInput'
+  | 'slider';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -79,6 +80,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   inputOtp: 'otp',
   chip: 'chip',
   tagsInput: 'tags',
+  slider: 'slider',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1439,6 +1441,48 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       default: 'warning 70 % sobre input',
       preset: false,
       description: 'Borde con el límite alcanzado.',
+    },
+  ],
+  slider: [
+    {
+      name: '--mimi-slider-height',
+      default: '6px',
+      preset: true,
+      description: 'Grosor de la pista.',
+    },
+    {
+      name: '--mimi-slider-thumb-size',
+      default: '20px',
+      preset: true,
+      description: 'Tamaño del pulgar.',
+    },
+    {
+      name: '--mimi-slider-track',
+      default: 'track',
+      inherits: '--mimi-track',
+      preset: false,
+      description: 'Pista.',
+    },
+    {
+      name: '--mimi-slider-fill',
+      default: 'track-fill',
+      inherits: '--mimi-track-fill',
+      preset: false,
+      description: 'Parte llena y borde del pulgar (destructive con error).',
+    },
+    {
+      name: '--mimi-slider-thumb',
+      default: 'thumb',
+      inherits: '--mimi-thumb',
+      preset: false,
+      description: 'Fondo del pulgar.',
+    },
+    {
+      name: '--mimi-slider-thumb-shadow',
+      default: 'shadow-neutral',
+      inherits: '--mimi-shadow-neutral',
+      preset: false,
+      description: 'Sombra del pulgar.',
     },
   ],
 };

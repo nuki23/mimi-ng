@@ -147,3 +147,10 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Pegado de varias etiquetas y validación propia:** no están en el diseño.
   - **Botón de quitar:** Mimi usa el de Tags Input (opacidad 0,7) también para el Combobox (el diseño del Combobox usa `muted-foreground`). Presión 0,9 (`--mimi-press-scale-sm`; el diseño, 0,85).
   - **Anuncios al agregar y quitar:** no están en el diseño.
+
+  Slider (G2.7):
+  - **Foco:** el diseño lo marca con `box-shadow` (2px del fondo y 4px de `ring`); Mimi usa el contorno `ring` de los botones (2px, separado 2px), que se ve igual y lo comprueba `focus-styles.spec.ts`.
+  - **Al arrastrar, el pulgar recibe el foco:** el diseño no lo hace; Mimi sí, para que el teclado siga desde ahí.
+  - **RTL:** no está en el diseño (las flechas y la posición se invierten).
+  - **Vertical:** no está en el diseño ni en Mimi (más adelante).
+  - **Nombres del rango:** el diseño usa «Mínimo» y «Máximo» con `aria-labelledby`; Mimi junta la etiqueta y el nombre en el `aria-label` («Precio por noche, Mínimo»).

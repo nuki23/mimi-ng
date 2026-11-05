@@ -41,10 +41,6 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 - G2.9 (pregunta escrita en la G2.0): Date Picker y Date Range, ¿una tabla de tokens o dos? (el usuario la dejó para el inicio de la G2.9).
 
 - M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
-- G2.7: base técnica (`input type="range"` nativo, dos nativos superpuestos, pulgares propios con `role="slider"` o un nativo invisible por pulgar como Angular Material).
-- G2.7: nombres de la API.
-- G2.7: orientación vertical y RTL.
-- G2.7: ¿dividir en G2.7a (un valor) y G2.7b (rango doble)?
 - G2.8: dónde viven las utilidades nuevas de lista (ítem compartido de la CLI o `utils/`) y qué incluyen.
 - G2.8: nombres de la API.
 - G2.8: crear un valor nuevo, ¿`creatable` con `(create)` o lo hace el usuario?
@@ -79,6 +75,5 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(c) Se deciden solo si se llega a esa parte.**
 
-- G2.7: distancia mínima entre pulgares, ¿entrada `minRange` o validador del formulario? (solo con el rango doble).
 - Grupo 2 (cualquier tarea o la G2.P): si un componente deja el CSS global cerca del error (145 kB) o el `initial` cerca de 505 kB, qué se hace (reducir o subir un techo); decide el usuario con la tabla acumulada y el gzip real (spec 10, «Grupo 2: medir primero»).
 - 5.17: ¿qué cambios de API exige la revisión móvil y a qué versión van (en la 5.17a: 0.3.0 o 0.2.1)? (solo si la revisión los encuentra).

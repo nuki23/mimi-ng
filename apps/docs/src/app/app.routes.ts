@@ -152,6 +152,12 @@ export const routes: Routes = [
           import('./pages/docs/components/progress/progress-page').then((m) => m.ProgressPage),
       },
       {
+        path: 'components/slider',
+        title: 'Slider · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/slider/slider-page').then((m) => m.SliderPage),
+      },
+      {
         path: 'components/tags-input',
         title: 'Tags Input · Mimi',
         loadComponent: () =>

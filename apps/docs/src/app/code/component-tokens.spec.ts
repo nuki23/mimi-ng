@@ -44,6 +44,7 @@ const FOLDER: Record<TokenComponent, string> = {
   inputOtp: 'input-otp',
   chip: 'chip',
   tagsInput: 'tags-input',
+  slider: 'slider',
 };
 
 /**

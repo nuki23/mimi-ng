@@ -1,0 +1,85 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Slider</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Un valor o un rango, con el arrastre o con el teclado, marcas y el valor en una burbuja.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="slider" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Un valor</h3>
+  <app-code-preview [code]="source.basic">
+    <app-slider-basic-example />
+  </app-code-preview>
+
+  <h3 id="range" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Rango</h3>
+  <p class="text-pretty">
+    La distancia mínima entre pulgares es un validador de tu formulario: el ejemplo de edad la pide
+    de 5 años.
+  </p>
+  <app-code-preview [code]="source.range">
+    <app-slider-range-example />
+  </app-code-preview>
+
+  <h3 id="marks" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Marcas</h3>
+  <app-code-preview [code]="source.marks">
+    <app-slider-marks-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Teclado y accesibilidad
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Cada pulgar es un
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="slider"</code>
+      con su valor y
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-valuetext</code>
+      (el texto de
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">format</code>). En el
+      rango se llaman «Mínimo» y «Máximo».
+    </li>
+    <li>
+      Flechas: un paso; Re Pág y Av Pág: diez; Inicio y Fin: los límites. En derecha a izquierda, ←
+      sube.
+    </li>
+    <li>
+      Al tocar la pista, el pulgar más cercano va ahí, recibe el foco y se arrastra (también con el
+      dedo). La burbuja no se anuncia: el valor ya está en el pulgar.
+    </li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Entrada</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="slider" />
+</article>

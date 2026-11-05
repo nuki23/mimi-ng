@@ -104,6 +104,10 @@
             "label": "skeleton"
           },
           {
+            "value": "slider",
+            "label": "slider"
+          },
+          {
             "value": "switch",
             "label": "switch"
           },

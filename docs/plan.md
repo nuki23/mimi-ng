@@ -117,7 +117,7 @@ Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4
 - [x] G2.4b Input Mask: marcador, prefijo e ícono (pendiente de comprobación manual: navegador) · v0.3.0 · S · depende: G2.4a · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
 - [x] G2.5 Input OTP (pendiente de comprobación manual: NVDA, SMS y navegador) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.5.md](plan/grupo-2/G2.5.md)
 - [x] G2.6 Tags Input (pendiente de comprobación manual: NVDA y navegador) · v0.3.0 · M · depende: G2.0, G2.0b, 2.4, 2.2 · [docs/plan/grupo-2/G2.6.md](plan/grupo-2/G2.6.md)
-- [ ] G2.7 Slider (rango doble) · v0.3.0 · L · depende: G2.0, G2.0b, G1.2, G2.1 · [docs/plan/grupo-2/G2.7.md](plan/grupo-2/G2.7.md)
+- [x] G2.7 Slider (rango doble) (pendiente de comprobación manual: NVDA, táctil y navegador) · v0.3.0 · L · depende: G2.0, G2.0b, G1.2, G2.1 · [docs/plan/grupo-2/G2.7.md](plan/grupo-2/G2.7.md)
 - [ ] G2.8 Combobox/Autocomplete · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, G1.5, G2.6, G2.1, M.2 (provisional) · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
 - [ ] G2.9 Date Picker y Date Range · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, 2.1 · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
 - [x] G2.10 Progress (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.10.md](plan/grupo-2/G2.10.md)

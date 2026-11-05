@@ -27,6 +27,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   'input-mask': ['forms'],
   'input-otp': ['forms'],
   'tags-input': ['forms', 'cdk'],
+  slider: ['forms', 'cdk'],
   password: ['forms', 'cdk'],
   popover: ['cdk'],
   tooltip: ['cdk'],
@@ -97,6 +98,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiChipText',
     spanish: 'MIMI_CHIP_TEXT_ES',
     file: 'chip/chip-texts',
+  },
+  {
+    component: 'Slider',
+    provider: 'provideMimiSliderText',
+    spanish: 'MIMI_SLIDER_TEXT_ES',
+    file: 'slider/slider-texts',
   },
   {
     component: 'Pagination',

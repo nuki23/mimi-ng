@@ -362,6 +362,7 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
         inputOtp: { width: '40px', height: '48px', gap: '6px', radius: '8px', fontSize: '20px' },
         chip: { height: '24px', radius: '6px', fontSize: '12px', removeSize: '16px' },
         tagsInput: { gap: '4px', padding: '4px', inputMinWidth: '80px' },
+        slider: { height: '4px', thumbSize: '18px' },
       },
     });
     for (const line of [
@@ -459,6 +460,8 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-tags-gap: 4px;',
       '--mimi-tags-padding: 4px;',
       '--mimi-tags-input-min-width: 80px;',
+      '--mimi-slider-height: 4px;',
+      '--mimi-slider-thumb-size: 18px;',
     ]) {
       expect(css).toContain(line);
     }

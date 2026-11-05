@@ -221,6 +221,19 @@
       "files": ["components/progress/progress.ts", "components/progress/index.ts"],
       "registryDependencies": ["utils/cn"]
     },
+    "slider": {
+      "type": "component",
+      "files": [
+        "components/slider/slider.ts",
+        "components/slider/slider-texts.ts",
+        "components/slider/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.0",
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+    },
     "tags-input": {
       "type": "component",
       "files": [

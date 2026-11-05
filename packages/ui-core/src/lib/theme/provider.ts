@@ -96,6 +96,7 @@ const COMPONENT_PREFIX: Record<keyof MimiComponentTokens, string> = {
   inputOtp: 'otp',
   chip: 'chip',
   tagsInput: 'tags',
+  slider: 'slider',
 };
 
 /** Nombres de la 0.1.0 que siguen funcionando hasta la 1.0 (spec 12): ruta → qué usar. */
