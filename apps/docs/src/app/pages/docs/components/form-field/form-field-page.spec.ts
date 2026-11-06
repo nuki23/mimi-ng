@@ -1,41 +1,45 @@
 import { TestBed } from '@angular/core/testing';
-import { examples, settle } from '../../../../code/code-preview.testing';
+import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { MIMI_ERROR_MESSAGES_ES, provideMimiErrorMessages } from '@/components/ui/form-field';
 import { FormFieldPage } from './form-field-page';
 
 describe('FormFieldPage', () => {
-  it('cada ejemplo corre en Preview y su pestaña Código muestra el archivo real', async () => {
-    TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: HighlighterService,
-          useValue: { highlight: () => new Promise(() => undefined) },
-        },
-      ],
-    });
-    const fixture = TestBed.createComponent(FormFieldPage);
-    await settle(fixture);
-    const el = fixture.nativeElement as HTMLElement;
+  it(
+    'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
+    async () => {
+      TestBed.configureTestingModule({
+        providers: [
+          {
+            provide: HighlighterService,
+            useValue: { highlight: () => new Promise(() => undefined) },
+          },
+        ],
+      });
+      const fixture = TestBed.createComponent(FormFieldPage);
+      await settle(fixture);
+      const el = fixture.nativeElement as HTMLElement;
 
-    const previews = examples(fixture);
-    expect(previews.length).toBe(8);
-    for (const { example, code } of previews) {
-      expect(example?.querySelector('mimi-form-field')).not.toBeNull();
-      expect(code).toMatch(
-        /import \{[^}]*\bMimiFormField(Imports)?\b[^}]*\} from '@\/components\/ui\/form-field';/,
-      );
-      expect(code).toMatch(/export class FormField\w+Example/);
-    }
-    expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-      'installation',
-      'usage',
-      'examples',
-      'messages',
-      'customize-messages',
-      'api',
-    ]);
-  });
+      const previews = examples(fixture);
+      expect(previews.length).toBe(8);
+      for (const { example, code } of previews) {
+        expect(example?.querySelector('mimi-form-field')).not.toBeNull();
+        expect(code).toMatch(
+          /import \{[^}]*\bMimiFormField(Imports)?\b[^}]*\} from '@\/components\/ui\/form-field';/,
+        );
+        expect(code).toMatch(/export class FormField\w+Example/);
+      }
+      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
+        'installation',
+        'usage',
+        'examples',
+        'messages',
+        'customize-messages',
+        'api',
+      ]);
+    },
+    PAGE_EXAMPLES_TIMEOUT,
+  );
 
   it('los niveles 3 y 4 muestran su mensaje: provider propio y predeterminados', async () => {
     TestBed.configureTestingModule({

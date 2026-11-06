@@ -84,7 +84,10 @@ const rightClick = (target: Element, x = 120, y = 80, button = 2) => {
   return event;
 };
 
-describe('MimiContextMenu', () => {
+// M.12: 20 s por prueba en esta suite (no los 5 s de Vitest). Abrir el panel la primera vez en
+// cada archivo paga la primera creación de sus componentes: aislada tarda menos de 1 s, pero con
+// `pnpm test` y todos los workers ocupados llegó a 6,8 s (05/11/2026; docs/plan/mantenimiento.md).
+describe('MimiContextMenu', { timeout: 20_000 }, () => {
   async function setup() {
     const fixture = TestBed.createComponent(Host);
     const root = fixture.nativeElement as HTMLElement;

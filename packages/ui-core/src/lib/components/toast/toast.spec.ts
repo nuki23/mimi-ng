@@ -32,7 +32,10 @@ class DialogContent {}
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-describe('injectMimiToast', () => {
+// M.12: 20 s por prueba en esta suite (no los 5 s de Vitest). Abrir el panel la primera vez en
+// cada archivo paga la primera creación de sus componentes: aislada tarda menos de 1 s, pero con
+// `pnpm test` y todos los workers ocupados llegó a 6,8 s (05/11/2026; docs/plan/mantenimiento.md).
+describe('injectMimiToast', { timeout: 20_000 }, () => {
   async function setup(providers: unknown[] = []) {
     TestBed.configureTestingModule({ providers: providers as never[] });
     const fixture = TestBed.createComponent(Host);
@@ -269,36 +272,99 @@ describe('injectMimiToast', () => {
   });
 
   it('el tiempo se detiene con el puntero, con el foco y con la pestaña oculta', async () => {
-    const { toast, settle, until, open, list, items } = await setup();
-    toast('Pausa', { duration: 80 });
-    await settle();
-    list().dispatchEvent(new MouseEvent('mouseenter'));
-    await wait(200);
-    expect(open().length).toBe(1);
-    expect(document.querySelector('mimi-toaster')!.hasAttribute('data-expanded')).toBe(true);
-    list().dispatchEvent(new MouseEvent('mouseleave'));
-    await until(() => open().length === 0);
-
-    toast('Foco', { duration: 80 });
-    await settle();
-    items()[0].dispatchEvent(new FocusEvent('focusin', { bubbles: true }));
-    await wait(200);
-    expect(open().length).toBe(1);
-    items()[0].dispatchEvent(new FocusEvent('focusout', { bubbles: true }));
-    await until(() => open().length === 0);
+    // Sin reloj real (M.12): con 80 ms reales, bajo carga el toast se cerraba antes de llegar a
+    // pausarlo. Un reloj manual captura solo los temporizadores largos (los del toast, 60 s);
+    // los cortos de Angular y de settle/until siguen siendo reales.
+    const DURATION = 60_000;
+    const realSetTimeout = globalThis.setTimeout;
+    const realClearTimeout = globalThis.clearTimeout;
+    const pending = new Map<number, { run: () => void; delay: number }>();
+    let now = 1_000_000;
+    let nextId = 1;
+    vi.spyOn(Date, 'now').mockImplementation(() => now);
+    vi.spyOn(globalThis, 'setTimeout').mockImplementation(((
+      handler: () => void,
+      delay?: number,
+    ) => {
+      if ((delay ?? 0) < 10_000) return realSetTimeout(handler, delay);
+      const id = -nextId++;
+      pending.set(id, { run: handler, delay: delay! });
+      return id;
+    }) as unknown as typeof setTimeout);
+    vi.spyOn(globalThis, 'clearTimeout').mockImplementation(((id?: number) => {
+      if (id !== undefined && pending.delete(id)) return;
+      realClearTimeout(id);
+    }) as typeof clearTimeout);
+    const delays = () => [...pending.values()].map((timer) => timer.delay);
+    const fire = () => {
+      const timers = [...pending.values()];
+      pending.clear();
+      for (const timer of timers) timer.run();
+    };
 
     const state = Object.getOwnPropertyDescriptor(Document.prototype, 'visibilityState')!;
-    Object.defineProperty(document, 'visibilityState', { configurable: true, value: 'hidden' });
     try {
-      toast('Oculta', { duration: 80 });
+      const { toast, settle, until, open, list, items } = await setup();
+      // Cada caso: corre el tiempo, pasan 1000 ms, se pausa (el temporizador se cancela y no
+      // cierra), se reanuda con lo que faltaba (59 000 ms) y, al cumplirse, cierra.
+      const pauseAndResume = async (
+        pause: () => void,
+        resume: () => void,
+        whilePaused: () => void = () => undefined,
+      ) => {
+        expect(delays()).toEqual([DURATION]);
+        now += 1000;
+        pause();
+        await settle();
+        expect(delays()).toEqual([]);
+        whilePaused();
+        now += DURATION * 2;
+        await settle();
+        expect(open().length).toBe(1);
+        resume();
+        await settle();
+        expect(delays()).toEqual([DURATION - 1000]);
+        fire();
+        await until(() => open().length === 0);
+      };
+
+      toast('Pausa', { duration: DURATION });
       await settle();
-      document.dispatchEvent(new Event('visibilitychange'));
-      await wait(200);
-      expect(open().length).toBe(1);
-      Object.defineProperty(document, 'visibilityState', { configurable: true, value: 'visible' });
-      document.dispatchEvent(new Event('visibilitychange'));
-      await until(() => open().length === 0);
+      await pauseAndResume(
+        () => list().dispatchEvent(new MouseEvent('mouseenter')),
+        () => list().dispatchEvent(new MouseEvent('mouseleave')),
+        () =>
+          expect(document.querySelector('mimi-toaster')!.hasAttribute('data-expanded')).toBe(true),
+      );
+
+      toast('Foco', { duration: DURATION });
+      await settle();
+      const item = items().find((li) => li.dataset['state'] === 'open')!;
+      await pauseAndResume(
+        () => item.dispatchEvent(new FocusEvent('focusin', { bubbles: true })),
+        () => item.dispatchEvent(new FocusEvent('focusout', { bubbles: true })),
+      );
+
+      toast('Oculta', { duration: DURATION });
+      await settle();
+      await pauseAndResume(
+        () => {
+          Object.defineProperty(document, 'visibilityState', {
+            configurable: true,
+            value: 'hidden',
+          });
+          document.dispatchEvent(new Event('visibilitychange'));
+        },
+        () => {
+          Object.defineProperty(document, 'visibilityState', {
+            configurable: true,
+            value: 'visible',
+          });
+          document.dispatchEvent(new Event('visibilitychange'));
+        },
+      );
     } finally {
+      vi.restoreAllMocks();
       delete (document as { visibilityState?: unknown }).visibilityState;
       Object.defineProperty(Document.prototype, 'visibilityState', state);
     }

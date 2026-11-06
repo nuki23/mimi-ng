@@ -67,7 +67,10 @@ const settle = async (fixture: { whenStable(): Promise<unknown> }) => {
   }
 };
 
-describe('MimiDatePicker', () => {
+// M.12: 20 s por prueba en esta suite (no los 5 s de Vitest). Abrir el panel la primera vez en
+// cada archivo paga la primera creación de sus componentes: aislada tarda menos de 1 s, pero con
+// `pnpm test` y todos los workers ocupados llegó a 6,8 s (05/11/2026; docs/plan/mantenimiento.md).
+describe('MimiDatePicker', { timeout: 20_000 }, () => {
   beforeAll(() => {
     // jsdom no mide: el InteractivityChecker del CDK necesita geometría para el foco al abrir.
     Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {

@@ -89,7 +89,10 @@ describe('fechas de Mimi (dates.ts)', () => {
   });
 });
 
-describe('MimiCalendar', () => {
+// M.12: 20 s por prueba en esta suite (no los 5 s de Vitest). Pintar la cuadrícula la primera
+// vez en cada archivo paga la primera creación de sus componentes: aislada tarda menos de 1 s,
+// pero con `pnpm test` y todos los workers ocupados llegó a 2,5 s (05/11/2026; docs/plan/mantenimiento.md).
+describe('MimiCalendar', { timeout: 20_000 }, () => {
   async function setup() {
     TestBed.configureTestingModule({
       providers: [

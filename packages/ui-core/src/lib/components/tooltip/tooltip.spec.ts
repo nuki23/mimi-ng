@@ -70,7 +70,10 @@ const settle = async (fixture: { whenStable(): Promise<unknown> }) => {
 /** El último cierre de otro tooltip abre el siguiente sin retraso: cada prueba empieza lejos. */
 let now = 1_000_000;
 
-describe('MimiTooltip', () => {
+// M.12: 20 s por prueba en esta suite (no los 5 s de Vitest). Abrir el panel la primera vez en
+// cada archivo paga la primera creación de sus componentes: aislada tarda menos de 1 s, pero con
+// `pnpm test` y todos los workers ocupados llegó a 6,8 s (05/11/2026; docs/plan/mantenimiento.md).
+describe('MimiTooltip', { timeout: 20_000 }, () => {
   beforeEach(() => {
     now += 60_000;
     vi.spyOn(Date, 'now').mockImplementation(() => now);
