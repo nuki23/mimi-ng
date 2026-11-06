@@ -26,14 +26,14 @@
       "type": "util",
       "files": ["utils/overlay.ts"],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       }
     },
     "menu": {
       "type": "util",
       "files": ["components/menu/menu.ts", "components/menu/index.ts"],
       "peerDependencies": {
-        "@angular/aria": "^22.2.0"
+        "@angular/aria": "^22.2.4"
       },
       "registryDependencies": ["utils/cn", "utils/overlay"]
     },
@@ -45,7 +45,7 @@
         "components/chip/index.ts"
       ],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles"]
     },
@@ -53,7 +53,7 @@
       "type": "util",
       "files": ["components/option-list/option-list.ts", "components/option-list/index.ts"],
       "peerDependencies": {
-        "@angular/aria": "^22.2.0"
+        "@angular/aria": "^22.2.4"
       },
       "registryDependencies": ["utils/cn"]
     },
@@ -123,7 +123,7 @@
       "type": "component",
       "files": ["components/context-menu/context-menu.ts", "components/context-menu/index.ts"],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["menu", "utils/overlay"]
@@ -136,7 +136,7 @@
         "components/dialog/index.ts"
       ],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/overlay"]
@@ -148,7 +148,7 @@
         "class-variance-authority": "^0.7.1"
       },
       "peerDependencies": {
-        "@angular/aria": "^22.2.0"
+        "@angular/aria": "^22.2.4"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles"]
     },
@@ -164,7 +164,7 @@
         "class-variance-authority": "^0.7.1"
       },
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["button", "utils/cn", "utils/control-styles", "utils/overlay"]
     },
@@ -180,7 +180,7 @@
         "class-variance-authority": "^0.7.1"
       },
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["button", "input", "select", "utils/cn"]
     },
@@ -220,7 +220,7 @@
         "components/password/index.ts"
       ],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["input", "utils/cn", "utils/control-styles"]
     },
@@ -237,7 +237,7 @@
         "components/slider/index.ts"
       ],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0",
+        "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
@@ -250,8 +250,8 @@
         "components/combobox/index.ts"
       ],
       "peerDependencies": {
-        "@angular/aria": "^22.2.0",
-        "@angular/cdk": "^22.2.0",
+        "@angular/aria": "^22.2.4",
+        "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
@@ -272,7 +272,7 @@
         "components/calendar/index.ts"
       ],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles"]
     },
@@ -313,7 +313,7 @@
         "components/file-upload/index.ts"
       ],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0",
+        "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
       "registryDependencies": [
@@ -362,7 +362,7 @@
         "class-variance-authority": "^0.7.1"
       },
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0",
+        "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles"]
@@ -374,7 +374,7 @@
         "class-variance-authority": "^0.7.1"
       },
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles"]
     },
@@ -382,7 +382,7 @@
       "type": "component",
       "files": ["components/dropdown-menu/dropdown-menu.ts", "components/dropdown-menu/index.ts"],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["menu", "utils/overlay"]
@@ -413,7 +413,7 @@
       "type": "component",
       "files": ["components/popover/popover.ts", "components/popover/index.ts"],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["utils/cn", "utils/overlay"]
@@ -426,8 +426,8 @@
         "components/select/index.ts"
       ],
       "peerDependencies": {
-        "@angular/aria": "^22.2.0",
-        "@angular/cdk": "^22.2.0",
+        "@angular/aria": "^22.2.4",
+        "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
@@ -467,7 +467,7 @@
       "type": "component",
       "files": ["components/tooltip/tooltip.ts", "components/tooltip/index.ts"],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["utils/cn", "utils/overlay"]
