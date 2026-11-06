@@ -570,6 +570,32 @@
   }
 }
 
+/* Texto solo para lectores de pantalla del CDK: el LiveAnnouncer (Pagination, Toast, Password,
+   File Upload, Tags Input y Combobox múltiple) crea al final del body un elemento con esta clase,
+   pero no carga su CSS (el CDK solo lo inyecta con Dialog y las trampas de foco): sin esta
+   regla, el anuncio («Página 2 de 12») se ve al final de la página. Igual que
+   @angular/cdk/a11y-prebuilt.css, y sin capa, como la inyecta el CDK. */
+.cdk-visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+  outline: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  left: 0;
+}
+
+[dir='rtl'] .cdk-visually-hidden {
+  left: auto;
+  right: 0;
+}
+
 @keyframes mimi-spin {
   to {
     transform: rotate(360deg);
