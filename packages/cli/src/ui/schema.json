@@ -32,12 +32,24 @@
             "label": "button"
           },
           {
+            "value": "calendar",
+            "label": "calendar"
+          },
+          {
             "value": "card",
             "label": "card"
           },
           {
             "value": "checkbox",
             "label": "checkbox"
+          },
+          {
+            "value": "color-picker",
+            "label": "color-picker"
+          },
+          {
+            "value": "combobox",
+            "label": "combobox"
           },
           {
             "value": "confirm",
@@ -48,12 +60,24 @@
             "label": "context-menu"
           },
           {
+            "value": "date-picker",
+            "label": "date-picker"
+          },
+          {
+            "value": "date-range",
+            "label": "date-range"
+          },
+          {
             "value": "dialog",
             "label": "dialog"
           },
           {
             "value": "dropdown-menu",
             "label": "dropdown-menu"
+          },
+          {
+            "value": "file-upload",
+            "label": "file-upload"
           },
           {
             "value": "form-field",
@@ -64,12 +88,32 @@
             "label": "input"
           },
           {
+            "value": "input-mask",
+            "label": "input-mask"
+          },
+          {
+            "value": "input-otp",
+            "label": "input-otp"
+          },
+          {
+            "value": "number-input",
+            "label": "number-input"
+          },
+          {
             "value": "pagination",
             "label": "pagination"
           },
           {
+            "value": "password",
+            "label": "password"
+          },
+          {
             "value": "popover",
             "label": "popover"
+          },
+          {
+            "value": "progress",
+            "label": "progress"
           },
           {
             "value": "select",
@@ -84,6 +128,10 @@
             "label": "skeleton"
           },
           {
+            "value": "slider",
+            "label": "slider"
+          },
+          {
             "value": "switch",
             "label": "switch"
           },
@@ -92,12 +140,20 @@
             "label": "tabs"
           },
           {
+            "value": "tags-input",
+            "label": "tags-input"
+          },
+          {
             "value": "textarea",
             "label": "textarea"
           },
           {
             "value": "toast",
             "label": "toast"
+          },
+          {
+            "value": "toggle-group",
+            "label": "toggle-group"
           },
           {
             "value": "toolbar",

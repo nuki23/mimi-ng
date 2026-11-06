@@ -147,7 +147,7 @@ describe('mimi (alias ui)', () => {
       '"buton" no es un componente de Mimi. ¿Quisiste decir button?',
     );
     await expect(run('mimi', { components: ['zzz'] }, tree)).rejects.toThrow(
-      /"zzz" no es un componente de Mimi\.\nDisponibles: avatar, badge, button, card/,
+      /"zzz" no es un componente de Mimi\.\nDisponibles: avatar, badge, button, calendar, card/,
     );
     await expect(run('mimi', { components: ['form'] }, tree)).rejects.toThrow(
       '¿Quisiste decir form-field?',
@@ -475,6 +475,106 @@ describe('mimi (alias ui)', () => {
     expect(deps['@angular/cdk']).toBe('~22.1.0');
   });
 
+  describe('M.4: aviso con cdk o aria anteriores a 22.2.4', () => {
+    const outdatedWarning = (warnings: string[]) =>
+      warnings.find((w) => w.startsWith('Mimi necesita @angular/cdk y @angular/aria'));
+
+    it('combobox con cdk 22.2.3 instalado: avisa, nombra cdk y aria, y no cambia el cdk', async () => {
+      const { run, tree, warnings } = await initialized();
+      const pkg = json(tree, '/package.json');
+      pkg.dependencies['@angular/cdk'] = '^22.2.0';
+      tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+      tree.create('/node_modules/@angular/cdk/package.json', JSON.stringify({ version: '22.2.3' }));
+      const result = await run('mimi', { components: ['combobox'] }, tree);
+      const deps = json(result, '/package.json').dependencies;
+      // Solo avisa: el cdk del usuario queda igual y aria, igual que el cdk (la pide exacta).
+      expect(deps['@angular/cdk']).toBe('^22.2.0');
+      expect(deps['@angular/aria']).toBe('22.2.3');
+      expect(outdatedWarning(warnings())).toBe(
+        'Mimi necesita @angular/cdk y @angular/aria 22.2.4 o posterior (las anteriores tienen ' +
+          'errores conocidos con sus componentes) y tu proyecto tiene:\n' +
+          '  @angular/aria: "22.2.3", que se agrega ahora\n' +
+          '  @angular/cdk: 22.2.3 instalada\n' +
+          'Actualízalos con:\n' +
+          '  ng update @angular/cdk @angular/aria',
+      );
+    });
+
+    it('con cdk y aria 22.2.4 instalados no avisa', async () => {
+      const { run, tree, warnings } = await initialized();
+      const pkg = json(tree, '/package.json');
+      pkg.dependencies['@angular/cdk'] = '^22.2.0';
+      pkg.dependencies['@angular/aria'] = '^22.2.0';
+      tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+      for (const name of ['cdk', 'aria']) {
+        tree.create(
+          `/node_modules/@angular/${name}/package.json`,
+          JSON.stringify({ version: '22.2.4' }),
+        );
+      }
+      await run('mimi', { components: ['select'] }, tree);
+      expect(outdatedWarning(warnings())).toBeUndefined();
+    });
+
+    it('instalado manda sobre el rango: 22.2.0 fijo con 22.2.6 en disco no avisa', async () => {
+      const { run, tree, warnings } = await initialized();
+      const pkg = json(tree, '/package.json');
+      pkg.dependencies['@angular/cdk'] = '22.2.0';
+      tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+      tree.create('/node_modules/@angular/cdk/package.json', JSON.stringify({ version: '22.2.6' }));
+      await run('mimi', { components: ['popover'] }, tree);
+      expect(outdatedWarning(warnings())).toBeUndefined();
+    });
+
+    // Un caso por prueba: cada uno corre init en un workspace nuevo.
+    it.each<[string, boolean]>([
+      ['22.2.3', true],
+      ['~22.1.0', true],
+      ['^21.0.0', true],
+      ['^22.0.0', false],
+      ['~22.2.0', false],
+      ['22.2.4', false],
+      ['^23.0.0', false],
+      ['latest', false],
+    ])('sin instalar, cdk "%s" en package.json: avisa = %s', async (range, warns) => {
+      const h = await initialized();
+      const pkg = json(h.tree, '/package.json');
+      pkg.dependencies['@angular/cdk'] = range;
+      h.tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+      await h.run('mimi', { components: ['dialog'] }, h.tree);
+      const warning = outdatedWarning(h.warnings());
+      expect(Boolean(warning)).toBe(warns);
+      if (warns) {
+        expect(warning).toContain(`  @angular/cdk: "${range}" en package.json`);
+        // Dialog no usa aria: el comando no la nombra.
+        expect(warning).toMatch(/ng update @angular\/cdk$/);
+      }
+    });
+
+    it('lo que agrega Mimi con un @angular/core fijo en 22.2.3 también avisa', async () => {
+      const { run, tree, warnings } = await initialized();
+      const pkg = json(tree, '/package.json');
+      pkg.dependencies['@angular/core'] = '22.2.3';
+      tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+      const result = await run('mimi', { components: ['tabs'] }, tree);
+      const deps = json(result, '/package.json').dependencies;
+      expect(deps['@angular/aria']).toBe('22.2.3');
+      expect(deps['@angular/cdk']).toBe('22.2.3');
+      const warning = outdatedWarning(warnings());
+      expect(warning).toContain('  @angular/aria: "22.2.3", que se agrega ahora');
+      expect(warning).toContain('  @angular/cdk: "22.2.3", que se agrega ahora');
+    });
+
+    it('un componente sin cdk ni aria no avisa aunque el cdk sea viejo', async () => {
+      const { run, tree, warnings } = await initialized();
+      const pkg = json(tree, '/package.json');
+      pkg.dependencies['@angular/cdk'] = '22.1.0';
+      tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+      await run('mimi', { components: ['button'] }, tree);
+      expect(outdatedWarning(warnings())).toBeUndefined();
+    });
+  });
+
   it('tabs: solo importa aria, pero instala también @angular/cdk (aria lo necesita)', async () => {
     const { run, tree, logs } = await initialized();
     const cssPath = json(tree, '/mimi.json').tailwind.css as string;
@@ -612,6 +712,17 @@ describe('ui: modificados según .mimi/base (no según la plantilla)', () => {
     expect(snapshot(result)).toEqual(before);
     expect(warnings()).toEqual([]);
     expect(logs.map((l) => l.message)).toContain('Nada que hacer: los archivos ya están al día.');
+  });
+
+  it('M.11: con --overwrite, reemplaza también lo de la misma versión (distinto de la plantilla)', async () => {
+    const { run, tree, logs } = await withButtonFormatted();
+    const result = await run('mimi', { components: ['button'], overwrite: true }, tree);
+    for (const name of BUTTON) {
+      const original = template(`components/button/${name}`);
+      expect(result.readContent(`/${UI}/button/${name}`)).toBe(original);
+      expect(result.readContent(`/.mimi/base/button/${name}`)).toBe(original);
+    }
+    expect(logs.map((l) => l.message)).toContain('Reemplazado (--overwrite):');
   });
 
   it('igual a su base pero de una versión anterior: lo actualiza y lo dice', async () => {

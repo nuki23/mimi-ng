@@ -59,7 +59,10 @@ const settle = async (fixture: { whenStable(): Promise<unknown> }) => {
 const key = (target: Element, k: string) =>
   target.dispatchEvent(new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true }));
 
-describe('MimiDropdownMenu', () => {
+// M.12: 20 s por prueba en esta suite (no los 5 s de Vitest). Abrir el panel la primera vez en
+// cada archivo paga la primera creación de sus componentes: aislada tarda menos de 1 s, pero con
+// `pnpm test` y todos los workers ocupados llegó a 6,8 s (05/11/2026; docs/plan/mantenimiento.md).
+describe('MimiDropdownMenu', { timeout: 20_000 }, () => {
   async function setup() {
     const fixture = TestBed.createComponent(Host);
     const root = fixture.nativeElement as HTMLElement;

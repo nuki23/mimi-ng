@@ -88,6 +88,19 @@ const COMPONENT_PREFIX: Record<keyof MimiComponentTokens, string> = {
   tabs: 'tabs',
   toolbar: 'toolbar',
   pagination: 'pagination',
+  toggleGroup: 'toggle-group',
+  progress: 'progress',
+  numberInput: 'number',
+  password: 'password',
+  inputMask: 'mask',
+  inputOtp: 'otp',
+  chip: 'chip',
+  tagsInput: 'tags',
+  slider: 'slider',
+  combobox: 'combobox',
+  date: 'date',
+  fileUpload: 'upload',
+  colorPicker: 'color-picker',
 };
 
 /** Nombres de la 0.1.0 que siguen funcionando hasta la 1.0 (spec 12): ruta → qué usar. */

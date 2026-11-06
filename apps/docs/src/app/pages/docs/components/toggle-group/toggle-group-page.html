@@ -1,0 +1,208 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Toggle Group</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Un control segmentado para elegir una opción, como una radio, o varias, como botones de
+    alternancia. En la selección simple, el fondo se desliza hasta la opción elegida.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="toggle-group" />
+  <p class="text-pretty">
+    Usa el
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">FocusKeyManager</code>
+    de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>
+    para las flechas. Si tu proyecto no lo tiene, el comando lo instala en la versión de tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/core</code>.
+  </p>
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <p class="text-pretty">
+    Los botones son tuyos: les pones
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >mimiToggleGroupItem</code
+    >
+    con su valor y el contenido (texto, ícono o los dos). Los de solo ícono llevan
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code>.
+  </p>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="text" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Texto · selección simple</h3>
+  <p class="text-pretty">
+    Una opción a la vez: las flechas mueven el foco y eligen. El valor es
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">T | null</code>.
+  </p>
+  <app-code-preview [code]="source.text">
+    <app-toggle-group-text-example />
+  </app-code-preview>
+
+  <h3 id="icons" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Íconos · selección simple
+  </h3>
+  <p class="text-pretty">Solo con íconos, cada botón mide 44px de ancho.</p>
+  <app-code-preview [code]="source.icons">
+    <app-toggle-group-icons-example />
+  </app-code-preview>
+
+  <h3 id="multiple" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Íconos · selección múltiple
+  </h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">multiple</code>, cada
+    botón se alterna por su cuenta y el valor es
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">T[]</code>.
+  </p>
+  <app-code-preview [code]="source.multiple">
+    <app-toggle-group-multiple-example />
+  </app-code-preview>
+
+  <h3 id="solid" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Texto e ícono · solid</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">variant="solid"</code>
+    pinta los elegidos en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">primary</code>.
+  </p>
+  <app-code-preview [code]="source.solid">
+    <app-toggle-group-solid-example />
+  </app-code-preview>
+
+  <h3 id="disabled" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Deshabilitado</h3>
+  <app-code-preview [code]="source.disabled">
+    <app-toggle-group-disabled-example />
+  </app-code-preview>
+
+  <h3 id="forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Formularios</h3>
+  <p class="text-pretty">
+    Funciona con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[formField]</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">formControlName</code>
+    y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(ngModel)]</code>, en
+    simple y en múltiple. Se marca como tocado cuando el foco sale del grupo, y un requerido sin
+    elegir muestra el borde de error.
+  </p>
+  <app-code-preview [code]="source.forms">
+    <app-toggle-group-forms-example />
+  </app-code-preview>
+
+  <h3 id="custom" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Personalizar con class</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> va al
+    grupo y a cada botón, y gana a las clases de Mimi.
+  </p>
+  <app-code-preview [code]="source.custom">
+    <app-toggle-group-custom-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Teclado y accesibilidad
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Simple:
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >role="radiogroup"</code
+      >
+      con botones
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="radio"</code>.
+      Una sola parada de Tab (el elegido, o el primero); → y ↓ eligen el siguiente, ← y ↑ el
+      anterior, con vuelta. Espacio elige el enfocado.
+    </li>
+    <li>
+      Múltiple:
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="group"</code>
+      con botones
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-pressed</code>;
+      cada uno es una parada de Tab y se alterna con Enter o Espacio.
+    </li>
+    <li>
+      En derecha a izquierda (<code
+        class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >dir="rtl"</code
+      >
+      en
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;html&gt;</code> o
+      la directiva
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">Dir</code> del CDK),
+      ← avanza y el indicador se desplaza al revés.
+    </li>
+    <li>
+      En desarrollo avisa si falta el nombre del grupo, si un botón sin texto no tiene
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code> o
+      si el valor no coincide con el modo (un arreglo sin
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">multiple</code>).
+    </li>
+    <li>Con movimiento reducido, el indicador salta sin animarse y no hay escala al pulsar.</li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <h3 id="api-group" class="mt-2 text-lg font-semibold tracking-[-0.01em]">mimi-toggle-group</h3>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Entrada</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of groupApi; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="api-item" class="mt-2 text-lg font-semibold tracking-[-0.01em]">mimiToggleGroupItem</h3>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Entrada</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of itemApi; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    Estado en atributos:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >data-state="on|off"</code
+    >
+    y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-variant</code> en
+    cada botón;
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-variant</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-multiple</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-disabled</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-invalid</code> en
+    el grupo.
+  </p>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="toggleGroup" />
+</article>

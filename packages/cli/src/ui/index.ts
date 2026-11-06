@@ -45,6 +45,20 @@ interface Plan {
   implicit: string[];
   /** Paquetes que se agregan a package.json (los que el proyecto no tiene). */
   newPackages: Record<string, string>;
+  /** cdk o aria que quedan por debajo del mínimo del registro (M.4): solo se avisa. */
+  outdated: OutdatedPeer[];
+  /** Los de cdk y aria que el proyecto tendrá (declarados o agregados): van en el `ng update`. */
+  updatable: string[];
+}
+
+interface OutdatedPeer {
+  name: string;
+  /** Lo que tiene el proyecto: la versión instalada o el rango de package.json. */
+  current: string;
+  /** De dónde sale `current`: node_modules, package.json o lo que la CLI agrega ahora. */
+  source: 'installed' | 'declared' | 'added';
+  /** El mínimo que pide el registro (por ejemplo, 22.2.4 de `^22.2.4`). */
+  required: string;
 }
 
 /**
@@ -148,7 +162,114 @@ function inspect(tree: Tree, options: UiOptions): Plan {
   );
 
   const componentsDir = normalizePath(config.aliases?.components ?? 'src/app/components/ui');
-  return { componentsDir, config, items, implicit, newPackages };
+  const outdated = outdatedPeers(tree, items, installed, newPackages);
+  const updatable = PEERS_WITH_MINIMUM.filter((name) => installed[name] || newPackages[name]);
+  return { componentsDir, config, items, implicit, newPackages, outdated, updatable };
+}
+
+// ── Versiones mínimas de cdk y aria (M.4) ─────────────────────────────────────────────
+
+/**
+ * Paquetes cuya versión mínima se vigila. La CLI no los cambia si el proyecto ya los tiene (se
+ * actualizan con `ng update`, junto con el resto de Angular), pero avisa si quedan por debajo de
+ * lo que pide el registro: con aria y cdk 22.2.3, Combobox y Select lanzan NG0950 (spec 4,
+ * «#33974»).
+ */
+const PEERS_WITH_MINIMUM = ['@angular/cdk', '@angular/aria'];
+
+type Version = [number, number, number];
+
+const RANGE = /^\s*(\^|~|>=|=)?\s*v?(\d+)\.(\d+)\.(\d+)\s*$/;
+
+function parseRange(range: string): { op: string; version: Version } | null {
+  const match = RANGE.exec(range);
+  if (!match) return null;
+  return { op: match[1] ?? '=', version: [+match[2], +match[3], +match[4]] };
+}
+
+function compare(a: Version, b: Version): number {
+  return a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
+}
+
+/**
+ * Si un rango puede instalar `required` o una posterior. Lo que no se entiende (`*`, `latest`,
+ * `22.2.x`, `workspace:`…) cuenta como que sí: el aviso no da falsas alarmas.
+ */
+function canReach(range: string, required: Version): boolean {
+  const parsed = parseRange(range);
+  if (!parsed) return true;
+  if (parsed.op === '>=' || compare(parsed.version, required) >= 0) return true;
+  // Por debajo del mínimo: llega solo si el tope del rango (exclusivo) queda por encima.
+  const [major, minor, patch] = parsed.version;
+  const upper: Version | null =
+    parsed.op === '^'
+      ? major > 0
+        ? [major + 1, 0, 0]
+        : minor > 0
+          ? [0, minor + 1, 0]
+          : [0, 0, patch + 1]
+      : parsed.op === '~'
+        ? [major, minor + 1, 0]
+        : null;
+  return upper !== null && compare(required, upper) < 0;
+}
+
+/** El mínimo que piden los ítems para cada paquete vigilado (aria implica el mismo cdk). */
+function requiredMinimums(items: string[]): Map<string, Version> {
+  const minimums = new Map<string, Version>();
+  for (const item of items) {
+    const { dependencies = {}, peerDependencies = {} } = registry.items[item];
+    for (const [name, range] of Object.entries({ ...dependencies, ...peerDependencies })) {
+      if (!PEERS_WITH_MINIMUM.includes(name)) continue;
+      const version = parseRange(range)?.version;
+      if (!version) continue;
+      const names = name === '@angular/aria' ? [name, '@angular/cdk'] : [name];
+      for (const target of names) {
+        const known = minimums.get(target);
+        if (!known || compare(version, known) > 0) minimums.set(target, version);
+      }
+    }
+  }
+  return minimums;
+}
+
+function outdatedPeers(
+  tree: Tree,
+  items: string[],
+  installed: Record<string, string>,
+  newPackages: Record<string, string>,
+): OutdatedPeer[] {
+  const outdated: OutdatedPeer[] = [];
+  for (const [name, required] of requiredMinimums(items)) {
+    const declared = installed[name] ?? newPackages[name];
+    if (!declared) continue;
+    // Si ya está instalado, manda la versión de node_modules (la que corre de verdad).
+    const onDisk = installed[name] ? installedVersion(tree, name) : null;
+    const version = onDisk ? parseRange(onDisk)?.version : null;
+    const ok = version ? compare(version, required) >= 0 : canReach(declared, required);
+    if (!ok) {
+      outdated.push({
+        name,
+        current: onDisk ?? declared,
+        source: onDisk ? 'installed' : installed[name] ? 'declared' : 'added',
+        required: required.join('.'),
+      });
+    }
+  }
+  return outdated.sort((a, b) => a.name.localeCompare(b.name));
+}
+
+const SOURCE_TEXT: Record<OutdatedPeer['source'], (current: string) => string> = {
+  installed: (current) => `${current} instalada`,
+  declared: (current) => `"${current}" en package.json`,
+  added: (current) => `"${current}", que se agrega ahora`,
+};
+
+function installedVersion(tree: Tree, name: string): string | null {
+  const file = tree.read(`node_modules/${name}/package.json`);
+  if (!file) return null;
+  const { version } = JSON.parse(file.toString('utf-8')) as { version?: string };
+  return version ?? null;
 }
 
 /**
@@ -283,6 +404,17 @@ function summary(plan: Plan, report: FileReport): Rule {
     if (packages.length > 0) {
       log.info('Dependencias que se instalan:');
       for (const [name, version] of packages) log.info(`  ${name}@${version}`);
+    }
+    if (plan.outdated.length > 0) {
+      const required = [...new Set(plan.outdated.map((peer) => peer.required))].join(', ');
+      const lines = plan.outdated.map(
+        (peer) => `  ${peer.name}: ${SOURCE_TEXT[peer.source](peer.current)}`,
+      );
+      log.warn(
+        `Mimi necesita @angular/cdk y @angular/aria ${required} o posterior (las anteriores ` +
+          `tienen errores conocidos con sus componentes) y tu proyecto tiene:\n${lines.join('\n')}\n` +
+          `Actualízalos con:\n  ng update ${plan.updatable.join(' ')}`,
+      );
     }
     if (hasFileChanges(report)) {
       log.info(

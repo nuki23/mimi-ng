@@ -91,7 +91,10 @@ const settle = async (fixture: { whenStable(): Promise<unknown> }) => {
   }
 };
 
-describe('MimiDialog', () => {
+// M.12: 20 s por prueba en esta suite (no los 5 s de Vitest). Abrir el panel la primera vez en
+// cada archivo paga la primera creación de sus componentes: aislada tarda menos de 1 s, pero con
+// `pnpm test` y todos los workers ocupados llegó a 6,8 s (05/11/2026; docs/plan/mantenimiento.md).
+describe('MimiDialog', { timeout: 20_000 }, () => {
   async function setup() {
     TestBed.configureTestingModule({ providers: [provideMimiDialogText(MIMI_DIALOG_TEXT_ES)] });
     const fixture = TestBed.createComponent(Host);

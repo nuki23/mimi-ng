@@ -104,7 +104,10 @@ const settle = async (fixture: { whenStable(): Promise<unknown> }) => {
   }
 };
 
-describe('MimiTabs', () => {
+// M.12: 20 s por prueba en esta suite (no los 5 s de Vitest). Crear los paneles la primera vez
+// en cada archivo paga la primera creación de sus componentes: aislada tarda menos de 1 s, pero
+// con `pnpm test` y todos los workers ocupados llegó a 1,8 s (05/11/2026; docs/plan/mantenimiento.md).
+describe('MimiTabs', { timeout: 20_000 }, () => {
   beforeEach(() => (created = []));
   // El foco que queda en una pestaña afecta al :focus-visible de las pruebas que siguen (Tooltip).
   afterEach(() => (document.activeElement as HTMLElement | null)?.blur?.());

@@ -157,7 +157,10 @@ const key = (target: Element, k: string, init: KeyboardEventInit = {}) =>
     new KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true, ...init }),
   );
 
-describe('MimiSelect', () => {
+// M.12: 20 s por prueba en esta suite (no los 5 s de Vitest). Abrir el panel la primera vez en
+// cada archivo paga la primera creación de sus componentes: aislada tarda menos de 1 s, pero con
+// `pnpm test` y todos los workers ocupados llegó a 6,8 s (05/11/2026; docs/plan/mantenimiento.md).
+describe('MimiSelect', { timeout: 20_000 }, () => {
   beforeAll(() => {
     // jsdom no lo implementa; aria lo usa para traer la opción activa a la vista.
     Element.prototype.scrollIntoView ??= () => undefined;
@@ -707,10 +710,15 @@ describe('MimiSelect', () => {
     const select = fixture.debugElement.query(By.directive(MimiSelect))
       .componentInstance as unknown as { positions(): ConnectedPosition[] };
     const pane = () => panel()!.closest<HTMLElement>('.cdk-overlay-pane')!;
-    // Por defecto: debajo, al inicio y con el ancho del disparador; si no cabe, encima.
+    // Por defecto: debajo, al inicio y con el ancho del disparador; si no cabe, encima. Con las
+    // otras alineaciones de cada lado (5.17a), sin pasar a los costados.
     expect(select.positions().map((p) => [p.overlayY, p.originX])).toEqual([
       ['top', 'start'],
+      ['top', 'end'],
+      ['top', 'center'],
       ['bottom', 'start'],
+      ['bottom', 'end'],
+      ['bottom', 'center'],
     ]);
     await open('plain');
     expect(pane().style.width).not.toBe('');
@@ -721,7 +729,11 @@ describe('MimiSelect', () => {
     await settle(fixture);
     expect(select.positions().map((p) => [p.overlayY, p.originX])).toEqual([
       ['bottom', 'end'],
+      ['bottom', 'start'],
+      ['bottom', 'center'],
       ['top', 'end'],
+      ['top', 'start'],
+      ['top', 'center'],
     ]);
     await open('plain');
     // Sin matchWidth, el CDK no le fija el ancho del disparador.

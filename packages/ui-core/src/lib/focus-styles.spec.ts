@@ -54,6 +54,30 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
     count: 2,
     why: 'Panel y contenedor del cdk: reciben el foco al abrir (autoFocus) para que el lector lea el título.',
   },
+  'components/input-mask/input-mask.ts': {
+    count: 1,
+    why: 'Input de dentro: el anillo lo pinta la caja con focus-within.',
+  },
+  'components/input-otp/input-otp.ts': {
+    count: 1,
+    why: 'Input real transparente: el foco se ve en la casilla activa (borde y halo ring), como el diseño.',
+  },
+  'components/tags-input/tags-input.ts': {
+    count: 1,
+    why: 'Campo de dentro: el anillo lo pinta la caja con focus-within.',
+  },
+  'components/combobox/combobox.ts': {
+    count: 2,
+    why: 'Campo de dentro: el anillo lo pinta la caja con focus-within. Panel: el foco no entra (la opción activa lleva fondo).',
+  },
+  'components/option-list/option-list.ts': {
+    count: 1,
+    why: 'La lista (tabindex="-1", activedescendant): el foco se queda en el campo y la opción activa lleva fondo.',
+  },
+  'components/number-input/number-input.ts': {
+    count: 1,
+    why: 'Input de dentro: el anillo lo pinta la caja con focus-within (como Select).',
+  },
   'components/toast/toast.ts': {
     count: 1,
     why: 'La región de los toasts (tabindex="-1"): F8 lleva el foco a un toast, que tiene su anillo.',

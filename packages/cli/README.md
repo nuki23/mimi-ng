@@ -46,7 +46,7 @@ ng g mimi                     # menú para elegir (terminal interactiva)
 ng g @mimi-ng/cli:ui button   # forma larga (si Mimi no está en schematicCollections)
 ```
 
-Cada componente se copia a `src/app/components/ui/<nombre>`, con lo que necesite, y se instalan las dependencias que falten. Algunos usan por dentro `@angular/cdk` y `@angular/aria`, paquetes oficiales del equipo de Angular: `ng g mimi` los instala cuando hacen falta (aria en la versión exacta de tu cdk) y agrega los estilos del CDK a tu CSS global. Más en [Fundamentos](https://ng.mimiworks.dev/docs/foundations).
+Cada componente se copia a `src/app/components/ui/<nombre>`, con lo que necesite, y se instalan las dependencias que falten. Algunos usan por dentro `@angular/cdk` y `@angular/aria`, paquetes oficiales del equipo de Angular: `ng g mimi` los instala cuando hacen falta (aria en la versión exacta de tu cdk) y agrega los estilos del CDK a tu CSS global. Mimi necesita `@angular/cdk` y `@angular/aria` 22.2.4 o posterior (con 22.2.3, Combobox y Select pueden fallar al destruirse): si ya los tienes en una versión anterior, `ng g mimi` te avisa (no los cambia por ti); actualízalos con `ng update @angular/cdk @angular/aria`. Más en [Fundamentos](https://ng.mimiworks.dev/docs/foundations).
 
 Después lo importas como cualquier otro:
 
@@ -67,22 +67,36 @@ export class App {}
 - **Badge**: `ng g mimi badge` · [documentación](https://ng.mimiworks.dev/docs/components/badge)
 - **Button**: `ng g mimi button` · [documentación](https://ng.mimiworks.dev/docs/components/button)
 - **Card**: `ng g mimi card` · [documentación](https://ng.mimiworks.dev/docs/components/card)
+- **Calendar**: `ng g mimi calendar` · [documentación](https://ng.mimiworks.dev/docs/components/date-picker)
 - **Checkbox**: `ng g mimi checkbox` · [documentación](https://ng.mimiworks.dev/docs/components/switch)
+- **Color Picker**: `ng g mimi color-picker` · [documentación](https://ng.mimiworks.dev/docs/components/color-picker)
+- **Combobox**: `ng g mimi combobox` · [documentación](https://ng.mimiworks.dev/docs/components/combobox)
 - **Confirm**: `ng g mimi confirm` · [documentación](https://ng.mimiworks.dev/docs/components/confirm)
 - **Context Menu**: `ng g mimi context-menu` · [documentación](https://ng.mimiworks.dev/docs/components/context-menu)
+- **Date Picker**: `ng g mimi date-picker` · [documentación](https://ng.mimiworks.dev/docs/components/date-picker)
+- **Date Range**: `ng g mimi date-range` · [documentación](https://ng.mimiworks.dev/docs/components/date-range)
 - **Dialog**: `ng g mimi dialog` · [documentación](https://ng.mimiworks.dev/docs/components/dialog)
 - **Dropdown Menu**: `ng g mimi dropdown-menu` · [documentación](https://ng.mimiworks.dev/docs/components/dropdown-menu)
+- **File Upload**: `ng g mimi file-upload` · [documentación](https://ng.mimiworks.dev/docs/components/file-upload)
 - **FormField**: `ng g mimi form-field` · [documentación](https://ng.mimiworks.dev/docs/components/form-field)
 - **Input**: `ng g mimi input` · [documentación](https://ng.mimiworks.dev/docs/components/input)
+- **Input Mask**: `ng g mimi input-mask` · [documentación](https://ng.mimiworks.dev/docs/components/input-mask)
+- **Input OTP**: `ng g mimi input-otp` · [documentación](https://ng.mimiworks.dev/docs/components/input-otp)
+- **Number Input**: `ng g mimi number-input` · [documentación](https://ng.mimiworks.dev/docs/components/number-input)
 - **Pagination**: `ng g mimi pagination` · [documentación](https://ng.mimiworks.dev/docs/components/pagination)
+- **Password**: `ng g mimi password` · [documentación](https://ng.mimiworks.dev/docs/components/password)
 - **Popover**: `ng g mimi popover` · [documentación](https://ng.mimiworks.dev/docs/components/popover)
+- **Progress**: `ng g mimi progress` · [documentación](https://ng.mimiworks.dev/docs/components/progress)
 - **Select**: `ng g mimi select` · [documentación](https://ng.mimiworks.dev/docs/components/select)
 - **Separator**: `ng g mimi separator` · [documentación](https://ng.mimiworks.dev/docs/components/separator)
 - **Skeleton**: `ng g mimi skeleton` · [documentación](https://ng.mimiworks.dev/docs/components/skeleton)
+- **Slider**: `ng g mimi slider` · [documentación](https://ng.mimiworks.dev/docs/components/slider)
 - **Switch**: `ng g mimi switch` · [documentación](https://ng.mimiworks.dev/docs/components/switch)
 - **Tabs**: `ng g mimi tabs` · [documentación](https://ng.mimiworks.dev/docs/components/tabs)
 - **Textarea**: `ng g mimi textarea` · [documentación](https://ng.mimiworks.dev/docs/components/input)
+- **Tags Input**: `ng g mimi tags-input` · [documentación](https://ng.mimiworks.dev/docs/components/tags-input)
 - **Toast**: `ng g mimi toast` · [documentación](https://ng.mimiworks.dev/docs/components/toast)
+- **Toggle Group**: `ng g mimi toggle-group` · [documentación](https://ng.mimiworks.dev/docs/components/toggle-group)
 - **Toolbar**: `ng g mimi toolbar` · [documentación](https://ng.mimiworks.dev/docs/components/toolbar)
 - **Tooltip**: `ng g mimi tooltip` · [documentación](https://ng.mimiworks.dev/docs/components/tooltip)
 

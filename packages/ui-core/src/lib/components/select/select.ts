@@ -818,9 +818,10 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly clearClasses = CLEAR_CLASSES;
   protected readonly searchInputClasses = SEARCH_INPUT_CLASSES;
   protected readonly viewportMargin = MIMI_VIEWPORT_MARGIN;
-  /** En el lado pedido (debajo, por defecto); si no cabe, en el opuesto. */
+  /** En el lado pedido (debajo, por defecto); si no cabe, en el opuesto. Con las tres
+   *  alineaciones de cada lado (5.17a), sin pasar a los costados. */
   protected readonly positions = computed(() =>
-    mimiConnectedPositions(this.side(), this.align(), OFFSET).slice(0, 2),
+    mimiConnectedPositions(this.side(), this.align(), OFFSET).slice(0, 6),
   );
 
   protected readonly classes = computed(() => cn(TRIGGER_CLASSES, this.userClass()));

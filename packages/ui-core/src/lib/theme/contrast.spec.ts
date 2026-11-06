@@ -150,6 +150,11 @@ const CONTRAST_PAIRS: [string, string, string][] = [
   ['outline/ghost neutros', 'foreground', 'card'],
   ['outline/ghost neutros hover', 'accent-foreground', 'accent'],
   ['badge outline', 'foreground', 'background'],
+  // Globales del Grupo 2 (G2.0b): textos que el diseño pone sobre ellos.
+  ['chip (Tags Input, Combobox)', 'chip-foreground', 'chip'],
+  ['zona de arrastre (File Upload)', 'foreground', 'dropzone'],
+  ['zona de arrastre activa', 'info-soft-foreground', 'dropzone-active'],
+  ['banda del rango (Date Range)', 'foreground', 'range'],
   ...(['success', 'warning', 'info', 'destructive'] as const).flatMap(
     (t): [string, string, string][] => {
       const soft = t === 'destructive' ? 'destructive-soft-bg' : `${t}-soft`;

@@ -26,16 +26,36 @@
       "type": "util",
       "files": ["utils/overlay.ts"],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       }
     },
     "menu": {
       "type": "util",
       "files": ["components/menu/menu.ts", "components/menu/index.ts"],
       "peerDependencies": {
-        "@angular/aria": "^22.2.0"
+        "@angular/aria": "^22.2.4"
       },
       "registryDependencies": ["utils/cn", "utils/overlay"]
+    },
+    "chip": {
+      "type": "util",
+      "files": [
+        "components/chip/chip.ts",
+        "components/chip/chip-texts.ts",
+        "components/chip/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles"]
+    },
+    "option-list": {
+      "type": "util",
+      "files": ["components/option-list/option-list.ts", "components/option-list/index.ts"],
+      "peerDependencies": {
+        "@angular/aria": "^22.2.4"
+      },
+      "registryDependencies": ["utils/cn"]
     },
     "theme": {
       "type": "theme",
@@ -103,7 +123,7 @@
       "type": "component",
       "files": ["components/context-menu/context-menu.ts", "components/context-menu/index.ts"],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["menu", "utils/overlay"]
@@ -116,7 +136,7 @@
         "components/dialog/index.ts"
       ],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/overlay"]
@@ -128,7 +148,7 @@
         "class-variance-authority": "^0.7.1"
       },
       "peerDependencies": {
-        "@angular/aria": "^22.2.0"
+        "@angular/aria": "^22.2.4"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles"]
     },
@@ -144,7 +164,7 @@
         "class-variance-authority": "^0.7.1"
       },
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["button", "utils/cn", "utils/control-styles", "utils/overlay"]
     },
@@ -160,9 +180,192 @@
         "class-variance-authority": "^0.7.1"
       },
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["button", "input", "select", "utils/cn"]
+    },
+    "input-mask": {
+      "type": "component",
+      "files": ["components/input-mask/input-mask.ts", "components/input-mask/index.ts"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/field-state"]
+    },
+    "input-otp": {
+      "type": "component",
+      "files": ["components/input-otp/input-otp.ts", "components/input-otp/index.ts"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/field-state"]
+    },
+    "number-input": {
+      "type": "component",
+      "files": [
+        "components/number-input/number-input.ts",
+        "components/number-input/number-input-texts.ts",
+        "components/number-input/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/field-state"]
+    },
+    "password": {
+      "type": "component",
+      "files": [
+        "components/password/password.ts",
+        "components/password/password-texts.ts",
+        "components/password/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4"
+      },
+      "registryDependencies": ["input", "utils/cn", "utils/control-styles"]
+    },
+    "progress": {
+      "type": "component",
+      "files": ["components/progress/progress.ts", "components/progress/index.ts"],
+      "registryDependencies": ["utils/cn"]
+    },
+    "slider": {
+      "type": "component",
+      "files": [
+        "components/slider/slider.ts",
+        "components/slider/slider-texts.ts",
+        "components/slider/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4",
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+    },
+    "combobox": {
+      "type": "component",
+      "files": [
+        "components/combobox/combobox.ts",
+        "components/combobox/combobox-texts.ts",
+        "components/combobox/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/aria": "^22.2.4",
+        "@angular/cdk": "^22.2.4",
+        "@angular/forms": "^22.0.0"
+      },
+      "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
+      "registryDependencies": [
+        "chip",
+        "option-list",
+        "utils/cn",
+        "utils/field-state",
+        "utils/overlay"
+      ]
+    },
+    "calendar": {
+      "type": "component",
+      "files": [
+        "components/calendar/calendar.ts",
+        "components/calendar/calendar-texts.ts",
+        "components/calendar/dates.ts",
+        "components/calendar/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles"]
+    },
+    "date-picker": {
+      "type": "component",
+      "files": ["components/date-picker/date-picker.ts", "components/date-picker/index.ts"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "calendar",
+        "popover",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state"
+      ]
+    },
+    "date-range": {
+      "type": "component",
+      "files": ["components/date-range/date-range.ts", "components/date-range/index.ts"],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "calendar",
+        "date-picker",
+        "popover",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state"
+      ]
+    },
+    "file-upload": {
+      "type": "component",
+      "files": [
+        "components/file-upload/file-upload.ts",
+        "components/file-upload/file-upload-texts.ts",
+        "components/file-upload/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4",
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "button",
+        "progress",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state"
+      ]
+    },
+    "color-picker": {
+      "type": "component",
+      "files": [
+        "components/color-picker/color-picker.ts",
+        "components/color-picker/color-picker-texts.ts",
+        "components/color-picker/color.ts",
+        "components/color-picker/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "input",
+        "popover",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state"
+      ]
+    },
+    "tags-input": {
+      "type": "component",
+      "files": [
+        "components/tags-input/tags-input.ts",
+        "components/tags-input/tags-input-texts.ts",
+        "components/tags-input/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["chip", "utils/cn", "utils/field-state"]
+    },
+    "toggle-group": {
+      "type": "component",
+      "files": ["components/toggle-group/toggle-group.ts", "components/toggle-group/index.ts"],
+      "dependencies": {
+        "class-variance-authority": "^0.7.1"
+      },
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4",
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles"]
     },
     "toolbar": {
       "type": "component",
@@ -171,7 +374,7 @@
         "class-variance-authority": "^0.7.1"
       },
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles"]
     },
@@ -179,7 +382,7 @@
       "type": "component",
       "files": ["components/dropdown-menu/dropdown-menu.ts", "components/dropdown-menu/index.ts"],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["menu", "utils/overlay"]
@@ -210,7 +413,7 @@
       "type": "component",
       "files": ["components/popover/popover.ts", "components/popover/index.ts"],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["utils/cn", "utils/overlay"]
@@ -223,8 +426,8 @@
         "components/select/index.ts"
       ],
       "peerDependencies": {
-        "@angular/aria": "^22.2.0",
-        "@angular/cdk": "^22.2.0",
+        "@angular/aria": "^22.2.4",
+        "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
@@ -264,7 +467,7 @@
       "type": "component",
       "files": ["components/tooltip/tooltip.ts", "components/tooltip/index.ts"],
       "peerDependencies": {
-        "@angular/cdk": "^22.2.0"
+        "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["utils/cn", "utils/overlay"]

@@ -31,6 +31,11 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/docs/foundations-page').then((m) => m.FoundationsPage),
       },
       {
+        path: 'theme',
+        title: 'Tema · Mimi',
+        loadComponent: () => import('./pages/docs/theme/theme-page').then((m) => m.ThemePage),
+      },
+      {
         path: 'components/button',
         title: 'Button · Mimi',
         loadComponent: () =>
@@ -113,6 +118,94 @@ export const routes: Routes = [
         title: 'Toolbar · Mimi',
         loadComponent: () =>
           import('./pages/docs/components/toolbar/toolbar-page').then((m) => m.ToolbarPage),
+      },
+      {
+        path: 'components/input-mask',
+        title: 'Input Mask · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/input-mask/input-mask-page').then((m) => m.InputMaskPage),
+      },
+      {
+        path: 'components/input-otp',
+        title: 'Input OTP · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/input-otp/input-otp-page').then((m) => m.InputOtpPage),
+      },
+      {
+        path: 'components/number-input',
+        title: 'Number Input · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/number-input/number-input-page').then(
+            (m) => m.NumberInputPage,
+          ),
+      },
+      {
+        path: 'components/password',
+        title: 'Password · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/password/password-page').then((m) => m.PasswordPage),
+      },
+      {
+        path: 'components/progress',
+        title: 'Progress · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/progress/progress-page').then((m) => m.ProgressPage),
+      },
+      {
+        path: 'components/slider',
+        title: 'Slider · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/slider/slider-page').then((m) => m.SliderPage),
+      },
+      {
+        path: 'components/combobox',
+        title: 'Combobox · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/combobox/combobox-page').then((m) => m.ComboboxPage),
+      },
+      {
+        path: 'components/date-picker',
+        title: 'Date Picker · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/date-picker/date-picker-page').then(
+            (m) => m.DatePickerPage,
+          ),
+      },
+      {
+        path: 'components/date-range',
+        title: 'Date Range · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/date-range/date-range-page').then((m) => m.DateRangePage),
+      },
+      {
+        path: 'components/file-upload',
+        title: 'File Upload · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/file-upload/file-upload-page').then(
+            (m) => m.FileUploadPage,
+          ),
+      },
+      {
+        path: 'components/color-picker',
+        title: 'Color Picker · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/color-picker/color-picker-page').then(
+            (m) => m.ColorPickerPage,
+          ),
+      },
+      {
+        path: 'components/tags-input',
+        title: 'Tags Input · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/tags-input/tags-input-page').then((m) => m.TagsInputPage),
+      },
+      {
+        path: 'components/toggle-group',
+        title: 'Toggle Group · Mimi',
+        loadComponent: () =>
+          import('./pages/docs/components/toggle-group/toggle-group-page').then(
+            (m) => m.ToggleGroupPage,
+          ),
       },
       {
         path: 'components/toast',

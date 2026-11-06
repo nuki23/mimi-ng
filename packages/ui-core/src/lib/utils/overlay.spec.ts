@@ -11,9 +11,18 @@ const rect = (left: number, top: number, width: number, height: number) =>
   ({ left, top, width, height }) as DOMRect;
 
 describe('utils/overlay', () => {
-  it('posiciones: la pedida, la opuesta y los otros dos lados centrados', () => {
+  it('posiciones: la pedida, las otras alineaciones del lado, el opuesto igual y los otros dos lados centrados', () => {
     const positions = mimiConnectedPositions('bottom', 'start', 12);
-    expect(positions.map(mimiPlacedSide)).toEqual(['bottom', 'top', 'right', 'left']);
+    expect(positions.map(mimiPlacedSide)).toEqual([
+      'bottom',
+      'bottom',
+      'bottom',
+      'top',
+      'top',
+      'top',
+      'right',
+      'left',
+    ]);
     expect(positions[0]).toEqual({
       originX: 'start',
       originY: 'bottom',
@@ -21,12 +30,29 @@ describe('utils/overlay', () => {
       overlayY: 'top',
       offsetY: 12,
     });
-    expect(positions[1].offsetY).toBe(-12);
-    expect(positions[2]).toMatchObject({ originY: 'center', overlayY: 'center', offsetX: 12 });
+    // 5.17a: en una pantalla chica, antes de cambiar de lado prueba alinear al final y al centro.
+    expect(positions.slice(0, 3).map((p) => p.overlayX)).toEqual(['start', 'end', 'center']);
+    expect(positions[3].offsetY).toBe(-12);
+    expect(positions.slice(3, 6).map((p) => p.overlayX)).toEqual(['start', 'end', 'center']);
+    expect(positions[6]).toMatchObject({ originY: 'center', overlayY: 'center', offsetX: 12 });
+  });
+
+  it('las otras alineaciones: end prueba start y center; center prueba start y end', () => {
+    expect(
+      mimiConnectedPositions('top', 'end', 8)
+        .slice(0, 3)
+        .map((p) => p.overlayX),
+    ).toEqual(['end', 'start', 'center']);
+    expect(
+      mimiConnectedPositions('bottom', 'center', 8)
+        .slice(0, 3)
+        .map((p) => p.overlayX),
+    ).toEqual(['center', 'start', 'end']);
   });
 
   it('a los lados, align pasa al eje vertical', () => {
-    const [right, left] = mimiConnectedPositions('right', 'end', 10);
+    const positions = mimiConnectedPositions('right', 'end', 10);
+    const [right, left] = [positions[0], positions[3]];
     expect(right).toEqual({
       originX: 'end',
       originY: 'bottom',

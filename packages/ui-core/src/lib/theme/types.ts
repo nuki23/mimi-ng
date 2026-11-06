@@ -353,6 +353,209 @@ export interface MimiPaginationTokens {
 }
 
 /**
+ * Toggle Group. Fondo, textos, indicador y su sombra van en el CSS (`--mimi-toggle-group-bg`,
+ * `-fg`, `-active-fg`, `-indicator`, `-indicator-shadow`).
+ */
+export interface MimiToggleGroupTokens {
+  /** Radio de cada ítem y del indicador (el global `radius`); el del grupo es radio + relleno. */
+  radius?: string;
+  /** Relleno del grupo (3px). */
+  padding?: string;
+  /** Separación entre ítems (2px). */
+  gap?: string;
+  /** Alto de cada ítem (32px). */
+  itemHeight?: string;
+  /** Relleno horizontal de cada ítem (12px). */
+  itemPx?: string;
+  /** Ancho mínimo de un ítem (el de uno solo con ícono, 44px). */
+  iconWidth?: string;
+  /** Tamaño de texto (13.5px). */
+  fontSize?: string;
+  /** Curva del indicador (`cubic-bezier(.3, 1.35, .5, 1)`, la de Tabs). */
+  spring?: string;
+}
+
+/**
+ * Progress. La pista y la parte llena van en el CSS (`--mimi-progress-track`, `-fill`).
+ */
+export interface MimiProgressTokens {
+  /** Grosor de la barra (8px). */
+  height?: string;
+  /** Tamaño del círculo `default` (76px). */
+  circleSize?: string;
+  /** Grosor del trazo del círculo `default`, en unidades del viewBox de 36 (3). */
+  circleWidth?: string | number;
+}
+
+/**
+ * Number Input. El fondo del botón en hover va en el CSS (`--mimi-number-button-hover`); el
+ * borde, el fondo y los anillos son los de Input (globales).
+ */
+export interface MimiNumberInputTokens {
+  /** Altura (el alto de control). */
+  height?: string;
+  /** Radio de la caja (el global `radius`). */
+  radius?: string;
+  /** Relleno horizontal de la caja (4px). */
+  px?: string;
+  /** Tamaño de los botones − y + (30px). */
+  buttonSize?: string;
+  /** Radio de los botones (el global `radius-sm`). */
+  buttonRadius?: string;
+}
+
+/**
+ * Password. El hover del botón y la pista del medidor van en el CSS
+ * (`--mimi-password-toggle-hover`, `-meter-track`); los colores de los niveles son los globales
+ * `--mimi-strength-*`.
+ */
+export interface MimiPasswordTokens {
+  /** Botón de mostrar u ocultar (32px). */
+  toggleSize?: string;
+  /** Radio del botón (el global `radius-sm`). */
+  toggleRadius?: string;
+  /** Alto de cada barra del medidor (6px). */
+  meterHeight?: string;
+  /** Separación entre barras (4px). */
+  meterGap?: string;
+}
+
+/**
+ * Input Mask. El color del marcador y el fondo del prefijo van en el CSS
+ * (`--mimi-mask-placeholder`, `-prefix-bg`); la caja usa los tokens de Input.
+ */
+export interface MimiInputMaskTokens {
+  /** Separación entre el prefijo, el ícono y el texto (8px). */
+  gap?: string;
+  /** Alto del prefijo (26px). */
+  prefixHeight?: string;
+  /** Radio del prefijo (el global `radius-sm`). */
+  prefixRadius?: string;
+}
+
+/**
+ * Input OTP. Fondo, borde, separador y cursor van en el CSS (`--mimi-otp-bg`, `-border`,
+ * `-separator`, `-caret`).
+ */
+export interface MimiInputOtpTokens {
+  /** Ancho de la casilla (46px). */
+  width?: string;
+  /** Alto de la casilla (54px). */
+  height?: string;
+  /** Separación entre casillas (8px). */
+  gap?: string;
+  /** Radio (el global `radius`). */
+  radius?: string;
+  /** Tamaño del carácter (22px). */
+  fontSize?: string;
+}
+
+/** Chip (Tags Input y Combobox). Los colores van en el CSS (`--mimi-chip-bg`, `-fg`). */
+export interface MimiChipTokens {
+  /** Alto (26px). */
+  height?: string;
+  /** Radio (el global `badge-radius`). */
+  radius?: string;
+  /** Tamaño de texto (13px). */
+  fontSize?: string;
+  /** Botón de quitar (18px). */
+  removeSize?: string;
+}
+
+/** Tags Input. El borde con el límite alcanzado va en el CSS (`--mimi-tags-full-border`). */
+export interface MimiTagsInputTokens {
+  /** Separación entre chips (6px). */
+  gap?: string;
+  /** Relleno de la caja (`5px 10px 5px 6px`). */
+  padding?: string;
+  /** Ancho mínimo del campo de texto (120px). */
+  inputMinWidth?: string;
+}
+
+/**
+ * Slider. Pista, relleno, pulgar y su sombra van en el CSS (`--mimi-slider-track`, `-fill`,
+ * `-thumb`, `-thumb-shadow`); la burbuja usa los colores de Tooltip.
+ */
+export interface MimiSliderTokens {
+  /** Grosor de la pista (6px). */
+  height?: string;
+  /** Tamaño del pulgar (20px). */
+  thumbSize?: string;
+}
+
+/**
+ * Combobox. El fondo y la sombra del panel y la opción activa van en el CSS
+ * (`--mimi-combobox-menu-bg`, `-menu-shadow`, `-option-hover`).
+ */
+export interface MimiComboboxTokens {
+  /** Alto del campo (el global `control-height`). */
+  height?: string;
+  /** Radio del campo y del panel (el global `radius`). */
+  radius?: string;
+  /** Alto máximo del panel (228px). */
+  menuMaxHeight?: string;
+  /** Alto mínimo de cada opción (34px). */
+  optionHeight?: string;
+  /** Radio de cada opción (el global `radius-sm`). */
+  optionRadius?: string;
+}
+
+/**
+ * Calendario, Date Picker y Date Range (una tabla, decidido por defecto en la G2.9). Los colores
+ * van en el CSS (`--mimi-date-cell-hover`, `-selected-bg`, `-selected-fg`, `-range`,
+ * `-today-ring`, `-menu-bg`, `-menu-shadow`).
+ */
+export interface MimiDateTokens {
+  /** Tamaño de cada día (36px). */
+  cellSize?: string;
+  /** Radio de cada día (el global `radius-sm`). */
+  cellRadius?: string;
+  /** Relleno del panel (12px). */
+  padding?: string;
+  /** Ancho de la columna de atajos del rango (130px). */
+  presetsWidth?: string;
+}
+
+/**
+ * File Upload. Fondos y bordes de la zona van en el CSS (`--mimi-upload-bg`, `-border`,
+ * `-active-bg`, `-active-border`).
+ */
+export interface MimiFileUploadTokens {
+  /** Radio de la zona (el global `radius-card`). */
+  radius?: string;
+  /** Alto mínimo de la zona (176px). */
+  height?: string;
+  /** Círculo del ícono (44px). */
+  iconSize?: string;
+  /** Radio de cada fila (el global `radius`). */
+  itemRadius?: string;
+  /** Miniatura de cada fila (44px). */
+  thumbSize?: string;
+}
+
+/**
+ * Color Picker. Fondo, sombra, el borde y la sombra de los pulgares y el borde de las muestras
+ * van en el CSS (`--mimi-color-picker-bg`, `-shadow`, `-thumb-border`, `-thumb-shadow`,
+ * `-swatch-border`).
+ */
+export interface MimiColorPickerTokens {
+  /** Radio del panel (el global `radius`). */
+  radius?: string;
+  /** Ancho del panel (280px). */
+  width?: string;
+  /** Relleno y separación (12px). */
+  padding?: string;
+  /** Alto del área de saturación (150px). */
+  areaHeight?: string;
+  /** Radio del área (el global `radius-sm`). */
+  areaRadius?: string;
+  /** Alto de la barra de tono (12px). */
+  hueHeight?: string;
+  /** Separación de las muestras (6px). */
+  swatchGap?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -378,6 +581,19 @@ export interface MimiComponentTokens {
   tabs?: MimiTabsTokens;
   toolbar?: MimiToolbarTokens;
   pagination?: MimiPaginationTokens;
+  toggleGroup?: MimiToggleGroupTokens;
+  progress?: MimiProgressTokens;
+  numberInput?: MimiNumberInputTokens;
+  password?: MimiPasswordTokens;
+  inputMask?: MimiInputMaskTokens;
+  inputOtp?: MimiInputOtpTokens;
+  chip?: MimiChipTokens;
+  tagsInput?: MimiTagsInputTokens;
+  slider?: MimiSliderTokens;
+  combobox?: MimiComboboxTokens;
+  date?: MimiDateTokens;
+  fileUpload?: MimiFileUploadTokens;
+  colorPicker?: MimiColorPickerTokens;
 }
 
 export interface MimiThemePreset {

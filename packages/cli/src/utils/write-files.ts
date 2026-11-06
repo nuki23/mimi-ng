@@ -116,7 +116,8 @@ type FileState = 'new' | 'same' | 'formatted' | 'old' | 'modifiedOld' | 'modifie
  * - si no, se crean los que faltan y se actualizan los que el usuario no tocó. Los modificados
  *   sobre esta versión se conservan (`skipped`).
  *
- * Con `overwrite`, todo se reemplaza y nada se bloquea. Los ítems `implicit` (el tema y lo que
+ * Con `overwrite`, todo se reemplaza y nada se bloquea, también un archivo igual a su base de la
+ * misma versión (`formatted`; M.11). Los ítems `implicit` (el tema y lo que
  * copia init, que `ng g mimi` revisa aunque no se pidan) solo se escriben si hay que
  * actualizarlos: un cambio del usuario sobre la versión actual se respeta en silencio, también
  * con `overwrite`, y no bloquean a otros ítems.
@@ -239,7 +240,15 @@ export function writeTemplates(options: {
             writeBase(file, content);
             break;
           case 'formatted':
-            options.report.unchanged.push(file);
+            // Con --overwrite se reemplaza siempre, también con la misma versión (M.11): sin él,
+            // un archivo distinto de la plantilla con la misma versión no se podía reponer.
+            if (options.overwrite && !implicit.has(item)) {
+              tree.overwrite(target, content);
+              options.report.overwritten.push(file);
+              writeBase(file, content);
+            } else {
+              options.report.unchanged.push(file);
+            }
             break;
           case 'old':
             tree.overwrite(target, content);

@@ -79,3 +79,129 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Number Input (G2.2), lectura del número:** el diseño interpreta el texto quitando todo lo que no es dígito, punto o signo y usando `parseFloat` (función `num()` de `F3 Slider OTP Numero Mascara`). Con un idioma de coma decimal (por ejemplo, `es-ES`), «1.250,5» se lee mal. Mimi tiene que leer con los separadores del idioma.
   - **Input Mask (G2.4), valor guardado:** en el diseño, el estado guarda solo los dígitos y la máscara se aplica al mostrar (`mask[key]` en `mask()`). Qué guarda Mimi está pendiente de decidir (plan, G2.4).
   - **Anillo de error (Number Input, Input Mask, Password, Input OTP, Tags Input):** los diseños del Grupo 2 usan `--mimi-destructive-soft` para el anillo de error; desde la T.1, el anillo es `--mimi-destructive-ring` (`--mimi-destructive-soft` queda como alias hasta la 1.0, spec 12).
+
+  Grupo 2 (G2.0), al escribir las tablas de tokens (04/11/2026, spec 13, «Grupo 2»):
+  - **La hoja de tokens no tiene el Grupo 2:** `mimi-tokens-data.js` y `mimi-variables-componentes.css` no traen tokens por componente del Grupo 2. Las tablas de la spec 13 salen de las medidas en línea de los `.dc.html`. Agregarlas a la hoja.
+  - **Presiones distintas:** Toggle Group 0,93; Number Input y Password 0,88; File Upload 0,985; Color Picker 0,9 y 0,94; Date Picker 0,9, 0,94 y 0,96. Mimi usa `--mimi-press-scale` o `--mimi-press-scale-sm`; cada componente anota cuál.
+  - **Radios fijos:** marca de tarjeta del Input Mask (5px) y burbuja del Slider (7px; Tooltip usa 8px).
+  - **Íconos de 15px** en los botones de Number Input y en el ojo de la galería de Password; los controles usan `--mimi-icon-size` (16px).
+  - **Deshabilitado del Date Picker:** opacidad 0,38 y tachado; el resto de Mimi usa `--mimi-disabled-opacity` (0,5).
+  - **Botón de quitar del chip:** en Tags Input baja la opacidad a 0,7; en el Combobox usa `muted-foreground`. Elegir uno (el chip es compartido).
+  - **Color Picker:** pulgares con borde `#fff` y sombras `oklch(0 0 0 / .25)` y `/ .3`, y el degradado con `#000` y `#fff` (este último es inherente al área de saturación). Los pulgares quedan pendientes de la G2.12.
+  - **Progress:** la parte llena usa `--mimi-primary` y no `--mimi-track-fill` (que vale lo mismo). Decidir si Progress sigue a `track-fill`.
+  - **Miniaturas de estados:** las galerías de Input OTP (38×46px) y Password (campo de 36px, medidor de 5px) no son un tamaño; si se quiere un tamaño `sm`, diseñarlo.
+  - **`--mimi-selection`:** solo lo usa `Theme Studio`; ningún componente del Grupo 2 lo usa. Se lleva al tema igual (G2.0b).
+
+  Revisión móvil del Grupo 1 (5.17a, 04/11/2026):
+  - **Sin diseños móviles:** ningún componente tiene diseño para pantallas chicas. Mimi usa en móvil los paneles de escritorio, anclados y dentro de la pantalla (spec 4, «Paneles en pantallas chicas»). Si se quiere una hoja inferior o un panel modal en móvil (Select, Combobox, Date Picker), diseñarla.
+  - **Alineación de los paneles:** cuando la alineación pedida no cabe, el panel se alinea al otro extremo o al centro del disparador antes de cambiar de lado. El diseño no muestra el caso.
+  - **Tamaño de objetivo:** Switch (36 × 20px) y Checkbox (16 × 16px) cumplen 2.5.8 (AA) solo por espaciado; ninguno llega a 44 × 44 (2.5.5). Si se quiere un área táctil mayor, definirla en el diseño.
+
+  Toggle Group (G2.1):
+  - **Presión al pulsar:** el diseño usa 0,93; Mimi usa `--mimi-press-scale-sm` (0,9; con movimiento reducido, 1).
+  - **Error del formulario:** no está en el diseño. Mimi pone un borde `destructive` de 1px al grupo (`data-invalid`) cuando es inválido y se tocó.
+  - **`solid` en simple:** el diseño solo la muestra en múltiple. En simple, Mimi pinta el indicador en `primary` con el texto en `primary-foreground`.
+  - **Múltiple:** el diseño usa columnas del ancho de cada botón (`auto`) solo en «Texto e ícono»; Mimi lo hace así en todo grupo múltiple (no hay indicador que necesite columnas iguales). En simple, columnas iguales (el ancho del botón más ancho).
+  - **Foco visible:** el diseño no lo muestra. Mimi usa el contorno `ring` de los botones (2px, separado 2px).
+
+  Progress (G2.10):
+  - **Movimiento reducido:** el diseño dice que la barra indeterminada «late» pero no cómo. Mimi la pone a ancho completo con `mimi-pulse` (1,6 s). El círculo indeterminado también late (el diseño no lo dice).
+  - **Barra de tonos de 6px:** en el diseño es otra altura; en Mimi se hace con `class="h-1.5"` (sin tamaño ni token propio).
+  - **Círculo pequeño:** 44px, trazo 4 y texto de 11px sin token (el grande sí tiene `--mimi-progress-circle-size` y `-width`).
+  - **Valor del círculo pequeño:** el diseño muestra «40» sin el signo; Mimi también lo quita en `sm`.
+  - **RTL:** la barra indeterminada cruza de derecha a izquierda (`rtl:-scale-x-100`); el diseño no muestra RTL.
+
+  Number Input (G2.2):
+  - **Botones en el límite:** el diseño los deshabilita (`disabled`, opacidad 0,35 y cursor de no permitido); Mimi usa `aria-disabled` (si no, el foco cae a `body`) con `--mimi-disabled-opacity` (0,5).
+  - **Presión:** 0,9 (`--mimi-press-scale-sm`); el diseño, 0,88.
+  - **Enter:** el diseño sale del campo; Mimi confirma lo escrito y deja el foco en el campo (mover el foco sin pedirlo desorienta con el teclado).
+  - **No están en el diseño:** Re Pág/Av Pág (diez pasos), Inicio/Fin (los límites), mantener pulsado − o + (repite) y el campo vacío (`null`, con `placeholder`). La rueda del mouse no cambia el valor (decidido por defecto).
+  - **Lectura:** el diseño quita todo lo que no es dígito, punto o signo; Mimi lee con los separadores del idioma (ya anotado en la tanda B).
+  - **Solo lectura:** no está en el diseño; los botones quedan con `aria-disabled` y el teclado no cambia el valor.
+
+  Password (G2.3):
+  - **Heurística con otras reglas:** el diseño cuenta cuatro reglas (0–1 débil, 2–3 media, 4 fuerte); Mimi la generaliza a cualquier lista (todas, fuerte; al menos la mitad, media; menos, débil).
+  - **Presión del ojo:** 0,9 (`--mimi-press-scale-sm`); el diseño, 0,88.
+  - **Deshabilitado y solo lectura:** el diseño solo muestra el campo deshabilitado; Mimi deshabilita también el botón. Solo lectura no tiene diseño: el botón sigue funcionando (mostrar no cambia el valor).
+  - **Reglas propias y sin reglas:** no están en el diseño.
+
+  Input Mask (G2.4a):
+  - **Cursor, borrar sobre un literal, pegado e IME:** el diseño no los muestra. Mimi deja el cursor después del mismo dígito, borra el dígito vecino al borrar sobre un literal, acepta pegar con o sin literales y no reformatea durante la composición.
+  - **Literales al final:** el diseño (`applyMask`) los agrega mientras haya dígitos; Mimi escribe un literal solo si le sigue un dígito («(5», no «(5) »), para que borrar no se trabe.
+  - **Solo lectura:** no está en el diseño (el input nativo `readonly`).
+
+  Input Mask (G2.4b):
+  - **Marcador:** en el diseño es el texto completo de la máscara rellenado con lo escrito (`typed` + `rest`); Mimi recibe el marcador entero (`ghost`, por ejemplo `DD/MM/AAAA`) y muestra lo que falta después de lo escrito. Si `ghost` y la máscara tienen distinto largo, el marcador se corta o queda corto (responsabilidad del usuario).
+  - **Clic en el prefijo o el ícono:** el diseño no lo define; Mimi lleva el foco al campo.
+  - **Marca de la tarjeta:** radio fijo de 5px en el diseño; en Mimi es del ejemplo.
+
+  Input OTP (G2.5):
+  - **«Completo»:** en el diseño, el borde verde aparece cuando el código está completo y es correcto; Mimi lo pinta con `success`, que pone la app al verificar (llenar las casillas no basta).
+  - **Separador opcional y otras longitudes:** el diseño muestra 6 casillas con el guion después de la tercera; en Mimi el guion va donde diga `separatorAfter` y, sin él, no hay.
+  - **Alfanumérico:** no está en el diseño.
+  - **Casilla activa con el código completo:** el diseño no lo muestra; Mimi deja el anillo en la última casilla.
+
+  Tags Input y chip (G2.6):
+  - **Contador:** el diseño lo pone arriba, junto a la etiqueta; Mimi lo pone debajo, a la derecha del mensaje (la etiqueta es del usuario).
+  - **Límite alcanzado:** el diseño deshabilita el campo; Mimi lo deja en solo lectura (si no, el foco se pierde).
+  - **Pegado de varias etiquetas y validación propia:** no están en el diseño.
+  - **Botón de quitar:** Mimi usa el de Tags Input (opacidad 0,7) también para el Combobox (el diseño del Combobox usa `muted-foreground`). Presión 0,9 (`--mimi-press-scale-sm`; el diseño, 0,85).
+  - **Anuncios al agregar y quitar:** no están en el diseño.
+
+  Slider (G2.7):
+  - **Foco:** el diseño lo marca con `box-shadow` (2px del fondo y 4px de `ring`); Mimi usa el contorno `ring` de los botones (2px, separado 2px), que se ve igual y lo comprueba `focus-styles.spec.ts`.
+  - **Al arrastrar, el pulgar recibe el foco:** el diseño no lo hace; Mimi sí, para que el teclado siga desde ahí.
+  - **RTL:** no está en el diseño (las flechas y la posición se invierten).
+  - **Vertical:** no está en el diseño ni en Mimi (más adelante).
+  - **Nombres del rango:** el diseño usa «Mínimo» y «Máximo» con `aria-labelledby`; Mimi junta la etiqueta y el nombre en el `aria-label` («Precio por noche, Mínimo»).
+
+  Combobox (G2.8a, simple):
+  - **Sin coincidencias:** el diseño simple muestra «Sin coincidencias.» dentro de la lista, y el bloque de «Sin resultados» con ícono, título y detalle aparte; Mimi usa siempre el bloque (`role="status"`), con un detalle genérico en los textos (el del diseño, «crea la ciudad», es del ejemplo).
+  - **Cargando:** el texto del diseño («Buscando ciudades…») es del ejemplo; el texto por defecto es «Buscando…».
+  - **Escape con el panel cerrado:** el diseño no lo define; Mimi vacía el campo y quita el valor (APG).
+  - **Al salir sin elegir:** el diseño no lo define; Mimi vuelve al texto de la opción elegida, y con el campo vacío quita el valor.
+  - **Clic en el campo:** el diseño abre al enfocar (`onFocus`); Mimi abre con el clic, la flecha o al escribir, no al llegar con Tab (APG).
+  - **«Crear»:** el diseño agrega la opción él mismo; en Mimi la agrega la app (`(create)`), y el Combobox la elige en cuanto aparece.
+  - **Anuncio de la cantidad de resultados:** no está en el diseño.
+  - **Ícono del principio:** en el diseño es parte del campo; en Mimi lo pone el usuario (`[mimiComboboxStart]`).
+
+  Combobox (G2.8b, múltiple):
+  - **Chips:** los del ítem `chip` (los de Tags Input: botón de quitar con opacidad 0,7, presión 0,9); el diseño del Combobox usa `muted-foreground` y 0,85 (ver Tags Input).
+  - **Resumen «+N»:** el diseño lo muestra en la fila de estados (un chip de 24px sin botón y «+2»); Mimi lo aplica con el campo cerrado y sin foco, con el chip normal (26px, con su botón de quitar).
+  - **Escape cerrado:** el diseño no lo define; en el múltiple Mimi solo vacía lo escrito (no quita los chips).
+  - **Ayuda:** el diseño la escribe a mano debajo del campo; en Mimi es parte del componente en el múltiple (`hint`), en el `aria-describedby` del campo.
+  - **Anuncios al agregar y quitar:** no están en el diseño (los de Tags Input).
+
+  Date Picker y calendario (G2.9a):
+  - **Teclado de la APG en la cuadrícula:** el diseño usa un botón por día con Tab; Mimi usa una cuadrícula (`role="grid"`) con una sola parada de Tab y las teclas de la APG.
+  - **Días no disponibles:** el diseño los pone `disabled`; en Mimi llevan `aria-disabled` y reciben el foco (si no, las flechas no podrían pasar por ellos), con el mismo aspecto (0,38, tachado).
+  - **Idioma:** el diseño escribe meses y días en español y empieza el lunes; en Mimi salen de `Intl` con el idioma. Con `es`, el título es «Septiembre de 2026» (el diseño, «Septiembre 2026») y la fecha del botón «30 sept 2026» (el diseño, «30 sep 2026»).
+  - **Nombre del botón del título:** el diseño usa solo «Cambiar vista»; Mimi usa «Septiembre de 2026, Cambiar vista» (el nombre contiene el texto visible).
+  - **Foco al abrir:** el diseño no lo define; Mimi lo lleva al día elegido o a hoy (el Popover enfoca el elemento con `autofocus`).
+  - **«Ir a hoy»:** el diseño cambia el mes; Mimi además lleva el foco a hoy.
+  - **Calendario suelto:** no está en el diseño.
+
+  Date Range (G2.9b):
+  - **Botones de mes:** el diseño los llama «Mes anterior» y «Mes siguiente»; Mimi usa los del calendario («Anterior», «Siguiente»).
+  - **Atajos:** el diseño trae seis fijos; en Mimi son de la app (`presets`), y los seis del diseño están en el ejemplo.
+  - **Fecha del botón:** con `Intl`, «24 sept 2026 – 30 sept 2026» (el diseño, «24 sep 2026 – 30 sep 2026»).
+  - **Cerrar con solo el inicio:** el diseño no lo define; Mimi lo descarta y el valor no cambia.
+  - **Límites:** se llaman `minDate` y `maxDate` (no `min`/`max`, que en un control de formulario tendrían el tipo del valor).
+
+  File Upload (G2.11):
+  - **La zona es un `<button>`** (el diseño, un `div` con `role="button"`), con el mismo contenido.
+  - **Nombres al arrastrar:** el diseño muestra «portada.jpg, contrato.pdf y 1 más»; el navegador no da los nombres hasta soltar, así que Mimi muestra solo la cantidad («Suelta para subir 3 archivos»).
+  - **Rechazados:** en el diseño, un archivo de más de 10 MB entra a la lista con su error; en Mimi no entra en el valor (sale por `(rejected)`) y la app decide si lo muestra.
+  - **La lista es de la app:** `mimi-file-item` recibe el estado; la subida simulada del diseño está en el ejemplo.
+  - **Tamaño con el idioma:** `Intl.NumberFormat` con `LOCALE_ID` («2,4 MB» en `es`; el diseño, «2.4 MB»).
+  - **Anuncios:** no están en el diseño.
+
+  Color Picker (G2.12):
+  - **Disparador:** el diseño solo dibuja el panel; `mimi-color-input` (la caja de Input con la muestra y el valor, y el panel en un Popover) es propuesta de Mimi, sin diseño.
+  - **Colores fijos de los pulgares y las muestras:** el borde blanco y las sombras del diseño son tokens del componente (`--mimi-color-picker-thumb-border`, `-thumb-shadow`, `-swatch-border`) con el valor del diseño.
+  - **`aria-valuenow` en el área:** el diseño no lo pone; ARIA lo pide en un `slider`, así que Mimi da la saturación (y las dos en `aria-valuetext`).
+  - **Foco:** el contorno de los botones (2px separado), en el área, el tono y las muestras.
+  - **Paleta:** el diseño trae 16 colores fijos; en Mimi la paleta es de la app (`swatches`) y los 16 están en el ejemplo.
+  - **Muestras:** una parada de Tab por grupo y flechas (el diseño: Tab por cada una).
+  - **Tono y recorte:** Re Pág/Av Pág e Inicio/Fin en el tono; aviso cuando un OKLCH se recorta a sRGB. No están en el diseño.
+  - **Panel suelto sin fondo:** el panel del diseño tiene fondo, borde y sombra; el `mimi-color-picker` suelto no los trae (los pone la app, como en el ejemplo); el del disparador, sí.

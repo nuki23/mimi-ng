@@ -1,0 +1,153 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Tema</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Cambia el color principal, el radio y la densidad, mira el resultado en componentes reales y
+    copia el CSS o el preset para tu proyecto. Nada se guarda: al salir de la página, el sitio
+    vuelve a su tema.
+  </p>
+
+  <h2 id="customize" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Personalizar
+  </h2>
+
+  <div class="flex flex-col gap-2">
+    <span id="theme-primary" class="text-sm font-medium">Color principal</span>
+    <div class="flex flex-wrap items-center gap-3">
+      <mimi-toggle-group aria-labelledby="theme-primary" [(value)]="primary">
+        @for (swatch of swatches; track swatch.value) {
+          <button [mimiToggleGroupItem]="swatch.value">
+            <span
+              aria-hidden="true"
+              class="size-3 shrink-0 rounded-full border"
+              [class.bg-foreground]="swatch.value === 'base'"
+              [style.background]="swatch.value === 'base' ? null : swatch.value"
+            ></span>
+            {{ swatch.label }}
+          </button>
+        }
+      </mimi-toggle-group>
+      <label class="inline-flex items-center gap-2 text-sm">
+        <input
+          type="color"
+          class="size-8 cursor-pointer rounded-md border bg-transparent p-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          [value]="custom()"
+          (input)="pickCustom($event)"
+        />
+        Otro color
+      </label>
+    </div>
+  </div>
+
+  <div class="flex flex-wrap gap-6">
+    <div class="flex flex-col gap-2">
+      <span id="theme-radius" class="text-sm font-medium">Radio</span>
+      <mimi-toggle-group aria-labelledby="theme-radius" [(value)]="radius">
+        @for (r of radii; track r.value) {
+          <button [mimiToggleGroupItem]="r.value">{{ r.label }}</button>
+        }
+      </mimi-toggle-group>
+    </div>
+    <div class="flex flex-col gap-2">
+      <span id="theme-density" class="text-sm font-medium">Densidad</span>
+      <mimi-toggle-group aria-labelledby="theme-density" [(value)]="density">
+        @for (d of densities; track d.value) {
+          <button [mimiToggleGroupItem]="d.value">{{ d.label }}</button>
+        }
+      </mimi-toggle-group>
+    </div>
+  </div>
+
+  <h2 id="preview" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Vista previa
+  </h2>
+  @if (siteDark()) {
+    <p class="text-sm text-pretty text-muted-foreground">
+      El sitio está en modo oscuro, así que la vista previa también. Para verla en claro, cambia el
+      modo del sitio con el botón del encabezado.
+    </p>
+  } @else {
+    <mimi-toggle-group aria-label="Modo de la vista previa" [(value)]="previewMode">
+      <button mimiToggleGroupItem="light">Claro</button>
+      <button mimiToggleGroupItem="dark">Oscuro</button>
+    </mimi-toggle-group>
+  }
+
+  <div
+    data-slot="theme-preview"
+    class="rounded-card border bg-background p-6 text-foreground"
+    [class.dark]="previewDark()"
+  >
+    <mimi-card class="max-w-md">
+      <mimi-card-header>
+        <mimi-card-title>Crear proyecto</mimi-card-title>
+        <mimi-card-description>Así se ven los componentes con tu tema.</mimi-card-description>
+      </mimi-card-header>
+      <mimi-card-content class="flex flex-col gap-4">
+        <input mimiInput aria-label="Nombre del proyecto" placeholder="Nombre del proyecto" />
+        <div class="flex flex-wrap items-center gap-2">
+          <span mimiBadge>Nuevo</span>
+          <span mimiBadge variant="soft">Beta</span>
+          <span mimiBadge variant="outline">v0.3</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-4 text-sm">
+          <label class="inline-flex items-center gap-2"
+            ><mimi-switch [checked]="true" />Público</label
+          >
+          <label class="inline-flex items-center gap-2"
+            ><mimi-checkbox [checked]="true" />Avisos</label
+          >
+        </div>
+        <mimi-toggle-group aria-label="Visibilidad de ejemplo" value="team">
+          <button mimiToggleGroupItem="me">Solo yo</button>
+          <button mimiToggleGroupItem="team">Equipo</button>
+          <button mimiToggleGroupItem="all">Todos</button>
+        </mimi-toggle-group>
+      </mimi-card-content>
+      <mimi-card-footer class="flex justify-end gap-2">
+        <button mimiBtn variant="outline">Cancelar</button>
+        <button mimiBtn>Crear</button>
+      </mimi-card-footer>
+    </mimi-card>
+  </div>
+
+  <h2 id="export" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Exportar</h2>
+  @if (contrast(); as c) {
+    @if (lowContrast()) {
+      <p
+        data-slot="contrast-warning"
+        role="status"
+        class="rounded-lg border border-warning-border bg-warning-soft px-4 py-3 text-sm text-pretty text-warning-soft-foreground"
+      >
+        El texto sobre este color llega a {{ ratioText() }}:1, por debajo de 4,5:1 (WCAG AA). Los
+        botones con este color se leerán mal: elige un color más claro o más oscuro antes de
+        exportar.
+      </p>
+    } @else {
+      <p class="text-sm text-muted-foreground">
+        Texto sobre el color principal: {{ ratioText() }}:1 (AA desde 4,5:1).
+      </p>
+    }
+  }
+  <p class="text-pretty">
+    El preset va en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">app.config.ts</code>
+    con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >provideMimiTheme()</code
+    >; el CSS, en tu
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">styles.css</code>,
+    después de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">theme-base.css</code>.
+    Usa uno de los dos.
+  </p>
+  <div class="mt-2 flex items-center justify-between gap-2">
+    <h3 id="export-preset" class="text-lg font-semibold tracking-[-0.01em]">Preset</h3>
+    <app-copy-button [text]="code()" label="Copiar preset" />
+  </div>
+  <app-code-block [code]="code()" lang="angular-ts" [copyable]="false" label="Preset del tema" />
+  <div class="mt-2 flex items-center justify-between gap-2">
+    <h3 id="export-css" class="text-lg font-semibold tracking-[-0.01em]">CSS</h3>
+    <app-copy-button [text]="css()" label="Copiar CSS" />
+  </div>
+  <app-code-block [code]="css()" lang="css" [copyable]="false" label="CSS del tema" />
+</article>

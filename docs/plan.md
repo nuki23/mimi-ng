@@ -76,22 +76,33 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 ## En curso
 
-Nada en curso. Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
+Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
+
+- 5.17a · auto/grupo-2-2026-11-04 · Claude Code (modo autónomo) · 04/11/2026 — a falta de comprobación del usuario (C4 a C8 en un Android y un iPhone reales)
+- 5.17b · auto/grupo-2-2026-11-04 · Claude Code (modo autónomo) · 05/11/2026 — a falta de comprobación del usuario (C4 y C7 en teléfonos reales) y del hallazgo de C3 (paneles altos)
 
 ## Mantenimiento
 
 Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propia: salen en la siguiente versión que se publique.
 
 - [ ] M.1 Confirm con acción asíncrona · sin versión · — · depende: G1.6, G1.7 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.2 Alinear Angular en la 22.2.x · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.2 Alinear Angular en la 22.2.x · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.3 Revisar rodeos con aria 22.2 · sin versión · — · depende: M.2 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.4 Aviso de la CLI con un cdk anterior a `^22.2.0` · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.4 Aviso de la CLI con un cdk o aria anteriores a 22.2.4 (solo avisa) · v0.3.0 · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.5 Pasada con NVDA por los componentes con overlays · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.6 Select: saltar a una opción con una letra estando cerrado · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.7 Íconos de Lucide en los chunks del showcase · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.8 La CLI y los bloqueos de «todo o nada» · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.9 Migrar Select a las utilidades de lista del Combobox · sin versión · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.10 Script `check-plan` (casillas del índice y del detalle, enlaces, IDs) · sin versión · — · depende: la reorganización del plan (PASO 4) · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.11 La CLI y `--overwrite` con la misma versión (era un error; corregido) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.12 Pruebas deterministas con temporizadores y animaciones (Dialog, Toast, docs bajo carga; la parte de docs, hecha el 05/11/2026) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.13 Bajar `main` del showcase (rutas de docs diferidas y menú móvil al abrir; al empezar el Grupo 3, en otra rama) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.14 Color Picker: exponer los dos ejes del área · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.15 Pruebas de accesibilidad con axe sobre las páginas del showcase (axe-core aprobado solo como devDependency del repo; después de la G2.P) · sin versión · — · depende: G2.P · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.16 Auditoría de `readonly`, `aria-labelledby` y `aria-describedby` en todos los controles · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.17 Pruebas de docs independientes del `localStorage` de Node 26 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.18 Guardar en el repo el script de medición a 360 px · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
@@ -104,36 +115,36 @@ Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendad
 
 Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4a y G2.4b están dentro de `G2.4.md`; 5.17a y 5.17b, dentro de `5.17.md`.
 
-- [ ] G2.0 Catálogo de tokens del Grupo 2 en la spec 13 · v0.3.0 · M · depende: — · [docs/plan/grupo-2/G2.0.md](plan/grupo-2/G2.0.md)
-- [ ] G2.0b Tokens globales del Grupo 2 en el tema · v0.3.0 · M · depende: G2.0 · [docs/plan/grupo-2/G2.0b.md](plan/grupo-2/G2.0b.md)
-- [ ] G2.1 Toggle Group · v0.3.0 · M · depende: G2.0, G2.0b, 5.17a · [docs/plan/grupo-2/G2.1.md](plan/grupo-2/G2.1.md)
-- [ ] 5.2 Página «Tema» sencilla · v0.3.0 · M · depende: G2.1, G2.0b · [docs/plan/grupo-2/5.2.md](plan/grupo-2/5.2.md)
-- [ ] G2.2 Number Input · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.2.md](plan/grupo-2/G2.2.md)
-- [ ] G2.3 Password · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.3.md](plan/grupo-2/G2.3.md)
-- [ ] G2.4 Input Mask (paraguas de G2.4a y G2.4b) · v0.3.0 · paraguas · depende: las de G2.4a y G2.4b · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
-- [ ] G2.4a Input Mask: máscara de dígitos · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
-- [ ] G2.4b Input Mask: marcador, prefijo e ícono · v0.3.0 · S · depende: G2.4a · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
-- [ ] G2.5 Input OTP · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.5.md](plan/grupo-2/G2.5.md)
-- [ ] G2.6 Tags Input · v0.3.0 · M · depende: G2.0, G2.0b, 2.4, 2.2 · [docs/plan/grupo-2/G2.6.md](plan/grupo-2/G2.6.md)
-- [ ] G2.7 Slider (rango doble) · v0.3.0 · L · depende: G2.0, G2.0b, G1.2, G2.1 · [docs/plan/grupo-2/G2.7.md](plan/grupo-2/G2.7.md)
-- [ ] G2.8 Combobox/Autocomplete · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, G1.5, G2.6, G2.1, M.2 (provisional) · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
-- [ ] G2.9 Date Picker y Date Range · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, 2.1 · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
-- [ ] G2.10 Progress · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.10.md](plan/grupo-2/G2.10.md)
-- [ ] G2.11 File Upload · v0.3.0 · M · depende: G2.0, G2.0b, 2.1, G2.10 · [docs/plan/grupo-2/G2.11.md](plan/grupo-2/G2.11.md)
-- [ ] G2.12 Color Picker · v0.3.0 · M · depende: G2.0, G2.0b, G1.1, G2.7, 2.2 · [docs/plan/grupo-2/G2.12.md](plan/grupo-2/G2.12.md)
+- [x] G2.0 Catálogo de tokens del Grupo 2 en la spec 13 (pendiente de comprobación manual: aprobación de las tablas) · v0.3.0 · M · depende: — · [docs/plan/grupo-2/G2.0.md](plan/grupo-2/G2.0.md)
+- [x] G2.0b Tokens globales del Grupo 2 en el tema · v0.3.0 · M · depende: G2.0 · [docs/plan/grupo-2/G2.0b.md](plan/grupo-2/G2.0b.md)
+- [x] G2.1 Toggle Group (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b, 5.17a · [docs/plan/grupo-2/G2.1.md](plan/grupo-2/G2.1.md)
+- [x] 5.2 Página «Tema» sencilla (pendiente de comprobación manual: teclado, lector y contraste en navegador) · v0.3.0 · M · depende: G2.1, G2.0b · [docs/plan/grupo-2/5.2.md](plan/grupo-2/5.2.md)
+- [x] G2.2 Number Input (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.2.md](plan/grupo-2/G2.2.md)
+- [x] G2.3 Password (pendiente de comprobación manual: gestores de contraseñas, NVDA y navegador) · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.3.md](plan/grupo-2/G2.3.md)
+- [x] G2.4 Input Mask (paraguas de G2.4a y G2.4b) · v0.3.0 · paraguas · depende: las de G2.4a y G2.4b · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
+- [x] G2.4a Input Mask: máscara de dígitos (pendiente de comprobación manual: NVDA, Android y navegador) · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
+- [x] G2.4b Input Mask: marcador, prefijo e ícono (pendiente de comprobación manual: navegador) · v0.3.0 · S · depende: G2.4a · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
+- [x] G2.5 Input OTP (pendiente de comprobación manual: NVDA, SMS y navegador) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.5.md](plan/grupo-2/G2.5.md)
+- [x] G2.6 Tags Input (pendiente de comprobación manual: NVDA y navegador) · v0.3.0 · M · depende: G2.0, G2.0b, 2.4, 2.2 · [docs/plan/grupo-2/G2.6.md](plan/grupo-2/G2.6.md)
+- [x] G2.7 Slider (rango doble) (pendiente de comprobación manual: NVDA, táctil y navegador) · v0.3.0 · L · depende: G2.0, G2.0b, G1.2, G2.1 · [docs/plan/grupo-2/G2.7.md](plan/grupo-2/G2.7.md)
+- [x] G2.8 Combobox/Autocomplete (paraguas de G2.8a y G2.8b) · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, G1.5, G2.6, G2.1, M.2 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
+  - [x] G2.8a Combobox simple · v0.3.0 · M · depende: las de G2.8 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
+  - [x] G2.8b Combobox múltiple con chips · v0.3.0 · M · depende: G2.8a, G2.6 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
+- [x] G2.9 Date Picker y Date Range (paraguas de G2.9a y G2.9b) · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, 2.1 · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
+  - [x] G2.9a Calendario y Date Picker · v0.3.0 · M · depende: las de G2.9 · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
+  - [x] G2.9b Date Range · v0.3.0 · M · depende: G2.9a · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
+- [x] G2.10 Progress (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.10.md](plan/grupo-2/G2.10.md)
+- [x] G2.11 File Upload · v0.3.0 · M · depende: G2.0, G2.0b, 2.1, G2.10 · [docs/plan/grupo-2/G2.11.md](plan/grupo-2/G2.11.md)
+- [x] G2.12 Color Picker · v0.3.0 · M · depende: G2.0, G2.0b, G1.1, G2.7, 2.2 · [docs/plan/grupo-2/G2.12.md](plan/grupo-2/G2.12.md)
 - [ ] 5.17 Revisión móvil (paraguas de 5.17a y 5.17b) · v0.3.0 · paraguas · depende: las de 5.17a y 5.17b · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
-- [ ] 5.17a Revisión móvil del Grupo 1 (antes de G2.1) · v0.3.0 o 0.2.1 · M · depende: — · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
-- [ ] 5.17b Revisión móvil del Grupo 2 · v0.3.0 · M · depende: 5.17a, G2.1 a G2.12 · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
+- [~] 5.17a Revisión móvil del Grupo 1 (antes de G2.1), a falta de comprobación del usuario (C4 a C8 en teléfonos) · v0.3.0 · M · depende: — · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
+- [~] 5.17b Revisión móvil del Grupo 2 (a falta de comprobación del usuario y con un hallazgo abierto en C3) · v0.3.0 · M · depende: 5.17a, G2.1 a G2.12 · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
 - [ ] G2.P Puerta del Grupo 2 · v0.3.0 · L · depende: G2.0 a G2.12, 5.2, 5.17a, 5.17b · [docs/plan/grupo-2/G2.P.md](plan/grupo-2/G2.P.md)
 
-## Grupo 3 y Blocks → v0.4.0: datos y pantallas
+## Blocks → v0.4.0: pantallas
 
-Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md) (tareas de una línea; cada una tendrá su archivo cuando se detalle).
+Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md) (tareas de una línea; cada una tendrá su archivo cuando se detalle). División decidida por el usuario el 05/11/2026 en la G2.P (spec 4, «Blocks»): los Blocks que solo usan componentes publicados van en la 0.4.0; `table-01` con el Grupo 3 (0.5.0); `dashboard-01` con el Grupo 4 (0.6.0; ajuste por dependencias, pendiente de revisión del usuario).
 
-- [ ] G3.1 Tree · v0.4.0 · — · depende: G2.P, 2.10 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G3.2 Sortable List · v0.4.0 · — · depende: G2.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G3.3 Command (⌘K) · v0.4.0 · — · depende: G2.P, G1.6, G2.8 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G3.4 Data Table · v0.4.0 · — · depende: G2.P, 2.10, G1.3, G1.11, 2.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.1 Ítems de tipo `block` en el registro · v0.4.0 · — · depende: G2.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.2 `login-01` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.3 `login-02` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
@@ -141,18 +152,28 @@ Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md) (tareas de una l�
 - [ ] B.5 `otp-01` · v0.4.0 · — · depende: B.1, G2.5 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.6 `settings-01` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.7 `pricing-01` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.8 `dashboard-01` · v0.4.0 · — · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.9 `table-01` · v0.4.0 · — · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G3.P Puerta del Grupo 3 y Blocks · v0.4.0 · — · depende: G3.1 a G3.4, B.1 a B.9 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] B.P Puerta de los Blocks · v0.4.0 · — · depende: B.1 a B.7 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 
-## Grupo 4 → v0.5.0: estructura
+## Grupo 3 → v0.5.0: datos
 
-Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md).
+Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md).
 
-- [ ] G4.1 Accordion · v0.5.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.2 Sheet/Drawer · v0.5.0 · — · depende: G3.P, G1.6 · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.3 Stepper · v0.5.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.P Puerta del Grupo 4 · v0.5.0 · — · depende: G4.1 a G4.3 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] G3.1 Tree · v0.5.0 · — · depende: G2.P, 2.10 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G3.2 Sortable List · v0.5.0 · — · depende: G2.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G3.3 Command (⌘K) · v0.5.0 · — · depende: G2.P, G1.6, G2.8 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G3.4 Data Table · v0.5.0 · — · depende: G2.P, 2.10, G1.3, G1.11, 2.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] B.9 `table-01` · v0.5.0 · — · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G3.P Puerta del Grupo 3 · v0.5.0 · — · depende: G3.1 a G3.4, B.9, B.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+
+## Grupo 4 → v0.6.0: estructura
+
+Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md) (B.8, en [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)).
+
+- [ ] G4.1 Accordion · v0.6.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] G4.2 Sheet/Drawer · v0.6.0 · — · depende: G3.P, G1.6 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] G4.3 Stepper · v0.6.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] B.8 `dashboard-01` · v0.6.0 · — · depende: B.1, G3.4, G4.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G4.P Puerta del Grupo 4 · v0.6.0 · — · depende: G4.1 a G4.3, B.8 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 
 ## Mimi Effects (sin versión asignada)
 

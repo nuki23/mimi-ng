@@ -14,7 +14,8 @@ const tokensFs = tokensNode.getBuiltinModule('node:fs') as {
 };
 const LIB = `${tokensNode.cwd()}/packages/ui-core/src/lib`;
 
-const FOLDER: Record<TokenComponent, string> = {
+/** Carpeta del componente; una lista si la tabla es de varios (el calendario y sus campos). */
+const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   avatar: 'avatar',
   badge: 'badge',
   button: 'button',
@@ -36,6 +37,19 @@ const FOLDER: Record<TokenComponent, string> = {
   tabs: 'tabs',
   toolbar: 'toolbar',
   pagination: 'pagination',
+  toggleGroup: 'toggle-group',
+  progress: 'progress',
+  numberInput: 'number-input',
+  password: 'password',
+  inputMask: 'input-mask',
+  inputOtp: 'input-otp',
+  chip: 'chip',
+  tagsInput: 'tags-input',
+  slider: 'slider',
+  combobox: 'combobox',
+  date: ['calendar', 'date-picker', 'date-range'],
+  fileUpload: 'file-upload',
+  colorPicker: 'color-picker',
 };
 
 /**
@@ -46,6 +60,8 @@ const GLOBALS = new Set([
   '--mimi-input-background',
   '--mimi-switch-off',
   '--mimi-card-foreground',
+  // Global del Grupo 2 (G2.0b) que el chip lee como respaldo.
+  '--mimi-chip-foreground',
   '--mimi-popover-foreground',
   '--mimi-popover-arrow-offset',
   '--mimi-tooltip-foreground',
@@ -55,15 +71,22 @@ const GLOBALS = new Set([
   // Cuántas pestañas hay y cuál se pinta: las escribe Tabs para colocar el indicador.
   '--mimi-tabs-count',
   '--mimi-tabs-index',
+  // Lo mismo en Toggle Group (G2.1).
+  '--mimi-toggle-group-count',
+  '--mimi-toggle-group-index',
 ]);
 
 /** Código del componente (sin pruebas). */
 function source(component: TokenComponent): string {
-  const dir = `${LIB}/components/${FOLDER[component]}`;
-  return tokensFs
-    .readdirSync(dir)
-    .filter((f) => f.endsWith('.ts') && !f.endsWith('.spec.ts'))
-    .map((f) => tokensFs.readFileSync(`${dir}/${f}`, 'utf8'))
+  const folders = FOLDER[component];
+  return (typeof folders === 'string' ? [folders] : folders)
+    .flatMap((folder) => {
+      const dir = `${LIB}/components/${folder}`;
+      return tokensFs
+        .readdirSync(dir)
+        .filter((f) => f.endsWith('.ts') && !f.endsWith('.spec.ts'))
+        .map((f) => tokensFs.readFileSync(`${dir}/${f}`, 'utf8'));
+    })
     .join('\n');
 }
 const themeBase = tokensFs.readFileSync(`${LIB}/theme/theme-base.css`, 'utf8');

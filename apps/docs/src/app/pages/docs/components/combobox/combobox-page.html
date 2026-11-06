@@ -1,0 +1,137 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Combobox</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Un campo donde se escribe para filtrar una lista y elegir una opción. Puede crear valores nuevos
+    y buscar en el servidor.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="combobox" />
+  <p class="text-pretty">
+    Instala también las utilidades de lista (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >option-list</code
+    >: el filtro, el resaltado y la lista), el chip (el de Tags Input, para el múltiple) y usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/aria</code>
+    y <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>.
+  </p>
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="city" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con ícono y texto secundario
+  </h3>
+  <p class="text-pretty">
+    Prueba «mede»: el filtro no distingue tildes ni mayúsculas. «Lima» está deshabilitada.
+  </p>
+  <app-code-preview [code]="source.city">
+    <app-combobox-city-example />
+  </app-code-preview>
+
+  <h3 id="multiple" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Múltiple con chips</h3>
+  <p class="text-pretty">
+    Enter agrega o quita la opción activa sin cerrar; Backspace con el campo vacío quita el último
+    chip. Al salir, si hay más de uno, se ve el primero y «+N».
+  </p>
+  <app-code-preview [code]="source.multiple">
+    <app-combobox-multiple-example />
+  </app-code-preview>
+
+  <h3 id="create" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Crear un valor nuevo</h3>
+  <app-code-preview [code]="source.create">
+    <app-combobox-create-example />
+  </app-code-preview>
+
+  <h3 id="async" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Búsqueda en el servidor</h3>
+  <p class="text-pretty">Prueba «sa» (carga) y «Tokio» (sin resultados).</p>
+  <app-code-preview [code]="source.async">
+    <app-combobox-async-example />
+  </app-code-preview>
+
+  <h3 id="forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Formularios y estados</h3>
+  <app-code-preview [code]="source.forms">
+    <app-combobox-forms-example />
+  </app-code-preview>
+
+  <h3 id="custom" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Opción propia, class y panelClass
+  </h3>
+  <app-code-preview [code]="source.custom">
+    <app-combobox-custom-example />
+  </app-code-preview>
+
+  <h3 id="texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textos</h3>
+  <app-code-block [code]="texts" lang="angular-ts" />
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Teclado y accesibilidad
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Escribir abre la lista y activa la primera coincidencia. ↓ y ↑ abren y recorren; Alt+↓ abre y
+      Alt+↑ cierra; Enter elige; Escape cierra y, con la lista cerrada, vacía el campo.
+    </li>
+    <li>
+      El foco se queda en el campo: la opción activa se anuncia con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-activedescendant</code
+      >. La cantidad de resultados y «sin resultados» se anuncian en una región de estado.
+    </li>
+    <li>
+      Al salir, lo escrito sin elegir se descarta y vuelve el texto de la opción elegida; con el
+      campo vacío, se quita el valor.
+    </li>
+    <li>
+      Múltiple: la lista es
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-multiselectable</code
+      >; Enter alterna sin cerrar; Backspace con el campo vacío quita el último chip; Escape cerrado
+      solo vacía lo escrito. Cada chip tiene su botón «Quitar …» (el foco vuelve al campo) y el
+      lector anuncia lo que se agrega y se quita. La ayuda de debajo describe al campo.
+    </li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Entrada</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >[mimiComboboxStart]</code
+    >
+    pone un ícono al principio del campo, y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >ng-template[mimiComboboxOption]</code
+    >
+    cambia el contenido de cada opción (con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-highlight</code>
+    para resaltar lo escrito).
+  </p>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="combobox" />
+</article>

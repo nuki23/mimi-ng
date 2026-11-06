@@ -9,3 +9,11 @@ allowBuilds:
   esbuild: true # compilador que usa @angular/build
   lmdb: true # caché persistente de compilación (.angular/cache)
   msgpackr-extract: true # serialización rápida para la caché de lmdb
+
+# M.2: las herramientas de schematics van en la misma versión que @angular/cli, también para
+# packages/cli, que declara ^22.0.0 (el rango que se publica; no cambia). Se actualiza con la
+# regla de la M.2 al subir Angular.
+overrides:
+  '@angular-devkit/core': 22.2.4
+  '@angular-devkit/schematics': 22.2.4
+  '@schematics/angular': 22.2.4

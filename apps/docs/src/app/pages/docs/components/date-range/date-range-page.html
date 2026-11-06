@@ -1,0 +1,85 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Date Range</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Un periodo entre dos fechas, con atajos opcionales y la cuenta de días.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="date-range" />
+  <p class="text-pretty">
+    Usa el mismo calendario que el Date Picker (que se instala con él) y el Popover.
+  </p>
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="report" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con atajos y sin fechas futuras
+  </h3>
+  <p class="text-pretty">
+    El primer clic marca el inicio y el segundo, el fin (si es anterior, se intercambian); el
+    siguiente empieza otro periodo.
+  </p>
+  <app-code-preview [code]="source.report">
+    <app-date-range-report-example />
+  </app-code-preview>
+
+  <h3 id="forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Formularios y estados</h3>
+  <app-code-preview [code]="source.forms">
+    <app-date-range-forms-example />
+  </app-code-preview>
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Teclado y accesibilidad
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      El teclado de la cuadrícula es el del Date Picker; Enter o Espacio marcan el inicio y el fin.
+    </li>
+    <li>
+      La ayuda de debajo del calendario («Elige el día final.») se anuncia; los atajos llevan
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-pressed</code>.
+    </li>
+    <li>Al cerrar con solo el inicio elegido, se descarta y el valor no cambia.</li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Entrada</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    Los límites se llaman
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">minDate</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">maxDate</code>: en un
+    control de formulario,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">min</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">max</code> tendrían que
+    ser un periodo.
+  </p>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="date" />
+</article>
