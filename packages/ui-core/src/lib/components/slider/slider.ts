@@ -50,12 +50,13 @@ const THUMB_BASE = cn(
   'size-[var(--mimi-slider-thumb-size,20px)] bg-[color:var(--mimi-slider-thumb,var(--mimi-thumb,var(--mimi-background)))]',
   'shadow-[shadow:var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
   '[transition:box-shadow_.2s_ease,scale_.15s_cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none',
-  'not-aria-disabled:hover:shadow-[0_0_0_6px_var(--mimi-ring-soft),var(--mimi-shadow-neutral)]',
+  // Hover y arrastre suman el halo a la sombra del pulgar (su token), con tipo (estilos 8).
+  'not-aria-disabled:hover:shadow-[shadow:0_0_0_6px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
   'aria-disabled:cursor-not-allowed',
   buttonFocusStyles,
 );
 const DRAGGING =
-  'scale-[1.12] cursor-grabbing shadow-[0_0_0_8px_var(--mimi-ring-soft),var(--mimi-shadow-neutral)]';
+  'scale-[1.12] cursor-grabbing shadow-[shadow:0_0_0_8px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]';
 /** Borde del pulgar y color de la parte llena: el relleno o, con error, `destructive`. */
 const FILL = {
   ok: {

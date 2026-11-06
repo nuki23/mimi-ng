@@ -152,6 +152,14 @@ describe('MimiSlider', () => {
     expect(host.price()).toEqual([300, 810]);
     expect(document.activeElement).toBe(thumbs('range')[1]);
     expect(thumbs('range')[1].hasAttribute('data-dragging')).toBe(true);
+    // Arrastre: el halo de 8px sobre la sombra del pulgar (su token), con tipo; reemplaza a la base.
+    const dragged = thumbs('range')[1].className.split(' ');
+    expect(dragged).toContain(
+      'shadow-[shadow:0_0_0_8px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
+    );
+    expect(dragged).not.toContain(
+      'shadow-[shadow:var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
+    );
     el.dispatchEvent(
       new PointerEvent('pointermove', { bubbles: true, clientX: 150, pointerId: 1 }),
     );
@@ -232,6 +240,12 @@ describe('MimiSlider', () => {
     expect(t.className).toContain('focus-visible:outline-2');
     expect(t.className).not.toContain('outline-none');
     expect(t.className).toContain('var(--mimi-thumb,var(--mimi-background))');
+    // Sombras con tipo (estilos 8) y el token del pulgar también en hover.
+    const classes = t.className.split(' ');
+    expect(classes).toContain(
+      'not-aria-disabled:hover:shadow-[shadow:0_0_0_6px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
+    );
+    expect(classes.filter((c) => /shadow-\[(?!shadow:)/.test(c))).toEqual([]);
     const track = part('single').querySelector('[data-slot="track"]')!;
     expect(track.className).toContain('var(--mimi-track,var(--mimi-input))');
     // El anfitrión (todo el objetivo del puntero) mide 24px de alto (2.5.8, 5.17b).
