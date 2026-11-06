@@ -39,7 +39,7 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 
 | Herramienta            | Versión instalada | Requisito                                                                                    |
 | ---------------------- | ----------------- | -------------------------------------------------------------------------------------------- |
-| Node.js                | 24.15.0           | Angular 22 exige `^22.22.3 \|\| ^24.15.0 \|\| ^26.0.0`                                       |
+| Node.js                | 24.18.0           | Angular 22 exige `^22.22.3 \|\| ^24.15.0 \|\| ^26.0.0`                                       |
 | pnpm                   | 12.5.1            | Fijada en `packageManager` del `package.json` raíz                                           |
 | Angular (framework)    | 22.2.4            | `@angular/core`, `common`, `compiler`, `compiler-cli`, `forms`, `platform-browser`, `router` |
 | Angular (herramientas) | 22.2.4            | `@angular/cli`, `@angular/build` (se versionan aparte del framework)                         |

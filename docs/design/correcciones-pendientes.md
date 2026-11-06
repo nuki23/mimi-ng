@@ -205,3 +205,8 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Muestras:** una parada de Tab por grupo y flechas (el diseño: Tab por cada una).
   - **Tono y recorte:** Re Pág/Av Pág e Inicio/Fin en el tono; aviso cuando un OKLCH se recorta a sRGB. No están en el diseño.
   - **Panel suelto sin fondo:** el panel del diseño tiene fondo, borde y sombra; el `mimi-color-picker` suelto no los trae (los pone la app, como en el ejemplo); el del disparador, sí.
+
+  Revisión móvil del Grupo 2 (5.17b, 05/11/2026; anotado en la G2.P, 06/11/2026):
+  - **Paneles altos en pantallas chicas:** el calendario (365px), el Date Range con atajos (360px) y el Color Picker en su disparador (372px) no caben arriba ni abajo de un disparador que está en el medio de una pantalla de 360 × 780 y quedan de 2 a 7px fuera del margen de 8px. Sin diseño móvil; si se confirma en un teléfono real, diseñar una alternativa (por ejemplo, una hoja inferior) o un panel más bajo.
+  - **Objetivo del Slider:** el anfitrión del Slider mide 24px de alto (el diseño, 20px, el alto del pulgar) para que en el rango estrecho los objetivos de los dos pulgares no se toquen (2.5.8). El aspecto no cambia.
+  - **Objetivos chicos que cumplen por espaciado:** el botón de quitar del chip (18 × 18px, Tags Input y Combobox) y la barra de tono del Color Picker (12px de alto). Si se quiere un área táctil mayor, definirla en el diseño.

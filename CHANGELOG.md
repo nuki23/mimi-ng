@@ -2,6 +2,93 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
+## 0.3.0 (06/11/2026): entradas avanzadas
+
+### Antes de actualizar
+
+- **Actualiza `@angular/cdk` y `@angular/aria` a la 22.2.4 o superior.** Los componentes que los usan piden ahora `^22.2.4` (antes `^22.2.0`): con la 22.2.3, Combobox y Select lanzan `NG0950: Input "combobox" is required but no value is available yet` cuando se crean y se destruyen antes de la primera detección de cambios. `ng g mimi` no cambia un cdk o un aria que ya tengas instalados (solo te avisa, ver «CLI»), así que actualízalos tú:
+
+  ```sh
+  ng update @angular/cdk @angular/aria
+  ```
+
+- **Si modificaste tu tema (`components/ui/theme/theme-base.css`)**, `ng g mimi` no lo actualiza (solo avisa) y te faltarán dos cosas de esta versión:
+  1. **La regla de `.cdk-visually-hidden`** (es una corrección, ver «Correcciones»). Copia del `theme-base.css` nuevo, que está en `node_modules/@mimi-ng/cli/dist/templates/theme/theme-base.css` después de instalar la CLI (en `.mimi/base/theme/` queda la versión anterior, la que modificaste, para comparar), el bloque `.cdk-visually-hidden { … }` y el de `[dir='rtl'] .cdk-visually-hidden { … }`, fuera de cualquier `@layer`; **o** agrega a tu CSS global, después del tema:
+
+     ```css
+     @import '@angular/cdk/a11y-prebuilt.css';
+     ```
+
+  2. **Los tokens globales del Grupo 2** (abajo, «Tema»). No es obligatorio: los componentes nuevos funcionan sin ellos, porque cada uno trae su valor de respaldo; cópialos si quieres cambiarlos desde el tema o usar sus clases (`bg-track`, `bg-chip`…).
+
+### Componentes nuevos
+
+Doce componentes de entrada, todos con `class`, atributos `data-*`, tokens propios (`--mimi-<componente>-*` y su grupo en `provideMimiTheme({ components })`), página con su tabla «Variables CSS» y textos en inglés con su versión `_ES`. Los controles de formulario funcionan sin adaptadores con Signal Forms (`[formField]`), Reactive Forms y `ngModel` (`FormValueControl`), y dentro de `mimi-form-field` reciben la etiqueta y el error.
+
+- **Toggle Group** (`ng g mimi toggle-group`): control segmentado. Simple (como un grupo de radio, con un indicador que se desliza) o `multiple` (botones que se activan); un solo `[(value)]`, `variant="solid"` y teclado con flechas. Usa el `FocusKeyManager` de `@angular/cdk`.
+- **Number Input** (`ng g mimi number-input`): campo numérico con − y +, `min`, `max`, `step` y `format` (las opciones de `Intl.NumberFormat`: moneda, decimales, unidad, porcentaje) en el idioma de la app. Lee «1.250,5» en `es-ES`; vacío es `null`.
+- **Password** (`ng g mimi password`): envuelve tu `<input mimiInput type="password">` (el valor y el formulario siguen siendo del input) y le agrega el botón de mostrar u ocultar y, con `meter`, el medidor con reglas configurables (`rules`) o tu propia función (`strength`). Usa `@angular/cdk` (anuncia el nivel).
+- **Input Mask** (`ng g mimi input-mask`): da formato mientras se escribe (`mask="(000) 000-0000"`); el valor guarda **solo los dígitos**. Con marcador de lo que falta (`ghost`), prefijo fijo e ícono.
+- **Input OTP** (`ng g mimi input-otp`): código de un solo uso en casillas, con un solo input real (pegar y el autocompletado del SMS funcionan), `length`, `separatorAfter`, `alphanumeric` y `success`.
+- **Tags Input** (`ng g mimi tags-input`): etiquetas como chips, con separadores, pegado de varias, duplicados, `limit`, `normalize` y `validate`. Instala también el chip (ver «Ítems internos»).
+- **Slider** (`ng g mimi slider`): un valor o, con `range`, un rango `[desde, hasta]` con dos pulgares que no se cruzan; marcas, burbuja con el valor (`showValue`), `format` y RTL. Usa `@angular/cdk`.
+- **Combobox** (`ng g mimi combobox`): campo donde se escribe para filtrar y elegir, simple o `multiple` con chips; crear opciones nuevas (`creatable` y `(create)`), búsqueda en el servidor (`loading` y `(searchChange)`), filtro propio (`filterWith`) y plantilla por opción. Usa `@angular/aria` y `@angular/cdk`, como Select.
+- **Date Picker** (`ng g mimi date-picker`) y **Date Range** (`ng g mimi date-range`): fecha o periodo en un calendario dentro de un Popover, con `min`/`max` (en Date Range, `minDate`/`maxDate`), días deshabilitados, atajos en el rango e idioma con `Intl.DateTimeFormat` (`LOCALE_ID` o `locale`, sin registrar datos). **La fecha es una cadena ISO** (`'2026-09-30'`, tipo `MimiDate`), sin problemas de zona horaria; `toMimiDate()` y `fromMimiDate()` convierten de y a `Date`. El calendario también se instala suelto: **`ng g mimi calendar`** (`mimi-calendar`).
+- **Progress** (`ng g mimi progress`): barra o círculo (`shape`), determinado o indeterminado (`value` sin definir), con `tone`. Sin dependencias.
+- **File Upload** (`ng g mimi file-upload`): zona para elegir o soltar archivos (`accept`, `maxSize`, `maxFiles`; los rechazados salen por `(rejected)`) y una lista de filas (`mimi-file-list`, `mimi-file-item`) para mostrar el estado de la subida que hace tu app. Mimi no sube nada. Usa `@angular/cdk`.
+- **Color Picker** (`ng g mimi color-picker`): panel con área de saturación y brillo, tono, paleta (`swatches`), recientes y campo en HEX u OKLCH (`mimi-color-picker`), y el mismo panel en un disparador con Popover (`mimi-color-input`). El valor es siempre hex en minúsculas.
+
+### Ítems internos nuevos
+
+No salen en el menú de `ng g mimi`; los instalan los componentes que los usan:
+
+- **`chip`** (`components/ui/chip/`): el chip de Tags Input y del Combobox múltiple (`mimi-chip`), con sus anuncios (`injectMimiChipAnnouncer`). Usa `@angular/cdk`.
+- **`option-list`** (`components/ui/option-list/`): las utilidades de lista del Combobox (filtro sin tildes ni mayúsculas, resaltado `mimi-highlight` y los tipos `MimiListOption` y `MimiListOptionGroup`). Usa `@angular/aria`. **Select no cambia en esta versión:** sigue con su propia lógica de lista (pasarlo a estas utilidades queda para más adelante).
+
+### Tema
+
+- **Tokens globales nuevos** (claro y oscuro, y con su clase de Tailwind): `--mimi-range` (banda del rango de fechas), `--mimi-track`, `--mimi-track-fill` y `--mimi-thumb` (pistas y pulgares), `--mimi-chip` y `--mimi-chip-foreground`, `--mimi-dropzone`, `--mimi-dropzone-active` y `--mimi-dropzone-active-border`, `--mimi-strength-weak`, `--mimi-strength-medium` y `--mimi-strength-strong` (medidor de Password) y `--mimi-selection`.
+- **Animaciones nuevas:** `mimi-caret` (cursor de Input OTP), `mimi-bob` (File Upload al arrastrar), `mimi-shake` (Input OTP con error) y `mimi-indet` (Progress indeterminado). Con movimiento reducido, los componentes no las usan (Progress indeterminado late en su lugar).
+- **La regla de `.cdk-visually-hidden`** (ver «Correcciones»).
+- **Preset:** grupos nuevos en `components` (`toggleGroup`, `progress`, `numberInput`, `password`, `inputMask`, `inputOtp`, `chip`, `tagsInput`, `slider`, `combobox`, `date`, `fileUpload` y `colorPicker`). Date Picker, Date Range y el calendario comparten el grupo `date` (`--mimi-date-*`).
+- **Los componentes nuevos funcionan con un tema de la 0.2.0:** todos los tokens globales nuevos se usan con un valor de respaldo, así que no se rompe nada si tu tema no los tiene.
+
+### Rupturas
+
+Mientras Mimi sea `0.x`, una versión menor puede cambiar algo publicado (spec 12). En esta versión, una:
+
+- **Dependencias: `@angular/cdk` y `@angular/aria` pasan de `^22.2.0` a `^22.2.4`** en todos los ítems que los usan, también los publicados en la 0.2.0 (Popover, Tooltip, Dropdown Menu, Context Menu, Select, Dialog, Toast, Tabs, Toolbar y Pagination, los ítems de menú y `utils/overlay`; Confirm, a través de Dialog). **Por qué:** con la 22.2.3, Combobox y Select lanzan `NG0950` al destruirse antes de su primera detección de cambios (arreglado en aria 22.2.4). **Qué hacer:** `ng update @angular/cdk @angular/aria` (ver «Antes de actualizar»). Si ya tienes la 22.2.4 o posterior, no cambia nada.
+
+### Cambios en componentes de la 0.2.0
+
+Sin cambios de API. `ng g mimi` los actualiza si no modificaste sus archivos.
+
+- **Paneles dentro de la pantalla en móvil** (`utils/overlay`, lo usan Popover, Tooltip, Dropdown Menu, Context Menu y Select). En una pantalla de 360px, algunos menús se salían por un costado. Ahora, si la alineación pedida no cabe, el panel prueba las otras dos alineaciones del mismo lado antes de cambiar de lado, y queda a 8px del borde. Select prueba también las tres alineaciones arriba y abajo (antes, dos posiciones).
+- **Popover: al abrir, el foco va al elemento con `autofocus` del panel** si lo hay (así el calendario enfoca el día elegido); si no, al primer elemento enfocable, como antes. Si tu contenido tiene un `autofocus`, ahora el foco empieza ahí.
+
+### CLI
+
+- **`ng g mimi` avisa si tu `@angular/cdk` o tu `@angular/aria` son anteriores a la 22.2.4** (instalados o declarados en un rango que no puede llegar a ella) y te da el `ng update`. Solo avisa: no cambia las versiones de tu proyecto.
+- **`--overwrite` reemplaza también con la misma versión.** Antes, con la misma versión de la CLI, un archivo distinto de la plantilla se tomaba como «al día» y no se reemplazaba.
+
+### Correcciones
+
+- **El texto del anuncio para lectores de pantalla se veía al final de la página** (afecta a la 0.2.0). Pagination («Página 4 de 12») y Toast (su texto) anuncian con el `LiveAnnouncer` del CDK, que crea un elemento con la clase `cdk-visually-hidden` pero no carga el CSS que lo oculta (el CDK solo lo carga al abrir un Dialog o una trampa de foco). Sin haber abierto antes un Dialog, el texto quedaba a la vista al final del `body`. El tema trae ahora esa regla, así que lo arregla cualquier `ng g mimi` si no modificaste el tema; **si lo modificaste**, copia la regla o importa `@angular/cdk/a11y-prebuilt.css` (ver «Antes de actualizar»). Los componentes nuevos que anuncian (Password, File Upload, Tags Input y Combobox múltiple) ya lo usan.
+
+### Cómo actualizar desde la 0.2.0
+
+1. Actualiza cdk y aria: `ng update @angular/cdk @angular/aria` (si tienes una versión anterior a la 22.2.4).
+2. Instala la CLI nueva: `npm i -D @mimi-ng/cli@0.3.0` (con pnpm, `pnpm add -D @mimi-ng/cli@0.3.0`).
+3. Vuelve a ejecutar `ng g mimi` con los componentes que usas (por ejemplo, `ng g mimi button select pagination toast`). Actualiza esos componentes, sus utilidades y el tema, y lo dice: «pagination actualizado de 0.2.0 a 0.3.0». Lo que modificaste no se toca (todo o nada por componente, como en la 0.2.0): el aviso dice qué no se actualizó, y `--overwrite` lo reemplaza (guarda antes tus cambios para aplicarlos de nuevo; `.mimi/base/` tiene la versión que modificaste, para comparar).
+4. Si modificaste el tema, copia a mano lo de «Antes de actualizar».
+5. Para los componentes nuevos, `ng g mimi <nombre>` (por ejemplo, `ng g mimi combobox date-picker`).
+
+### Limitaciones conocidas
+
+- **Paneles altos en pantallas chicas:** el calendario, el Date Range con atajos y el Color Picker en su disparador miden unos 360–372px; con el disparador en el medio de una pantalla de 360 × 780, no caben ni arriba ni abajo y pueden quedar unos píxeles fuera del margen. En móvil se usan los mismos paneles que en escritorio (sin hoja inferior ni panel modal en esta versión).
+- **Date Picker y Date Range:** la fecha se elige en el calendario; todavía no se puede escribir a mano.
+- Documentación solo en español.
+
 ## 0.2.0 (21/10/2026): overlays y navegación
 
 ### Componentes nuevos
