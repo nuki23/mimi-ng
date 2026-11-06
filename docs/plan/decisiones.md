@@ -7,8 +7,6 @@
 Primero las abiertas. Debajo, «Decididas», las del Grupo 2 tomadas hace poco (hasta que la G2.P las lleve a `docs/historial/plan-grupo-2.md`). Las anteriores están en `docs/historial/decisiones.md` y en la spec.
 
 - [ ] Versión de Mimi Effects y del Grupo 5: se decide en la G4.P.
-- [ ] `dashboard-01` en la v0.6.0 con el Grupo 4 (ajuste por dependencias del 05/11/2026, ver abajo): pendiente de revisión del usuario.
-- [ ] CLI y cdk anterior a `^22.2.0`: avisar o actualizar (ver M.4).
 - [ ] Cambios de API que pueda exigir la revisión móvil (ver 5.17).
 
 ### Decididas (03/11/2026)
@@ -20,7 +18,9 @@ Decisiones tomadas por el usuario el 03/11/2026 sobre preguntas que estaban aqu�
 - [x] **Presupuesto del CSS global y del `initial`: se suben (05/11/2026).** Decidido por el usuario (05/11/2026), solo en el sitio de documentación: CSS global, aviso de 130 a 160 kB y error de 145 a 175 kB; `initial`, aviso de 475 a 505 kB y error de 505 a 535 kB (los mismos +30 kB, porque incluye el CSS). Motivo: con la G2.7 el CSS global llegó a 140,98 / 20,50 kB (crudo / gzip), a 4,02 kB del error. Cada informe da además el peso de `theme-base.css` solo y cuánto del CSS global viene de los ejemplos; la G2.P repite la medición. Vive en la spec 10.
 - [x] **Para la puerta G2.P (decidido por el usuario el 05/11/2026):** la M.9 no entra en la 0.3.0 (Select no se toca); la tabla del CSS: en la spec 10 solo los límites, y las mediciones con fecha van a `docs/historial/` (con el grupo, en la G2.P); no hay 0.2.1: el arreglo de la 5.17a va en la 0.3.0; la M.11 era un error (`--overwrite` sobrescribe siempre; corregida); los paneles altos a 360px (5.17b) son un criterio manual de la puerta (teléfono real) y, si se confirma, una tarea con un spike de las opciones del overlay (margen de viewport y empuje); aceptadas las versiones exactas de Angular (M.2) y `minDate`/`maxDate` en el Date Range; la tabla única de tokens de las fechas, anotada con su por qué y lo que se pierde (`docs/auto/decisiones-por-defecto.md`).
 - [x] **Grupo 5 (revisado en la G2.P, decidido por el usuario el 05/11/2026):** opción (a), sigue sin versión hasta la G4.P. Antes: «el criterio "según lo que pidan los usuarios" sigue abierto; se revisa en la G2.P».
-- [x] **Blocks (revisado en la G2.P, decidido por el usuario el 05/11/2026):** opción (b), dividir: v0.4.0 con los Blocks que no usan Data Table (`login-01`, `login-02`, `signup-01`, `otp-01`, `settings-01`, `pricing-01` y el tipo `block`, B.1 a B.7 y la puerta B.P), v0.5.0 con el Grupo 3 y `table-01`, y el Grupo 4 pasa a la v0.6.0. **Ajuste por dependencias** (el usuario pidió comprobarlo antes de aplicar): en los diseños, ningún Block usa componentes del Grupo 4, del Grupo 5 ni posteriores, salvo `dashboard-01`, que tiene una barra lateral fija (como la Sidebar de dashboard, G5.1, sin versión) y un botón «Abrir menú» en móvil que pide un cajón (Sheet, G4.2). Se aplicó: `dashboard-01` (B.8) en la v0.6.0 con el Grupo 4, con la barra lateral escrita dentro del Block. Alternativa: v0.5.0 sin el cajón (spec 4, «Blocks»). Antes: «todos en la v0.4.0, con el Grupo 3 (decidido el 03/11/2026)».
+- [x] **Blocks (revisado en la G2.P, decidido por el usuario el 05/11/2026):** opción (b), dividir: v0.4.0 con los Blocks que no usan Data Table (`login-01`, `login-02`, `signup-01`, `otp-01`, `settings-01`, `pricing-01` y el tipo `block`, B.1 a B.7 y la puerta B.P), v0.5.0 con el Grupo 3 y `table-01`, y el Grupo 4 pasa a la v0.6.0. **Ajuste por dependencias** (el usuario pidió comprobarlo antes de aplicar): en los diseños, ningún Block usa componentes del Grupo 4, del Grupo 5 ni posteriores, salvo `dashboard-01`, que tiene una barra lateral fija (como la Sidebar de dashboard, G5.1, sin versión) y un botón «Abrir menú» en móvil que pide un cajón (Sheet, G4.2). Se aplicó: `dashboard-01` (B.8) en la v0.6.0 con el Grupo 4, con la barra lateral escrita dentro del Block. Alternativa: v0.5.0 sin el cajón (spec 4, «Blocks»). Antes: «todos en la v0.4.0, con el Grupo 3 (decidido el 03/11/2026)». **El ajuste de `dashboard-01`, aceptado por el usuario tal como se aplicó (05/11/2026).**
+- [x] **M.4: CLI con cdk o aria anteriores (decidido por el usuario el 05/11/2026):** solo avisar (la CLI no cambia el rango); umbral 22.2.4; en la 0.3.0, con prueba. Hecha (spec 5, «Versión mínima de cdk y aria»). Antes: «¿solo avisar o también actualizar el rango?», con umbral `^22.2.0`.
+- [x] **M.15: axe-core (decidido por el usuario el 05/11/2026):** aprobado solo como `devDependency` del repo, que no se distribuye; la tarea se hace después de la G2.P.
 - [x] **Globales del Grupo 2 por preset** (G2.0b). Decidió el usuario: ningún global nuevo va por preset; todos solo en el CSS.
 - [x] **`mimi-indet`** (G2.0 y G2.10). Decidió el usuario: global, en `theme-base.css`, como `mimi-caret`, `mimi-bob` y `mimi-shake`; entra en el alcance de la G2.0b. Vive en la spec 13, «Otros globales del diseño».
 - [x] **Chip compartido** (G2.6 y G2.8). Decidió el usuario: un ítem `chip` de la CLI (como `menu`), que crea la G2.6 y usan Tags Input y el Combobox múltiple.
@@ -41,7 +41,7 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(b) Se deciden al empezar su tarea.**
 
-- M.4: con un cdk anterior a `^22.2.0`, ¿la CLI solo avisa o también actualiza el rango?
+- Ninguna por ahora (la de la M.4 se decidió el 05/11/2026).
 
 **(c) Se deciden solo si se llega a esa parte.**
 
