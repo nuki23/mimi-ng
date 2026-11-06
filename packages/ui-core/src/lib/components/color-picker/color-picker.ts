@@ -353,7 +353,8 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
       const before = previous?.value ?? { h: 0, s: 0, v: 0 };
       if (!hex) return before;
       if (previous && fromHsv(before) === hex) return before;
-      const next = toHsv(hex)!;
+      const next = toHsv(hex);
+      if (!next) return before;
       return next.s === 0 || next.v === 0 ? { ...next, h: before.h } : next;
     },
   });
