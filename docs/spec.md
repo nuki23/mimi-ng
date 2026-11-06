@@ -473,7 +473,7 @@ Cada grupo es una versión menor y va precedido por su tarea de diseño en Claud
 | 11    | File Upload                                | PrimeNG (FileUpload) y Vuesax              | Button, Progress                               |
 | 12    | Color Picker                               | PrimeNG (ColorPicker) y HeroUI             | Popover, Input (el tono es propio: G2.12)      |
 
-**Grupo 3 → v0.4.0: datos**
+**Grupo 3 → v0.5.0: datos** (era la 0.4.0; la 0.4.0 es de los Blocks, ver «Blocks»)
 
 | Orden | Componente                                                          | Inspiración                           | Depende de                                         |
 | ----- | ------------------------------------------------------------------- | ------------------------------------- | -------------------------------------------------- |
@@ -482,7 +482,7 @@ Cada grupo es una versión menor y va precedido por su tarea de diseño en Claud
 | 3     | Command (⌘K; también el buscador de la documentación, tarea 5.8)    | shadcn (Command)                      | Dialog, lógica de lista de Combobox                |
 | 4     | Data Table (ordenar, filtrar, paginar, seleccionar, columnas fijas) | shadcn (Data Table) y PrimeNG (Table) | Checkbox, Dropdown Menu, Pagination, Input         |
 
-**Grupo 4 → v0.5.0: estructura**
+**Grupo 4 → v0.6.0: estructura** (era la 0.5.0)
 
 | Orden | Componente   | Inspiración                | Depende de                              |
 | ----- | ------------ | -------------------------- | --------------------------------------- |
@@ -492,7 +492,7 @@ Cada grupo es una versión menor y va precedido por su tarea de diseño en Claud
 
 - **Sheet/Drawer:** flotante, como el de shadcn: separado de los bordes de la pantalla, con el radio de las tarjetas y, en la versión inferior, una barra de agarre.
 
-**Grupo 5: según lo que pidan los usuarios** (prioridad decidida después de la 0.2.0; sin orden fijo)
+**Grupo 5: según lo que pidan los usuarios** (sin orden fijo; revisado en la G2.P: **sigue sin versión** hasta la G4.P, decidido por el usuario el 05/11/2026)
 
 | Componente           | Inspiración              | Depende de                |
 | -------------------- | ------------------------ | ------------------------- |
@@ -513,7 +513,7 @@ En mimi-ng hay una página de tema sencilla (sección 11, «Página "Tema"»; pl
 
 ### Blocks
 
-Pantallas completas que la CLI copia como cualquier componente (`ng g mimi login-01`), con los componentes que usan. Diseñados (`docs/design/Block <nombre>.dc.html` y el índice `Mimi F6 Blocks.dc.html`): `login-01`, `login-02`, `signup-01`, `otp-01`, `settings-01`, `dashboard-01`, `table-01` y `pricing-01`. **Salen todos en la v0.4.0, junto con el Grupo 3** (decidido el 03/11/2026; se revisa en la puerta del Grupo 2, G2.P): los que no usan Data Table se pueden trabajar apenas termine el Grupo 2, y los que la usan (`dashboard-01` y `table-01`) esperan a la G3.4.
+Pantallas completas que la CLI copia como cualquier componente (`ng g mimi login-01`), con los componentes que usan. Diseñados (`docs/design/Block <nombre>.dc.html` y el índice `Mimi F6 Blocks.dc.html`): `login-01`, `login-02`, `signup-01`, `otp-01`, `settings-01`, `dashboard-01`, `table-01` y `pricing-01`. **Divididos en tres versiones** (decidido por el usuario el 05/11/2026 en la G2.P, opción (b), con un ajuste por dependencias): la **v0.4.0** son los seis que solo usan componentes ya publicados (`login-01`, `login-02`, `signup-01`, `otp-01`, `settings-01` y `pricing-01`) y el tipo `block` del registro; la **v0.5.0**, el Grupo 3 y `table-01` (usa Data Table); la **v0.6.0**, el Grupo 4 y `dashboard-01`. **Ajuste (pendiente de revisión del usuario):** el diseño de `dashboard-01` tiene, además de la Data Table, una barra lateral fija (`aside` de 232px, como la Sidebar de dashboard del Grupo 5) y, en móvil, un botón «Abrir menú» que pide un cajón (Sheet, G4.2), así que espera al Grupo 4; la barra lateral se escribe dentro del Block, como la dibuja el diseño, sin depender de la Sidebar (el Grupo 5 sigue sin versión). Alternativa: `dashboard-01` en la v0.5.0, con la barra inferior del diseño como única navegación móvil y sin el botón «Abrir menú». Ningún otro Block usa componentes del Grupo 4, del Grupo 5 ni posteriores (revisado en los diseños el 05/11/2026).
 
 ### Mimi Effects
 

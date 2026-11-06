@@ -141,14 +141,10 @@ Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4
 - [~] 5.17b Revisión móvil del Grupo 2 (a falta de comprobación del usuario y con un hallazgo abierto en C3) · v0.3.0 · M · depende: 5.17a, G2.1 a G2.12 · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
 - [ ] G2.P Puerta del Grupo 2 · v0.3.0 · L · depende: G2.0 a G2.12, 5.2, 5.17a, 5.17b · [docs/plan/grupo-2/G2.P.md](plan/grupo-2/G2.P.md)
 
-## Grupo 3 y Blocks → v0.4.0: datos y pantallas
+## Blocks → v0.4.0: pantallas
 
-Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md) (tareas de una línea; cada una tendrá su archivo cuando se detalle).
+Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md) (tareas de una línea; cada una tendrá su archivo cuando se detalle). División decidida por el usuario el 05/11/2026 en la G2.P (spec 4, «Blocks»): los Blocks que solo usan componentes publicados van en la 0.4.0; `table-01` con el Grupo 3 (0.5.0); `dashboard-01` con el Grupo 4 (0.6.0; ajuste por dependencias, pendiente de revisión del usuario).
 
-- [ ] G3.1 Tree · v0.4.0 · — · depende: G2.P, 2.10 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G3.2 Sortable List · v0.4.0 · — · depende: G2.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G3.3 Command (⌘K) · v0.4.0 · — · depende: G2.P, G1.6, G2.8 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G3.4 Data Table · v0.4.0 · — · depende: G2.P, 2.10, G1.3, G1.11, 2.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.1 Ítems de tipo `block` en el registro · v0.4.0 · — · depende: G2.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.2 `login-01` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.3 `login-02` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
@@ -156,18 +152,28 @@ Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md) (tareas de una l�
 - [ ] B.5 `otp-01` · v0.4.0 · — · depende: B.1, G2.5 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.6 `settings-01` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.7 `pricing-01` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.8 `dashboard-01` · v0.4.0 · — · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.9 `table-01` · v0.4.0 · — · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G3.P Puerta del Grupo 3 y Blocks · v0.4.0 · — · depende: G3.1 a G3.4, B.1 a B.9 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] B.P Puerta de los Blocks · v0.4.0 · — · depende: B.1 a B.7 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 
-## Grupo 4 → v0.5.0: estructura
+## Grupo 3 → v0.5.0: datos
 
-Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md).
+Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md).
 
-- [ ] G4.1 Accordion · v0.5.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.2 Sheet/Drawer · v0.5.0 · — · depende: G3.P, G1.6 · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.3 Stepper · v0.5.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.P Puerta del Grupo 4 · v0.5.0 · — · depende: G4.1 a G4.3 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] G3.1 Tree · v0.5.0 · — · depende: G2.P, 2.10 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G3.2 Sortable List · v0.5.0 · — · depende: G2.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G3.3 Command (⌘K) · v0.5.0 · — · depende: G2.P, G1.6, G2.8 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G3.4 Data Table · v0.5.0 · — · depende: G2.P, 2.10, G1.3, G1.11, 2.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] B.9 `table-01` · v0.5.0 · — · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G3.P Puerta del Grupo 3 · v0.5.0 · — · depende: G3.1 a G3.4, B.9, B.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+
+## Grupo 4 → v0.6.0: estructura
+
+Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md) (B.8, en [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)).
+
+- [ ] G4.1 Accordion · v0.6.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] G4.2 Sheet/Drawer · v0.6.0 · — · depende: G3.P, G1.6 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] G4.3 Stepper · v0.6.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] B.8 `dashboard-01` · v0.6.0 · — · depende: B.1, G3.4, G4.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G4.P Puerta del Grupo 4 · v0.6.0 · — · depende: G4.1 a G4.3, B.8 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 
 ## Mimi Effects (sin versión asignada)
 
