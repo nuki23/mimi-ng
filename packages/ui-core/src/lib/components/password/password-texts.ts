@@ -6,10 +6,11 @@ import { InjectionToken, type Provider } from '@angular/core';
  */
 
 export interface MimiPasswordText {
-  /** Nombre del botón con la contraseña oculta. */
+  /**
+   * Nombre fijo del botón; el estado lo da `aria-pressed` (guía APG, «Button»: un botón de
+   * alternar no cambia de nombre).
+   */
   show: string;
-  /** Nombre del botón con la contraseña a la vista. */
-  hide: string;
   /** Nombres de los niveles del medidor. */
   weak: string;
   medium: string;
@@ -26,7 +27,6 @@ export interface MimiPasswordText {
 /** Textos predeterminados (inglés). */
 export const MIMI_PASSWORD_TEXT_EN: MimiPasswordText = {
   show: 'Show password',
-  hide: 'Hide password',
   weak: 'Weak',
   medium: 'Medium',
   strong: 'Strong',
@@ -40,7 +40,6 @@ export const MIMI_PASSWORD_TEXT_EN: MimiPasswordText = {
 /** Textos en español: `provideMimiPasswordText(MIMI_PASSWORD_TEXT_ES)`. */
 export const MIMI_PASSWORD_TEXT_ES: MimiPasswordText = {
   show: 'Mostrar contraseña',
-  hide: 'Ocultar contraseña',
   weak: 'Débil',
   medium: 'Media',
   strong: 'Fuerte',

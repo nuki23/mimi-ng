@@ -105,7 +105,7 @@ describe('MimiPassword', () => {
     return { fixture, host: fixture.componentInstance, root, part, input, toggle, type };
   }
 
-  it('mostrar y ocultar: cambia el type del mismo input, aria-pressed y el nombre del botón', async () => {
+  it('mostrar y ocultar: cambia el type del mismo input y aria-pressed; el nombre es fijo (APG)', async () => {
     const { fixture, input, toggle } = await setup();
     const el = input('new');
     expect(toggle('new').getAttribute('aria-pressed')).toBe('false');
@@ -116,7 +116,8 @@ describe('MimiPassword', () => {
     expect(input('new')).toBe(el);
     expect(el.type).toBe('text');
     expect(toggle('new').getAttribute('aria-pressed')).toBe('true');
-    expect(toggle('new').getAttribute('aria-label')).toBe('Hide password');
+    // Un botón de alternar no cambia de nombre: el estado lo da aria-pressed.
+    expect(toggle('new').getAttribute('aria-label')).toBe('Show password');
     // El foco no se mueve.
     expect(document.activeElement).toBe(toggle('new'));
     toggle('new').click();
