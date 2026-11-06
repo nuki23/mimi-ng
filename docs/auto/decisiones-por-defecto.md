@@ -85,6 +85,15 @@ Decisiones que tomó Claude Code en modo autónomo sobre una «PENDIENTE DE DECI
 - **Aceptadas** (no estaban en la tabla porque no eran PENDIENTE DE DECIDIR, sino alertas de los informes): las versiones exactas de Angular en el `package.json` raíz (M.2) y `minDate`/`maxDate` en el Date Range (G2.9b).
 - **G2.9, una sola tabla de tokens para las fechas: se aparta de la recomendación de la tarea.** La recomendación era «decidirlo junto con ¿Date Range aparte?: si es aparte, dos tablas». Se eligió una (`--mimi-date-*`) aunque el Date Range es un componente aparte, **por qué:** los dos usan el mismo `mimi-calendar`, que pinta los días, el elegido, hoy y la banda del rango; con dos prefijos, el calendario tendría que leer los tokens de los dos componentes (o duplicarlos) y la prueba de la tabla (`component-tokens.spec.ts`) tomaría `--mimi-date-range-*` como tokens de `date`; el único token propio del rango es `--mimi-date-presets-width`. **Qué se pierde:** no se puede dar un aspecto distinto al calendario del Date Picker y al del Date Range con tokens (por ejemplo, días más grandes solo en el rango): cambiar `--mimi-date-*` cambia los dos, salvo que la app lo acote con una clase propia (`class="[--mimi-date-cell-size:40px]"` en uno de ellos); en el Theme Studio, los dos componentes comparten un grupo de variables; y el nombre `--mimi-date-range` es la banda (no un prefijo), así que no queda libre un prefijo `date-range` para el futuro sin renombrar.
 
+## Para la revisión de la 0.9.9: nombres incoherentes
+
+Anotados a pedido del usuario (05/11/2026), tras la revisión independiente de la rama. No se cambian ahora; se deciden en la revisión de la API antes de la 1.0, junto con las RUPTURAS de la tabla.
+
+- **`success` en Input OTP frente a `tone`:** Input OTP marca el código correcto con un booleano `success` (`input-otp.ts`); Badge, Button, Menu y Progress expresan el color con `tone`.
+- **`min`/`max` frente a `minDate`/`maxDate`:** el Date Picker usa `min`/`max` (con el tipo del valor, `FormValueControl`); el Date Range usa `minDate`/`maxDate`, porque `FormValueControl` daría a `min`/`max` el tipo del periodo (aceptado por el usuario el 05/11/2026, pero los dos nombres conviven).
+- **Selector `mimi-date-range` y clase `MimiDateRangePicker`:** el selector no dice «picker» y la clase sí (el Date Picker es `mimi-date-picker` / `MimiDatePicker`).
+- **`MIMI_DATE_PICKER_TEXT` en `calendar/`:** el token de textos lleva el nombre del Date Picker, pero vive en `calendar/calendar-texts.ts` y lo usan también el calendario suelto y el Date Range.
+
 ## Arreglos tras la revisión independiente de la rama (05/11/2026)
 
 Pedidos por el usuario; no son decisiones por defecto. Lo que cambia algo publicado en la 0.2.0 va marcado **RUPTURA**, para el CHANGELOG de la puerta.

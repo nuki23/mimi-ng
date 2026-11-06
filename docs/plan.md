@@ -96,8 +96,13 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.9 Migrar Select a las utilidades de lista del Combobox · sin versión · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.10 Script `check-plan` (casillas del índice y del detalle, enlaces, IDs) · sin versión · — · depende: la reorganización del plan (PASO 4) · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.11 La CLI y `--overwrite` con la misma versión (era un error; corregido) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.13 Bajar `main` del showcase (rutas de docs diferidas y menú móvil al abrir) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.12 Pruebas deterministas con temporizadores y animaciones (Dialog, Toast, docs bajo carga) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.13 Bajar `main` del showcase (rutas de docs diferidas y menú móvil al abrir; al empezar el Grupo 3, en otra rama) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.14 Color Picker: exponer los dos ejes del área · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.15 Pruebas de accesibilidad con axe sobre las páginas del showcase · sin versión · — · depende: decisión de la dependencia · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.16 Auditoría de `readonly`, `aria-labelledby` y `aria-describedby` en todos los controles · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.17 Pruebas de docs independientes del `localStorage` de Node 26 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.18 Guardar en el repo el script de medición a 360 px · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
