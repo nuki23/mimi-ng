@@ -27,9 +27,9 @@ describe('FileUploadPage', () => {
       expect(code).toMatch(/export class FileUpload\w+Example/);
     }
     // Textos en español y los archivos ya subidos.
-    expect(el.querySelector('mimi-file-upload button')!.getAttribute('aria-label')).toBe(
-      'Subir archivos',
-    );
+    expect(
+      el.querySelector('mimi-file-upload button [data-slot="title"]')!.textContent?.trim(),
+    ).toBe('Arrastra archivos o haz clic');
     const names = Array.from(el.querySelectorAll('mimi-file-item [data-slot="name"]')).map((n) =>
       n.textContent?.trim(),
     );

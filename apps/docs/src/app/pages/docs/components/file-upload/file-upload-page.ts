@@ -88,10 +88,11 @@ export class FileUploadPage {
       description: 'Bytes por archivo y cantidad máxima (contando los que ya están).',
     },
     {
-      name: 'title / hint',
+      name: 'heading / hint',
       type: 'string',
       default: '«Arrastra archivos o haz clic» / —',
-      description: 'Título de la zona y qué acepta (describe la zona).',
+      description:
+        'Título visible de la zona (es también su nombre accesible) y qué acepta (describe la zona).',
     },
     {
       name: '(rejected)',
@@ -113,7 +114,14 @@ export class FileUploadPage {
       description: 'La lista. Al quitar el último con el foco, el foco va a emptyFocus.',
     },
     {
-      name: 'disabled / aria-label / class',
+      name: 'aria-label / aria-labelledby',
+      type: 'string',
+      default: '—',
+      description:
+        'Van delante del título en el nombre de la zona, sin reemplazarlo: el nombre contiene siempre el texto visible (WCAG 2.5.3).',
+    },
+    {
+      name: 'disabled / class',
       type: '—',
       default: '—',
       description: 'De la zona de soltar.',

@@ -6,9 +6,7 @@ import { InjectionToken, type Provider } from '@angular/core';
  */
 
 export interface MimiFileUploadText {
-  /** Nombre de la zona de soltar. */
-  upload: string;
-  /** Título de la zona en reposo. */
+  /** Título de la zona en reposo (también su nombre accesible). */
   title: string;
   /** Título con archivos encima. */
   drop: (count: number) => string;
@@ -31,7 +29,6 @@ export interface MimiFileUploadText {
 }
 
 export const MIMI_FILE_UPLOAD_TEXT_EN: MimiFileUploadText = {
-  upload: 'Upload files',
   title: 'Drag files here or click',
   drop: (count) =>
     count > 0 ? `Drop to upload ${count} ${count === 1 ? 'file' : 'files'}` : 'Drop to upload',
@@ -50,7 +47,6 @@ export const MIMI_FILE_UPLOAD_TEXT_EN: MimiFileUploadText = {
 };
 
 export const MIMI_FILE_UPLOAD_TEXT_ES: MimiFileUploadText = {
-  upload: 'Subir archivos',
   title: 'Arrastra archivos o haz clic',
   drop: (count) =>
     count > 0

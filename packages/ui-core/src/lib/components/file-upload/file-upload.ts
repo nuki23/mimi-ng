@@ -140,7 +140,7 @@ let nextId = 0;
       [id]="controlId()"
       [class]="zoneClasses()"
       [disabled]="disabled()"
-      [attr.aria-label]="ariaLabel() || texts.upload"
+      [attr.aria-labelledby]="labelledBy()"
       [attr.aria-describedby]="hint() ? hintId : null"
       [attr.aria-invalid]="showInvalid() || null"
       [attr.aria-required]="required() || null"
@@ -166,8 +166,8 @@ let nextId = 0;
           <path d="m8 17 4-4 4 4" />
         </svg>
       </span>
-      <span data-slot="title" class="text-sm font-semibold">{{
-        over() ? texts.drop(dragCount()) : title() || texts.title
+      <span [id]="headingId" data-slot="title" class="text-sm font-semibold">{{
+        over() ? texts.drop(dragCount()) : heading() || texts.title
       }}</span>
       @if (hint()) {
         <span [id]="hintId" data-slot="hint" class="text-[12.5px] text-muted-foreground">{{
@@ -175,6 +175,9 @@ let nextId = 0;
         }}</span>
       }
     </button>
+    @if (ariaLabel()) {
+      <span [id]="labelId" hidden>{{ ariaLabel() }}</span>
+    }
     <input
       #picker
       type="file"
@@ -190,6 +193,7 @@ let nextId = 0;
     class: 'block w-full',
     '[attr.id]': 'null',
     '[attr.aria-label]': 'null',
+    '[attr.aria-labelledby]': 'null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
   },
@@ -214,8 +218,12 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   readonly maxFiles = input<number | undefined, unknown>(undefined, {
     transform: (v: unknown) => (v == null || v === '' ? undefined : numberAttribute(v)),
   });
-  /** Título de la zona. Por defecto, «Arrastra archivos o haz clic». */
-  readonly title = input('');
+  /**
+   * Título visible de la zona. Por defecto, «Arrastra archivos o haz clic». Es también su nombre
+   * accesible (WCAG 2.5.3): `aria-label` y `aria-labelledby` se anteponen, no lo reemplazan. No se
+   * llama `title` para no tapar el atributo nativo (el globo del navegador).
+   */
+  readonly heading = input('');
   /** Qué se acepta («PNG, JPG o PDF · hasta 10 MB»): describe la zona. */
   readonly hint = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
@@ -224,7 +232,10 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   readonly dirty = input(false, { transform: booleanAttribute });
   readonly required = input(false, { transform: booleanAttribute });
   readonly id = input<string>();
+  /** Va delante del título en el nombre accesible («Avatar, Arrastra archivos o haz clic»). */
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
+  /** Ids de etiquetas propias; van delante del título en el nombre accesible. */
+  readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
   readonly userClass = input('', { alias: 'class' });
 
   /** Archivos que no se agregaron, con el motivo. */
@@ -242,6 +253,14 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   private readonly baseId = `mimi-file-upload-${nextId++}`;
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly hintId = `${this.baseId}-hint`;
+  protected readonly headingId = `${this.baseId}-heading`;
+  protected readonly labelId = `${this.baseId}-label`;
+  /** El nombre accesible contiene siempre el texto visible del título (WCAG 2.5.3). */
+  protected readonly labelledBy = computed(() =>
+    [this.ariaLabelledby(), this.ariaLabel() ? this.labelId : null, this.headingId]
+      .filter(Boolean)
+      .join(' '),
+  );
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly over = signal(false);

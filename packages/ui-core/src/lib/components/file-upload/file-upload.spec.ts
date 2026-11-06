@@ -49,6 +49,13 @@ const file = (name: string, type: string, size = 1000) => {
       }
     </mimi-file-list>
     <mimi-file-upload data-test="single" aria-label="Avatar" accept="image/*" [(value)]="single" />
+    <span id="fu-ext-label">Etiqueta</span>
+    <mimi-file-upload
+      data-test="titled"
+      aria-labelledby="fu-ext-label"
+      heading="Sube tu CV"
+      title="Globo"
+    />
     <mimi-file-upload data-test="reactive" aria-label="R" multiple [formControl]="control" />
     <mimi-file-upload data-test="signal" aria-label="S" multiple [formField]="signalForm.files" />
     <mimi-file-upload data-test="ng-model" aria-label="M" multiple name="f" [(ngModel)]="model" />
@@ -144,7 +151,7 @@ describe('MimiFileUpload', () => {
     const { zone, picker, host } = await setup();
     const z = zone('plain');
     expect(z.getAttribute('type')).toBe('button');
-    expect(z.getAttribute('aria-label')).toBe('Subir archivos');
+    expect(z.hasAttribute('aria-label')).toBe(false);
     expect(document.getElementById(z.getAttribute('aria-describedby')!)?.textContent).toBe(
       'PNG, JPG o PDF · hasta 10 MB',
     );
@@ -154,8 +161,34 @@ describe('MimiFileUpload', () => {
     expect(picker('plain').hidden).toBe(true);
     expect(picker('plain').getAttribute('accept')).toBe('image/*,.pdf');
     expect(picker('plain').multiple).toBe(true);
-    expect(zone('single').getAttribute('aria-label')).toBe('Avatar');
     expect(host('single').querySelector('input')!.multiple).toBe(false);
+  });
+
+  it('el nombre accesible contiene el título visible (WCAG 2.5.3), también con aria-label', async () => {
+    const { fixture, zone, host, drag } = await setup();
+    const name = (id: string) =>
+      zone(id)
+        .getAttribute('aria-labelledby')!
+        .split(' ')
+        .map((ref) => document.getElementById(ref)!.textContent!.trim())
+        .join(', ');
+    const visible = (id: string) =>
+      zone(id).querySelector('[data-slot="title"]')!.textContent!.trim();
+    expect(name('plain')).toBe('Arrastra archivos o haz clic');
+    expect(name('plain')).toContain(visible('plain'));
+    // aria-label va delante del título, no lo reemplaza; ni el host ni la zona lo llevan.
+    expect(name('single')).toBe('Avatar, Arrastra archivos o haz clic');
+    expect(zone('single').hasAttribute('aria-label')).toBe(false);
+    expect(host('single').hasAttribute('aria-label')).toBe(false);
+    // Un título propio en `heading`; `title` queda libre como atributo nativo.
+    expect(name('titled')).toBe('Etiqueta, Sube tu CV');
+    expect(host('titled').getAttribute('title')).toBe('Globo');
+    // Al arrastrar cambia el texto visible, y el nombre con él.
+    drag('plain', 'dragenter', [new File(['x'], 'a.pdf')]);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(name('plain')).toBe(visible('plain'));
+    expect(name('plain')).toBe('Suelta para subir 1 archivo');
   });
 
   it('clic (y Enter o Espacio, que dan clic en un <button>) abre el selector', async () => {
