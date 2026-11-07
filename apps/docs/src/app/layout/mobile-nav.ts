@@ -5,13 +5,16 @@ import {
   DestroyRef,
   type ElementRef,
   effect,
+  PendingTasks,
   inject,
+  signal,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
 import { MimiButton } from '@/components/ui/button';
 import { filter } from 'rxjs';
+import type { DocsNavSection } from './docs-nav';
 import { DocsSidebar } from './docs-sidebar';
 import { MobileNavService } from './mobile-nav.service';
 
@@ -19,7 +22,9 @@ import { MobileNavService } from './mobile-nav.service';
  * Panel de navegación para pantallas menores a lg. Es un <dialog> modal nativo: el resto de
  * la página queda inerte (el foco no sale del panel), Escape lo cierra y el foco vuelve al
  * botón que lo abrió. También se cierra con un clic en el fondo o al navegar. Mientras está
- * abierto, la página no hace scroll.
+ * abierto, la página no hace scroll. Las secciones de la barra lateral (DOCS_NAV) se cargan con
+ * import() al abrirlo la primera vez, para que no vayan en main (M.13). Con `@defer` el
+ * optimizador de chunks juntaba el chunk compartido del framework dentro de main (medido).
  */
 @Component({
   selector: 'app-mobile-nav',
@@ -31,6 +36,20 @@ export class MobileNav {
   protected readonly nav = inject(MobileNavService);
   private readonly document = inject(DOCUMENT);
   private readonly dialog = viewChild.required<ElementRef<HTMLDialogElement>>('dialog');
+
+  /** Secciones de la navegación; null hasta la primera apertura. */
+  protected readonly sections = signal<DocsNavSection[] | null>(null);
+
+  private readonly pendingTasks = inject(PendingTasks);
+
+  private readonly loadSections = effect(() => {
+    if (!this.nav.isOpen() || this.sections() !== null) return;
+    // PendingTasks: la app no queda «estable» hasta que llegan (whenStable en las pruebas).
+    void this.pendingTasks.run(async () => {
+      const { DOCS_NAV } = await import('./docs-nav');
+      this.sections.set(DOCS_NAV);
+    });
+  });
 
   /** overflow que tenía <html> antes de abrir; null = no está bloqueado. */
   private previousOverflow: string | null = null;

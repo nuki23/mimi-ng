@@ -44,6 +44,24 @@ describe('MobileNav', () => {
     expect(html.style.overflow).toBe('scroll');
   });
 
+  it('carga la barra lateral al abrirlo por primera vez y la conserva al cerrarlo (M.13)', async () => {
+    const fixture = TestBed.createComponent(MobileNav);
+    const nav = TestBed.inject(MobileNavService);
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    expect(el.querySelector('app-docs-sidebar')).toBeNull();
+
+    nav.open();
+    await fixture.whenStable();
+    const links = el.querySelectorAll('dialog nav a');
+    expect(links.length).toBeGreaterThan(30);
+    expect(links[0].getAttribute('href')).toBe('/docs/introduction');
+
+    nav.close();
+    await fixture.whenStable();
+    expect(el.querySelector('app-docs-sidebar')).not.toBeNull();
+  });
+
   it('se cierra con un clic en el fondo, pero no con un clic dentro del panel', async () => {
     const fixture = TestBed.createComponent(MobileNav);
     const nav = TestBed.inject(MobileNavService);
