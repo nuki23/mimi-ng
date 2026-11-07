@@ -29,9 +29,18 @@ let nextId = 0;
  * otp-01 (Block de Mimi): verificación con un código de 6 dígitos, con reenvío y cuenta
  * regresiva. Diseño: docs/design/Block otp-01.dc.html.
  *
- * Es una pantalla: va después del registro o del inicio de sesión. `verify` sale con el código
- * (al completar los dígitos o con el botón, una sola vez por código); tu app lo comprueba y
- * responde con `status`.
+ * Es una página, que va después del registro o del inicio de sesión: `ng g mimi otp-01` la
+ * genera en tu carpeta de páginas (`aliases.pages` de mimi.json; por defecto, `src/app/pages/otp/`,
+ * u otro nombre con `--name`) junto con su archivo de rutas (`otp.routes.ts`, con la página en
+ * carga diferida), y te da la línea para `app.routes.ts`:
+ *
+ * ```ts
+ * { path: 'otp', loadChildren: () => import('./pages/otp/otp.routes').then((m) => m.OTP_ROUTES) },
+ * ```
+ *
+ * `verify` sale con el código (al completar los dígitos o con el botón, una sola vez por
+ * código); tu app lo comprueba y responde con `status`: conéctalo aquí mismo o, si la usas dentro
+ * de otra página, por sus entradas y salidas:
  *
  * ```html
  * <mimi-otp-01 destination="a••••@example.com" [status]="otp.status()" [loading]="otp.checking()"

@@ -29,6 +29,8 @@ Al terminar, `ng g mimi` te da la línea exacta para las rutas de `app.routes.ts
 - **Se actualiza como siempre:** Mimi sigue la página por su nombre del registro (`login-01`), aunque le pongas otro: `mimi.json → blocks.login-01` guarda su versión, su carpeta (`path`) y su nombre (`name`), y sus copias originales van a `.mimi/base/pages/login-01/`. Todo o nada, el aviso si la modificaste, `--overwrite` y el aviso de un componente actualizado que usa tu Block funcionan igual. Si mueves la carpeta, cambia `path` en `mimi.json`.
 - **Con `source(none)`**, `ng add` y `ng g mimi` agregan también el `@source` de la carpeta de páginas.
 
+- **El comentario de cabecera** de los cinco Blocks de página describe ahora lo que genera la CLI (la carpeta de `aliases.pages`, `<nombre>.routes.ts` y la línea para `app.routes.ts`), en vez de `{ path: 'login', component: Login01 }`. Solo cambia el comentario: una pantalla de la 0.4.0 sin modificar se actualiza por él («actualizado de 0.4.0 a …»).
+
 **Si ya instalaste una pantalla con la 0.4.0**, no cambia nada: sigue en `src/app/blocks/login-01/` (`Login01`), tus rutas siguen funcionando y `ng g mimi` la sigue actualizando ahí, con las mismas reglas. Para pasarla a página: guarda tus cambios (por ejemplo, en git), borra la carpeta `src/app/blocks/login-01/`, ejecuta `ng g mimi login-01`, pega la línea nueva en `app.routes.ts` y quita la ruta vieja.
 
 ## 0.4.0 (07/11/2026): pantallas

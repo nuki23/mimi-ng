@@ -26,9 +26,18 @@ let nextId = 0;
  * login-02 (Block de Mimi): inicio de sesión dividido en dos, con el formulario a un lado y una
  * imagen con un testimonio en vidrio al otro. Diseño: docs/design/Block login-02.dc.html.
  *
- * Es una pantalla: ponla en tus rutas (`{ path: 'login', component: Login02 }`). Da tu imagen con
- * `imageSrc` (y `imageAlt` si no es decorativa). El testimonio está escrito en la plantilla:
- * cámbialo ahí.
+ * Es una página: `ng g mimi login-02` la genera en tu carpeta de páginas (`aliases.pages` de
+ * mimi.json; por defecto, `src/app/pages/login/`, u otro nombre con `--name` si ya tienes la de
+ * login-01) junto con su archivo de rutas (`login.routes.ts`, con la página en carga diferida),
+ * y te da la línea para `app.routes.ts`:
+ *
+ * ```ts
+ * { path: 'login', loadChildren: () => import('./pages/login/login.routes').then((m) => m.LOGIN_ROUTES) },
+ * ```
+ *
+ * Da tu imagen con `imageSrc` (y `imageAlt` si no es decorativa). El testimonio está escrito en
+ * la plantilla: cámbialo ahí. Si la usas dentro de otra página, sus entradas y salidas siguen
+ * ahí:
  *
  * ```html
  * <mimi-login-02 imageSrc="/img/login.jpg" [loading]="auth.loading()" (submitted)="auth.signIn($event)" />
