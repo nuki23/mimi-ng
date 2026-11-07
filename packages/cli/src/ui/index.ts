@@ -13,6 +13,7 @@ import {
   PAGE_NAME,
   type PageTarget,
   defaultPageName,
+  isBlockLikeName,
   isPageFile,
   pageClassName,
   pageItemOf,
@@ -277,6 +278,13 @@ function planPages(
           ` (son páginas: ${pageNames}). No se cambió nada.`,
       );
     }
+    if (isBlockLikeName(pageItems[0], name)) {
+      throw new SchematicsException(
+        `--name ${name} lleva el nombre del Block (${pageItems[0]}): elige el de tu página, por ` +
+          `ejemplo --name ${defaultPageName(pageItems[0])} o --name admin-` +
+          `${defaultPageName(pageItems[0])}. No se cambió nada.`,
+      );
+    }
   }
 
   const prefix = projectPrefix(tree, pagesDir);
@@ -377,16 +385,24 @@ function projectPrefix(tree: Tree, dir: string): string {
 }
 
 /**
- * Cómo importa `app.routes.ts` el archivo de rutas de una página: relativo a la carpeta `app/`
- * que contiene la página (`src/app/pages/login` → `./pages/login/login.routes`). Si la página no
- * está dentro de una carpeta `app/`, la ruta del workspace (y `appDir` null: hay que ajustarla).
+ * Cómo importa `app.routes.ts` el archivo de rutas de una página: relativo a la carpeta del
+ * `app.routes.ts` que está por encima de la página (`src/app/pages/login` →
+ * `./pages/login/login.routes`). Se busca subiendo desde la carpeta de arriba de la página (nunca
+ * la suya: una página `app` tiene su propio `app.routes.ts`); si no hay ninguno, la carpeta `app/`
+ * más cercana por encima. Si tampoco, la ruta del workspace (y `appDir` null: hay que ajustarla).
  */
-function routesImportOf(page: PageTarget): { path: string; appDir: string | null } {
+function routesImportOf(tree: Tree, page: PageTarget): { path: string; appDir: string | null } {
   const routes = `${page.dir}/${page.name}.routes`;
-  const at = `/${page.dir}/`.lastIndexOf('/app/');
-  if (at < 0) return { path: routes, appDir: null };
-  const appDir = page.dir.slice(0, at + 3);
-  return { path: relativePath(appDir, routes), appDir };
+  const ancestors: string[] = [];
+  const parts = page.dir.split('/');
+  for (let length = parts.length - 1; length > 0; length--) {
+    ancestors.push(parts.slice(0, length).join('/'));
+  }
+  const appDir =
+    ancestors.find((dir) => tree.exists(`${dir}/app.routes.ts`)) ??
+    ancestors.find((dir) => basename(dir) === 'app') ??
+    null;
+  return appDir ? { path: relativePath(appDir, routes), appDir } : { path: routes, appDir: null };
 }
 
 /**
@@ -763,7 +779,7 @@ function summary(plan: Plan, report: FileReport): Rule {
       const page = plan.pages[item];
       if (page) {
         if (!created.has(routesKey(item))) continue;
-        const { path: routes, appDir } = routesImportOf(page);
+        const { path: routes, appDir } = routesImportOf(tree, page);
         const routesFile = appDir ? `${appDir}/app.routes.ts` : null;
         log.info(
           `${item} es ahora tu página ${page.name} (${page.dir}/, clase ` +

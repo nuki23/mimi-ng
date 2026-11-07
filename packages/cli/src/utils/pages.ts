@@ -90,23 +90,41 @@ export function pageTargetPath(key: string, target: PageTarget): string {
 
 const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+/** `settings-01` → `SETTINGS_01`; `Login-Page` → `LOGIN_PAGE`. */
+const constantCase = (kebab: string) => kebab.replace(/-/g, '_').toUpperCase();
+
+/**
+ * ¿El nombre de página contiene el del Block (`login-01`, `login-01-x`)? La conversión no
+ * distinguiría lo viejo de lo nuevo: `ng g mimi` lo rechaza con su propio mensaje.
+ */
+export const isBlockLikeName = (item: string, name: string) =>
+  name === item || name.startsWith(`${item}-`);
+
 /**
  * El código de un archivo del Block convertido en el de la página: el selector `mimi-login-01`
  * (también en los `id`) pasa a `app-login-page`; la clase `Login01` y sus tipos (`Login01Value`)
- * a `LoginPage` (`LoginPageValue`); los archivos propios (`./login-01.html`) a `./login.html`.
- * Lanza un error si queda algo del nombre del Block (un Block nuevo con otra forma necesita que
- * se revise esta función; lo prueba `pages.spec.ts` con los Blocks reales).
+ * a `LoginPage` (`LoginPageValue`); las constantes (`SETTINGS_01_PLAN`) a `SETTINGS_PAGE_PLAN`;
+ * los archivos propios (`./login-01.html`) a `./login.html`. Lanza un error si queda algo del
+ * nombre del Block (un Block nuevo con otra forma necesita que se revise esta función; lo prueba
+ * `pages.spec.ts` con los Blocks reales). El nombre de la página no puede contener el del Block
+ * (`--name login-01`): lo rechaza antes `isBlockLikeName`.
  */
 export function renderPageFile(source: string, target: PageTarget): string {
   const { item, name } = target;
   const fromClass = pascal(item);
+  const fromConstant = constantCase(item);
   const result = source
     .split(`mimi-${item}`)
     .join(pageSelector(target.prefix, name))
     .replace(new RegExp(`(['"\`])\\./${escape(item)}\\.`, 'g'), `$1./${name}.`)
-    .replace(new RegExp(`\\b${escape(fromClass)}`, 'g'), pageClassName(name));
+    .replace(new RegExp(`\\b${escape(fromClass)}`, 'g'), pageClassName(name))
+    .replace(
+      new RegExp(`\\b${escape(fromConstant)}(?=_|\\b)`, 'g'),
+      constantCase(pageClassName(name).replace(/([a-z0-9])([A-Z])/g, '$1-$2')),
+    );
   const left = [`mimi-${item}`, `./${item}.`].filter((text) => result.includes(text));
   if (new RegExp(`\\b${escape(fromClass)}`).test(result)) left.push(fromClass);
+  if (new RegExp(`\\b${escape(fromConstant)}(?=_|\\b)`).test(result)) left.push(fromConstant);
   if (left.length > 0) {
     throw new Error(
       `No se pudo convertir ${item} en una página: quedan ${left.join(', ')}. Es un error de Mimi; ` +

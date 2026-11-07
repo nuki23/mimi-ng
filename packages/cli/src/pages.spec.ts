@@ -121,6 +121,12 @@ describe('registro (B.11-a)', () => {
 });
 
 describe('conversión de un Block en página (utils/pages)', () => {
+  it('utils/pages.ts no importa nada (lo empaqueta también el sitio, en el navegador)', () => {
+    const source = readFileSync(join(import.meta.dirname, 'utils', 'pages.ts'), 'utf8');
+    expect(source).not.toMatch(/^\s*import\s/m);
+    expect(source).not.toMatch(/\brequire\(/);
+  });
+
   it('nombres: por defecto, clase, selector y constante de rutas', () => {
     expect(defaultPageName('login-01')).toBe('login');
     expect(defaultPageName('settings-01')).toBe('settings');
@@ -165,6 +171,17 @@ describe('conversión de un Block en página (utils/pages)', () => {
     expect(result).toContain('export interface LoginPageValue');
     expect(result).toContain('export type LoginPageProvider');
     expect(result).toContain('`app-login-page-${nextId++}`');
+  });
+
+  it('settings-01: las constantes se renombran como la clase (revisión independiente)', () => {
+    const source = readFileSync(join(UI_CORE_LIB, 'blocks/settings-01/settings-01.ts'), 'utf8');
+    expect(source).toContain('SETTINGS_01_');
+    const result = renderPageFile(source, target('settings-01'));
+    expect(result).not.toContain('SETTINGS_01');
+    expect(result).toContain('SETTINGS_PAGE_');
+    expect(renderPageFile('const A = SETTINGS_01_PLAN;\n', target('settings-01', 'admin'))).toBe(
+      'const A = ADMIN_PAGE_PLAN;\n',
+    );
   });
 
   it('falla si queda algo del Block (otra forma de archivo)', () => {
@@ -292,6 +309,11 @@ describe('ng g mimi <página> (B.11)', () => {
         '--name "Admin Demo" no sirve como nombre de página',
       ],
       [
+        '--name con el nombre del Block (revisión independiente)',
+        { components: [TEST_PAGE], name: 'demo-01-admin' },
+        '--name demo-01-admin lleva el nombre del Block (demo-01): elige el de tu página',
+      ],
+      [
         '--name sin páginas',
         { components: ['button'], name: 'demo' },
         '--name es el nombre de la página que se genera, y no pediste ningún Block de tipo página',
@@ -361,6 +383,20 @@ describe('ng g mimi <página> (B.11)', () => {
     expect(custom.logs.map((l) => l.message)).toContain(
       "  { path: 'demo', loadChildren: () => import('./features/demo/demo.routes')" +
         '.then((m) => m.DEMO_ROUTES) },',
+    );
+  });
+
+  it('una página llamada app: la línea es para el app.routes.ts de la app, no el suyo', async () => {
+    const { run, tree, logs } = await initialized();
+    await run('mimi', { components: [TEST_PAGE], name: 'app' }, tree);
+    const messages = logs.map((l) => l.message);
+    expect(messages).toContain(
+      `demo-01 es ahora tu página app (${PAGES}/app/, clase AppPage). Para abrirla en /app, ` +
+        `agrega esta línea a las rutas de ${APP}/app.routes.ts:`,
+    );
+    expect(messages).toContain(
+      "  { path: 'app', loadChildren: () => import('./pages/app/app.routes')" +
+        '.then((m) => m.APP_ROUTES) },',
     );
   });
 
