@@ -79,8 +79,12 @@ const CASES: Case[] = [
   },
 ];
 
-/** Páginas de los Blocks: plantilla BlockDoc, archivos reales y estados de la vista previa. */
-describe('Páginas de los Blocks', () => {
+/**
+ * Páginas de los Blocks: plantilla BlockDoc, archivos reales y estados de la vista previa.
+ * 20 s (M.12): la primera carga la vista previa en frío; en `pnpm test` completo, justo después
+ * de `pnpm build`, pasó de los 5 s de Vitest (07/11/2026, B.11). Sola tarda unos 2 s.
+ */
+describe('Páginas de los Blocks', { timeout: 20_000 }, () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [

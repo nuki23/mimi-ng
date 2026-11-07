@@ -127,7 +127,8 @@ export function targetPathOf(
 /**
  * Copia original en .mimi/base, con la misma estructura (`.mimi/base/button/button.ts`). Los
  * Blocks conservan `blocks/` (`.mimi/base/blocks/login-01/login-01.ts`), y esa es también su
- * clave en el manifiesto.
+ * clave en el manifiesto. Las páginas van por su nombre del registro, no por el de su carpeta
+ * (`.mimi/base/pages/login-01/login-01.ts`, B.11-f).
  */
 export function basePathOf(file: string): string {
   return `${BASE_DIR}/${projectPathOf(file)}`;

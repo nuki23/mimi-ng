@@ -501,7 +501,7 @@ describe('ng g mimi <página> (B.11)', () => {
     });
 
     it('modificada: bloqueada como en la 0.4.0; M1 sigue avisando', async () => {
-      const { run, tree, warnings } = await initialized();
+      const { run, tree, logs, warnings } = await initialized();
       installedWith040(tree, { modified: ['blocks/demo-01/demo-01.ts'] });
       const result = await run('mimi', { components: [TEST_PAGE] }, tree);
       expect(result.readContent(`/${BLOCKS}/demo-01/demo-01.html`)).toBe(
@@ -511,6 +511,8 @@ describe('ng g mimi <página> (B.11)', () => {
         `demo-01 no se actualizó a ${VERSION}: es tu pantalla y la modificaste ` +
           `(${BLOCKS}/demo-01/demo-01.ts)`,
       );
+      // Sin el «se actualiza ahí»: no se actualizó.
+      expect(logs.map((l) => l.message).some((m) => m.startsWith('demo-01 sigue en'))).toBe(false);
 
       const other = await initialized();
       const withOldButton = await other.run('mimi', { components: ['button'] }, other.tree);

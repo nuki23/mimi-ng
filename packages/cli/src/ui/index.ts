@@ -781,8 +781,9 @@ function summary(plan: Plan, report: FileReport): Rule {
           `<mimi-${item} />, importando ${blockClassName(item)} de ${plan.blocksDir}/${item}.`,
       );
     }
-    // Pantallas de la 0.4.0: siguen donde estaban (B.11-g).
-    for (const item of plan.legacyPages) {
+    // Pantallas de la 0.4.0: siguen donde estaban (B.11-g). Una bloqueada ya tiene su aviso.
+    const blockedItems = new Set(report.blocked.map((b) => b.item));
+    for (const item of plan.legacyPages.filter((legacy) => !blockedItems.has(legacy))) {
       log.info(
         `${item} sigue en ${plan.blocksDir}/${item}/, donde lo instalaste con la 0.4.0, y se ` +
           `actualiza ahí. Los Blocks de pantalla se generan ahora como páginas ` +
