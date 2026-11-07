@@ -105,7 +105,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.17 Pruebas de docs independientes del `localStorage` de Node 26 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.18 Guardar en el repo el script de medición a 360 px · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.19 Excluir `.mimi/` del escaneo de Tailwind (`init` la escribe; `ng g mimi` avisa) · sin versión (sale en la 0.4.0) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9, release de GitHub y prueba desde npm de la 0.3.0; y lo manual de los Blocks de la 0.4.0 cuando se hagan; la hace el usuario) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9; la release de GitHub y la prueba desde npm de la 0.3.0, hechas; y lo manual de los Blocks de la 0.4.0 cuando se hagan; la hace el usuario) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
@@ -309,7 +309,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] G2.11 File Upload (05/11/2026).
 - [x] G2.12 Color Picker (05/11/2026).
 - [x] 5.17 Revisión móvil, con 5.17a (Grupo 1, 04/11/2026) y 5.17b (Grupo 2, 05/11/2026); cerradas el 06/11/2026, pendiente de comprobación manual: teléfonos reales y los paneles altos de C3 (M.20).
-- [x] G2.P Puerta del Grupo 2 (06/11/2026; pendiente de comprobación manual: teléfonos reales, NVDA, Firefox, Safari, VoiceOver y las decisiones por defecto para la revisión de la 0.9.9, en la M.20; release de GitHub y prueba desde npm, sin dato).
+- [x] G2.P Puerta del Grupo 2 (06/11/2026; pendiente de comprobación manual: teléfonos reales, NVDA, Firefox, Safari, VoiceOver y las decisiones por defecto para la revisión de la 0.9.9, en la M.20; release de GitHub como Latest y prueba desde npm sin errores, anotadas el 06/11/2026).
 
 **Tandas de diseño** (texto completo en la línea)
 

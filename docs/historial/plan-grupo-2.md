@@ -40,6 +40,7 @@ El detalle está al final de la [G2.P](grupo-2/G2.P.md), «Publicación de la 0.
 - El sitio (Cloudflare, desde `main`) muestra la 0.3.0 (dato del usuario).
 - Release de GitHub: **pendiente** (sin dato).
 - Prueba desde npm real en un proyecto limpio: **pendiente** (sin dato).
+- **Actualización del 06/11/2026** (dato del usuario, agregado después del cierre; detalle en la [G2.P](grupo-2/G2.P.md)): la release de GitHub de la 0.3.0 quedó publicada como **Latest**, y la prueba desde npm real (`ng add`, `ng g mimi button combobox date-picker` y `ng build` en un proyecto limpio fuera del repo) salió sin errores, con todos los componentes funcionando. Los dos puntos, hechos.
 
 ## Decididas (03/11/2026)
 
