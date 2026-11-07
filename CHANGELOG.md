@@ -2,7 +2,7 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
-## 0.4.0 (por publicar: poner la fecha al publicar): pantallas
+## 0.4.0 (07/11/2026): pantallas
 
 ### Antes de actualizar
 
