@@ -37,7 +37,7 @@ Crea el componente **$ARGUMENTS** de Mimi. Sigue el protocolo de `CLAUDE.md`, «
 ## 3. La página, en `apps/docs/src/app/pages/docs/components/$ARGUMENTS/`
 
 - `$ARGUMENTS-page.ts` y `$ARGUMENTS-page.html`, con la tipografía de las páginas existentes (`pages/docs/introduction-page.html`).
-- Ruta `/docs/components/$ARGUMENTS`: hija de `docs` en `apps/docs/src/app/app.routes.ts`, lazy, con `title: '<Nombre> · Mimi'`.
+- Ruta `/docs/components/$ARGUMENTS`: en `apps/docs/src/app/pages/docs/docs.routes.ts` (las rutas de docs, diferidas con `loadChildren` desde la M.13; no en `app.routes.ts`), lazy, con `title: '<Nombre> · Mimi'`.
 - En `apps/docs/src/app/layout/docs-nav.ts` (`DOCS_NAV`), cambia el ítem de $ARGUMENTS a `status: 'ready'` (una prueba falla si un ítem `ready` no tiene ruta).
 - Contenido: título, descripción, instalación con `<app-install-command name="$ARGUMENTS" />`, un ejemplo por variante y estado (los de «Ejemplos del showcase» de la tarea), un ejemplo personalizando con `class` y la tabla de API (input, tipo, valor por defecto, descripción).
 - Cada ejemplo es un componente propio en `examples/$ARGUMENTS-<caso>.example.ts` y se muestra con `CodePreview`, importado **también como texto**, así el código mostrado es el real:

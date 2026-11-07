@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { LucideChevronRight } from '@lucide/angular';
 import { filter, map } from 'rxjs';
-import { findDocsNavEntry } from './docs-nav';
+import { DOCS_NAV, findDocsNavEntry } from './docs-nav';
 import { DocsSidebar } from './docs-sidebar';
 import { DocsToc } from './docs-toc';
 
@@ -26,4 +26,5 @@ export class DocsLayout {
   );
 
   protected readonly crumb = computed(() => findDocsNavEntry(this.url()));
+  protected readonly nav = DOCS_NAV;
 }

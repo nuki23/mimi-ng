@@ -5,7 +5,7 @@ Librería de componentes UI para **Angular 22** + **Tailwind CSS 4**. Los compon
 ## Documentos del proyecto
 
 - `docs/spec.md`: especificación completa. Léela antes de crear o cambiar un componente, el tema o la CLI.
-- `docs/plan.md`: el índice de tareas (una línea por tarea, con su estado y el enlace a su detalle) y las reglas del plan. El detalle de cada tarea está en `docs/plan/` (una tarea detallada tiene su archivo con el ID como nombre, por ejemplo `docs/plan/grupo-2/G2.1.md`; las de una línea van en el archivo de su bloque). Para encontrar una tarea por su ID: el índice o `grep -rn "<ID>" docs/plan/`. Cómo se trabaja una tarea: «Forma de trabajar», abajo.
+- `docs/plan.md`: el índice de tareas (una línea por tarea, con su estado y el enlace a su detalle) y las reglas del plan. El detalle de cada tarea está en `docs/plan/` (una tarea detallada tiene su archivo con el ID como nombre, por ejemplo `docs/plan/grupo-3/G3.1.md`; las de una línea van en el archivo de su bloque). Para encontrar una tarea por su ID: el índice o `grep -rn "<ID>" docs/plan/`. Cómo se trabaja una tarea: «Forma de trabajar», abajo.
 - `docs/design/`: diseños y variables CSS de Claude Design. Colores, radios y sombras salen de aquí, nunca inventados. Lo que Mimi haga distinto del diseño, o sin diseño, se anota en `docs/design/correcciones-pendientes.md` (tarea D6 del plan).
 - `docs/historial/`: el texto completo de las tareas terminadas del plan. No se edita.
 - `docs/futuro/`: proyectos aparte que no se trabajan en mimi-ng (por ahora, `theme-studio.md`). No se toman como tareas.

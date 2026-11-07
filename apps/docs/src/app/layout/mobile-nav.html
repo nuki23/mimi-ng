@@ -36,7 +36,10 @@
       </button>
     </div>
     <div class="flex-1 overflow-y-auto px-5 py-8">
-      <app-docs-sidebar />
+      <!-- DOCS_NAV se carga al abrir el panel por primera vez y se queda (M.13). -->
+      @if (sections(); as sections) {
+        <app-docs-sidebar [sections]="sections" />
+      }
     </div>
   </div>
 </dialog>

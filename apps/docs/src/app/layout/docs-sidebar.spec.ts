@@ -81,15 +81,24 @@ describe('DocsSidebar', () => {
 });
 
 describe('DOCS_NAV', () => {
-  /** Rutas completas de la app, a partir de app.routes.ts. */
-  const collectPaths = (list: Route[], prefix = ''): string[] =>
-    list.flatMap((route) => {
+  /**
+   * Rutas completas de la app, a partir de app.routes.ts. Resuelve los loadChildren (las de
+   * /docs están en pages/docs/docs.routes.ts desde la M.13), así que también comprueba que
+   * app.routes.ts las enlaza.
+   */
+  const collectPaths = async (list: Route[], prefix = ''): Promise<string[]> => {
+    const paths: string[] = [];
+    for (const route of list) {
       const path = route.path ? `${prefix}/${route.path}` : prefix;
-      return [path, ...collectPaths(route.children ?? [], path)];
-    });
+      const loaded = route.loadChildren ? await route.loadChildren() : [];
+      const children = [...(route.children ?? []), ...(Array.isArray(loaded) ? loaded : [])];
+      paths.push(path, ...(await collectPaths(children, path)));
+    }
+    return paths;
+  };
 
-  it('cada ítem ready tiene su ruta en app.routes.ts', () => {
-    const paths = new Set(collectPaths(routes));
+  it('cada ítem ready tiene su ruta en app.routes.ts (o en las rutas diferidas de /docs)', async () => {
+    const paths = new Set(await collectPaths(routes));
     const ready = DOCS_NAV.flatMap((s) => s.items).filter((i) => i.status === 'ready');
     expect(ready.length).toBeGreaterThan(0);
     for (const item of ready) {
