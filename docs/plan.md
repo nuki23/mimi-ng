@@ -80,6 +80,7 @@ Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
 - 5.17a · auto/grupo-2-2026-11-04 · Claude Code (modo autónomo) · 04/11/2026 — a falta de comprobación del usuario (C4 a C8 en un Android y un iPhone reales)
 - 5.17b · auto/grupo-2-2026-11-04 · Claude Code (modo autónomo) · 05/11/2026 — a falta de comprobación del usuario (C4 y C7 en teléfonos reales) y del hallazgo de C3 (paneles altos)
+- G2.P · auto/release-0.3.0-2026-11-06 · Claude Code (modo autónomo) · 06/11/2026 — preparada la 0.3.0 (CHANGELOG, versión, verificación y `.tgz`); a falta de comprobación del usuario (teléfonos, paneles altos, NVDA, Safari), de la publicación y de mover el grupo al historial
 
 ## Mantenimiento
 
@@ -139,7 +140,7 @@ Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4
 - [ ] 5.17 Revisión móvil (paraguas de 5.17a y 5.17b) · v0.3.0 · paraguas · depende: las de 5.17a y 5.17b · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
 - [~] 5.17a Revisión móvil del Grupo 1 (antes de G2.1), a falta de comprobación del usuario (C4 a C8 en teléfonos) · v0.3.0 · M · depende: — · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
 - [~] 5.17b Revisión móvil del Grupo 2 (a falta de comprobación del usuario y con un hallazgo abierto en C3) · v0.3.0 · M · depende: 5.17a, G2.1 a G2.12 · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
-- [ ] G2.P Puerta del Grupo 2 · v0.3.0 · L · depende: G2.0 a G2.12, 5.2, 5.17a, 5.17b · [docs/plan/grupo-2/G2.P.md](plan/grupo-2/G2.P.md)
+- [~] G2.P Puerta del Grupo 2 (preparada la 0.3.0; a falta de comprobación del usuario y de la publicación) · v0.3.0 · L · depende: G2.0 a G2.12, 5.2, 5.17a, 5.17b · [docs/plan/grupo-2/G2.P.md](plan/grupo-2/G2.P.md)
 
 ## Blocks → v0.4.0: pantallas
 
