@@ -116,7 +116,13 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 
 ## Blocks → v0.4.0: pantallas
 
-Cerrada el 07/11/2026 (puerta B.P; **falta publicar, lo hace el usuario**). Las tareas están en «Terminado» y su texto en `docs/historial/blocks/` (índice: `docs/historial/plan-blocks.md`). `table-01` va con el Grupo 3 (0.5.0) y `dashboard-01` con el Grupo 4 (0.6.0).
+Cerrada el 07/11/2026 (puerta B.P) y **publicada el 07/11/2026** (`@mimi-ng/cli@0.4.0`, registro en `docs/historial/plan-blocks.md`). Las tareas están en «Terminado» y su texto en `docs/historial/blocks/` (índice: `docs/historial/plan-blocks.md`). `table-01` va con el Grupo 3 (0.5.0) y `dashboard-01` con el Grupo 4 (0.6.0).
+
+## Blocks: páginas del usuario (por publicar)
+
+Detalle: `docs/plan/blocks/` (un archivo por tarea).
+
+- [x] B.11 Los Blocks de pantalla se generan como páginas del usuario (`ng g mimi login-01` → `src/app/pages/login/`, `LoginPage`, con su `login.routes.ts`; 07/11/2026, pendiente de comprobación manual: navegador real) · sin versión · L · depende: B.P · [docs/plan/blocks/B.11.md](plan/blocks/B.11.md)
 
 ## Grupo 3 → v0.5.0: datos
 
@@ -301,7 +307,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] 5.17 Revisión móvil, con 5.17a (Grupo 1, 04/11/2026) y 5.17b (Grupo 2, 05/11/2026); cerradas el 06/11/2026, pendiente de comprobación manual: teléfonos reales y los paneles altos de C3 (M.20).
 - [x] G2.P Puerta del Grupo 2 (06/11/2026; pendiente de comprobación manual: teléfonos reales, NVDA, Firefox, Safari, VoiceOver y las decisiones por defecto para la revisión de la 0.9.9, en la M.20; release de GitHub como Latest y prueba desde npm sin errores, anotadas el 06/11/2026).
 
-**Blocks, v0.4.0** (`docs/historial/plan-blocks.md`, con el texto de cada tarea en `docs/historial/blocks/`; puerta cerrada el 07/11/2026, sin publicar todavía). Lo manual que quedó pendiente en cada tarea sigue en la M.20.
+**Blocks, v0.4.0** (`docs/historial/plan-blocks.md`, con el texto de cada tarea en `docs/historial/blocks/`; puerta cerrada y publicada el 07/11/2026, sobre las 14:56 de Colombia en npm). Lo manual que quedó pendiente en cada tarea sigue en la M.20.
 
 - [x] B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase (07/11/2026; pendiente de comprobación manual: teléfono real y Safari).
 - [x] B.2 `login-01` (07/11/2026; pendiente de comprobación manual).
@@ -311,7 +317,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] B.10 Tabs con orientación vertical (07/11/2026; pendiente de comprobación manual: NVDA).
 - [x] B.6 `settings-01` (07/11/2026; pendiente de comprobación manual).
 - [x] B.7 `pricing-01` (07/11/2026; pendiente de comprobación manual).
-- [x] B.P Puerta de los Blocks (07/11/2026, después de los arreglos de la revisión independiente; la publicación de la 0.4.0 la hace el usuario).
+- [x] B.P Puerta de los Blocks (07/11/2026, después de los arreglos de la revisión independiente; la 0.4.0, publicada por el usuario el 07/11/2026, con la release de GitHub como Latest).
 
 **Tandas de diseño** (texto completo en la línea)
 

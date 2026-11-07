@@ -18,6 +18,14 @@ Texto de las tareas de los Blocks de la 0.4.0 al cerrar su puerta (07/11/2026, r
 
 **Revisión independiente de la rama (07/11/2026)**, arreglada antes de cerrar la puerta: G1 (`@source` de los Blocks con `source(none)`), M1 (aviso de un componente que usa un Block), M2 (alias absolutos o fuera del proyecto), M3 (foco al guardar `settings-01` desde otra sección), M4 (reintentar el mismo código en `otp-01`), M5 (textos de relleno genéricos) y menores; M.21 y M.22 registradas en `docs/plan/mantenimiento.md`.
 
-**Publicación de la 0.4.0 (registro):** la hace el usuario (`docs/proceso/release.md`); al publicar, anotar aquí la fecha y hora de `npm publish`, `latest`, la etiqueta y su commit, la release de GitHub, el despliegue y la prueba desde npm.
+**Publicación de la 0.4.0 (registro):** la hizo el usuario (`docs/proceso/release.md`); datos del usuario, anotados el 07/11/2026:
+
+- `@mimi-ng/cli@0.4.0` publicada en npm el 07/11/2026, sobre las 14:56 (hora de Colombia, UTC−5), con `npm publish` desde `packages/cli`.
+- `npm view @mimi-ng/cli dist-tags` da `{ latest: '0.4.0' }`, y `versions` termina en `0.4.0`.
+- Paquete: 149 archivos, 232,9 kB, shasum `e54248945c862d17dbd229e427601cacf56e35d7`.
+- Etiqueta `v0.4.0` sobre `0860c55` (fusión del PR #9).
+- Release de GitHub creada como **Latest**.
+- Despliegue del sitio: no informado en este registro.
+- Prueba desde npm: el usuario instaló y probó los Blocks desde npm y no reportó problemas (el usuario corregirá esta línea si hubo alguno).
 
 Informes del modo autónomo: `docs/auto/plan-0.4.0-2026-11-06.md` (el detalle del plan), `docs/auto/blocks-0.4.0-2026-11-06.md` (las tareas, con la tabla acumulada del bundle) y `docs/auto/revision-blocks-0.4.0-2026-11-07.md` (los arreglos de la revisión y la puerta).

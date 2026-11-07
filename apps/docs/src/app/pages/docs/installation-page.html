@@ -124,7 +124,14 @@
   <p class="text-pretty">
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi.json</code> es la
     configuración de Mimi: dónde están el CSS global y la carpeta de componentes, y qué versión de
-    cada componente tienes.
+    cada componente tienes. <code class="font-mono text-[13px]">aliases.blocks</code> es la carpeta
+    de los Blocks que son una sección (una parte de una página) y
+    <code class="font-mono text-[13px]">aliases.pages</code>, la de los que son una página entera
+    (<code class="font-mono text-[13px]">ng g mimi login-01</code> genera
+    <code class="font-mono text-[13px]">src/app/pages/login/</code>). Las dos son rutas relativas a
+    la raíz del proyecto y las puedes cambiar; si faltan, la CLI usa estas y las escribe la primera
+    vez. Cada Block que agregas queda en <code class="font-mono text-[13px]">blocks</code>, con su
+    versión y, si es una página, su carpeta y su nombre.
   </p>
   <app-code-block [code]="mimiJson" lang="json" />
   <p class="text-pretty">

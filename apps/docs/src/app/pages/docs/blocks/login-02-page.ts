@@ -7,8 +7,7 @@ import type { BlockState } from './block-frame';
 import tsSource from '@/blocks/login-02/login-02' with { loader: 'text' };
 // @ts-expect-error
 import htmlSource from '@/blocks/login-02/login-02.html' with { loader: 'text' };
-// @ts-expect-error
-import indexSource from '@/blocks/login-02/index' with { loader: 'text' };
+import { pageFiles, pageInfo } from './page-code';
 
 /** Página del Block login-02 (B.3). */
 @Component({
@@ -17,6 +16,7 @@ import indexSource from '@/blocks/login-02/index' with { loader: 'text' };
   template: `
     <app-block-doc
       name="login-02"
+      kind="page"
       description="Inicio de sesión en dos columnas: el formulario a un lado y tu imagen con un testimonio en vidrio al otro. En móvil, la imagen es un banner arriba."
       [components]="components"
       [files]="files"
@@ -25,7 +25,7 @@ import indexSource from '@/blocks/login-02/index' with { loader: 'text' };
       [states]="states"
     >
       <p class="text-pretty">
-        Ponla en tus rutas y da tu imagen con
+        Es tu página: pega la línea en tus rutas y da tu imagen con
         <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">imageSrc</code>.
         Sin imagen se ve un degradado neutro, provisional hasta que el diseño tenga una. El
         testimonio está escrito en la plantilla: cámbialo ahí. El Block no trae archivos de imagen
@@ -57,11 +57,12 @@ import indexSource from '@/blocks/login-02/index' with { loader: 'text' };
 })
 export class Login02Page {
   protected readonly usage = [
-    "import { Login02 } from './blocks/login-02';",
+    '// app.routes.ts (la línea que te da ng g mimi; con login-01 ya en pages/login, usa',
+    '// --name, por ejemplo ng g mimi login-02 --name sign-in)',
+    pageInfo('login-02').routeLine,
     '',
-    "export const routes: Routes = [{ path: 'login', component: Login02 }];",
-    '',
-    '<mimi-login-02',
+    '// O dentro de otra página tuya:',
+    '<app-login-page',
     '  imageSrc="/img/login.jpg"',
     '  [loading]="auth.loading()"',
     '  [error]="auth.error()"',
@@ -77,11 +78,12 @@ export class Login02Page {
     { name: 'avatar', path: '/docs/components/avatar' },
   ];
 
-  protected readonly files: BlockFile[] = [
-    { name: 'login-02/login-02.ts', code: tsSource as string, lang: 'angular-ts' },
-    { name: 'login-02/login-02.html', code: htmlSource as string, lang: 'angular-html' },
-    { name: 'login-02/index.ts', code: indexSource as string, lang: 'typescript' },
-  ];
+  /** Como los genera ng g mimi login-02 (B.11). */
+  protected readonly files: BlockFile[] = pageFiles(
+    'login-02',
+    tsSource as string,
+    htmlSource as string,
+  );
 
   protected readonly states: BlockState[] = [
     { id: 'image', label: 'Con imagen' },
@@ -129,7 +131,7 @@ export class Login02Page {
       name: 'submitted',
       type: '{ email, password }',
       default: '—',
-      description: 'Formulario válido enviado (Login02Value).',
+      description: 'Formulario válido enviado (LoginPageValue).',
     },
     { name: 'sso', type: 'void', default: '—', description: 'Se pulsó «Sign in with SSO».' },
   ];

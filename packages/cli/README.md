@@ -110,14 +110,19 @@ export class App {}
 
 ## Blocks
 
-Pantallas enteras (inicio de sesión, registro, ajustes…) hechas con los componentes de Mimi. Se agregan con el mismo comando, por ejemplo `ng g mimi` seguido del nombre del Block: la pantalla se copia a `src/app/blocks/<nombre>` (`aliases.blocks` en `mimi.json`) y los componentes que usa, a la carpeta de siempre. Es un componente de página: agrégalo a tus rutas. La pantalla es tuya; si la modificas, `ng g mimi` no la vuelve a tocar al actualizar (te avisa y `--overwrite` la reemplaza entera).
+Pantallas y secciones (inicio de sesión, registro, ajustes, precios…) hechas con los componentes de Mimi. Se agregan con el mismo comando, por ejemplo `ng g mimi` seguido del nombre del Block, y los componentes que usan van a la carpeta de siempre.
 
-- **login-01** (inicio de sesión centrado, con Google y GitHub): `ng g mimi login-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-01)
-- **login-02** (inicio de sesión en dos columnas, con imagen y testimonio): `ng g mimi login-02` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-02)
-- **otp-01** (verificación con un código de 6 dígitos, reenvío y cuenta regresiva): `ng g mimi otp-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/otp-01)
-- **pricing-01** (tres planes con mensual/anual y el plan destacado): `ng g mimi pricing-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/pricing-01)
-- **settings-01** (ajustes de cuenta con secciones, interruptores, sesiones y facturación): `ng g mimi settings-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/settings-01)
-- **signup-01** (registro con validación, medidor de contraseña y confirmación): `ng g mimi signup-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/signup-01)
+- **Las páginas** (`login-01`, `login-02`, `otp-01`, `settings-01`, `signup-01`) se generan como una página tuya: `ng g mimi login-01` crea `src/app/pages/login/` (`aliases.pages` en `mimi.json`) con `login.ts`, `login.html` y `login.routes.ts`, y la clase `LoginPage`. Al terminar te da la línea para `app.routes.ts` (la CLI no toca tus rutas). Otro nombre: `--name admin-login`. Si la carpeta ya existe, no la toca y te pide otro nombre.
+- **Las secciones** (`pricing-01`) se copian a `src/app/blocks/<nombre>` (`aliases.blocks`): ponlas dentro de una de tus páginas.
+
+El Block es tuyo; si lo modificas, `ng g mimi` no lo vuelve a tocar al actualizar (te avisa y `--overwrite` lo reemplaza entero). Mimi lo sigue por su nombre (`login-01`) aunque le pongas otro. Si instalaste una pantalla con la 0.4.0, sigue en `src/app/blocks/` y se actualiza ahí.
+
+- **login-01** (página: inicio de sesión centrado, con Google y GitHub): `ng g mimi login-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-01)
+- **login-02** (página: inicio de sesión en dos columnas, con imagen y testimonio): `ng g mimi login-02` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-02)
+- **otp-01** (página: verificación con un código de 6 dígitos, reenvío y cuenta regresiva): `ng g mimi otp-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/otp-01)
+- **pricing-01** (sección: tres planes con mensual/anual y el plan destacado): `ng g mimi pricing-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/pricing-01)
+- **settings-01** (página: ajustes de cuenta con secciones, interruptores, sesiones y facturación): `ng g mimi settings-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/settings-01)
+- **signup-01** (página: registro con validación, medidor de contraseña y confirmación): `ng g mimi signup-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/signup-01)
 
 ## Tus cambios
 

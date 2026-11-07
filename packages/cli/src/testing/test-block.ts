@@ -32,7 +32,45 @@ export const TEST_BLOCK_SOURCE: Record<string, string> = {
   'blocks/test-block/index.ts': "export * from './test-block';\n",
 };
 
-/** Copia dist/ con el Block de prueba y devuelve la ruta de su collection.json. */
+/**
+ * Un Block de prueba de tipo página (B.11), con la forma de los reales: clase `Demo01`, un tipo
+ * `Demo01Value`, selector e `id` con `mimi-demo-01` y su plantilla en `./demo-01.html`.
+ */
+export const TEST_PAGE = 'demo-01';
+export const TEST_PAGE_FILES = [
+  'blocks/demo-01/demo-01.ts',
+  'blocks/demo-01/demo-01.html',
+  'blocks/demo-01/index.ts',
+];
+
+export const TEST_PAGE_SOURCE: Record<string, string> = {
+  'blocks/demo-01/demo-01.ts': [
+    "import { ChangeDetectionStrategy, Component, output } from '@angular/core';",
+    "import { MimiButton } from '@/components/ui/button';",
+    '',
+    'export interface Demo01Value {',
+    '  ok: boolean;',
+    '}',
+    '',
+    '/** demo-01: `<mimi-demo-01 (done)="…" />`. */',
+    '@Component({',
+    "  selector: 'mimi-demo-01',",
+    '  imports: [MimiButton],',
+    "  templateUrl: './demo-01.html',",
+    '  changeDetection: ChangeDetectionStrategy.OnPush,',
+    '})',
+    'export class Demo01 {',
+    '  readonly done = output<Demo01Value>();',
+    '  protected readonly id = `mimi-demo-01-${0}`;',
+    '}',
+    '',
+  ].join('\n'),
+  'blocks/demo-01/demo-01.html':
+    '<button mimiBtn type="button" [id]="id" (click)="done.emit({ ok: true })">Hola</button>\n',
+  'blocks/demo-01/index.ts': "export * from './demo-01';\n",
+};
+
+/** Copia dist/ con los Blocks de prueba y devuelve la ruta de su collection.json. */
 export function collectionWithTestBlock(name = 'default'): string {
   const target = join(here, '..', '..', 'node_modules', '.mimi-test-dist', name);
   rmSync(target, { recursive: true, force: true });
@@ -46,7 +84,19 @@ export function collectionWithTestBlock(name = 'default'): string {
   const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
   registry.items[TEST_BLOCK] = {
     type: 'block',
+    kind: 'section',
     files: TEST_BLOCK_FILES,
+    registryDependencies: ['button'],
+  };
+  for (const [file, content] of Object.entries(TEST_PAGE_SOURCE)) {
+    const path = join(target, 'templates', file);
+    mkdirSync(dirname(path), { recursive: true });
+    writeFileSync(path, content);
+  }
+  registry.items[TEST_PAGE] = {
+    type: 'block',
+    kind: 'page',
+    files: TEST_PAGE_FILES,
     registryDependencies: ['button'],
   };
   writeFileSync(registryPath, JSON.stringify(registry, null, 2));

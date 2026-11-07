@@ -89,9 +89,10 @@ describe('ng g mimi <block> (B.1)', () => {
 
     const messages = logs.map((l) => l.message);
     expect(messages).toContain(`  + ${BLOCKS}/test-block/test-block.ts`);
+    // test-block es una sección (B.11-a): va dentro de una página, no en las rutas.
     expect(messages).toContain(
-      "test-block es una pantalla: agrégala a tus rutas, por ejemplo { path: 'test', " +
-        "component: TestBlock } (import { TestBlock } from './blocks/test-block').",
+      'test-block es una sección (una parte de una página): ponla en una de tus páginas con ' +
+        `<mimi-test-block />, importando TestBlock de ${BLOCKS}/test-block.`,
     );
     expect(warnings()).toEqual([]);
   });
@@ -327,7 +328,7 @@ describe('ng g mimi <block> (B.1)', () => {
       const css = tree
         .readContent(CSS)
         .split('\n')
-        .filter((l) => !l.includes('/blocks'))
+        .filter((l) => !l.includes('/blocks') && !l.includes('/pages'))
         .join('\n');
       tree.overwrite(CSS, css);
       h.logs.length = 0;

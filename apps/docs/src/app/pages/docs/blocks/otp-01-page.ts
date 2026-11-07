@@ -7,8 +7,7 @@ import type { BlockState } from './block-frame';
 import tsSource from '@/blocks/otp-01/otp-01' with { loader: 'text' };
 // @ts-expect-error
 import htmlSource from '@/blocks/otp-01/otp-01.html' with { loader: 'text' };
-// @ts-expect-error
-import indexSource from '@/blocks/otp-01/index' with { loader: 'text' };
+import { pageFiles, pageInfo } from './page-code';
 
 /** Página del Block otp-01 (B.5). */
 @Component({
@@ -17,6 +16,7 @@ import indexSource from '@/blocks/otp-01/index' with { loader: 'text' };
   template: `
     <app-block-doc
       name="otp-01"
+      kind="page"
       description="Verificación con un código de 6 dígitos (Input OTP), con reenvío y cuenta regresiva. Encaja después del registro o del inicio de sesión."
       [components]="components"
       [files]="files"
@@ -60,9 +60,11 @@ import indexSource from '@/blocks/otp-01/index' with { loader: 'text' };
 })
 export class Otp01Page {
   protected readonly usage = [
-    "import { Otp01 } from './blocks/otp-01';",
+    '// app.routes.ts (la línea que te da ng g mimi)',
+    pageInfo('otp-01').routeLine,
     '',
-    '<mimi-otp-01',
+    '// O dentro de otra página tuya, con tu verificación:',
+    '<app-otp-page',
     '  [destination]="otp.maskedEmail()"',
     '  [status]="otp.status()"',
     '  [loading]="otp.checking()"',
@@ -78,11 +80,12 @@ export class Otp01Page {
     { name: 'card', path: '/docs/components/card' },
   ];
 
-  protected readonly files: BlockFile[] = [
-    { name: 'otp-01/otp-01.ts', code: tsSource as string, lang: 'angular-ts' },
-    { name: 'otp-01/otp-01.html', code: htmlSource as string, lang: 'angular-html' },
-    { name: 'otp-01/index.ts', code: indexSource as string, lang: 'typescript' },
-  ];
+  /** Como los genera ng g mimi otp-01 (B.11). */
+  protected readonly files: BlockFile[] = pageFiles(
+    'otp-01',
+    tsSource as string,
+    htmlSource as string,
+  );
 
   protected readonly states: BlockState[] = [{ id: 'resend', label: 'Reenvío disponible' }];
 

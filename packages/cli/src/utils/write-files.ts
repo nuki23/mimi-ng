@@ -9,7 +9,29 @@ import {
   url,
 } from '@angular-devkit/schematics';
 import { registry, resolveItems } from '../registry';
+import {
+  type PageTarget,
+  isPageFile,
+  pageItemOf,
+  pageKeyOf,
+  pageKeys,
+  pageSourceFiles,
+  pageTargetPath,
+  renderPageFile,
+  routesFile,
+  routesKey,
+} from './pages';
 import { defaultBlocksDir } from './project';
+
+/** Las páginas de esta ejecución, por su nombre del registro (B.11). */
+export type Pages = Record<string, PageTarget>;
+
+/**
+ * Los archivos de un ítem: los del registro o, si se genera como página, sus claves
+ * `pages/<ítem>/…` (B.11-f).
+ */
+export const itemFiles = (item: string, pages: Pages = {}) =>
+  pages[item] ? pageKeys(item, registry.items[item].files) : registry.items[item].files;
 
 /** Carpeta de las copias originales, en la raíz del workspace. Debe quedar en git. */
 export const BASE_DIR = '.mimi/base';
@@ -86,7 +108,17 @@ export const isBlockFile = (file: string) => file.startsWith(BLOCKS_PREFIX);
  * `blocks/` (`blocks/login-01/login-01.ts` → `<blocksDir>/login-01/login-01.ts`); el resto, a la
  * de componentes (ver projectPathOf).
  */
-export function targetPathOf(file: string, componentsDir: string, blocksDir: string): string {
+export function targetPathOf(
+  file: string,
+  componentsDir: string,
+  blocksDir: string,
+  pages: Pages = {},
+): string {
+  if (isPageFile(file)) {
+    const target = pages[pageItemOf(file)];
+    if (!target) throw new Error(`Falta la carpeta de la página de ${file}.`);
+    return pageTargetPath(file, target);
+  }
   return isBlockFile(file)
     ? `${blocksDir}/${file.slice(BLOCKS_PREFIX.length)}`
     : `${componentsDir}/${projectPathOf(file)}`;
@@ -95,7 +127,8 @@ export function targetPathOf(file: string, componentsDir: string, blocksDir: str
 /**
  * Copia original en .mimi/base, con la misma estructura (`.mimi/base/button/button.ts`). Los
  * Blocks conservan `blocks/` (`.mimi/base/blocks/login-01/login-01.ts`), y esa es también su
- * clave en el manifiesto.
+ * clave en el manifiesto. Las páginas van por su nombre del registro, no por el de su carpeta
+ * (`.mimi/base/pages/login-01/login-01.ts`, B.11-f).
  */
 export function basePathOf(file: string): string {
   return `${BASE_DIR}/${projectPathOf(file)}`;
@@ -154,12 +187,16 @@ export function writeTemplates(options: {
   componentsDir: string;
   /** Carpeta de los Blocks (solo hace falta si se copia alguno). */
   blocksDir?: string;
+  /** Los Blocks que se generan como páginas, con su carpeta y su nombre (B.11). */
+  pages?: Pages;
   overwrite: boolean;
   version: string;
   report: FileReport;
 }): Rule {
   const items = [...new Set(options.items)];
   const implicit = new Set(options.implicit ?? []);
+  const pages = options.pages ?? {};
+  const filesOf = (item: string) => itemFiles(item, pages);
   const files = new Set(items.flatMap((item) => registry.items[item].files));
   const contents = new Map<string, string>();
 
@@ -176,6 +213,15 @@ export function writeTemplates(options: {
 
   // 2. Decide por ítem y escribe.
   const write: Rule = (tree) => {
+    // Las páginas: su código sale del Block, con el nombre que eligió el usuario (B.11).
+    for (const [item, target] of Object.entries(pages)) {
+      for (const file of pageSourceFiles(registry.items[item].files)) {
+        const source = contents.get(file);
+        if (source !== undefined)
+          contents.set(pageKeyOf(item, file), renderPageFile(source, target));
+      }
+      contents.set(routesKey(item), routesFile(target));
+    }
     const manifest = readManifest(tree);
     let manifestChanged = false;
     const targetOf = (file: string) =>
@@ -183,6 +229,7 @@ export function writeTemplates(options: {
         file,
         options.componentsDir,
         options.blocksDir ?? defaultBlocksDir(options.componentsDir),
+        pages,
       );
 
     const stateOf = (file: string): { state: FileState; from: string | null } => {
@@ -204,7 +251,7 @@ export function writeTemplates(options: {
     const states = new Map(
       items.map((item) => [
         item,
-        registry.items[item].files
+        filesOf(item)
           .filter((file) => contents.has(file))
           .map((file) => ({ file, ...stateOf(file) })),
       ]),
@@ -319,8 +366,9 @@ export function blockedMessages(
   componentsDir: string,
   version: string,
   blocksDir: string = defaultBlocksDir(componentsDir),
+  pages: Pages = {},
 ): string[] {
-  const path = (file: string) => targetPathOf(file, componentsDir, blocksDir);
+  const path = (file: string) => targetPathOf(file, componentsDir, blocksDir, pages);
   return report.blocked.map(({ item, files, dependency, installed }) => {
     if (dependency) {
       const needs = `necesita ${dependency} ${version}, que no se actualizó (ver el aviso de ${dependency}).`;

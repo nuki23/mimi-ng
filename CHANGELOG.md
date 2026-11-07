@@ -2,6 +2,35 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
+## Por publicar
+
+Sin versión todavía: sale en la siguiente que se publique.
+
+### Los Blocks de pantalla se generan como páginas tuyas (B.11)
+
+**Cambia lo que hace `ng g mimi` con `login-01`, `login-02`, `signup-01`, `otp-01` y `settings-01` en un proyecto que no los tiene** (RUPTURA respecto de la 0.4.0). Antes copiaba el Block tal cual a `src/app/blocks/login-01/` (clase `Login01`, selector `mimi-login-01`); ahora genera una página tuya:
+
+```
+src/app/pages/login/login.ts          ← clase LoginPage, selector app-login-page
+src/app/pages/login/login.html
+src/app/pages/login/login.routes.ts   ← LOGIN_ROUTES, con la página en carga diferida
+```
+
+Al terminar, `ng g mimi` te da la línea exacta para las rutas de `app.routes.ts` (no la edita):
+
+```ts
+{ path: 'login', loadChildren: () => import('./pages/login/login.routes').then((m) => m.LOGIN_ROUTES) },
+```
+
+- **Páginas y secciones:** el registro marca cada Block como página (`page`) o sección (`section`). Son páginas `login-01`, `login-02`, `signup-01`, `otp-01` y `settings-01`; es una sección `pricing-01`, que sigue copiándose tal cual a `aliases.blocks` para ponerla dentro de una de tus páginas.
+- **La carpeta:** `aliases.pages` en `mimi.json` (nuevo; por defecto, la hermana de tu carpeta de componentes: `src/app/pages`). `ng add` lo escribe; en un proyecto anterior, `ng g mimi` lo agrega la primera vez que genera una página. Como los demás alias, tiene que ser una ruta relativa dentro del proyecto (si no, el error claro de siempre, sin cambiar nada).
+- **El nombre:** el del Block sin el número (`login-01` y `login-02` → `login`, `signup-01` → `signup`, `otp-01` → `otp`, `settings-01` → `settings`), u otro con `--name` (`ng g mimi login-02 --name sign-in` → `sign-in/sign-in.ts`, `SignInPage`). La clase y el selector no llevan `mimi`; el selector usa el prefijo de tu proyecto (`angular.json`). Los tipos del Block se renombran igual (`Login01Value` → `LoginPageValue`).
+- **Si la carpeta ya existe** (por ejemplo, `login-02` cuando ya tienes la página de `login-01` en `pages/login/`), `ng g mimi` no escribe nada y te pide otro nombre con `--name`, también con `--overwrite`.
+- **Se actualiza como siempre:** Mimi sigue la página por su nombre del registro (`login-01`), aunque le pongas otro: `mimi.json → blocks.login-01` guarda su versión, su carpeta (`path`) y su nombre (`name`), y sus copias originales van a `.mimi/base/pages/login-01/`. Todo o nada, el aviso si la modificaste, `--overwrite` y el aviso de un componente actualizado que usa tu Block funcionan igual. Si mueves la carpeta, cambia `path` en `mimi.json`.
+- **Con `source(none)`**, `ng add` y `ng g mimi` agregan también el `@source` de la carpeta de páginas.
+
+**Si ya instalaste una pantalla con la 0.4.0**, no cambia nada: sigue en `src/app/blocks/login-01/` (`Login01`), tus rutas siguen funcionando y `ng g mimi` la sigue actualizando ahí, con las mismas reglas. Para pasarla a página: guarda tus cambios (por ejemplo, en git), borra la carpeta `src/app/blocks/login-01/`, ejecuta `ng g mimi login-01`, pega la línea nueva en `app.routes.ts` y quita la ruta vieja.
+
 ## 0.4.0 (07/11/2026): pantallas
 
 ### Antes de actualizar

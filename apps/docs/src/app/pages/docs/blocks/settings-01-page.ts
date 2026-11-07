@@ -7,8 +7,7 @@ import type { BlockState } from './block-frame';
 import tsSource from '@/blocks/settings-01/settings-01' with { loader: 'text' };
 // @ts-expect-error
 import htmlSource from '@/blocks/settings-01/settings-01.html' with { loader: 'text' };
-// @ts-expect-error
-import indexSource from '@/blocks/settings-01/index' with { loader: 'text' };
+import { pageFiles, pageInfo } from './page-code';
 
 /** Página del Block settings-01 (B.6). */
 @Component({
@@ -17,6 +16,7 @@ import indexSource from '@/blocks/settings-01/index' with { loader: 'text' };
   template: `
     <app-block-doc
       name="settings-01"
+      kind="page"
       description="Ajustes de cuenta de un producto SaaS: perfil, notificaciones, seguridad y facturación, con navegación lateral (pestañas verticales; píldoras en móvil) y una barra de «cambios sin guardar»."
       [components]="components"
       [files]="files"
@@ -63,25 +63,29 @@ import indexSource from '@/blocks/settings-01/index' with { loader: 'text' };
 })
 export class Settings01Page {
   protected readonly usage = [
-    "import { Settings01, type Settings01Value } from './blocks/settings-01';",
+    '// app.routes.ts (la línea que te da ng g mimi)',
+    pageInfo('settings-01').routeLine,
+    '',
+    '// Conecta tus datos en settings.ts, o úsala dentro de otra página tuya:',
+    "import { SettingsPage, type SettingsPageValue } from './pages/settings/settings';",
     "import { injectMimiConfirm } from '@/components/ui/confirm';",
     "import { injectMimiToast } from '@/components/ui/toast';",
     '',
     '@Component({',
-    '  imports: [Settings01],',
-    '  template: `<mimi-settings-01',
+    '  imports: [SettingsPage],',
+    '  template: `<app-settings-page',
     '    [profile]="account.profile()"',
     '    [saving]="saving()"',
     '    (saved)="save($event)"',
     '    (deleteAccount)="remove()"',
     '  />`,',
     '})',
-    'export class SettingsPage {',
+    'export class AccountPage {',
     '  private readonly confirm = injectMimiConfirm();',
     '  private readonly toast = injectMimiToast();',
     '  readonly saving = signal(false);',
     '',
-    '  async save(value: Settings01Value) {',
+    '  async save(value: SettingsPageValue) {',
     '    this.saving.set(true);',
     '    await this.account.update(value);',
     '    this.saving.set(false);',
@@ -113,11 +117,12 @@ export class Settings01Page {
     { name: 'form-field', path: '/docs/components/form-field' },
   ];
 
-  protected readonly files: BlockFile[] = [
-    { name: 'settings-01/settings-01.ts', code: tsSource as string, lang: 'angular-ts' },
-    { name: 'settings-01/settings-01.html', code: htmlSource as string, lang: 'angular-html' },
-    { name: 'settings-01/index.ts', code: indexSource as string, lang: 'typescript' },
-  ];
+  /** Como los genera ng g mimi settings-01 (B.11). */
+  protected readonly files: BlockFile[] = pageFiles(
+    'settings-01',
+    tsSource as string,
+    htmlSource as string,
+  );
 
   protected readonly states: BlockState[] = [
     { id: 'notifications', label: 'Notificaciones' },
@@ -128,25 +133,25 @@ export class Settings01Page {
   protected readonly inputs: BlockApiRow[] = [
     {
       name: 'profile',
-      type: 'Settings01Profile',
+      type: 'SettingsPageProfile',
       default: 'el del ejemplo',
       description: 'Nombre, usuario, biografía, iniciales y foto (avatarSrc).',
     },
     {
       name: 'preferences',
-      type: 'Settings01Preferences',
+      type: 'SettingsPagePreferences',
       default: 'el del ejemplo',
       description: 'Los interruptores de las tres secciones.',
     },
     {
       name: 'sessions',
-      type: 'Settings01Session[]',
+      type: 'SettingsPageSession[]',
       default: 'dos de ejemplo',
       description: 'Dispositivo, lugar y hora; current marca «This session».',
     },
     {
       name: 'plan',
-      type: 'Settings01Plan',
+      type: 'SettingsPagePlan',
       default: 'el del ejemplo',
       description: 'Plan, precio por persona (con Intl y LOCALE_ID), asientos, tarjeta y factura.',
     },
@@ -168,7 +173,7 @@ export class Settings01Page {
   protected readonly outputs: BlockApiRow[] = [
     {
       name: 'saved',
-      type: 'Settings01Value',
+      type: 'SettingsPageValue',
       default: '—',
       description: 'El formulario válido al pulsar «Save».',
     },

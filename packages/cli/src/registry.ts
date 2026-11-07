@@ -8,6 +8,12 @@ import registryJson from './registry.json';
 export interface RegistryItem {
   type: 'component' | 'util' | 'theme' | 'block';
   /**
+   * Solo en los Blocks (B.11): `page`, una pantalla entera que `ng g mimi` genera como página del
+   * usuario en `aliases.pages` (`src/app/pages/login/login.ts`, `LoginPage`, con su archivo de
+   * rutas); `section`, una parte de una página que se copia tal cual a `aliases.blocks`.
+   */
+  kind?: 'page' | 'section';
+  /**
    * Rutas relativas a las plantillas (`dist/templates`), p. ej. `components/button/button.ts` o
    * `blocks/login-01/login-01.ts`.
    */
@@ -37,6 +43,10 @@ export interface Registry {
 }
 
 export const registry = registryJson as unknown as Registry;
+
+/** ¿El ítem es un Block que se genera como página (B.11)? */
+export const isPageBlock = (name: string, reg: Registry = registry) =>
+  reg.items[name]?.type === 'block' && reg.items[name].kind === 'page';
 
 /**
  * El ítem y todas sus `registryDependencies`, sin repetir, dependencias primero.

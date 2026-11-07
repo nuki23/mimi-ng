@@ -4,6 +4,7 @@ import { CodeBlock } from '../../../code/code-block';
 import type { CodeLang } from '../../../code/highlighter.service';
 import { InstallCommand } from '../../../code/install-command';
 import { BlockFrame, type BlockState } from './block-frame';
+import { pageInfo } from './page-code';
 
 export interface BlockFile {
   /** Ruta dentro de la carpeta del Block en el proyecto, p. ej. `login-01/login-01.ts`. */
@@ -52,47 +53,101 @@ export interface BlockApiRow {
         Instalación
       </h2>
       <app-install-command [name]="name()" />
-      <p class="text-pretty">
-        Copia la pantalla a la carpeta de Blocks de tu proyecto (<code
-          class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-          >aliases.blocks</code
-        >
-        en
-        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi.json</code>;
-        por defecto,
-        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-          >src/app/blocks</code
-        >) y los componentes que usa a la de siempre. La pantalla es tuya: cámbiala como quieras. Si
-        la modificas, la CLI no la vuelve a tocar al actualizar.
-      </p>
+      @if (page(); as page) {
+        <p data-slot="block-install" class="text-pretty">
+          <strong>Genera una página tuya</strong> en la carpeta de páginas (<code
+            class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+            >aliases.pages</code
+          >
+          en
+          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi.json</code>;
+          por defecto,
+          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">{{
+            page.dir
+          }}</code
+          >): <code class="font-mono text-[13px]">{{ page.name }}.ts</code>,
+          <code class="font-mono text-[13px]">{{ page.name }}.html</code> y
+          <code class="font-mono text-[13px]">{{ page.name }}.routes.ts</code>, con la clase
+          <code class="font-mono text-[13px]">{{ page.className }}</code> (selector
+          <code class="font-mono text-[13px]">{{ page.selector }}</code
+          >, con el prefijo de tu proyecto). Los componentes que usa van a la carpeta de siempre. Al
+          terminar, <code class="font-mono text-[13px]">ng g mimi</code> te da la línea para las
+          rutas de
+          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+            >app.routes.ts</code
+          >, con la página en carga diferida:
+        </p>
+        <app-code-block [code]="page.routeLine" lang="typescript" label="app.routes.ts" />
+      } @else {
+        <p data-slot="block-install" class="text-pretty">
+          Es una <strong>sección</strong>: una parte de una página (no tiene ruta propia). Copia el
+          Block a la carpeta de Blocks de tu proyecto (<code
+            class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+            >aliases.blocks</code
+          >
+          en
+          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi.json</code>;
+          por defecto,
+          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+            >src/app/blocks</code
+          >) y los componentes que usa a la de siempre; ponlo dentro de una de tus páginas.
+        </p>
+      }
       <ul data-slot="block-notes" class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
         <li>
           <strong>Un Block es un componente Angular tuyo desde que se copia.</strong> Los
           componentes de Mimi (Button, Input…) tienen una API estable que se cuida entre versiones;
           un Block no: es un punto de partida. Sus entradas y salidas pueden cambiar de una versión
-          a otra, y lo normal es que lo edites.
+          a otra, y lo normal es que lo edites. Si lo modificas, la CLI no lo vuelve a tocar al
+          actualizar (te avisa, y <code class="font-mono text-[13px]">--overwrite</code> lo
+          reemplaza entero).
         </li>
-        <li>
-          <strong>La carpeta la eliges tú:</strong> cambia
-          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-            >aliases.blocks</code
-          >
-          en
-          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi.json</code>
-          (por ejemplo, a
-          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-            >src/app/pages</code
-          >) antes de agregar el Block. Tiene que ser una ruta relativa a la raíz de tu proyecto.
-        </li>
-        <li>
-          <strong>La CLI no toca tus rutas:</strong> registra la pantalla tú en
-          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-            >app.routes.ts</code
-          >
-          (el resumen de
-          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g mimi</code>
-          te da la línea).
-        </li>
+        @if (page(); as page) {
+          <li>
+            <strong>El nombre y la carpeta los eliges tú:</strong>
+            <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+              >ng g mimi {{ name() }} --name admin-{{ page.name }}</code
+            >
+            genera
+            <code class="font-mono text-[13px]">admin-{{ page.name }}/</code> con la clase
+            <code class="font-mono text-[13px]">Admin{{ page.className }}</code
+            >, y
+            <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+              >aliases.pages</code
+            >
+            en <code class="font-mono text-[13px]">mimi.json</code> cambia la carpeta de todas (una
+            ruta relativa a la raíz de tu proyecto). Si la carpeta ya existe, la CLI no la toca y te
+            pide otro nombre. Mimi sigue la página por su nombre ({{ name() }}), así que la
+            actualiza aunque la llames de otra forma.
+          </li>
+          <li>
+            <strong>La CLI no toca tus rutas:</strong> pega tú la línea en
+            <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+              >app.routes.ts</code
+            >.
+          </li>
+          <li>
+            <strong>¿La instalaste con la 0.4.0?</strong> Sigue en
+            <code class="font-mono text-[13px]">src/app/blocks/{{ name() }}/</code> y se actualiza
+            ahí, como antes. Para pasarla a página, guarda tus cambios, borra esa carpeta y vuelve a
+            ejecutar el comando.
+          </li>
+        } @else {
+          <li>
+            <strong>La carpeta la eliges tú:</strong> cambia
+            <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+              >aliases.blocks</code
+            >
+            en
+            <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+              >mimi.json</code
+            >
+            (por ejemplo, a
+            <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+              >src/app/sections</code
+            >) antes de agregar el Block. Tiene que ser una ruta relativa a la raíz de tu proyecto.
+          </li>
+        }
       </ul>
       <p data-slot="landmarks" class="text-pretty">
         Ningún Block pone
@@ -169,12 +224,16 @@ export interface BlockApiRow {
 })
 export class BlockDoc {
   readonly name = input.required<string>();
+  /** `page`: la CLI genera una página del usuario (B.11); `section`: lo copia tal cual. */
+  readonly kind = input.required<'page' | 'section'>();
   readonly description = input.required<string>();
   readonly components = input<BlockComponent[]>([]);
   readonly files = input<BlockFile[]>([]);
   readonly inputs = input<BlockApiRow[]>([]);
   readonly outputs = input<BlockApiRow[]>([]);
   readonly states = input<BlockState[]>([]);
+
+  protected readonly page = computed(() => (this.kind() === 'page' ? pageInfo(this.name()) : null));
 
   protected readonly tables = computed(() => [
     { title: 'Entrada', rows: this.inputs() },
