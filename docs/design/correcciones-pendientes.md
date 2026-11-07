@@ -217,6 +217,12 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Colores fijos en la sombra de la columna fija de Data Table** (`oklch(0 0 0 / .25)`) y en las mezclas de hover y elegida (`color-mix` con `foreground` 3,5 % e `info` 8 % sobre `card`): no hay globales para ellos; quedan como tokens propios de la tabla.
   - **Casillas dibujadas a mano:** Tree (selección múltiple) y Data Table dibujan su casilla (16px, check de 12px); Mimi usa su Checkbox, con el mismo tamaño.
 
+  Tree (G3.1, 07/11/2026):
+  - **La casilla no es un botón:** el diseño pone un `<button role="checkbox">` y un botón para el chevrón dentro de cada `treeitem` del múltiple; Mimi no pone controles enfocables dentro de un nodo (la casilla es visual, con los estilos de Checkbox, y el estado va en el `aria-checked` del nodo) y el chevrón es un `span` que se puede pulsar. Sin `aria-multiselectable` (es de `aria-selected`; el múltiple usa `aria-checked`).
+  - **Íconos y colores de los archivos:** son del usuario (plantilla `mimiTreeNode`); el ejemplo del sitio usa los del diseño (`folder`, `file-code`… con los `-soft-foreground`).
+  - **Sin diseño:** la fila de error de la carga diferida (texto en `destructive-soft-foreground`, 12,5px, como «Cargando…»), los nodos deshabilitados (opacidad 50 %) y el árbol deshabilitado.
+  - **Fila «Cargando…»:** el diseño la pinta dentro del árbol; Mimi la oculta a los lectores (`aria-hidden`) y anuncia el texto en una región `role="status"` aparte (los hijos de un `tree` solo pueden ser `treeitem` o `group`).
+
   Blocks: la página del sitio (B.1, 07/11/2026):
   - **Página de un Block sin diseño:** `Mimi F6 Blocks.dc.html` es el índice de los Blocks, no la página de documentación. La página (`/docs/blocks/<nombre>`) se armó con lo que ya tiene el sitio: título, descripción, la vista previa en un marco con borde y fondo `muted`, `InstallCommand`, «Componentes que usa» como enlaces en píldora, el código con `CodeBlock` (un bloque por archivo) y la tabla de API. Pedir el diseño de la página.
   - **Marco de la vista previa:** `iframe` de 760px de alto, con tres `mimi-toggle-group` encima (Escritorio · Móvil (375 px), Claro · Oscuro y el estado) y el enlace «Abrir en una pestaña». El ancho móvil (375px) es el de los marcos de `F6 Blocks`; el alto y los controles no están en el diseño.

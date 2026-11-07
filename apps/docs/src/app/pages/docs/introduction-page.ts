@@ -69,4 +69,5 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'toggle-group', name: 'Toggle Group' },
   { id: 'toolbar', name: 'Toolbar' },
   { id: 'tooltip', name: 'Tooltip' },
+  { id: 'tree', name: 'Tree' },
 ];

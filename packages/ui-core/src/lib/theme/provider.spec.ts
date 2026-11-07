@@ -387,6 +387,13 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           hueHeight: '14px',
           swatchGap: '8px',
         },
+        tree: {
+          padding: '8px',
+          rowHeight: '36px',
+          rowRadius: '4px',
+          indent: '20px',
+          fontSize: '14px',
+        },
       },
     });
     for (const line of [
@@ -507,6 +514,11 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-color-picker-area-radius: 4px;',
       '--mimi-color-picker-hue-height: 14px;',
       '--mimi-color-picker-swatch-gap: 8px;',
+      '--mimi-tree-padding: 8px;',
+      '--mimi-tree-row-height: 36px;',
+      '--mimi-tree-row-radius: 4px;',
+      '--mimi-tree-indent: 20px;',
+      '--mimi-tree-font-size: 14px;',
     ]) {
       expect(css).toContain(line);
     }

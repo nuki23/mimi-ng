@@ -556,6 +556,23 @@ export interface MimiColorPickerTokens {
 }
 
 /**
+ * Tree. Fondo, hover y el nodo elegido van en el CSS (`--mimi-tree-bg`, `-hover`, `-selected`,
+ * `-selected-fg`).
+ */
+export interface MimiTreeTokens {
+  /** Relleno del contenedor (6px). */
+  padding?: string;
+  /** Alto de cada nodo (32px). */
+  rowHeight?: string;
+  /** Radio del nodo (el global `radius-sm`). */
+  rowRadius?: string;
+  /** Sangría por nivel (18px). */
+  indent?: string;
+  /** Tamaño de texto (13.5px). */
+  fontSize?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -594,6 +611,7 @@ export interface MimiComponentTokens {
   date?: MimiDateTokens;
   fileUpload?: MimiFileUploadTokens;
   colorPicker?: MimiColorPickerTokens;
+  tree?: MimiTreeTokens;
 }
 
 export interface MimiThemePreset {

@@ -51,7 +51,8 @@ export type TokenComponent =
   | 'combobox'
   | 'date'
   | 'fileUpload'
-  | 'colorPicker';
+  | 'colorPicker'
+  | 'tree';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -89,6 +90,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   date: 'date',
   fileUpload: 'upload',
   colorPicker: 'color-picker',
+  tree: 'tree',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1763,6 +1765,67 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       default: 'oklch(0 0 0 / .1)',
       preset: false,
       description: 'Borde interior de las muestras.',
+    },
+  ],
+  tree: [
+    {
+      name: '--mimi-tree-padding',
+      default: '6px',
+      preset: true,
+      description: 'Relleno del contenedor.',
+    },
+    {
+      name: '--mimi-tree-row-height',
+      default: '32px',
+      preset: true,
+      description: 'Alto de cada nodo.',
+    },
+    {
+      name: '--mimi-tree-row-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio del nodo.',
+    },
+    {
+      name: '--mimi-tree-indent',
+      default: '18px',
+      preset: true,
+      description: 'Sangría por nivel.',
+    },
+    {
+      name: '--mimi-tree-font-size',
+      default: '13.5px',
+      preset: true,
+      description: 'Tamaño de texto.',
+    },
+    {
+      name: '--mimi-tree-bg',
+      default: 'card',
+      inherits: '--mimi-card',
+      preset: false,
+      description: 'Fondo del contenedor.',
+    },
+    {
+      name: '--mimi-tree-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo del nodo en hover.',
+    },
+    {
+      name: '--mimi-tree-selected',
+      default: 'primary',
+      inherits: '--mimi-primary',
+      preset: false,
+      description: 'Fondo del nodo elegido (simple).',
+    },
+    {
+      name: '--mimi-tree-selected-fg',
+      default: 'primary-foreground',
+      inherits: '--mimi-primary-foreground',
+      preset: false,
+      description: 'Texto del nodo elegido.',
     },
   ],
 };

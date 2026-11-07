@@ -68,6 +68,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Date Range', path: '/docs/components/date-range', status: 'ready' },
       { title: 'File Upload', path: '/docs/components/file-upload', status: 'ready' },
       { title: 'Color Picker', path: '/docs/components/color-picker', status: 'ready' },
+      { title: 'Tree', path: '/docs/components/tree', status: 'ready' },
     ],
   },
   {

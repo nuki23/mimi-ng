@@ -50,6 +50,7 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   date: ['calendar', 'date-picker', 'date-range'],
   fileUpload: 'file-upload',
   colorPicker: 'color-picker',
+  tree: 'tree',
 };
 
 /**

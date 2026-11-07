@@ -21,6 +21,18 @@ import {
 let nextId = 0;
 
 /**
+ * La caja de la casilla (16px; marcada o mixta, `primary` con su sombra), según su
+ * `data-state="checked | indeterminate | unchecked"`. La usa también el Tree para dibujar sus
+ * casillas sin un control enfocable dentro del nodo (plan, G3.1-d).
+ */
+export const MIMI_CHECKBOX_BOX_STYLES = cn(
+  'inline-flex size-[var(--mimi-checkbox-size,1rem)] shrink-0 items-center justify-center rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))] border border-[color:var(--mimi-checkbox-border,var(--mimi-input))] bg-input-background text-[color:var(--mimi-checkbox-check,var(--mimi-primary-foreground))]',
+  'mimi-transition active:scale-(--mimi-press-scale-sm)',
+  'data-[state=checked]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:shadow-primary',
+  'data-[state=indeterminate]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:shadow-primary',
+);
+
+/**
  * Casilla de verificación (docs/design/Mimi Componentes.dc.html, sección 7):
  * `<mimi-checkbox [(checked)]="recordarme">Recordarme</mimi-checkbox>`.
  *
@@ -148,12 +160,9 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
     cn('inline-flex items-center gap-2.5 text-sm', this.userClass()),
   );
 
-  // Caja de 16px. Marcada o mixta: primary con su sombra. Foco: borde ring (sin marcar) y contorno.
   protected readonly boxClasses = cn(
-    'peer inline-flex size-[var(--mimi-checkbox-size,1rem)] shrink-0 items-center justify-center rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))] border border-[color:var(--mimi-checkbox-border,var(--mimi-input))] bg-input-background text-[color:var(--mimi-checkbox-check,var(--mimi-primary-foreground))]',
-    'mimi-transition active:scale-(--mimi-press-scale-sm)',
-    'data-[state=checked]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:shadow-primary',
-    'data-[state=indeterminate]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:shadow-primary',
+    'peer',
+    MIMI_CHECKBOX_BOX_STYLES,
     'data-[state=unchecked]:focus-visible:border-ring data-[state=unchecked]:aria-invalid:border-destructive',
     'disabled:shadow-none',
     buttonFocusStyles,

@@ -164,6 +164,10 @@
             "label": "tooltip"
           },
           {
+            "value": "tree",
+            "label": "tree"
+          },
+          {
             "value": "login-01",
             "label": "login-01 (Block, página)"
           },

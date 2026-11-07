@@ -43,6 +43,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   'date-range': ['forms', 'cdk'],
   'file-upload': ['forms', 'cdk'],
   'color-picker': ['forms', 'cdk'],
+  tree: ['forms', 'cdk'],
   'dropdown-menu': ['cdk', 'aria'],
   'context-menu': ['cdk', 'aria'],
   tabs: ['cdk', 'aria'],
@@ -122,6 +123,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiColorPickerText',
     spanish: 'MIMI_COLOR_PICKER_TEXT_ES',
     file: 'color-picker/color-picker-texts',
+  },
+  {
+    component: 'Tree',
+    provider: 'provideMimiTreeText',
+    spanish: 'MIMI_TREE_TEXT_ES',
+    file: 'tree/tree-texts',
   },
   {
     component: 'File Upload',

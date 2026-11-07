@@ -472,6 +472,19 @@
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["utils/cn", "utils/overlay"]
     },
+    "tree": {
+      "type": "component",
+      "files": [
+        "components/tree/tree.ts",
+        "components/tree/tree-texts.ts",
+        "components/tree/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4",
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["checkbox", "utils/cn"]
+    },
     "textarea": {
       "type": "component",
       "files": [

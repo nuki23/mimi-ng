@@ -158,6 +158,11 @@ export const DOCS_ROUTES: Routes = [
       import('./components/color-picker/color-picker-page').then((m) => m.ColorPickerPage),
   },
   {
+    path: 'components/tree',
+    title: 'Tree · Mimi',
+    loadComponent: () => import('./components/tree/tree-page').then((m) => m.TreePage),
+  },
+  {
     path: 'components/tags-input',
     title: 'Tags Input · Mimi',
     loadComponent: () =>

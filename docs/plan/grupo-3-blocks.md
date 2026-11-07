@@ -12,7 +12,7 @@ Hechas y cerradas el 07/11/2026 (puerta B.P; la publicación la hace el usuario)
 
 Componentes de la spec 4 (tabla del Grupo 3) y el Block que usa Data Table.
 
-- [ ] G3.1 Tree. Diseño: `F4 Command Tree Sortable`.
+- [x] G3.1 Tree. Diseño: `F4 Command Tree Sortable`. Detalle: [grupo-3/G3.1.md](grupo-3/G3.1.md) (07/11/2026; pendiente de comprobación manual).
   - Depende de: G2.P, 2.10 (Checkbox, hecha)
 - [ ] G3.2 Sortable List, con `@angular/cdk/drag-drop` y accesible con teclado. Diseño: `F4 Command Tree Sortable`.
   - Depende de: G2.P (spec 4: `@angular/cdk/drag-drop`, manejo de teclado propio)

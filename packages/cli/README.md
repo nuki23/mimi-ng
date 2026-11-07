@@ -107,6 +107,7 @@ export class App {}
 - **Toggle Group**: `ng g mimi toggle-group` · [documentación](https://ng.mimiworks.dev/docs/components/toggle-group)
 - **Toolbar**: `ng g mimi toolbar` · [documentación](https://ng.mimiworks.dev/docs/components/toolbar)
 - **Tooltip**: `ng g mimi tooltip` · [documentación](https://ng.mimiworks.dev/docs/components/tooltip)
+- **Tree**: `ng g mimi tree` · [documentación](https://ng.mimiworks.dev/docs/components/tree)
 
 ## Blocks
 
