@@ -72,7 +72,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 
 Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proceso/release.md`. La puerta la recorre el comando `/cerrar-grupo`; las tareas, `/componente` y `/tarea`, con el protocolo de `CLAUDE.md`, «Forma de trabajar».
 
-**Historial:** `docs/historial/plan-fase-0-3.md`, `plan-0.1.x.md`, `plan-grupo-1.md` (incluye la Fase 4 y la publicación de la 0.2.0), `plan-grupo-2.md` (índice del Grupo 2, con la 5.2, la 5.17 y la publicación de la 0.3.0; el texto de cada tarea, en `docs/historial/grupo-2/`), `plan-plataforma.md` y `decisiones.md`.
+**Historial:** `docs/historial/plan-fase-0-3.md`, `plan-0.1.x.md`, `plan-grupo-1.md` (incluye la Fase 4 y la publicación de la 0.2.0), `plan-grupo-2.md` (índice del Grupo 2, con la 5.2, la 5.17 y la publicación de la 0.3.0; el texto de cada tarea, en `docs/historial/grupo-2/`), `plan-blocks.md` (índice de los Blocks de la 0.4.0; el texto de cada tarea, en `docs/historial/blocks/`), `plan-plataforma.md` y `decisiones.md`.
 
 **Al cerrar un grupo** (desde el Grupo 2): los archivos de sus tareas pasan tal cual de `docs/plan/<grupo>/` a `docs/historial/<grupo>/` (con `git mv`, sin reescribirlos), y `docs/historial/plan-<grupo>.md` lleva el índice, el registro de la publicación y lo que se movió de otros lugares (por ejemplo, «Decididas» de `docs/plan/decisiones.md`). Lo manual que quede pendiente no se deja solo en el historial: va a una tarea abierta (por ejemplo, la M.20).
 
@@ -116,19 +116,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 
 ## Blocks → v0.4.0: pantallas
 
-División decidida por el usuario el 05/11/2026 en la G2.P (spec 4, «Blocks»): los Blocks que solo usan componentes publicados van en la 0.4.0; `table-01` con el Grupo 3 (0.5.0); `dashboard-01` con el Grupo 4 (0.6.0; ajuste por dependencias, pendiente de revisión del usuario).
-
-Detalle (06/11/2026): un archivo por tarea en `docs/plan/blocks/` (el nombre es el ID). **Las 20 preguntas de la 0.4.0 las decidió el usuario el 07/11/2026** (adoptó las recomendaciones; `docs/auto/decisiones-por-defecto.md`, «Decididas por el usuario: Blocks 0.4.0»). En ejecución en modo autónomo en la rama `auto/blocks-0.4.0-2026-11-06` (informe: `docs/auto/blocks-0.4.0-2026-11-06.md`). Con la B.1-h (hoja aparte, spike superado), los Blocks **no** suman al CSS global del sitio. Orden recomendado (respeta las dependencias): B.1 → B.2 → B.3 → B.4 → B.5 → B.10 → B.6 → B.7 → B.P. La B.1 va primero (la CLI y la vista previa son de todos); la B.10 justo antes de la B.6, que la necesita. Con la B.1 hecha, el orden entre B.2 a B.5 y B.7 se puede cambiar. Presupuesto: si los Blocks van al CSS global (B.1-h, opción (b)), el aviso de 160 kB salta hacia el tercer o cuarto Block en cualquier orden, sin llegar al error (estimado 162–167 kB).
-
-- [x] B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase (07/11/2026; pendiente de comprobación manual: teléfono real y Safari, a la M.20) · v0.4.0 · L · depende: G2.P · [docs/plan/blocks/B.1.md](plan/blocks/B.1.md)
-- [x] B.2 `login-01` (07/11/2026; pendiente de comprobación manual, a la M.20) · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.2.md](plan/blocks/B.2.md)
-- [x] B.3 `login-02` (07/11/2026; pendiente de comprobación manual, a la M.20) · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.3.md](plan/blocks/B.3.md)
-- [x] B.4 `signup-01` (07/11/2026; pendiente de comprobación manual, a la M.20) · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.4.md](plan/blocks/B.4.md)
-- [x] B.5 `otp-01` (07/11/2026; pendiente de comprobación manual, a la M.20) · v0.4.0 · S · depende: B.1, G2.5 · [docs/plan/blocks/B.5.md](plan/blocks/B.5.md)
-- [x] B.10 Tabs con orientación vertical (07/11/2026; pendiente de comprobación manual: NVDA, a la M.20) · v0.4.0 · M · depende: G1.9 · [docs/plan/blocks/B.10.md](plan/blocks/B.10.md)
-- [x] B.6 `settings-01` (07/11/2026; pendiente de comprobación manual, a la M.20) · v0.4.0 · L · depende: B.1, B.10 · [docs/plan/blocks/B.6.md](plan/blocks/B.6.md)
-- [x] B.7 `pricing-01` (07/11/2026; pendiente de comprobación manual, a la M.20) · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.7.md](plan/blocks/B.7.md)
-- [ ] B.P Puerta de los Blocks (dependencias hechas; informe en `docs/auto/blocks-0.4.0-2026-11-06.md`, «B.P») · v0.4.0 · L · depende: B.1 a B.7, B.10 · [docs/plan/blocks/B.P.md](plan/blocks/B.P.md)
+Cerrada el 07/11/2026 (puerta B.P; **falta publicar, lo hace el usuario**). Las tareas están en «Terminado» y su texto en `docs/historial/blocks/` (índice: `docs/historial/plan-blocks.md`). `table-01` va con el Grupo 3 (0.5.0) y `dashboard-01` con el Grupo 4 (0.6.0).
 
 ## Grupo 3 → v0.5.0: datos
 
@@ -312,6 +300,18 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] G2.12 Color Picker (05/11/2026).
 - [x] 5.17 Revisión móvil, con 5.17a (Grupo 1, 04/11/2026) y 5.17b (Grupo 2, 05/11/2026); cerradas el 06/11/2026, pendiente de comprobación manual: teléfonos reales y los paneles altos de C3 (M.20).
 - [x] G2.P Puerta del Grupo 2 (06/11/2026; pendiente de comprobación manual: teléfonos reales, NVDA, Firefox, Safari, VoiceOver y las decisiones por defecto para la revisión de la 0.9.9, en la M.20; release de GitHub como Latest y prueba desde npm sin errores, anotadas el 06/11/2026).
+
+**Blocks, v0.4.0** (`docs/historial/plan-blocks.md`, con el texto de cada tarea en `docs/historial/blocks/`; puerta cerrada el 07/11/2026, sin publicar todavía). Lo manual que quedó pendiente en cada tarea sigue en la M.20.
+
+- [x] B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase (07/11/2026; pendiente de comprobación manual: teléfono real y Safari).
+- [x] B.2 `login-01` (07/11/2026; pendiente de comprobación manual).
+- [x] B.3 `login-02` (07/11/2026; pendiente de comprobación manual).
+- [x] B.4 `signup-01` (07/11/2026; pendiente de comprobación manual).
+- [x] B.5 `otp-01` (07/11/2026; pendiente de comprobación manual).
+- [x] B.10 Tabs con orientación vertical (07/11/2026; pendiente de comprobación manual: NVDA).
+- [x] B.6 `settings-01` (07/11/2026; pendiente de comprobación manual).
+- [x] B.7 `pricing-01` (07/11/2026; pendiente de comprobación manual).
+- [x] B.P Puerta de los Blocks (07/11/2026, después de los arreglos de la revisión independiente; la publicación de la 0.4.0 la hace el usuario).
 
 **Tandas de diseño** (texto completo en la línea)
 

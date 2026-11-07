@@ -89,6 +89,10 @@ describe('HomePage', () => {
   it('vitrina «Hecho con Mimi» y pie con la licencia', async () => {
     const { el, text } = await setup();
     expect(text(el.querySelector('#showcase-title'))).toBe('Hecho con Mimi');
+    // B.P-a: un enlace a los Blocks (la prueba de enlaces comprueba que su página está lista).
+    expect(el.querySelector('[data-slot="blocks-link"]')?.getAttribute('href')).toBe(
+      '/docs/blocks/login-01',
+    );
     expect(text(el.querySelector('footer'))).toBe('Mimi · Licencia MIT · Hecho para Angular');
   });
 

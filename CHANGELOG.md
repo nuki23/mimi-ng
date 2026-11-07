@@ -2,6 +2,63 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
+## 0.4.0 (por publicar: poner la fecha al publicar): pantallas
+
+### Antes de actualizar
+
+- **Excluye `.mimi/` del escaneo de Tailwind** (si usas Tailwind 4.1 o superior y tu `@import "tailwindcss"` no lleva `source(none)`). `.mimi/` va en git y tiene las copias originales de Mimi: sin excluirla, tu CSS lleva las clases de esas copias aunque ya las hayas cambiado en tus componentes. Agrega a tu CSS global, después de `@import "tailwindcss"` (con `src/styles.css`):
+
+  ```css
+  @source not "../.mimi";
+  ```
+
+  `ng add` la escribe desde esta versión; en un proyecto de la 0.3.0, `ng g mimi` te avisa con la línea exacta si falta (no toca esa parte de tu CSS). Con Tailwind 4.0 (no entiende `@source not`), actualiza Tailwind primero.
+
+### Blocks: pantallas enteras
+
+Seis pantallas hechas con los componentes de Mimi, que se instalan con el mismo comando y quedan en tu proyecto para que las cambies. **No son componentes:** el menú de `ng g mimi` los lista después de los 36 componentes.
+
+- **login-01** (`ng g mimi login-01`): inicio de sesión centrado con correo, contraseña con mostrar u ocultar, «recordarme» y botones de Google y GitHub.
+- **login-02** (`ng g mimi login-02`): inicio de sesión en dos columnas, con tu imagen (`imageSrc`) y un testimonio en vidrio (texto de relleno para que pongas el tuyo).
+- **signup-01** (`ng g mimi signup-01`): registro con mensajes al salir de cada campo, el medidor de Password, confirmación y un botón que dice qué falta.
+- **otp-01** (`ng g mimi otp-01`): verificación con un código de 6 dígitos (Input OTP), reenvío con cuenta regresiva y reintento del mismo código tras un error.
+- **settings-01** (`ng g mimi settings-01`): ajustes de cuenta con navegación lateral (pestañas verticales; píldoras en móvil), perfil, notificaciones, seguridad, facturación y una barra de «cambios sin guardar».
+- **pricing-01** (`ng g mimi pricing-01`): tres planes con mensual/anual (el ahorro se calcula con los precios), el destacado con un borde de color estático y los precios con `Intl.NumberFormat`.
+
+**Cómo se instalan:** `ng g mimi login-01` copia la pantalla a `src/app/blocks/login-01/` y los componentes que usa a tu carpeta de componentes, con sus dependencias. La carpeta de los Blocks es `aliases.blocks` en `mimi.json`: `ng add` la escribe desde esta versión y, en un proyecto de la 0.3.0, `ng g mimi` la agrega la primera vez que copias un Block (por defecto, la hermana de `components/`: `src/app/blocks`). Cada Block es un componente de página standalone (`Login01`, selector `mimi-login-01`): ponlo en tus rutas (`{ path: 'login', component: Login01 }`) y conéctalo con sus salidas (`submitted`, `verify`, `saved`…). Textos en inglés, en la plantilla; formularios con Signal Forms; íconos en SVG en línea (sin dependencias). Ningún Block pone `<main>`: va en tu layout.
+
+**Cómo se actualizan:** igual que un componente, todo o nada. Si modificaste tu pantalla (lo normal), `ng g mimi` no la toca y te lo dice sin alarma; `--overwrite` la reemplaza entera. Un Block tampoco se actualiza si se bloquea uno de sus componentes (no compilaría). Sus componentes sí se actualizan aunque el Block quede como estaba, y **`ng g mimi` te avisa** cuando actualiza un componente que usa uno de tus Blocks: «Tu Block login-01 usa button, que se actualizó a 0.4.0; revisa el CHANGELOG…».
+
+**Con `@import "tailwindcss" source(none)`:** Tailwind solo escanea las carpetas que indicas. `ng add` escribe ahora también `@source` de la carpeta de los Blocks, y `ng g mimi <block>` lo agrega si falta (en un proyecto de la 0.3.0 con `source(none)`, sin él, la pantalla quedaba sin sus estilos).
+
+### Cambios en componentes publicados
+
+Sin rupturas. `ng g mimi` los actualiza si no modificaste sus archivos.
+
+- **Tabs: `orientation="horizontal | vertical"`** (por defecto `horizontal`, como antes). En vertical, las pestañas a un lado y el panel al otro, ↑/↓ para moverse, y puede cambiar en vivo (por ejemplo, con el ancho). **Un detalle:** el anfitrión `mimi-tabs` pone ahora su `flex-direction` con un binding (`column` en horizontal, `row` en vertical), así que **un `style="flex-direction: …"` estático que pusieras en `<mimi-tabs>` ya no gana**; usa `orientation`, o una clase con `!` si de verdad necesitas otra dirección.
+
+### CLI
+
+- **Ítems de tipo `block`** en el registro, con su carpeta (`aliases.blocks`), sus bases en `.mimi/base/blocks/` y su clave `blocks` en `mimi.json`. Un Block nuevo agrega al resumen cómo enrutarlo.
+- **`ng add` excluye `.mimi/` del escaneo de Tailwind** 4.1+ (`@source not "../.mimi";`) y `ng g mimi` avisa si falta (ver «Antes de actualizar»).
+- **Con `source(none)`, el `@source` de la carpeta de los Blocks** (ver arriba).
+- **Aviso cuando un componente que se actualiza lo usa uno de tus Blocks** (no bloquea nada).
+- **Error claro si `aliases.components` o `aliases.blocks` es una ruta absoluta, tiene `..` o sale del proyecto** (antes, `C:\…` creaba una carpeta «C:» dentro del proyecto). No se escribe nada.
+- El error de un nombre desconocido dice ahora «no es un componente ni un Block de Mimi».
+
+### Cómo actualizar desde la 0.3.0
+
+1. Instala la CLI nueva: `npm i -D @mimi-ng/cli@0.4.0` (con pnpm, `pnpm add -D @mimi-ng/cli@0.4.0`).
+2. Agrega `@source not "../.mimi";` a tu CSS global (ver «Antes de actualizar»), o sigue el aviso de `ng g mimi`.
+3. Vuelve a ejecutar `ng g mimi` con los componentes que usas (por ejemplo, `ng g mimi tabs button`): actualiza lo que no modificaste y lo dice («tabs actualizado de 0.3.0 a 0.4.0»).
+4. Para los Blocks, `ng g mimi <nombre>` (por ejemplo, `ng g mimi login-01`). La primera vez escribe `aliases.blocks` en tu `mimi.json` y, con `source(none)`, el `@source` de su carpeta.
+
+### Limitaciones conocidas
+
+- **Diseños pendientes:** el error de credenciales de los inicios de sesión, la imagen de `login-02` (sin `imageSrc`, un degradado neutro provisional) y el estado «válido» de un campo (lo escribe `signup-01`) no tienen diseño todavía.
+- **`otp-01`:** si tu app responde a dos envíos seguidos con el mismo `status` sin pasar por `loading`, el segundo no se muestra; pon `loading` mientras compruebas el código.
+- Documentación solo en español; los Blocks, en inglés.
+
 ## 0.3.0 (06/11/2026): entradas avanzadas
 
 ### Antes de actualizar

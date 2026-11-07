@@ -6,17 +6,7 @@ División decidida por el usuario el 05/11/2026 en la G2.P (opción (b)), con un
 
 ## Blocks → v0.4.0: pantallas
 
-Detalladas el 06/11/2026 (rama `auto/plan-0.4.0-2026-11-06`): un archivo por tarea en `docs/plan/blocks/` (el nombre es el ID), con la plantilla completa. Las preguntas, con su recomendación, están indexadas en `docs/plan/decisiones.md`. Informe: `docs/auto/plan-0.4.0-2026-11-06.md`.
-
-- [ ] B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase · [docs/plan/blocks/B.1.md](blocks/B.1.md)
-- [ ] B.2 `login-01` · [docs/plan/blocks/B.2.md](blocks/B.2.md)
-- [ ] B.3 `login-02` · [docs/plan/blocks/B.3.md](blocks/B.3.md)
-- [ ] B.4 `signup-01` · [docs/plan/blocks/B.4.md](blocks/B.4.md)
-- [ ] B.5 `otp-01` · [docs/plan/blocks/B.5.md](blocks/B.5.md)
-- [ ] B.10 Tabs con orientación vertical (para `settings-01`) · [docs/plan/blocks/B.10.md](blocks/B.10.md)
-- [ ] B.6 `settings-01` · [docs/plan/blocks/B.6.md](blocks/B.6.md)
-- [ ] B.7 `pricing-01` · [docs/plan/blocks/B.7.md](blocks/B.7.md)
-- [ ] B.P Puerta de los Blocks (v0.4.0) · [docs/plan/blocks/B.P.md](blocks/B.P.md)
+Hechas y cerradas el 07/11/2026 (puerta B.P; la publicación la hace el usuario). El texto de cada tarea está en `docs/historial/blocks/` (índice: `docs/historial/plan-blocks.md`).
 
 ## Grupo 3 → v0.5.0: datos
 
