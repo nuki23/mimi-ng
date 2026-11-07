@@ -4,7 +4,7 @@
 
 - [ ] B.P Puerta de los Blocks (v0.4.0): la lista de «Puerta del grupo» de «Cómo usar este plan», más lo específico de abajo.
   - v0.4.0 · Tamaño L (cierre y preparación de la release) · Depende de: B.1 a B.7 y B.10 · Bloquea: G3.P (la 0.4.0 se publica antes que la 0.5.0)
-  - Estado: —
+  - Estado: sin empezar. B.1 a B.7 y B.10 hechas el 07/11/2026 en `auto/blocks-0.4.0-2026-11-06`; el informe de la puerta (qué está y qué falta, punto por punto) está en `docs/auto/blocks-0.4.0-2026-11-06.md`, «B.P». El modo autónomo se detiene aquí (A7).
   - Leer antes: «Puerta del grupo» en «Cómo usar este plan» (los nueve puntos) y «Al cerrar un grupo»; la G2.P en `docs/historial/grupo-2/G2.P.md` (el precedente: CHANGELOG, conteos, `.tgz`, tabla acumulada, publicación); `docs/proceso/release.md`; spec 5 y 10; la M.19 y la M.20 en `docs/plan/mantenimiento.md`.
   - Diseño: no aplica (salvo D6).
   - Objetivo: dejar la 0.4.0 lista para publicar: Blocks instalables, CHANGELOG, pruebas reales de la CLI con Blocks, presupuestos medidos y lo manual reunido.
