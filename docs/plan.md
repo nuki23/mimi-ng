@@ -106,6 +106,8 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.18 Guardar en el repo el script de medición a 360 px · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.19 Excluir `.mimi/` del escaneo de Tailwind (`init` la escribe; `ng g mimi` avisa) · sin versión (sale en la 0.4.0) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9; la release de GitHub y la prueba desde npm de la 0.3.0, hechas; y lo manual de los Blocks de la 0.4.0 cuando se hagan; la hace el usuario) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.21 Switch con una entrada `aria-describedby` (y quitar el rodeo de `settings-01`) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.22 Hash de `blocks.css` en el sitio · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño

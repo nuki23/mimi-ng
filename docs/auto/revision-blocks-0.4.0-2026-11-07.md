@@ -91,3 +91,12 @@ Commit: `fix(blocks): textos de relleno genéricos en vez de personas y marcas i
 **Pruebas:** `pricing-01.spec.ts` (+2: el ahorro calculado con otros planes y sin ahorro; las clases de la insignia en RTL), `signup-01.spec.ts` (+1: el `h1` antes del `h2` y `order-first`), `block-pages.spec.ts` (la nota de `<main>` en cada página) e `imports.spec.ts` (+1, alarma: ninguna plantilla de Block tiene `<main>`). Los Blocks: 57 en verde; páginas y vista previa: 19.
 
 Commit: `fix(blocks): menores de la revisión (tipos, «−17%» calculado, RTL, orden de encabezados, example.com, nota de <main>)`.
+
+## Punto 8: tareas de mantenimiento (registradas, sin hacer)
+
+- **M.21** Switch con una entrada `aria-describedby` (y quitar el rodeo de `settings-01`, que busca `[role="switch"]` en un `afterEveryRender`).
+- **M.22** Hash de `blocks.css` en el sitio (sale sin hash: la caché del navegador puede servir la vieja después de un despliegue).
+
+Las dos en `docs/plan/mantenimiento.md`, con su origen, opciones y criterios de hecho, y en el índice de `docs/plan.md`. La nota de Tabs (un `style="flex-direction:…"` estático en `<mimi-tabs>` ya no gana) va en el CHANGELOG de la 0.4.0, que se escribe en la puerta (abajo).
+
+Commit: `docs(plan): M.21 (aria-describedby en Switch) y M.22 (hash de blocks.css)`.
