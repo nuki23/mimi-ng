@@ -1,0 +1,43 @@
+# B.P Puerta de los Blocks (v0.4.0)
+
+[← Índice del plan](../../plan.md)
+
+- [ ] B.P Puerta de los Blocks (v0.4.0): la lista de «Puerta del grupo» de «Cómo usar este plan», más lo específico de abajo.
+  - v0.4.0 · Tamaño L (cierre y preparación de la release) · Depende de: B.1 a B.7 y B.10 · Bloquea: G3.P (la 0.4.0 se publica antes que la 0.5.0)
+  - Estado: —
+  - Leer antes: «Puerta del grupo» en «Cómo usar este plan» (los nueve puntos) y «Al cerrar un grupo»; la G2.P en `docs/historial/grupo-2/G2.P.md` (el precedente: CHANGELOG, conteos, `.tgz`, tabla acumulada, publicación); `docs/proceso/release.md`; spec 5 y 10; la M.19 y la M.20 en `docs/plan/mantenimiento.md`.
+  - Diseño: no aplica (salvo D6).
+  - Objetivo: dejar la 0.4.0 lista para publicar: Blocks instalables, CHANGELOG, pruebas reales de la CLI con Blocks, presupuestos medidos y lo manual reunido.
+  - Alcance: los nueve puntos de la puerta general y lo específico de abajo. NO incluye publicar (lo hace el usuario).
+  - Lo específico de la 0.4.0:
+    - **CHANGELOG de la 0.4.0** con «Cómo actualizar desde la 0.3.0»: los seis Blocks y cómo se instalan (`ng g mimi login-01`), dónde se copian (`aliases.blocks` en `mimi.json`, escrito por la CLI la primera vez en proyectos de la 0.3.0) y cómo se actualizan (B.1-b); Tabs con `orientation` (B.10); la **M.19** (con el texto propuesto en la M.19: `ng add` excluye `.mimi/` del escaneo de Tailwind 4.1+, `ng g mimi` avisa si falta, y la línea a mano para proyectos de la 0.3.0); cualquier cambio en componentes publicados que hayan pedido los Blocks. La M.13 no va (es del sitio, no del paquete).
+    - **Conteos:** los componentes siguen siendo los que dé el catálogo (36 en la 0.3.0, sin contar Blocks) en `registry.json`, `x-prompt`, Fundamentos, Introducción y README de la CLI; los Blocks, en su propia lista (README de la CLI, sección «Blocks» del sitio, `x-prompt` si se decidió B.1-c). La comparación, con un script, como en la G2.P.
+    - **Pruebas reales con el `.tgz`** (ruta corta en Windows): los 4 escenarios de siempre (npm nuevo, pnpm nuevo, actualización desde la 0.3.0 de npm sin cambios y con un archivo modificado) y, además, con Blocks: `ng g mimi login-01` en un proyecto nuevo (trae sus componentes, compila, se ve); `settings-01` (el que más componentes trae); un proyecto de la 0.3.0 sin `aliases.blocks`; un Block modificado al actualizar (aviso de B.1-b); un componente de un Block modificado (el Block se bloquea, los demás se actualizan).
+    - **Tabla acumulada** del CSS global, del JS inicial, de `main` y del `initial` (crudo y gzip), una fila por tarea, desde la medición de partida (06/11/2026, después de la M.13: CSS global 153,15 / 22,00 kB; JS inicial 330,16 / 104,57 kB; `main` 135,40 kB; `initial` 483,32 kB). Con la estimación de B.1 (9–14 kB de CSS si los Blocks van al CSS global) y lo real; si algo queda cerca de un error, decide el usuario.
+    - **D6** con un apartado por Block y por la B.10.
+    - **Lo manual, a la M.20** (o a una tarea nueva de la 0.4.0 si la M.20 ya se cerró): la lista de «Manual» de cada tarea (B.1 a B.7 y B.10).
+    - **Las decisiones de B.1 a B.10** anotadas en la spec (las que siguen vigentes como regla: tipo `block`, actualización, idioma, íconos, vista previa y CSS).
+    - **Mover el grupo al historial** como dice «Al cerrar un grupo»: `git mv docs/plan/blocks docs/historial/blocks` e índice `docs/historial/plan-blocks.md` con el registro de la publicación.
+  - Base técnica: no aplica.
+  - API pública propuesta: no aplica.
+  - Formularios: no aplica.
+  - Tokens: spec 13 al día (la B.10 si agregó alguno; los Blocks no tienen).
+  - Teclado y accesibilidad: lo de cada tarea; si hubo pasadas con NVDA o teléfonos, anotarlas en Fundamentos.
+  - Ejemplos del showcase: la sección «Blocks» completa (los seis en `ready`) y la landing con un enlace a los Blocks si el usuario lo quiere (pregunta abajo).
+  - CLI: `registry.json` y pruebas de la CLI (punto 4); los escenarios de arriba.
+  - Textos: no aplica.
+  - Trampas conocidas:
+    - Los Blocks no suman al conteo de componentes: si un script de conteo cuenta todos los ítems, da otro número.
+    - Las pruebas reales con Blocks tardan más (más componentes por Block): proyectos en `C:\t\` y uno por escenario.
+    - El historial no se edita después de escrito: mover el grupo es lo último.
+  - Criterios de hecho:
+    - Los nueve puntos de la puerta general.
+    - CHANGELOG 0.4.0 con «Cómo actualizar desde la 0.3.0», los Blocks, la B.10 y la M.19.
+    - Conteos iguales en todos los lugares; los Blocks en su lista.
+    - Los escenarios del `.tgz` con su resultado anotado.
+    - La tabla acumulada, con la decisión del usuario si algo quedó cerca de un error.
+    - D6 al día y la lista manual en la M.20.
+    - El grupo en `docs/historial/` y una línea por tarea en «Terminado».
+    - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
+  - Preguntas abiertas:
+    - PENDIENTE DE DECIDIR (B.P-a): ¿la landing muestra los Blocks (una fila con capturas o un enlace)? Recomendación: un enlace a la sección «Blocks» en la landing actual, sin rediseñarla (la Landing v2 es la 5.16).
