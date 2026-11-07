@@ -65,3 +65,17 @@ Commit: `fix(blocks): settings-01 enfoca el campo con error al guardar desde otr
 **Pruebas:** `otp-01.spec.ts`, 9 en verde (las 7 de antes sin cambios); `otp-01-demo.spec.ts` en verde.
 
 Commit: `fix(blocks): otp-01 deja reintentar el mismo código tras un error (M4)`.
+
+## M5: datos inventados en los Blocks
+
+**login-02:** el testimonio («“We moved from PrimeNG to Mimi in two weeks…”», «Diego Paz», «CTO · Andes Logistics», iniciales «DP») pasa a texto de relleno genérico: «Add a short quote from a customer here.», «Customer name», «Role · Company» e iniciales «CN», con un comentario en la plantilla (pon la cita de un cliente real, con su permiso, o quita el `figure`).
+
+**Búsqueda en los demás Blocks** (nombres de personas, marcas de terceros y dominios, con `grep` en `packages/ui-core/src/lib/blocks`):
+
+- **settings-01:** la persona del ejemplo («Ana Torres», «anatorres», «AT» y una biografía que nombraba a Mimi como empleador) y dos ciudades reales. Pasan a «Your name», «your-username», «YN», «A short bio your team will see.», «Your city» y «Another city».
+- **Dominios reales** (`company.com` en `login-02`, `signup-01` y `otp-01`; `mimi.dev/` en `settings-01`): van en el punto 7 (`example.com`).
+- **Se quedan:** «Mimi Sales», la marca de ejemplo del propio proyecto (`login-01`, `login-02`, `signup-01`); «Google» y «GitHub» en los botones de `login-01` (son los proveedores de inicio de sesión, la función del botón); «Chrome · macOS» y «Safari · iPhone» en las sesiones (describen dispositivos).
+
+**Pruebas:** `login-02.spec.ts` comprueba los textos de relleno; `settings-01.spec.ts` usa los valores nuevos. Los Blocks: 54 pruebas en verde. D6 al día.
+
+Commit: `fix(blocks): textos de relleno genéricos en vez de personas y marcas inventadas (M5)`.

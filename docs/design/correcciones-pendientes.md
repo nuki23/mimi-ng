@@ -231,7 +231,8 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Iniciales del testimonio:** `mimi-avatar` pequeño (32px) con `bg-info-soft` y `text-info-soft-foreground`, como el `span` del diseño.
   - **Vidrio:** con «reducir transparencia» (`prefers-reduced-transparency`), fondo `card` sólido y sin desenfoque (no está en el diseño).
   - **Corte del diseño:** dos columnas desde `md` (768px); el diseño solo dibuja 1280px y móvil.
-  - **Textos en inglés** (B.1-i), incluido el testimonio («Andes Logística» → «Andes Logistics») y la nota legal.
+  - **Textos en inglés** (B.1-i) y la nota legal.
+  - **Testimonio de relleno (M5, 07/11/2026):** el diseño trae una cita, una persona y una empresa inventadas que nombran a otra biblioteca; el Block pone texto de relleno claramente genérico («Add a short quote from a customer here.», «Customer name», «Role · Company», iniciales «CN»). Si el diseño quiere un ejemplo, que sea igual de genérico.
 
   signup-01 (B.4, 07/11/2026):
   - **Estado «válido» de un campo:** `mimi-form-field` solo tiene errores. El «Looks good.» / «Valid email.» / «They match.» del diseño (ícono `circle-check` en `success-soft-foreground`) lo escribe el Block, en un elemento que describe el campo. Si se quiere en FormField, diseñarlo ahí (y su token).
@@ -261,7 +262,7 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **«Quitar» la foto y «Cerrar» la sesión:** `mimiBtn` `ghost`/`danger` y `outline`/`secondary` en tamaño `sm`; «Cerrar» lleva el dispositivo en su nombre accesible («Sign out of Safari · iPhone»).
   - **Moneda y fecha:** con `Intl` y el `LOCALE_ID` (el diseño: «$240 por persona» y «1 de noviembre» escritos); el ejemplo usa 12 USD.
   - **Barra de cambios:** con «reducir transparencia», fondo sólido; el botón «Save» dice «Saving…» con `saving` (no está en el diseño).
-  - **Textos en inglés** (B.1-i), con los lugares de las sesiones neutros («Mexico City», «Guadalajara»).
+  - **Textos en inglés** (B.1-i). **Datos de ejemplo genéricos (M5, 07/11/2026):** el diseño usa una persona inventada y dos ciudades; el Block, «Your name», «your-username», «YN», «Your city» y «Another city».
 
   pricing-01 (B.7, 07/11/2026):
   - **Borde del destacado (B.7-a, decidido por el usuario):** estático. El mismo `conic-gradient` de `info` y `success` del diseño (desde 200°), quieto, sobre `border`, con 1,5px, `shadow-popover` y la insignia; sin `@keyframes mimi-beam` ni `@property --mimi-beam-a`. Cuando exista Border Beam (E.7), el sitio mostrará cómo cambiarlo.

@@ -106,8 +106,13 @@ describe('Login02', () => {
   it('testimonio en figure con blockquote y figcaption; un h1', async () => {
     const { el, q } = await setup();
     expect(q('figure blockquote')).toBeTruthy();
-    expect(q('figure figcaption').textContent).toContain('Diego Paz');
-    expect(q('figcaption mimi-avatar').textContent?.trim()).toBe('DP');
+    // M5: texto de relleno genérico, sin una persona ni una marca de terceros.
+    expect(q('figure blockquote').textContent?.trim()).toBe(
+      'Add a short quote from a customer here.',
+    );
+    expect(q('figure figcaption').textContent).toContain('Customer name');
+    expect(q('figure figcaption').textContent).toContain('Role · Company');
+    expect(q('figcaption mimi-avatar').textContent?.trim()).toBe('CN');
     expect(el.querySelectorAll('h1')).toHaveLength(1);
   });
 

@@ -65,7 +65,7 @@ export interface Settings01Preferences {
 export interface Settings01Session {
   id: string;
   device: string;
-  /** Lugar y hora, ya escritos («Mexico City · now»). */
+  /** Lugar y hora, ya escritos («Your city · now»). */
   detail: string;
   kind: 'desktop' | 'mobile';
   /** La sesión de este navegador (no se puede cerrar desde aquí). */
@@ -88,12 +88,15 @@ export interface Settings01Plan {
 export type Settings01Value = Pick<Settings01Profile, 'name' | 'username' | 'bio'> &
   Settings01Preferences;
 
-/** Valores de ejemplo (los del diseño), para que la pantalla funcione sin datos. */
+/**
+ * Valores de ejemplo, para que la pantalla funcione sin datos. Genéricos a propósito (M5): ninguna
+ * persona ni marca de terceros; tu app pasa los suyos.
+ */
 export const SETTINGS_01_PROFILE: Settings01Profile = {
-  name: 'Ana Torres',
-  username: 'anatorres',
-  bio: 'Product design at Mimi. I take care of themes and contrast.',
-  initials: 'AT',
+  name: 'Your name',
+  username: 'your-username',
+  bio: 'A short bio your team will see.',
+  initials: 'YN',
 };
 export const SETTINGS_01_PREFERENCES: Settings01Preferences = {
   compact: true,
@@ -109,11 +112,11 @@ export const SETTINGS_01_SESSIONS: Settings01Session[] = [
   {
     id: 'this',
     device: 'Chrome · macOS',
-    detail: 'Mexico City · now',
+    detail: 'Your city · now',
     kind: 'desktop',
     current: true,
   },
-  { id: 'iphone', device: 'Safari · iPhone', detail: 'Guadalajara · 2 days ago', kind: 'mobile' },
+  { id: 'iphone', device: 'Safari · iPhone', detail: 'Another city · 2 days ago', kind: 'mobile' },
 ];
 export const SETTINGS_01_PLAN: Settings01Plan = {
   name: 'Team',

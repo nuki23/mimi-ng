@@ -125,10 +125,10 @@ describe('Settings01', { timeout: 20_000 }, () => {
   it('«con cambios» aparece al cambiar un valor y desaparece al volver al original', async () => {
     const { type, bar, q } = await setup();
     expect(bar().textContent?.trim()).toBe('');
-    await type('Name', 'Ana T.');
+    await type('Name', 'New name');
     expect(bar().textContent).toContain('You have unsaved changes');
     expect(q('mimi-settings-01').getAttribute('data-state')).toBe('changed');
-    await type('Name', 'Ana Torres');
+    await type('Name', 'Your name');
     expect(bar().textContent?.trim()).toBe('');
   });
 
@@ -147,18 +147,22 @@ describe('Settings01', { timeout: 20_000 }, () => {
 
   it('Guardar emite el valor y quita la barra', async () => {
     const { type, button, bar, host } = await setup();
-    await type('Name', 'Ana T.');
+    await type('Name', 'New name');
     button('Save').click();
     await new Promise((r) => setTimeout(r));
     expect(host.saved).toHaveLength(1);
-    expect(host.saved[0]).toMatchObject({ name: 'Ana T.', username: 'anatorres', compact: true });
-    await type('Name', 'Ana T.');
+    expect(host.saved[0]).toMatchObject({
+      name: 'New name',
+      username: 'your-username',
+      compact: true,
+    });
+    await type('Name', 'New name');
     expect(bar().textContent?.trim()).toBe('');
   });
 
   it('Guardar con un error no emite y lleva el foco al campo', async () => {
     const { type, button, host, byLabel, fixture } = await setup();
-    await type('Username', 'Ana Torres');
+    await type('Username', 'Not Valid');
     button('Save').click();
     await settle(fixture);
     expect(host.saved).toEqual([]);
@@ -167,7 +171,7 @@ describe('Settings01', { timeout: 20_000 }, () => {
 
   it('M3: Guardar con un error desde OTRA sección vuelve a Perfil y enfoca el campo', async () => {
     const { type, button, host, byLabel, fixture, tab } = await setup();
-    await type('Username', 'Ana Torres');
+    await type('Username', 'Not Valid');
     tab('billing').click();
     await settle(fixture);
     expect(host.tab()).toBe('billing');
