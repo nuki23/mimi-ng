@@ -40,4 +40,4 @@
     - El grupo en `docs/historial/` y una línea por tarea en «Terminado».
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR (B.P-a): ¿la landing muestra los Blocks (una fila con capturas o un enlace)? Recomendación: un enlace a la sección «Blocks» en la landing actual, sin rediseñarla (la Landing v2 es la 5.16).
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.P-a): ¿la landing muestra los Blocks (una fila con capturas o un enlace)? Recomendación: un enlace a la sección «Blocks» en la landing actual, sin rediseñarla (la Landing v2 es la 5.16).

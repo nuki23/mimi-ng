@@ -35,4 +35,4 @@
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
     - Manual (a la M.20): NVDA (mensajes, nivel del medidor y la nota del botón); gestor de contraseñas (propone una contraseña nueva); teléfono real.
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR (B.4-a): cuándo se muestran los mensajes: al salir del campo (el diseño: `touched`) o al escribir. Recomendación: al salir del campo, y la confirmación también al escribir una vez que se tocó (así deja de decir «no coincide» en cuanto coincide).
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.4-a): cuándo se muestran los mensajes: al salir del campo (el diseño: `touched`) o al escribir. Recomendación: al salir del campo, y la confirmación también al escribir una vez que se tocó (así deja de decir «no coincide» en cuanto coincide).

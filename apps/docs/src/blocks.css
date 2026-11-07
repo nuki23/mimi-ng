@@ -1,0 +1,12 @@
+/* Hoja de la vista previa de los Blocks (B.1-h): solo las clases de los Blocks, que no van en el
+   CSS global del sitio (styles.css las excluye con @source not). La carga la ruta
+   /preview/blocks/… (angular.json: inject false). El tema y Tailwind ya están en el CSS global:
+   aquí se usan como referencia (sin volver a emitirlos), salvo las variables del tema de
+   Tailwind, que solo se emiten si se usan. */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities) source(none);
+@reference '@mimi-ng/ui-core/theme.css';
+
+@source '../../../packages/ui-core/src/lib/blocks';
+@source not '../../../packages/ui-core/src/**/*.spec.ts';

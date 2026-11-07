@@ -35,4 +35,4 @@
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
     - Manual (a la M.20): autocompletar el código desde un SMS en iOS y en Android (`one-time-code`); NVDA; teléfono real.
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR (B.5-a): ¿verifica solo al completar los dígitos, solo con el botón, o con los dos (el diseño tiene botón)? Recomendación: los dos, con la salida una sola vez por código.
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.5-a): ¿verifica solo al completar los dígitos, solo con el botón, o con los dos (el diseño tiene botón)? Recomendación: los dos, con la salida una sola vez por código.

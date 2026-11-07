@@ -121,6 +121,8 @@ describe('init', () => {
         components: UI,
         utils: `${UI}/utils`,
         theme: 'projects/app/src/app/mimi.preset.ts',
+        // Desde la 0.4.0: la hermana de components/ (B.1-a).
+        blocks: 'projects/app/src/app/blocks',
       },
       components: {},
     });

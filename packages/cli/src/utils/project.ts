@@ -16,8 +16,29 @@ export interface MimiConfig {
    */
   style?: string;
   tailwind?: { css?: string };
-  aliases?: { components?: string; utils?: string; theme?: string };
+  /**
+   * `blocks`: carpeta de los Blocks (B.1). Los proyectos de la 0.3.0 o anteriores no lo tienen:
+   * `ng g mimi` usa `defaultBlocksDir` y lo escribe la primera vez que copia un Block.
+   */
+  aliases?: { components?: string; utils?: string; theme?: string; blocks?: string };
   components?: Record<string, { version: string }>;
+  /** Versión de cada Block copiado, como `components`. */
+  blocks?: Record<string, { version: string }>;
+}
+
+/**
+ * Carpeta de los Blocks si mimi.json no la dice: la hermana de `components/` cuando la de
+ * componentes es la de siempre (`src/app/components/ui` → `src/app/blocks`), o si no, la hermana
+ * de la carpeta de componentes (`src/app/ui` → `src/app/blocks`).
+ */
+export function defaultBlocksDir(componentsDir: string): string {
+  const parts = componentsDir.split('/').filter(Boolean);
+  if (parts.length >= 2 && parts.at(-1) === 'ui' && parts.at(-2) === 'components') {
+    parts.splice(-2, 2);
+  } else {
+    parts.pop();
+  }
+  return [...parts, 'blocks'].join('/');
 }
 
 export function readJson<T>(tree: Tree, path: string): T | null {

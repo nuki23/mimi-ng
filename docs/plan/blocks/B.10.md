@@ -29,4 +29,4 @@
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
     - Manual (a la M.20): NVDA en vertical (anuncia «vertical» y las flechas ↑/↓).
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR (B.10-a): ¿la orientación vertical va en una tarea propia (esta) o dentro de la B.6? Recomendación: **tarea propia**, porque cambia un componente publicado (sale en el CHANGELOG, se prueba con las pruebas de Tabs y la usa cualquiera, no solo el Block). Alternativa: dentro de la B.6, o que settings-01 no use Tabs en escritorio sino una lista de enlaces (`aria-current`) y Tabs solo en móvil.
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.10-a): ¿la orientación vertical va en una tarea propia (esta) o dentro de la B.6? Recomendación: **tarea propia**, porque cambia un componente publicado (sale en el CHANGELOG, se prueba con las pruebas de Tabs y la usa cualquiera, no solo el Block). Alternativa: dentro de la B.6, o que settings-01 no use Tabs en escritorio sino una lista de enlaces (`aria-current`) y Tabs solo en móvil.

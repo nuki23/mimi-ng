@@ -144,10 +144,10 @@ describe('mimi (alias ui)', () => {
     const before = snapshot(tree);
     const error = run('mimi', { components: ['buton', 'zzz'] }, tree);
     await expect(error).rejects.toThrow(
-      '"buton" no es un componente de Mimi. ¿Quisiste decir button?',
+      '"buton" no es un componente ni un Block de Mimi. ¿Quisiste decir button?',
     );
     await expect(run('mimi', { components: ['zzz'] }, tree)).rejects.toThrow(
-      /"zzz" no es un componente de Mimi\.\nDisponibles: avatar, badge, button, calendar, card/,
+      /"zzz" no es un componente ni un Block de Mimi\.\nDisponibles: avatar, badge, button, calendar, card/,
     );
     await expect(run('mimi', { components: ['form'] }, tree)).rejects.toThrow(
       '¿Quisiste decir form-field?',
@@ -448,7 +448,7 @@ describe('mimi (alias ui)', () => {
   it('menu no se puede pedir: no es un componente', async () => {
     const { run, tree } = await initialized();
     await expect(run('mimi', { components: ['menu'] }, tree)).rejects.toThrow(
-      /no es un componente de Mimi/,
+      /no es un componente ni un Block de Mimi/,
     );
   });
 

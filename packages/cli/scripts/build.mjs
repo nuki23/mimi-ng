@@ -1,6 +1,7 @@
 // Compila los schematics de @mimi-ng/cli y empaqueta las plantillas de ui-core (tareas 3.1 y 3.2).
 // Solo APIs de Node (sin cp ni rm de shell), para que funcione igual en Windows.
 import { execFileSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 import { cp, readFile, rm, writeFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { dirname, join, relative, sep } from 'node:path';
@@ -12,8 +13,8 @@ const src = join(cliRoot, 'src');
 const dist = join(cliRoot, 'dist');
 const uiCoreLib = join(repoRoot, 'packages', 'ui-core', 'src', 'lib');
 
-/** Carpetas de ui-core que se entregan con la CLI. */
-const TEMPLATE_DIRS = ['components', 'utils', 'theme'];
+/** Carpetas de ui-core que se entregan con la CLI (blocks, desde la 0.4.0: B.1). */
+const TEMPLATE_DIRS = ['components', 'utils', 'theme', 'blocks'];
 
 /**
  * Archivos que no se entregan, relativos a ui-core/src/lib. `utils/index.ts` es el índice de
@@ -54,6 +55,7 @@ await writeFile(registryPath, `${JSON.stringify({ version, ...builtRegistry }, n
 
 // 4. Plantillas: los archivos de ui-core que copia la CLI, sin pruebas ni excluidos.
 for (const dir of TEMPLATE_DIRS) {
+  if (!existsSync(join(uiCoreLib, dir))) continue;
   await cp(join(uiCoreLib, dir), join(dist, 'templates', dir), {
     recursive: true,
     filter: isShipped,

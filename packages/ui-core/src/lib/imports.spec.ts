@@ -79,6 +79,28 @@ describe('importaciones de ui-core', () => {
     }
   });
 
+  it('Blocks (B.1): nadie importa un Block, y un Block solo importa componentes con el alias', () => {
+    // Se arma por partes para que este archivo no se detecte a sí mismo.
+    const blockImport = new RegExp(String.raw`from\s+['"]@/` + String.raw`blocks`);
+    const blocksDir = path.join(ROOT, 'blocks');
+    const offenders = files
+      .filter((file) => blockImport.test(fs.readFileSync(file, 'utf8')))
+      .map((file) => path.relative(ROOT, file));
+    expect(offenders).toEqual([]);
+    // Un Block importa sus componentes con @/components/ui/<x> (archivo concreto, regla 9) y sus
+    // archivos entre sí con rutas relativas dentro de su carpeta (la otra prueba).
+    const aliased = /from\s+['"](@\/[^'"]+)['"]/g;
+    const wrong = files
+      .filter((file) => file.startsWith(blocksDir))
+      .flatMap((file) =>
+        [...fs.readFileSync(file, 'utf8').matchAll(aliased)]
+          .map(([, spec]) => spec)
+          .filter((spec) => !spec.startsWith('@/components/ui/'))
+          .map((spec) => `${path.relative(ROOT, file)}: ${spec}`),
+      );
+    expect(wrong).toEqual([]);
+  });
+
   it('nada privado de @angular/aria ni @angular/cdk (decisión 4.3)', () => {
     const offenders = files.flatMap((file) =>
       privateAngularImports(fs.readFileSync(file, 'utf8')).map(

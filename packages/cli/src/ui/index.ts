@@ -9,7 +9,13 @@ import { hasDirective, insertAfterTheme } from '../init/css';
 import { INIT_ITEMS } from '../init/items';
 import { normalizePath } from '../init/paths';
 import { registry, resolveItems } from '../registry';
-import { type MimiConfig, type PackageJson, allDependencies, readJson } from '../utils/project';
+import {
+  type MimiConfig,
+  type PackageJson,
+  allDependencies,
+  defaultBlocksDir,
+  readJson,
+} from '../utils/project';
 import {
   mimiSourceNotLine,
   missingMimiExclusion,
@@ -21,7 +27,8 @@ import {
   blockedMessages,
   emptyReport,
   hasFileChanges,
-  projectPathOf,
+  isBlockFile,
+  targetPathOf,
   updatedMessages,
   writeTemplates,
 } from '../utils/write-files';
@@ -31,15 +38,23 @@ export interface UiOptions {
   overwrite?: boolean;
 }
 
-/** Componentes que se pueden agregar: los ítems `component` del registro. */
-export const AVAILABLE = Object.entries(registry.items)
-  .filter(([, item]) => item.type === 'component')
-  .map(([name]) => name)
-  .sort();
+const namesOf = (type: 'component' | 'block') =>
+  Object.entries(registry.items)
+    .filter(([, item]) => item.type === type)
+    .map(([name]) => name)
+    .sort();
+
+/**
+ * Lo que se puede agregar: los ítems `component` del registro y, después, los `block` (B.1-c;
+ * el mismo orden que el x-prompt).
+ */
+export const AVAILABLE = [...namesOf('component'), ...namesOf('block')];
 
 /** Lo que ui averigua antes de escribir nada. */
 interface Plan {
   componentsDir: string;
+  /** Carpeta de los Blocks: `aliases.blocks` de mimi.json o la de por defecto. */
+  blocksDir: string;
   config: MimiConfig;
   /** Ítems a copiar: los pedidos y sus registryDependencies, sin repetir. */
   items: string[];
@@ -90,6 +105,7 @@ export function ui(options: UiOptions): Rule {
         items: [...plan.items, ...plan.implicit],
         implicit: plan.implicit,
         componentsDir: plan.componentsDir,
+        blocksDir: plan.blocksDir,
         overwrite: options.overwrite ?? false,
         version: registry.version,
         report,
@@ -131,7 +147,7 @@ function inspect(tree: Tree, options: UiOptions): Plan {
   if (unknown.length > 0) {
     const lines = unknown.map((name) => {
       const suggestion = closest(name);
-      return `"${name}" no es un componente de Mimi.${suggestion ? ` ¿Quisiste decir ${suggestion}?` : ''}`;
+      return `"${name}" no es un componente ni un Block de Mimi.${suggestion ? ` ¿Quisiste decir ${suggestion}?` : ''}`;
     });
     throw new SchematicsException(`${lines.join('\n')}\nDisponibles: ${AVAILABLE.join(', ')}.`);
   }
@@ -172,11 +188,13 @@ function inspect(tree: Tree, options: UiOptions): Plan {
   );
 
   const componentsDir = normalizePath(config.aliases?.components ?? 'src/app/components/ui');
+  const blocksDir = normalizePath(config.aliases?.blocks ?? defaultBlocksDir(componentsDir));
   const outdated = outdatedPeers(tree, items, installed, newPackages);
   const updatable = PEERS_WITH_MINIMUM.filter((name) => installed[name] || newPackages[name]);
   const missingExclusion = mimiExclusion(tree, config, installed);
   return {
     componentsDir,
+    blocksDir,
     config,
     items,
     implicit,
@@ -362,13 +380,22 @@ function updateMimiConfig(plan: Plan, report: FileReport): Rule {
     const skipped = new Set(report.skipped);
     const blocked = new Set(report.blocked.map((b) => b.item));
     const components = { ...plan.config.components };
+    const blocks = { ...plan.config.blocks };
     for (const item of plan.items) {
-      if (registry.items[item].type !== 'component') continue;
+      const { type, files } = registry.items[item];
+      if (type !== 'component' && type !== 'block') continue;
       if (blocked.has(item)) continue;
-      if (registry.items[item].files.some((file) => skipped.has(file))) continue;
-      components[item] = { version: registry.version };
+      if (files.some((file) => skipped.has(file))) continue;
+      (type === 'block' ? blocks : components)[item] = { version: registry.version };
     }
-    const next = { ...plan.config, components };
+    const next: MimiConfig = { ...plan.config, components };
+    if (Object.keys(blocks).length > 0) {
+      next.blocks = blocks;
+      // Proyectos de la 0.3.0 o anteriores: la carpeta queda escrita la primera vez (B.1-a).
+      if (!plan.config.aliases?.blocks) {
+        next.aliases = { ...plan.config.aliases, blocks: plan.blocksDir };
+      }
+    }
     const text = `${JSON.stringify(next, null, 2)}\n`;
     if (tree.readText('mimi.json') !== text) tree.overwrite('mimi.json', text);
   };
@@ -409,10 +436,19 @@ function updateGlobalCss(plan: Plan): Rule {
 
 // ── Mensaje final ─────────────────────────────────────────────────────────────────────
 
+/**
+ * Cómo se importa un Block desde `app.routes.ts` (en `src/app/`): `src/app/blocks` →
+ * `./blocks/login-01`. Si la carpeta no está dentro de `app/`, la ruta del workspace.
+ */
+function routesImport(blocksDir: string, item: string): string {
+  const at = `/${blocksDir}`.lastIndexOf('/app/');
+  return at >= 0 ? `./${`/${blocksDir}`.slice(at + 5)}/${item}` : `${blocksDir}/${item}`;
+}
+
 function summary(plan: Plan, report: FileReport): Rule {
   return (_tree, context) => {
     const log = context.logger;
-    const path = (file: string) => `${plan.componentsDir}/${projectPathOf(file)}`;
+    const path = (file: string) => targetPathOf(file, plan.componentsDir, plan.blocksDir);
 
     if (report.created.length > 0) {
       log.info('Agregado:');
@@ -421,6 +457,16 @@ function summary(plan: Plan, report: FileReport): Rule {
     if (report.overwritten.length > 0) {
       log.info('Reemplazado (--overwrite):');
       for (const file of report.overwritten) log.info(`  ~ ${path(file)}`);
+      // Un Block es una pantalla del usuario: --overwrite la reemplaza entera (B.1, trampas).
+      const screens = [
+        ...new Set(report.overwritten.filter(isBlockFile).map((file) => file.split('/')[1])),
+      ];
+      for (const block of screens) {
+        log.warn(
+          `--overwrite reemplazó tu pantalla ${block} (${plan.blocksDir}/${block}/) por la de ` +
+            `Mimi ${registry.version}. Si tenías cambios, recupéralos de git.`,
+        );
+      }
     }
     const itemOf = (file: string) =>
       [...plan.items, ...plan.implicit].find((item) => registry.items[item].files.includes(file)) ??
@@ -431,8 +477,25 @@ function summary(plan: Plan, report: FileReport): Rule {
         `Omitido: ${path(file)} ya existe con otro contenido (usa --overwrite para reemplazarlo).`,
       );
     }
-    for (const message of blockedMessages(report, plan.componentsDir, registry.version)) {
+    for (const message of blockedMessages(
+      report,
+      plan.componentsDir,
+      registry.version,
+      plan.blocksDir,
+    )) {
       log.warn(message);
+    }
+    // Un Block nuevo es una página: se enruta (B.1, «API pública»).
+    const created = new Set(report.created);
+    for (const item of plan.items) {
+      const { type, files } = registry.items[item];
+      if (type !== 'block' || !files.some((file) => created.has(file))) continue;
+      const className = item.replace(/(^|-)([a-z0-9])/g, (_, _dash, c: string) => c.toUpperCase());
+      log.info(
+        `${item} es una pantalla: agrégala a tus rutas, por ejemplo ` +
+          `{ path: '${item.split('-')[0]}', component: ${className} } ` +
+          `(import { ${className} } from '${routesImport(plan.blocksDir, item)}').`,
+      );
     }
     if (!hasFileChanges(report) && report.skipped.length === 0 && report.blocked.length === 0) {
       log.info('Nada que hacer: los archivos ya están al día.');

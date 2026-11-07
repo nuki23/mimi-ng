@@ -9,6 +9,7 @@ import {
   url,
 } from '@angular-devkit/schematics';
 import { registry, resolveItems } from '../registry';
+import { defaultBlocksDir } from './project';
 
 /** Carpeta de las copias originales, en la raíz del workspace. Debe quedar en git. */
 export const BASE_DIR = '.mimi/base';
@@ -74,7 +75,28 @@ export function projectPathOf(file: string): string {
   return file.replace(/^components\//, '');
 }
 
-/** Copia original en .mimi/base, con la misma estructura (`.mimi/base/button/button.ts`). */
+/** Prefijo de los archivos de un Block en las plantillas (`blocks/login-01/login-01.ts`). */
+const BLOCKS_PREFIX = 'blocks/';
+
+/** ¿Es un archivo de un Block? */
+export const isBlockFile = (file: string) => file.startsWith(BLOCKS_PREFIX);
+
+/**
+ * Ruta en el proyecto de un archivo de las plantillas: los Blocks van a su carpeta, sin
+ * `blocks/` (`blocks/login-01/login-01.ts` → `<blocksDir>/login-01/login-01.ts`); el resto, a la
+ * de componentes (ver projectPathOf).
+ */
+export function targetPathOf(file: string, componentsDir: string, blocksDir: string): string {
+  return isBlockFile(file)
+    ? `${blocksDir}/${file.slice(BLOCKS_PREFIX.length)}`
+    : `${componentsDir}/${projectPathOf(file)}`;
+}
+
+/**
+ * Copia original en .mimi/base, con la misma estructura (`.mimi/base/button/button.ts`). Los
+ * Blocks conservan `blocks/` (`.mimi/base/blocks/login-01/login-01.ts`), y esa es también su
+ * clave en el manifiesto.
+ */
 export function basePathOf(file: string): string {
   return `${BASE_DIR}/${projectPathOf(file)}`;
 }
@@ -130,6 +152,8 @@ export function writeTemplates(options: {
   items: string[];
   implicit?: Iterable<string>;
   componentsDir: string;
+  /** Carpeta de los Blocks (solo hace falta si se copia alguno). */
+  blocksDir?: string;
   overwrite: boolean;
   version: string;
   report: FileReport;
@@ -154,7 +178,12 @@ export function writeTemplates(options: {
   const write: Rule = (tree) => {
     const manifest = readManifest(tree);
     let manifestChanged = false;
-    const targetOf = (file: string) => `${options.componentsDir}/${projectPathOf(file)}`;
+    const targetOf = (file: string) =>
+      targetPathOf(
+        file,
+        options.componentsDir,
+        options.blocksDir ?? defaultBlocksDir(options.componentsDir),
+      );
 
     const stateOf = (file: string): { state: FileState; from: string | null } => {
       const target = targetOf(file);
@@ -289,8 +318,9 @@ export function blockedMessages(
   report: FileReport,
   componentsDir: string,
   version: string,
+  blocksDir: string = defaultBlocksDir(componentsDir),
 ): string[] {
-  const path = (file: string) => `${componentsDir}/${projectPathOf(file)}`;
+  const path = (file: string) => targetPathOf(file, componentsDir, blocksDir);
   return report.blocked.map(({ item, files, dependency, installed }) => {
     if (dependency) {
       const needs = `necesita ${dependency} ${version}, que no se actualizó (ver el aviso de ${dependency}).`;
@@ -298,9 +328,20 @@ export function blockedMessages(
         ? `${item} no se actualizó a ${version}: ${needs}`
         : `${item} no se agregó: ${needs}`;
     }
-    const isTheme = registry.items[item]?.type === 'theme';
-    const label = isTheme ? 'El tema' : item;
+    const type = registry.items[item]?.type;
     const dir = projectPathOf(files[0]).split('/').slice(0, -1).join('/');
+    if (type === 'block') {
+      // Lo normal es editar un Block (es una pantalla del usuario): el aviso no alarma (B.1-b).
+      return (
+        `${item} no se actualizó a ${version}: es tu pantalla y la modificaste ` +
+        `(${files.map(path).join(', ')}), así que no se tocó ninguno de sus archivos. Es lo ` +
+        `normal con un Block. La versión de Mimi que modificaste está en ${BASE_DIR}/${dir}/, ` +
+        'para comparar. Si quieres la nueva, guarda tus cambios (por ejemplo, en git) y vuelve ' +
+        'a ejecutar el comando con --overwrite: reemplaza tu pantalla entera.'
+      );
+    }
+    const isTheme = type === 'theme';
+    const label = isTheme ? 'El tema' : item;
     return (
       `${label} no se actualizó a ${version} porque modificaste ${files.map(path).join(', ')}. ` +
       'No se cambió ninguno de sus archivos, para no mezclar versiones.' +

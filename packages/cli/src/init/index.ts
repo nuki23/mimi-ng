@@ -15,6 +15,7 @@ import {
   type MimiConfig,
   type PackageJson,
   allDependencies,
+  defaultBlocksDir,
   majorOf,
   readJson,
 } from '../utils/project';
@@ -326,6 +327,8 @@ function writeMimiConfig(plan: Plan): Rule {
         components: plan.componentsDir,
         utils: `${plan.componentsDir}/utils`,
         theme: `${plan.sourceRoot}/app/mimi.preset.ts`,
+        // Desde la 0.4.0 (B.1-a). Los proyectos anteriores lo reciben con el primer Block.
+        blocks: defaultBlocksDir(plan.componentsDir),
       },
       components: {},
     };

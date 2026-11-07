@@ -41,5 +41,5 @@
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
     - Manual (a la M.20): NVDA (pestañas verticales, interruptores con descripción, barra de cambios); teléfono real (píldoras desplazables con el dedo, teclado virtual sobre la barra de cambios); claro y oscuro.
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR (B.6-a): «Eliminar cuenta» confirma con `mimi-confirm` (G1.7, publicado; suma `@angular/cdk/dialog` al Block) o solo emite la salida y el usuario decide. Recomendación: **solo la salida**, como en el diseño (que no dibuja la confirmación); el código de la página del sitio muestra cómo enchufarle `mimi-confirm`.
-    - PENDIENTE DE DECIDIR (B.6-b): ¿Guardar muestra un Toast (G1.8)? Recomendación: no (el Toast es global y lo provee la app); la barra desaparece al guardar, y el sitio muestra el ejemplo con Toast.
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.6-a): «Eliminar cuenta» confirma con `mimi-confirm` (G1.7, publicado; suma `@angular/cdk/dialog` al Block) o solo emite la salida y el usuario decide. Recomendación: **solo la salida**, como en el diseño (que no dibuja la confirmación); el código de la página del sitio muestra cómo enchufarle `mimi-confirm`.
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.6-b): ¿Guardar muestra un Toast (G1.8)? Recomendación: no (el Toast es global y lo provee la app); la barra desaparece al guardar, y el sitio muestra el ejemplo con Toast.
