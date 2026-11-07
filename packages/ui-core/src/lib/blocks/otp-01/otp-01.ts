@@ -80,8 +80,14 @@ export class Otp01 {
   protected readonly incomplete = signal(false);
 
   /** `status` vale para el código que se envió: al cambiarlo, vuelve a «idle». */
+  /**
+   * Enviado y sin respuesta todavía (M4): el `status` que hay es el del envío anterior. Se apaga
+   * cuando tu app cambia `status` o `loading` (si respondes con el mismo `status`, pon `loading`
+   * mientras compruebas).
+   */
+  private readonly awaiting = signal(false);
   protected readonly shownStatus = computed<Otp01Status>(() =>
-    this.code() === this.sent() ? this.status() : 'idle',
+    this.awaiting() || this.loading() || this.code() !== this.sent() ? 'idle' : this.status(),
   );
   protected readonly message = computed(() => {
     if (this.incomplete()) return `Enter the ${this.length()}-digit code.`;
@@ -128,6 +134,12 @@ export class Otp01 {
       const code = this.code();
       if (code.length === this.length()) untracked(() => this.send(code));
     });
+    // La respuesta de tu app (un status o un loading nuevos) termina la espera del envío.
+    effect(() => {
+      this.status();
+      this.loading();
+      untracked(() => this.awaiting.set(false));
+    });
     inject(DestroyRef).onDestroy(() => this.stopTimer());
     afterNextRender(() => {
       this.startCountdown();
@@ -139,6 +151,9 @@ export class Otp01 {
   }
 
   protected onCodeChange(code: string): void {
+    // Al editar, el código enviado deja de valer: el mensaje vuelve a «idle» y, completo de nuevo
+    // (aunque sea el mismo), se vuelve a enviar (M4).
+    if (code !== this.code()) this.sent.set(null);
     this.code.set(code);
     this.incomplete.set(false);
   }
@@ -164,9 +179,15 @@ export class Otp01 {
     this.otp().controlElement.focus();
   }
 
+  /**
+   * Una vez por código (B.5-a): al completar y con el botón no se repite. Después de un error, el
+   * mismo código se puede reintentar (M4).
+   */
   private send(code: string): void {
-    if (this.loading() || code === this.sent()) return;
+    if (this.loading()) return;
+    if (code === this.sent() && !(this.status() === 'error' && !this.awaiting())) return;
     this.sent.set(code);
+    this.awaiting.set(true);
     this.verify.emit(code);
   }
 

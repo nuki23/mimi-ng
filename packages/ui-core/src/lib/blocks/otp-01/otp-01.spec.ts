@@ -97,6 +97,45 @@ describe('Otp01', () => {
     expect(q('mimi-input-otp').getAttribute('data-state') ?? '').not.toBe('error');
   });
 
+  describe('M4: reintentar el mismo código tras un error', () => {
+    it('borrar y volver a escribir el mismo código lo envía otra vez, sin «Incorrect» antes de la respuesta', async () => {
+      const { type, settle, host, status } = await setup();
+      await type('246811');
+      host.status.set('error');
+      await settle();
+      expect(status().textContent).toContain('Incorrect code.');
+      await type('24681');
+      expect(status().textContent).not.toContain('Incorrect code.');
+      await type('246811');
+      expect(host.codes).toEqual(['246811', '246811']);
+      // Enviado de nuevo: el error viejo no se muestra mientras no llega la respuesta.
+      expect(status().textContent).not.toContain('Incorrect code.');
+      host.loading.set(true);
+      await settle();
+      expect(status().textContent).not.toContain('Incorrect code.');
+      host.loading.set(false);
+      await settle();
+      expect(status().textContent).toContain('Incorrect code.');
+    });
+
+    it('«Verify» con el mismo código después de un error lo envía otra vez', async () => {
+      const { type, settle, host, button, status } = await setup();
+      await type('246811');
+      host.status.set('error');
+      await settle();
+      button('Verify').click();
+      await settle();
+      expect(host.codes).toEqual(['246811', '246811']);
+      expect(status().textContent).not.toContain('Incorrect code.');
+      // Sin error, el botón no repite un código ya enviado (una vez por código).
+      host.status.set('idle');
+      await settle();
+      button('Verify').click();
+      await settle();
+      expect(host.codes).toHaveLength(2);
+    });
+  });
+
   it('el mensaje describe el código (role="status")', async () => {
     const { input, status } = await setup();
     expect(input().getAttribute('aria-describedby')).toContain(status().id);

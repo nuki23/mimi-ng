@@ -104,7 +104,8 @@ export class Otp01Page {
       name: 'status',
       type: "'idle' | 'error' | 'success'",
       default: "'idle'",
-      description: 'El resultado del último código enviado por verify.',
+      description:
+        'El resultado del último código enviado por verify. Tras un error se puede reintentar el mismo código; si respondes otra vez con el mismo status, pon loading mientras compruebas (así el error viejo no se ve antes de tu respuesta).',
     },
     {
       name: 'loading',

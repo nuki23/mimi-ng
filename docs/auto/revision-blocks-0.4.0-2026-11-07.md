@@ -51,3 +51,17 @@ Commit: `fix(cli): error claro con alias absolutos o fuera del proyecto en mimi.
 **Arreglo:** el campo con error queda pendiente (`pendingFocus`) y lo enfoca el primer render en el que el campo ya está enlazado a su `[formField]` (`formFieldBindings().length > 0`), desde el `afterEveryRender` que ya tenía el Block; si ya lo está (se guarda desde Perfil), se enfoca en el acto. **La prueba pasa;** `settings-01.spec.ts`: 12 en verde.
 
 Commit: `fix(blocks): settings-01 enfoca el campo con error al guardar desde otra sección (M3)`.
+
+## M4: otp-01, reintentar el mismo código tras un error
+
+**Pruebas primero** (`otp-01.spec.ts`, «M4», 2): las dos fallaron con el código anterior (`expected [ '246811' ] to deeply equal [ '246811', '246811' ]`): el mismo código no se podía reenviar, ni volviendo a escribirlo ni con «Verify», y al reescribirlo el «Incorrect code» volvía al instante.
+
+**Arreglo** (`otp-01.ts`):
+
+- editar el código anula el «enviado» (vuelve a «idle»); completo otra vez, aunque sea el mismo, se envía;
+- con el mismo código y un error, «Verify» lo reenvía; sin error, sigue siendo una vez por código (B.5-a);
+- después de enviar, el Block **espera la respuesta** (`awaiting`): no muestra el `status` anterior hasta que tu app cambia `status` o `loading`, y mientras `loading` no muestra ninguno. Si una app responde con el mismo `status` sin `loading`, el mensaje se queda en «idle» (documentado en la API de la página: pon `loading` mientras compruebas).
+
+**Pruebas:** `otp-01.spec.ts`, 9 en verde (las 7 de antes sin cambios); `otp-01-demo.spec.ts` en verde.
+
+Commit: `fix(blocks): otp-01 deja reintentar el mismo código tras un error (M4)`.
