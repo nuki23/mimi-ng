@@ -165,27 +165,27 @@
           },
           {
             "value": "login-01",
-            "label": "login-01 (Block)"
+            "label": "login-01 (Block, página)"
           },
           {
             "value": "login-02",
-            "label": "login-02 (Block)"
+            "label": "login-02 (Block, página)"
           },
           {
             "value": "otp-01",
-            "label": "otp-01 (Block)"
+            "label": "otp-01 (Block, página)"
           },
           {
             "value": "pricing-01",
-            "label": "pricing-01 (Block)"
+            "label": "pricing-01 (Block, sección)"
           },
           {
             "value": "settings-01",
-            "label": "settings-01 (Block)"
+            "label": "settings-01 (Block, página)"
           },
           {
             "value": "signup-01",
-            "label": "signup-01 (Block)"
+            "label": "signup-01 (Block, página)"
           }
         ]
       }
@@ -194,6 +194,10 @@
       "type": "boolean",
       "default": false,
       "description": "Reemplaza los archivos que ya existan con otro contenido."
+    },
+    "name": {
+      "type": "string",
+      "description": "Nombre de la página que genera un Block de tipo página (por defecto, el del Block sin el número: login-01 → login). En kebab-case: --name admin-login."
     }
   }
 }

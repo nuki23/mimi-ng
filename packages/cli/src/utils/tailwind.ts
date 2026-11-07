@@ -32,30 +32,33 @@ function atLeast41(version: string): boolean {
 
 /**
  * Con `source(none)`, Tailwind solo escanea lo que dice un `@source`: la carpeta de los Blocks
- * necesita el suyo (G1), como la de componentes. Devuelve el CSS con la línea agregada (después
- * del `@source` de componentes, o del tema), o `null` si no hace falta: sin `source(none)`, o si
- * ya está (comillas simples o dobles).
+ * (G1) y la de las páginas (B.11) necesitan el suyo, como la de componentes. Devuelve el CSS con
+ * la línea agregada (después del último `@source` de `afterDirs` que esté, o del tema), o `null`
+ * si no hace falta: sin `source(none)`, o si ya está (comillas simples o dobles).
  */
-export function withBlocksSource(
+export function withFolderSource(
   css: string,
   cssPath: string,
-  componentsDir: string,
-  blocksDir: string,
+  afterDirs: string[],
+  dir: string,
 ): { css: string; line: string } | null {
   const tailwind = findTailwindImport(css);
   if (!tailwind?.sourceNone) return null;
   const cssDir = dirnameOf(cssPath);
-  const path = relativePath(cssDir, blocksDir);
+  const path = relativePath(cssDir, dir);
   if (hasDirective(css, '@source', path)) return null;
   const line = `@source "${path}";`;
-  const after = new RegExp(
-    String.raw`^[ \t]*@source\s+(["'])` +
-      relativePath(cssDir, componentsDir).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') +
-      String.raw`\1[^;\n]*;[^\n]*$`,
-    'm',
-  ).exec(css);
-  if (after) {
-    const end = after.index + after[0].length;
+  let end = -1;
+  for (const after of afterDirs) {
+    const match = new RegExp(
+      String.raw`^[ \t]*@source\s+(["'])` +
+        relativePath(cssDir, after).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') +
+        String.raw`\1[^;\n]*;[^\n]*$`,
+      'm',
+    ).exec(css);
+    if (match) end = Math.max(end, match.index + match[0].length);
+  }
+  if (end >= 0) {
     const eol = /\r\n/.test(css) ? '\r\n' : '\n';
     return { css: css.slice(0, end) + eol + line + css.slice(end), line };
   }

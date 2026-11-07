@@ -17,6 +17,7 @@ import {
   allDependencies,
   assertAliases,
   defaultBlocksDir,
+  defaultPagesDir,
   majorOf,
   readJson,
 } from '../utils/project';
@@ -64,6 +65,8 @@ interface Plan {
   componentsDir: string;
   /** Carpeta de los Blocks (la de mimi.json o la de por defecto). */
   blocksDir: string;
+  /** Carpeta de las páginas (B.11; la de mimi.json o la de por defecto). */
+  pagesDir: string;
   buildTsConfig?: string;
   mimiConfig: MimiConfig | null;
   sourceRoot: string;
@@ -172,6 +175,7 @@ async function inspect(tree: Tree, options: InitOptions): Promise<Plan> {
     sourceNot: tailwindSupportsSourceNot(tree, deps['tailwindcss']),
     componentsDir,
     blocksDir: normalizePath(mimiConfig?.aliases?.blocks ?? defaultBlocksDir(componentsDir)),
+    pagesDir: normalizePath(mimiConfig?.aliases?.pages ?? defaultPagesDir(componentsDir)),
     buildTsConfig: typeof tsConfig === 'string' ? normalizePath(tsConfig) : undefined,
     mimiConfig,
     sourceRoot,
@@ -228,6 +232,11 @@ function updateGlobalCss(plan: Plan): Rule {
     const blocksSourcePath = relativePath(cssDir, plan.blocksDir);
     if (plan.sourceNone && !hasDirective(css, '@source', blocksSourcePath)) {
       lines.push(`@source "${blocksSourcePath}";`);
+    }
+    // B.11-i: y la de las páginas (los Blocks de tipo página).
+    const pagesSourcePath = relativePath(cssDir, plan.pagesDir);
+    if (plan.sourceNone && !hasDirective(css, '@source', pagesSourcePath)) {
+      lines.push(`@source "${pagesSourcePath}";`);
     }
     // Sin source(none), Tailwind escanea todo el workspace salvo lo que ignora git, y .mimi/ va
     // en git: las clases de las copias originales acabarían en el CSS aunque el usuario ya las
@@ -340,6 +349,8 @@ function writeMimiConfig(plan: Plan): Rule {
         theme: `${plan.sourceRoot}/app/mimi.preset.ts`,
         // Desde la 0.4.0 (B.1-a). Los proyectos anteriores lo reciben con el primer Block.
         blocks: plan.blocksDir,
+        // Desde la B.11. Los proyectos anteriores lo reciben con la primera página.
+        pages: plan.pagesDir,
       },
       components: {},
     };

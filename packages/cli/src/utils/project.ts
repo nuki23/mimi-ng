@@ -21,10 +21,33 @@ export interface MimiConfig {
    * `blocks`: carpeta de los Blocks (B.1). Los proyectos de la 0.3.0 o anteriores no lo tienen:
    * `ng g mimi` usa `defaultBlocksDir` y lo escribe la primera vez que copia un Block.
    */
-  aliases?: { components?: string; utils?: string; theme?: string; blocks?: string };
+  /**
+   * `pages`: carpeta de las páginas (B.11), los Blocks de tipo `page`. Si falta, `ng g mimi` usa
+   * `defaultPagesDir` y lo escribe la primera vez que genera una página.
+   */
+  aliases?: {
+    components?: string;
+    utils?: string;
+    theme?: string;
+    blocks?: string;
+    pages?: string;
+  };
   components?: Record<string, { version: string }>;
   /** Versión de cada Block copiado, como `components`. */
-  blocks?: Record<string, { version: string }>;
+  blocks?: Record<string, BlockEntry>;
+}
+
+/**
+ * Un Block en `mimi.json → blocks`, por su nombre del registro. Una página (B.11) guarda además
+ * dónde está y con qué nombre se generó: así se sigue aunque el usuario elija otro nombre o mueva
+ * la carpeta (cambiando `path`). Sin `path`, es una sección o una pantalla de la 0.4.0.
+ */
+export interface BlockEntry {
+  version: string;
+  /** Carpeta de la página en el workspace (`src/app/pages/login`). */
+  path?: string;
+  /** Nombre con que se generó (`login`: `login.ts`, `LoginPage`). */
+  name?: string;
 }
 
 /**
@@ -33,31 +56,57 @@ export interface MimiConfig {
  * de la carpeta de componentes (`src/app/ui` → `src/app/blocks`).
  */
 export function defaultBlocksDir(componentsDir: string): string {
+  return siblingOfComponents(componentsDir, 'blocks');
+}
+
+/**
+ * Carpeta de las páginas si mimi.json no la dice (B.11-b), con la misma regla que la de los
+ * Blocks: `src/app/components/ui` → `src/app/pages`.
+ */
+export function defaultPagesDir(componentsDir: string): string {
+  return siblingOfComponents(componentsDir, 'pages');
+}
+
+function siblingOfComponents(componentsDir: string, folder: string): string {
   const parts = componentsDir.split('/').filter(Boolean);
   if (parts.length >= 2 && parts.at(-1) === 'ui' && parts.at(-2) === 'components') {
     parts.splice(-2, 2);
   } else {
     parts.pop();
   }
-  return [...parts, 'blocks'].join('/');
+  return [...parts, folder].join('/');
 }
 
+const ALIAS_EXAMPLES = {
+  components: 'src/app/components/ui',
+  blocks: 'src/app/blocks',
+  pages: 'src/app/pages',
+} as const;
+
 /**
- * M2: falla con un error claro (sin escribir nada) si `aliases.components` o `aliases.blocks` de
- * mimi.json es absoluto, tiene `..` o sale del proyecto.
+ * M2: falla con un error claro (sin escribir nada) si `aliases.components`, `aliases.blocks` o
+ * `aliases.pages` de mimi.json, o la carpeta de una página (`blocks.<ítem>.path`, B.11), es
+ * absoluto, tiene `..` o sale del proyecto.
  */
 export function assertAliases(config: MimiConfig): void {
-  for (const name of ['components', 'blocks'] as const) {
+  for (const name of ['components', 'blocks', 'pages'] as const) {
     const value = config.aliases?.[name];
     if (value === undefined) continue;
-    const reason = invalidAliasReason(value);
-    if (!reason) continue;
-    const example = name === 'blocks' ? 'src/app/blocks' : 'src/app/components/ui';
-    throw new SchematicsException(
-      `mimi.json → aliases.${name} ${reason}: ${JSON.stringify(value)}. Usa una ruta relativa a ` +
-        `la raíz del workspace y dentro de ella (por ejemplo "${example}"). No se cambió nada.`,
-    );
+    assertRelative(`aliases.${name}`, value, ALIAS_EXAMPLES[name]);
   }
+  for (const [item, entry] of Object.entries(config.blocks ?? {})) {
+    if (entry?.path === undefined) continue;
+    assertRelative(`blocks.${item}.path`, entry.path, `${ALIAS_EXAMPLES.pages}/login`);
+  }
+}
+
+function assertRelative(key: string, value: unknown, example: string): void {
+  const reason = invalidAliasReason(value);
+  if (!reason) return;
+  throw new SchematicsException(
+    `mimi.json → ${key} ${reason}: ${JSON.stringify(value)}. Usa una ruta relativa a ` +
+      `la raíz del workspace y dentro de ella (por ejemplo "${example}"). No se cambió nada.`,
+  );
 }
 
 export function readJson<T>(tree: Tree, path: string): T | null {

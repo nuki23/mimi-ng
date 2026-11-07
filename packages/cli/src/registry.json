@@ -486,6 +486,7 @@
     },
     "login-01": {
       "type": "block",
+      "kind": "page",
       "files": [
         "blocks/login-01/login-01.ts",
         "blocks/login-01/login-01.html",
@@ -507,6 +508,7 @@
     },
     "login-02": {
       "type": "block",
+      "kind": "page",
       "files": [
         "blocks/login-02/login-02.ts",
         "blocks/login-02/login-02.html",
@@ -519,6 +521,7 @@
     },
     "signup-01": {
       "type": "block",
+      "kind": "page",
       "files": [
         "blocks/signup-01/signup-01.ts",
         "blocks/signup-01/signup-01.html",
@@ -531,11 +534,13 @@
     },
     "otp-01": {
       "type": "block",
+      "kind": "page",
       "files": ["blocks/otp-01/otp-01.ts", "blocks/otp-01/otp-01.html", "blocks/otp-01/index.ts"],
       "registryDependencies": ["button", "card", "input-otp", "utils/cn"]
     },
     "settings-01": {
       "type": "block",
+      "kind": "page",
       "files": [
         "blocks/settings-01/settings-01.ts",
         "blocks/settings-01/settings-01.html",
@@ -561,6 +566,7 @@
     },
     "pricing-01": {
       "type": "block",
+      "kind": "section",
       "files": [
         "blocks/pricing-01/pricing-01.ts",
         "blocks/pricing-01/pricing-01.html",

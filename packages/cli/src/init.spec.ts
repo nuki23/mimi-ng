@@ -123,6 +123,8 @@ describe('init', () => {
         theme: 'projects/app/src/app/mimi.preset.ts',
         // Desde la 0.4.0: la hermana de components/ (B.1-a).
         blocks: 'projects/app/src/app/blocks',
+        // Desde la B.11: las páginas, también hermana de components/.
+        pages: 'projects/app/src/app/pages',
       },
       components: {},
     });
@@ -308,7 +310,7 @@ describe('init', () => {
     expect(result.readContent('/projects/app/tsconfig.app.json')).toBe(before);
   });
 
-  it('con source(none) agrega el @source exacto de componentes y de Blocks (G1) y avisa', async () => {
+  it('con source(none) agrega el @source exacto de componentes, Blocks (G1) y páginas (B.11) y avisa', async () => {
     const { runner, run, logs } = harness();
     const tree = await createWorkspace(runner);
     tree.overwrite(STYLES, "@import 'tailwindcss' source(none);\n");
@@ -318,7 +320,8 @@ describe('init', () => {
       "@import 'tailwindcss' source(none);\n" +
         '@import "./app/components/ui/theme/theme-base.css";\n' +
         '@source "./app/components/ui";\n' +
-        '@source "./app/blocks";\n',
+        '@source "./app/blocks";\n' +
+        '@source "./app/pages";\n',
     );
     expect(logs.some((l) => l.level === 'warn' && l.message.includes('source(none)'))).toBe(true);
 

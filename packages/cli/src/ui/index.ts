@@ -7,29 +7,43 @@ import {
 } from '@schematics/angular/utility';
 import { hasDirective, insertAfterTheme } from '../init/css';
 import { INIT_ITEMS } from '../init/items';
-import { normalizePath } from '../init/paths';
-import { registry, resolveItems } from '../registry';
+import { normalizePath, relativePath } from '../init/paths';
+import { isPageBlock, registry, resolveItems } from '../registry';
 import {
+  PAGE_NAME,
+  type PageTarget,
+  defaultPageName,
+  isPageFile,
+  pageClassName,
+  pageItemOf,
+  routeLine,
+  routesKey,
+} from '../utils/pages';
+import {
+  type BlockEntry,
   type MimiConfig,
   type PackageJson,
   allDependencies,
   assertAliases,
   defaultBlocksDir,
+  defaultPagesDir,
   readJson,
 } from '../utils/project';
 import {
   mimiSourceNotLine,
   missingMimiExclusion,
   tailwindSupportsSourceNot,
-  withBlocksSource,
+  withFolderSource,
 } from '../utils/tailwind';
 import {
   BASE_DIR,
   type FileReport,
+  type Pages,
   blockedMessages,
   emptyReport,
   hasFileChanges,
   isBlockFile,
+  itemFiles,
   targetPathOf,
   updatedMessages,
   writeTemplates,
@@ -38,6 +52,8 @@ import {
 export interface UiOptions {
   components?: string[];
   overwrite?: boolean;
+  /** Nombre de la página (B.11-c), solo con un Block de tipo `page`: `--name admin-login`. */
+  name?: string;
 }
 
 const namesOf = (type: 'component' | 'block') =>
@@ -57,6 +73,15 @@ interface Plan {
   componentsDir: string;
   /** Carpeta de los Blocks: `aliases.blocks` de mimi.json o la de por defecto. */
   blocksDir: string;
+  /** Carpeta de las páginas: `aliases.pages` de mimi.json o la de por defecto (B.11-b). */
+  pagesDir: string;
+  /** Los Blocks de tipo `page` de esta ejecución que se generan como páginas, con su carpeta. */
+  pages: Pages;
+  /**
+   * Blocks de tipo `page` instalados con la 0.4.0 (en `aliases.blocks`, sin `path` en mimi.json):
+   * se quedan y se actualizan donde están, como en la 0.4.0 (B.11-g).
+   */
+  legacyPages: string[];
   config: MimiConfig;
   /** Ítems a copiar: los pedidos y sus registryDependencies, sin repetir. */
   items: string[];
@@ -108,13 +133,14 @@ export function ui(options: UiOptions): Rule {
         implicit: plan.implicit,
         componentsDir: plan.componentsDir,
         blocksDir: plan.blocksDir,
+        pages: plan.pages,
         overwrite: options.overwrite ?? false,
         version: registry.version,
         report,
       }),
       updateMimiConfig(plan, report),
       updateGlobalCss(plan),
-      addBlocksSource(plan),
+      addFolderSources(plan),
       ...Object.entries(plan.newPackages).map(([name, version]) =>
         addDependency(name, version, {
           type: DependencyType.Default,
@@ -193,12 +219,17 @@ function inspect(tree: Tree, options: UiOptions): Plan {
 
   const componentsDir = normalizePath(config.aliases?.components ?? 'src/app/components/ui');
   const blocksDir = normalizePath(config.aliases?.blocks ?? defaultBlocksDir(componentsDir));
+  const pagesDir = normalizePath(config.aliases?.pages ?? defaultPagesDir(componentsDir));
+  const { pages, legacyPages } = planPages(tree, config, items, options.name, blocksDir, pagesDir);
   const outdated = outdatedPeers(tree, items, installed, newPackages);
   const updatable = PEERS_WITH_MINIMUM.filter((name) => installed[name] || newPackages[name]);
   const missingExclusion = mimiExclusion(tree, config, installed);
   return {
     componentsDir,
     blocksDir,
+    pagesDir,
+    pages,
+    legacyPages,
     config,
     items,
     implicit,
@@ -207,6 +238,155 @@ function inspect(tree: Tree, options: UiOptions): Plan {
     updatable,
     missingExclusion,
   };
+}
+
+// ── Páginas (B.11) ────────────────────────────────────────────────────────────────────
+
+/**
+ * Dónde va cada Block de tipo `page` de esta ejecución. Todo se comprueba antes de escribir: si
+ * algo no cuadra (un `--name` inválido, una carpeta que ya existe y no es esa página, dos páginas
+ * en la misma carpeta), falla sin cambiar nada.
+ *
+ * - Ya generada (`mimi.json → blocks.<ítem>.path`): se actualiza ahí, con su nombre (B.11-f).
+ * - Instalada con la 0.4.0 (`<aliases.blocks>/<ítem>/<ítem>.ts`, sin `path`): se queda donde está
+ *   y se actualiza como antes (B.11-g).
+ * - Nueva: `<aliases.pages>/<nombre>/`, con `--name` o el nombre por defecto (B.11-c).
+ */
+function planPages(
+  tree: Tree,
+  config: MimiConfig,
+  items: string[],
+  name: string | undefined,
+  blocksDir: string,
+  pagesDir: string,
+): { pages: Pages; legacyPages: string[] } {
+  const pageItems = items.filter((item) => isPageBlock(item));
+  if (name !== undefined) {
+    if (!PAGE_NAME.test(name)) {
+      throw new SchematicsException(
+        `--name ${JSON.stringify(name)} no sirve como nombre de página: usa minúsculas, números y ` +
+          'guiones, empezando con una letra (por ejemplo, --name admin-login). No se cambió nada.',
+      );
+    }
+    if (pageItems.length !== 1) {
+      const pageNames = AVAILABLE.filter((item) => isPageBlock(item)).join(', ');
+      throw new SchematicsException(
+        (pageItems.length === 0
+          ? '--name es el nombre de la página que se genera, y no pediste ningún Block de tipo página'
+          : `--name sirve para una sola página, y pediste ${pageItems.join(', ')}: agrégalas por separado`) +
+          ` (son páginas: ${pageNames}). No se cambió nada.`,
+      );
+    }
+  }
+
+  const prefix = projectPrefix(tree, pagesDir);
+  const pages: Pages = {};
+  const legacyPages: string[] = [];
+  const taken = new Map<string, string>();
+  for (const item of pageItems) {
+    const entry: BlockEntry | undefined = config.blocks?.[item];
+    let target: PageTarget;
+    if (entry?.path) {
+      const dir = normalizePath(entry.path);
+      const trackedName = entry.name && PAGE_NAME.test(entry.name) ? entry.name : basename(dir);
+      if (name !== undefined && name !== trackedName) {
+        throw new SchematicsException(
+          `${item} ya es tu página ${trackedName} (${dir}/): Mimi la sigue por su nombre del ` +
+            `registro, así que está en un solo sitio. Para actualizarla, ejecuta ng g mimi ${item} ` +
+            'sin --name. Si quieres otra copia con otro nombre, renombra o mueve la tuya y cambia ' +
+            `"path" y "name" de blocks.${item} en mimi.json. No se cambió nada.`,
+        );
+      }
+      target = { item, dir, name: trackedName, prefix };
+    } else if (tree.exists(`${blocksDir}/${item}/${item}.ts`)) {
+      if (name !== undefined) {
+        throw new SchematicsException(
+          `${item} está instalado como en la 0.4.0, en ${blocksDir}/${item}/, y se sigue ` +
+            'actualizando ahí. Para generarlo como página, guarda tus cambios (por ejemplo, en git), ' +
+            `borra esa carpeta y vuelve a ejecutar el comando. No se cambió nada.`,
+        );
+      }
+      legacyPages.push(item);
+      continue;
+    } else {
+      const pageName = name ?? defaultPageName(item);
+      const dir = `${pagesDir}/${pageName}`;
+      if (hasContent(tree, dir)) {
+        const owner = Object.entries(config.blocks ?? {}).find(
+          ([, other]) => other?.path && normalizePath(other.path) === dir,
+        )?.[0];
+        throw new SchematicsException(
+          `La carpeta ${dir}/ ya existe${owner ? ` (es tu página de ${owner})` : ''}, así que ` +
+            `${item} no se generó ahí: Mimi no sobrescribe tus archivos. Elige otro nombre con ` +
+            `--name, por ejemplo: ng g mimi ${item} --name ${pageName}-2. No se cambió nada.`,
+        );
+      }
+      target = { item, dir, name: pageName, prefix };
+    }
+    const other = taken.get(target.dir);
+    if (other) {
+      throw new SchematicsException(
+        `${other} y ${item} irían a la misma carpeta (${target.dir}/). Agrégalos por separado, ` +
+          `uno de ellos con --name (por ejemplo: ng g mimi ${item} --name ${target.name}-2). ` +
+          'No se cambió nada.',
+      );
+    }
+    taken.set(target.dir, item);
+    pages[item] = target;
+  }
+  return { pages, legacyPages };
+}
+
+const basename = (path: string) => path.slice(path.lastIndexOf('/') + 1);
+
+/** ¿La carpeta existe y tiene algo dentro? (Un árbol de schematics no tiene carpetas vacías.) */
+function hasContent(tree: Tree, dir: string): boolean {
+  const entry = tree.getDir(dir);
+  return entry.subfiles.length + entry.subdirs.length > 0;
+}
+
+interface AngularJson {
+  projects?: Record<
+    string,
+    { root?: string; sourceRoot?: string; prefix?: unknown; projectType?: string }
+  >;
+}
+
+/**
+ * Prefijo de los selectores (`app`, de angular.json → projects → prefix): el del proyecto que
+ * contiene la carpeta de páginas o, si no, el de la única aplicación. Si no se sabe, `app`.
+ */
+function projectPrefix(tree: Tree, dir: string): string {
+  let workspace: AngularJson | null = null;
+  try {
+    workspace = readJson<AngularJson>(tree, 'angular.json');
+  } catch {
+    return 'app';
+  }
+  const projects = Object.values(workspace?.projects ?? {});
+  const sourceOf = (project: (typeof projects)[number]) =>
+    normalizePath(project.sourceRoot ?? `${project.root ?? ''}/src`);
+  const inside = projects
+    .filter((project) => `${dir}/`.startsWith(`${sourceOf(project)}/`))
+    .sort((a, b) => sourceOf(b).length - sourceOf(a).length);
+  const apps = projects.filter((project) => project.projectType === 'application');
+  const project = inside[0] ?? (apps.length === 1 ? apps[0] : undefined);
+  return typeof project?.prefix === 'string' && /^[a-z][a-z0-9-]*$|^$/.test(project.prefix)
+    ? project.prefix
+    : 'app';
+}
+
+/**
+ * Cómo importa `app.routes.ts` el archivo de rutas de una página: relativo a la carpeta `app/`
+ * que contiene la página (`src/app/pages/login` → `./pages/login/login.routes`). Si la página no
+ * está dentro de una carpeta `app/`, la ruta del workspace (y `appDir` null: hay que ajustarla).
+ */
+function routesImportOf(page: PageTarget): { path: string; appDir: string | null } {
+  const routes = `${page.dir}/${page.name}.routes`;
+  const at = `/${page.dir}/`.lastIndexOf('/app/');
+  if (at < 0) return { path: routes, appDir: null };
+  const appDir = page.dir.slice(0, at + 3);
+  return { path: relativePath(appDir, routes), appDir };
 }
 
 /**
@@ -386,18 +566,31 @@ function updateMimiConfig(plan: Plan, report: FileReport): Rule {
     const components = { ...plan.config.components };
     const blocks = { ...plan.config.blocks };
     for (const item of plan.items) {
-      const { type, files } = registry.items[item];
+      const { type } = registry.items[item];
       if (type !== 'component' && type !== 'block') continue;
       if (blocked.has(item)) continue;
-      if (files.some((file) => skipped.has(file))) continue;
-      (type === 'block' ? blocks : components)[item] = { version: registry.version };
+      if (itemFiles(item, plan.pages).some((file) => skipped.has(file))) continue;
+      if (type === 'component') {
+        components[item] = { version: registry.version };
+        continue;
+      }
+      // Una página guarda dónde está y con qué nombre se generó (B.11-f).
+      const page = plan.pages[item];
+      blocks[item] = page
+        ? { version: registry.version, path: page.dir, name: page.name }
+        : { version: registry.version };
     }
     const next: MimiConfig = { ...plan.config, components };
     if (Object.keys(blocks).length > 0) {
       next.blocks = blocks;
-      // Proyectos de la 0.3.0 o anteriores: la carpeta queda escrita la primera vez (B.1-a).
-      if (!plan.config.aliases?.blocks) {
-        next.aliases = { ...plan.config.aliases, blocks: plan.blocksDir };
+      // Proyectos anteriores: la carpeta queda escrita la primera vez que se copia un Block
+      // (B.1-a) o se genera una página (B.11-b).
+      const entries = Object.values(blocks);
+      const aliases = { ...plan.config.aliases };
+      if (!aliases.blocks && entries.some((entry) => !entry.path)) aliases.blocks = plan.blocksDir;
+      if (!aliases.pages && entries.some((entry) => entry.path)) aliases.pages = plan.pagesDir;
+      if (JSON.stringify(aliases) !== JSON.stringify(plan.config.aliases ?? {})) {
+        next.aliases = aliases;
       }
     }
     const text = `${JSON.stringify(next, null, 2)}\n`;
@@ -439,25 +632,41 @@ function updateGlobalCss(plan: Plan): Rule {
 }
 
 /**
- * G1: con `@import "tailwindcss" source(none)`, Tailwind no escanea la carpeta de los Blocks y
- * la pantalla queda sin sus estilos. Si se copia un Block, se agrega su `@source` (una vez).
+ * G1: con `@import "tailwindcss" source(none)`, Tailwind no escanea la carpeta de los Blocks ni
+ * la de las páginas (B.11-i), y la pantalla queda sin sus estilos. Si se copia un Block o se
+ * genera una página, se agrega el `@source` de su carpeta (una vez).
  */
-function addBlocksSource(plan: Plan): Rule {
+function addFolderSources(plan: Plan): Rule {
   return (tree, context) => {
-    if (!plan.items.some((item) => registry.items[item].type === 'block')) return;
+    const dirs: string[] = [];
+    if (plan.items.some((item) => registry.items[item].type === 'block' && !plan.pages[item])) {
+      dirs.push(plan.blocksDir);
+    }
+    for (const page of Object.values(plan.pages)) {
+      const dir = `${page.dir}/`.startsWith(`${plan.pagesDir}/`) ? plan.pagesDir : page.dir;
+      if (!dirs.includes(dir)) dirs.push(dir);
+    }
+    if (dirs.length === 0) return;
     const cssPath = plan.config.tailwind?.css;
     if (!cssPath || !tree.exists(cssPath)) return;
-    const result = withBlocksSource(
-      tree.readText(cssPath),
-      cssPath,
-      plan.componentsDir,
-      plan.blocksDir,
-    );
-    if (!result) return;
-    tree.overwrite(cssPath, result.css);
+    let css = tree.readText(cssPath);
+    const lines: string[] = [];
+    for (const dir of dirs) {
+      const result = withFolderSource(
+        css,
+        cssPath,
+        [plan.componentsDir, plan.blocksDir, plan.pagesDir],
+        dir,
+      );
+      if (!result) continue;
+      css = result.css;
+      lines.push(result.line);
+    }
+    if (lines.length === 0) return;
+    tree.overwrite(cssPath, css);
     context.logger.info(
       `Agregado a ${cssPath} (tu @import de Tailwind usa source(none), así que Tailwind solo ` +
-        `escanea las carpetas que indicas):\n  ${result.line}`,
+        `escanea las carpetas que indicas):\n${lines.map((line) => `  ${line}`).join('\n')}`,
     );
   };
 }
@@ -491,19 +700,15 @@ function blocksUsingUpdated(
   return messages;
 }
 
-/**
- * Cómo se importa un Block desde `app.routes.ts` (en `src/app/`): `src/app/blocks` →
- * `./blocks/login-01`. Si la carpeta no está dentro de `app/`, la ruta del workspace.
- */
-function routesImport(blocksDir: string, item: string): string {
-  const at = `/${blocksDir}`.lastIndexOf('/app/');
-  return at >= 0 ? `./${`/${blocksDir}`.slice(at + 5)}/${item}` : `${blocksDir}/${item}`;
-}
+/** `pricing-01` → `Pricing01`: la clase de un Block copiado tal cual. */
+const blockClassName = (item: string) =>
+  item.replace(/(^|-)([a-z0-9])/g, (_, _dash, c: string) => c.toUpperCase());
 
 function summary(plan: Plan, report: FileReport): Rule {
-  return (_tree, context) => {
+  return (tree, context) => {
     const log = context.logger;
-    const path = (file: string) => targetPathOf(file, plan.componentsDir, plan.blocksDir);
+    const path = (file: string) =>
+      targetPathOf(file, plan.componentsDir, plan.blocksDir, plan.pages);
 
     if (report.created.length > 0) {
       log.info('Agregado:');
@@ -513,19 +718,27 @@ function summary(plan: Plan, report: FileReport): Rule {
       log.info('Reemplazado (--overwrite):');
       for (const file of report.overwritten) log.info(`  ~ ${path(file)}`);
       // Un Block es una pantalla del usuario: --overwrite la reemplaza entera (B.1, trampas).
-      const screens = [
-        ...new Set(report.overwritten.filter(isBlockFile).map((file) => file.split('/')[1])),
-      ];
-      for (const block of screens) {
+      const screens = new Map<string, string>();
+      for (const file of report.overwritten) {
+        if (isPageFile(file)) {
+          const item = pageItemOf(file);
+          screens.set(item, `${plan.pages[item].dir}/`);
+        } else if (isBlockFile(file)) {
+          const item = file.split('/')[1];
+          screens.set(item, `${plan.blocksDir}/${item}/`);
+        }
+      }
+      for (const [block, dir] of screens) {
         log.warn(
-          `--overwrite reemplazó tu pantalla ${block} (${plan.blocksDir}/${block}/) por la de ` +
+          `--overwrite reemplazó tu pantalla ${block} (${dir}) por la de ` +
             `Mimi ${registry.version}. Si tenías cambios, recupéralos de git.`,
         );
       }
     }
     const itemOf = (file: string) =>
-      [...plan.items, ...plan.implicit].find((item) => registry.items[item].files.includes(file)) ??
-      file;
+      [...plan.items, ...plan.implicit].find((item) =>
+        itemFiles(item, plan.pages).includes(file),
+      ) ?? file;
     for (const message of updatedMessages(report, itemOf, registry.version)) log.info(message);
     for (const message of blocksUsingUpdated(plan, report, itemOf)) log.warn(message);
     for (const file of report.skipped) {
@@ -538,19 +751,44 @@ function summary(plan: Plan, report: FileReport): Rule {
       plan.componentsDir,
       registry.version,
       plan.blocksDir,
+      plan.pages,
     )) {
       log.warn(message);
     }
-    // Un Block nuevo es una página: se enruta (B.1, «API pública»).
+    // Una página nueva se enruta con la línea exacta (B.11-e); la CLI no edita app.routes.ts.
+    // Una sección nueva va dentro de una página.
     const created = new Set(report.created);
     for (const item of plan.items) {
-      const { type, files } = registry.items[item];
-      if (type !== 'block' || !files.some((file) => created.has(file))) continue;
-      const className = item.replace(/(^|-)([a-z0-9])/g, (_, _dash, c: string) => c.toUpperCase());
+      if (registry.items[item].type !== 'block' || plan.legacyPages.includes(item)) continue;
+      const page = plan.pages[item];
+      if (page) {
+        if (!created.has(routesKey(item))) continue;
+        const { path: routes, appDir } = routesImportOf(page);
+        const routesFile = appDir ? `${appDir}/app.routes.ts` : null;
+        log.info(
+          `${item} es ahora tu página ${page.name} (${page.dir}/, clase ` +
+            `${pageClassName(page.name)}). Para abrirla en /${page.name}, agrega esta línea a ` +
+            (routesFile && tree.exists(routesFile)
+              ? `las rutas de ${routesFile}:`
+              : 'tus rutas (la ruta del import es relativa a tu app.routes.ts):'),
+        );
+        log.info(`  ${routeLine(page, routes)}`);
+        continue;
+      }
+      if (!registry.items[item].files.some((file) => created.has(file))) continue;
       log.info(
-        `${item} es una pantalla: agrégala a tus rutas, por ejemplo ` +
-          `{ path: '${item.split('-')[0]}', component: ${className} } ` +
-          `(import { ${className} } from '${routesImport(plan.blocksDir, item)}').`,
+        `${item} es una sección (una parte de una página): ponla en una de tus páginas con ` +
+          `<mimi-${item} />, importando ${blockClassName(item)} de ${plan.blocksDir}/${item}.`,
+      );
+    }
+    // Pantallas de la 0.4.0: siguen donde estaban (B.11-g).
+    for (const item of plan.legacyPages) {
+      log.info(
+        `${item} sigue en ${plan.blocksDir}/${item}/, donde lo instalaste con la 0.4.0, y se ` +
+          `actualiza ahí. Los Blocks de pantalla se generan ahora como páginas ` +
+          `(${plan.pagesDir}/${defaultPageName(item)}/, ${pageClassName(defaultPageName(item))}): ` +
+          'para pasarlo, guarda tus cambios, borra esa carpeta y vuelve a ejecutar ' +
+          `ng g mimi ${item}.`,
       );
     }
     if (!hasFileChanges(report) && report.skipped.length === 0 && report.blocked.length === 0) {
