@@ -20,6 +20,7 @@ import {
   mimiSourceNotLine,
   missingMimiExclusion,
   tailwindSupportsSourceNot,
+  withBlocksSource,
 } from '../utils/tailwind';
 import {
   BASE_DIR,
@@ -112,6 +113,7 @@ export function ui(options: UiOptions): Rule {
       }),
       updateMimiConfig(plan, report),
       updateGlobalCss(plan),
+      addBlocksSource(plan),
       ...Object.entries(plan.newPackages).map(([name, version]) =>
         addDependency(name, version, {
           type: DependencyType.Default,
@@ -431,6 +433,30 @@ function updateGlobalCss(plan: Plan): Rule {
     tree.overwrite(cssPath, updated);
     context.logger.info(`Agregado a ${cssPath}:`);
     for (const line of lines) context.logger.info(`  ${line}`);
+  };
+}
+
+/**
+ * G1: con `@import "tailwindcss" source(none)`, Tailwind no escanea la carpeta de los Blocks y
+ * la pantalla queda sin sus estilos. Si se copia un Block, se agrega su `@source` (una vez).
+ */
+function addBlocksSource(plan: Plan): Rule {
+  return (tree, context) => {
+    if (!plan.items.some((item) => registry.items[item].type === 'block')) return;
+    const cssPath = plan.config.tailwind?.css;
+    if (!cssPath || !tree.exists(cssPath)) return;
+    const result = withBlocksSource(
+      tree.readText(cssPath),
+      cssPath,
+      plan.componentsDir,
+      plan.blocksDir,
+    );
+    if (!result) return;
+    tree.overwrite(cssPath, result.css);
+    context.logger.info(
+      `Agregado a ${cssPath} (tu @import de Tailwind usa source(none), así que Tailwind solo ` +
+        `escanea las carpetas que indicas):\n  ${result.line}`,
+    );
   };
 }
 

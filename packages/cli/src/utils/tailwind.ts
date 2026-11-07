@@ -1,5 +1,5 @@
 import type { Tree } from '@angular-devkit/schematics';
-import { findTailwindImport, hasDirective } from '../init/css';
+import { findTailwindImport, hasDirective, insertAfterTheme } from '../init/css';
 import { dirnameOf, relativePath } from '../init/paths';
 
 /** La carpeta de las copias originales (`.mimi/base/`), en la raíz del workspace. */
@@ -28,6 +28,39 @@ export function tailwindSupportsSourceNot(tree: Tree, declared: string | undefin
 function atLeast41(version: string): boolean {
   const [major, minor] = version.split('.').map((n) => Number.parseInt(n, 10) || 0);
   return major > 4 || (major === 4 && minor >= 1);
+}
+
+/**
+ * Con `source(none)`, Tailwind solo escanea lo que dice un `@source`: la carpeta de los Blocks
+ * necesita el suyo (G1), como la de componentes. Devuelve el CSS con la línea agregada (después
+ * del `@source` de componentes, o del tema), o `null` si no hace falta: sin `source(none)`, o si
+ * ya está (comillas simples o dobles).
+ */
+export function withBlocksSource(
+  css: string,
+  cssPath: string,
+  componentsDir: string,
+  blocksDir: string,
+): { css: string; line: string } | null {
+  const tailwind = findTailwindImport(css);
+  if (!tailwind?.sourceNone) return null;
+  const cssDir = dirnameOf(cssPath);
+  const path = relativePath(cssDir, blocksDir);
+  if (hasDirective(css, '@source', path)) return null;
+  const line = `@source "${path}";`;
+  const after = new RegExp(
+    String.raw`^[ \t]*@source\s+(["'])` +
+      relativePath(cssDir, componentsDir).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') +
+      String.raw`\1[^;\n]*;[^\n]*$`,
+    'm',
+  ).exec(css);
+  if (after) {
+    const end = after.index + after[0].length;
+    const eol = /\r\n/.test(css) ? '\r\n' : '\n';
+    return { css: css.slice(0, end) + eol + line + css.slice(end), line };
+  }
+  const updated = insertAfterTheme(css, [line]);
+  return updated === null ? null : { css: updated, line };
 }
 
 /** La línea que excluye `.mimi/` del escaneo de Tailwind, relativa al CSS global. */

@@ -230,6 +230,64 @@ describe('ng g mimi <block> (B.1)', () => {
     ]);
   });
 
+  describe('G1: con source(none), el @source de la carpeta de Blocks', () => {
+    const CSS = '/projects/app/src/styles.css';
+    /** Un proyecto de la 0.3.0 con source(none): init escribió solo el @source de componentes. */
+    async function withSourceNone() {
+      const h = harness(collection);
+      let tree = await createWorkspace(h.runner);
+      tree.overwrite(CSS, "@import 'tailwindcss' source(none);\n");
+      tree = await h.run('init', {}, tree);
+      const css = tree
+        .readContent(CSS)
+        .split('\n')
+        .filter((l) => !l.includes('/blocks'))
+        .join('\n');
+      tree.overwrite(CSS, css);
+      h.logs.length = 0;
+      return { ...h, tree };
+    }
+
+    it('ng g mimi <block> lo agrega después del de componentes, una vez, y lo dice', async () => {
+      const { run, tree, logs } = await withSourceNone();
+      expect(tree.readContent(CSS)).not.toContain('./app/blocks');
+      const result = await run('mimi', { components: [TEST_BLOCK] }, tree);
+      expect(result.readContent(CSS)).toBe(
+        "@import 'tailwindcss' source(none);\n" +
+          '@import "./app/components/ui/theme/theme-base.css";\n' +
+          '@source "./app/components/ui";\n' +
+          '@source "./app/blocks";\n',
+      );
+      expect(logs.map((l) => l.message).join('\n')).toContain('  @source "./app/blocks";');
+      const again = await run('mimi', { components: [TEST_BLOCK] }, result);
+      expect(again.readContent(CSS)).toBe(result.readContent(CSS));
+    });
+
+    it('con aliases.blocks propio, su carpeta; con comillas simples ya escrito, no lo repite', async () => {
+      const { run, tree } = await withSourceNone();
+      const config = json(tree, '/mimi.json');
+      config.aliases.blocks = 'projects/app/src/app/pages';
+      tree.overwrite('/mimi.json', JSON.stringify(config));
+      const result = await run('mimi', { components: [TEST_BLOCK] }, tree);
+      expect(result.readContent(CSS)).toContain('@source "./app/pages";');
+
+      const manual = await withSourceNone();
+      manual.tree.overwrite(CSS, `${manual.tree.readContent(CSS)}@source './app/blocks';\n`);
+      const kept = await manual.run('mimi', { components: [TEST_BLOCK] }, manual.tree);
+      expect(kept.readContent(CSS).match(/app\/blocks/g)).toHaveLength(1);
+    });
+
+    it('un componente solo no lo agrega; sin source(none) tampoco', async () => {
+      const { run, tree } = await withSourceNone();
+      const withButton = await run('mimi', { components: ['button'] }, tree);
+      expect(withButton.readContent(CSS)).not.toContain('./app/blocks');
+
+      const plain = await initialized();
+      const result = await plain.run('mimi', { components: [TEST_BLOCK] }, plain.tree);
+      expect(result.readContent(CSS)).not.toContain('@source "./app/blocks"');
+    });
+  });
+
   it('el nombre del Block se sugiere como los componentes', async () => {
     const { run, tree } = await initialized();
     await expect(run('mimi', { components: ['test-blok'] }, tree)).rejects.toThrow(
