@@ -154,4 +154,10 @@ describe('Pricing01', () => {
     expect(host.classList).toContain('bg-muted');
     expect(host.classList).not.toContain('bg-background');
   });
+
+  it('es una sección (B.11-a): no ocupa el alto de la pantalla', async () => {
+    const { el } = await setup();
+    const host = el.querySelector('mimi-pricing-01')!;
+    expect([...host.classList].filter((c) => /^min-h-/.test(c))).toEqual([]);
+  });
 });

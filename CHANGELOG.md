@@ -31,6 +31,8 @@ Al terminar, `ng g mimi` te da la línea exacta para las rutas de `app.routes.ts
 
 - **El comentario de cabecera** de los cinco Blocks de página describe ahora lo que genera la CLI (la carpeta de `aliases.pages`, `<nombre>.routes.ts` y la línea para `app.routes.ts`), en vez de `{ path: 'login', component: Login01 }`. Solo cambia el comentario: una pantalla de la 0.4.0 sin modificar se actualiza por él («actualizado de 0.4.0 a …»).
 
+- **`pricing-01` ya no ocupa el alto de la pantalla** (se quita `min-h-svh` del anfitrión): es una sección y va dentro de una página, junto a otras partes. Si la tienes sola en una ruta y quieres el alto de antes, pásale `class="min-h-svh"`. Una copia de la 0.4.0 sin modificar se actualiza con el cambio.
+
 **Si ya instalaste una pantalla con la 0.4.0**, no cambia nada: sigue en `src/app/blocks/login-01/` (`Login01`), tus rutas siguen funcionando y `ng g mimi` la sigue actualizando ahí, con las mismas reglas. Para pasarla a página: guarda tus cambios (por ejemplo, en git), borra la carpeta `src/app/blocks/login-01/`, ejecuta `ng g mimi login-01`, pega la línea nueva en `app.routes.ts` y quita la ruta vieja.
 
 ## 0.4.0 (07/11/2026): pantallas
