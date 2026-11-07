@@ -6,7 +6,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 
 **Dónde está cada tarea (desde el 03/11/2026).** Este archivo es el **índice**: una línea por tarea pendiente, con su estado, versión, tamaño, dependencias y el enlace a su detalle, y «Terminado» con una línea por tarea hecha. El detalle está en `docs/plan/`:
 
-- Una tarea con la plantilla completa tiene su propio archivo, con el ID como nombre: `docs/plan/grupo-2/G2.1.md`, `docs/plan/grupo-2/5.17.md`. Las hijas de una tarea paraguas van dentro del archivo de la madre (G2.4a y G2.4b en `G2.4.md`; 5.17a y 5.17b en `5.17.md`).
+- Una tarea con la plantilla completa tiene su propio archivo, con el ID como nombre, en la carpeta de su grupo: así estaban `docs/plan/grupo-2/G2.1.md` y `docs/plan/grupo-2/5.17.md` (hoy en `docs/historial/grupo-2/`, con el grupo cerrado). Las hijas de una tarea paraguas van dentro del archivo de la madre (G2.4a y G2.4b en `G2.4.md`; 5.17a y 5.17b en `5.17.md`).
 - Las tareas de una línea van juntas en el archivo de su bloque: `mantenimiento.md`, `grupo-3-blocks.md`, `grupo-4.md`, `mimi-effects.md`, `grupo-5.md`, `plataforma.md` y `version-1.0.md`. Cuando una se detalla, se le crea su archivo propio con la misma regla (por ejemplo, `docs/plan/grupo-3/G3.1.md`) y se actualiza su enlace en el índice.
 - Las decisiones abiertas, las «Decididas» y el índice de lo que está «PENDIENTE DE DECIDIR» están en `docs/plan/decisiones.md`.
 - Para encontrar una tarea por su ID (por ejemplo, «plan, G1.5b»): el índice de este archivo, o `grep -rn "G2.7" docs/plan/`; si ya está hecha, en `docs/historial/`.
@@ -72,15 +72,15 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 
 Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proceso/release.md`. La puerta la recorre el comando `/cerrar-grupo`; las tareas, `/componente` y `/tarea`, con el protocolo de `CLAUDE.md`, «Forma de trabajar».
 
-**Historial:** `docs/historial/plan-fase-0-3.md`, `plan-0.1.x.md`, `plan-grupo-1.md` (incluye la Fase 4 y la publicación de la 0.2.0), `plan-plataforma.md` y `decisiones.md`.
+**Historial:** `docs/historial/plan-fase-0-3.md`, `plan-0.1.x.md`, `plan-grupo-1.md` (incluye la Fase 4 y la publicación de la 0.2.0), `plan-grupo-2.md` (índice del Grupo 2, con la 5.2, la 5.17 y la publicación de la 0.3.0; el texto de cada tarea, en `docs/historial/grupo-2/`), `plan-plataforma.md` y `decisiones.md`.
+
+**Al cerrar un grupo** (desde el Grupo 2): los archivos de sus tareas pasan tal cual de `docs/plan/<grupo>/` a `docs/historial/<grupo>/` (con `git mv`, sin reescribirlos), y `docs/historial/plan-<grupo>.md` lleva el índice, el registro de la publicación y lo que se movió de otros lugares (por ejemplo, «Decididas» de `docs/plan/decisiones.md`). Lo manual que quede pendiente no se deja solo en el historial: va a una tarea abierta (por ejemplo, la M.20).
 
 ## En curso
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- 5.17a · auto/grupo-2-2026-11-04 · Claude Code (modo autónomo) · 04/11/2026 — a falta de comprobación del usuario (C4 a C8 en un Android y un iPhone reales)
-- 5.17b · auto/grupo-2-2026-11-04 · Claude Code (modo autónomo) · 05/11/2026 — a falta de comprobación del usuario (C4 y C7 en teléfonos reales) y del hallazgo de C3 (paneles altos)
-- G2.P · auto/release-0.3.0-2026-11-06 · Claude Code (modo autónomo) · 06/11/2026 — preparada la 0.3.0 (CHANGELOG, versión, verificación y `.tgz`); a falta de comprobación del usuario (teléfonos, paneles altos, NVDA, Safari), de la publicación y de mover el grupo al historial
+Ninguna.
 
 ## Mantenimiento
 
@@ -105,43 +105,12 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.17 Pruebas de docs independientes del `localStorage` de Node 26 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.18 Guardar en el repo el script de medición a 360 px · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.19 Excluir `.mimi/` del escaneo de Tailwind (`init` la escribe; `ng g mimi` avisa) · sin versión (sale en la 0.4.0) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9, release de GitHub y prueba desde npm de la 0.3.0; la hace el usuario) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
 
 - [ ] D6 Correcciones de diseño pendientes (Claude Design). La lista está en `docs/design/correcciones-pendientes.md`: cada componente nuevo agrega ahí lo que hizo distinto del diseño o sin diseño, y se resuelve en Claude Design cuando se decida, sin bloquear ningún grupo. Quién: el usuario resuelve en Claude Design; Claude Code anota.
-
-## Grupo 2 → v0.3.0: entradas avanzadas
-
-Componentes de la spec 4 («Hoja de ruta», tabla del Grupo 2). Orden recomendado (respeta las dependencias): G2.0 → G2.0b → 5.17a → G2.1 → 5.2 → G2.10 → G2.2 → G2.3 → G2.4a → G2.4b → G2.5 → G2.6 → G2.7 → G2.8 → G2.9 → G2.11 → G2.12 → 5.17b → G2.P. La 5.17a (revisión móvil del Grupo 1) va antes de G2.1 por decisión del usuario (03/11/2026; ver 5.17a); no depende de G2.0 ni de G2.0b y puede hacerse antes que ellas. Con las dependencias cumplidas, el orden entre G2.2 a G2.5 se puede cambiar.
-
-Detalle: un archivo por tarea en `docs/plan/grupo-2/` (el nombre es el ID). G2.4a y G2.4b están dentro de `G2.4.md`; 5.17a y 5.17b, dentro de `5.17.md`.
-
-- [x] G2.0 Catálogo de tokens del Grupo 2 en la spec 13 (pendiente de comprobación manual: aprobación de las tablas) · v0.3.0 · M · depende: — · [docs/plan/grupo-2/G2.0.md](plan/grupo-2/G2.0.md)
-- [x] G2.0b Tokens globales del Grupo 2 en el tema · v0.3.0 · M · depende: G2.0 · [docs/plan/grupo-2/G2.0b.md](plan/grupo-2/G2.0b.md)
-- [x] G2.1 Toggle Group (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b, 5.17a · [docs/plan/grupo-2/G2.1.md](plan/grupo-2/G2.1.md)
-- [x] 5.2 Página «Tema» sencilla (pendiente de comprobación manual: teclado, lector y contraste en navegador) · v0.3.0 · M · depende: G2.1, G2.0b · [docs/plan/grupo-2/5.2.md](plan/grupo-2/5.2.md)
-- [x] G2.2 Number Input (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.2.md](plan/grupo-2/G2.2.md)
-- [x] G2.3 Password (pendiente de comprobación manual: gestores de contraseñas, NVDA y navegador) · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.3.md](plan/grupo-2/G2.3.md)
-- [x] G2.4 Input Mask (paraguas de G2.4a y G2.4b) · v0.3.0 · paraguas · depende: las de G2.4a y G2.4b · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
-- [x] G2.4a Input Mask: máscara de dígitos (pendiente de comprobación manual: NVDA, Android y navegador) · v0.3.0 · M · depende: G2.0, G2.0b, 2.2 · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
-- [x] G2.4b Input Mask: marcador, prefijo e ícono (pendiente de comprobación manual: navegador) · v0.3.0 · S · depende: G2.4a · [docs/plan/grupo-2/G2.4.md](plan/grupo-2/G2.4.md)
-- [x] G2.5 Input OTP (pendiente de comprobación manual: NVDA, SMS y navegador) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.5.md](plan/grupo-2/G2.5.md)
-- [x] G2.6 Tags Input (pendiente de comprobación manual: NVDA y navegador) · v0.3.0 · M · depende: G2.0, G2.0b, 2.4, 2.2 · [docs/plan/grupo-2/G2.6.md](plan/grupo-2/G2.6.md)
-- [x] G2.7 Slider (rango doble) (pendiente de comprobación manual: NVDA, táctil y navegador) · v0.3.0 · L · depende: G2.0, G2.0b, G1.2, G2.1 · [docs/plan/grupo-2/G2.7.md](plan/grupo-2/G2.7.md)
-- [x] G2.8 Combobox/Autocomplete (paraguas de G2.8a y G2.8b) · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, G1.5, G2.6, G2.1, M.2 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
-  - [x] G2.8a Combobox simple · v0.3.0 · M · depende: las de G2.8 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
-  - [x] G2.8b Combobox múltiple con chips · v0.3.0 · M · depende: G2.8a, G2.6 · [docs/plan/grupo-2/G2.8.md](plan/grupo-2/G2.8.md)
-- [x] G2.9 Date Picker y Date Range (paraguas de G2.9a y G2.9b) · v0.3.0 · L · depende: G2.0, G2.0b, G1.1, 2.1 · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
-  - [x] G2.9a Calendario y Date Picker · v0.3.0 · M · depende: las de G2.9 · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
-  - [x] G2.9b Date Range · v0.3.0 · M · depende: G2.9a · [docs/plan/grupo-2/G2.9.md](plan/grupo-2/G2.9.md)
-- [x] G2.10 Progress (pendiente de comprobación manual: NVDA y navegador real) · v0.3.0 · M · depende: G2.0, G2.0b · [docs/plan/grupo-2/G2.10.md](plan/grupo-2/G2.10.md)
-- [x] G2.11 File Upload · v0.3.0 · M · depende: G2.0, G2.0b, 2.1, G2.10 · [docs/plan/grupo-2/G2.11.md](plan/grupo-2/G2.11.md)
-- [x] G2.12 Color Picker · v0.3.0 · M · depende: G2.0, G2.0b, G1.1, G2.7, 2.2 · [docs/plan/grupo-2/G2.12.md](plan/grupo-2/G2.12.md)
-- [ ] 5.17 Revisión móvil (paraguas de 5.17a y 5.17b) · v0.3.0 · paraguas · depende: las de 5.17a y 5.17b · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
-- [~] 5.17a Revisión móvil del Grupo 1 (antes de G2.1), a falta de comprobación del usuario (C4 a C8 en teléfonos) · v0.3.0 · M · depende: — · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
-- [~] 5.17b Revisión móvil del Grupo 2 (a falta de comprobación del usuario y con un hallazgo abierto en C3) · v0.3.0 · M · depende: 5.17a, G2.1 a G2.12 · [docs/plan/grupo-2/5.17.md](plan/grupo-2/5.17.md)
-- [~] G2.P Puerta del Grupo 2 (preparada la 0.3.0; a falta de comprobación del usuario y de la publicación) · v0.3.0 · L · depende: G2.0 a G2.12, 5.2, 5.17a, 5.17b · [docs/plan/grupo-2/G2.P.md](plan/grupo-2/G2.P.md)
 
 ## Blocks → v0.4.0: pantallas
 
@@ -318,6 +287,26 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] G1.10 mimi-toolbar (20/10/2026).
 - [x] G1.11 Pagination (20/10/2026). PENDIENTE: el informe de cierre de la G1.11 («Comprobado en Chrome real: ver el informe de cierre») no está en el repo; lo tiene el usuario en el chat.
 - [x] G1.12 Página «Fundamentos» (20/10/2026).
+
+**Grupo 2, v0.3.0** (`docs/historial/plan-grupo-2.md`, con el texto de cada tarea en `docs/historial/grupo-2/`; publicada el 06/11/2026, `2026-11-07T00:23Z` en npm). Lo manual que quedó pendiente en cada tarea sigue en la M.20.
+
+- [x] G2.0 Catálogo de tokens del Grupo 2 en la spec 13 (04/11/2026; pendiente de comprobación manual: aprobación de las tablas).
+- [x] G2.0b Tokens globales del Grupo 2 en el tema (04/11/2026).
+- [x] G2.1 Toggle Group (04/11/2026; pendiente de comprobación manual: NVDA y navegador real).
+- [x] 5.2 Página «Tema» sencilla (04/11/2026; pendiente de comprobación manual: teclado, lector y contraste en navegador).
+- [x] G2.2 Number Input (04/11/2026; pendiente de comprobación manual: NVDA y navegador real).
+- [x] G2.3 Password (04/11/2026; pendiente de comprobación manual: gestores de contraseñas, NVDA y navegador).
+- [x] G2.4 Input Mask, con G2.4a (máscara de dígitos) y G2.4b (marcador, prefijo e ícono) (04/11/2026; pendiente de comprobación manual: NVDA, Android y navegador).
+- [x] G2.5 Input OTP (05/11/2026; pendiente de comprobación manual: NVDA, SMS y navegador).
+- [x] G2.6 Tags Input (05/11/2026; pendiente de comprobación manual: NVDA y navegador).
+- [x] G2.7 Slider, con el rango doble (05/11/2026; pendiente de comprobación manual: NVDA, táctil y navegador).
+- [x] G2.8 Combobox/Autocomplete, con G2.8a (simple) y G2.8b (múltiple con chips) (05/11/2026).
+- [x] G2.9 Date Picker y Date Range, con G2.9a y G2.9b (05/11/2026).
+- [x] G2.10 Progress (04/11/2026; pendiente de comprobación manual: NVDA y navegador real).
+- [x] G2.11 File Upload (05/11/2026).
+- [x] G2.12 Color Picker (05/11/2026).
+- [x] 5.17 Revisión móvil, con 5.17a (Grupo 1, 04/11/2026) y 5.17b (Grupo 2, 05/11/2026); cerradas el 06/11/2026, pendiente de comprobación manual: teléfonos reales y los paneles altos de C3 (M.20).
+- [x] G2.P Puerta del Grupo 2 (06/11/2026; pendiente de comprobación manual: teléfonos reales, NVDA, Firefox, Safari, VoiceOver y las decisiones por defecto para la revisión de la 0.9.9, en la M.20; release de GitHub y prueba desde npm, sin dato).
 
 **Tandas de diseño** (texto completo en la línea)
 
