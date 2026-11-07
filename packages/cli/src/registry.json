@@ -558,6 +558,15 @@
         "textarea",
         "utils/cn"
       ]
+    },
+    "pricing-01": {
+      "type": "block",
+      "files": [
+        "blocks/pricing-01/pricing-01.ts",
+        "blocks/pricing-01/pricing-01.html",
+        "blocks/pricing-01/index.ts"
+      ],
+      "registryDependencies": ["badge", "button", "toggle-group", "utils/cn"]
     }
   }
 }

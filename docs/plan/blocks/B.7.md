@@ -2,7 +2,7 @@
 
 [← Índice del plan](../../plan.md)
 
-- [ ] B.7 `pricing-01`: tres planes con un interruptor mensual/anual; el plan destacado con la insignia «Más popular».
+- [x] B.7 `pricing-01`: tres planes con un interruptor mensual/anual; el plan destacado con la insignia «Más popular». (07/11/2026; pendiente de comprobación manual: NVDA, Firefox y Safari, teléfono real y movimiento reducido en el sistema, a la M.20. Informe: `docs/auto/blocks-0.4.0-2026-11-06.md`, «B.7». API final: `<mimi-pricing-01 [plans] [(period)] [currency] [locale] [faqHref] (planSelected) class>`; tipos `Pricing01Plan` y `Pricing01Selection`.)
   - v0.4.0 · Tamaño M · Depende de: B.1 y los componentes que usa, publicados (2.1, 2.4, 2.5, G2.1) · Bloquea: B.P
   - Estado: —
   - Leer antes: B.1; la G2.1 Toggle Group en `docs/historial/grupo-2/G2.1.md` (modo simple, que no se deja sin elección); spec 4 (Card, Badge, Button, Toggle Group) y «Mimi Effects»; spec 6.6 (movimiento reducido); `docs/plan/mimi-effects.md` (E.7 Border Beam, sin versión).

@@ -8,6 +8,7 @@ import { DOCS_ROUTES } from '../docs.routes';
 import { Login01Page } from './login-01-page';
 import { Login02Page } from './login-02-page';
 import { Otp01Page } from './otp-01-page';
+import { Pricing01Page } from './pricing-01-page';
 import { Settings01Page } from './settings-01-page';
 import { Signup01Page } from './signup-01-page';
 
@@ -61,6 +62,12 @@ const CASES: Case[] = [
       'form-field',
     ],
     states: ['notifications', 'security', 'billing'],
+  },
+  {
+    name: 'pricing-01',
+    page: Pricing01Page,
+    components: ['toggle-group', 'badge', 'button'],
+    states: ['yearly'],
   },
 ];
 

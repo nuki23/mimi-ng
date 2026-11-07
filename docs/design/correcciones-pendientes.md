@@ -262,3 +262,10 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Moneda y fecha:** con `Intl` y el `LOCALE_ID` (el diseño: «$240 por persona» y «1 de noviembre» escritos); el ejemplo usa 12 USD.
   - **Barra de cambios:** con «reducir transparencia», fondo sólido; el botón «Save» dice «Saving…» con `saving` (no está en el diseño).
   - **Textos en inglés** (B.1-i), con los lugares de las sesiones neutros («Mexico City», «Guadalajara»).
+
+  pricing-01 (B.7, 07/11/2026):
+  - **Borde del destacado (B.7-a, decidido por el usuario):** estático. El mismo `conic-gradient` de `info` y `success` del diseño (desde 200°), quieto, sobre `border`, con 1,5px, `shadow-popover` y la insignia; sin `@keyframes mimi-beam` ni `@property --mimi-beam-a`. Cuando exista Border Beam (E.7), el sitio mostrará cómo cambiarlo.
+  - **Pie de precios:** el del diseño es de un país («pesos mexicanos más IVA · Factura CFDI 4.0»); el Block dice «Prices in &lt;moneda&gt;, taxes not included · FAQ».
+  - **Precios del ejemplo:** en USD (12/10 y 24/20 por persona y mes), con `Intl.NumberFormat`; el diseño usa 190/158 y 240/199 pesos.
+  - **Interruptor mensual/anual:** `mimi-toggle-group` redondeado (`rounded-full` con `class`), con su fondo deslizante; el «−17%» es un `mimiBadge` dentro del botón Anual.
+  - **«Custom»:** el diseño dice «A medida»; sin unidad ni nota.

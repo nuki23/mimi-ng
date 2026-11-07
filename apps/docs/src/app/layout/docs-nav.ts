@@ -80,7 +80,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'signup-01', path: '/docs/blocks/signup-01', status: 'ready' },
       { title: 'otp-01', path: '/docs/blocks/otp-01', status: 'ready' },
       { title: 'settings-01', path: '/docs/blocks/settings-01', status: 'ready' },
-      { title: 'pricing-01', path: '/docs/blocks/pricing-01', status: 'pending' },
+      { title: 'pricing-01', path: '/docs/blocks/pricing-01', status: 'ready' },
     ],
   },
 ];

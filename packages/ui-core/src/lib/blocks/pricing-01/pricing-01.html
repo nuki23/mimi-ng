@@ -1,0 +1,168 @@
+<div class="flex max-w-[620px] flex-col items-center gap-3 text-center">
+  <span mimiBadge variant="soft" tone="info" class="h-[26px] gap-1.5 px-3 text-[12.5px]">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <!-- Lucide sparkles (ISC) -->
+      <path
+        d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"
+      />
+      <path d="M20 2v4" />
+      <path d="M22 4h-4" />
+      <circle cx="4" cy="20" r="2" />
+    </svg>
+    14-day free trial on any plan
+  </span>
+  <h1 class="text-[32px] leading-[1.08] font-extrabold tracking-[-0.03em] text-balance md:text-5xl">
+    Plans that grow with you
+  </h1>
+  <p class="text-base leading-[1.55] text-pretty text-muted-foreground">
+    Pay only for the people who use it. Change or cancel whenever you want.
+  </p>
+
+  <!-- El fondo que se desliza es de Toggle Group (no se copia el marcado del diseño). -->
+  <mimi-toggle-group
+    aria-label="Billing period"
+    class="mt-1.5 grid grid-cols-[repeat(2,140px)] rounded-full [&_button]:rounded-full [&_[data-slot=indicator]]:rounded-full"
+    [value]="period()"
+    (valueChange)="setPeriod($event)"
+  >
+    <button mimiToggleGroupItem="monthly" class="h-9">Monthly</button>
+    <button mimiToggleGroupItem="yearly" class="h-9 gap-1.5">
+      Yearly
+      <span mimiBadge variant="soft" tone="success" class="h-5 px-[7px] text-[11px]">−17%</span>
+    </button>
+  </mimi-toggle-group>
+</div>
+
+<div class="grid w-full max-w-[1080px] grid-cols-1 items-stretch gap-[18px] md:grid-cols-3">
+  @for (card of cards(); track card.plan.id) {
+    <!-- El destacado: un borde de 1,5px con un degradado de color, quieto (B.7-a). -->
+    <section
+      [attr.aria-labelledby]="id + '-' + card.plan.id"
+      [attr.data-featured]="card.plan.featured ? '' : null"
+      [class]="
+        card.plan.featured
+          ? 'relative mt-3 flex rounded-card bg-[image:conic-gradient(from_200deg,transparent_0deg_250deg,var(--mimi-info)_310deg,var(--mimi-success)_345deg,transparent_360deg),linear-gradient(var(--mimi-border),var(--mimi-border))] p-[1.5px] shadow-popover md:mt-0'
+          : 'relative flex rounded-card shadow-card'
+      "
+    >
+      @if (card.plan.featured) {
+        <span
+          mimiBadge
+          class="absolute -top-[13px] left-1/2 z-2 h-[26px] -translate-x-1/2 gap-[5px] px-3 text-xs whitespace-nowrap shadow-primary"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <!-- Lucide star (ISC) -->
+            <path
+              d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"
+            />
+          </svg>
+          Most popular
+        </span>
+      }
+      <div
+        [class]="
+          card.plan.featured
+            ? 'flex flex-1 flex-col gap-[18px] rounded-[calc(var(--mimi-radius-card)-1.5px)] bg-card px-6 py-[26px]'
+            : 'flex flex-1 flex-col gap-[18px] rounded-card border bg-card px-6 py-[26px]'
+        "
+      >
+        <div class="flex flex-col gap-1.5">
+          <h2 [id]="id + '-' + card.plan.id" class="text-base font-bold">{{ card.plan.name }}</h2>
+          <p class="text-[13.5px] leading-[1.45] text-muted-foreground">
+            {{ card.plan.description }}
+          </p>
+        </div>
+        <div class="flex items-baseline gap-1.5">
+          <span
+            data-slot="price"
+            class="text-[40px] font-extrabold tracking-[-0.03em] tabular-nums"
+            >{{ card.price }}</span
+          >
+          <span class="text-[13.5px] text-muted-foreground">{{ card.unit }}</span>
+        </div>
+        <span
+          data-slot="note"
+          class="-mt-3 min-h-[18px] text-[12.5px] text-success-soft-foreground"
+          >{{ card.note }}</span
+        >
+        <button
+          mimiBtn
+          type="button"
+          class="h-[calc(var(--mimi-control-height,2.5rem)+4px)] text-[14.5px] font-semibold"
+          [variant]="card.plan.featured ? 'solid' : 'outline'"
+          [tone]="card.plan.featured ? 'primary' : 'secondary'"
+          (click)="planSelected.emit({ plan: card.plan, period: period() })"
+        >
+          {{ card.plan.cta }}
+        </button>
+        <div class="h-px bg-border"></div>
+        <ul class="flex flex-col gap-2.5">
+          @for (feature of card.plan.features; track feature.label) {
+            <li class="flex items-start gap-2.5 text-sm leading-[1.4]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+                [class]="
+                  feature.included
+                    ? 'mt-px shrink-0 text-success-soft-foreground'
+                    : 'mt-px shrink-0 text-muted-foreground'
+                "
+              >
+                @if (feature.included) {
+                  <!-- Lucide check (ISC) -->
+                  <path d="M20 6 9 17l-5-5" />
+                } @else {
+                  <!-- Lucide minus (ISC) -->
+                  <path d="M5 12h14" />
+                }
+              </svg>
+              <span [class]="feature.included ? 'text-foreground' : 'text-muted-foreground'">
+                <span class="sr-only">{{ feature.included ? 'Included: ' : 'Not included: ' }}</span
+                >{{ feature.label }}
+              </span>
+            </li>
+          }
+        </ul>
+      </div>
+    </section>
+  }
+</div>
+
+<p class="text-center text-[13.5px] text-muted-foreground">
+  Prices in {{ currency() }}, taxes not included ·
+  <a
+    [href]="faqHref()"
+    class="rounded-sm font-semibold text-foreground underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+    >FAQ</a
+  >
+</p>

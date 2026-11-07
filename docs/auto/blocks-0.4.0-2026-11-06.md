@@ -7,7 +7,7 @@ Pedido: ejecutar B.1 → B.2 → B.3 → B.4 → B.5 → B.10 → B.6 → B.7 �
 ## Pendiente del usuario
 
 1. **Diseños que faltan** (no bloquearon, decidido por el usuario): la página de un Block en el sitio y el marco de la vista previa (B.1, en D6); los estados de error de `login-01` (B.2); la imagen de `login-02` (B.3); el estado «válido» de un campo (B.4). Cada uno está en `docs/design/correcciones-pendientes.md` con lo que se hizo.
-2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3); `signup-01`: NVDA (mensajes, nivel del medidor y la nota del botón), el gestor de contraseñas (que proponga una nueva) y un teléfono real (B.4); `otp-01`: autocompletar el código desde un SMS en iOS y en Android (`one-time-code`), NVDA y un teléfono real (B.5); Tabs vertical con NVDA (que anuncie «vertical» y las flechas ↑/↓) (B.10); `settings-01`: NVDA (pestañas verticales, interruptores con descripción, barra de cambios), un teléfono real (píldoras desplazables con el dedo, teclado virtual sobre la barra de cambios) y claro/oscuro en un navegador real (B.6).
+2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3); `signup-01`: NVDA (mensajes, nivel del medidor y la nota del botón), el gestor de contraseñas (que proponga una nueva) y un teléfono real (B.4); `otp-01`: autocompletar el código desde un SMS en iOS y en Android (`one-time-code`), NVDA y un teléfono real (B.5); Tabs vertical con NVDA (que anuncie «vertical» y las flechas ↑/↓) (B.10); `settings-01`: NVDA (pestañas verticales, interruptores con descripción, barra de cambios), un teléfono real (píldoras desplazables con el dedo, teclado virtual sobre la barra de cambios) y claro/oscuro en un navegador real (B.6); `pricing-01`: NVDA (interruptor y características incluidas o no), Firefox y Safari (el borde), un teléfono real y movimiento reducido en el sistema (B.7).
 3. **Imagen de `login-02`** (B.3-a): hoy un degradado neutro provisional; pedir la imagen o una ilustración en Claude Design (D6).
 
 ## Tabla acumulada del sitio
@@ -24,6 +24,7 @@ Medición de partida (06/11/2026, después de la M.13, comprobada al empezar la 
 | B.5     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 17,80 / 3,66      |
 | B.10    | 154,12 / 22,14  | 331,42 / 105,69 | 135,97      | 485,54         | 17,80 / 3,66      |
 | B.6     | 154,12 / 22,14  | 331,50 / 105,71 | 135,97      | 485,62         | 24,13 / 4,64      |
+| B.7     | 154,12 / 22,14  | 331,50 / 105,70 | 135,97      | 485,62         | 27,08 / 5,17      |
 
 ## B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase
 
@@ -316,3 +317,35 @@ Nuevos: `packages/ui-core/src/lib/blocks/settings-01/settings-01.ts`, `settings-
 Modificados: `packages/ui-core/src/lib/components/tabs/tabs.ts` y `tabs-orientation.spec.ts` (el arreglo de la B.10), `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `apps/docs/src/app/pages/docs/blocks/block-pages.spec.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.6.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
 
 Commit: `feat(blocks): settings-01, ajustes de cuenta con navegación lateral y barra de cambios (B.6)`.
+
+## B.7 `pricing-01`
+
+**Estado:** `[x]`, pendiente de comprobación manual (NVDA, Firefox y Safari, teléfono real, movimiento reducido; a la M.20).
+
+### Plan breve
+
+Cabecera con la insignia, el `h1` y el interruptor mensual/anual (`mimi-toggle-group` en modo simple, con el «−17%» dentro de Anual); tres tarjetas como datos (`plans`, con los del diseño por defecto), precios con `Intl.NumberFormat` (`currency`, `locale`), la nota anual, el destacado con la insignia y el borde **estático** (B.7-a), y el pie neutro.
+
+### Decisiones y desvíos
+
+- **B.7-a (decidido por el usuario):** borde estático (el `conic-gradient` del diseño, quieto). No hace falta movimiento reducido: no hay animación (lo prueba la spec).
+- **Nombres:** `Pricing01Plan`/`Pricing01Selection` (no `MimiPricing01Plan` como decía la tarea), como `Login01Value` y los demás Blocks; con un `id` estable por plan para `planSelected`.
+- **Pie neutro y precios en USD** (D6).
+
+### Criterios de hecho
+
+- **El Block en ui-core, en el registro y en el sitio.** Ítem `pricing-01` (badge, button, toggle-group, `utils/cn`; sin peers propias), `x-prompt`, README; página `/docs/blocks/pricing-01` con el estado «Anual». Capturas: escritorio claro en anual (tres columnas a la misma altura, el destacado con su borde e insignia) y móvil oscuro en mensual (una columna). Coinciden con el diseño.
+- **Pruebas.** `pricing-01.spec.ts` (7): el periodo cambia los precios y la nota anual; `planSelected` con el plan y el periodo; «Custom» sin precio ni unidad; otro `locale` y otra moneda (`de-DE`, EUR); el destacado con la insignia, sin animación y con el degradado; cada tarjeta es una región con el nombre del plan; «Included»/«Not included» para lectores con el ícono `aria-hidden`; el interruptor con nombre, un `h1` y `class`.
+- **`ng g mimi pricing-01` en un proyecto limpio.** Con la CLI `0.4.0-real.7`: agrega toggle-group y el Block; con la ruta, `ng build` en verde.
+- **CSS global y JS inicial, antes y después.** Sin cambios (154,12 / 22,14 kB; 331,50 / 105,70 kB; `main` 135,97). `blocks.css` 24,13 → 27,08 kB (5,17 gzip).
+- **D6.** «pricing-01 (B.7)».
+- **`pnpm build`, `pnpm test` y `pnpm format:check` en verde.** Docs 183, ui-core 831 y CLI 144.
+- **Manual (a la M.20):** NO COMPROBADO (manual, usuario): NVDA, Firefox y Safari, teléfono real, movimiento reducido en el sistema.
+
+### Archivos
+
+Nuevos: `packages/ui-core/src/lib/blocks/pricing-01/pricing-01.ts`, `pricing-01.html`, `index.ts`, `pricing-01.spec.ts`; `apps/docs/src/app/pages/docs/blocks/pricing-01-page.ts`.
+
+Modificados: `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `apps/docs/src/app/pages/docs/blocks/block-pages.spec.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.7.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
+
+Commit: `feat(blocks): pricing-01, planes con mensual/anual y el destacado con borde estático (B.7)`.
