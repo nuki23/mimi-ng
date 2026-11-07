@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-Ninguna.
+- B.11 · `auto/blocks-paginas-2026-11-07` · Claude Code (modo autónomo) · 07/11/2026
 
 ## Mantenimiento
 
@@ -117,6 +117,12 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 ## Blocks → v0.4.0: pantallas
 
 Cerrada el 07/11/2026 (puerta B.P) y **publicada el 07/11/2026** (`@mimi-ng/cli@0.4.0`, registro en `docs/historial/plan-blocks.md`). Las tareas están en «Terminado» y su texto en `docs/historial/blocks/` (índice: `docs/historial/plan-blocks.md`). `table-01` va con el Grupo 3 (0.5.0) y `dashboard-01` con el Grupo 4 (0.6.0).
+
+## Blocks: páginas del usuario (por publicar)
+
+Detalle: `docs/plan/blocks/` (un archivo por tarea).
+
+- [~] B.11 Los Blocks de pantalla se generan como páginas del usuario (`ng g mimi login-01` → `src/app/pages/login/`, `LoginPage`, con su `login.routes.ts`) · sin versión · L · depende: B.P · [docs/plan/blocks/B.11.md](plan/blocks/B.11.md)
 
 ## Grupo 3 → v0.5.0: datos
 
