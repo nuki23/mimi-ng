@@ -222,4 +222,9 @@ export const DOCS_ROUTES: Routes = [
     title: 'signup-01 · Blocks · Mimi',
     loadComponent: () => import('./blocks/signup-01-page').then((m) => m.Signup01Page),
   },
+  {
+    path: 'blocks/otp-01',
+    title: 'otp-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/otp-01-page').then((m) => m.Otp01Page),
+  },
 ];

@@ -242,3 +242,10 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **«Already have an account? Sign in»:** agregado (no está en el diseño), para `signinHref`.
   - **Dominio del correo:** el validador `email` de Angular acepta `ana@empresa`; el Block pide además un punto en el dominio, como el diseño.
   - **Textos en inglés** (B.1-i): beneficios y mensajes traducidos («Soporte en español» pasa a «Support that answers», neutro).
+
+  otp-01 (B.5, 07/11/2026):
+  - **Código incompleto al pulsar «Verify»:** sin diseño; el Block marca las casillas con el error y dice «Enter the 6-digit code.».
+  - **Mensaje de éxito:** «Code verified. Signing you in…», como el diseño; el de error ya no sugiere el código del ejemplo («Prueba con 246810» es del diseño, no del Block).
+  - **Casillas:** 42 × 50 px en móvil y 48 × 56 px desde `sm`, con los tokens de Input OTP (`--mimi-otp-width`, `-height`, `-gap`, `-font-size`) en `class`; el valor por defecto del componente es 46 × 54 px.
+  - **«Use another email»:** un botón (salida `changeDestination`), no un enlace.
+  - **Anuncio del reenvío:** «You can request another code now.» en una región `aria-live` oculta, solo al habilitarse (no está en el diseño).

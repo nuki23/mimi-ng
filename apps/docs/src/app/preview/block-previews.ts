@@ -18,6 +18,11 @@ export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {
       error: { error: 'Wrong email or password. Try again or reset your password.' },
     },
   },
+  'otp-01': {
+    // Con una verificación de mentira (246810), para ver el error y el éxito (otp-01-demo.ts).
+    load: () => import('./otp-01-demo').then((m) => m.Otp01Demo),
+    states: { resend: { resendSeconds: 0 } },
+  },
   'signup-01': {
     load: () => import('@/blocks/signup-01').then((m) => m.Signup01),
     states: {

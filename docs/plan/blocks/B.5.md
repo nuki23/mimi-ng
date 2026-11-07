@@ -2,7 +2,7 @@
 
 [← Índice del plan](../../plan.md)
 
-- [ ] B.5 `otp-01`: verificación con un código de 6 dígitos (Input OTP), con reenvío y cuenta regresiva.
+- [x] B.5 `otp-01`: verificación con un código de 6 dígitos (Input OTP), con reenvío y cuenta regresiva. (07/11/2026; pendiente de comprobación manual: autocompletar desde un SMS en iOS y Android, NVDA y teléfono real, a la M.20. Informe: `docs/auto/blocks-0.4.0-2026-11-06.md`, «B.5». API final: `<mimi-otp-01 [destination] [length] [resendSeconds] [loading] [status] [autofocus] (verify) (resend) (changeDestination) class>`; sin Signal Forms, ver el informe.)
   - v0.4.0 · Tamaño S · Depende de: B.1, G2.5 (Input OTP, publicado en la 0.3.0) y 2.1 · Bloquea: B.P
   - Estado: —
   - Leer antes: B.1; la G2.5 Input OTP en `docs/historial/grupo-2/G2.5.md` (`length`, `separatorAfter`, `success`, mensaje con `role="status"`, movimiento reducido); spec 8.

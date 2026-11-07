@@ -528,6 +528,11 @@
         "@angular/forms": "^22.0.0"
       },
       "registryDependencies": ["button", "checkbox", "form-field", "input", "password", "utils/cn"]
+    },
+    "otp-01": {
+      "type": "block",
+      "files": ["blocks/otp-01/otp-01.ts", "blocks/otp-01/otp-01.html", "blocks/otp-01/index.ts"],
+      "registryDependencies": ["button", "card", "input-otp", "utils/cn"]
     }
   }
 }

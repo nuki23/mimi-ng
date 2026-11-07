@@ -172,6 +172,10 @@
             "label": "login-02 (Block)"
           },
           {
+            "value": "otp-01",
+            "label": "otp-01 (Block)"
+          },
+          {
             "value": "signup-01",
             "label": "signup-01 (Block)"
           }

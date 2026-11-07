@@ -7,7 +7,7 @@ Pedido: ejecutar B.1 → B.2 → B.3 → B.4 → B.5 → B.10 → B.6 → B.7 �
 ## Pendiente del usuario
 
 1. **Diseños que faltan** (no bloquearon, decidido por el usuario): la página de un Block en el sitio y el marco de la vista previa (B.1, en D6); los estados de error de `login-01` (B.2); la imagen de `login-02` (B.3); el estado «válido» de un campo (B.4). Cada uno está en `docs/design/correcciones-pendientes.md` con lo que se hizo.
-2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3); `signup-01`: NVDA (mensajes, nivel del medidor y la nota del botón), el gestor de contraseñas (que proponga una nueva) y un teléfono real (B.4).
+2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3); `signup-01`: NVDA (mensajes, nivel del medidor y la nota del botón), el gestor de contraseñas (que proponga una nueva) y un teléfono real (B.4); `otp-01`: autocompletar el código desde un SMS en iOS y en Android (`one-time-code`), NVDA y un teléfono real (B.5).
 3. **Imagen de `login-02`** (B.3-a): hoy un degradado neutro provisional; pedir la imagen o una ilustración en Claude Design (D6).
 
 ## Tabla acumulada del sitio
@@ -21,6 +21,7 @@ Medición de partida (06/11/2026, después de la M.13, comprobada al empezar la 
 | B.2     | 153,39 / 22,05  | 330,71 / 104,78 | 135,93      | 484,10         | 8,26 / 2,10       |
 | B.3     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 14,78 / 3,09      |
 | B.4     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 16,18 / 3,34      |
+| B.5     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 17,80 / 3,66      |
 
 ## B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase
 
@@ -217,3 +218,37 @@ Nuevos: `packages/ui-core/src/lib/blocks/signup-01/signup-01.ts`, `signup-01.htm
 Modificados: `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `apps/docs/src/app/pages/docs/blocks/block-pages.spec.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.4.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
 
 Commit: `feat(blocks): signup-01, registro con medidor de contraseña y la nota de lo que falta (B.4)`.
+
+## B.5 `otp-01`
+
+**Estado:** `[x]`, pendiente de comprobación manual (SMS en iOS y Android, NVDA, teléfono real; a la M.20).
+
+### Plan breve
+
+El Block con `mimi-input-otp` (6 dígitos, separador después del tercero), el mensaje `role="status"` que describe el código, «Verify», el reenvío con cuenta regresiva (`setInterval` limpiado con `DestroyRef`) y «Use another email». `verify` una vez por código, al completar o con el botón (B.5-a); `status` de la app pinta error o éxito. En la vista previa, una demo del sitio simula la verificación.
+
+### Decisiones y desvíos
+
+- **B.5-a (decidido por el usuario):** al completar y con el botón, una sola vez por código (se guarda el último enviado).
+- **Sin Signal Forms (desvío de la tarea, que proponía un campo con `required` y `minLength`):** el error del código lo decide la app (`status`) y se pinta con las entradas `invalid`/`touched`/`success` de Input OTP, que Signal Forms escribe cuando hay `[formField]` (no se pueden usar los dos a la vez). Un solo campo no necesita `form()`: el Block usa `[value]`/`(valueChange)` y valida la longitud al pulsar el botón. No trae `@angular/forms`.
+- **`status` vale para el código enviado:** al escribir otro, vuelve a «idle» (si no, el error del código anterior quedaba pintado mientras se escribe uno nuevo).
+- **`resendSeconds`:** 60 por defecto (42 en el diseño, que es un instante de la cuenta); la vista previa usa 42.
+- **`autofocus`** (entrada nueva, `true` por defecto): el foco va al código solo si nadie lo tiene (no lo roba dentro de un diálogo).
+- **Demo de la vista previa (`apps/docs/src/app/preview/otp-01-demo.ts`):** acepta 246810 después de 600 ms; no es parte del Block. Estado de la página: «Reenvío disponible» (`resendSeconds: 0`).
+
+### Criterios de hecho
+
+- **El Block en ui-core, en el registro y en el sitio.** Ítem `otp-01` (button, card, input-otp, `utils/cn`; sin peers propias), `x-prompt`, README; página `/docs/blocks/otp-01` (`ready`). Capturas: escritorio claro con un código incorrecto (casillas en error y el mensaje), móvil oscuro con 246810 (éxito, casillas de 42 × 50 px).
+- **Pruebas.** `otp-01.spec.ts` (7, con temporizadores falsos): `verify` al completar y con el botón una vez por código; incompleto con el botón; `status` error y éxito y la vuelta a «idle» al cambiar el código; el mensaje describe el código; cuenta regresiva («Resend in 0:42» → «0:41» → «Resend code»), el anuncio solo al habilitarse, `resend` reinicia y vacía el código; `loading`; `changeDestination`, foco inicial, un `h1` y `class`. `otp-01-demo.spec.ts`: la demo da error con otro código y éxito con 246810.
+- **`ng g mimi otp-01` en un proyecto limpio.** Con la CLI `0.4.0-real.5`: agrega input-otp y el Block; con la ruta, `ng build` en verde.
+- **CSS global y JS inicial, antes y después.** Sin cambios (153,39 / 22,05 kB; 331,42 / 105,69 kB; `main` 135,97). `blocks.css` 16,18 → 17,80 kB (3,66 gzip).
+- **`pnpm build`, `pnpm test` y `pnpm format:check` en verde.** Docs 181, ui-core 808 y CLI 144.
+- **Manual (a la M.20):** NO COMPROBADO (manual, usuario): SMS en iOS y Android, NVDA, teléfono real.
+
+### Archivos
+
+Nuevos: `packages/ui-core/src/lib/blocks/otp-01/otp-01.ts`, `otp-01.html`, `index.ts`, `otp-01.spec.ts`; `apps/docs/src/app/pages/docs/blocks/otp-01-page.ts`; `apps/docs/src/app/preview/otp-01-demo.ts` y `otp-01-demo.spec.ts`.
+
+Modificados: `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `apps/docs/src/app/pages/docs/blocks/block-pages.spec.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.5.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
+
+Commit: `feat(blocks): otp-01, verificación por código con reenvío y cuenta regresiva (B.5)`.
