@@ -145,6 +145,24 @@ describe('registry.json', () => {
     }
   });
 
+  it('Blocks (B.1): sus archivos en blocks/<nombre>/, solo dependen de componentes y utils', () => {
+    for (const [name, item] of entries.filter(([, i]) => i.type === 'block')) {
+      for (const file of item.files) {
+        expect(file.startsWith(`blocks/${name}/`), `${name}: ${file}`).toBe(true);
+      }
+      for (const dep of item.registryDependencies ?? []) {
+        expect(['component', 'util'], `${name} → ${dep}`).toContain(registry.items[dep].type);
+      }
+    }
+    // Y ningún ítem que no sea un Block tiene archivos en blocks/.
+    for (const [name, item] of entries.filter(([, i]) => i.type !== 'block')) {
+      expect(
+        item.files.filter((f) => f.startsWith('blocks/')),
+        name,
+      ).toEqual([]);
+    }
+  });
+
   it('las versiones son las del package.json de ui-core', () => {
     for (const [name, item] of entries) {
       for (const [pkg, range] of Object.entries(item.dependencies ?? {})) {
@@ -172,26 +190,26 @@ describe('registry.json', () => {
     expect(() => resolveItems('nope', registry)).toThrow('"nope" no existe');
   });
 
-  it('el README del paquete lista todos los componentes del registro, con su ng g mimi', () => {
-    const readme = readFileSync(join(here, '..', 'README.md'), 'utf8');
-    const components = entries
-      .filter(([, item]) => item.type === 'component')
-      .map(([name]) => name);
-    const missing = components.filter((name) => !readme.includes(`\`ng g mimi ${name}\``));
-    expect(missing).toEqual([]);
-    // Y ninguno de más.
-    const listed = [...readme.matchAll(/`ng g mimi ([a-z-]+)`/g)].map((m) => m[1]);
-    expect(listed.filter((name) => !components.includes(name))).toEqual([]);
-  });
-
-  it('la lista del x-prompt de ui es la de los componentes del registro', () => {
-    const schema = JSON.parse(readFileSync(join(here, 'ui', 'schema.json'), 'utf8'));
-    const items = schema.properties.components['x-prompt'].items as { value: string }[];
-    const components = entries
-      .filter(([, item]) => item.type === 'component')
+  const namesOf = (type: string) =>
+    entries
+      .filter(([, item]) => item.type === type)
       .map(([name]) => name)
       .sort();
-    expect(items.map((i) => i.value)).toEqual(components);
+
+  it('el README del paquete lista todos los componentes y Blocks del registro, con su ng g mimi', () => {
+    const readme = readFileSync(join(here, '..', 'README.md'), 'utf8');
+    const installable = [...namesOf('component'), ...namesOf('block')];
+    const missing = installable.filter((name) => !readme.includes(`\`ng g mimi ${name}\``));
+    expect(missing).toEqual([]);
+    // Y ninguno de más.
+    const listed = [...readme.matchAll(/`ng g mimi ([a-z0-9-]+)`/g)].map((m) => m[1]);
+    expect(listed.filter((name) => !installable.includes(name))).toEqual([]);
+  });
+
+  it('la lista del x-prompt de ui: los componentes y, después, los Blocks (B.1-c)', () => {
+    const schema = JSON.parse(readFileSync(join(here, 'ui', 'schema.json'), 'utf8'));
+    const items = schema.properties.components['x-prompt'].items as { value: string }[];
+    expect(items.map((i) => i.value)).toEqual([...namesOf('component'), ...namesOf('block')]);
     // Sin enum: un nombre desconocido llega al schematic, que sugiere el parecido.
     expect(schema.properties.components.items.enum).toBeUndefined();
   });

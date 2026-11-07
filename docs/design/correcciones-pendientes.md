@@ -210,3 +210,63 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Paneles altos en pantallas chicas:** el calendario (365px), el Date Range con atajos (360px) y el Color Picker en su disparador (372px) no caben arriba ni abajo de un disparador que está en el medio de una pantalla de 360 × 780 y quedan de 2 a 7px fuera del margen de 8px. Sin diseño móvil; si se confirma en un teléfono real, diseñar una alternativa (por ejemplo, una hoja inferior) o un panel más bajo.
   - **Objetivo del Slider:** el anfitrión del Slider mide 24px de alto (el diseño, 20px, el alto del pulgar) para que en el rango estrecho los objetivos de los dos pulgares no se toquen (2.5.8). El aspecto no cambia.
   - **Objetivos chicos que cumplen por espaciado:** el botón de quitar del chip (18 × 18px, Tags Input y Combobox) y la barra de tono del Color Picker (12px de alto). Si se quiere un área táctil mayor, definirla en el diseño.
+
+  Blocks: la página del sitio (B.1, 07/11/2026):
+  - **Página de un Block sin diseño:** `Mimi F6 Blocks.dc.html` es el índice de los Blocks, no la página de documentación. La página (`/docs/blocks/<nombre>`) se armó con lo que ya tiene el sitio: título, descripción, la vista previa en un marco con borde y fondo `muted`, `InstallCommand`, «Componentes que usa» como enlaces en píldora, el código con `CodeBlock` (un bloque por archivo) y la tabla de API. Pedir el diseño de la página.
+  - **Marco de la vista previa:** `iframe` de 760px de alto, con tres `mimi-toggle-group` encima (Escritorio · Móvil (375 px), Claro · Oscuro y el estado) y el enlace «Abrir en una pestaña». El ancho móvil (375px) es el de los marcos de `F6 Blocks`; el alto y los controles no están en el diseño.
+
+  login-01 (B.2, 07/11/2026):
+  - **Error de credenciales sin diseño:** un `role="alert"` encima del botón, con el ícono `circle-alert` y los colores de error suave (`destructive-soft-bg`, `destructive-soft-foreground`, radio `--mimi-radius`), derivados del error de Input. Pedir el diseño.
+  - **Campos inválidos sin diseño:** los de `mimi-form-field` y `mimi-input` (borde y etiqueta en `destructive`, mensaje debajo); al enviar con errores, el foco va al primero.
+  - **Contraseña:** el diseño la escribe a mano (input y botón del ojo); el Block usa `mimi-password` (G2.3), con el mismo botón (`aria-pressed`, nombre fijo).
+  - **Logotipos:** la «G» de Google es la letra en un círculo del diseño (no el logotipo); GitHub, el ícono `github` de Lucide escrito en línea (Lucide lo marca como obsoleto por ser una marca).
+  - **Separador con texto:** `mimi-separator` no tiene texto; «or with your email» va entre dos separadores dentro del Block.
+  - **Botón principal:** 4px más alto que el control (`calc(var(--mimi-control-height) + 4px)`), con `class` en `mimiBtn`; el giro de carga se detiene con «reducir movimiento» (el diseño no lo dice).
+  - **Textos en inglés** (B.1-i): los del diseño, traducidos («Sign in», «Welcome back to Mimi Sales.», «or with your email», «Forgot it?», «Remember me for 30 days», «Signing in…», «Don't have an account? Sign up»).
+  - **Trama de puntos:** la máscara usa `var(--mimi-foreground)` en lugar de `#000` (solo cuenta el canal alfa; así no hay un color fijo).
+
+  login-02 (B.3, 07/11/2026):
+  - **Imagen (provisional):** el diseño tiene un hueco de la herramienta (`image-slot`), no una imagen. Sin `imageSrc`, el Block muestra un **degradado neutro** (`from-secondary via-muted to-accent`), marcado como provisional en el código (decidido por el usuario). Pedir la imagen o una ilustración libre (SVG en línea) para el ejemplo.
+  - **Error de credenciales y campos inválidos:** sin diseño, como en login-01 (`role="alert"` con los colores de error suave).
+  - **Iniciales del testimonio:** `mimi-avatar` pequeño (32px) con `bg-info-soft` y `text-info-soft-foreground`, como el `span` del diseño.
+  - **Vidrio:** con «reducir transparencia» (`prefers-reduced-transparency`), fondo `card` sólido y sin desenfoque (no está en el diseño).
+  - **Corte del diseño:** dos columnas desde `md` (768px); el diseño solo dibuja 1280px y móvil.
+  - **Textos en inglés** (B.1-i) y la nota legal.
+  - **Testimonio de relleno (M5, 07/11/2026):** el diseño trae una cita, una persona y una empresa inventadas que nombran a otra biblioteca; el Block pone texto de relleno claramente genérico («Add a short quote from a customer here.», «Customer name», «Role · Company», iniciales «CN»). Si el diseño quiere un ejemplo, que sea igual de genérico.
+
+  signup-01 (B.4, 07/11/2026):
+  - **Estado «válido» de un campo:** `mimi-form-field` solo tiene errores. El «Looks good.» / «Valid email.» / «They match.» del diseño (ícono `circle-check` en `success-soft-foreground`) lo escribe el Block, en un elemento que describe el campo. Si se quiere en FormField, diseñarlo ahí (y su token).
+  - **Color de la etiqueta y el mensaje con error:** el diseño usa `destructive-soft-foreground`; Mimi, `destructive` (`--mimi-field-error`, ya anotado arriba).
+  - **Cuándo aparece el error:** al salir del campo (B.4-a), como el diseño; Mimi lo muestra también al escribir (`dirty`), así que el Block le pasa `[showError]` a cada campo.
+  - **Términos:** el diseño no dibuja su error; el Block lo muestra debajo («Accept the terms to continue.») al pulsar el botón incompleto. «Terms» y «Privacy Notice» son enlaces (el diseño: texto).
+  - **Botón:** `aria-disabled` en vez de `disabled` (la nota se lee y el botón se enfoca), con el aspecto deshabilitado del diseño; la nota cuenta también el nombre («your name»), que el diseño no lista.
+  - **«Already have an account? Sign in»:** agregado (no está en el diseño), para `signinHref`.
+  - **Dominio del correo:** el validador `email` de Angular acepta `ana@empresa`; el Block pide además un punto en el dominio, como el diseño.
+  - **Textos en inglés** (B.1-i): beneficios y mensajes traducidos («Soporte en español» pasa a «Support that answers», neutro).
+
+  otp-01 (B.5, 07/11/2026):
+  - **Código incompleto al pulsar «Verify»:** sin diseño; el Block marca las casillas con el error y dice «Enter the 6-digit code.».
+  - **Mensaje de éxito:** «Code verified. Signing you in…», como el diseño; el de error ya no sugiere el código del ejemplo («Prueba con 246810» es del diseño, no del Block).
+  - **Casillas:** 42 × 50 px en móvil y 48 × 56 px desde `sm`, con los tokens de Input OTP (`--mimi-otp-width`, `-height`, `-gap`, `-font-size`) en `class`; el valor por defecto del componente es 46 × 54 px.
+  - **«Use another email»:** un botón (salida `changeDestination`), no un enlace.
+  - **Anuncio del reenvío:** «You can request another code now.» en una región `aria-live` oculta, solo al habilitarse (no está en el diseño).
+
+  Tabs vertical (B.10, 07/11/2026):
+  - **Sin diseño:** `F2 Toast Tabs Toolbar` no tiene Tabs vertical. Mimi lo armó con lo de la horizontal: filas iguales del alto de siempre (44px subrayada, 34px píldora), texto al inicio con 12px a los lados, la subrayada con el borde y la barra de 2px al inicio, y la píldora con su fondo moviéndose hacia abajo y sin el ancho máximo de 520px. El espacio entre la lista y el panel es el `gap` de 14px del componente. La navegación lateral de `settings-01` (fila con fondo `accent`, sin indicador) no es ninguna de las dos: lo resuelve la B.6.
+
+  settings-01 (B.6, 07/11/2026):
+  - **Navegación lateral y píldoras móviles frente a las variantes de Tabs:** ni `underline` ni `pill`. El Block usa una sola `mimi-tabs` (vertical en escritorio, horizontal en móvil, B.10) y la viste con `class` (selectores sobre `[role=tab]` y el indicador oculto): filas de 38px con fondo `accent` en la elegida (escritorio) y píldoras de 34px con borde que se desplazan en horizontal, la elegida en `primary` (móvil). Si se quiere como variante de Tabs, diseñarla (sin variante nueva sin decisión).
+  - **Prefijo del usuario («mimi.dev/» en el diseño, «example.com/» en el Block):** no hay un grupo de input con prefijo; el Block arma la caja con los colores de Input (borde, fondo, foco y error).
+  - **Descripción de los interruptores:** el diseño solo pone `aria-label`; el Block nombra cada uno con su título (`<label for>`) y lo describe con su descripción (`aria-describedby` en el botón de Switch, que no tiene entrada para eso).
+  - **Barra de asientos:** `mimi-progress` con su nombre («Seats used»), no un `div`.
+  - **«Quitar» la foto y «Cerrar» la sesión:** `mimiBtn` `ghost`/`danger` y `outline`/`secondary` en tamaño `sm`; «Cerrar» lleva el dispositivo en su nombre accesible («Sign out of Safari · iPhone»).
+  - **Moneda y fecha:** con `Intl` y el `LOCALE_ID` (el diseño: «$240 por persona» y «1 de noviembre» escritos); el ejemplo usa 12 USD.
+  - **Barra de cambios:** con «reducir transparencia», fondo sólido; el botón «Save» dice «Saving…» con `saving` (no está en el diseño).
+  - **Textos en inglés** (B.1-i). **Datos de ejemplo genéricos (M5, 07/11/2026):** el diseño usa una persona inventada y dos ciudades; el Block, «Your name», «your-username», «YN», «Your city» y «Another city».
+
+  pricing-01 (B.7, 07/11/2026):
+  - **Borde del destacado (B.7-a, decidido por el usuario):** estático. El mismo `conic-gradient` de `info` y `success` del diseño (desde 200°), quieto, sobre `border`, con 1,5px, `shadow-popover` y la insignia; sin `@keyframes mimi-beam` ni `@property --mimi-beam-a`. Cuando exista Border Beam (E.7), el sitio mostrará cómo cambiarlo.
+  - **Pie de precios:** el del diseño es de un país («pesos mexicanos más IVA · Factura CFDI 4.0»); el Block dice «Prices in &lt;moneda&gt;, taxes not included · FAQ».
+  - **Precios del ejemplo:** en USD (12/10 y 24/20 por persona y mes), con `Intl.NumberFormat`; el diseño usa 190/158 y 240/199 pesos.
+  - **Interruptor mensual/anual:** `mimi-toggle-group` redondeado (`rounded-full` con `class`), con su fondo deslizante; el «−17%» es un `mimiBadge` dentro del botón Anual.
+  - **«Custom»:** el diseño dice «A medida»; sin unidad ni nota.

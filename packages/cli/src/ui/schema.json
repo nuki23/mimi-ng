@@ -9,13 +9,13 @@
       "items": {
         "type": "string"
       },
-      "description": "Componentes que se agregan (varios a la vez: button input form-field).",
+      "description": "Componentes o Blocks que se agregan (varios a la vez: button input form-field, o un Block: login-01).",
       "$default": {
         "$source": "argv",
         "index": 0
       },
       "x-prompt": {
-        "message": "¿Qué componentes quieres agregar?",
+        "message": "¿Qué componentes o Blocks quieres agregar?",
         "type": "list",
         "multiselect": true,
         "items": [
@@ -162,6 +162,30 @@
           {
             "value": "tooltip",
             "label": "tooltip"
+          },
+          {
+            "value": "login-01",
+            "label": "login-01 (Block)"
+          },
+          {
+            "value": "login-02",
+            "label": "login-02 (Block)"
+          },
+          {
+            "value": "otp-01",
+            "label": "otp-01 (Block)"
+          },
+          {
+            "value": "pricing-01",
+            "label": "pricing-01 (Block)"
+          },
+          {
+            "value": "settings-01",
+            "label": "settings-01 (Block)"
+          },
+          {
+            "value": "signup-01",
+            "label": "signup-01 (Block)"
           }
         ]
       }

@@ -18,8 +18,9 @@ export interface Harness {
   warnings(): string[];
 }
 
-export function harness(): Harness {
-  const runner = new SchematicTestRunner('@mimi-ng/cli', COLLECTION);
+/** `collection`: otra copia compilada (por ejemplo, la del Block de prueba, test-block.ts). */
+export function harness(collection: string = COLLECTION): Harness {
+  const runner = new SchematicTestRunner('@mimi-ng/cli', collection);
   const logs: Harness['logs'] = [];
   runner.logger.subscribe((entry) => logs.push({ level: entry.level, message: entry.message }));
   return {

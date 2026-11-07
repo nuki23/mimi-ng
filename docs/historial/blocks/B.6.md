@@ -2,7 +2,7 @@
 
 [← Índice del plan](../../plan.md)
 
-- [ ] B.6 `settings-01`: configuración con navegación lateral (pestañas verticales), formularios, interruptores, sesiones, zona de peligro, facturación y barra de «cambios sin guardar».
+- [x] B.6 `settings-01`: configuración con navegación lateral (pestañas verticales), formularios, interruptores, sesiones, zona de peligro, facturación y barra de «cambios sin guardar». (07/11/2026; pendiente de comprobación manual: NVDA, teléfono real y claro/oscuro en un navegador real, a la M.20. Informe: `docs/auto/blocks-0.4.0-2026-11-06.md`, «B.6». API final: `<mimi-settings-01 [profile] [preferences] [sessions] [plan] [saving] [(tab)] (saved) (avatarChange) (avatarRemove) (sessionEnd) (deleteAccount) (changePlan) class>`.)
   - v0.4.0 · Tamaño L (el Block más grande: cuatro secciones) · Depende de: B.1, B.10 (Tabs con orientación vertical) y los componentes que usa, publicados (2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.8, 2.9, G1.9, G2.10) · Bloquea: B.P
   - Estado: —
   - Leer antes: B.1; la B.10; spec 4 (Tabs, Input, Textarea, Switch, Avatar, Badge, Progress, Card, Separator, Button); la G1.9 Tabs en `docs/historial/plan-grupo-1.md` (aria Tabs, `preserveContent`, variante `pill`); la G2.10 Progress en `docs/historial/grupo-2/G2.10.md`; spec 8.
@@ -41,5 +41,5 @@
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
     - Manual (a la M.20): NVDA (pestañas verticales, interruptores con descripción, barra de cambios); teléfono real (píldoras desplazables con el dedo, teclado virtual sobre la barra de cambios); claro y oscuro.
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR (B.6-a): «Eliminar cuenta» confirma con `mimi-confirm` (G1.7, publicado; suma `@angular/cdk/dialog` al Block) o solo emite la salida y el usuario decide. Recomendación: **solo la salida**, como en el diseño (que no dibuja la confirmación); el código de la página del sitio muestra cómo enchufarle `mimi-confirm`.
-    - PENDIENTE DE DECIDIR (B.6-b): ¿Guardar muestra un Toast (G1.8)? Recomendación: no (el Toast es global y lo provee la app); la barra desaparece al guardar, y el sitio muestra el ejemplo con Toast.
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.6-a): «Eliminar cuenta» confirma con `mimi-confirm` (G1.7, publicado; suma `@angular/cdk/dialog` al Block) o solo emite la salida y el usuario decide. Recomendación: **solo la salida**, como en el diseño (que no dibuja la confirmación); el código de la página del sitio muestra cómo enchufarle `mimi-confirm`.
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.6-b): ¿Guardar muestra un Toast (G1.8)? Recomendación: no (el Toast es global y lo provee la app); la barra desaparece al guardar, y el sitio muestra el ejemplo con Toast.

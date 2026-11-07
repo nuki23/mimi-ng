@@ -1,0 +1,174 @@
+<!-- Trama de puntos de fondo (solo escritorio). La máscara usa solo el canal alfa. -->
+<div
+  aria-hidden="true"
+  class="pointer-events-none absolute inset-0 -z-10 hidden bg-[radial-gradient(color-mix(in_oklab,var(--mimi-foreground)_14%,transparent)_1px,transparent_1px)] bg-size-[18px_18px] mask-[radial-gradient(ellipse_at_50%_40%,var(--mimi-foreground)_30%,transparent_75%)] sm:block"
+></div>
+
+<mimi-card
+  class="w-full gap-[18px] border-0 bg-transparent p-0 shadow-none sm:max-w-[400px] sm:border sm:bg-card sm:p-8 sm:shadow-card"
+>
+  <form
+    novalidate
+    class="flex flex-col gap-[18px]"
+    [attr.aria-labelledby]="id + '-title'"
+    (submit)="onSubmit($event)"
+  >
+    <div class="flex flex-col items-center gap-2.5 text-center">
+      <span
+        aria-hidden="true"
+        class="inline-flex size-10 items-center justify-center rounded-[12px] bg-primary text-[22px] leading-none font-extrabold text-primary-foreground shadow-primary"
+        >m</span
+      >
+      <h1 [id]="id + '-title'" class="text-2xl font-extrabold tracking-[-0.02em]">Sign in</h1>
+      <p class="text-sm text-muted-foreground">Welcome back to Mimi Sales.</p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+      <button
+        mimiBtn
+        type="button"
+        variant="outline"
+        tone="secondary"
+        (click)="provider.emit('google')"
+      >
+        <!-- La «G» del diseño, una letra en un círculo (no el logotipo de Google). -->
+        <span
+          aria-hidden="true"
+          class="inline-flex size-[18px] items-center justify-center rounded-full border-[1.5px] border-current text-[11px] font-extrabold"
+          >G</span
+        >
+        Google
+      </button>
+      <button
+        mimiBtn
+        type="button"
+        variant="outline"
+        tone="secondary"
+        (click)="provider.emit('github')"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <!-- Lucide github (ISC) -->
+          <path
+            d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"
+          />
+          <path d="M9 18c-4.51 2-5-2-7-2" />
+        </svg>
+        GitHub
+      </button>
+    </div>
+
+    <div class="flex items-center gap-3 text-xs text-muted-foreground">
+      <mimi-separator class="w-auto flex-1" />
+      or with your email
+      <mimi-separator class="w-auto flex-1" />
+    </div>
+
+    <mimi-form-field label="Email">
+      <input mimiInput type="email" autocomplete="email" [formField]="login.email" />
+    </mimi-form-field>
+
+    <mimi-form-field class="relative">
+      <label [attr.for]="id + '-password'" class="text-sm font-medium">Password</label>
+      <a
+        [href]="forgotHref()"
+        class="absolute top-0 right-0 rounded-sm text-[13px] font-medium text-muted-foreground underline underline-offset-3 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >Forgot it?</a
+      >
+      <mimi-password>
+        <input
+          mimiInput
+          type="password"
+          autocomplete="current-password"
+          [id]="id + '-password'"
+          [formField]="login.password"
+        />
+      </mimi-password>
+    </mimi-form-field>
+
+    <div class="flex items-center gap-2.5">
+      <mimi-checkbox [id]="id + '-remember'" [formField]="login.remember" />
+      <label [attr.for]="id + '-remember'" class="cursor-pointer text-sm"
+        >Remember me for 30 days</label
+      >
+    </div>
+
+    <!-- Siempre en la página: así el lector anuncia el error cuando aparece. -->
+    <div role="alert" class="empty:hidden">
+      @if (error(); as message) {
+        <p
+          class="flex items-start gap-2 rounded-[var(--mimi-radius)] bg-destructive-soft-bg px-3 py-2.5 text-sm text-destructive-soft-foreground"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="mt-0.5 shrink-0"
+          >
+            <!-- Lucide circle-alert (ISC) -->
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" x2="12" y1="8" y2="12" />
+            <line x1="12" x2="12.01" y1="16" y2="16" />
+          </svg>
+          {{ message }}
+        </p>
+      }
+    </div>
+
+    <button
+      mimiBtn
+      type="submit"
+      class="h-[calc(var(--mimi-control-height,2.5rem)+4px)] text-[15px] font-semibold"
+      [attr.aria-disabled]="loading() ? 'true' : null"
+      [attr.aria-busy]="loading() ? 'true' : null"
+    >
+      @if (loading()) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          class="motion-safe:animate-[mimi-spin_0.8s_linear_infinite]"
+        >
+          <!-- Lucide loader-circle (ISC) -->
+          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+        </svg>
+        Signing in…
+      } @else {
+        Sign in
+      }
+    </button>
+
+    <p class="text-center text-sm text-muted-foreground">
+      Don't have an account?
+      <a
+        [href]="signupHref()"
+        class="rounded-sm font-semibold text-foreground underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >Sign up</a
+      >
+    </p>
+  </form>
+</mimi-card>

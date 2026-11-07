@@ -1,0 +1,166 @@
+<mimi-card
+  class="w-full items-center gap-[22px] border-0 bg-transparent p-0 text-center shadow-none sm:max-w-[440px] sm:border sm:bg-card sm:px-8 sm:py-9 sm:shadow-card"
+>
+  <span
+    aria-hidden="true"
+    class="inline-flex size-14 items-center justify-center rounded-full bg-info-soft text-info-soft-foreground shadow-[0_0_0_8px_color-mix(in_oklab,var(--mimi-info)_8%,transparent)]"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="26"
+      height="26"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <!-- Lucide mail-check (ISC) -->
+      <path d="M22 13V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h8" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+      <path d="m16 19 2 2 4-4" />
+    </svg>
+  </span>
+
+  <div class="flex flex-col gap-1.5">
+    <h1 [id]="id + '-title'" class="text-2xl font-extrabold tracking-[-0.02em]">
+      Check your email
+    </h1>
+    <p class="text-sm leading-normal text-muted-foreground">
+      We sent a {{ length() }}-digit code to
+      <b class="font-bold text-foreground">{{ destination() }}</b
+      >.
+    </p>
+  </div>
+
+  <div class="flex flex-col items-center gap-2.5">
+    <!-- Casillas más pequeñas en móvil, con los tokens de Input OTP. -->
+    <mimi-input-otp
+      class="[--mimi-otp-font-size:20px] [--mimi-otp-gap:6px] [--mimi-otp-height:50px] [--mimi-otp-width:42px] sm:[--mimi-otp-font-size:22px] sm:[--mimi-otp-gap:8px] sm:[--mimi-otp-height:56px] sm:[--mimi-otp-width:48px]"
+      aria-label="Verification code"
+      [aria-describedby]="id + '-message'"
+      [length]="length()"
+      [separatorAfter]="length() === 6 ? 3 : undefined"
+      [invalid]="incomplete() || shownStatus() === 'error'"
+      [touched]="incomplete() || shownStatus() === 'error'"
+      [success]="shownStatus() === 'success'"
+      [value]="code()"
+      (valueChange)="onCodeChange($event)"
+    />
+    <!-- El mensaje del código (Input OTP no trae uno propio). -->
+    <span role="status" [id]="id + '-message'" [class]="messageClasses()">
+      @if (incomplete() || shownStatus() === 'error') {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <!-- Lucide circle-alert (ISC) -->
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" x2="12" y1="8" y2="12" />
+          <line x1="12" x2="12.01" y1="16" y2="16" />
+        </svg>
+      } @else if (shownStatus() === 'success') {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <!-- Lucide circle-check (ISC) -->
+          <circle cx="12" cy="12" r="10" />
+          <path d="m9 12 2 2 4-4" />
+        </svg>
+      }
+      {{ message() }}
+    </span>
+  </div>
+
+  <button
+    mimiBtn
+    type="button"
+    class="h-[calc(var(--mimi-control-height,2.5rem)+4px)] w-full text-[15px] font-semibold"
+    [attr.aria-disabled]="loading() ? 'true' : null"
+    [attr.aria-busy]="loading() ? 'true' : null"
+    (click)="onVerify()"
+  >
+    @if (loading()) {
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+        class="motion-safe:animate-[mimi-spin_0.8s_linear_infinite]"
+      >
+        <!-- Lucide loader-circle (ISC) -->
+        <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+      </svg>
+      Verifying…
+    } @else {
+      Verify
+    }
+  </button>
+
+  <div class="flex flex-col gap-2 text-[13.5px] text-muted-foreground">
+    <span>
+      Didn't get it?
+      <button
+        type="button"
+        class="rounded-sm font-semibold text-foreground underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:text-muted-foreground"
+        [disabled]="left() > 0"
+        (click)="onResend()"
+      >
+        @if (left() > 0) {
+          Resend in {{ countdown() }}
+        } @else {
+          Resend code
+        }
+      </button>
+    </span>
+    <!-- Anuncia solo cuando se puede reenviar (no cada segundo). -->
+    <span class="sr-only" aria-live="polite">{{ resendAnnouncement() }}</span>
+    <button
+      type="button"
+      class="inline-flex items-center justify-center gap-1.5 rounded-sm text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+      (click)="changeDestination.emit()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <!-- Lucide arrow-left (ISC) -->
+        <path d="m12 19-7-7 7-7" />
+        <path d="M19 12H5" />
+      </svg>
+      Use another email
+    </button>
+  </div>
+</mimi-card>

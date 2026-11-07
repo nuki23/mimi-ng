@@ -2,9 +2,9 @@
 
 [← Índice del plan](../../plan.md)
 
-- [ ] B.4 `signup-01`: registro con validación en vivo, medidor de contraseña con reglas, confirmación y un botón que explica qué falta.
+- [x] B.4 `signup-01`: registro con validación en vivo, medidor de contraseña con reglas, confirmación y un botón que explica qué falta. (07/11/2026; pendiente de comprobación manual: NVDA, gestor de contraseñas y teléfono real, a la M.20. Informe: `docs/auto/blocks-0.4.0-2026-11-06.md`, «B.4».)
   - v0.4.0 · Tamaño M · Depende de: B.1 (y los componentes que usa, publicados: 2.1, 2.2, 2.10, 2.11, G2.3) · Bloquea: B.P
-  - Estado: —
+  - Estado: hecha el 07/11/2026 en `auto/blocks-0.4.0-2026-11-06` (Claude Code, modo autónomo). API final: `<mimi-signup-01 [loading] [error] [termsHref] [privacyHref] [signinHref] (submitted) class>`; `submitted` lleva `Signup01Value` (`{ name, email, password }`).
   - Leer antes: B.1; la B.2 (mismo esqueleto de formulario); la G2.3 Password en `docs/historial/grupo-2/G2.3.md` (`meter`, `rules`, `strength`, anuncios del nivel con el `LiveAnnouncer`); spec 8 (validadores de Signal Forms, `mimi-form-field` y `mimi-form-error`).
   - Diseño: `Block signup-01.dc.html` y su fila en `Mimi F6 Blocks.dc.html` («Componentes: Input, Password, medidor, Checkbox, Button»). Lo que muestra:
     - Escritorio: una columna de beneficios a la izquierda (`aside`: logo «Mimi Ventas», `h2` «Todo tu equipo comercial en un solo panel.», tres beneficios con ícono —`git-merge`, `shield-check`, `headset`— y «14 días gratis · sin tarjeta») y el formulario a la derecha.
@@ -35,4 +35,4 @@
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
     - Manual (a la M.20): NVDA (mensajes, nivel del medidor y la nota del botón); gestor de contraseñas (propone una contraseña nueva); teléfono real.
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR (B.4-a): cuándo se muestran los mensajes: al salir del campo (el diseño: `touched`) o al escribir. Recomendación: al salir del campo, y la confirmación también al escribir una vez que se tocó (así deja de decir «no coincide» en cuanto coincide).
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.4-a): cuándo se muestran los mensajes: al salir del campo (el diseño: `touched`) o al escribir. Recomendación: al salir del campo, y la confirmación también al escribir una vez que se tocó (así deja de decir «no coincide» en cuanto coincide).

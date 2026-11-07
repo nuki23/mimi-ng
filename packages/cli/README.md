@@ -108,6 +108,17 @@ export class App {}
 - **Toolbar**: `ng g mimi toolbar` · [documentación](https://ng.mimiworks.dev/docs/components/toolbar)
 - **Tooltip**: `ng g mimi tooltip` · [documentación](https://ng.mimiworks.dev/docs/components/tooltip)
 
+## Blocks
+
+Pantallas enteras (inicio de sesión, registro, ajustes…) hechas con los componentes de Mimi. Se agregan con el mismo comando, por ejemplo `ng g mimi` seguido del nombre del Block: la pantalla se copia a `src/app/blocks/<nombre>` (`aliases.blocks` en `mimi.json`) y los componentes que usa, a la carpeta de siempre. Es un componente de página: agrégalo a tus rutas. La pantalla es tuya; si la modificas, `ng g mimi` no la vuelve a tocar al actualizar (te avisa y `--overwrite` la reemplaza entera).
+
+- **login-01** (inicio de sesión centrado, con Google y GitHub): `ng g mimi login-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-01)
+- **login-02** (inicio de sesión en dos columnas, con imagen y testimonio): `ng g mimi login-02` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-02)
+- **otp-01** (verificación con un código de 6 dígitos, reenvío y cuenta regresiva): `ng g mimi otp-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/otp-01)
+- **pricing-01** (tres planes con mensual/anual y el plan destacado): `ng g mimi pricing-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/pricing-01)
+- **settings-01** (ajustes de cuenta con secciones, interruptores, sesiones y facturación): `ng g mimi settings-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/settings-01)
+- **signup-01** (registro con validación, medidor de contraseña y confirmación): `ng g mimi signup-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/signup-01)
+
 ## Tus cambios
 
 - Guarda la carpeta `.mimi/` en git: tiene la copia original de cada archivo, y con ella Mimi sabe qué cambiaste tú.

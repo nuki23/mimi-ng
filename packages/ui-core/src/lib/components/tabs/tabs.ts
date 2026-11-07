@@ -97,37 +97,75 @@ export class MimiTabsOutlet {
   });
 }
 
+/**
+ * Orientación de la fila de pestañas (B.10): horizontal (por defecto) o vertical, para una
+ * navegación lateral. En vertical, las flechas son ↑/↓ (las pone aria) y el panel va al lado.
+ */
+export type MimiTabsOrientation = 'horizontal' | 'vertical';
+
 /** El contenedor visible de las pestañas (recibe el `class` del usuario). */
 const containerVariants = cva('relative font-sans', {
   variants: {
     variant: {
-      underline: 'border-b border-border',
+      underline: 'border-border',
       // 4px fijos (no rem): el indicador resta los mismos 8px.
-      pill: 'max-w-[520px] rounded-[calc(var(--mimi-radius)_+_4px)] bg-[color:var(--mimi-tabs-pill-bg,var(--mimi-muted))] p-[4px]',
+      pill: 'rounded-[calc(var(--mimi-radius)_+_4px)] bg-[color:var(--mimi-tabs-pill-bg,var(--mimi-muted))] p-[4px]',
     },
+    orientation: { horizontal: '', vertical: 'self-start' },
   },
-  defaultVariants: { variant: 'underline' },
+  compoundVariants: [
+    { variant: 'underline', orientation: 'horizontal', class: 'border-b' },
+    { variant: 'underline', orientation: 'vertical', class: 'border-s' },
+    { variant: 'pill', orientation: 'horizontal', class: 'max-w-[520px]' },
+  ],
+  defaultVariants: { variant: 'underline', orientation: 'horizontal' },
 });
 
 /**
- * El indicador: columnas iguales, así que su ancho es el de una columna y se desplaza su propio
- * ancho por cada pestaña (sin medir nada). En derecha a izquierda, al revés.
+ * El indicador: columnas (o filas) iguales, así que su tamaño es el de una pestaña y se desplaza
+ * su propio ancho (o alto) por cada una (sin medir nada). En derecha a izquierda, al revés.
  */
 const indicatorVariants = cva(
   [
     'pointer-events-none absolute',
-    'translate-x-[calc(100%_*_var(--mimi-tabs-index))] rtl:translate-x-[calc(-100%_*_var(--mimi-tabs-index))]',
     'transition-[translate] duration-[450ms] ease-[var(--mimi-tabs-spring,cubic-bezier(0.3,1.35,0.5,1))] motion-reduce:transition-none',
   ],
   {
     variants: {
       variant: {
-        underline:
-          '-bottom-px start-0 h-0.5 w-[calc(100%_/_var(--mimi-tabs-count))] rounded-[2px] bg-[color:var(--mimi-tabs-indicator,var(--mimi-foreground))]',
-        pill: 'start-[4px] top-[4px] bottom-[4px] w-[calc((100%_-_8px)_/_var(--mimi-tabs-count))] rounded-[var(--mimi-radius)] bg-[color:var(--mimi-tabs-pill-active,var(--mimi-card))] shadow-neutral',
+        underline: 'rounded-[2px] bg-[color:var(--mimi-tabs-indicator,var(--mimi-foreground))]',
+        pill: 'rounded-[var(--mimi-radius)] bg-[color:var(--mimi-tabs-pill-active,var(--mimi-card))] shadow-neutral',
+      },
+      orientation: {
+        horizontal:
+          'translate-x-[calc(100%_*_var(--mimi-tabs-index))] rtl:translate-x-[calc(-100%_*_var(--mimi-tabs-index))]',
+        vertical: 'translate-y-[calc(100%_*_var(--mimi-tabs-index))]',
       },
     },
-    defaultVariants: { variant: 'underline' },
+    compoundVariants: [
+      {
+        variant: 'underline',
+        orientation: 'horizontal',
+        class: '-bottom-px start-0 h-0.5 w-[calc(100%_/_var(--mimi-tabs-count))]',
+      },
+      {
+        // La barra va a la izquierda (al inicio), sobre el borde del contenedor.
+        variant: 'underline',
+        orientation: 'vertical',
+        class: '-start-px top-0 w-0.5 h-[calc(100%_/_var(--mimi-tabs-count))]',
+      },
+      {
+        variant: 'pill',
+        orientation: 'horizontal',
+        class: 'start-[4px] top-[4px] bottom-[4px] w-[calc((100%_-_8px)_/_var(--mimi-tabs-count))]',
+      },
+      {
+        variant: 'pill',
+        orientation: 'vertical',
+        class: 'start-[4px] end-[4px] top-[4px] h-[calc((100%_-_8px)_/_var(--mimi-tabs-count))]',
+      },
+    ],
+    defaultVariants: { variant: 'underline', orientation: 'horizontal' },
   },
 );
 
@@ -148,8 +186,10 @@ const tabVariants = cva(
         // 34px sin token (el token de alto es el de la subrayada): plan D6.
         pill: 'h-[34px] gap-1.5 rounded-[var(--mimi-radius)] text-[13.5px] [&_svg]:size-[15px] [&_svg]:shrink-0',
       },
+      // En vertical, el texto al inicio, como una navegación lateral.
+      orientation: { horizontal: '', vertical: 'justify-start px-3 text-start' },
     },
-    defaultVariants: { variant: 'underline' },
+    defaultVariants: { variant: 'underline', orientation: 'horizontal' },
   },
 );
 
@@ -196,11 +236,12 @@ const COUNT_CLASSES =
             <div
               ngTabList
               data-slot="tablist"
+              [orientation]="orientation()"
               [selectedTab]="painted()"
               (selectedTabChange)="fromAria($event)"
               [attr.aria-label]="ariaLabel() || null"
               [attr.aria-labelledby]="ariaLabelledby() || null"
-              [class]="tablistClasses"
+              [class]="tablistClasses()"
               (click)="choose($event)"
               (keydown.enter)="choose($event)"
               (keydown.space)="choose($event)"
@@ -248,12 +289,19 @@ const COUNT_CLASSES =
     </div>
   `,
   host: {
-    style: 'display: flex; flex-direction: column; gap: 14px',
+    // flex-direction va en su binding (B.10), no aquí.
+    style: 'display: flex; gap: 14px',
     // El class es del contenedor de las pestañas; aria-label y aria-labelledby, del tablist.
     '[attr.class]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
     '[attr.data-variant]': 'variant()',
+    '[attr.data-orientation]': 'orientation()',
+    // En vertical, las pestañas a un lado y el panel al otro. Bindings sueltos (no [style] con
+    // un objeto, que sumaba ɵɵstyleMap al JS inicial: spec 10).
+    // Siempre con valor: con null, Angular quita también el flex-direction del style estático.
+    '[style.flex-direction]': 'orientation() === "vertical" ? "row" : "column"',
+    '[style.align-items]': 'orientation() === "vertical" ? "flex-start" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -264,6 +312,8 @@ export class MimiTabs {
   readonly value = model<string | undefined>(undefined);
   /** Por defecto, `underline`. */
   readonly variant = input<MimiTabsVariant>('underline');
+  /** Por defecto, `horizontal`. Puede cambiar en vivo (por ejemplo, con el ancho). */
+  readonly orientation = input<MimiTabsOrientation>('horizontal');
   /** Conserva el contenido de los paneles al cambiar de pestaña (por defecto se destruye). */
   readonly preserveContent = input(false, { transform: booleanAttribute });
   /** Nombre accesible de la fila de pestañas. */
@@ -298,22 +348,37 @@ export class MimiTabs {
     this.tabs().findIndex((tab) => tab.value() === this.painted()),
   );
 
+  private readonly variants = computed(() => ({
+    variant: this.variant(),
+    orientation: this.orientation(),
+  }));
   protected readonly containerClasses = computed(() =>
-    cn(containerVariants({ variant: this.variant() }), this.userClass()),
+    cn(containerVariants(this.variants()), this.userClass()),
   );
-  protected readonly indicatorClasses = computed(() =>
-    indicatorVariants({ variant: this.variant() }),
-  );
-  protected readonly tabClasses = computed(() => tabVariants({ variant: this.variant() }));
+  protected readonly indicatorClasses = computed(() => indicatorVariants(this.variants()));
+  // Con cn(): la vertical cambia `justify-center` por `justify-start` (sin él, quedaban las dos y
+  // ganaba la que va después en el CSS).
+  protected readonly tabClasses = computed(() => cn(tabVariants(this.variants())));
   // Sin outline-none: en Tailwind 4 pone --tw-outline-style en none y anula el anillo de foco.
-  protected readonly tablistClasses = cn(
-    'grid grid-cols-[repeat(var(--mimi-tabs-count),minmax(0,1fr))] rounded-[inherit]',
-    // Con todas deshabilitadas, el foco queda en la fila (aria).
-    buttonFocusStyles,
+  // Las clases de cada orientación, completas (no variantes encadenadas: selectores largos, G2.1).
+  protected readonly tablistClasses = computed(() =>
+    cn(
+      this.orientation() === 'vertical'
+        ? 'grid grid-rows-[repeat(var(--mimi-tabs-count),minmax(0,1fr))]'
+        : 'grid grid-cols-[repeat(var(--mimi-tabs-count),minmax(0,1fr))]',
+      'rounded-[inherit]',
+      // Con todas deshabilitadas, el foco queda en la fila (aria).
+      buttonFocusStyles,
+    ),
   );
   protected readonly countClasses = COUNT_CLASSES;
   protected readonly panelClasses = computed(() =>
-    cn('px-0.5 py-1', buttonFocusStyles, this.panelClass()),
+    cn(
+      'px-0.5 py-1',
+      this.orientation() === 'vertical' && 'min-w-0 flex-1',
+      buttonFocusStyles,
+      this.panelClass(),
+    ),
   );
 
   /** El último valor que puso Mimi (no viene de fuera). */

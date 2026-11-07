@@ -81,6 +81,27 @@
     <app-tabs-preserve-example />
   </app-code-preview>
 
+  <h3 id="vertical" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Vertical</h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >orientation="vertical"</code
+    >, una navegación lateral: las pestañas en columna, el panel al lado y ↑/↓ para moverse. La
+    subrayada lleva la barra al inicio; la píldora mueve el fondo hacia abajo.
+  </p>
+  <app-code-preview [code]="source.vertical">
+    <app-tabs-vertical-example />
+  </app-code-preview>
+
+  <h3 id="responsive" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Según el ancho</h3>
+  <p class="text-pretty">
+    La orientación puede cambiar en vivo: aquí, vertical desde 768px y horizontal en pantallas
+    chicas.
+  </p>
+  <app-code-preview [code]="source.responsive">
+    <app-tabs-responsive-example />
+  </app-code-preview>
+
   <h3 id="custom-class" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Personalizado</h3>
   <p class="text-pretty">
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">class</code> va a la
@@ -98,7 +119,10 @@
   <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
     <li>
       Tab entra a la pestaña elegida y después pasa al panel. Las flechas cambian de pestaña (con
-      vuelta); Inicio y Fin, a la primera y la última.
+      vuelta): ←/→ en horizontal, ↑/↓ en vertical (<code
+        class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >aria-orientation</code
+      >); Inicio y Fin, a la primera y la última.
     </li>
     <li>
       Roles

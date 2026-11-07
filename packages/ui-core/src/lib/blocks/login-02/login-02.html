@@ -1,0 +1,186 @@
+<!-- Imagen: arriba como banner en móvil, la mitad derecha en escritorio. -->
+<div
+  class="relative h-[200px] shrink-0 overflow-hidden rounded-b-[24px] bg-muted md:order-2 md:h-auto md:w-1/2 md:rounded-none"
+>
+  @if (imageSrc(); as src) {
+    <img [src]="src" [alt]="imageAlt()" class="absolute inset-0 size-full object-cover" />
+  } @else {
+    <!-- PROVISIONAL (B.3-a): degradado neutro hasta tener una imagen en el diseño. Pon la tuya con imageSrc. -->
+    <div
+      aria-hidden="true"
+      data-slot="placeholder"
+      class="absolute inset-0 bg-linear-to-br from-secondary via-muted to-accent"
+    ></div>
+  }
+
+  <figure
+    class="pointer-events-none absolute inset-x-7 bottom-7 hidden flex-col gap-3 rounded-card border border-glass-border bg-glass p-5 backdrop-blur-glass md:flex [@media(prefers-reduced-transparency:reduce)]:bg-card [@media(prefers-reduced-transparency:reduce)]:backdrop-blur-none"
+  >
+    <!-- Texto de relleno: pon aquí la cita de un cliente real (con su permiso), o quita el figure. -->
+    <blockquote class="text-[17px] leading-[1.45] font-semibold text-pretty">
+      Add a short quote from a customer here.
+    </blockquote>
+    <figcaption class="flex items-center gap-2.5">
+      <mimi-avatar size="sm">
+        <mimi-avatar-fallback class="bg-info-soft font-bold text-info-soft-foreground"
+          >CN</mimi-avatar-fallback
+        >
+      </mimi-avatar>
+      <span class="flex flex-col leading-[1.3]">
+        <span class="text-[13.5px] font-bold">Customer name</span>
+        <span class="text-[12.5px] text-muted-foreground">Role · Company</span>
+      </span>
+    </figcaption>
+  </figure>
+</div>
+
+<div class="flex min-w-0 flex-1 flex-col px-[22px] pt-5 pb-6 md:px-10 md:py-8">
+  <div class="flex items-center gap-2.5">
+    <span
+      aria-hidden="true"
+      class="inline-flex size-8 items-center justify-center rounded-[10px] bg-primary text-lg leading-none font-extrabold text-primary-foreground"
+      >m</span
+    >
+    <span class="text-base font-bold">Mimi Sales</span>
+  </div>
+
+  <div class="flex flex-1 items-center justify-center py-6 md:py-0">
+    <form
+      novalidate
+      class="flex w-full max-w-[360px] flex-col gap-[18px]"
+      [attr.aria-labelledby]="id + '-title'"
+      (submit)="onSubmit($event)"
+    >
+      <div class="flex flex-col gap-1.5">
+        <h1
+          [id]="id + '-title'"
+          class="text-[26px] font-extrabold tracking-[-0.025em] md:text-[32px]"
+        >
+          Welcome back
+        </h1>
+        <p class="text-[14.5px] text-muted-foreground">Sign in with your work email.</p>
+      </div>
+
+      <mimi-form-field label="Email">
+        <input
+          mimiInput
+          type="email"
+          autocomplete="email"
+          placeholder="name@example.com"
+          [formField]="login.email"
+        />
+      </mimi-form-field>
+
+      <mimi-form-field class="relative">
+        <label [attr.for]="id + '-password'" class="text-sm font-medium">Password</label>
+        <a
+          [href]="forgotHref()"
+          class="absolute top-0 right-0 rounded-sm text-[13px] text-muted-foreground underline underline-offset-3 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >Forgot it?</a
+        >
+        <input
+          mimiInput
+          type="password"
+          autocomplete="current-password"
+          placeholder="••••••••"
+          [id]="id + '-password'"
+          [formField]="login.password"
+        />
+      </mimi-form-field>
+
+      <!-- Siempre en la página: así el lector anuncia el error cuando aparece. -->
+      <div role="alert" class="empty:hidden">
+        @if (error(); as message) {
+          <p
+            class="flex items-start gap-2 rounded-[var(--mimi-radius)] bg-destructive-soft-bg px-3 py-2.5 text-sm text-destructive-soft-foreground"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              class="mt-0.5 shrink-0"
+            >
+              <!-- Lucide circle-alert (ISC) -->
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" x2="12" y1="8" y2="12" />
+              <line x1="12" x2="12.01" y1="16" y2="16" />
+            </svg>
+            {{ message }}
+          </p>
+        }
+      </div>
+
+      <button
+        mimiBtn
+        type="submit"
+        class="h-[calc(var(--mimi-control-height,2.5rem)+4px)] text-[15px] font-semibold"
+        [attr.aria-disabled]="loading() ? 'true' : null"
+        [attr.aria-busy]="loading() ? 'true' : null"
+      >
+        @if (loading()) {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="motion-safe:animate-[mimi-spin_0.8s_linear_infinite]"
+          >
+            <!-- Lucide loader-circle (ISC) -->
+            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+          </svg>
+          Signing in…
+        } @else {
+          Sign in
+        }
+      </button>
+
+      <button mimiBtn type="button" variant="outline" tone="secondary" (click)="sso.emit()">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <!-- Lucide key-round (ISC) -->
+          <path
+            d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"
+          />
+          <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
+        </svg>
+        Sign in with SSO
+      </button>
+
+      <p class="text-sm text-muted-foreground">
+        First time here?
+        <a
+          [href]="signupHref()"
+          class="rounded-sm font-semibold text-foreground underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          >Create an account</a
+        >
+      </p>
+    </form>
+  </div>
+
+  <p class="text-xs text-muted-foreground">
+    By continuing you agree to the Terms and the Privacy Notice.
+  </p>
+</div>

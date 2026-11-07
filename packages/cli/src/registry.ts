@@ -1,9 +1,16 @@
 import registryJson from './registry.json';
 
-/** Un ítem del registro: un componente, un util o el tema. */
+/**
+ * Un ítem del registro: un componente, un util, el tema o un Block (una pantalla entera, B.1).
+ * Un Block se copia a `aliases.blocks` de mimi.json (no a la carpeta de componentes) y sus
+ * `registryDependencies` son los componentes que usa; ningún ítem depende de un Block.
+ */
 export interface RegistryItem {
-  type: 'component' | 'util' | 'theme';
-  /** Rutas relativas a las plantillas (`dist/templates`), p. ej. `components/button/button.ts`. */
+  type: 'component' | 'util' | 'theme' | 'block';
+  /**
+   * Rutas relativas a las plantillas (`dist/templates`), p. ej. `components/button/button.ts` o
+   * `blocks/login-01/login-01.ts`.
+   */
   files: string[];
   /** Paquetes de npm que se instalan con el ítem, con la versión de ui-core. */
   dependencies?: Record<string, string>;

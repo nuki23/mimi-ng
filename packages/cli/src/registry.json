@@ -483,6 +483,90 @@
         "class-variance-authority": "^0.7.1"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+    },
+    "login-01": {
+      "type": "block",
+      "files": [
+        "blocks/login-01/login-01.ts",
+        "blocks/login-01/login-01.html",
+        "blocks/login-01/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "button",
+        "card",
+        "checkbox",
+        "form-field",
+        "input",
+        "password",
+        "separator",
+        "utils/cn"
+      ]
+    },
+    "login-02": {
+      "type": "block",
+      "files": [
+        "blocks/login-02/login-02.ts",
+        "blocks/login-02/login-02.html",
+        "blocks/login-02/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["avatar", "button", "form-field", "input", "utils/cn"]
+    },
+    "signup-01": {
+      "type": "block",
+      "files": [
+        "blocks/signup-01/signup-01.ts",
+        "blocks/signup-01/signup-01.html",
+        "blocks/signup-01/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["button", "checkbox", "form-field", "input", "password", "utils/cn"]
+    },
+    "otp-01": {
+      "type": "block",
+      "files": ["blocks/otp-01/otp-01.ts", "blocks/otp-01/otp-01.html", "blocks/otp-01/index.ts"],
+      "registryDependencies": ["button", "card", "input-otp", "utils/cn"]
+    },
+    "settings-01": {
+      "type": "block",
+      "files": [
+        "blocks/settings-01/settings-01.ts",
+        "blocks/settings-01/settings-01.html",
+        "blocks/settings-01/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "form-field",
+        "input",
+        "progress",
+        "separator",
+        "switch",
+        "tabs",
+        "textarea",
+        "utils/cn"
+      ]
+    },
+    "pricing-01": {
+      "type": "block",
+      "files": [
+        "blocks/pricing-01/pricing-01.ts",
+        "blocks/pricing-01/pricing-01.html",
+        "blocks/pricing-01/index.ts"
+      ],
+      "registryDependencies": ["badge", "button", "toggle-group", "utils/cn"]
     }
   }
 }

@@ -10,6 +10,8 @@
 /* Sin esto Tailwind no genera las clases que usan los componentes de ui-core */
 @source '../../../packages/ui-core/src';
 @source not '../../../packages/ui-core/src/**/*.spec.ts';
+/* Los Blocks van en su propia hoja (blocks.css), que solo carga su vista previa (B.1-h). */
+@source not '../../../packages/ui-core/src/lib/blocks';
 
 /* Shiki en modo dual: los colores del código vienen de los temas github-light / github-dark
    (variables --shiki-*); el fondo es bg-muted. Cambiar a .dark no vuelve a resaltar. */

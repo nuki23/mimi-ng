@@ -2,7 +2,7 @@
 
 [← Índice del plan](../../plan.md)
 
-- [ ] B.5 `otp-01`: verificación con un código de 6 dígitos (Input OTP), con reenvío y cuenta regresiva.
+- [x] B.5 `otp-01`: verificación con un código de 6 dígitos (Input OTP), con reenvío y cuenta regresiva. (07/11/2026; pendiente de comprobación manual: autocompletar desde un SMS en iOS y Android, NVDA y teléfono real, a la M.20. Informe: `docs/auto/blocks-0.4.0-2026-11-06.md`, «B.5». API final: `<mimi-otp-01 [destination] [length] [resendSeconds] [loading] [status] [autofocus] (verify) (resend) (changeDestination) class>`; sin Signal Forms, ver el informe.)
   - v0.4.0 · Tamaño S · Depende de: B.1, G2.5 (Input OTP, publicado en la 0.3.0) y 2.1 · Bloquea: B.P
   - Estado: —
   - Leer antes: B.1; la G2.5 Input OTP en `docs/historial/grupo-2/G2.5.md` (`length`, `separatorAfter`, `success`, mensaje con `role="status"`, movimiento reducido); spec 8.
@@ -35,4 +35,4 @@
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
     - Manual (a la M.20): autocompletar el código desde un SMS en iOS y en Android (`one-time-code`); NVDA; teléfono real.
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR (B.5-a): ¿verifica solo al completar los dígitos, solo con el botón, o con los dos (el diseño tiene botón)? Recomendación: los dos, con la salida una sola vez por código.
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.5-a): ¿verifica solo al completar los dígitos, solo con el botón, o con los dos (el diseño tiene botón)? Recomendación: los dos, con la salida una sola vez por código.

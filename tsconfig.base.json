@@ -19,7 +19,8 @@
       "@/components/ui/utils/*": ["./packages/ui-core/src/lib/utils/*"],
       "@/components/ui/theme": ["./packages/ui-core/src/lib/theme/index.ts"],
       "@/components/ui/theme/*": ["./packages/ui-core/src/lib/theme/*"],
-      "@/components/ui/*": ["./packages/ui-core/src/lib/components/*"]
+      "@/components/ui/*": ["./packages/ui-core/src/lib/components/*"],
+      "@/blocks/*": ["./packages/ui-core/src/lib/blocks/*"]
     }
   }
 }

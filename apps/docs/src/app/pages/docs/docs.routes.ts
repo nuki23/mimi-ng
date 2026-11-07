@@ -206,4 +206,35 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () =>
       import('./components/form-field/form-field-page').then((m) => m.FormFieldPage),
   },
+  // Blocks (B.1): una página por Block, con la plantilla BlockDoc.
+  {
+    path: 'blocks/login-01',
+    title: 'login-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/login-01-page').then((m) => m.Login01Page),
+  },
+  {
+    path: 'blocks/login-02',
+    title: 'login-02 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/login-02-page').then((m) => m.Login02Page),
+  },
+  {
+    path: 'blocks/signup-01',
+    title: 'signup-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/signup-01-page').then((m) => m.Signup01Page),
+  },
+  {
+    path: 'blocks/otp-01',
+    title: 'otp-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/otp-01-page').then((m) => m.Otp01Page),
+  },
+  {
+    path: 'blocks/settings-01',
+    title: 'settings-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/settings-01-page').then((m) => m.Settings01Page),
+  },
+  {
+    path: 'blocks/pricing-01',
+    title: 'pricing-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/pricing-01-page').then((m) => m.Pricing01Page),
+  },
 ];

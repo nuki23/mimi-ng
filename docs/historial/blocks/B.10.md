@@ -2,9 +2,9 @@
 
 [← Índice del plan](../../plan.md)
 
-- [ ] B.10 Tabs: entrada `orientation` (`'horizontal' | 'vertical'`) en `mimi-tabs`, para la navegación lateral de `settings-01`.
+- [x] B.10 Tabs: entrada `orientation` (`'horizontal' | 'vertical'`) en `mimi-tabs`, para la navegación lateral de `settings-01`. (07/11/2026; pendiente de comprobación manual: NVDA en vertical, a la M.20. Informe: `docs/auto/blocks-0.4.0-2026-11-06.md`, «B.10».)
   - v0.4.0 · Tamaño M · Depende de: G1.9 (Tabs, publicado en la 0.2.0) · Bloquea: B.6
-  - Estado: —
+  - Estado: hecha el 07/11/2026 en `auto/blocks-0.4.0-2026-11-06` (Claude Code, modo autónomo). Spike: cambiar `orientation` en vivo no rompe los rodeos (no hace falta recrear la fila). No es RUPTURA.
   - Leer antes: la G1.9 Tabs en `docs/historial/plan-grupo-1.md` (los dos choques con aria y cómo se contienen; el indicador animado; `preserveContent`); spec 4, «Rodeos de aria» (Tabs) y la tabla de Tabs; spec 13 (tokens `tabs`); la B.6 (qué necesita el Block); spec 10, «Trampas de tamaño» (una instrucción de plantilla nueva puede sumar al JS inicial).
   - Diseño: `Block settings-01.dc.html` (la lista vertical de escritorio). `F2 Toast Tabs Toolbar` (Tabs) no tiene una variante vertical: lo que se haga se anota en D6.
   - Objetivo: que Tabs sirva también como navegación lateral, con el teclado de su orientación, sin cambiar nada para quien ya lo usa en horizontal.
@@ -29,4 +29,4 @@
     - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
     - Manual (a la M.20): NVDA en vertical (anuncia «vertical» y las flechas ↑/↓).
   - Preguntas abiertas:
-    - PENDIENTE DE DECIDIR (B.10-a): ¿la orientación vertical va en una tarea propia (esta) o dentro de la B.6? Recomendación: **tarea propia**, porque cambia un componente publicado (sale en el CHANGELOG, se prueba con las pruebas de Tabs y la usa cualquiera, no solo el Block). Alternativa: dentro de la B.6, o que settings-01 no use Tabs en escritorio sino una lista de enlaces (`aria-current`) y Tabs solo en móvil.
+    - Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.10-a): ¿la orientación vertical va en una tarea propia (esta) o dentro de la B.6? Recomendación: **tarea propia**, porque cambia un componente publicado (sale en el CHANGELOG, se prueba con las pruebas de Tabs y la usa cualquiera, no solo el Block). Alternativa: dentro de la B.6, o que settings-01 no use Tabs en escritorio sino una lista de enlaces (`aria-current`) y Tabs solo en móvil.

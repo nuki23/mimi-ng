@@ -15,6 +15,8 @@ import {
   type MimiConfig,
   type PackageJson,
   allDependencies,
+  assertAliases,
+  defaultBlocksDir,
   majorOf,
   readJson,
 } from '../utils/project';
@@ -60,6 +62,8 @@ interface Plan {
   /** Tailwind entiende `@source not` (4.1+). */
   sourceNot: boolean;
   componentsDir: string;
+  /** Carpeta de los Blocks (la de mimi.json o la de por defecto). */
+  blocksDir: string;
   buildTsConfig?: string;
   mimiConfig: MimiConfig | null;
   sourceRoot: string;
@@ -155,6 +159,7 @@ async function inspect(tree: Tree, options: InitOptions): Promise<Plan> {
 
   const sourceRoot = normalizePath(project.sourceRoot ?? `${project.root}/src`);
   const mimiConfig = readJson<MimiConfig>(tree, 'mimi.json');
+  if (mimiConfig) assertAliases(mimiConfig);
   const componentsDir = normalizePath(
     mimiConfig?.aliases?.components ?? `${sourceRoot}/app/components/ui`,
   );
@@ -166,6 +171,7 @@ async function inspect(tree: Tree, options: InitOptions): Promise<Plan> {
     sourceNone: findTailwindImport(tree.readText(withTailwind))!.sourceNone,
     sourceNot: tailwindSupportsSourceNot(tree, deps['tailwindcss']),
     componentsDir,
+    blocksDir: normalizePath(mimiConfig?.aliases?.blocks ?? defaultBlocksDir(componentsDir)),
     buildTsConfig: typeof tsConfig === 'string' ? normalizePath(tsConfig) : undefined,
     mimiConfig,
     sourceRoot,
@@ -216,6 +222,12 @@ function updateGlobalCss(plan: Plan): Rule {
         `El @import de Tailwind en ${plan.cssPath} usa source(none): Tailwind no escanea nada por su ` +
           `cuenta. Se agregó @source "${sourcePath}"; para que genere las clases de los componentes.`,
       );
+    }
+    // G1: y la carpeta de los Blocks (sin él, un Block queda sin estilos). Tailwind no se queja
+    // si la carpeta todavía no existe.
+    const blocksSourcePath = relativePath(cssDir, plan.blocksDir);
+    if (plan.sourceNone && !hasDirective(css, '@source', blocksSourcePath)) {
+      lines.push(`@source "${blocksSourcePath}";`);
     }
     // Sin source(none), Tailwind escanea todo el workspace salvo lo que ignora git, y .mimi/ va
     // en git: las clases de las copias originales acabarían en el CSS aunque el usuario ya las
@@ -326,6 +338,8 @@ function writeMimiConfig(plan: Plan): Rule {
         components: plan.componentsDir,
         utils: `${plan.componentsDir}/utils`,
         theme: `${plan.sourceRoot}/app/mimi.preset.ts`,
+        // Desde la 0.4.0 (B.1-a). Los proyectos anteriores lo reciben con el primer Block.
+        blocks: plan.blocksDir,
       },
       components: {},
     };
