@@ -67,6 +67,10 @@ describe('MimiTabs: orientation (B.10)', { timeout: 20_000 }, () => {
     );
     expect(container().classList).toContain('border-s');
     expect(container().classList).not.toContain('border-b');
+    // El texto al inicio: justify-start reemplaza a justify-center (cn).
+    const firstTab = tablist().querySelector('[role="tab"]')!;
+    expect(firstTab.classList).toContain('justify-start');
+    expect(firstTab.classList).not.toContain('justify-center');
   });
 
   it('vertical: ↑/↓ eligen; ←/→ no hacen nada; Inicio y Fin', async () => {

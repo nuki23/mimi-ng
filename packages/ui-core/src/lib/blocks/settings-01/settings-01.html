@@ -1,0 +1,424 @@
+<header class="flex flex-col gap-1 border-b px-4 pt-5 pb-3.5 md:px-10 md:pt-7 md:pb-5">
+  <h1 class="text-2xl font-extrabold tracking-[-0.025em] md:text-[28px]">Settings</h1>
+  <p class="text-sm text-muted-foreground">Manage your profile, notifications and security.</p>
+</header>
+
+<div class="flex-1 md:px-10 md:pt-7 md:pb-10">
+  <!-- Una sola lista de pestañas: vertical en escritorio, píldoras horizontales en móvil (B.10). -->
+  <mimi-tabs
+    aria-label="Settings sections"
+    [orientation]="wide() ? 'vertical' : 'horizontal'"
+    [class]="wide() ? sideNavClasses : pillNavClasses"
+    [panelClass]="panelClasses"
+    [style.gap.px]="wide() ? 40 : 0"
+    [value]="tab()"
+    (valueChange)="tab.set($any($event))"
+  >
+    @for (item of tabs; track item.value) {
+      <ng-template [mimiTabLabel]="item.value">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="17"
+          height="17"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          @switch (item.value) {
+            @case ('profile') {
+              <!-- Lucide user-round (ISC) -->
+              <circle cx="12" cy="8" r="5" />
+              <path d="M20 21a8 8 0 0 0-16 0" />
+            }
+            @case ('notifications') {
+              <!-- Lucide bell (ISC) -->
+              <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+              <path
+                d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+              />
+            }
+            @case ('security') {
+              <!-- Lucide shield (ISC) -->
+              <path
+                d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+              />
+            }
+            @case ('billing') {
+              <!-- Lucide credit-card (ISC) -->
+              <rect width="20" height="14" x="2" y="5" rx="2" />
+              <line x1="2" x2="22" y1="10" y2="10" />
+            }
+          }
+        </svg>
+        {{ item.label }}
+      </ng-template>
+    }
+
+    <!-- Perfil -->
+    <ng-template mimiTab="profile" label="Profile">
+      <mimi-card>
+        <div class="flex flex-col gap-0.5 px-5 pt-5 pb-1">
+          <h2 class="text-base font-bold">Public profile</h2>
+          <p class="text-[13.5px] text-muted-foreground">Visible to people on your team.</p>
+        </div>
+        <div class="flex flex-col gap-4 px-5 py-4">
+          <div class="flex flex-wrap items-center gap-3.5">
+            <mimi-avatar size="lg">
+              @if (profile().avatarSrc; as src) {
+                <img mimiAvatarImage [src]="src" [alt]="model().name" />
+              }
+              <mimi-avatar-fallback class="bg-info-soft font-bold text-info-soft-foreground">{{
+                profile().initials
+              }}</mimi-avatar-fallback>
+            </mimi-avatar>
+            <button
+              mimiBtn
+              type="button"
+              variant="outline"
+              tone="secondary"
+              size="sm"
+              (click)="avatarChange.emit()"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <!-- Lucide upload (ISC) -->
+                <path d="M12 3v12" />
+                <path d="m17 8-5-5-5 5" />
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              </svg>
+              Change photo
+            </button>
+            <button
+              mimiBtn
+              type="button"
+              variant="ghost"
+              tone="danger"
+              size="sm"
+              (click)="avatarRemove.emit()"
+            >
+              Remove
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 gap-3.5 md:grid-cols-2">
+            <mimi-form-field label="Name">
+              <input mimiInput autocomplete="name" [formField]="settings.name" />
+            </mimi-form-field>
+            <mimi-form-field>
+              <label [attr.for]="id + '-username'" class="text-sm font-medium">Username</label>
+              <!-- Prefijo fijo con los colores de Input (no hay un grupo de input con prefijo). -->
+              <div
+                class="flex h-[var(--mimi-control-height,2.5rem)] items-center overflow-hidden rounded-[var(--mimi-radius)] border border-input bg-input-background mimi-transition focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft has-[[aria-invalid=true]]:border-destructive"
+              >
+                <span
+                  aria-hidden="true"
+                  class="flex h-full items-center border-e border-input bg-muted px-2.5 text-[13px] text-muted-foreground"
+                  >mimi.dev/</span
+                >
+                <input
+                  mimiInput
+                  autocomplete="username"
+                  class="h-full min-w-0 flex-1 rounded-none border-0 bg-transparent px-2.5 shadow-none focus-visible:ring-0"
+                  [id]="id + '-username'"
+                  [formField]="settings.username"
+                />
+              </div>
+            </mimi-form-field>
+          </div>
+
+          <mimi-form-field class="relative">
+            <label [attr.for]="id + '-bio'" class="text-sm font-medium">Bio</label>
+            <!-- El contador describe el campo y no se anuncia con cada tecla (no es una región viva). -->
+            <span
+              [id]="bioId"
+              class="absolute top-0 right-0 text-xs text-muted-foreground tabular-nums"
+              >{{ model().bio.length }}/160</span
+            >
+            <textarea
+              mimiTextarea
+              rows="3"
+              [id]="id + '-bio'"
+              [attr.aria-describedby]="bioId"
+              [formField]="settings.bio"
+            ></textarea>
+          </mimi-form-field>
+        </div>
+      </mimi-card>
+
+      <mimi-card>
+        <h2 class="px-5 pt-5 pb-2 text-base font-bold">Preferences</h2>
+        @for (row of profileSwitches; track row.key) {
+          <!-- Una fila con interruptor: el título lo nombra y la descripción lo describe. -->
+          <div class="flex items-center justify-between gap-4 border-t px-5 py-3.5">
+            <span class="flex flex-col leading-[1.4]">
+              <label [attr.for]="id + '-' + row.key" class="cursor-pointer text-sm font-medium">{{
+                row.label
+              }}</label>
+              <span [id]="id + '-' + row.key + '-desc'" class="text-[13px] text-muted-foreground">{{
+                row.description
+              }}</span>
+            </span>
+            <mimi-switch
+              [id]="id + '-' + row.key"
+              [attr.data-describedby]="id + '-' + row.key + '-desc'"
+              [formField]="field(row.key)"
+            />
+          </div>
+        }
+      </mimi-card>
+    </ng-template>
+
+    <!-- Notificaciones -->
+    <ng-template mimiTab="notifications" label="Notifications">
+      @for (group of notificationGroups; track group.title) {
+        <mimi-card>
+          <div class="flex items-center gap-2.5 px-5 pt-[18px] pb-2.5">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="17"
+              height="17"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+              class="text-muted-foreground"
+            >
+              @if (group.icon === 'mail') {
+                <!-- Lucide mail (ISC) -->
+                <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />
+                <rect x="2" y="4" width="20" height="16" rx="2" />
+              } @else {
+                <!-- Lucide smartphone (ISC) -->
+                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                <path d="M12 18h.01" />
+              }
+            </svg>
+            <h2 class="text-base font-bold">{{ group.title }}</h2>
+          </div>
+          @for (row of group.rows; track row.key) {
+            <div class="flex items-center justify-between gap-4 border-t px-5 py-3.5">
+              <span class="flex flex-col leading-[1.4]">
+                <label [attr.for]="id + '-' + row.key" class="cursor-pointer text-sm font-medium">{{
+                  row.label
+                }}</label>
+                <span
+                  [id]="id + '-' + row.key + '-desc'"
+                  class="text-[13px] text-muted-foreground"
+                  >{{ row.description }}</span
+                >
+              </span>
+              <mimi-switch
+                [id]="id + '-' + row.key"
+                [attr.data-describedby]="id + '-' + row.key + '-desc'"
+                [formField]="field(row.key)"
+              />
+            </div>
+          }
+        </mimi-card>
+      }
+    </ng-template>
+
+    <!-- Seguridad -->
+    <ng-template mimiTab="security" label="Security">
+      <mimi-card class="gap-3.5 p-5">
+        <div class="flex items-center justify-between gap-3">
+          <div class="flex flex-col gap-0.5">
+            <h2 class="flex flex-wrap items-center gap-2 text-base font-bold">
+              <label [attr.for]="id + '-twoFactor'" class="cursor-pointer"
+                >Two-step verification</label
+              >
+              <span mimiBadge variant="soft" tone="success">Recommended</span>
+            </h2>
+            <p [id]="id + '-twoFactor-desc'" class="text-[13.5px] text-muted-foreground">
+              Ask for a code from your app when signing in.
+            </p>
+          </div>
+          <mimi-switch
+            [id]="id + '-twoFactor'"
+            [attr.data-describedby]="id + '-twoFactor-desc'"
+            [formField]="settings.twoFactor"
+          />
+        </div>
+        <mimi-separator />
+        <h3 class="text-sm font-bold">Active sessions</h3>
+        <ul class="flex flex-col gap-3">
+          @for (session of sessions(); track session.id) {
+            <li class="flex items-center gap-3">
+              <span
+                aria-hidden="true"
+                class="inline-flex size-9 shrink-0 items-center justify-center rounded-[var(--mimi-radius-sm)] bg-muted"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  @if (session.kind === 'mobile') {
+                    <!-- Lucide smartphone (ISC) -->
+                    <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                    <path d="M12 18h.01" />
+                  } @else {
+                    <!-- Lucide monitor (ISC) -->
+                    <rect width="20" height="14" x="2" y="3" rx="2" />
+                    <line x1="8" x2="16" y1="21" y2="21" />
+                    <line x1="12" x2="12" y1="17" y2="21" />
+                  }
+                </svg>
+              </span>
+              <span class="flex min-w-0 flex-1 flex-col leading-[1.35]">
+                <span class="text-sm font-medium">{{ session.device }}</span>
+                <span class="text-[12.5px] text-muted-foreground">{{ session.detail }}</span>
+              </span>
+              @if (session.current) {
+                <span mimiBadge variant="soft" tone="info">This session</span>
+              } @else {
+                <button
+                  mimiBtn
+                  type="button"
+                  variant="outline"
+                  tone="secondary"
+                  size="sm"
+                  [attr.aria-label]="'Sign out of ' + session.device"
+                  (click)="sessionEnd.emit(session.id)"
+                >
+                  Sign out
+                </button>
+              }
+            </li>
+          }
+        </ul>
+      </mimi-card>
+
+      <section
+        [attr.aria-labelledby]="id + '-danger'"
+        class="flex flex-wrap items-center justify-between gap-4 rounded-card border border-[color:color-mix(in_oklab,var(--mimi-destructive)_40%,var(--mimi-border))] bg-destructive-soft-bg p-5"
+      >
+        <div class="flex flex-col gap-0.5 text-destructive-soft-foreground">
+          <h2 [id]="id + '-danger'" class="text-base font-bold">Delete account</h2>
+          <p class="text-[13.5px]">Your data is deleted after 30 days. This can't be undone.</p>
+        </div>
+        <button mimiBtn type="button" tone="danger" size="sm" (click)="deleteAccount.emit()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <!-- Lucide trash (ISC) -->
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6" />
+            <path d="M3 6h18" />
+            <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+          </svg>
+          Delete account
+        </button>
+      </section>
+    </ng-template>
+
+    <!-- Facturación -->
+    <ng-template mimiTab="billing" label="Billing">
+      <mimi-card class="gap-3.5 p-5">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex flex-col gap-0.5">
+            <h2 class="text-[13px] font-normal text-muted-foreground">Current plan</h2>
+            <span class="text-[22px] font-extrabold">{{ price() }}</span>
+          </div>
+          <button mimiBtn type="button" size="sm" (click)="changePlan.emit()">Change plan</button>
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <div class="flex justify-between text-[13px]">
+            <span [id]="id + '-seats'">Seats used</span>
+            <span class="text-muted-foreground">{{ plan().seatsUsed }} of {{ plan().seats }}</span>
+          </div>
+          <mimi-progress
+            [aria-labelledby]="id + '-seats'"
+            [value]="plan().seatsUsed"
+            [max]="plan().seats"
+          />
+        </div>
+        <span class="flex items-center gap-2 text-[13.5px] text-muted-foreground">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <!-- Lucide credit-card (ISC) -->
+            <rect width="20" height="14" x="2" y="5" rx="2" />
+            <line x1="2" x2="22" y1="10" y2="10" />
+          </svg>
+          {{ plan().card }} · next invoice on {{ nextInvoice() }}
+        </span>
+      </mimi-card>
+    </ng-template>
+  </mimi-tabs>
+</div>
+
+<!-- La barra de cambios: la región existe siempre, así el lector la anuncia al aparecer. -->
+<div role="status" class="contents">
+  @if (changed()) {
+    <div
+      class="sticky bottom-0 flex items-center justify-between gap-3 border-t border-glass-border bg-glass px-5 py-3 backdrop-blur-glass [@media(prefers-reduced-transparency:reduce)]:bg-background"
+    >
+      <span class="text-[13.5px] font-medium">You have unsaved changes</span>
+      <div class="flex gap-2">
+        <button
+          mimiBtn
+          type="button"
+          variant="outline"
+          tone="secondary"
+          size="sm"
+          (click)="discard()"
+        >
+          Discard
+        </button>
+        <button
+          mimiBtn
+          type="button"
+          size="sm"
+          [attr.aria-disabled]="saving() ? 'true' : null"
+          [attr.aria-busy]="saving() ? 'true' : null"
+          (click)="save()"
+        >
+          {{ saving() ? 'Saving…' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  }
+</div>

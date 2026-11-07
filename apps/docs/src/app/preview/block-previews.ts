@@ -23,6 +23,14 @@ export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {
     load: () => import('./otp-01-demo').then((m) => m.Otp01Demo),
     states: { resend: { resendSeconds: 0 } },
   },
+  'settings-01': {
+    load: () => import('@/blocks/settings-01').then((m) => m.Settings01),
+    states: {
+      notifications: { tab: 'notifications' },
+      security: { tab: 'security' },
+      billing: { tab: 'billing' },
+    },
+  },
   'signup-01': {
     load: () => import('@/blocks/signup-01').then((m) => m.Signup01),
     states: {

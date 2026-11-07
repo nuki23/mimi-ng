@@ -533,6 +533,31 @@
       "type": "block",
       "files": ["blocks/otp-01/otp-01.ts", "blocks/otp-01/otp-01.html", "blocks/otp-01/index.ts"],
       "registryDependencies": ["button", "card", "input-otp", "utils/cn"]
+    },
+    "settings-01": {
+      "type": "block",
+      "files": [
+        "blocks/settings-01/settings-01.ts",
+        "blocks/settings-01/settings-01.html",
+        "blocks/settings-01/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "form-field",
+        "input",
+        "progress",
+        "separator",
+        "switch",
+        "tabs",
+        "textarea",
+        "utils/cn"
+      ]
     }
   }
 }

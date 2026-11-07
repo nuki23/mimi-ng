@@ -252,3 +252,13 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
 
   Tabs vertical (B.10, 07/11/2026):
   - **Sin diseño:** `F2 Toast Tabs Toolbar` no tiene Tabs vertical. Mimi lo armó con lo de la horizontal: filas iguales del alto de siempre (44px subrayada, 34px píldora), texto al inicio con 12px a los lados, la subrayada con el borde y la barra de 2px al inicio, y la píldora con su fondo moviéndose hacia abajo y sin el ancho máximo de 520px. El espacio entre la lista y el panel es el `gap` de 14px del componente. La navegación lateral de `settings-01` (fila con fondo `accent`, sin indicador) no es ninguna de las dos: lo resuelve la B.6.
+
+  settings-01 (B.6, 07/11/2026):
+  - **Navegación lateral y píldoras móviles frente a las variantes de Tabs:** ni `underline` ni `pill`. El Block usa una sola `mimi-tabs` (vertical en escritorio, horizontal en móvil, B.10) y la viste con `class` (selectores sobre `[role=tab]` y el indicador oculto): filas de 38px con fondo `accent` en la elegida (escritorio) y píldoras de 34px con borde que se desplazan en horizontal, la elegida en `primary` (móvil). Si se quiere como variante de Tabs, diseñarla (sin variante nueva sin decisión).
+  - **Prefijo del usuario («mimi.dev/»):** no hay un grupo de input con prefijo; el Block arma la caja con los colores de Input (borde, fondo, foco y error).
+  - **Descripción de los interruptores:** el diseño solo pone `aria-label`; el Block nombra cada uno con su título (`<label for>`) y lo describe con su descripción (`aria-describedby` en el botón de Switch, que no tiene entrada para eso).
+  - **Barra de asientos:** `mimi-progress` con su nombre («Seats used»), no un `div`.
+  - **«Quitar» la foto y «Cerrar» la sesión:** `mimiBtn` `ghost`/`danger` y `outline`/`secondary` en tamaño `sm`; «Cerrar» lleva el dispositivo en su nombre accesible («Sign out of Safari · iPhone»).
+  - **Moneda y fecha:** con `Intl` y el `LOCALE_ID` (el diseño: «$240 por persona» y «1 de noviembre» escritos); el ejemplo usa 12 USD.
+  - **Barra de cambios:** con «reducir transparencia», fondo sólido; el botón «Save» dice «Saving…» con `saving` (no está en el diseño).
+  - **Textos en inglés** (B.1-i), con los lugares de las sesiones neutros («Mexico City», «Guadalajara»).

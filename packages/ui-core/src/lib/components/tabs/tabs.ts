@@ -356,7 +356,9 @@ export class MimiTabs {
     cn(containerVariants(this.variants()), this.userClass()),
   );
   protected readonly indicatorClasses = computed(() => indicatorVariants(this.variants()));
-  protected readonly tabClasses = computed(() => tabVariants(this.variants()));
+  // Con cn(): la vertical cambia `justify-center` por `justify-start` (sin él, quedaban las dos y
+  // ganaba la que va después en el CSS).
+  protected readonly tabClasses = computed(() => cn(tabVariants(this.variants())));
   // Sin outline-none: en Tailwind 4 pone --tw-outline-style en none y anula el anillo de foco.
   // Las clases de cada orientación, completas (no variantes encadenadas: selectores largos, G2.1).
   protected readonly tablistClasses = computed(() =>

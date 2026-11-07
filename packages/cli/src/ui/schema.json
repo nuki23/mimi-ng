@@ -176,6 +176,10 @@
             "label": "otp-01 (Block)"
           },
           {
+            "value": "settings-01",
+            "label": "settings-01 (Block)"
+          },
+          {
             "value": "signup-01",
             "label": "signup-01 (Block)"
           }

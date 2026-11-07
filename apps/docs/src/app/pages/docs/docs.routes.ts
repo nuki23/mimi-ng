@@ -227,4 +227,9 @@ export const DOCS_ROUTES: Routes = [
     title: 'otp-01 · Blocks · Mimi',
     loadComponent: () => import('./blocks/otp-01-page').then((m) => m.Otp01Page),
   },
+  {
+    path: 'blocks/settings-01',
+    title: 'settings-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/settings-01-page').then((m) => m.Settings01Page),
+  },
 ];

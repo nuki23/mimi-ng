@@ -7,7 +7,7 @@ Pedido: ejecutar B.1 → B.2 → B.3 → B.4 → B.5 → B.10 → B.6 → B.7 �
 ## Pendiente del usuario
 
 1. **Diseños que faltan** (no bloquearon, decidido por el usuario): la página de un Block en el sitio y el marco de la vista previa (B.1, en D6); los estados de error de `login-01` (B.2); la imagen de `login-02` (B.3); el estado «válido» de un campo (B.4). Cada uno está en `docs/design/correcciones-pendientes.md` con lo que se hizo.
-2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3); `signup-01`: NVDA (mensajes, nivel del medidor y la nota del botón), el gestor de contraseñas (que proponga una nueva) y un teléfono real (B.4); `otp-01`: autocompletar el código desde un SMS en iOS y en Android (`one-time-code`), NVDA y un teléfono real (B.5); Tabs vertical con NVDA (que anuncie «vertical» y las flechas ↑/↓) (B.10).
+2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3); `signup-01`: NVDA (mensajes, nivel del medidor y la nota del botón), el gestor de contraseñas (que proponga una nueva) y un teléfono real (B.4); `otp-01`: autocompletar el código desde un SMS en iOS y en Android (`one-time-code`), NVDA y un teléfono real (B.5); Tabs vertical con NVDA (que anuncie «vertical» y las flechas ↑/↓) (B.10); `settings-01`: NVDA (pestañas verticales, interruptores con descripción, barra de cambios), un teléfono real (píldoras desplazables con el dedo, teclado virtual sobre la barra de cambios) y claro/oscuro en un navegador real (B.6).
 3. **Imagen de `login-02`** (B.3-a): hoy un degradado neutro provisional; pedir la imagen o una ilustración en Claude Design (D6).
 
 ## Tabla acumulada del sitio
@@ -23,6 +23,7 @@ Medición de partida (06/11/2026, después de la M.13, comprobada al empezar la 
 | B.4     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 16,18 / 3,34      |
 | B.5     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 17,80 / 3,66      |
 | B.10    | 154,12 / 22,14  | 331,42 / 105,69 | 135,97      | 485,54         | 17,80 / 3,66      |
+| B.6     | 154,12 / 22,14  | 331,50 / 105,71 | 135,97      | 485,62         | 24,13 / 4,64      |
 
 ## B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase
 
@@ -279,3 +280,39 @@ Nuevos: `packages/ui-core/src/lib/components/tabs/tabs-orientation.spec.ts`, `ap
 Modificados: `packages/ui-core/src/lib/components/tabs/tabs.ts`, `apps/docs/src/app/pages/docs/components/tabs/tabs-page.ts`, `tabs-page.html`, `tabs-page.spec.ts`, `docs/spec.md`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.10.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
 
 Commit: `feat(tabs): orientación vertical, también en vivo (B.10)`.
+
+## B.6 `settings-01`
+
+**Estado:** `[x]`, pendiente de comprobación manual (NVDA, teléfono real, claro/oscuro en un navegador real; a la M.20).
+
+### Plan breve
+
+Cabecera, una sola `mimi-tabs` (vertical desde 768 px con `matchMedia`, horizontal en móvil; B.10) con íconos en `mimiTabLabel`, y las cuatro secciones: Perfil (avatar, foto, nombre, usuario con prefijo, biografía con contador, dos interruptores), Notificaciones (dos grupos), Seguridad (dos pasos, sesiones, zona de peligro) y Facturación (plan con `Intl`, asientos con Progress, tarjeta). Un `form()` de Signal Forms con el perfil y las preferencias; «con cambios» comparando con el valor de partida; Descartar y Guardar; salidas para foto, sesiones, borrar la cuenta y plan.
+
+### Decisiones y desvíos
+
+- **B.6-a y B.6-b (decididas por el usuario):** «Delete account» solo emite la salida; «Save» no muestra un Toast. La página del sitio muestra cómo enchufarles `injectMimiConfirm()` (tono `danger`) y `injectMimiToast()`.
+- **Sin `preserveContent`:** los valores viven en el modelo de Signal Forms, así que cambiar de sección no pierde lo escrito aunque el panel se destruya; la barra cuenta todas las secciones. (La tarea lo proponía por si el formulario vivía en el panel.)
+- **La navegación**, con `class` sobre Tabs (selectores sobre `[role=tab]`, indicador oculto): ver D6.
+- **Descripción de los interruptores:** Switch no tiene entrada para `aria-describedby`; el Block lo pone en el botón interno después de cada render (`afterEveryRender`: el panel de una sección se crea al mostrarse, sin una señal que avise).
+- **Entrada `tab`** (`model`, `[(tab)]`): la sección elegida; la vista previa la usa para los estados.
+- **`maxlength` en la biografía:** no se escribe en el HTML (choca con `[formField]`; Signal Forms tiene `maxLength(160)` y el contador).
+- **Un fallo de la B.10 encontrado aquí:** en vertical, las pestañas quedaban centradas: `tabVariants` daba `justify-center` y `justify-start` juntas (sin `cn()`), y ganaba la que va después en el CSS. Se corrigió en `tabs.ts` (`cn(tabVariants(…))`) con su prueba en `tabs-orientation.spec.ts`. Va en este commit; la B.10 ya estaba subida.
+
+### Criterios de hecho
+
+- **El Block en ui-core, en el registro y en el sitio, con las cuatro secciones.** Ítem `settings-01` (peer `@angular/forms`; avatar, badge, button, card, form-field, input, progress, separator, switch, tabs, textarea y `utils/cn`), `x-prompt`, README; página `/docs/blocks/settings-01` con los estados «Notificaciones», «Seguridad» y «Facturación». Capturas: Perfil en escritorio claro con un interruptor cambiado y la barra; Seguridad en móvil oscuro con las píldoras; Facturación en escritorio. Coinciden con el diseño.
+- **Pruebas.** `settings-01.spec.ts` (11): las secciones con ↑/↓ en vertical; en móvil (con `matchMedia` simulado) horizontal con ←/→; «con cambios» aparece y desaparece al volver al valor original; un interruptor cuenta y Descartar restaura; Guardar emite y quita la barra; Guardar con un error no emite y enfoca el campo; el contador de la biografía describe el campo y no es una región viva; cada interruptor con su título y su descripción; las salidas de foto, sesiones, borrar y plan; facturación con `Intl` y la barra de asientos con su nombre; un `h1` y `class`.
+- **`ng g mimi settings-01` en un proyecto limpio (trae los once componentes).** En el proyecto de la B.2 con la CLI `0.4.0-real.6`: agrega los que faltaban (badge, progress, switch, tabs, textarea; los demás ya estaban) y el Block, e instala `@angular/aria` (lo pide Tabs) en la versión exacta del cdk; con la ruta, `ng build` en verde.
+- **CSS global y JS inicial, antes y después.** CSS global sin cambios (154,12 / 22,14 kB). JS inicial 331,42 → 331,50 kB (+0,08, por el `cn()` de Tabs); `main` igual. `blocks.css` 17,80 → 24,13 kB (4,64 gzip): el Block más grande, fuera del CSS global (B.1-h).
+- **D6.** «settings-01 (B.6)».
+- **`pnpm build`, `pnpm test` y `pnpm format:check` en verde.** Docs 182, ui-core 824 y CLI 144.
+- **Manual (a la M.20):** NO COMPROBADO (manual, usuario): NVDA, teléfono real, claro y oscuro en un navegador real.
+
+### Archivos
+
+Nuevos: `packages/ui-core/src/lib/blocks/settings-01/settings-01.ts`, `settings-01.html`, `index.ts`, `settings-01.spec.ts`; `apps/docs/src/app/pages/docs/blocks/settings-01-page.ts`.
+
+Modificados: `packages/ui-core/src/lib/components/tabs/tabs.ts` y `tabs-orientation.spec.ts` (el arreglo de la B.10), `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `apps/docs/src/app/pages/docs/blocks/block-pages.spec.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.6.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
+
+Commit: `feat(blocks): settings-01, ajustes de cuenta con navegación lateral y barra de cambios (B.6)`.
