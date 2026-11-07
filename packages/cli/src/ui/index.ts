@@ -13,6 +13,7 @@ import {
   type MimiConfig,
   type PackageJson,
   allDependencies,
+  assertAliases,
   defaultBlocksDir,
   readJson,
 } from '../utils/project';
@@ -136,6 +137,7 @@ function inspect(tree: Tree, options: UiOptions): Plan {
         '  ng add @mimi-ng/cli',
     );
   }
+  assertAliases(config);
 
   const requested = [...new Set((options.components ?? []).map((name) => name.trim()))].filter(
     Boolean,

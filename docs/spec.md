@@ -650,6 +650,8 @@ Idempotente: `ng g mimi button` dos veces no cambia nada ni vuelve a instalar.
 }
 ```
 
+**Alias válidos (M2, desde la 0.4.0):** `aliases.components` y `aliases.blocks` son rutas relativas a la raíz del workspace y dentro de ella. `init` y `ng g mimi` fallan antes de escribir nada, con «mimi.json → aliases.blocks es una ruta absoluta: "C:\\proyecto\\blocks". Usa una ruta relativa a la raíz del workspace y dentro de ella (por ejemplo "src/app/blocks"). No se cambió nada.», si un alias es absoluto (`/x`, `C:\x`, `~/x`), tiene `..`, está vacío o apunta a la raíz (antes, `C:\x` creaba una carpeta «C:» en el proyecto). Pruebas: `blocks.spec.ts`, «M2».
+
 `aliases.blocks` y `blocks` existen desde la 0.4.0 (B.1): `init` escribe el primero; `ng g mimi` lo agrega en los proyectos anteriores la primera vez que copia un Block, y `blocks` aparece con el primer Block.
 
 `style` es el tema (`"mimi"`). La CLI no lo lee ni lo valida: cualquier valor se conserva tal cual (para la 0.1.0, ver la sección 12).

@@ -1,4 +1,5 @@
 import { SchematicsException, type Tree } from '@angular-devkit/schematics';
+import { invalidAliasReason } from '../init/paths';
 
 /** Nombre de esta colección (el paquete). */
 export const MIMI_COLLECTION = '@mimi-ng/cli';
@@ -39,6 +40,24 @@ export function defaultBlocksDir(componentsDir: string): string {
     parts.pop();
   }
   return [...parts, 'blocks'].join('/');
+}
+
+/**
+ * M2: falla con un error claro (sin escribir nada) si `aliases.components` o `aliases.blocks` de
+ * mimi.json es absoluto, tiene `..` o sale del proyecto.
+ */
+export function assertAliases(config: MimiConfig): void {
+  for (const name of ['components', 'blocks'] as const) {
+    const value = config.aliases?.[name];
+    if (value === undefined) continue;
+    const reason = invalidAliasReason(value);
+    if (!reason) continue;
+    const example = name === 'blocks' ? 'src/app/blocks' : 'src/app/components/ui';
+    throw new SchematicsException(
+      `mimi.json → aliases.${name} ${reason}: ${JSON.stringify(value)}. Usa una ruta relativa a ` +
+        `la raíz del workspace y dentro de ella (por ejemplo "${example}"). No se cambió nada.`,
+    );
+  }
 }
 
 export function readJson<T>(tree: Tree, path: string): T | null {

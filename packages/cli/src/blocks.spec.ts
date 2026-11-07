@@ -230,6 +230,46 @@ describe('ng g mimi <block> (B.1)', () => {
     ]);
   });
 
+  describe('M2: alias absolutos, con «..» o fuera del proyecto', () => {
+    const cases: [string, string, string][] = [
+      ['blocks', 'C:\\proyecto\\blocks', 'es una ruta absoluta'],
+      ['blocks', 'C:/proyecto/blocks', 'es una ruta absoluta'],
+      ['blocks', '/src/app/blocks', 'es una ruta absoluta'],
+      ['blocks', '../otro/blocks', 'tiene «..» (saldría del proyecto)'],
+      ['blocks', 'src/app/../../../blocks', 'tiene «..» (saldría del proyecto)'],
+      ['components', 'C:\\ui', 'es una ruta absoluta'],
+      ['components', '../ui', 'tiene «..» (saldría del proyecto)'],
+      ['components', './', 'apunta a la raíz del workspace'],
+    ];
+
+    it.each(cases)(
+      'ng g mimi: aliases.%s = %j falla sin cambiar nada',
+      async (name, value, reason) => {
+        const { run, tree } = await initialized();
+        const config = json(tree, '/mimi.json');
+        config.aliases[name] = value;
+        tree.overwrite('/mimi.json', JSON.stringify(config));
+        const before = snapshot(tree);
+        await expect(run('mimi', { components: [TEST_BLOCK] }, tree)).rejects.toThrow(
+          `mimi.json → aliases.${name} ${reason}: ${JSON.stringify(value)}. Usa una ruta relativa`,
+        );
+        expect(snapshot(tree)).toEqual(before);
+        // Ninguna carpeta rara (como «C:») en el árbol.
+        expect(tree.files.some((f) => f.startsWith('/C:'))).toBe(false);
+      },
+    );
+
+    it('init también, con un mimi.json que ya existe', async () => {
+      const { run, tree } = await initialized();
+      const config = json(tree, '/mimi.json');
+      config.aliases.blocks = 'D:\\blocks';
+      tree.overwrite('/mimi.json', JSON.stringify(config));
+      await expect(run('init', {}, tree)).rejects.toThrow(
+        'mimi.json → aliases.blocks es una ruta absoluta',
+      );
+    });
+  });
+
   describe('M1: avisa si un componente actualizado lo usa un Block instalado', () => {
     const notice = (warnings: string[]) =>
       warnings.filter((w) => w.startsWith('Tu Block test-block usa'));

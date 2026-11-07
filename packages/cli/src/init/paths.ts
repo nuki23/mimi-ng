@@ -15,6 +15,23 @@ export function normalizePath(path: string): string {
   return out.join('/');
 }
 
+/**
+ * M2: un alias de mimi.json (`components`, `blocks`) tiene que ser una ruta relativa a la raíz del
+ * workspace y quedar dentro de él. Devuelve el motivo si no lo es (o null): absoluta (`/x`,
+ * `C:\x`, `\\servidor`, `~/x`), con `..` o vacía. Se comprueba antes de normalizar: normalizePath
+ * convertiría `C:\x` en una carpeta «C:» y quitaría el `/` inicial.
+ */
+export function invalidAliasReason(value: unknown): string | null {
+  if (typeof value !== 'string' || value.trim() === '') return 'está vacío';
+  const path = value.trim().replace(/\\/g, '/');
+  if (/^[a-zA-Z]:/.test(path) || path.startsWith('/') || path.startsWith('~')) {
+    return 'es una ruta absoluta';
+  }
+  if (path.split('/').includes('..')) return 'tiene «..» (saldría del proyecto)';
+  if (normalizePath(path) === '') return 'apunta a la raíz del workspace';
+  return null;
+}
+
 /** Carpeta de un archivo: `src/styles.css` → `src`. */
 export function dirnameOf(path: string): string {
   const parts = normalizePath(path).split('/');

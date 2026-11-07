@@ -33,3 +33,13 @@ Commit: `fix(cli): @source de la carpeta de Blocks con source(none), en ng g mim
 **Pruebas:** `blocks.spec.ts`, «M1» (3): pidiendo solo el componente (se actualiza y avisa); con el Block modificado y bloqueado (avisa además del bloqueo; el componente se actualiza igual); sin aviso si el Block se actualizó con él o si el componente no cambió. `pnpm test:cli`: 150 en verde. Spec 5 al día.
 
 Commit: `feat(cli): avisa si un componente actualizado lo usa un Block instalado (M1)`.
+
+## M2: alias absolutos, con «..» o fuera del proyecto
+
+**Antes:** `normalizePath` convertía `C:\proyecto\blocks` en `C:/proyecto/blocks` (una carpeta «C:» dentro del workspace) y quitaba el `/` inicial de una ruta absoluta; `..` se resolvía y podía salir del proyecto.
+
+**Arreglo:** `invalidAliasReason` (`init/paths.ts`) y `assertAliases` (`utils/project.ts`): `ng g mimi` e `init` (con un `mimi.json` que ya existe) fallan **antes de escribir nada** si `aliases.components` o `aliases.blocks` es absoluto (`/x`, `C:\x`, `C:/x`, `~/x`), tiene `..`, está vacío o apunta a la raíz, con el motivo, el valor y un ejemplo.
+
+**Pruebas:** `blocks.spec.ts`, «M2» (9): ocho casos de los dos alias con `ng g mimi` (error exacto, el árbol sin cambios y sin ninguna carpeta «C:») y uno con `init`. `pnpm test:cli`: 159 en verde. Spec 5 al día.
+
+Commit: `fix(cli): error claro con alias absolutos o fuera del proyecto en mimi.json (M2)`.

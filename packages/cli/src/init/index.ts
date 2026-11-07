@@ -15,6 +15,7 @@ import {
   type MimiConfig,
   type PackageJson,
   allDependencies,
+  assertAliases,
   defaultBlocksDir,
   majorOf,
   readJson,
@@ -158,6 +159,7 @@ async function inspect(tree: Tree, options: InitOptions): Promise<Plan> {
 
   const sourceRoot = normalizePath(project.sourceRoot ?? `${project.root}/src`);
   const mimiConfig = readJson<MimiConfig>(tree, 'mimi.json');
+  if (mimiConfig) assertAliases(mimiConfig);
   const componentsDir = normalizePath(
     mimiConfig?.aliases?.components ?? `${sourceRoot}/app/components/ui`,
   );
