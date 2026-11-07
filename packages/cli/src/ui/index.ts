@@ -463,6 +463,33 @@ function addBlocksSource(plan: Plan): Rule {
 // ── Mensaje final ─────────────────────────────────────────────────────────────────────
 
 /**
+ * M1: un componente que se actualizó y que usa un Block instalado (en `mimi.json → blocks`) que
+ * no se actualizó en esta ejecución (porque el usuario lo modificó, o porque no se pidió). Solo
+ * avisa: la pantalla es del usuario y puede necesitar cambios con la API nueva.
+ */
+function blocksUsingUpdated(
+  plan: Plan,
+  report: FileReport,
+  itemOf: (file: string) => string,
+): string[] {
+  const updated = new Set(report.updated.map(({ file }) => itemOf(file)));
+  const messages: string[] = [];
+  for (const block of Object.keys(plan.config.blocks ?? {}).sort()) {
+    if (updated.has(block) || registry.items[block]?.type !== 'block') continue;
+    const used = resolveItems(block).filter(
+      (item) => updated.has(item) && registry.items[item].type === 'component',
+    );
+    if (used.length === 0) continue;
+    const list = used.join(', ');
+    messages.push(
+      `Tu Block ${block} usa ${list}, que se actualizó a ${registry.version}; revisa el ` +
+        'CHANGELOG por si tu pantalla necesita algún cambio.',
+    );
+  }
+  return messages;
+}
+
+/**
  * Cómo se importa un Block desde `app.routes.ts` (en `src/app/`): `src/app/blocks` →
  * `./blocks/login-01`. Si la carpeta no está dentro de `app/`, la ruta del workspace.
  */
@@ -498,6 +525,7 @@ function summary(plan: Plan, report: FileReport): Rule {
       [...plan.items, ...plan.implicit].find((item) => registry.items[item].files.includes(file)) ??
       file;
     for (const message of updatedMessages(report, itemOf, registry.version)) log.info(message);
+    for (const message of blocksUsingUpdated(plan, report, itemOf)) log.warn(message);
     for (const file of report.skipped) {
       log.warn(
         `Omitido: ${path(file)} ya existe con otro contenido (usa --overwrite para reemplazarlo).`,

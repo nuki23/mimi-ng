@@ -230,6 +230,46 @@ describe('ng g mimi <block> (B.1)', () => {
     ]);
   });
 
+  describe('M1: avisa si un componente actualizado lo usa un Block instalado', () => {
+    const notice = (warnings: string[]) =>
+      warnings.filter((w) => w.startsWith('Tu Block test-block usa'));
+    const expected =
+      `Tu Block test-block usa button, que se actualizó a ${VERSION}; revisa el CHANGELOG ` +
+      'por si tu pantalla necesita algún cambio.';
+
+    it('pidiendo solo el componente', async () => {
+      const { run, tree, warnings } = await initialized();
+      const installed = await run('mimi', { components: [TEST_BLOCK] }, tree);
+      makeOld(installed, { block: false, button: true });
+      const result = await run('mimi', { components: ['button'] }, installed);
+      expect(json(result, '/mimi.json').components.button.version).toBe(VERSION);
+      expect(notice(warnings())).toEqual([expected]);
+    });
+
+    it('con el Block modificado (bloqueado): avisa además del bloqueo, sin bloquear el componente', async () => {
+      const { run, tree, warnings } = await initialized();
+      const installed = await run('mimi', { components: [TEST_BLOCK] }, tree);
+      makeOld(installed, { button: true, modified: ['blocks/test-block/index.ts'] });
+      const result = await run('mimi', { components: [TEST_BLOCK] }, installed);
+      expect(json(result, '/mimi.json').components.button.version).toBe(VERSION);
+      expect(notice(warnings())).toEqual([expected]);
+      expect(warnings()).toHaveLength(2);
+    });
+
+    it('no avisa si el Block se actualizó con él, ni si el componente no cambió', async () => {
+      const { run, tree, warnings } = await initialized();
+      const installed = await run('mimi', { components: [TEST_BLOCK] }, tree);
+      makeOld(installed, { button: true });
+      await run('mimi', { components: [TEST_BLOCK] }, installed);
+      expect(notice(warnings())).toEqual([]);
+
+      const fresh = await initialized();
+      const again = await fresh.run('mimi', { components: [TEST_BLOCK] }, fresh.tree);
+      await fresh.run('mimi', { components: ['button'] }, again);
+      expect(notice(fresh.warnings())).toEqual([]);
+    });
+  });
+
   describe('G1: con source(none), el @source de la carpeta de Blocks', () => {
     const CSS = '/projects/app/src/styles.css';
     /** Un proyecto de la 0.3.0 con source(none): init escribió solo el @source de componentes. */

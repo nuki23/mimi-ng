@@ -25,3 +25,11 @@ Pedido: los arreglos de una revisión independiente de la rama, en orden y un co
 **Pruebas:** `blocks.spec.ts`, «G1» (3): lo agrega después del de componentes una vez y lo dice; con `aliases.blocks` propio usa su carpeta y no repite uno escrito con comillas simples; un componente solo, o sin `source(none)`, no lo agrega. `init.spec.ts`: con `source(none)`, los dos `@source` exactos. **En el proyecto real**, con la CLI reempaquetada (`0.4.0-real.8`), `ng g mimi login-01` agregó `@source "./app/blocks";` y las cuatro clases entraron en el CSS. `pnpm test:cli`: 147 en verde. Spec 5 al día (paso 6 de `init` y «`@source` de los Blocks con `source(none)`»).
 
 Commit: `fix(cli): @source de la carpeta de Blocks con source(none), en ng g mimi e init (G1)`.
+
+## M1: aviso cuando se actualiza un componente que usa un Block
+
+**Arreglo:** al terminar, `ng g mimi` revisa los Blocks de `mimi.json → blocks` que no se actualizaron en esa ejecución (el usuario los modificó, o no los pidió); si alguno usa (en cualquier nivel) un componente que sí se actualizó, avisa sin bloquear: «Tu Block test-block usa button, que se actualizó a 0.3.0; revisa el CHANGELOG por si tu pantalla necesita algún cambio.» (con la versión de la CLI).
+
+**Pruebas:** `blocks.spec.ts`, «M1» (3): pidiendo solo el componente (se actualiza y avisa); con el Block modificado y bloqueado (avisa además del bloqueo; el componente se actualiza igual); sin aviso si el Block se actualizó con él o si el componente no cambió. `pnpm test:cli`: 150 en verde. Spec 5 al día.
+
+Commit: `feat(cli): avisa si un componente actualizado lo usa un Block instalado (M1)`.
