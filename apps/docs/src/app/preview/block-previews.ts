@@ -18,4 +18,13 @@ export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {
       error: { error: 'Wrong email or password. Try again or reset your password.' },
     },
   },
+  'login-02': {
+    load: () => import('@/blocks/login-02').then((m) => m.Login02),
+    states: {
+      // Una ilustración del sitio (original de Mimi): el Block no trae imágenes.
+      image: { imageSrc: '/avatars/avatar-2.svg' },
+      loading: { loading: true },
+      error: { error: 'Wrong email or password. Try again or reset your password.' },
+    },
+  },
 };

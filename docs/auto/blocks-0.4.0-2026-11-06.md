@@ -7,7 +7,8 @@ Pedido: ejecutar B.1 → B.2 → B.3 → B.4 → B.5 → B.10 → B.6 → B.7 �
 ## Pendiente del usuario
 
 1. **Diseños que faltan** (no bloquearon, decidido por el usuario): la página de un Block en el sitio y el marco de la vista previa (B.1, en D6); los estados de error de `login-01` (B.2); la imagen de `login-02` (B.3); el estado «válido» de un campo (B.4). Cada uno está en `docs/design/correcciones-pendientes.md` con lo que se hizo.
-2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2).
+2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3).
+3. **Imagen de `login-02`** (B.3-a): hoy un degradado neutro provisional; pedir la imagen o una ilustración en Claude Design (D6).
 
 ## Tabla acumulada del sitio
 
@@ -18,6 +19,7 @@ Medición de partida (06/11/2026, después de la M.13, comprobada al empezar la 
 | Partida | 153,15 / 22,00  | 330,16 / 104,57 | 135,40      | 483,32         | —                 |
 | B.1     | 153,39 / 22,05  | 330,69 / 104,78 | 135,93      | 484,08         | 0,06 / 0,08       |
 | B.2     | 153,39 / 22,05  | 330,71 / 104,78 | 135,93      | 484,10         | 8,26 / 2,10       |
+| B.3     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 14,78 / 3,09      |
 
 ## B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase
 
@@ -138,3 +140,40 @@ Nuevos: `packages/ui-core/src/lib/blocks/login-01/login-01.ts`, `login-01.html`,
 Modificados: `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/preview/block-preview-page.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.2.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
 
 Commit: `feat(blocks): login-01, inicio de sesión centrado con Signal Forms (B.2)`.
+
+## B.3 `login-02`
+
+**Estado:** `[x]`, pendiente de comprobación manual (contraste del testimonio sobre imágenes reales, teléfono con el teclado abierto, gestor de contraseñas; a la M.20).
+
+### Plan breve
+
+El Block en `packages/ui-core/src/lib/blocks/login-02/` con el esqueleto de envío de `login-01` (Signal Forms, foco al primer error, `role="alert"`, `aria-busy`); la columna de la imagen (banner de 200 px con las esquinas inferiores redondeadas en móvil, la mitad derecha desde `md`), el testimonio en vidrio (`figure`, `blockquote`, `figcaption`, `mimi-avatar`), `imageSrc`/`imageAlt` y, sin imagen, el degradado neutro provisional (B.3-a, precisión del usuario). Registro, `x-prompt`, README, página y vista previa con los estados «Con imagen», «Cargando» y «Con error».
+
+### Decisiones aplicadas
+
+- **B.3-a (decidido por el usuario, con una precisión):** sin `imageSrc`, un degradado neutro con tokens (`bg-linear-to-br from-secondary via-muted to-accent`), con el comentario «PROVISIONAL (B.3-a)» en la plantilla y en D6. El estado «Con imagen» de la vista previa usa una ilustración del sitio (`/avatars/avatar-2.svg`, original de Mimi): el Block no trae imágenes.
+- **B.3-b (decidido por el usuario):** las iniciales con `mimi-avatar` (y `mimi-avatar-fallback` con `bg-info-soft`, como el diseño).
+- La contraseña es un `input[mimiInput]` como en el diseño (sin el ojo ni `mimi-password`): así el Block no trae `@angular/cdk`.
+
+### Criterios de hecho
+
+- **El Block en ui-core, en el registro y en el sitio, con los estados.** Ítem `login-02` (peer `@angular/forms`; `registryDependencies`: avatar, button, form-field, input, `utils/cn`), `x-prompt` «login-02 (Block)», README; página `/docs/blocks/login-02` (`ready`). Capturas (Chrome sin interfaz, CDP): escritorio claro sin imagen (el degradado se ve muy suave en claro), escritorio oscuro con imagen y vidrio legible, móvil 375 px con el banner arriba y el error. Coinciden con el diseño.
+- **Pruebas.** `login-02.spec.ts` (8): envío válido; inválido con foco al correo; `loading`; `error`; `sso`; sin `imageSrc` el degradado `aria-hidden` y con `imageSrc` la imagen con `alt=""` por defecto y el `imageAlt` del usuario; el testimonio en `figure` con `blockquote`, `figcaption` y el avatar; un `h1`; `class`. Las páginas de los Blocks pasan a una prueba con una fila por Block (`block-pages.spec.ts`, reemplaza a `login-01-page.spec.ts`), que además exige que cada Block de `BLOCK_PREVIEWS` tenga página, ruta y su ítem `ready` en el menú.
+- **`ng g mimi login-02` en un proyecto limpio.** En el mismo proyecto de la B.2 (`C:\t\b040\clean\app`), con la CLI reempaquetada (`0.4.0-real.3`): agrega avatar y los tres archivos del Block (lo demás ya estaba igual a la plantilla), la línea de las rutas; con las dos pantallas en las rutas, `ng build` en verde (454,39 kB iniciales).
+- **CSS global y JS inicial, antes y después.** CSS global sin cambios (153,39 / 22,05 kB); `blocks.css` 8,26 → 14,78 kB (3,09 gzip). JS inicial 330,71 → **331,42 kB** (+0,71; gzip 104,78 → 105,69) y `main` 135,93 → 135,97. **Reparto de chunks:** el JS inicial pasó de 3 a 4 archivos: el optimizador sacó del chunk inicial grande (194,06 → 179,68 kB) el código de `@angular/platform-browser` (el `EventManager` y el renderizador del DOM) a un chunk inicial propio de 15,07 kB, porque ahora lo comparten más chunks diferidos. No entró código nuevo; el neto (+0,71 kB) es menor que 1 kB.
+- **D6.** «login-02 (B.3)»: la imagen provisional, el error sin diseño, el avatar, el vidrio con «reducir transparencia», el corte en `md` y los textos.
+- **`pnpm build`, `pnpm test` y `pnpm format:check` en verde.** Build sin avisos; docs 178, ui-core 792 y CLI 144 pruebas; formato correcto.
+- **Manual (a la M.20):** NO COMPROBADO (manual, usuario): contraste sobre imágenes reales claras y oscuras, teléfono real con el teclado abierto, gestor de contraseñas.
+
+### Revisión crítica
+
+- El degradado provisional en claro casi no se distingue del fondo `muted` (los tres tokens son grises muy cercanos). Es «neutro» como se pidió; si se quiere más contraste, se decide con la imagen del diseño.
+- En la comprobación, un servidor de desarrollo viejo (el `TaskStop` no detiene el `ng serve` hijo de `pnpm dev`) servía un `blocks.css` sin las clases del Block nuevo: la hoja `inject: false` no se regenera con archivos nuevos en modo vigilancia. Con el servidor reiniciado, todo bien. Desde aquí, el servidor se detiene por puerto (`Stop-Process`) y se reinicia en cada Block.
+
+### Archivos
+
+Nuevos: `packages/ui-core/src/lib/blocks/login-02/login-02.ts`, `login-02.html`, `index.ts`, `login-02.spec.ts`; `apps/docs/src/app/pages/docs/blocks/login-02-page.ts`, `block-pages.spec.ts`. Borrado: `apps/docs/src/app/pages/docs/blocks/login-01-page.spec.ts`.
+
+Modificados: `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.3.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
+
+Commit: `feat(blocks): login-02, inicio de sesión en dos columnas con imagen y testimonio (B.3)`.

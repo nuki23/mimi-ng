@@ -504,6 +504,18 @@
         "separator",
         "utils/cn"
       ]
+    },
+    "login-02": {
+      "type": "block",
+      "files": [
+        "blocks/login-02/login-02.ts",
+        "blocks/login-02/login-02.html",
+        "blocks/login-02/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["avatar", "button", "form-field", "input", "utils/cn"]
     }
   }
 }

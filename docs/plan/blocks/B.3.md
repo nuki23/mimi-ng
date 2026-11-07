@@ -2,9 +2,9 @@
 
 [← Índice del plan](../../plan.md)
 
-- [ ] B.3 `login-02`: inicio de sesión dividido en dos, con el formulario a un lado y una imagen con un testimonio en vidrio al otro.
+- [x] B.3 `login-02`: inicio de sesión dividido en dos, con el formulario a un lado y una imagen con un testimonio en vidrio al otro. (07/11/2026; pendiente de comprobación manual: contraste del testimonio sobre imágenes reales, teléfono con el teclado abierto y gestor de contraseñas, a la M.20. Informe: `docs/auto/blocks-0.4.0-2026-11-06.md`, «B.3».)
   - v0.4.0 · Tamaño M · Depende de: B.1 (y los componentes que usa, publicados: 2.1, 2.2, 2.11) · Bloquea: B.P
-  - Estado: —
+  - Estado: hecha el 07/11/2026 en `auto/blocks-0.4.0-2026-11-06` (Claude Code, modo autónomo). API final: `<mimi-login-02 [loading] [error] [imageSrc] [imageAlt] [forgotHref] [signupHref] (submitted) (sso) class>`. Componentes: avatar, button, form-field, input (la contraseña es un `input[mimiInput]`, como el diseño, sin `mimi-password`).
   - Leer antes: B.1; la B.2 (`login-01`: la misma API de envío); spec 4 (Input, Button, FormField); spec 13, tokens `glass` y `overlay-blur` (T.1).
   - Diseño: `Block login-02.dc.html` y su fila en `Mimi F6 Blocks.dc.html` («Componentes: Input, Button, Image Slot, glass»). Lo que muestra:
     - Escritorio: dos columnas; la imagen ocupa la mitad derecha (un `image-slot` de la herramienta de diseño: «Arrastra tu imagen al hueco»), con un testimonio en vidrio abajo («“Pasamos de PrimeNG a Mimi en dos semanas…”», iniciales «DP», Diego Paz, CTO · Andes Logística).
