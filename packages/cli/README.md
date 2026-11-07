@@ -114,6 +114,7 @@ Pantallas enteras (inicio de sesión, registro, ajustes…) hechas con los compo
 
 - **login-01** (inicio de sesión centrado, con Google y GitHub): `ng g mimi login-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-01)
 - **login-02** (inicio de sesión en dos columnas, con imagen y testimonio): `ng g mimi login-02` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-02)
+- **signup-01** (registro con validación, medidor de contraseña y confirmación): `ng g mimi signup-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/signup-01)
 
 ## Tus cambios
 

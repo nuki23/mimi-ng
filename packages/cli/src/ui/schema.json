@@ -170,6 +170,10 @@
           {
             "value": "login-02",
             "label": "login-02 (Block)"
+          },
+          {
+            "value": "signup-01",
+            "label": "signup-01 (Block)"
           }
         ]
       }

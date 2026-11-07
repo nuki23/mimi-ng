@@ -516,6 +516,18 @@
         "@angular/forms": "^22.0.0"
       },
       "registryDependencies": ["avatar", "button", "form-field", "input", "utils/cn"]
+    },
+    "signup-01": {
+      "type": "block",
+      "files": [
+        "blocks/signup-01/signup-01.ts",
+        "blocks/signup-01/signup-01.html",
+        "blocks/signup-01/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["button", "checkbox", "form-field", "input", "password", "utils/cn"]
     }
   }
 }

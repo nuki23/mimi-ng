@@ -121,7 +121,7 @@ Detalle (06/11/2026): un archivo por tarea en `docs/plan/blocks/` (el nombre es 
 - [x] B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase (07/11/2026; pendiente de comprobación manual: teléfono real y Safari, a la M.20) · v0.4.0 · L · depende: G2.P · [docs/plan/blocks/B.1.md](plan/blocks/B.1.md)
 - [x] B.2 `login-01` (07/11/2026; pendiente de comprobación manual, a la M.20) · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.2.md](plan/blocks/B.2.md)
 - [x] B.3 `login-02` (07/11/2026; pendiente de comprobación manual, a la M.20) · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.3.md](plan/blocks/B.3.md)
-- [ ] B.4 `signup-01` · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.4.md](plan/blocks/B.4.md)
+- [x] B.4 `signup-01` (07/11/2026; pendiente de comprobación manual, a la M.20) · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.4.md](plan/blocks/B.4.md)
 - [ ] B.5 `otp-01` · v0.4.0 · S · depende: B.1, G2.5 · [docs/plan/blocks/B.5.md](plan/blocks/B.5.md)
 - [ ] B.10 Tabs con orientación vertical · v0.4.0 · M · depende: G1.9 · [docs/plan/blocks/B.10.md](plan/blocks/B.10.md)
 - [ ] B.6 `settings-01` · v0.4.0 · L · depende: B.1, B.10 · [docs/plan/blocks/B.6.md](plan/blocks/B.6.md)

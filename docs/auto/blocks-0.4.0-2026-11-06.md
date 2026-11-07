@@ -7,7 +7,7 @@ Pedido: ejecutar B.1 → B.2 → B.3 → B.4 → B.5 → B.10 → B.6 → B.7 �
 ## Pendiente del usuario
 
 1. **Diseños que faltan** (no bloquearon, decidido por el usuario): la página de un Block en el sitio y el marco de la vista previa (B.1, en D6); los estados de error de `login-01` (B.2); la imagen de `login-02` (B.3); el estado «válido» de un campo (B.4). Cada uno está en `docs/design/correcciones-pendientes.md` con lo que se hizo.
-2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3).
+2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3); `signup-01`: NVDA (mensajes, nivel del medidor y la nota del botón), el gestor de contraseñas (que proponga una nueva) y un teléfono real (B.4).
 3. **Imagen de `login-02`** (B.3-a): hoy un degradado neutro provisional; pedir la imagen o una ilustración en Claude Design (D6).
 
 ## Tabla acumulada del sitio
@@ -20,6 +20,7 @@ Medición de partida (06/11/2026, después de la M.13, comprobada al empezar la 
 | B.1     | 153,39 / 22,05  | 330,69 / 104,78 | 135,93      | 484,08         | 0,06 / 0,08       |
 | B.2     | 153,39 / 22,05  | 330,71 / 104,78 | 135,93      | 484,10         | 8,26 / 2,10       |
 | B.3     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 14,78 / 3,09      |
+| B.4     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 16,18 / 3,34      |
 
 ## B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase
 
@@ -177,3 +178,42 @@ Nuevos: `packages/ui-core/src/lib/blocks/login-02/login-02.ts`, `login-02.html`,
 Modificados: `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.3.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
 
 Commit: `feat(blocks): login-02, inicio de sesión en dos columnas con imagen y testimonio (B.3)`.
+
+## B.4 `signup-01`
+
+**Estado:** `[x]`, pendiente de comprobación manual (NVDA, gestor de contraseñas, teléfono real; a la M.20).
+
+### Plan breve
+
+El Block con la columna de beneficios (escritorio) y el formulario: nombre, correo de trabajo, `mimi-password` con el medidor, confirmación y términos, en un `form()` de Signal Forms con `required`, `minLength(2)`, `email` más el dominio, «fuerte» (las cuatro reglas), «coinciden» y términos aceptados. Mensajes al salir del campo (B.4-a), mensajes de «válido» propios del Block, botón con `aria-disabled` y la nota de lo que falta, `loading` y `error`. Registro, `x-prompt`, README, página y vista previa.
+
+### Decisiones y desvíos
+
+- **B.4-a (decidido por el usuario):** al salir del campo; una vez tocado, cambia mientras se escribe. Mimi muestra el error también con `dirty`, así que el Block pasa `[showError]="touched && invalid"` a cada campo (la entrada `showError` de Input, publicada).
+- **Una sola lista de reglas:** el Block arma las cuatro reglas de Password con los textos de `MIMI_PASSWORD_TEXT`, se las pasa a `mimi-password` (`[rules]`) y las usa con `mimiPasswordLevel` para el validador de «fuerte»: no repite la heurística.
+- **El dominio del correo:** el validador `email` de Angular acepta `ana@empresa`; el Block agrega uno que pide un punto en el dominio (como el diseño), con el mismo mensaje.
+- **Los términos** van en un `mimi-form-field` para que se vea su error al pulsar el botón incompleto.
+- **Estados de la vista previa:** «Cargando» y «Con error». «Vacío», «con errores» y «completo» se ven escribiendo en la vista previa (el Block no tiene entradas para fijar el valor del formulario: API mínima, B.1-e). Las capturas de abajo los muestran con valores escritos por CDP.
+
+### Criterios de hecho
+
+- **El Block en ui-core, en el registro y en el sitio.** Ítem `signup-01` (peer `@angular/forms`; button, checkbox, form-field, input, password, `utils/cn`), `x-prompt`, README; página `/docs/blocks/signup-01` (`ready`). Capturas: escritorio claro con nombre válido, correo sin dominio, contraseña media, confirmación distinta y la nota («Missing: a valid email, a strong password, matching passwords, accepting the terms.»); móvil oscuro vacío, sin la columna de beneficios y con el logo arriba. Coinciden con el diseño.
+- **Pruebas.** `signup-01.spec.ts` (9): nombre (mensaje solo al salir, `aria-invalid`, «Looks good.» y que describe el campo); correo sin dominio y «Valid email.»; fuerza (nota y `data-level` del medidor 2 → 3); confirmación («no coinciden» y deja de decirlo en cuanto coinciden); el botón con `aria-disabled` (no `disabled`) y la nota exacta; pulsarlo incompleto marca todo, no envía y enfoca el primer error; completo («All set.», envía `{ name, email, password }`); `loading` y `error`; `autocomplete="new-password"` en las dos, un `h1` y `class`.
+- **`ng g mimi signup-01` en un proyecto limpio.** En el proyecto de la B.2 con la CLI `0.4.0-real.4`: copia los tres archivos del Block (sus componentes ya estaban), con la línea de las rutas; con la ruta `signup`, `ng build` en verde (466,92 kB iniciales).
+- **CSS global y JS inicial, antes y después.** Sin cambios: CSS global 153,39 / 22,05 kB, JS inicial 331,42 / 105,69 kB, `main` 135,97 kB. `blocks.css` 14,78 → 16,18 kB (3,34 gzip).
+- **D6.** «signup-01 (B.4)»: el estado «válido», el color del error, cuándo aparece, los términos, el botón, «Sign in», el dominio y los textos.
+- **`pnpm build`, `pnpm test` y `pnpm format:check` en verde.** Docs 179, ui-core 801 y CLI 144 pruebas; build sin avisos; formato correcto.
+- **Manual (a la M.20):** NO COMPROBADO (manual, usuario): NVDA, gestor de contraseñas, teléfono real.
+
+### Revisión crítica
+
+- Los `aria-describedby` de «válido» se escriben una vez (valor constante): `mimi-form-field` les suma el id de su error sin que Angular los reescriba. Lo cubre la prueba del nombre.
+- En las pruebas, el evento `input` tiene que burbujear (como en el navegador) para que `mimi-password` lo vea en su anfitrión.
+
+### Archivos
+
+Nuevos: `packages/ui-core/src/lib/blocks/signup-01/signup-01.ts`, `signup-01.html`, `index.ts`, `signup-01.spec.ts`; `apps/docs/src/app/pages/docs/blocks/signup-01-page.ts`.
+
+Modificados: `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `apps/docs/src/app/pages/docs/blocks/block-pages.spec.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.4.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
+
+Commit: `feat(blocks): signup-01, registro con medidor de contraseña y la nota de lo que falta (B.4)`.

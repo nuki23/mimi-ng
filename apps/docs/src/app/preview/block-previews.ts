@@ -18,6 +18,13 @@ export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {
       error: { error: 'Wrong email or password. Try again or reset your password.' },
     },
   },
+  'signup-01': {
+    load: () => import('@/blocks/signup-01').then((m) => m.Signup01),
+    states: {
+      loading: { loading: true },
+      error: { error: 'This email is already registered. Sign in or use another one.' },
+    },
+  },
   'login-02': {
     load: () => import('@/blocks/login-02').then((m) => m.Login02),
     states: {

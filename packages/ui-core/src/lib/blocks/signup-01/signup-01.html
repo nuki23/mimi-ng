@@ -1,0 +1,330 @@
+<!-- Beneficios (solo escritorio). -->
+<aside
+  [attr.aria-labelledby]="id + '-perks'"
+  class="hidden w-[44%] shrink-0 flex-col justify-between border-r bg-muted px-12 py-10 md:flex"
+>
+  <div class="flex items-center gap-2.5">
+    <span
+      aria-hidden="true"
+      class="inline-flex size-8 items-center justify-center rounded-[10px] bg-primary text-lg leading-none font-extrabold text-primary-foreground"
+      >m</span
+    >
+    <span class="text-base font-bold">Mimi Sales</span>
+  </div>
+  <div class="flex flex-col gap-[22px]">
+    <h2
+      [id]="id + '-perks'"
+      class="text-[30px] leading-[1.15] font-extrabold tracking-[-0.025em] text-balance"
+    >
+      Your whole sales team in one place.
+    </h2>
+    <ul class="flex flex-col gap-3.5">
+      <li class="flex items-start gap-3">
+        <span
+          class="inline-flex size-[30px] shrink-0 items-center justify-center rounded-[9px] border bg-card"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <!-- Lucide git-merge (ISC) -->
+            <circle cx="18" cy="18" r="3" />
+            <circle cx="6" cy="6" r="3" />
+            <path d="M6 21V9a9 9 0 0 0 9 9" />
+          </svg>
+        </span>
+        <span class="flex flex-col leading-[1.4]">
+          <span class="text-[14.5px] font-semibold">Sync without losing changes</span>
+          <span class="text-[13.5px] text-muted-foreground">Your team works on the same data.</span>
+        </span>
+      </li>
+      <li class="flex items-start gap-3">
+        <span
+          class="inline-flex size-[30px] shrink-0 items-center justify-center rounded-[9px] border bg-card"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <!-- Lucide shield-check (ISC) -->
+            <path
+              d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+            />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+        </span>
+        <span class="flex flex-col leading-[1.4]">
+          <span class="text-[14.5px] font-semibold">Secure by default</span>
+          <span class="text-[13.5px] text-muted-foreground">Encryption and 2FA for everyone.</span>
+        </span>
+      </li>
+      <li class="flex items-start gap-3">
+        <span
+          class="inline-flex size-[30px] shrink-0 items-center justify-center rounded-[9px] border bg-card"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <!-- Lucide headset (ISC) -->
+            <path
+              d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"
+            />
+            <path d="M21 16v2a4 4 0 0 1-4 4h-5" />
+          </svg>
+        </span>
+        <span class="flex flex-col leading-[1.4]">
+          <span class="text-[14.5px] font-semibold">Support that answers</span>
+          <span class="text-[13.5px] text-muted-foreground">A reply in under 4 hours.</span>
+        </span>
+      </li>
+    </ul>
+  </div>
+  <span class="text-[12.5px] text-muted-foreground">14-day free trial · no card required</span>
+</aside>
+
+<div class="flex min-w-0 flex-1 items-center justify-center px-[22px] py-7 md:p-10">
+  <form
+    novalidate
+    class="flex w-full max-w-[400px] flex-col gap-4"
+    [attr.aria-labelledby]="id + '-title'"
+    (submit)="onSubmit($event)"
+  >
+    <span
+      aria-hidden="true"
+      class="inline-flex size-9 items-center justify-center rounded-[11px] bg-primary text-xl leading-none font-extrabold text-primary-foreground md:hidden"
+      >m</span
+    >
+    <div class="flex flex-col gap-1">
+      <h1 [id]="id + '-title'" class="text-[26px] font-extrabold tracking-[-0.025em]">
+        Create your account
+      </h1>
+      <p class="text-sm text-muted-foreground">It takes less than a minute.</p>
+    </div>
+
+    <mimi-form-field label="Full name">
+      <input
+        mimiInput
+        autocomplete="name"
+        [attr.aria-describedby]="id + '-name-ok'"
+        [formField]="signup.name"
+        [showError]="blurred('name')"
+      />
+      <!-- «Válido»: texto del Block (FormField solo tiene errores). -->
+      <p [id]="id + '-name-ok'" [class]="okClasses">
+        @if (valid('name')) {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <!-- Lucide circle-check (ISC) -->
+            <circle cx="12" cy="12" r="10" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+          Looks good.
+        }
+      </p>
+    </mimi-form-field>
+
+    <mimi-form-field label="Work email">
+      <input
+        mimiInput
+        type="email"
+        autocomplete="email"
+        [attr.aria-describedby]="id + '-email-ok'"
+        [formField]="signup.email"
+        [showError]="blurred('email')"
+      />
+      <p [id]="id + '-email-ok'" [class]="okClasses">
+        @if (valid('email')) {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <!-- Lucide circle-check (ISC) -->
+            <circle cx="12" cy="12" r="10" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+          Valid email.
+        }
+      </p>
+    </mimi-form-field>
+
+    <mimi-form-field label="Password">
+      <mimi-password meter [rules]="rules">
+        <input
+          mimiInput
+          type="password"
+          autocomplete="new-password"
+          [formField]="signup.password"
+          [showError]="blurred('password')"
+        />
+      </mimi-password>
+    </mimi-form-field>
+
+    <mimi-form-field label="Confirm password">
+      <input
+        mimiInput
+        type="password"
+        autocomplete="new-password"
+        [attr.aria-describedby]="id + '-confirm-ok'"
+        [formField]="signup.confirm"
+        [showError]="blurred('confirm')"
+      />
+      <p [id]="id + '-confirm-ok'" [class]="okClasses">
+        @if (valid('confirm')) {
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <!-- Lucide circle-check (ISC) -->
+            <circle cx="12" cy="12" r="10" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+          They match.
+        }
+      </p>
+    </mimi-form-field>
+
+    <!-- En un mimi-form-field para que su error se vea (al pulsar el botón incompleto). -->
+    <mimi-form-field>
+      <div class="flex items-start gap-2.5">
+        <mimi-checkbox class="mt-0.5" [id]="id + '-terms'" [formField]="signup.terms" />
+        <label [attr.for]="id + '-terms'" class="cursor-pointer text-[13.5px] leading-[1.45]">
+          I accept the
+          <a
+            [href]="termsHref()"
+            class="rounded-sm font-medium underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >Terms</a
+          >
+          and the
+          <a
+            [href]="privacyHref()"
+            class="rounded-sm font-medium underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >Privacy Notice</a
+          >.
+        </label>
+      </div>
+    </mimi-form-field>
+
+    <div role="alert" class="empty:hidden">
+      @if (error(); as message) {
+        <p
+          class="flex items-start gap-2 rounded-[var(--mimi-radius)] bg-destructive-soft-bg px-3 py-2.5 text-sm text-destructive-soft-foreground"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="mt-0.5 shrink-0"
+          >
+            <!-- Lucide circle-alert (ISC) -->
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" x2="12" y1="8" y2="12" />
+            <line x1="12" x2="12.01" y1="16" y2="16" />
+          </svg>
+          {{ message }}
+        </p>
+      }
+    </div>
+
+    <!-- aria-disabled y no disabled: el botón se enfoca y su nota (lo que falta) se lee. -->
+    <button
+      mimiBtn
+      type="submit"
+      class="h-[calc(var(--mimi-control-height,2.5rem)+4px)] text-[15px] font-semibold aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]"
+      [attr.aria-disabled]="loading() || !complete() ? 'true' : null"
+      [attr.aria-busy]="loading() ? 'true' : null"
+      [attr.aria-describedby]="id + '-hint'"
+    >
+      @if (loading()) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          class="motion-safe:animate-[mimi-spin_0.8s_linear_infinite]"
+        >
+          <!-- Lucide loader-circle (ISC) -->
+          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+        </svg>
+        Creating account…
+      } @else {
+        Create account
+      }
+    </button>
+    <p [id]="id + '-hint'" class="-mt-1 text-center text-[12.5px] text-muted-foreground">
+      {{ hint() }}
+    </p>
+
+    <p class="text-center text-sm text-muted-foreground">
+      Already have an account?
+      <a
+        [href]="signinHref()"
+        class="rounded-sm font-semibold text-foreground underline underline-offset-3 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        >Sign in</a
+      >
+    </p>
+  </form>
+</div>

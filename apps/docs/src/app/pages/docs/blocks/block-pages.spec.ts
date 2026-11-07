@@ -7,6 +7,7 @@ import { BLOCK_PREVIEWS } from '../../../preview/block-previews';
 import { DOCS_ROUTES } from '../docs.routes';
 import { Login01Page } from './login-01-page';
 import { Login02Page } from './login-02-page';
+import { Signup01Page } from './signup-01-page';
 
 interface Case {
   name: string;
@@ -28,6 +29,12 @@ const CASES: Case[] = [
     page: Login02Page,
     components: ['input', 'button', 'form-field', 'avatar'],
     states: ['image', 'loading', 'error'],
+  },
+  {
+    name: 'signup-01',
+    page: Signup01Page,
+    components: ['input', 'password', 'checkbox', 'button', 'form-field'],
+    states: ['loading', 'error'],
   },
 ];
 

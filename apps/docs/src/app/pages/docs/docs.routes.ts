@@ -217,4 +217,9 @@ export const DOCS_ROUTES: Routes = [
     title: 'login-02 · Blocks · Mimi',
     loadComponent: () => import('./blocks/login-02-page').then((m) => m.Login02Page),
   },
+  {
+    path: 'blocks/signup-01',
+    title: 'signup-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/signup-01-page').then((m) => m.Signup01Page),
+  },
 ];

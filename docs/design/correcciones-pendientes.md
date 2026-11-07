@@ -232,3 +232,13 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Vidrio:** con «reducir transparencia» (`prefers-reduced-transparency`), fondo `card` sólido y sin desenfoque (no está en el diseño).
   - **Corte del diseño:** dos columnas desde `md` (768px); el diseño solo dibuja 1280px y móvil.
   - **Textos en inglés** (B.1-i), incluido el testimonio («Andes Logística» → «Andes Logistics») y la nota legal.
+
+  signup-01 (B.4, 07/11/2026):
+  - **Estado «válido» de un campo:** `mimi-form-field` solo tiene errores. El «Looks good.» / «Valid email.» / «They match.» del diseño (ícono `circle-check` en `success-soft-foreground`) lo escribe el Block, en un elemento que describe el campo. Si se quiere en FormField, diseñarlo ahí (y su token).
+  - **Color de la etiqueta y el mensaje con error:** el diseño usa `destructive-soft-foreground`; Mimi, `destructive` (`--mimi-field-error`, ya anotado arriba).
+  - **Cuándo aparece el error:** al salir del campo (B.4-a), como el diseño; Mimi lo muestra también al escribir (`dirty`), así que el Block le pasa `[showError]` a cada campo.
+  - **Términos:** el diseño no dibuja su error; el Block lo muestra debajo («Accept the terms to continue.») al pulsar el botón incompleto. «Terms» y «Privacy Notice» son enlaces (el diseño: texto).
+  - **Botón:** `aria-disabled` en vez de `disabled` (la nota se lee y el botón se enfoca), con el aspecto deshabilitado del diseño; la nota cuenta también el nombre («your name»), que el diseño no lista.
+  - **«Already have an account? Sign in»:** agregado (no está en el diseño), para `signinHref`.
+  - **Dominio del correo:** el validador `email` de Angular acepta `ana@empresa`; el Block pide además un punto en el dominio, como el diseño.
+  - **Textos en inglés** (B.1-i): beneficios y mensajes traducidos («Soporte en español» pasa a «Support that answers», neutro).
