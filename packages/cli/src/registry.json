@@ -483,6 +483,27 @@
         "class-variance-authority": "^0.7.1"
       },
       "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+    },
+    "login-01": {
+      "type": "block",
+      "files": [
+        "blocks/login-01/login-01.ts",
+        "blocks/login-01/login-01.html",
+        "blocks/login-01/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": [
+        "button",
+        "card",
+        "checkbox",
+        "form-field",
+        "input",
+        "password",
+        "separator",
+        "utils/cn"
+      ]
     }
   }
 }

@@ -75,7 +75,7 @@ export const DOCS_NAV: DocsNavSection[] = [
     // ready cuando existe su página.
     title: 'Blocks',
     items: [
-      { title: 'login-01', path: '/docs/blocks/login-01', status: 'pending' },
+      { title: 'login-01', path: '/docs/blocks/login-01', status: 'ready' },
       { title: 'login-02', path: '/docs/blocks/login-02', status: 'pending' },
       { title: 'signup-01', path: '/docs/blocks/signup-01', status: 'pending' },
       { title: 'otp-01', path: '/docs/blocks/otp-01', status: 'pending' },

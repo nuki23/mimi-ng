@@ -8,6 +8,10 @@ import {
   signal,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {
+  MIMI_ERROR_MESSAGES_EN,
+  provideMimiErrorMessages,
+} from '@/components/ui/form-field/error-messages';
 import { THEME_STORAGE_KEY } from '../core/theme.service';
 import { BLOCK_PREVIEWS } from './block-previews';
 
@@ -26,6 +30,9 @@ export const BLOCKS_STYLESHEET = 'blocks.css';
  */
 @Component({
   selector: 'app-block-preview-page',
+  // Los Blocks están en inglés (B.1-i): sus mensajes de error también, aunque el sitio esté en
+  // español (app.config). Archivo concreto, sin form-field.
+  providers: [provideMimiErrorMessages(MIMI_ERROR_MESSAGES_EN)],
   template: `
     @if (missing()) {
       <p class="p-8 text-muted-foreground">No hay ningún Block llamado «{{ name }}».</p>

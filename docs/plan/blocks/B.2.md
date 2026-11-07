@@ -2,9 +2,9 @@
 
 [← Índice del plan](../../plan.md)
 
-- [ ] B.2 `login-01`: inicio de sesión centrado con correo, contraseña con mostrar u ocultar, «recordarme» y botones de Google y GitHub.
+- [x] B.2 `login-01`: inicio de sesión centrado con correo, contraseña con mostrar u ocultar, «recordarme» y botones de Google y GitHub. (07/11/2026; pendiente de comprobación manual: gestor de contraseñas, NVDA, teléfono real y navegador real, a la M.20. Informe: `docs/auto/blocks-0.4.0-2026-11-06.md`, «B.2».)
   - v0.4.0 · Tamaño M · Depende de: B.1 (y los componentes que usa, todos publicados: 2.1, 2.2, 2.5, 2.6, 2.10, 2.11, G2.3) · Bloquea: B.P
-  - Estado: —
+  - Estado: hecha el 07/11/2026 en `auto/blocks-0.4.0-2026-11-06` (Claude Code, modo autónomo). API final: `<mimi-login-01 [loading] [error] [forgotHref] [signupHref] (submitted) (provider) class>`; `submitted` lleva `Login01Value` (`{ email, password, remember }`).
   - Leer antes: B.1 (las decisiones comunes: tipo `block`, API mínima, Signal Forms, idioma, íconos, vista previa); spec 4 (Card, Input, Password, Checkbox, Button, Separator y FormField); spec 8 (Signal Forms y `mimi-form-field`); la G2.3 Password en `docs/historial/grupo-2/G2.3.md` (el botón de mostrar y `autocomplete`).
   - Diseño: `Block login-01.dc.html` (escritorio y `mobile`), y su fila en `Mimi F6 Blocks.dc.html` («Componentes: Card, Input, Password, Checkbox, Button, Separator»). Lo que muestra:
     - Escritorio: fondo `muted` con una trama de puntos (`radial-gradient` con `foreground` al 14%, 18px, con máscara elíptica), tarjeta de 400px con padding de 32px, radio `--mimi-radius-card` y `shadow-card`.

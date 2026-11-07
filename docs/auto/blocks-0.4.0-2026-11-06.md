@@ -7,7 +7,7 @@ Pedido: ejecutar B.1 → B.2 → B.3 → B.4 → B.5 → B.10 → B.6 → B.7 �
 ## Pendiente del usuario
 
 1. **Diseños que faltan** (no bloquearon, decidido por el usuario): la página de un Block en el sitio y el marco de la vista previa (B.1, en D6); los estados de error de `login-01` (B.2); la imagen de `login-02` (B.3); el estado «válido» de un campo (B.4). Cada uno está en `docs/design/correcciones-pendientes.md` con lo que se hizo.
-2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1).
+2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2).
 
 ## Tabla acumulada del sitio
 
@@ -17,6 +17,7 @@ Medición de partida (06/11/2026, después de la M.13, comprobada al empezar la 
 | ------- | --------------- | --------------- | ----------- | -------------- | ----------------- |
 | Partida | 153,15 / 22,00  | 330,16 / 104,57 | 135,40      | 483,32         | —                 |
 | B.1     | 153,39 / 22,05  | 330,69 / 104,78 | 135,93      | 484,08         | 0,06 / 0,08       |
+| B.2     | 153,39 / 22,05  | 330,71 / 104,78 | 135,93      | 484,10         | 8,26 / 2,10       |
 
 ## B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase
 
@@ -104,3 +105,36 @@ Nuevos: `apps/docs/src/blocks.css`, `apps/docs/src/app/preview/block-previews.ts
 Modificados: `angular.json`, `tsconfig.base.json`, `apps/docs/src/styles.css`, `apps/docs/src/app/app.html`, `apps/docs/src/app/app.ts`, `apps/docs/src/app/app.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `packages/cli/README.md`, `packages/cli/scripts/build.mjs`, `packages/cli/src/registry.ts`, `packages/cli/src/registry.spec.ts`, `packages/cli/src/init/index.ts`, `packages/cli/src/init.spec.ts`, `packages/cli/src/ui/index.ts`, `packages/cli/src/ui/schema.json`, `packages/cli/src/ui.spec.ts`, `packages/cli/src/utils/project.ts`, `packages/cli/src/utils/write-files.ts`, `packages/cli/src/testing/harness.ts`, `packages/ui-core/src/lib/imports.spec.ts`, `docs/spec.md`, `docs/plan.md`, `docs/plan/decisiones.md`, `docs/plan/blocks/B.1.md` (y B.3, B.4, B.5, B.6, B.7, B.10, B.P, por las decisiones), `docs/plan/grupo-3-blocks.md`, `docs/auto/decisiones-por-defecto.md`, `docs/design/correcciones-pendientes.md`.
 
 Commit: `feat(cli): ítems de tipo block en el registro, la CLI y el showcase, con la vista previa en iframe y blocks.css aparte (B.1)`.
+
+## B.2 `login-01`
+
+**Estado:** `[x]`, pendiente de comprobación manual (gestor de contraseñas, NVDA, teléfono real, navegador real; a la M.20).
+
+### Plan breve
+
+El Block en `packages/ui-core/src/lib/blocks/login-01/` (`login-01.ts`, `login-01.html`, `index.ts`) con `mimi-card`, `mimi-form-field`, `input[mimiInput]`, `mimi-password`, `mimi-checkbox`, `button[mimiBtn]` y `mimi-separator`; un `form()` de Signal Forms (`required` y `email` en el correo, `required` en la contraseña); API mínima (`loading`, `error`, `forgotHref`, `signupHref`, `submitted`, `provider`, `class`); textos en inglés; íconos de Lucide en línea; error de credenciales derivado de los tokens de error. Ítem `login-01` en el registro, `x-prompt` y README; página `/docs/blocks/login-01` con `BlockDoc` y la vista previa con los estados «Cargando» y «Con error». Comprobación visual con Chrome sin interfaz y la segunda mitad del spike B.1-h.
+
+### Criterios de hecho
+
+- **El Block en ui-core, en el registro y en el sitio, con los estados del diseño y los agregados.** `packages/ui-core/src/lib/blocks/login-01/`; ítem `login-01` (`type: block`, peer `@angular/forms`, `registryDependencies`: button, card, checkbox, form-field, input, password, separator y `utils/cn`), en el `x-prompt` como «login-01 (Block)» y en el README de la CLI; página `/docs/blocks/login-01` (`ready` en `DOCS_NAV`). Estados: normal, cargando (giro y «Signing in…»), error de credenciales y campos inválidos (estos dos, sin diseño), claro y oscuro, escritorio y móvil. Capturas (Chrome sin interfaz, emulando el ancho por CDP: la ventana no baja de 500 px): escritorio oscuro, móvil 375 px claro con error y la página del sitio con el marco; coinciden con el diseño (tarjeta de 400 px con trama en escritorio; sin tarjeta, a todo el ancho y con las redes apiladas en móvil).
+- **Pruebas.** `login-01.spec.ts` (9): envía el valor con un formulario válido; inválido no envía, marca `aria-invalid`, muestra el mensaje y lleva el foco al correo; correo mal escrito; «recordarme» en el valor; `loading` (texto, `aria-busy`, `aria-disabled`, giro `aria-hidden`, no reenvía, `data-state`); `error` en el `role="alert"` que existe siempre; `provider` con cada red; un `h1` que nombra el formulario, la etiqueta de la contraseña y los enlaces; `class` del usuario gana con `cn()`. `login-01-page.spec.ts`: secciones, `iframe`, comando, componentes, los tres archivos reales y los estados de `BLOCK_PREVIEWS`.
+- **`ng g mimi login-01` en un proyecto limpio: copia el Block y sus siete componentes, compila y se ve igual que en el sitio.** Proyecto nuevo con `npx @angular/cli@22 new app --style=tailwind` (`C:\t\b040\clean\app`, npm), CLI empaquetada del repo (`0.4.0-real.2`, sin el Block de prueba), `ng add` y `ng g mimi login-01`: copia `src/app/blocks/login-01/` (3 archivos) y los siete componentes con sus utils, instala `@angular/cdk` (lo pide Password), `mimi.json` con `aliases.blocks` (de `init`) y `blocks.login-01`, y la línea de las rutas. Con la ruta `{ path: 'login', component: Login01 }`, `ng build` en verde (440,20 kB iniciales) y `ng serve` muestra la pantalla igual que en el sitio (con la fuente del sistema: Outfit solo la carga el sitio).
+- **CSS global y JS inicial, crudo y gzip, antes y después (con B.1-h).** CSS global sin cambios (153,39 / 22,05 kB): las clases del Block van en `blocks.css` (8,26 / 2,10 kB). JS inicial 330,69 → 330,71 kB (+0,02), `main` igual (135,93). **Spike B.1-h, segunda mitad: superada.** Con el servidor de desarrollo, se compararon los estilos calculados (24 propiedades) de los 47 elementos del Block con las dos hojas y con una sola (el CSS global sin el `@source not` y sin `blocks.css`), a 1280 y a 375 px: idénticos.
+- **D6.** «login-01 (B.2)»: error de credenciales y campos inválidos sin diseño, contraseña con `mimi-password`, logotipos, separador con texto, botón principal, textos en inglés y la máscara de la trama.
+- **`pnpm build`, `pnpm test` y `pnpm format:check` en verde.** Build sin avisos; docs 176, ui-core 784 y CLI 144 pruebas en verde; formato correcto.
+- **Manual (a la M.20):** NO COMPROBADO (manual, usuario): gestor de contraseñas, NVDA, teléfono real a 360 px, claro y oscuro en un navegador real.
+
+### Revisión crítica
+
+- **Accesibilidad:** el botón de enviar usa `aria-disabled` (sigue enfocable) mientras carga; el error de servidor está en un `role="alert"` que existe siempre (vacío no ocupa lugar: `empty:hidden`). «Remember me» con `<label for>` hacia el botón de `mimi-checkbox`.
+- **Alcance:** en la vista previa del sitio, los mensajes de error van en inglés: la página de vista previa provee `MIMI_ERROR_MESSAGES_EN` (el sitio da los de español en `app.config`).
+- **Bundle:** sin cambios en el inicial; la página y el Block son diferidos.
+- **Regla de edición que no cumplí:** para la comparación de una sola hoja, quité y repuse una línea de `apps/docs/src/styles.css` con `grep … >` desde la terminal; quedó idéntico (`git diff` vacío) y no entra en el commit.
+
+### Archivos
+
+Nuevos: `packages/ui-core/src/lib/blocks/login-01/login-01.ts`, `login-01.html`, `index.ts`, `login-01.spec.ts`; `apps/docs/src/app/pages/docs/blocks/login-01-page.ts` y `login-01-page.spec.ts`.
+
+Modificados: `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/preview/block-preview-page.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.2.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
+
+Commit: `feat(blocks): login-01, inicio de sesión centrado con Signal Forms (B.2)`.

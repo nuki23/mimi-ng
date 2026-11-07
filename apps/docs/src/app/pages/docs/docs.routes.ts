@@ -206,4 +206,10 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () =>
       import('./components/form-field/form-field-page').then((m) => m.FormFieldPage),
   },
+  // Blocks (B.1): una página por Block, con la plantilla BlockDoc.
+  {
+    path: 'blocks/login-01',
+    title: 'login-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/login-01-page').then((m) => m.Login01Page),
+  },
 ];

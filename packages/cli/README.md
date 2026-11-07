@@ -112,6 +112,8 @@ export class App {}
 
 Pantallas enteras (inicio de sesión, registro, ajustes…) hechas con los componentes de Mimi. Se agregan con el mismo comando, por ejemplo `ng g mimi` seguido del nombre del Block: la pantalla se copia a `src/app/blocks/<nombre>` (`aliases.blocks` en `mimi.json`) y los componentes que usa, a la carpeta de siempre. Es un componente de página: agrégalo a tus rutas. La pantalla es tuya; si la modificas, `ng g mimi` no la vuelve a tocar al actualizar (te avisa y `--overwrite` la reemplaza entera).
 
+- **login-01** (inicio de sesión centrado, con Google y GitHub): `ng g mimi login-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-01)
+
 ## Tus cambios
 
 - Guarda la carpeta `.mimi/` en git: tiene la copia original de cada archivo, y con ella Mimi sabe qué cambiaste tú.

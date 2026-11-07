@@ -214,3 +214,13 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   Blocks: la página del sitio (B.1, 07/11/2026):
   - **Página de un Block sin diseño:** `Mimi F6 Blocks.dc.html` es el índice de los Blocks, no la página de documentación. La página (`/docs/blocks/<nombre>`) se armó con lo que ya tiene el sitio: título, descripción, la vista previa en un marco con borde y fondo `muted`, `InstallCommand`, «Componentes que usa» como enlaces en píldora, el código con `CodeBlock` (un bloque por archivo) y la tabla de API. Pedir el diseño de la página.
   - **Marco de la vista previa:** `iframe` de 760px de alto, con tres `mimi-toggle-group` encima (Escritorio · Móvil (375 px), Claro · Oscuro y el estado) y el enlace «Abrir en una pestaña». El ancho móvil (375px) es el de los marcos de `F6 Blocks`; el alto y los controles no están en el diseño.
+
+  login-01 (B.2, 07/11/2026):
+  - **Error de credenciales sin diseño:** un `role="alert"` encima del botón, con el ícono `circle-alert` y los colores de error suave (`destructive-soft-bg`, `destructive-soft-foreground`, radio `--mimi-radius`), derivados del error de Input. Pedir el diseño.
+  - **Campos inválidos sin diseño:** los de `mimi-form-field` y `mimi-input` (borde y etiqueta en `destructive`, mensaje debajo); al enviar con errores, el foco va al primero.
+  - **Contraseña:** el diseño la escribe a mano (input y botón del ojo); el Block usa `mimi-password` (G2.3), con el mismo botón (`aria-pressed`, nombre fijo).
+  - **Logotipos:** la «G» de Google es la letra en un círculo del diseño (no el logotipo); GitHub, el ícono `github` de Lucide escrito en línea (Lucide lo marca como obsoleto por ser una marca).
+  - **Separador con texto:** `mimi-separator` no tiene texto; «or with your email» va entre dos separadores dentro del Block.
+  - **Botón principal:** 4px más alto que el control (`calc(var(--mimi-control-height) + 4px)`), con `class` en `mimiBtn`; el giro de carga se detiene con «reducir movimiento» (el diseño no lo dice).
+  - **Textos en inglés** (B.1-i): los del diseño, traducidos («Sign in», «Welcome back to Mimi Sales.», «or with your email», «Forgot it?», «Remember me for 30 days», «Signing in…», «Don't have an account? Sign up»).
+  - **Trama de puntos:** la máscara usa `var(--mimi-foreground)` en lugar de `#000` (solo cuenta el canal alfa; así no hay un color fijo).

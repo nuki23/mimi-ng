@@ -10,4 +10,12 @@ export interface BlockPreview {
   states?: Record<string, Record<string, unknown>>;
 }
 
-export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {};
+export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {
+  'login-01': {
+    load: () => import('@/blocks/login-01').then((m) => m.Login01),
+    states: {
+      loading: { loading: true },
+      error: { error: 'Wrong email or password. Try again or reset your password.' },
+    },
+  },
+};
