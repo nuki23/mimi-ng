@@ -2,9 +2,9 @@
 
 [← Índice del plan](../../plan.md)
 
-- [~] B.11 `ng g mimi login-01` deja de generar un componente «mimi-login-01» y crea una página del usuario (`src/app/pages/login/`, clase `LoginPage`, con su archivo de rutas).
+- [x] B.11 `ng g mimi login-01` deja de generar un componente «mimi-login-01» y crea una página del usuario (`src/app/pages/login/`, clase `LoginPage`, con su archivo de rutas). (07/11/2026; pendiente de comprobación manual: ver las páginas en un navegador real, a la M.20. Informe: `docs/auto/blocks-paginas-2026-11-07.md`.)
   - Sin versión (sale en la siguiente que se publique; el CHANGELOG la lleva en «Por publicar») · Tamaño L (CLI, registro, showcase y escenarios con el `.tgz`) · Depende de: B.P (hecha; la 0.4.0, publicada el 07/11/2026) · Bloquea: B.9 (`table-01` tendrá que declarar si es página o sección)
-  - Estado: en curso en `auto/blocks-paginas-2026-11-07` (Claude Code, modo autónomo), desde el 07/11/2026.
+  - Estado: hecha el 07/11/2026 en `auto/blocks-paginas-2026-11-07` (Claude Code, modo autónomo), con los tres arreglos de la revisión independiente. Queda para el usuario: el navegador real y si se reescribe el comentario de cabecera de los Blocks de página en ui-core (informe, sección 7).
   - Leer antes: spec 4, «Blocks»; spec 5, «Qué hace `mimi`» (pasos 3 a 9: todo o nada, bases, `mimi.json`), «Aviso de un componente que usa un Block (M1)», «`@source` de los Blocks con `source(none)` (G1)», «`mimi.json`» y «Alias válidos (M2)»; `docs/historial/blocks/B.1.md` (la arquitectura del tipo `block`); `docs/auto/revision-blocks-0.4.0-2026-11-07.md` (M1, M2, G1).
   - Diseño: no aplica (es la CLI; las pantallas no cambian). La página de Blocks del sitio se arma con lo que ya tiene (D6).
   - Objetivo: que un Block que es una pantalla entera quede en el proyecto como una página propia del usuario, con nombre de página y su ruta lista para pegar, y que los que son una parte de una página sigan copiándose como ahora.
