@@ -84,7 +84,7 @@ export class InstallationPage {
     '    "theme": "src/app/mimi.preset.ts"',
     '  },',
     '  "components": {',
-    '    "button": { "version": "0.3.0" }',
+    '    "button": { "version": "0.4.0" }',
     '  }',
     '}',
   ].join('\n');

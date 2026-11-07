@@ -96,6 +96,11 @@ describe('Páginas de los Blocks', () => {
       expect(el.textContent).toContain(`ng g mimi ${name}`);
       // Ningún Block pone <main>: la página lo dice (con lo del <header>).
       expect(el.querySelector('[data-slot="landmarks"]')?.textContent).toContain('<main>');
+      // Un Block es tuyo; aliases.blocks se puede cambiar; la CLI no toca las rutas.
+      const notes = el.querySelector('[data-slot="block-notes"]')?.textContent ?? '';
+      expect(notes).toContain('componente Angular tuyo');
+      expect(notes).toContain('src/app/pages');
+      expect(notes).toContain('app.routes.ts');
       expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
         'preview',
         'installation',

@@ -2,7 +2,7 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
-## 0.4.0 (por publicar: poner la fecha al publicar): pantallas
+## 0.4.0 (07/11/2026): pantallas
 
 ### Antes de actualizar
 
@@ -26,6 +26,8 @@ Seis pantallas hechas con los componentes de Mimi, que se instalan con el mismo 
 - **pricing-01** (`ng g mimi pricing-01`): tres planes con mensual/anual (el ahorro se calcula con los precios), el destacado con un borde de color estático y los precios con `Intl.NumberFormat`.
 
 **Cómo se instalan:** `ng g mimi login-01` copia la pantalla a `src/app/blocks/login-01/` y los componentes que usa a tu carpeta de componentes, con sus dependencias. La carpeta de los Blocks es `aliases.blocks` en `mimi.json`: `ng add` la escribe desde esta versión y, en un proyecto de la 0.3.0, `ng g mimi` la agrega la primera vez que copias un Block (por defecto, la hermana de `components/`: `src/app/blocks`). Cada Block es un componente de página standalone (`Login01`, selector `mimi-login-01`): ponlo en tus rutas (`{ path: 'login', component: Login01 }`) y conéctalo con sus salidas (`submitted`, `verify`, `saved`…). Textos en inglés, en la plantilla; formularios con Signal Forms; íconos en SVG en línea (sin dependencias). Ningún Block pone `<main>`: va en tu layout.
+
+**Un Block es tuyo desde que se copia.** Es un componente Angular de tu proyecto, no una pieza de la biblioteca: los componentes de Mimi (Button, Input…) tienen una API estable que se cuida entre versiones; un Block es un punto de partida, y sus entradas y salidas pueden cambiar de una versión a otra. Lo normal es editarlo. **La carpeta la eliges tú:** cambia `aliases.blocks` en `mimi.json` (por ejemplo, a `src/app/pages`) antes de agregar el Block; tiene que ser una ruta relativa a la raíz del proyecto. **La CLI no toca tus rutas:** registra la pantalla tú en `app.routes.ts` (el resumen de `ng g mimi` te da la línea).
 
 **Cómo se actualizan:** igual que un componente, todo o nada. Si modificaste tu pantalla (lo normal), `ng g mimi` no la toca y te lo dice sin alarma; `--overwrite` la reemplaza entera. Un Block tampoco se actualiza si se bloquea uno de sus componentes (no compilaría). Sus componentes sí se actualizan aunque el Block quede como estaba, y **`ng g mimi` te avisa** cuando actualiza un componente que usa uno de tus Blocks: «Tu Block login-01 usa button, que se actualizó a 0.4.0; revisa el CHANGELOG…».
 
