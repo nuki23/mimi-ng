@@ -22,7 +22,7 @@ Blocks de la spec 4 («Blocks») que no usan Data Table ni componentes del Grupo
   - Depende de: B.1
 - [ ] B.7 `pricing-01` (precios). Diseño: `Block pricing-01`.
   - Depende de: B.1
-- [ ] B.P Puerta de los Blocks (v0.4.0): la lista de «Puerta del grupo».
+- [ ] B.P Puerta de los Blocks (v0.4.0): la lista de «Puerta del grupo». En el CHANGELOG de la 0.4.0, también lo de mantenimiento que sale en esta versión: la M.19 (excluir `.mimi/` del escaneo de Tailwind; el texto propuesto está en la M.19, `docs/plan/mantenimiento.md`).
   - Depende de: B.1 a B.7
 
 ## Grupo 3 → v0.5.0: datos

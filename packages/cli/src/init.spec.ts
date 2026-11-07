@@ -92,12 +92,12 @@ describe('init', () => {
     expect(tree.exists(`/${UI}/utils/field-state.ts`)).toBe(false);
     expect(tree.exists(`/${UI}/utils/index.ts`)).toBe(false);
 
-    // El tema se importa justo después de Tailwind, sin @source.
+    // El tema se importa justo después de Tailwind; .mimi/ (en la raíz) no se escanea.
     const css = tree.readContent(STYLES);
     expect(css).toMatch(
-      /@import 'tailwindcss';\r?\n@import "\.\/app\/components\/ui\/theme\/theme-base\.css";/,
+      /@import 'tailwindcss';\r?\n@import "\.\/app\/components\/ui\/theme\/theme-base\.css";\r?\n@source not "\.\.\/\.\.\/\.\.\/\.mimi";/,
     );
-    expect(css).not.toContain('@source');
+    expect(css.match(/@source/g)).toHaveLength(1);
 
     // Alias en tsconfig.json, conservando los comentarios de Angular.
     const tsconfig = tree.readContent('/tsconfig.json');
@@ -156,9 +156,53 @@ describe('init', () => {
 
     const result = await run({}, tree);
     expect(result.readContent('/projects/app/src/global/app.css')).toBe(
-      '@import "tailwindcss";\n@import "../app/components/ui/theme/theme-base.css";\n',
+      '@import "tailwindcss";\n' +
+        '@import "../app/components/ui/theme/theme-base.css";\n' +
+        '@source not "../../../../.mimi";\n',
     );
     expect(json(result, '/mimi.json').tailwind.css).toBe('projects/app/src/global/app.css');
+  });
+
+  it('con Tailwind 4.0 no escribe @source not (no lo entiende) y avisa', async () => {
+    const { runner, run, logs } = harness();
+    const tree = await createWorkspace(runner);
+    const pkg = json(tree, '/package.json');
+    pkg.devDependencies.tailwindcss = '~4.0.17';
+    tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+
+    const result = await run({}, tree);
+    expect(result.readContent(STYLES)).not.toContain('@source');
+    expect(
+      logs.some((l) => l.level === 'warn' && l.message.includes('@source not "../../../.mimi";')),
+    ).toBe(true);
+  });
+
+  it('con ^4.0.17 sin instalar sí la escribe (instala la última 4.x); con 4.0.9 instalada, no', async () => {
+    const caret = harness();
+    const tree = await createWorkspace(caret.runner);
+    const pkg = json(tree, '/package.json');
+    pkg.devDependencies.tailwindcss = '^4.0.17';
+    tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+    const written = await caret.run({}, tree);
+    expect(written.readContent(STYLES)).toContain('@source not "../../../.mimi";');
+
+    const pinned = harness();
+    const other = await createWorkspace(pinned.runner);
+    other.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+    other.create('/node_modules/tailwindcss/package.json', JSON.stringify({ version: '4.0.9' }));
+    const result = await pinned.run({}, other);
+    expect(result.readContent(STYLES)).not.toContain('@source');
+    expect(
+      pinned.logs.some((l) => l.level === 'warn' && l.message.startsWith('Tailwind 4.0')),
+    ).toBe(true);
+  });
+
+  it('con @source not ya escrito (comillas simples) no lo repite', async () => {
+    const { runner, run } = harness();
+    const tree = await createWorkspace(runner);
+    tree.overwrite(STYLES, "@import 'tailwindcss';\n@source not '../../../.mimi';\n");
+    const result = await run({}, tree);
+    expect(result.readContent(STYLES).match(/@source/g)).toHaveLength(1);
   });
 
   it('con dos proyectos pide --project, y con --project configura ese', async () => {

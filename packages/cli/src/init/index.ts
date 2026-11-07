@@ -19,6 +19,11 @@ import {
   readJson,
 } from '../utils/project';
 import {
+  mimiSourceNotLine,
+  missingMimiExclusion,
+  tailwindSupportsSourceNot,
+} from '../utils/tailwind';
+import {
   BASE_DIR,
   type FileReport,
   blockedMessages,
@@ -52,6 +57,8 @@ interface Plan {
   projectName: string;
   cssPath: string;
   sourceNone: boolean;
+  /** Tailwind entiende `@source not` (4.1+). */
+  sourceNot: boolean;
   componentsDir: string;
   buildTsConfig?: string;
   mimiConfig: MimiConfig | null;
@@ -157,6 +164,7 @@ async function inspect(tree: Tree, options: InitOptions): Promise<Plan> {
     projectName: name,
     cssPath: withTailwind,
     sourceNone: findTailwindImport(tree.readText(withTailwind))!.sourceNone,
+    sourceNot: tailwindSupportsSourceNot(tree, deps['tailwindcss']),
     componentsDir,
     buildTsConfig: typeof tsConfig === 'string' ? normalizePath(tsConfig) : undefined,
     mimiConfig,
@@ -208,6 +216,19 @@ function updateGlobalCss(plan: Plan): Rule {
         `El @import de Tailwind en ${plan.cssPath} usa source(none): Tailwind no escanea nada por su ` +
           `cuenta. Se agregó @source "${sourcePath}"; para que genere las clases de los componentes.`,
       );
+    }
+    // Sin source(none), Tailwind escanea todo el workspace salvo lo que ignora git, y .mimi/ va
+    // en git: las clases de las copias originales acabarían en el CSS aunque el usuario ya las
+    // haya cambiado o quitado en sus componentes.
+    // Con Tailwind 4.0 (no entiende `@source not`) no se escribe: solo se avisa.
+    if (missingMimiExclusion(css, plan.cssPath)) {
+      const line = mimiSourceNotLine(plan.cssPath);
+      if (plan.sourceNot) lines.push(line);
+      else
+        context.logger.warn(
+          `Tailwind 4.0 escanea ${BASE_DIR}/ y genera CSS de más. Con Tailwind 4.1 o superior, ` +
+            `agrega ${line} en ${plan.cssPath} (init lo hace si lo vuelves a ejecutar).`,
+        );
     }
     if (lines.length === 0) return;
     css = insertAfterTailwind(css, lines);

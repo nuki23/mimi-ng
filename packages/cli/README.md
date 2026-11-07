@@ -29,13 +29,21 @@ ng add @mimi-ng/cli
 
 Verifica Angular y Tailwind (si falta algo, se detiene sin modificar nada) y configura el proyecto:
 
-- importa el tema de Mimi en tu CSS global, justo después de `@import "tailwindcss"`;
+- importa el tema de Mimi en tu CSS global, justo después de `@import "tailwindcss"`, y excluye `.mimi/` del escaneo de Tailwind (`@source not "../.mimi";`, con Tailwind 4.1 o superior);
 - agrega el alias `@/components/ui/*` al `tsconfig.json`;
 - registra la CLI en `angular.json`, para que funcione `ng g mimi`;
 - instala `clsx`, `tailwind-merge` y `class-variance-authority` con tu gestor de paquetes;
 - crea `mimi.json` y la carpeta `.mimi/`.
 
 Con `--icons` instala también [`@lucide/angular`](https://lucide.dev) para tus íconos.
+
+**Si configuraste el CSS a mano, o instalaste con la 0.3.0 o una anterior,** agrega después de `@import "tailwindcss"` (la ruta va de tu CSS global a la carpeta `.mimi/` de la raíz; con `src/styles.css`, así):
+
+```css
+@source not "../.mimi";
+```
+
+Sin esa línea, Tailwind escanea las copias originales de `.mimi/` (van en git) y tu CSS lleva sus clases aunque ya las hayas cambiado. `ng g mimi` te avisa si falta. Necesita Tailwind 4.1 o superior: la 4.0 no entiende `@source not`.
 
 ## Agregar componentes
 

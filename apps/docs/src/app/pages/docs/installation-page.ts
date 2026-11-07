@@ -19,7 +19,7 @@ export class InstallationPage {
   protected readonly changes = [
     {
       file: 'src/styles.css',
-      what: 'Importa el tema de Mimi justo después de @import "tailwindcss".',
+      what: 'Importa el tema de Mimi justo después de @import "tailwindcss" y, con Tailwind 4.1 o superior, excluye .mimi/ del escaneo de Tailwind (@source not "../.mimi";).',
     },
     {
       file: 'tsconfig.json',
@@ -40,6 +40,13 @@ export class InstallationPage {
     { file: 'mimi.json', what: 'Crea la configuración de Mimi.' },
     { file: '.mimi/', what: 'Guarda las copias originales de los archivos y sus versiones.' },
   ];
+
+  /** El CSS global que deja `ng add` en `src/styles.css` (la exclusión, desde la 0.4.0). */
+  protected readonly globalCss = [
+    "@import 'tailwindcss';",
+    '@import "./app/components/ui/theme/theme-base.css";',
+    '@source not "../.mimi";',
+  ].join('\n');
 
   protected readonly options = [
     {

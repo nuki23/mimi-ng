@@ -11,6 +11,11 @@ import { normalizePath } from '../init/paths';
 import { registry, resolveItems } from '../registry';
 import { type MimiConfig, type PackageJson, allDependencies, readJson } from '../utils/project';
 import {
+  mimiSourceNotLine,
+  missingMimiExclusion,
+  tailwindSupportsSourceNot,
+} from '../utils/tailwind';
+import {
   BASE_DIR,
   type FileReport,
   blockedMessages,
@@ -49,6 +54,11 @@ interface Plan {
   outdated: OutdatedPeer[];
   /** Los de cdk y aria que el proyecto tendrá (declarados o agregados): van en el `ng update`. */
   updatable: string[];
+  /**
+   * Falta excluir `.mimi/` del escaneo de Tailwind (4.1 o superior) en el CSS global: solo se
+   * avisa, con la línea exacta (init la escribe; ng g mimi no toca esa parte del CSS).
+   */
+  missingExclusion: { cssPath: string; line: string } | null;
 }
 
 interface OutdatedPeer {
@@ -164,7 +174,35 @@ function inspect(tree: Tree, options: UiOptions): Plan {
   const componentsDir = normalizePath(config.aliases?.components ?? 'src/app/components/ui');
   const outdated = outdatedPeers(tree, items, installed, newPackages);
   const updatable = PEERS_WITH_MINIMUM.filter((name) => installed[name] || newPackages[name]);
-  return { componentsDir, config, items, implicit, newPackages, outdated, updatable };
+  const missingExclusion = mimiExclusion(tree, config, installed);
+  return {
+    componentsDir,
+    config,
+    items,
+    implicit,
+    newPackages,
+    outdated,
+    updatable,
+    missingExclusion,
+  };
+}
+
+/**
+ * Sin `@source not` hacia `.mimi/`, Tailwind escanea las copias originales (van en git) y genera
+ * sus clases aunque el usuario ya las haya cambiado en sus componentes. Proyectos de la 0.3.0 o
+ * anteriores no la tienen: se avisa para que no tengan que volver a ejecutar ng add. Con
+ * Tailwind 4.0 no se avisa aquí (no la entiende; init ya lo explicó).
+ */
+function mimiExclusion(
+  tree: Tree,
+  config: MimiConfig,
+  installed: Record<string, string>,
+): Plan['missingExclusion'] {
+  const cssPath = config.tailwind?.css;
+  if (!cssPath || !tree.exists(cssPath)) return null;
+  if (!tailwindSupportsSourceNot(tree, installed['tailwindcss'])) return null;
+  if (!missingMimiExclusion(tree.readText(cssPath), cssPath)) return null;
+  return { cssPath, line: mimiSourceNotLine(cssPath) };
 }
 
 // ── Versiones mínimas de cdk y aria (M.4) ─────────────────────────────────────────────
@@ -414,6 +452,13 @@ function summary(plan: Plan, report: FileReport): Rule {
         `Mimi necesita @angular/cdk y @angular/aria ${required} o posterior (las anteriores ` +
           `tienen errores conocidos con sus componentes) y tu proyecto tiene:\n${lines.join('\n')}\n` +
           `Actualízalos con:\n  ng update ${plan.updatable.join(' ')}`,
+      );
+    }
+    if (plan.missingExclusion) {
+      const { cssPath, line } = plan.missingExclusion;
+      log.warn(
+        `Tailwind escanea ${BASE_DIR}/ (las copias originales de Mimi) y genera CSS de clases que ` +
+          `quizá ya no usas. Agrega a ${cssPath}, después de @import "tailwindcss":\n  ${line}`,
       );
     }
     if (hasFileChanges(report)) {

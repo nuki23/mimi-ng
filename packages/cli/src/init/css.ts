@@ -45,8 +45,12 @@ export function insertAfterTheme(css: string, lines: string[]): string | null {
   return css.slice(0, end) + lines.map((line) => eol + line).join('') + css.slice(end);
 }
 
-/** ¿Ya hay un `@import` o `@source` con esa ruta (con comillas simples o dobles)? */
-export function hasDirective(css: string, directive: '@import' | '@source', path: string): boolean {
+/** ¿Ya hay un `@import`, `@source` o `@source not` con esa ruta (comillas simples o dobles)? */
+export function hasDirective(
+  css: string,
+  directive: '@import' | '@source' | '@source not',
+  path: string,
+): boolean {
   const escaped = path.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return new RegExp(`${directive}\\s+(["'])${escaped}\\1`).test(css);
 }

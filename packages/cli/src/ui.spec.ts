@@ -974,3 +974,82 @@ describe('ng g mimi: todo o nada por componente', () => {
     expect(warnings()).toEqual([]);
   });
 });
+
+describe('ng g mimi: aviso si Tailwind escanea .mimi/', () => {
+  const CSS = '/projects/app/src/styles.css';
+  const LINE = '@source not "../../../.mimi";';
+  const exclusionWarning = (warnings: string[]) =>
+    warnings.find((w) => w.startsWith('Tailwind escanea .mimi/base/'));
+
+  /** Un proyecto de la 0.3.0 o anterior: init no escribió la exclusión. */
+  async function withoutExclusion(tailwind?: string, installedTailwind?: string) {
+    const h = await initialized();
+    h.tree.overwrite(CSS, h.tree.readContent(CSS).replace(/@source not[^\n]*\n/, ''));
+    if (tailwind) {
+      const pkg = json(h.tree, '/package.json');
+      pkg.devDependencies.tailwindcss = tailwind;
+      h.tree.overwrite('/package.json', JSON.stringify(pkg, null, 2));
+    }
+    if (installedTailwind) {
+      h.tree.create(
+        '/node_modules/tailwindcss/package.json',
+        JSON.stringify({ version: installedTailwind }),
+      );
+    }
+    return h;
+  }
+
+  it('sin la línea: avisa con la línea exacta y no cambia el CSS', async () => {
+    const { run, tree, warnings } = await withoutExclusion();
+    const before = tree.readContent(CSS);
+    expect(before).not.toContain('@source');
+    const result = await run('mimi', { components: ['button'] }, tree);
+    expect(exclusionWarning(warnings())).toBe(
+      'Tailwind escanea .mimi/base/ (las copias originales de Mimi) y genera CSS de clases que ' +
+        `quizá ya no usas. Agrega a projects/app/src/styles.css, después de @import "tailwindcss":\n  ${LINE}`,
+    );
+    expect(result.readContent(CSS)).toBe(before);
+  });
+
+  it('con la línea (de init o escrita a mano con comillas simples): no avisa', async () => {
+    const { run, tree, warnings } = await initialized();
+    expect(tree.readContent(CSS)).toContain(LINE);
+    await run('mimi', { components: ['button'] }, tree);
+    expect(exclusionWarning(warnings())).toBeUndefined();
+
+    const manual = await withoutExclusion();
+    manual.tree.overwrite(
+      CSS,
+      manual.tree
+        .readContent(CSS)
+        .replace(/(@import ['"]tailwindcss['"];)/, "$1\n@source not '../../../.mimi';"),
+    );
+    await manual.run('mimi', { components: ['button'] }, manual.tree);
+    expect(exclusionWarning(manual.warnings())).toBeUndefined();
+  });
+
+  it('con source(none): no avisa (Tailwind no escanea nada por su cuenta)', async () => {
+    const { run, tree, warnings } = await withoutExclusion();
+    tree.overwrite(
+      CSS,
+      tree
+        .readContent(CSS)
+        .replace(/@import (['"])tailwindcss\1;/, "@import 'tailwindcss' source(none);"),
+    );
+    await run('mimi', { components: ['button'] }, tree);
+    expect(exclusionWarning(warnings())).toBeUndefined();
+  });
+
+  it.each([
+    ['~4.0.17', undefined, false],
+    ['4.0.5', undefined, false],
+    ['^4.0.17', '4.0.9', false],
+    ['^4.0.17', undefined, true],
+    ['^4.1.12', undefined, true],
+    ['~4.0.17', '4.1.0', true],
+  ])('Tailwind %s (instalado: %s): avisa = %s', async (range, installedTw, expected) => {
+    const { run, tree, warnings } = await withoutExclusion(range, installedTw);
+    await run('mimi', { components: ['button'] }, tree);
+    expect(exclusionWarning(warnings()) !== undefined).toBe(expected);
+  });
+});

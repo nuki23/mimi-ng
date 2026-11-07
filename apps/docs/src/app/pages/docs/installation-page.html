@@ -139,6 +139,36 @@
     y trataría todos tus componentes como modificados.
   </p>
 
+  <h3 id="files-tailwind" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Que Tailwind no escanee .mimi/
+  </h3>
+  <p class="text-pretty">
+    Tailwind busca clases en todo el proyecto salvo lo que ignora git, y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">.mimi/</code> va en
+    git: sin excluirla, tu CSS lleva también las clases de las copias originales, aunque ya las
+    hayas cambiado en tus componentes.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng add</code> lo deja
+    así en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">src/styles.css</code>:
+  </p>
+  <app-code-block [code]="globalCss" lang="css" />
+  <p class="text-pretty">
+    Si configuraste el CSS a mano, o instalaste Mimi con la 0.3.0 o una anterior, agrega la línea
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&#64;source not "../.mimi";</code
+    >
+    después de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&#64;import "tailwindcss"</code
+    >. La ruta es relativa a tu CSS global, hasta la carpeta
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">.mimi/</code> de la
+    raíz del workspace.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g mimi</code> te
+    avisa, con la línea exacta, si falta. Necesita Tailwind 4.1 o superior: la 4.0 no entiende
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;source not</code>
+    (no la agregues; actualiza Tailwind).
+  </p>
+
   <h2 id="updates" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
     Si modificaste un componente
   </h2>
