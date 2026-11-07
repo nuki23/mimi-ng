@@ -43,3 +43,11 @@ Commit: `feat(cli): avisa si un componente actualizado lo usa un Block instalado
 **Pruebas:** `blocks.spec.ts`, «M2» (9): ocho casos de los dos alias con `ng g mimi` (error exacto, el árbol sin cambios y sin ninguna carpeta «C:») y uno con `init`. `pnpm test:cli`: 159 en verde. Spec 5 al día.
 
 Commit: `fix(cli): error claro con alias absolutos o fuera del proyecto en mimi.json (M2)`.
+
+## M3: settings-01, guardar con un error desde otra sección
+
+**Prueba primero** (`settings-01.spec.ts`, «M3»): usuario inválido en Perfil, cambiar a Facturación (el panel de Perfil deja de existir: contenido diferido de Tabs), pulsar «Save». **Falló como dijo el revisor:** volvía a Perfil, pero el foco se quedaba en la pestaña (`expected <button role="tab"…> to be <input mimiinput…>`): el `queueMicrotask` llegaba antes de que aria creara el panel.
+
+**Arreglo:** el campo con error queda pendiente (`pendingFocus`) y lo enfoca el primer render en el que el campo ya está enlazado a su `[formField]` (`formFieldBindings().length > 0`), desde el `afterEveryRender` que ya tenía el Block; si ya lo está (se guarda desde Perfil), se enfoca en el acto. **La prueba pasa;** `settings-01.spec.ts`: 12 en verde.
+
+Commit: `fix(blocks): settings-01 enfoca el campo con error al guardar desde otra sección (M3)`.

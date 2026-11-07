@@ -165,6 +165,21 @@ describe('Settings01', { timeout: 20_000 }, () => {
     expect(document.activeElement).toBe(byLabel('Username'));
   });
 
+  it('M3: Guardar con un error desde OTRA sección vuelve a Perfil y enfoca el campo', async () => {
+    const { type, button, host, byLabel, fixture, tab } = await setup();
+    await type('Username', 'Ana Torres');
+    tab('billing').click();
+    await settle(fixture);
+    expect(host.tab()).toBe('billing');
+    // El panel de Perfil no existe mientras se ve otra sección (contenido diferido de Tabs).
+    expect(document.body.textContent).not.toContain('Public profile');
+    button('Save').click();
+    await settle(fixture);
+    expect(host.saved).toEqual([]);
+    expect(host.tab()).toBe('profile');
+    expect(document.activeElement).toBe(byLabel('Username'));
+  });
+
   it('el contador de la biografía describe el campo', async () => {
     const { byLabel, type, el } = await setup();
     const bio = byLabel('Bio') as HTMLTextAreaElement;

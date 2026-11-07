@@ -16,7 +16,14 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { FormField, form, maxLength, pattern, required } from '@angular/forms/signals';
+import {
+  FormField,
+  type ValidationError,
+  form,
+  maxLength,
+  pattern,
+  required,
+} from '@angular/forms/signals';
 import { MimiAvatar, MimiAvatarFallback, MimiAvatarImage } from '@/components/ui/avatar';
 import { MimiBadge } from '@/components/ui/badge';
 import { MimiButton } from '@/components/ui/button';
@@ -286,6 +293,7 @@ export class Settings01 {
     const host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
     afterEveryRender({
       write: () => {
+        this.focusPending();
         for (const sw of Array.from(host.querySelectorAll('mimi-switch[data-describedby]'))) {
           const button = sw.querySelector('[role="switch"]');
           const id = sw.getAttribute('data-describedby')!;
@@ -334,14 +342,28 @@ export class Settings01 {
     const state = this.settings();
     state.markAsTouched();
     if (state.invalid()) {
-      // Un error en otra sección: se va a Perfil (los campos con validación están ahí).
+      // Los campos con validación están en Perfil. Si se guarda desde otra sección, su panel no
+      // existe todavía (contenido diferido de Tabs): el foco queda pendiente hasta que el campo
+      // esté enlazado en el DOM (M3), y lo pone el render que lo crea.
       this.tab.set('profile');
-      queueMicrotask(() => state.errorSummary()[0]?.fieldTree().focusBoundControl());
+      this.pendingFocus = state.errorSummary()[0]?.fieldTree ?? null;
+      this.focusPending();
       return;
     }
     const value = { ...this.model() };
     this.initial.set(value);
     this.saved.emit(value);
+  }
+
+  /** El campo con error que espera su panel para recibir el foco (M3). */
+  private pendingFocus: ValidationError.WithFieldTree['fieldTree'] | null = null;
+
+  /** Enfoca el campo pendiente si ya está en el DOM (enlazado a su `[formField]`). */
+  private focusPending(): void {
+    const field = this.pendingFocus?.();
+    if (!field || field.formFieldBindings().length === 0) return;
+    this.pendingFocus = null;
+    field.focusBoundControl();
   }
 
   private valueOf(): Settings01Value {
