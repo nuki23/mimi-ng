@@ -105,7 +105,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.17 Pruebas de docs independientes del `localStorage` de Node 26 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.18 Guardar en el repo el script de medición a 360 px · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.19 Excluir `.mimi/` del escaneo de Tailwind (`init` la escribe; `ng g mimi` avisa) · sin versión (sale en la 0.4.0) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9, release de GitHub y prueba desde npm de la 0.3.0; la hace el usuario) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9, release de GitHub y prueba desde npm de la 0.3.0; y lo manual de los Blocks de la 0.4.0 cuando se hagan; la hace el usuario) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
@@ -114,16 +114,19 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 
 ## Blocks → v0.4.0: pantallas
 
-Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md) (tareas de una línea; cada una tendrá su archivo cuando se detalle). División decidida por el usuario el 05/11/2026 en la G2.P (spec 4, «Blocks»): los Blocks que solo usan componentes publicados van en la 0.4.0; `table-01` con el Grupo 3 (0.5.0); `dashboard-01` con el Grupo 4 (0.6.0; ajuste por dependencias, pendiente de revisión del usuario).
+División decidida por el usuario el 05/11/2026 en la G2.P (spec 4, «Blocks»): los Blocks que solo usan componentes publicados van en la 0.4.0; `table-01` con el Grupo 3 (0.5.0); `dashboard-01` con el Grupo 4 (0.6.0; ajuste por dependencias, pendiente de revisión del usuario).
 
-- [ ] B.1 Ítems de tipo `block` en el registro · v0.4.0 · — · depende: G2.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.2 `login-01` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.3 `login-02` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.4 `signup-01` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.5 `otp-01` · v0.4.0 · — · depende: B.1, G2.5 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.6 `settings-01` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.7 `pricing-01` · v0.4.0 · — · depende: B.1 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] B.P Puerta de los Blocks · v0.4.0 · — · depende: B.1 a B.7 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+Detalle (06/11/2026): un archivo por tarea en `docs/plan/blocks/` (el nombre es el ID). **Las preguntas de la 0.4.0 están abiertas** (`docs/plan/decisiones.md`, «Blocks 0.4.0»): el usuario las revisa antes de empezar. Orden recomendado (respeta las dependencias): B.1 → B.2 → B.3 → B.4 → B.5 → B.10 → B.6 → B.7 → B.P. La B.1 va primero (la CLI y la vista previa son de todos); la B.10 justo antes de la B.6, que la necesita. Con la B.1 hecha, el orden entre B.2 a B.5 y B.7 se puede cambiar. Presupuesto: si los Blocks van al CSS global (B.1-h, opción (b)), el aviso de 160 kB salta hacia el tercer o cuarto Block en cualquier orden, sin llegar al error (estimado 162–167 kB).
+
+- [ ] B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase · v0.4.0 · L · depende: G2.P · [docs/plan/blocks/B.1.md](plan/blocks/B.1.md)
+- [ ] B.2 `login-01` · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.2.md](plan/blocks/B.2.md)
+- [ ] B.3 `login-02` · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.3.md](plan/blocks/B.3.md)
+- [ ] B.4 `signup-01` · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.4.md](plan/blocks/B.4.md)
+- [ ] B.5 `otp-01` · v0.4.0 · S · depende: B.1, G2.5 · [docs/plan/blocks/B.5.md](plan/blocks/B.5.md)
+- [ ] B.10 Tabs con orientación vertical · v0.4.0 · M · depende: G1.9 · [docs/plan/blocks/B.10.md](plan/blocks/B.10.md)
+- [ ] B.6 `settings-01` · v0.4.0 · L · depende: B.1, B.10 · [docs/plan/blocks/B.6.md](plan/blocks/B.6.md)
+- [ ] B.7 `pricing-01` · v0.4.0 · M · depende: B.1 · [docs/plan/blocks/B.7.md](plan/blocks/B.7.md)
+- [ ] B.P Puerta de los Blocks · v0.4.0 · L · depende: B.1 a B.7, B.10 · [docs/plan/blocks/B.P.md](plan/blocks/B.P.md)
 
 ## Grupo 3 → v0.5.0: datos
 

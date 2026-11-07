@@ -1,0 +1,45 @@
+# B.6 `settings-01`
+
+[← Índice del plan](../../plan.md)
+
+- [ ] B.6 `settings-01`: configuración con navegación lateral (pestañas verticales), formularios, interruptores, sesiones, zona de peligro, facturación y barra de «cambios sin guardar».
+  - v0.4.0 · Tamaño L (el Block más grande: cuatro secciones) · Depende de: B.1, B.10 (Tabs con orientación vertical) y los componentes que usa, publicados (2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.8, 2.9, G1.9, G2.10) · Bloquea: B.P
+  - Estado: —
+  - Leer antes: B.1; la B.10; spec 4 (Tabs, Input, Textarea, Switch, Avatar, Badge, Progress, Card, Separator, Button); la G1.9 Tabs en `docs/historial/plan-grupo-1.md` (aria Tabs, `preserveContent`, variante `pill`); la G2.10 Progress en `docs/historial/grupo-2/G2.10.md`; spec 8.
+  - Diseño: `Block settings-01.dc.html` y su fila en `Mimi F6 Blocks.dc.html` («Componentes: Tabs, Input, Textarea, Switch, Badge, Button»). Lo que muestra:
+    - Cabecera: `h1` «Configuración» (28px; 24px en móvil) y subtítulo.
+    - Escritorio: navegación lateral (`role="tablist"`, `aria-orientation="vertical"`) con cuatro secciones con ícono —Perfil, Notificaciones, Seguridad, Facturación—, la elegida con fondo `accent`; el panel a la derecha. Móvil: las mismas pestañas arriba, como píldoras desplazables en horizontal (la elegida en `primary`).
+    - **Perfil:** «Perfil público» con avatar «AT», «Cambiar foto» (ícono `upload`) y «Quitar»; nombre; usuario con el prefijo fijo «mimi.dev/»; biografía (`textarea` de 3 filas, máximo 160, contador «n/160»); «Preferencias» con dos interruptores con título y descripción (Modo compacto, Sonidos).
+    - **Notificaciones:** dos grupos con ícono (Correo: tres interruptores; Push: dos).
+    - **Seguridad:** «Verificación en dos pasos» con la insignia «Recomendado» y un interruptor; «Sesiones activas» (dispositivo, lugar y hora; «Esta sesión» como insignia y «Cerrar» en las otras); «Eliminar cuenta» (zona de peligro, botón `danger` con `trash-2`).
+    - **Facturación:** plan actual («Equipo · $240 por persona») con «Cambiar plan»; asientos «18 de 25» con una barra; la tarjeta («Visa •••• 4242 · próxima factura el 1 de noviembre»).
+    - Barra de «Tienes cambios sin guardar» (`role="status"`) con «Descartar» y «Guardar», visible solo con cambios.
+  - Objetivo: la pantalla de ajustes de cuenta de un producto SaaS, que muestra cómo se combinan casi todos los controles básicos de Mimi.
+  - Alcance: incluye las cuatro secciones del diseño, el estado «con cambios» (comparando con los valores iniciales), Descartar y Guardar, escritorio y móvil. NO incluye: subir la foto (salida), cerrar sesiones o borrar la cuenta de verdad (salidas), el cambio de plan.
+  - Base técnica: la de sus componentes; Tabs con `@angular/aria/tabs` y la orientación de la B.10.
+  - Componentes que usa (`registryDependencies`): `tabs`, `input`, `textarea`, `switch`, `avatar`, `badge`, `progress`, `button`, `card`, `separator`, `form-field`. Ninguno posterior a la 0.3.0 (Tabs con el cambio de la B.10, que sale en la misma 0.4.0).
+  - API pública propuesta: `<mimi-settings-01 [profile] [preferences] [sessions] [plan] [saving] (saved) (avatarChange) (avatarRemove) (sessionEnd) (deleteAccount) (changePlan) class>`, con tipos `MimiSettings01Profile`, etc., exportados del Block. Valores por defecto: los del diseño (Ana Torres…), para que la vista previa funcione sin datos. Los nombres se fijan al empezar.
+  - Formularios: Signal Forms (B.1-f): un `form()` con el perfil y las preferencias; «con cambios» = el valor distinto del inicial (`dirty` del formulario no basta: volver al valor original tiene que quitar la barra). `maxLength(160)` en la biografía, `required` en el nombre y un patrón en el usuario.
+  - Tokens: sin tokens propios. El prefijo «mimi.dev/» se arma dentro del Block con los colores de Input (no existe un grupo de input con prefijo; el `span[mimiMaskPrefix]` de Input Mask es de ese componente).
+  - Teclado y accesibilidad: pestañas con las flechas de su orientación (↑/↓ en vertical, ←/→ en horizontal, de aria); cada interruptor con su título como nombre y la descripción con `aria-describedby` (el diseño solo pone `aria-label`); el contador de la biografía con `aria-describedby` y sin anunciar cada tecla; «Eliminar cuenta» con tono `danger`; la barra de cambios con `role="status"` y sus botones en el orden de Tab al final del panel.
+  - Ejemplos del showcase: vista previa escritorio y móvil, claro y oscuro, en cada una de las cuatro secciones (un control de la página elige la sección: entrada `tab` del Block o un parámetro de la URL de la vista previa); con y sin cambios.
+  - CLI: ítem `settings-01` de tipo `block`; peers que llegan por sus componentes (`@angular/aria`, `@angular/cdk` por Tabs; `@angular/forms`).
+  - Textos: en el idioma de B.1-i. Moneda y fechas del ejemplo con `Intl` y el `LOCALE_ID` (no «$240» escrito a mano).
+  - Trampas conocidas:
+    - **Una sola lista de pestañas que cambia de orientación** con el ancho (vertical en escritorio, horizontal en móvil): `orientation` tiene que poder cambiar en vivo (B.10). Alternativa si no se puede: dos listas con `@if` según un `matchMedia` (sin `@angular/cdk/layout`, que sería otra dependencia).
+    - El aspecto de la navegación lateral (fila con fondo `accent`, sin indicador) y el de las píldoras móviles no son exactamente las variantes `underline` ni `pill` de Tabs: se resuelve con `class`/`panelClass` y, si no alcanza, se anota en D6 y se pregunta (no se agrega una variante nueva sin decisión).
+    - `preserveContent` en Tabs: sin él, cambiar de sección destruye el formulario de la anterior y pierde lo escrito; con él, la barra de cambios cuenta todas las secciones.
+    - La barra de asientos es Progress (G2.10) con su nombre («Asientos usados»), no un `div` como en el diseño.
+    - El interruptor del diseño hace `preventDefault` sobre el `label` entero: con `mimi-switch` el `label` ya funciona; no repetirlo.
+    - Es el Block que más CSS suma (estimado 2,5–3,5 kB crudos, B.1): con la decisión B.1-h (a) no cuenta en el CSS global.
+  - Criterios de hecho:
+    - El Block en ui-core, en el registro y en el sitio, con las cuatro secciones.
+    - Pruebas: cambiar de sección con el teclado (vertical y horizontal); «con cambios» aparece al cambiar un valor y desaparece al volver al original; Descartar restaura; Guardar emite el valor; las salidas de foto, sesiones, borrar y plan; contador de la biografía; `class`.
+    - `ng g mimi settings-01` en un proyecto limpio (trae los once componentes).
+    - CSS global y JS inicial, crudo y gzip, antes y después.
+    - D6: navegación lateral y píldoras móviles frente a las variantes de Tabs; prefijo del input; descripción de los interruptores.
+    - `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
+    - Manual (a la M.20): NVDA (pestañas verticales, interruptores con descripción, barra de cambios); teléfono real (píldoras desplazables con el dedo, teclado virtual sobre la barra de cambios); claro y oscuro.
+  - Preguntas abiertas:
+    - PENDIENTE DE DECIDIR (B.6-a): «Eliminar cuenta» confirma con `mimi-confirm` (G1.7, publicado; suma `@angular/cdk/dialog` al Block) o solo emite la salida y el usuario decide. Recomendación: **solo la salida**, como en el diseño (que no dibuja la confirmación); el código de la página del sitio muestra cómo enchufarle `mimi-confirm`.
+    - PENDIENTE DE DECIDIR (B.6-b): ¿Guardar muestra un Toast (G1.8)? Recomendación: no (el Toast es global y lo provee la app); la barra desaparece al guardar, y el sitio muestra el ejemplo con Toast.
