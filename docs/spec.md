@@ -1645,7 +1645,7 @@ Catálogo de los tokens del tema Mimi en tres niveles (tarea T.0). Va al final p
 
 **Fuentes** (en `docs/design/`): `mimi-tokens-data.js`, la hoja de tokens en datos (se ve en `Mimi Tokens.dc.html`); `tokens-mimi.css`, con los globales y los compartidos en claro y oscuro; y `mimi-variables-componentes.css`, con los tokens por componente. Ningún valor de esta sección se inventa: lo que la hoja no defina, se pregunta.
 
-**Cobertura:** la hoja cubre 21 componentes: los 11 de la 0.1.0 y los del Grupo 1. Los 12 del Grupo 2 (y el chip compartido) tienen su tabla desde la G2.0 (04/11/2026), sacada de los diseños de la Fase 3 y de `F5 Estructura` (la hoja no los tiene): 33 componentes en total. Los Grupos 3 a 5 agregan sus tokens (y su tabla aquí) con cada tanda de diseño, antes de construirlos.
+**Cobertura:** la hoja cubre 21 componentes: los 11 de la 0.1.0 y los del Grupo 1. Los 12 del Grupo 2 (y el chip compartido) tienen su tabla desde la G2.0 (04/11/2026), sacada de los diseños de la Fase 3 y de `F5 Estructura` (la hoja no los tiene): 33 componentes en total. Los 4 del Grupo 3 (Tree, Sortable List, Command y Data Table) tienen su tabla desde la G3.0 (07/11/2026), sacada de `F4 Command Tree Sortable` y de `Data Table`: 37 en total. Los Grupos 4 y 5 agregan sus tokens (y su tabla aquí) con cada tanda de diseño, antes de construirlos.
 
 ### Niveles
 
@@ -2268,6 +2268,87 @@ Pulgares de 14px (área) y 16px (tono) con borde blanco de 2px y sombras (`oklch
 - **No se agregaron:** `--mimi-field-hint` (FormField no tiene texto de ayuda), `--mimi-input-border-hover` (Input no tiene hover y `input-hover` no está en ui-core: cambiaría el aspecto) ni `--mimi-input-ring` (en la hoja es una sombra completa; hoy el halo es `ring-3` con un color en utilidades compartidas).
 - **Avatar:** el radio por defecto es el de `rounded-full` (`calc(infinity * 1px)`); la hoja dice `999px`, que se ve igual.
 - **Switch:** el pulgar mide alto − 4px y se desplaza ancho − alto, así que cambiar `--mimi-switch-width` o `-height` mantiene la proporción. `--mimi-switch-off` sigue siendo global; `--mimi-switch-track-off` cae en él.
+
+#### Grupo 3 (propuestas de la G3.0)
+
+Tablas escritas en la G3.0 (07/11/2026, modo autónomo) a partir del diseño, con el mismo método que la G2.0: **cada tabla está pendiente de la aprobación del usuario** y la cierra su componente al implementarlo. Diseños: `F4 Command Tree Sortable` (§1 Command, §2 Tree, §3 Sortable List) y `Data Table` (el componente que importa `F4 Data Table y Pagination`). Ninguno de los cuatro tiene variables en `mimi-variables-*.css` ni en `tokens-mimi.css`: los valores salen de los estilos del `.dc.html`. Colores y sombras solo en el CSS (sección 6.2); la columna «Preset» es la propuesta. **Prefijos** comprobados con grep el 07/11/2026 en `theme-base.css`, `tokens-mimi.css` y esta spec: `tree`, `sortable`, `command` y `table` están libres. No hacen falta globales nuevos: usan `mimi-spin` y `mimi-pulse` (ya en el tema), las sombras `neutral`, `card` y `popover`, `overlay` y `overlay-blur`, y los tonos con sus `-soft`.
+
+##### Tree (`tree`)
+
+Diseño: `F4 Command Tree Sortable`, §2.
+
+| Variable                  | Qué controla                    | Hereda de                   | Valor por defecto | Preset |
+| ------------------------- | ------------------------------- | --------------------------- | ----------------- | ------ |
+| `--mimi-tree-padding`     | Relleno del contenedor          | —                           | `6px`             | Sí     |
+| `--mimi-tree-row-height`  | Alto de cada nodo               | —                           | `32px`            | Sí     |
+| `--mimi-tree-row-radius`  | Radio del nodo                  | `--mimi-radius-sm`          | —                 | Sí     |
+| `--mimi-tree-indent`      | Sangría por nivel               | —                           | `18px`            | Sí     |
+| `--mimi-tree-font-size`   | Tamaño de texto                 | —                           | `13.5px`          | Sí     |
+| `--mimi-tree-bg`          | Fondo del contenedor            | `--mimi-card`               | —                 | No     |
+| `--mimi-tree-hover`       | Fondo del nodo en hover         | `--mimi-accent`             | —                 | No     |
+| `--mimi-tree-selected`    | Fondo del nodo elegido (simple) | `--mimi-primary`            | —                 | No     |
+| `--mimi-tree-selected-fg` | Texto e ícono del nodo elegido  | `--mimi-primary-foreground` | —                 | No     |
+
+Contenedor con borde `--mimi-border`, radio `--mimi-radius-card` y sombra `--mimi-shadow-neutral`; separación de 1px entre nodos. Nodo: relleno izquierdo `6px + (nivel − 1) × sangría`, derecho 8px, separación interna 6px; chevrón de 14px en `muted-foreground` en una caja de 16px, que gira 90° en 0,2 s con `cubic-bezier(.2,.8,.2,1)` y no se ve en las hojas; ícono del usuario de 16px; dato a la derecha en `--mimi-font-mono` de 11px y `muted-foreground`; elegido con peso 600. Foco: anillo interior `inset 0 0 0 2px var(--mimi-ring)`. Cargando un nodo: el chevrón pasa a `loader-circle` con `mimi-spin` (0,8 s) y debajo una fila de 28px con una barra de 120 × 9px (radio 4px, `muted`, `mimi-pulse`) y «Cargando…» en 12,5px. Selección múltiple: Checkbox de Mimi (con el estado parcial) entre el chevrón y el ícono, separación de 8px, el nivel 1 con peso 600 y un contador a la derecha (11,5px, cifras tabulares, `muted-foreground`); sin fondo de elegido (el estado lo dice la casilla).
+
+##### Sortable List (`sortable`)
+
+Diseño: `F4 Command Tree Sortable`, §3.
+
+| Variable                       | Qué controla                          | Hereda de          | Valor por defecto             | Preset |
+| ------------------------------ | ------------------------------------- | ------------------ | ----------------------------- | ------ |
+| `--mimi-sortable-item-height`  | Alto mínimo de cada elemento          | —                  | `56px`                        | Sí     |
+| `--mimi-sortable-gap`          | Separación entre elementos            | —                  | `8px`                         | Sí     |
+| `--mimi-sortable-radius`       | Radio del elemento y del hueco        | `--mimi-radius`    | —                             | Sí     |
+| `--mimi-sortable-bg`           | Fondo del elemento                    | `--mimi-card`      | —                             | No     |
+| `--mimi-sortable-handle-hover` | Fondo del asa en hover y al arrastrar | `--mimi-accent`    | —                             | No     |
+| `--mimi-sortable-drop`         | Borde del hueco donde caerá           | `--mimi-info`      | —                             | No     |
+| `--mimi-sortable-drop-bg`      | Fondo del hueco                       | `--mimi-info-soft` | —                             | No     |
+| `--mimi-sortable-lift`         | Giro y escala del elemento levantado  | —                  | `rotate(-1.5deg) scale(1.03)` | Sí     |
+| `--mimi-sortable-easing`       | Curva del reacomodo                   | —                  | `cubic-bezier(.2, .8, .2, 1)` | Sí     |
+
+Elemento: borde `--mimi-border`, relleno `0 12px 0 6px`, separación interna 10px; asa de 28 × 36px (radio `--mimi-radius-sm`, ícono `grip-vertical` de 16px en `muted-foreground`; en hover, `foreground`). Hueco: borde de 2px discontinuo. Levantado: sombra `--mimi-shadow-popover` más `0 0 0 2px` del color del hueco. El reacomodo dura 0,18 s. Lo de dentro del elemento (número, título, etiqueta del diseño) es contenido del usuario.
+
+##### Command (`command`)
+
+Diseño: `F4 Command Tree Sortable`, §1.
+
+| Variable                         | Qué controla                          | Hereda de          | Valor por defecto | Preset |
+| -------------------------------- | ------------------------------------- | ------------------ | ----------------- | ------ |
+| `--mimi-command-width`           | Ancho del panel                       | —                  | `560px`           | Sí     |
+| `--mimi-command-top`             | Distancia del panel al borde superior | —                  | `36px`            | Sí     |
+| `--mimi-command-input-height`    | Alto de la fila del buscador          | —                  | `52px`            | Sí     |
+| `--mimi-command-input-font-size` | Tamaño del texto del buscador         | —                  | `15px`            | Sí     |
+| `--mimi-command-list-height`     | Alto máximo de la lista               | —                  | `332px`           | Sí     |
+| `--mimi-command-item-height`     | Alto de cada comando                  | —                  | `40px`            | Sí     |
+| `--mimi-command-item-radius`     | Radio del comando                     | `--mimi-radius-sm` | —                 | Sí     |
+| `--mimi-command-icon-size`       | Caja del ícono del comando            | —                  | `26px`            | Sí     |
+| `--mimi-command-active`          | Fondo del comando activo              | `--mimi-accent`    | —                 | No     |
+
+Panel: `--mimi-popover`, borde, radio `--mimi-radius-card` y sombra `--mimi-shadow-popover`, sobre el velo `--mimi-overlay` con `--mimi-overlay-blur` (los del Dialog). Buscador: ícono `search` de 18px, relleno `0 14px 0 16px`, separación 10px, borde inferior y la tecla `esc` a la derecha. Lista: relleno de 6px; grupos con su título (11px, 600, mayúsculas, `letter-spacing: .05em`, relleno `8px 10px 4px`, `muted-foreground`). Comando: relleno `0 10px`, separación 10px, texto de 14px; la coincidencia con la búsqueda subrayada y en 700; caja del ícono con radio de 7px (fijo en el diseño: D6), que sin activar va en `muted`/`muted-foreground` (o `<tono>-soft`/`<tono>-soft-foreground`) y activada en `primary`/`primary-foreground` (o el tono sólido); atajos en `kbd` de 20px, radio 5px, `--mimi-font-mono` de 11px. Pie de 40px (12px, `muted-foreground`) con «↑↓ Navegar», «↵ Abrir» y el número de resultados. Sin resultados: círculo de 44px con `search-x` de 20px, título de 15px/700 y texto de 13px. Disparador del diseño (fuera del panel): 220 × 34px con la caja de Input y `⌘K`.
+
+##### Data Table (`table`)
+
+Diseño: `Data Table` (densidades `compact` y `comfortable`).
+
+| Variable                               | Qué controla                            | Hereda de      | Valor por defecto                                                    | Preset |
+| -------------------------------------- | --------------------------------------- | -------------- | -------------------------------------------------------------------- | ------ |
+| `--mimi-table-row-height`              | Alto de fila (compacta)                 | —              | `42px`                                                               | Sí     |
+| `--mimi-table-row-height-comfortable`  | Alto de fila (cómoda)                   | —              | `60px`                                                               | Sí     |
+| `--mimi-table-head-height`             | Alto del encabezado (compacta)          | —              | `38px`                                                               | Sí     |
+| `--mimi-table-head-height-comfortable` | Alto del encabezado (cómoda)            | —              | `44px`                                                               | Sí     |
+| `--mimi-table-font-size`               | Texto de las celdas (compacta)          | —              | `13px`                                                               | Sí     |
+| `--mimi-table-font-size-comfortable`   | Texto de las celdas (cómoda)            | —              | `14px`                                                               | Sí     |
+| `--mimi-table-cell-px`                 | Relleno horizontal de la celda          | —              | `10px`                                                               | Sí     |
+| `--mimi-table-toolbar-height`          | Alto mínimo de la barra de herramientas | —              | `56px`                                                               | Sí     |
+| `--mimi-table-bg`                      | Fondo de la tabla y de las filas        | `--mimi-card`  | —                                                                    | No     |
+| `--mimi-table-head-bg`                 | Fondo del encabezado                    | `--mimi-muted` | —                                                                    | No     |
+| `--mimi-table-row-hover`               | Fila en hover (o con su menú abierto)   | —              | `color-mix(in oklab, var(--mimi-foreground) 3.5%, var(--mimi-card))` | No     |
+| `--mimi-table-row-selected`            | Fila elegida                            | —              | `color-mix(in oklab, var(--mimi-info) 8%, var(--mimi-card))`         | No     |
+| `--mimi-table-expanded-bg`             | Fondo del detalle de una fila expandida | `--mimi-muted` | —                                                                    | No     |
+| `--mimi-table-sticky-shadow`           | Sombra de la columna fija al desplazar  | —              | `6px 0 10px -6px oklch(0 0 0 / .25)`                                 | No     |
+
+Contenedor: `--mimi-card`, borde, radio `--mimi-radius-card` y sombra `--mimi-shadow-card`; desplazamiento horizontal propio (`overscroll-behavior-x: contain`); cifras tabulares. Encabezado: texto de 12,5px/600 en `muted-foreground` (el de la columna ordenada en `foreground`) y botón de orden de 28px con `chevrons-up-down` (al 45 %), `arrow-up` o `arrow-down` de 13px; botón de filtro de 24px con `list-filter` de 13px, en `info-soft` cuando el filtro está activo, con un punto de 6px en `info`. Filas: borde inferior `--mimi-border`, transición del fondo 0,12 s. Columna fija: `position: sticky`, con la sombra de la tabla y un borde interior de 1px solo cuando la tabla está desplazada. Selección: Checkbox de Mimi (con el estado parcial en el encabezado). Detalle expandido: chevrón de 15px en una caja de 26px que gira 90° (0,25 s). Acciones: botón de 30px con `ellipsis` de 16px y el Dropdown Menu de Mimi. Barra: búsqueda de 280 × 36px con la caja de Input; chips de filtro (`--mimi-chip`, 26px); al haber selección, el contador en `info-soft` (26px, 700) y las acciones; selector de densidad con la apariencia de Toggle Group (36px por opción). Vacío: círculo de 52px con ícono de 24px, título de 15px/700 y texto de 13,5px (máx. 360px). Cargando: filas de esqueleto con `mimi-pulse`. Pie: rango («1–10 de 48») en 13px y la Pagination de Mimi. Densidad cómoda: avatar de 34px (compacta: 24px) y el correo bajo el nombre (en la compacta no se ve): contenido de las celdas, no tokens.
 
 ### Otros globales del diseño
 

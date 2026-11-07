@@ -211,6 +211,12 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Objetivo del Slider:** el anfitrión del Slider mide 24px de alto (el diseño, 20px, el alto del pulgar) para que en el rango estrecho los objetivos de los dos pulgares no se toquen (2.5.8). El aspecto no cambia.
   - **Objetivos chicos que cumplen por espaciado:** el botón de quitar del chip (18 × 18px, Tags Input y Combobox) y la barra de tono del Color Picker (12px de alto). Si se quiere un área táctil mayor, definirla en el diseño.
 
+  Grupo 3 (G3.0), al escribir las tablas de tokens (07/11/2026, spec 13, «Grupo 3»):
+  - **Sin hoja de variables:** ningún componente del Grupo 3 está en `mimi-variables-*.css` ni en `tokens-mimi.css`; las tablas salen de los estilos de `F4 Command Tree Sortable` y `Data Table`. Pasar los valores a la hoja de tokens.
+  - **Radios fijos en Command:** la caja del ícono (7px) y las teclas `kbd` (5px; 4px en el pie) no usan tokens de radio.
+  - **Colores fijos en la sombra de la columna fija de Data Table** (`oklch(0 0 0 / .25)`) y en las mezclas de hover y elegida (`color-mix` con `foreground` 3,5 % e `info` 8 % sobre `card`): no hay globales para ellos; quedan como tokens propios de la tabla.
+  - **Casillas dibujadas a mano:** Tree (selección múltiple) y Data Table dibujan su casilla (16px, check de 12px); Mimi usa su Checkbox, con el mismo tamaño.
+
   Blocks: la página del sitio (B.1, 07/11/2026):
   - **Página de un Block sin diseño:** `Mimi F6 Blocks.dc.html` es el índice de los Blocks, no la página de documentación. La página (`/docs/blocks/<nombre>`) se armó con lo que ya tiene el sitio: título, descripción, la vista previa en un marco con borde y fondo `muted`, `InstallCommand`, «Componentes que usa» como enlaces en píldora, el código con `CodeBlock` (un bloque por archivo) y la tabla de API. Pedir el diseño de la página.
   - **Marco de la vista previa:** `iframe` de 760px de alto, con tres `mimi-toggle-group` encima (Escritorio · Móvil (375 px), Claro · Oscuro y el estado) y el enlace «Abrir en una pestaña». El ancho móvil (375px) es el de los marcos de `F6 Blocks`; el alto y los controles no están en el diseño.

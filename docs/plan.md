@@ -126,7 +126,9 @@ Detalle: `docs/plan/blocks/` (un archivo por tarea).
 
 ## Grupo 3 → v0.5.0: datos
 
-Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md).
+Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md); las tareas detalladas, en `docs/plan/grupo-3/`. Orden (modo autónomo, 07/11/2026; el grupo no tenía «Orden recomendado»): G3.0, G3.1, G3.2, G3.3, G3.4, B.9 y G3.P, el de la tabla de la spec 4.
+
+- [x] G3.0 Catálogo de tokens del Grupo 3 en la spec 13 (07/11/2026; pendiente de comprobación manual: aprobación de las tablas) · v0.5.0 · S · depende: — · [docs/plan/grupo-3/G3.0.md](plan/grupo-3/G3.0.md)
 
 - [ ] G3.1 Tree · v0.5.0 · — · depende: G2.P, 2.10 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] G3.2 Sortable List · v0.5.0 · — · depende: G2.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
