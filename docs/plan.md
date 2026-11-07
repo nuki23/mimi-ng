@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-Ninguna.
+- G3.2 · `auto/grupo-3-2026-11-07` · Claude Code (modo autónomo) · 07/11/2026 · detenida: el CSS global pasa el aviso del presupuesto (161,03 kB > 160); decide el usuario
 
 ## Mantenimiento
 
@@ -131,7 +131,7 @@ Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md); las tareas detal
 - [x] G3.0 Catálogo de tokens del Grupo 3 en la spec 13 (07/11/2026; pendiente de comprobación manual: aprobación de las tablas) · v0.5.0 · S · depende: — · [docs/plan/grupo-3/G3.0.md](plan/grupo-3/G3.0.md)
 
 - [x] G3.1 Tree (07/11/2026; pendiente de comprobación manual: NVDA y navegador real) · v0.5.0 · L · depende: G2.P, 2.10, G3.0 · [docs/plan/grupo-3/G3.1.md](plan/grupo-3/G3.1.md)
-- [ ] G3.2 Sortable List · v0.5.0 · — · depende: G2.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [~] G3.2 Sortable List (detenida: CSS global 161,03 kB, pasa el aviso de 160; decide el usuario) · v0.5.0 · M · depende: G2.P, G3.0 · [docs/plan/grupo-3/G3.2.md](plan/grupo-3/G3.2.md)
 - [ ] G3.3 Command (⌘K) · v0.5.0 · — · depende: G2.P, G1.6, G2.8 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] G3.4 Data Table · v0.5.0 · — · depende: G2.P, 2.10, G1.3, G1.11, 2.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.9 `table-01` · v0.5.0 · — · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)

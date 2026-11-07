@@ -51,6 +51,7 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   fileUpload: 'file-upload',
   colorPicker: 'color-picker',
   tree: 'tree',
+  sortable: 'sortable-list',
 };
 
 /**

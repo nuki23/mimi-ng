@@ -99,6 +99,7 @@ export class App {}
 - **Separator**: `ng g mimi separator` · [documentación](https://ng.mimiworks.dev/docs/components/separator)
 - **Skeleton**: `ng g mimi skeleton` · [documentación](https://ng.mimiworks.dev/docs/components/skeleton)
 - **Slider**: `ng g mimi slider` · [documentación](https://ng.mimiworks.dev/docs/components/slider)
+- **Sortable List**: `ng g mimi sortable-list` · [documentación](https://ng.mimiworks.dev/docs/components/sortable-list)
 - **Switch**: `ng g mimi switch` · [documentación](https://ng.mimiworks.dev/docs/components/switch)
 - **Tabs**: `ng g mimi tabs` · [documentación](https://ng.mimiworks.dev/docs/components/tabs)
 - **Textarea**: `ng g mimi textarea` · [documentación](https://ng.mimiworks.dev/docs/components/input)

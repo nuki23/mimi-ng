@@ -163,6 +163,12 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./components/tree/tree-page').then((m) => m.TreePage),
   },
   {
+    path: 'components/sortable-list',
+    title: 'Sortable List · Mimi',
+    loadComponent: () =>
+      import('./components/sortable-list/sortable-list-page').then((m) => m.SortableListPage),
+  },
+  {
     path: 'components/tags-input',
     title: 'Tags Input · Mimi',
     loadComponent: () =>

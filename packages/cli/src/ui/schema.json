@@ -132,6 +132,10 @@
             "label": "slider"
           },
           {
+            "value": "sortable-list",
+            "label": "sortable-list"
+          },
+          {
             "value": "switch",
             "label": "switch"
           },

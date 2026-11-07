@@ -52,7 +52,8 @@ export type TokenComponent =
   | 'date'
   | 'fileUpload'
   | 'colorPicker'
-  | 'tree';
+  | 'tree'
+  | 'sortable';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -91,6 +92,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   fileUpload: 'upload',
   colorPicker: 'color-picker',
   tree: 'tree',
+  sortable: 'sortable',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1826,6 +1828,67 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-primary-foreground',
       preset: false,
       description: 'Texto del nodo elegido.',
+    },
+  ],
+  sortable: [
+    {
+      name: '--mimi-sortable-item-height',
+      default: '56px',
+      preset: true,
+      description: 'Alto mínimo de cada elemento.',
+    },
+    {
+      name: '--mimi-sortable-gap',
+      default: '8px',
+      preset: true,
+      description: 'Separación entre elementos.',
+    },
+    {
+      name: '--mimi-sortable-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio del elemento y del hueco.',
+    },
+    {
+      name: '--mimi-sortable-lift',
+      default: 'rotate(-1.5deg) scale(1.03)',
+      preset: true,
+      description: 'Giro y escala del elemento que se arrastra.',
+    },
+    {
+      name: '--mimi-sortable-easing',
+      default: 'cubic-bezier(.2, .8, .2, 1)',
+      preset: true,
+      description: 'Curva del reacomodo.',
+    },
+    {
+      name: '--mimi-sortable-bg',
+      default: 'card',
+      inherits: '--mimi-card',
+      preset: false,
+      description: 'Fondo del elemento.',
+    },
+    {
+      name: '--mimi-sortable-handle-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo del asa en hover y al arrastrar.',
+    },
+    {
+      name: '--mimi-sortable-drop',
+      default: 'info',
+      inherits: '--mimi-info',
+      preset: false,
+      description: 'Borde del hueco y anillo del elemento levantado.',
+    },
+    {
+      name: '--mimi-sortable-drop-bg',
+      default: 'info-soft',
+      inherits: '--mimi-info-soft',
+      preset: false,
+      description: 'Fondo del hueco donde caerá.',
     },
   ],
 };

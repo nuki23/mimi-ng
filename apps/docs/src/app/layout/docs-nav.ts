@@ -69,6 +69,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'File Upload', path: '/docs/components/file-upload', status: 'ready' },
       { title: 'Color Picker', path: '/docs/components/color-picker', status: 'ready' },
       { title: 'Tree', path: '/docs/components/tree', status: 'ready' },
+      { title: 'Sortable List', path: '/docs/components/sortable-list', status: 'ready' },
     ],
   },
   {

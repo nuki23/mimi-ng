@@ -221,7 +221,13 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **La casilla no es un botón:** el diseño pone un `<button role="checkbox">` y un botón para el chevrón dentro de cada `treeitem` del múltiple; Mimi no pone controles enfocables dentro de un nodo (la casilla es visual, con los estilos de Checkbox, y el estado va en el `aria-checked` del nodo) y el chevrón es un `span` que se puede pulsar. Sin `aria-multiselectable` (es de `aria-selected`; el múltiple usa `aria-checked`).
   - **Íconos y colores de los archivos:** son del usuario (plantilla `mimiTreeNode`); el ejemplo del sitio usa los del diseño (`folder`, `file-code`… con los `-soft-foreground`).
   - **Sin diseño:** la fila de error de la carga diferida (texto en `destructive-soft-foreground`, 12,5px, como «Cargando…»), los nodos deshabilitados (opacidad 50 %) y el árbol deshabilitado.
-  - **Fila «Cargando…»:** el diseño la pinta dentro del árbol; Mimi la oculta a los lectores (`aria-hidden`) y anuncia el texto en una región `role="status"` aparte (los hijos de un `tree` solo pueden ser `treeitem` o `group`).
+  - **Fila «Cargando…» (Tree):** el diseño la pinta dentro del árbol; Mimi la oculta a los lectores (`aria-hidden`) y anuncia el texto en una región `role="status"` aparte (los hijos de un `tree` solo pueden ser `treeitem` o `group`).
+
+  Sortable List (G3.2, 07/11/2026):
+  - **Agarrado con el teclado:** el diseño solo dibuja el arrastre con el puntero (girado y escalado); con el teclado, el elemento agarrado lleva la sombra y el anillo del levantado, sin girar (se mueve paso a paso) y con el asa en `accent`.
+  - **Hueco:** del alto del elemento que se arrastra (el diseño, 56px fijos), para elementos con más contenido.
+  - **Sin diseño:** la lista deshabilitada (asas al 50 %) y el asa con foco (el contorno `ring` de los botones).
+  - **Contenido del elemento:** el número, el título, el dato y la etiqueta del diseño son del usuario (plantilla `mimiSortableItem`); el ejemplo del sitio los reproduce con Badge.
 
   Blocks: la página del sitio (B.1, 07/11/2026):
   - **Página de un Block sin diseño:** `Mimi F6 Blocks.dc.html` es el índice de los Blocks, no la página de documentación. La página (`/docs/blocks/<nombre>`) se armó con lo que ya tiene el sitio: título, descripción, la vista previa en un marco con borde y fondo `muted`, `InstallCommand`, «Componentes que usa» como enlaces en píldora, el código con `CodeBlock` (un bloque por archivo) y la tabla de API. Pedir el diseño de la página.

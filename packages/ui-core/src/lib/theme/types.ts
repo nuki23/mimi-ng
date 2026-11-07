@@ -573,6 +573,23 @@ export interface MimiTreeTokens {
 }
 
 /**
+ * Sortable List. Fondo, el hover del asa y los colores del hueco van en el CSS
+ * (`--mimi-sortable-bg`, `-handle-hover`, `-drop`, `-drop-bg`).
+ */
+export interface MimiSortableTokens {
+  /** Alto mínimo de cada elemento (56px). */
+  itemHeight?: string;
+  /** Separación entre elementos (8px). */
+  gap?: string;
+  /** Radio del elemento y del hueco (el global `radius`). */
+  radius?: string;
+  /** Giro y escala del elemento levantado (`rotate(-1.5deg) scale(1.03)`). */
+  lift?: string;
+  /** Curva del reacomodo (`cubic-bezier(.2, .8, .2, 1)`). */
+  easing?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -612,6 +629,7 @@ export interface MimiComponentTokens {
   fileUpload?: MimiFileUploadTokens;
   colorPicker?: MimiColorPickerTokens;
   tree?: MimiTreeTokens;
+  sortable?: MimiSortableTokens;
 }
 
 export interface MimiThemePreset {

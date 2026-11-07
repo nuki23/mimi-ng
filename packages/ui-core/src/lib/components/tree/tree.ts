@@ -75,7 +75,9 @@ export interface MimiTreeNodeContext<T = unknown> {
  * ```
  */
 @Directive({ selector: 'ng-template[mimiTreeNode]' })
-export class MimiTreeNodeTemplate<T = unknown> {
+// `any` por defecto: el tipo de `nodes` no llega al `ng-template` (Angular no lo infiere), y con
+// `unknown` la plantilla del usuario no podría leer `node.data.algo` con strictTemplates.
+export class MimiTreeNodeTemplate<T = any> {
   readonly template = inject<TemplateRef<MimiTreeNodeContext<T>>>(TemplateRef);
 
   static ngTemplateContextGuard<T>(
@@ -89,7 +91,8 @@ export class MimiTreeNodeTemplate<T = unknown> {
 /**
  * Pinta la plantilla del nodo con su contexto. Se usa en vez de `NgTemplateOutlet`: con él, el
  * optimizador de chunks llevaba `NgTemplateOutlet` al JS inicial del sitio (+1,6 kB, G3.1; spec
- * 10, «Trampas de tamaño»).
+ * 10, «Trampas de tamaño»). Recibe cada dato por separado: un objeto de contexto nuevo en cada
+ * detección de cambios haría que el efecto se repitiera sin fin (NG0103, encontrado en la G3.2).
  *
  * @internal No forma parte de la API de Mimi.
  */
@@ -98,7 +101,10 @@ export class MimiTreeOutlet<T = unknown> {
   readonly template = input.required<TemplateRef<MimiTreeNodeContext<T>>>({
     alias: 'mimiTreeOutlet',
   });
-  readonly context = input.required<MimiTreeNodeContext<T>>({ alias: 'mimiTreeOutletContext' });
+  readonly node = input.required<MimiTreeNode<T>>({ alias: 'mimiTreeOutletNode' });
+  readonly level = input.required<number>({ alias: 'mimiTreeOutletLevel' });
+  readonly expanded = input.required<boolean>({ alias: 'mimiTreeOutletExpanded' });
+  readonly selected = input.required<boolean>({ alias: 'mimiTreeOutletSelected' });
 
   private readonly viewContainer = inject(ViewContainerRef);
   private view: EmbeddedViewRef<MimiTreeNodeContext<T>> | null = null;
@@ -106,7 +112,12 @@ export class MimiTreeOutlet<T = unknown> {
 
   private readonly render = effect(() => {
     const template = this.template();
-    const context = this.context();
+    const context: MimiTreeNodeContext<T> = {
+      $implicit: this.node(),
+      level: this.level(),
+      expanded: this.expanded(),
+      selected: this.selected(),
+    };
     untracked(() => {
       if (this.view && this.rendered === template) {
         Object.assign(this.view.context, context);
@@ -266,7 +277,10 @@ const fold = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toL
             @if (nodeTemplate(); as custom) {
               <ng-container
                 [mimiTreeOutlet]="custom.template"
-                [mimiTreeOutletContext]="contextOf(row)"
+                [mimiTreeOutletNode]="row.node"
+                [mimiTreeOutletLevel]="row.level"
+                [mimiTreeOutletExpanded]="row.expanded"
+                [mimiTreeOutletSelected]="isSelected(row.node)"
               />
             } @else {
               <span class="min-w-0 flex-1 truncate">{{ row.node.label }}</span>
@@ -486,20 +500,6 @@ export class MimiTree<T = unknown> implements FormValueControl<string | null | s
     return this.multiple()
       ? this.checkStates().get(node.id) === 'checked'
       : this.value() === node.id;
-  }
-
-  /**
-   * El contexto de la plantilla del nodo. En un método y no como objeto literal en la plantilla:
-   * el literal de cuatro claves usa una instrucción (`ɵɵpureFunction4`) que nadie más usa y
-   * entraría en el JS inicial del sitio (spec 10, «Trampas de tamaño»).
-   */
-  protected contextOf(row: Row<T>): MimiTreeNodeContext<T> {
-    return {
-      $implicit: row.node,
-      level: row.level,
-      expanded: row.expanded,
-      selected: this.isSelected(row.node),
-    };
   }
 
   protected rowState(row: Row<T>): string {

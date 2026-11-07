@@ -44,6 +44,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   'file-upload': ['forms', 'cdk'],
   'color-picker': ['forms', 'cdk'],
   tree: ['forms', 'cdk'],
+  'sortable-list': ['cdk'],
   'dropdown-menu': ['cdk', 'aria'],
   'context-menu': ['cdk', 'aria'],
   tabs: ['cdk', 'aria'],
@@ -123,6 +124,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiColorPickerText',
     spanish: 'MIMI_COLOR_PICKER_TEXT_ES',
     file: 'color-picker/color-picker-texts',
+  },
+  {
+    component: 'Sortable List',
+    provider: 'provideMimiSortableText',
+    spanish: 'MIMI_SORTABLE_TEXT_ES',
+    file: 'sortable-list/sortable-list-texts',
   },
   {
     component: 'Tree',
