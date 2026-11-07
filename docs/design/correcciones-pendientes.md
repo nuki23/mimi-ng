@@ -249,3 +249,6 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Casillas:** 42 × 50 px en móvil y 48 × 56 px desde `sm`, con los tokens de Input OTP (`--mimi-otp-width`, `-height`, `-gap`, `-font-size`) en `class`; el valor por defecto del componente es 46 × 54 px.
   - **«Use another email»:** un botón (salida `changeDestination`), no un enlace.
   - **Anuncio del reenvío:** «You can request another code now.» en una región `aria-live` oculta, solo al habilitarse (no está en el diseño).
+
+  Tabs vertical (B.10, 07/11/2026):
+  - **Sin diseño:** `F2 Toast Tabs Toolbar` no tiene Tabs vertical. Mimi lo armó con lo de la horizontal: filas iguales del alto de siempre (44px subrayada, 34px píldora), texto al inicio con 12px a los lados, la subrayada con el borde y la barra de 2px al inicio, y la píldora con su fondo moviéndose hacia abajo y sin el ancho máximo de 520px. El espacio entre la lista y el panel es el `gap` de 14px del componente. La navegación lateral de `settings-01` (fila con fondo `accent`, sin indicador) no es ninguna de las dos: lo resuelve la B.6.

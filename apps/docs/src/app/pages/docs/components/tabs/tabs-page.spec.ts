@@ -22,7 +22,8 @@ describe('TabsPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(6);
+      // 6 de la G1.9 y 2 de la B.10 (vertical y según el ancho).
+      expect(previews.length).toBe(8);
       for (const { example, code } of previews) {
         // Las pestañas del ejemplo (dentro del lienzo), no las de Preview/Código.
         expect(example?.querySelector('mimi-tabs [role="tab"]')).not.toBeNull();

@@ -7,7 +7,7 @@ Pedido: ejecutar B.1 → B.2 → B.3 → B.4 → B.5 → B.10 → B.6 → B.7 �
 ## Pendiente del usuario
 
 1. **Diseños que faltan** (no bloquearon, decidido por el usuario): la página de un Block en el sitio y el marco de la vista previa (B.1, en D6); los estados de error de `login-01` (B.2); la imagen de `login-02` (B.3); el estado «válido» de un campo (B.4). Cada uno está en `docs/design/correcciones-pendientes.md` con lo que se hizo.
-2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3); `signup-01`: NVDA (mensajes, nivel del medidor y la nota del botón), el gestor de contraseñas (que proponga una nueva) y un teléfono real (B.4); `otp-01`: autocompletar el código desde un SMS en iOS y en Android (`one-time-code`), NVDA y un teléfono real (B.5).
+2. **Comprobaciones manuales** (van a la M.20 en la B.P): la vista previa en un teléfono real (que el `iframe` no haga scroll doble) y en Safari (el `iframe` con `100dvh`) (B.1); `login-01` con el gestor de contraseñas del navegador (rellena y ofrece guardar), NVDA (errores y alerta anunciados), un teléfono real a 360 px y claro/oscuro en un navegador real (B.2); `login-02`: contraste del testimonio sobre una imagen real clara y otra oscura, un teléfono real con el teclado abierto (el banner de 200 px no debe tapar el formulario) y el gestor de contraseñas (B.3); `signup-01`: NVDA (mensajes, nivel del medidor y la nota del botón), el gestor de contraseñas (que proponga una nueva) y un teléfono real (B.4); `otp-01`: autocompletar el código desde un SMS en iOS y en Android (`one-time-code`), NVDA y un teléfono real (B.5); Tabs vertical con NVDA (que anuncie «vertical» y las flechas ↑/↓) (B.10).
 3. **Imagen de `login-02`** (B.3-a): hoy un degradado neutro provisional; pedir la imagen o una ilustración en Claude Design (D6).
 
 ## Tabla acumulada del sitio
@@ -22,6 +22,7 @@ Medición de partida (06/11/2026, después de la M.13, comprobada al empezar la 
 | B.3     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 14,78 / 3,09      |
 | B.4     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 16,18 / 3,34      |
 | B.5     | 153,39 / 22,05  | 331,42 / 105,69 | 135,97      | 484,81         | 17,80 / 3,66      |
+| B.10    | 154,12 / 22,14  | 331,42 / 105,69 | 135,97      | 485,54         | 17,80 / 3,66      |
 
 ## B.1 Ítems de tipo `block` en el registro, en la CLI y en el showcase
 
@@ -252,3 +253,29 @@ Nuevos: `packages/ui-core/src/lib/blocks/otp-01/otp-01.ts`, `otp-01.html`, `inde
 Modificados: `packages/cli/src/registry.json`, `packages/cli/src/ui/schema.json`, `packages/cli/README.md`, `apps/docs/src/app/preview/block-previews.ts`, `apps/docs/src/app/pages/docs/docs.routes.ts`, `apps/docs/src/app/layout/docs-nav.ts`, `apps/docs/src/app/pages/docs/blocks/block-pages.spec.ts`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.5.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
 
 Commit: `feat(blocks): otp-01, verificación por código con reenvío y cuenta regresiva (B.5)`.
+
+## B.10 Tabs con orientación vertical
+
+**Estado:** `[x]`, pendiente de comprobación manual (NVDA en vertical; a la M.20). **No es RUPTURA** (decidido por el usuario: cambio aditivo, B.10-a): entrada nueva con el valor de antes por defecto. Va al CHANGELOG de la 0.4.0 («Tabs: `orientation`»), que junta la B.P.
+
+### Plan breve
+
+Entrada `orientation` en `mimi-tabs`, pasada a `ngTabList` (aria pone `aria-orientation` y el teclado); las clases de cada orientación completas en TypeScript (`cva` con `compoundVariants`): `grid-rows` en vertical, el indicador con `translate-y` (barra al inicio en la subrayada, fondo en la píldora), el borde al inicio, el texto al inicio y el panel al lado (`flex-direction` en el anfitrión con un binding suelto). Spike: cambiar la orientación en vivo. Página de Tabs con dos ejemplos y la fila de la API.
+
+### Criterios de hecho
+
+- **`orientation` con pruebas.** `tabs-orientation.spec.ts` (5): `aria-orientation`, `data-orientation`, fila al lado del panel y filas iguales; ↑/↓ eligen, ←/→ no hacen nada, Inicio y Fin; el indicador en vertical (subrayada y píldora, `--mimi-tabs-index`); **cambio en vivo** a horizontal (←/→) y de vuelta a vertical (↑/↓), con el `tabindex="0"` solo en la elegida; horizontal por defecto. **Las 20 pruebas de antes (`tabs.spec.ts`) en verde sin tocarlas.** El spike salió bien: aria lee su `orientation` como señal y no hace falta recrear la fila.
+- **Un fallo encontrado en la comprobación visual (no lo veían las pruebas):** el primer intento usaba `[style.flex-direction]` con `null` en horizontal, y Angular quitaba también el `flex-direction: column` del estilo estático del anfitrión: las pestañas de CodePreview (y cualquier Tabs horizontal) quedaban en fila. Se corrigió dando siempre un valor (`column`/`row`) y quitando `flex-direction` del estilo estático; la prueba de orientación comprueba ahora `flex-direction: column` en horizontal. Las capturas de la página de Tabs (CodePreview correcto y los dos ejemplos verticales) están en el informe de la sesión.
+- **Página de Tabs al día; spec 4; D6.** Ejemplos «Vertical» (subrayada y píldora) y «Según el ancho» (vertical desde 768 px con `matchMedia`, cambia en vivo); `orientation` en la tabla de API; el teclado en «Teclado y accesibilidad»; la prueba de la página pasa de 6 a 8 ejemplos. Spec 4 (Tabs: «Vertical (B.10…)»); sin tokens nuevos (spec 13 sin cambios). D6: «Tabs vertical (B.10)».
+- **CHANGELOG:** lo junta la B.P.
+- **JS inicial y CSS global.** JS inicial sin cambios (331,42 / 105,69 kB; `main` 135,97). **CSS global 153,39 → 154,12 kB** (+0,73; gzip 22,05 → 22,14): las clases verticales de Tabs, que es un componente y va al CSS global (aviso 160 kB, error 175 kB).
+- **`pnpm build`, `pnpm test` y `pnpm format:check` en verde.** Build sin avisos; docs 181 y CLI 144 pruebas en verde; ui-core: en la primera corrida de `pnpm test` falló una prueba de Toast que esta tarea no toca («se cierra solo; con acción, Infinity o un valor enorme, no»: `expected 3 to be 4`, temporizadores bajo carga, la inestabilidad de la M.12); `pnpm test:ui-core` repetido: **813 en verde**. Formato correcto.
+- **Manual (a la M.20):** NO COMPROBADO (manual, usuario): NVDA en vertical.
+
+### Archivos
+
+Nuevos: `packages/ui-core/src/lib/components/tabs/tabs-orientation.spec.ts`, `apps/docs/src/app/pages/docs/components/tabs/examples/tabs-vertical.example.ts`, `tabs-responsive.example.ts`.
+
+Modificados: `packages/ui-core/src/lib/components/tabs/tabs.ts`, `apps/docs/src/app/pages/docs/components/tabs/tabs-page.ts`, `tabs-page.html`, `tabs-page.spec.ts`, `docs/spec.md`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/blocks/B.10.md`, `docs/auto/blocks-0.4.0-2026-11-06.md`.
+
+Commit: `feat(tabs): orientación vertical, también en vivo (B.10)`.

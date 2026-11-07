@@ -9,6 +9,8 @@ import { TabsCustomClassExample } from './examples/tabs-custom-class.example';
 import { TabsDisabledExample } from './examples/tabs-disabled.example';
 import { TabsPillExample } from './examples/tabs-pill.example';
 import { TabsPreserveExample } from './examples/tabs-preserve.example';
+import { TabsResponsiveExample } from './examples/tabs-responsive.example';
+import { TabsVerticalExample } from './examples/tabs-vertical.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -23,6 +25,10 @@ import disabledSource from './examples/tabs-disabled.example' with { loader: 'te
 import pillSource from './examples/tabs-pill.example' with { loader: 'text' };
 // @ts-expect-error
 import preserveSource from './examples/tabs-preserve.example' with { loader: 'text' };
+// @ts-expect-error
+import responsiveSource from './examples/tabs-responsive.example' with { loader: 'text' };
+// @ts-expect-error
+import verticalSource from './examples/tabs-vertical.example' with { loader: 'text' };
 
 /** Documentación de Tabs (tarea G1.9). */
 @Component({
@@ -38,6 +44,8 @@ import preserveSource from './examples/tabs-preserve.example' with { loader: 'te
     TabsDisabledExample,
     TabsPillExample,
     TabsPreserveExample,
+    TabsResponsiveExample,
+    TabsVerticalExample,
   ],
   templateUrl: './tabs-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,6 +58,8 @@ export class TabsPage {
     disabled: disabledSource as string,
     pill: pillSource as string,
     preserve: preserveSource as string,
+    responsive: responsiveSource as string,
+    vertical: verticalSource as string,
   };
 
   protected readonly usage = [
@@ -81,6 +91,13 @@ export class TabsPage {
       type: "'underline' | 'pill'",
       default: "'underline'",
       description: 'Subrayada o en píldora.',
+    },
+    {
+      name: 'orientation',
+      type: "'horizontal' | 'vertical'",
+      default: "'horizontal'",
+      description:
+        'En vertical, las pestañas a un lado y el panel al otro, con ↑/↓. Puede cambiar en vivo (desde la 0.4.0).',
     },
     {
       name: 'preserveContent',
