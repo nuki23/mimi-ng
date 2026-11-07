@@ -153,6 +153,18 @@ export class Pricing01 {
     });
   });
 
+  /**
+   * El ahorro del pago anual, calculado con los precios (no escrito a mano): el mayor de los
+   * planes con precio, redondeado («−17%» con 12/10 y 24/20). Sin ahorro, sin insignia.
+   */
+  protected readonly yearlySaving = computed(() => {
+    const savings = this.plans().flatMap(({ monthly, yearly }) =>
+      monthly && yearly !== null ? [Math.round((1 - yearly / monthly) * 100)] : [],
+    );
+    const best = Math.max(0, ...savings);
+    return best > 0 ? `−${best}%` : null;
+  });
+
   protected readonly classes = computed(() =>
     cn(
       'flex min-h-svh w-full flex-col items-center gap-7 bg-background px-[18px] pt-9 pb-8 text-foreground md:px-10 md:py-14',

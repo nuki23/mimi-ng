@@ -101,6 +101,23 @@ describe('importaciones de ui-core', () => {
     expect(wrong).toEqual([]);
   });
 
+  it('ningún Block pone <main> (va en el layout de la app)', () => {
+    const blocksDir = path.join(ROOT, 'blocks');
+    const templates = fs
+      .readdirSync(blocksDir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .flatMap((entry) =>
+        fs
+          .readdirSync(path.join(blocksDir, entry.name), { withFileTypes: true })
+          .filter((file) => file.name.endsWith('.html'))
+          .map((file) => path.join(blocksDir, entry.name, file.name)),
+      );
+    expect(templates.length).toBeGreaterThanOrEqual(6);
+    // Se arma por partes para que este archivo no se detecte a sí mismo.
+    const main = new RegExp('<' + 'main[\\s>]');
+    expect(templates.filter((file) => main.test(fs.readFileSync(file, 'utf8')))).toEqual([]);
+  });
+
   it('nada privado de @angular/aria ni @angular/cdk (decisión 4.3)', () => {
     const offenders = files.flatMap((file) =>
       privateAngularImports(fs.readFileSync(file, 'utf8')).map(

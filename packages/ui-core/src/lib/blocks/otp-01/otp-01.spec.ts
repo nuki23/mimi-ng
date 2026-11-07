@@ -6,7 +6,7 @@ import { Otp01, type Otp01Status } from './otp-01';
   imports: [Otp01],
   template: `<mimi-otp-01
     class="bg-muted"
-    destination="a••••@company.com"
+    destination="a••••@example.com"
     [resendSeconds]="resendSeconds()"
     [status]="status()"
     [loading]="loading()"

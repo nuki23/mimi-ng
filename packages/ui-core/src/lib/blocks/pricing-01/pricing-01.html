@@ -39,7 +39,12 @@
     <button mimiToggleGroupItem="monthly" class="h-9">Monthly</button>
     <button mimiToggleGroupItem="yearly" class="h-9 gap-1.5">
       Yearly
-      <span mimiBadge variant="soft" tone="success" class="h-5 px-[7px] text-[11px]">−17%</span>
+      <!-- El ahorro, calculado con los precios de los planes. -->
+      @if (yearlySaving(); as saving) {
+        <span mimiBadge variant="soft" tone="success" class="h-5 px-[7px] text-[11px]">{{
+          saving
+        }}</span>
+      }
     </button>
   </mimi-toggle-group>
 </div>
@@ -59,7 +64,7 @@
       @if (card.plan.featured) {
         <span
           mimiBadge
-          class="absolute -top-[13px] left-1/2 z-2 h-[26px] -translate-x-1/2 gap-[5px] px-3 text-xs whitespace-nowrap shadow-primary"
+          class="absolute -top-[13px] start-1/2 z-2 h-[26px] -translate-x-1/2 gap-[5px] px-3 text-xs whitespace-nowrap shadow-primary rtl:translate-x-1/2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -109,6 +109,39 @@ describe('Pricing01', () => {
     expect(items[0].querySelector('svg')?.getAttribute('aria-hidden')).toBe('true');
   });
 
+  it('el «−17%» sale de los precios; con otros planes cambia, y sin ahorro no aparece', async () => {
+    const fixture = TestBed.createComponent(Pricing01);
+    fixture.detectChanges();
+    const badge = () =>
+      (fixture.nativeElement as HTMLElement)
+        .querySelector('mimi-toggle-group')
+        ?.textContent?.match(/−\d+%/)?.[0] ?? null;
+    expect(badge()).toBe('−17%');
+    const plan = (monthly: number | null, yearly: number | null) => ({
+      id: `p${monthly}`,
+      name: 'Plan',
+      description: '',
+      monthly,
+      yearly,
+      cta: 'Go',
+      features: [],
+    });
+    fixture.componentRef.setInput('plans', [plan(10, 8), plan(20, 15), plan(null, null)]);
+    fixture.detectChanges();
+    expect(badge()).toBe('−25%');
+    fixture.componentRef.setInput('plans', [plan(10, 10)]);
+    fixture.detectChanges();
+    expect(badge()).toBeNull();
+  });
+
+  it('la insignia del destacado se centra con start-1/2 y el translate invertido en RTL', async () => {
+    const { el } = await setup();
+    const badge = el.querySelector('section[data-featured] > span')!;
+    expect(badge.classList).toContain('start-1/2');
+    expect(badge.classList).toContain('-translate-x-1/2');
+    expect(badge.classList).toContain('rtl:translate-x-1/2');
+  });
+
   it('el interruptor tiene nombre; un h1; class del usuario', async () => {
     const { el } = await setup();
     expect(

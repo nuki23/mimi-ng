@@ -95,12 +95,12 @@ export class Signup01 {
     required(path.name, { message: 'Enter your name.' });
     minLength(path.name, 2, { message: 'Enter your name.' });
     required(path.email, { message: 'Enter your work email.' });
-    email(path.email, { message: 'Add the domain, for example ana@company.com.' });
+    email(path.email, { message: 'Add the domain, for example name@example.com.' });
     // El validador de Angular acepta «ana@empresa» (sin punto en el dominio); un correo de
     // trabajo lo lleva.
     validate(path.email, ({ value }) =>
       /^[^\s@]+@[^\s@]+$/.test(value()) && !/@[^\s@]+\.[^\s@.]{2,}$/.test(value())
-        ? { kind: 'email', message: 'Add the domain, for example ana@company.com.' }
+        ? { kind: 'email', message: 'Add the domain, for example name@example.com.' }
         : undefined,
     );
     required(path.password, { message: 'Choose a password.' });

@@ -90,7 +90,7 @@ export class Otp01Page {
     {
       name: 'destination',
       type: 'string',
-      default: "'a••••@company.com'",
+      default: "'a••••@example.com'",
       description: 'El correo o teléfono, ya enmascarado, que se muestra.',
     },
     { name: 'length', type: 'number', default: '6', description: 'Dígitos del código.' },

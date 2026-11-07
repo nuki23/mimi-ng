@@ -41,7 +41,7 @@ export type Settings01Tab = 'profile' | 'notifications' | 'security' | 'billing'
 
 export interface Settings01Profile {
   name: string;
-  /** Sin el prefijo «mimi.dev/». */
+  /** Sin el prefijo de la dirección («example.com/», en la plantilla: pon el tuyo). */
   username: string;
   bio: string;
   /** Las iniciales del avatar si no hay foto. */
@@ -299,8 +299,8 @@ export class Settings01 {
         this.focusPending();
         for (const sw of Array.from(host.querySelectorAll('mimi-switch[data-describedby]'))) {
           const button = sw.querySelector('[role="switch"]');
-          const id = sw.getAttribute('data-describedby')!;
-          if (button && button.getAttribute('aria-describedby') !== id) {
+          const id = sw.getAttribute('data-describedby');
+          if (button && id && button.getAttribute('aria-describedby') !== id) {
             button.setAttribute('aria-describedby', id);
           }
         }
@@ -330,6 +330,12 @@ export class Settings01 {
     'px-4 py-3 [&_[data-slot=indicator]]:hidden [&_[role=tablist]]:flex [&_[role=tablist]]:gap-1.5 [&_[role=tablist]]:overflow-x-auto [&_[role=tablist]]:[scrollbar-width:none] [&_[role=tab]]:h-[34px] [&_[role=tab]]:shrink-0 [&_[role=tab]]:gap-1.5 [&_[role=tab]]:rounded-full [&_[role=tab]]:border [&_[role=tab]]:border-border [&_[role=tab]]:bg-card [&_[role=tab]]:px-3 [&_[role=tab]]:text-[13.5px] [&_[role=tab]]:text-foreground [&_[role=tab][aria-selected=true]]:border-primary [&_[role=tab][aria-selected=true]]:bg-primary [&_[role=tab][aria-selected=true]]:text-primary-foreground [&_svg]:size-[15px] [&_svg]:shrink-0';
   protected readonly panelClasses =
     'flex min-w-0 max-w-[680px] flex-1 flex-col gap-5 px-4 pt-4 pb-6 md:p-0';
+
+  /** Lo que elige Tabs (un `string`): solo se toma si es una de las cuatro secciones. */
+  protected selectTab(value: string | undefined): void {
+    const tab = this.tabs.find((item) => item.value === value);
+    if (tab) this.tab.set(tab.value);
+  }
 
   /** El campo de un interruptor. */
   protected field(key: keyof Settings01Preferences) {

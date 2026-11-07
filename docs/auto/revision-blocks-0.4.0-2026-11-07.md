@@ -79,3 +79,15 @@ Commit: `fix(blocks): otp-01 deja reintentar el mismo código tras un error (M4)
 **Pruebas:** `login-02.spec.ts` comprueba los textos de relleno; `settings-01.spec.ts` usa los valores nuevos. Los Blocks: 54 pruebas en verde. D6 al día.
 
 Commit: `fix(blocks): textos de relleno genéricos en vez de personas y marcas inventadas (M5)`.
+
+## Punto 7: menores (un commit)
+
+- **settings-01:** sin `$any($event)` (método `selectTab`, que solo toma una de las cuatro secciones) y sin el `!` del `afterEveryRender` (comprueba el `id`).
+- **pricing-01:** el «−17%» se calcula con los precios (el mayor ahorro de los planes con precio, redondeado; sin ahorro, sin insignia); la insignia «Most popular» se centra con `start-1/2` y el `translate` se invierte en RTL (`rtl:translate-x-1/2`).
+- **signup-01:** el formulario (con el `h1`) va antes que el `aside` (con su `h2`) en el DOM; a la vista sigue a la izquierda (`order-first`).
+- **`example.com`** en los datos de ejemplo: `otp-01` (`a••••@example.com`), `settings-01` (prefijo `example.com/`), `login-02` (`name@example.com`) y el mensaje de `signup-01` (`name@example.com`). Antes, `company.com` y `mimi.dev`, dominios reales.
+- **`<main>` y `<header>`:** la página de cada Block (plantilla `BlockDoc`) y la spec 4 dicen que ningún Block pone `<main>` y que el `<header>` de un Block pasa a ser el «banner» si la app no envuelve la ruta en `<main>`.
+
+**Pruebas:** `pricing-01.spec.ts` (+2: el ahorro calculado con otros planes y sin ahorro; las clases de la insignia en RTL), `signup-01.spec.ts` (+1: el `h1` antes del `h2` y `order-first`), `block-pages.spec.ts` (la nota de `<main>` en cada página) e `imports.spec.ts` (+1, alarma: ninguna plantilla de Block tiene `<main>`). Los Blocks: 57 en verde; páginas y vista previa: 19.
+
+Commit: `fix(blocks): menores de la revisión (tipos, «−17%» calculado, RTL, orden de encabezados, example.com, nota de <main>)`.

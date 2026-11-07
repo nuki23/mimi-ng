@@ -65,6 +65,21 @@ export interface BlockApiRow {
         >) y los componentes que usa a la de siempre. La pantalla es tuya: cámbiala como quieras. Si
         la modificas, la CLI no la vuelve a tocar al actualizar.
       </p>
+      <p data-slot="landmarks" class="text-pretty">
+        Ningún Block pone
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;main&gt;</code
+        >: va en tu layout, alrededor del
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+          >&lt;router-outlet&gt;</code
+        >. Si un Block tiene un
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+          >&lt;header&gt;</code
+        >
+        (settings-01) y tu app no envuelve la ruta en
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;main&gt;</code
+        >, ese <code class="font-mono text-[13px]">&lt;header&gt;</code> pasa a ser el «banner» de
+        la página para los lectores de pantalla.
+      </p>
 
       <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
       <ng-content />

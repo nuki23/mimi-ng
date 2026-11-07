@@ -34,7 +34,7 @@ let nextId = 0;
  * responde con `status`.
  *
  * ```html
- * <mimi-otp-01 destination="a••••@company.com" [status]="otp.status()" [loading]="otp.checking()"
+ * <mimi-otp-01 destination="a••••@example.com" [status]="otp.status()" [loading]="otp.checking()"
  *   (verify)="otp.check($event)" (resend)="otp.send()" (changeDestination)="router.navigate(['/signup'])" />
  * ```
  */
@@ -50,7 +50,7 @@ let nextId = 0;
 })
 export class Otp01 {
   /** El correo o teléfono, ya enmascarado, que se muestra. */
-  readonly destination = input('a••••@company.com');
+  readonly destination = input('a••••@example.com');
   readonly length = input(6, { transform: numberAttribute });
   /** Segundos hasta poder pedir otro código. */
   readonly resendSeconds = input(60, { transform: numberAttribute });

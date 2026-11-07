@@ -12,7 +12,7 @@
     [panelClass]="panelClasses"
     [style.gap.px]="wide() ? 40 : 0"
     [value]="tab()"
-    (valueChange)="tab.set($any($event))"
+    (valueChange)="selectTab($event)"
   >
     @for (item of tabs; track item.value) {
       <ng-template [mimiTabLabel]="item.value">
@@ -127,7 +127,7 @@
                 <span
                   aria-hidden="true"
                   class="flex h-full items-center border-e border-input bg-muted px-2.5 text-[13px] text-muted-foreground"
-                  >mimi.dev/</span
+                  >example.com/</span
                 >
                 <input
                   mimiInput

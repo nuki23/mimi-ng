@@ -94,6 +94,8 @@ describe('Páginas de los Blocks', () => {
       expect(el.querySelector('h1')?.textContent?.trim()).toBe(name);
       expect(el.querySelector('iframe')?.getAttribute('src')).toBe(`/preview/blocks/${name}`);
       expect(el.textContent).toContain(`ng g mimi ${name}`);
+      // Ningún Block pone <main>: la página lo dice (con lo del <header>).
+      expect(el.querySelector('[data-slot="landmarks"]')?.textContent).toContain('<main>');
       expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
         'preview',
         'installation',

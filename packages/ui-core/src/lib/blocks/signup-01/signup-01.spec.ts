@@ -90,7 +90,7 @@ describe('Signup01', () => {
     const { type, blur, el } = await setup();
     await type('Work email', 'ana@empresa');
     await blur('Work email');
-    expect(el.textContent).toContain('Add the domain, for example ana@company.com.');
+    expect(el.textContent).toContain('Add the domain, for example name@example.com.');
     await type('Work email', 'ana@empresa.com');
     expect(el.textContent).toContain('Valid email.');
   });
@@ -164,6 +164,13 @@ describe('Signup01', () => {
     await fixture.whenStable();
     expect(host.submitted).toEqual([]);
     expect(q('[role="alert"]').textContent).toContain('This email is already registered.');
+  });
+
+  it('el h1 va antes del aside con su h2 en el DOM; a la vista, los beneficios a la izquierda', async () => {
+    const { el } = await setup();
+    const headings = [...el.querySelectorAll('h1, h2')].map((h) => h.tagName);
+    expect(headings).toEqual(['H1', 'H2']);
+    expect(el.querySelector('aside')?.classList).toContain('order-first');
   });
 
   it('contraseñas con autocomplete="new-password"; un h1; class del usuario', async () => {
