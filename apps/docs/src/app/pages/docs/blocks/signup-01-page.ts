@@ -7,8 +7,7 @@ import type { BlockState } from './block-frame';
 import tsSource from '@/blocks/signup-01/signup-01' with { loader: 'text' };
 // @ts-expect-error
 import htmlSource from '@/blocks/signup-01/signup-01.html' with { loader: 'text' };
-// @ts-expect-error
-import indexSource from '@/blocks/signup-01/index' with { loader: 'text' };
+import { pageFiles, pageInfo } from './page-code';
 
 /** Página del Block signup-01 (B.4). */
 @Component({
@@ -17,6 +16,7 @@ import indexSource from '@/blocks/signup-01/index' with { loader: 'text' };
   template: `
     <app-block-doc
       name="signup-01"
+      kind="page"
       description="Registro que guía mientras escribes: mensajes al salir de cada campo, el medidor de Password con sus reglas, confirmación de la contraseña y un botón que dice qué falta."
       [components]="components"
       [files]="files"
@@ -25,7 +25,7 @@ import indexSource from '@/blocks/signup-01/index' with { loader: 'text' };
       [states]="states"
     >
       <p class="text-pretty">
-        Ponla en tus rutas y conecta
+        Es tu página: pega la línea en tus rutas y conecta
         <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">submitted</code>
         con tu registro. Escribe en la vista previa para ver los mensajes: aparecen al salir de cada
         campo y, una vez tocado, cambian mientras escribes. «Fuerte» son las cuatro reglas del
@@ -64,11 +64,11 @@ import indexSource from '@/blocks/signup-01/index' with { loader: 'text' };
 })
 export class Signup01Page {
   protected readonly usage = [
-    "import { Signup01 } from './blocks/signup-01';",
+    '// app.routes.ts (la línea que te da ng g mimi)',
+    pageInfo('signup-01').routeLine,
     '',
-    "export const routes: Routes = [{ path: 'signup', component: Signup01 }];",
-    '',
-    '<mimi-signup-01',
+    '// O dentro de otra página tuya:',
+    '<app-signup-page',
     '  [loading]="auth.loading()"',
     '  [error]="auth.error()"',
     '  termsHref="/terms"',
@@ -86,11 +86,12 @@ export class Signup01Page {
     { name: 'form-field', path: '/docs/components/form-field' },
   ];
 
-  protected readonly files: BlockFile[] = [
-    { name: 'signup-01/signup-01.ts', code: tsSource as string, lang: 'angular-ts' },
-    { name: 'signup-01/signup-01.html', code: htmlSource as string, lang: 'angular-html' },
-    { name: 'signup-01/index.ts', code: indexSource as string, lang: 'typescript' },
-  ];
+  /** Como los genera ng g mimi signup-01 (B.11). */
+  protected readonly files: BlockFile[] = pageFiles(
+    'signup-01',
+    tsSource as string,
+    htmlSource as string,
+  );
 
   protected readonly states: BlockState[] = [
     { id: 'loading', label: 'Cargando' },
@@ -126,7 +127,7 @@ export class Signup01Page {
       name: 'submitted',
       type: '{ name, email, password }',
       default: '—',
-      description: 'Formulario completo enviado (Signup01Value).',
+      description: 'Formulario completo enviado (SignupPageValue).',
     },
   ];
 }

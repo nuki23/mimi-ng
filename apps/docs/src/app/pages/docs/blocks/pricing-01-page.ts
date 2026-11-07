@@ -17,6 +17,7 @@ import indexSource from '@/blocks/pricing-01/index' with { loader: 'text' };
   template: `
     <app-block-doc
       name="pricing-01"
+      kind="section"
       description="Tres planes con un interruptor mensual/anual; el destacado con la insignia «Most popular» y un borde de color. Los planes son datos y los precios se escriben con Intl."
       [components]="components"
       [files]="files"

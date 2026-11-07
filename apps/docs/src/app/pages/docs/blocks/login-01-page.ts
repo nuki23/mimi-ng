@@ -7,8 +7,7 @@ import type { BlockState } from './block-frame';
 import tsSource from '@/blocks/login-01/login-01' with { loader: 'text' };
 // @ts-expect-error
 import htmlSource from '@/blocks/login-01/login-01.html' with { loader: 'text' };
-// @ts-expect-error
-import indexSource from '@/blocks/login-01/index' with { loader: 'text' };
+import { pageFiles, pageInfo } from './page-code';
 
 /** Página del Block login-01 (B.2). */
 @Component({
@@ -17,6 +16,7 @@ import indexSource from '@/blocks/login-01/index' with { loader: 'text' };
   template: `
     <app-block-doc
       name="login-01"
+      kind="page"
       description="Inicio de sesión centrado: correo, contraseña con mostrar u ocultar, «recordarme» y botones de Google y GitHub. Listo para enchufar a tu autenticación con una salida."
       [components]="components"
       [files]="files"
@@ -25,10 +25,11 @@ import indexSource from '@/blocks/login-01/index' with { loader: 'text' };
       [states]="states"
     >
       <p class="text-pretty">
-        Es una página: ponla en tus rutas y conecta las salidas con tu autenticación. Los textos
-        están en inglés y en la plantilla (<code
-          class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-          >login-01.html</code
+        Es tu página: pega la línea en tus rutas y conecta el envío con tu autenticación en
+        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">login.ts</code>
+        (o úsala dentro de otra página, con sus entradas y salidas). Los textos están en inglés y en
+        la plantilla (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+          >login.html</code
         >): cámbialos ahí. El formulario usa Signal Forms; los mensajes de error salen de
         <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
           >provideMimiErrorMessages</code
@@ -61,13 +62,11 @@ import indexSource from '@/blocks/login-01/index' with { loader: 'text' };
 })
 export class Login01Page {
   protected readonly usage = [
-    '// app.routes.ts',
-    "import { Login01 } from './blocks/login-01';",
+    '// app.routes.ts (la línea que te da ng g mimi)',
+    pageInfo('login-01').routeLine,
     '',
-    "export const routes: Routes = [{ path: 'login', component: Login01 }];",
-    '',
-    '// O dentro de tu página, con tu autenticación:',
-    '<mimi-login-01',
+    '// O dentro de otra página tuya, con tu autenticación:',
+    '<app-login-page',
     '  [loading]="auth.loading()"',
     '  [error]="auth.error()"',
     '  signupHref="/signup"',
@@ -86,11 +85,12 @@ export class Login01Page {
     { name: 'separator', path: '/docs/components/separator' },
   ];
 
-  protected readonly files: BlockFile[] = [
-    { name: 'login-01/login-01.ts', code: tsSource as string, lang: 'angular-ts' },
-    { name: 'login-01/login-01.html', code: htmlSource as string, lang: 'angular-html' },
-    { name: 'login-01/index.ts', code: indexSource as string, lang: 'typescript' },
-  ];
+  /** Como los genera ng g mimi login-01 (B.11). */
+  protected readonly files: BlockFile[] = pageFiles(
+    'login-01',
+    tsSource as string,
+    htmlSource as string,
+  );
 
   protected readonly states: BlockState[] = [
     { id: 'loading', label: 'Cargando' },
@@ -120,7 +120,7 @@ export class Login01Page {
       name: 'submitted',
       type: '{ email, password, remember }',
       default: '—',
-      description: 'Formulario válido enviado (Login01Value).',
+      description: 'Formulario válido enviado (LoginPageValue).',
     },
     {
       name: 'provider',
