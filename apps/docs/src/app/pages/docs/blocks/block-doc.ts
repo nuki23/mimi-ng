@@ -65,6 +65,35 @@ export interface BlockApiRow {
         >) y los componentes que usa a la de siempre. La pantalla es tuya: cámbiala como quieras. Si
         la modificas, la CLI no la vuelve a tocar al actualizar.
       </p>
+      <ul data-slot="block-notes" class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+        <li>
+          <strong>Un Block es un componente Angular tuyo desde que se copia.</strong> Los
+          componentes de Mimi (Button, Input…) tienen una API estable que se cuida entre versiones;
+          un Block no: es un punto de partida. Sus entradas y salidas pueden cambiar de una versión
+          a otra, y lo normal es que lo edites.
+        </li>
+        <li>
+          <strong>La carpeta la eliges tú:</strong> cambia
+          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+            >aliases.blocks</code
+          >
+          en
+          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi.json</code>
+          (por ejemplo, a
+          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+            >src/app/pages</code
+          >) antes de agregar el Block. Tiene que ser una ruta relativa a la raíz de tu proyecto.
+        </li>
+        <li>
+          <strong>La CLI no toca tus rutas:</strong> registra la pantalla tú en
+          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+            >app.routes.ts</code
+          >
+          (el resumen de
+          <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g mimi</code>
+          te da la línea).
+        </li>
+      </ul>
       <p data-slot="landmarks" class="text-pretty">
         Ningún Block pone
         <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;main&gt;</code
