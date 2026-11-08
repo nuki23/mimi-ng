@@ -149,7 +149,8 @@ export class DataTablePage {
       name: 'selection',
       type: 'unknown[]',
       default: '[]',
-      description: 'Ids de las filas elegidas.',
+      description:
+        'Ids de las filas elegidas. Sin total, al buscar o filtrar pierde las que ya no se ven.',
     },
     {
       name: 'expanded',

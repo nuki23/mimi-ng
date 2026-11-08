@@ -256,6 +256,29 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     expect(table.querySelector('[data-slot="search"]')).not.toBeNull();
   });
 
+  it('al buscar o filtrar, la selección pierde las filas que ya no se ven (G3.P)', async () => {
+    // Con filas elegidas la barra reemplaza al buscador: la búsqueda y los filtros cambian desde
+    // fuera (los modelos `query` y `filters`).
+    const { table, host, fixture } = await setup();
+    host.selection.set([1, 4, 5]);
+    await settle(fixture);
+    // Buscar «delta»: solo la fila 4 se ve; la barra no cuenta ni entrega la 1 y la 5.
+    host.query.set('delta');
+    await settle(fixture);
+    expect(host.selection()).toEqual([4]);
+    expect(table.querySelector('[data-slot="selection"]')!.textContent).toContain('1 selected');
+    expect(table.querySelector('[data-test="bulk"]')!.textContent).toBe('Borrar 1');
+    // Quitar la búsqueda no devuelve lo podado.
+    host.query.set('');
+    await settle(fixture);
+    expect(host.selection()).toEqual([4]);
+    // Un filtro por columna poda igual: «Activo» deja fuera la 4.
+    host.selection.set([1, 4]);
+    host.filters.set({ status: ['active'] });
+    await settle(fixture);
+    expect(host.selection()).toEqual([1]);
+  });
+
   it('expandir: aria-expanded y aria-controls al detalle; acciones y celdas propias', async () => {
     const { table, host, fixture } = await setup();
     const expand = table.querySelector<HTMLButtonElement>('[data-slot="expand"]')!;

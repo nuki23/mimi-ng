@@ -982,6 +982,23 @@ export class MimiDataTable<T = any> {
     if (untracked(this.page) > pages) untracked(() => this.page.set(pages));
   });
 
+  /**
+   * Al buscar o filtrar (sin `total`), la selección pierde las filas que ya no se ven: la barra
+   * nunca cuenta ni entrega filas ocultas. Quitar la búsqueda no devuelve lo podado (G3.P).
+   */
+  private readonly pruneSelection = effect(() => {
+    this.query();
+    this.filters();
+    if (this.server() || !this.narrowed()) return;
+    untracked(() => {
+      const selected = this.selection();
+      if (!selected.length) return;
+      const visible = new Set(this.filteredRows().map((row) => this.rowId()(row)));
+      const kept = selected.filter((id) => visible.has(id));
+      if (kept.length !== selected.length) this.selection.set(kept);
+    });
+  });
+
   protected valueOf(column: MimiTableColumn<T>, row: T): unknown {
     return column.value ? column.value(row) : (row as Record<string, unknown>)[column.id];
   }

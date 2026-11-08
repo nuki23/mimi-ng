@@ -182,6 +182,12 @@ Anotados a pedido del usuario (05/11/2026), tras la revisión independiente de l
 - **Selector `mimi-date-range` y clase `MimiDateRangePicker`:** el selector no dice «picker» y la clase sí (el Date Picker es `mimi-date-picker` / `MimiDatePicker`).
 - **`MIMI_DATE_PICKER_TEXT` en `calendar/`:** el token de textos lleva el nombre del Date Picker, pero vive en `calendar/calendar-texts.ts` y lo usan también el calendario suelto y el Date Range.
 
+## Arreglos tras la puerta del Grupo 3 (08/11/2026)
+
+Hallazgos plausibles de la G3.P, arreglados en modo autónomo (cada uno con una prueba que falló antes). Decididos por defecto, pendientes de revisión del usuario. Ninguno cambia algo publicado en la 0.4.0 (el Grupo 3 está sin publicar).
+
+- **Data Table, selección y búsqueda o filtro (Recomendación del informe, primera opción):** en modo cliente, cuando `query` o `filters` cambian y quedan filas elegidas que ya no se ven, la selección se poda a las visibles; quitar la búsqueda no las devuelve. Así la barra nunca cuenta ni entrega filas ocultas, sin mensaje nuevo ni textos que traducir. En modo servidor (`total`) no se poda: la tabla no conoce las demás filas.
+
 ## Arreglos tras la revisión independiente de la rama (05/11/2026)
 
 Pedidos por el usuario; no son decisiones por defecto. Lo que cambia algo publicado en la 0.2.0 va marcado **RUPTURA**, para el CHANGELOG de la puerta.
