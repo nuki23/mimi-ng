@@ -53,7 +53,8 @@ export type TokenComponent =
   | 'fileUpload'
   | 'colorPicker'
   | 'tree'
-  | 'sortable';
+  | 'sortable'
+  | 'command';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -93,6 +94,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   colorPicker: 'color-picker',
   tree: 'tree',
   sortable: 'sortable',
+  command: 'command',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1889,6 +1891,64 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-info-soft',
       preset: false,
       description: 'Fondo del hueco donde caerá.',
+    },
+  ],
+  command: [
+    {
+      name: '--mimi-command-width',
+      default: '560px',
+      preset: true,
+      description: 'Ancho del panel en el diálogo.',
+    },
+    {
+      name: '--mimi-command-top',
+      default: '36px',
+      preset: true,
+      description: 'Distancia del panel al borde superior en el diálogo.',
+    },
+    {
+      name: '--mimi-command-input-height',
+      default: '52px',
+      preset: true,
+      description: 'Alto de la fila del buscador.',
+    },
+    {
+      name: '--mimi-command-input-font-size',
+      default: '15px',
+      preset: true,
+      description: 'Tamaño del texto del buscador.',
+    },
+    {
+      name: '--mimi-command-list-height',
+      default: '332px',
+      preset: true,
+      description: 'Alto máximo de la lista.',
+    },
+    {
+      name: '--mimi-command-item-height',
+      default: '40px',
+      preset: true,
+      description: 'Alto de cada comando.',
+    },
+    {
+      name: '--mimi-command-item-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio del comando.',
+    },
+    {
+      name: '--mimi-command-icon-size',
+      default: '26px',
+      preset: true,
+      description: 'Caja del ícono del comando.',
+    },
+    {
+      name: '--mimi-command-active',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo del comando activo.',
     },
   ],
 };

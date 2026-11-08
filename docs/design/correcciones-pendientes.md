@@ -229,6 +229,14 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Sin diseño:** la lista deshabilitada (asas al 50 %) y el asa con foco (el contorno `ring` de los botones).
   - **Contenido del elemento:** el número, el título, el dato y la etiqueta del diseño son del usuario (plantilla `mimiSortableItem`); el ejemplo del sitio los reproduce con Badge.
 
+  Command (G3.3, 07/11/2026):
+  - **Título de grupo:** relleno `6px 8px 4px` (el de la lista compartida con Combobox, ítem `option-list`), no el `8px 10px 4px` del diseño; el tamaño, el peso y el color son los del diseño.
+  - **Alto de la lista:** el diseño lo fija en 332px; Mimi lo usa como máximo (`--mimi-command-list-height`) y la lista se acorta al filtrar, así que el panel cambia de alto mientras se escribe.
+  - **Posición del panel en una pantalla real:** el diseño lo pone a 36px del borde de arriba dentro de un marco de 500px; Mimi usa esos 36px en la pantalla (`--mimi-command-top`). En móvil tapa la cabecera del sitio. Confirmar con el diseño (por ejemplo, un porcentaje del alto).
+  - **Sin diseño:** comandos deshabilitados (opacidad 50 %, sin ejecutar), la paleta dentro de la página (borde, radio de tarjeta y sombra `popover`, sin la tecla `esc`) y el disparador en Windows (el ejemplo muestra «Ctrl K» fuera de Mac).
+  - **Atajos de la derecha:** se muestran en `kbd`, ocultos a los lectores (los símbolos ⌘ ⇧ se leen mal); Mimi no los registra.
+  - **Disparador del diseño:** la caja de Input de 220 × 34px con «Buscar…» y ⌘K no es una pieza de Command; el ejemplo del sitio la escribe con clases.
+
   Blocks: la página del sitio (B.1, 07/11/2026):
   - **Página de un Block sin diseño:** `Mimi F6 Blocks.dc.html` es el índice de los Blocks, no la página de documentación. La página (`/docs/blocks/<nombre>`) se armó con lo que ya tiene el sitio: título, descripción, la vista previa en un marco con borde y fondo `muted`, `InstallCommand`, «Componentes que usa» como enlaces en píldora, el código con `CodeBlock` (un bloque por archivo) y la tabla de API. Pedir el diseño de la página.
   - **Marco de la vista previa:** `iframe` de 760px de alto, con tres `mimi-toggle-group` encima (Escritorio · Móvil (375 px), Claro · Oscuro y el estado) y el enlace «Abrir en una pestaña». El ancho móvil (375px) es el de los marcos de `F6 Blocks`; el alto y los controles no están en el diseño.

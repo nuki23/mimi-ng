@@ -52,6 +52,7 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   colorPicker: 'color-picker',
   tree: 'tree',
   sortable: 'sortable-list',
+  command: 'command',
 };
 
 /**

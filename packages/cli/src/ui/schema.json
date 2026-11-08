@@ -52,6 +52,10 @@
             "label": "combobox"
           },
           {
+            "value": "command",
+            "label": "command"
+          },
+          {
             "value": "confirm",
             "label": "confirm"
           },

@@ -38,6 +38,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   'toggle-group': ['forms', 'cdk'],
   select: ['forms', 'cdk', 'aria'],
   combobox: ['forms', 'cdk', 'aria'],
+  command: ['cdk', 'aria'],
   calendar: ['cdk'],
   'date-picker': ['forms', 'cdk'],
   'date-range': ['forms', 'cdk'],
@@ -112,6 +113,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiComboboxText',
     spanish: 'MIMI_COMBOBOX_TEXT_ES',
     file: 'combobox/combobox-texts',
+  },
+  {
+    component: 'Command',
+    provider: 'provideMimiCommandText',
+    spanish: 'MIMI_COMMAND_TEXT_ES',
+    file: 'command/command-texts',
   },
   {
     component: 'Calendario, Date Picker y Date Range',

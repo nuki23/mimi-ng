@@ -79,6 +79,7 @@ export class App {}
 - **Checkbox**: `ng g mimi checkbox` · [documentación](https://ng.mimiworks.dev/docs/components/switch)
 - **Color Picker**: `ng g mimi color-picker` · [documentación](https://ng.mimiworks.dev/docs/components/color-picker)
 - **Combobox**: `ng g mimi combobox` · [documentación](https://ng.mimiworks.dev/docs/components/combobox)
+- **Command**: `ng g mimi command` · [documentación](https://ng.mimiworks.dev/docs/components/command)
 - **Confirm**: `ng g mimi confirm` · [documentación](https://ng.mimiworks.dev/docs/components/confirm)
 - **Context Menu**: `ng g mimi context-menu` · [documentación](https://ng.mimiworks.dev/docs/components/context-menu)
 - **Date Picker**: `ng g mimi date-picker` · [documentación](https://ng.mimiworks.dev/docs/components/date-picker)

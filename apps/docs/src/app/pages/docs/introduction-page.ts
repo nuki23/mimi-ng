@@ -41,6 +41,7 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'checkbox', name: 'Checkbox' },
   { id: 'color-picker', name: 'Color Picker' },
   { id: 'combobox', name: 'Combobox' },
+  { id: 'command', name: 'Command' },
   { id: 'confirm', name: 'Confirm' },
   { id: 'context-menu', name: 'Context Menu' },
   { id: 'date-picker', name: 'Date Picker' },

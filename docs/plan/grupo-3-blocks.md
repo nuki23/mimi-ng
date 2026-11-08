@@ -16,7 +16,7 @@ Componentes de la spec 4 (tabla del Grupo 3) y el Block que usa Data Table.
   - Depende de: G2.P, 2.10 (Checkbox, hecha)
 - [x] G3.2 Sortable List, con `@angular/cdk/drag-drop` y accesible con teclado. Diseño: `F4 Command Tree Sortable`. Detalle: [grupo-3/G3.2.md](grupo-3/G3.2.md) (07/11/2026; pendiente de comprobación manual).
   - Depende de: G2.P (spec 4: `@angular/cdk/drag-drop`, manejo de teclado propio)
-- [ ] G3.3 Command (⌘K). Después, la tarea 5.8 (buscador de la documentación). Diseño: `F4 Command Tree Sortable`.
+- [x] G3.3 Command (⌘K). Después, la tarea 5.8 (buscador de la documentación). Diseño: `F4 Command Tree Sortable`. Detalle: [grupo-3/G3.3.md](grupo-3/G3.3.md) (07/11/2026; pendiente de comprobación manual).
   - Depende de: G2.P, G1.6 (Dialog, hecha), G2.8 (lógica de lista de Combobox) · Bloquea: 5.8
 - [ ] G3.4 Data Table (ordenar, filtrar, paginar, seleccionar, columnas fijas). Usa Checkbox, Dropdown Menu y Pagination. Diseño: `Data Table` (en `F4 Data Table y Pagination`).
   - Depende de: G2.P, 2.10 (Checkbox), G1.3 (Dropdown Menu), G1.11 (Pagination), 2.2 (Input); todas hechas · Bloquea: B.8, B.9

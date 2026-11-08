@@ -590,6 +590,28 @@ export interface MimiSortableTokens {
 }
 
 /**
+ * Command. El fondo del comando activo va en el CSS (`--mimi-command-active`).
+ */
+export interface MimiCommandTokens {
+  /** Ancho del panel en el diálogo (560px). */
+  width?: string;
+  /** Distancia del panel al borde superior en el diálogo (36px). */
+  top?: string;
+  /** Alto de la fila del buscador (52px). */
+  inputHeight?: string;
+  /** Tamaño del texto del buscador (15px). */
+  inputFontSize?: string;
+  /** Alto máximo de la lista (332px). */
+  listHeight?: string;
+  /** Alto de cada comando (40px). */
+  itemHeight?: string;
+  /** Radio del comando (el global `radius-sm`). */
+  itemRadius?: string;
+  /** Caja del ícono del comando (26px). */
+  iconSize?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -630,6 +652,7 @@ export interface MimiComponentTokens {
   colorPicker?: MimiColorPickerTokens;
   tree?: MimiTreeTokens;
   sortable?: MimiSortableTokens;
+  command?: MimiCommandTokens;
 }
 
 export interface MimiThemePreset {

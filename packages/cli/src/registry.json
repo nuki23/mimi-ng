@@ -275,6 +275,18 @@
         "utils/overlay"
       ]
     },
+    "command": {
+      "type": "component",
+      "files": [
+        "components/command/command.ts",
+        "components/command/command-texts.ts",
+        "components/command/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/aria": "^22.2.4"
+      },
+      "registryDependencies": ["dialog", "option-list", "utils/cn"]
+    },
     "calendar": {
       "type": "component",
       "files": [

@@ -8,6 +8,12 @@ import { PAGE_EXAMPLES_TIMEOUT } from './code/code-preview.testing';
 import { DOCS_ROUTES } from './pages/docs/docs.routes';
 
 /**
+ * Importar todas las páginas crece con cada componente (no es una prueba de un ejemplo): sola
+ * tarda unos 5 s; con `pnpm test` completo, más de 20. 60 s da margen sin tapar un cuelgue.
+ */
+const ALL_PAGES_TIMEOUT = 60_000;
+
+/**
  * Las rutas de /docs están en pages/docs/docs.routes.ts y se cargan con loadChildren (M.13).
  * Estas pruebas usan la tabla real de la app: navegación directa, redirección y título.
  */
@@ -37,14 +43,15 @@ describe('Rutas de la app', () => {
     async () => {
       const pages = DOCS_ROUTES.filter((r) => r.loadComponent);
       expect(pages.length).toBeGreaterThan(30);
-      // Importa los ~40 módulos de página: con el equipo cargado pasa de los 5 s por defecto.
-      for (const route of pages) {
+      // Importa los ~50 módulos de página, en paralelo: en serie, con `pnpm test` completo y el
+      // equipo cargado, pasó de los 20 s al sumar la página de Command (G3.3, 07/11/2026).
+      const components = await Promise.all(pages.map((route) => route.loadComponent!()));
+      pages.forEach((route, i) => {
         expect(route.title, route.path).toEqual(expect.any(String));
-        const component = await route.loadComponent!();
-        expect(component, route.path).toEqual(expect.any(Function));
-      }
+        expect(components[i], route.path).toEqual(expect.any(Function));
+      });
     },
-    PAGE_EXAMPLES_TIMEOUT,
+    ALL_PAGES_TIMEOUT,
   );
 
   it(

@@ -134,6 +134,11 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./components/combobox/combobox-page').then((m) => m.ComboboxPage),
   },
   {
+    path: 'components/command',
+    title: 'Command · Mimi',
+    loadComponent: () => import('./components/command/command-page').then((m) => m.CommandPage),
+  },
+  {
     path: 'components/date-picker',
     title: 'Date Picker · Mimi',
     loadComponent: () =>
