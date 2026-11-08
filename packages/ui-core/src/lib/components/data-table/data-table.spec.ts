@@ -236,7 +236,9 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     boxes()[1].click();
     await settle(fixture);
     expect(host.selection()).toEqual([1]);
-    expect(rows()[0].getAttribute('aria-selected')).toBe('true');
+    // En una `<table>` el rol `row` no admite aria-selected: la fila elegida lo dice su casilla.
+    expect(rows()[0].hasAttribute('aria-selected')).toBe(false);
+    expect(rows()[0].hasAttribute('data-selected')).toBe(true);
     expect(boxes()[0].getAttribute('aria-checked')).toBe('mixed');
     expect(table.querySelector('[data-slot="selection"]')!.textContent).toContain('1 selected');
     expect(live()).toBe('1 selected');
@@ -290,7 +292,11 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     const { table } = await setup();
     const cells = table.querySelector('tbody tr')!.querySelectorAll<HTMLElement>('td');
     expect(cells[0].className).toContain('sticky');
-    expect(cells[1].style.left).toBe('44px');
+    // Lógico (RTL): inset-inline-start y no left.
+    const start = (el: HTMLElement) => el.style.getPropertyValue('inset-inline-start');
+    expect(start(cells[1])).toBe('44px');
+    expect(cells[0].className).toContain('start-0');
+    expect(cells[0].className).not.toMatch(/(^| )left-0/);
     expect(cells[2].className).toContain('sticky');
     // Anchos fijos: sin ellos el navegador reparte el ancho y los left de las fijas no coinciden.
     expect(cells[0].className).toContain('min-w-11');
@@ -298,10 +304,15 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     expect(cells[2].style.minWidth).toBe('200px');
     expect(cells[2].style.maxWidth).toBe('200px');
     // jsdom simplifica el calc() de la casilla (44px) y el expandir (36px).
-    expect(cells[2].style.left).toMatch(/^calc\((44px \+ 36px|80px)\)$/);
+    expect(start(cells[2])).toMatch(/^calc\((44px \+ 36px|80px)\)$/);
     expect(cells[2].className).toContain('group-data-[scrolled]/data-table:shadow-');
     expect(cells[3].className).not.toContain('sticky');
-    expect(cells[4].className).toContain('text-right');
+    expect(cells[4].className).toContain('text-end');
+    // La región de desplazamiento se alcanza con el teclado (Firefox y Safari) y tiene nombre.
+    const scroll = table.querySelector('[data-slot="scroll"]')!;
+    expect(scroll.getAttribute('tabindex')).toBe('0');
+    expect(scroll.getAttribute('role')).toBe('region');
+    expect(scroll.getAttribute('aria-label')).toBe('Clientes');
   });
 
   it('cargando: esqueleto con aria-busy y sin pie; vacío sin datos con la acción propia', async () => {

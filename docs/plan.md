@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-Ninguna.
+- G3.P · `auto/grupo-3-2026-11-07` · Claude Code (modo autónomo) · 07/11/2026 · a falta de comprobación del usuario (manual, versión y publicación)
 
 ## Mantenimiento
 
@@ -136,7 +136,7 @@ Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md); las tareas detal
 - [x] G3.3 Command (⌘K) (07/11/2026; pendiente de comprobación manual: NVDA y navegador real) · v0.5.0 · L · depende: G2.P, G1.6, G2.8 · [docs/plan/grupo-3/G3.3.md](plan/grupo-3/G3.3.md)
 - [x] G3.4 Data Table (07/11/2026; pendiente de comprobación manual: NVDA y navegador real) · v0.5.0 · L · depende: G2.P, 2.10, G1.3, G1.11, 2.2 · [docs/plan/grupo-3/G3.4.md](plan/grupo-3/G3.4.md)
 - [x] B.9 `table-01` (07/11/2026; pendiente de comprobación manual: teléfono real y NVDA) · v0.5.0 · M · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G3.P Puerta del Grupo 3 · v0.5.0 · — · depende: G3.1 a G3.4, B.9, B.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [~] G3.P Puerta del Grupo 3 (a falta de comprobación del usuario: manual, versión y publicación) · v0.5.0 · — · depende: G3.1 a G3.4, B.9, B.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 
 ## Grupo 4 → v0.6.0: estructura
 

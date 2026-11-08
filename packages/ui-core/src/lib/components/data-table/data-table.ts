@@ -236,7 +236,7 @@ const CELL_CLASSES = cn(
 );
 
 const HEAD_CLASSES = cn(
-  'h-[var(--mimi-table-head-height,38px)] border-b border-border px-[var(--mimi-table-cell-px,10px)] text-left whitespace-nowrap',
+  'h-[var(--mimi-table-head-height,38px)] border-b border-border px-[var(--mimi-table-cell-px,10px)] text-start whitespace-nowrap',
   'group-data-[density=comfortable]/data-table:h-[var(--mimi-table-head-height-comfortable,44px)]',
   'bg-[color:var(--mimi-table-head-bg,var(--mimi-muted))] text-[12.5px] font-semibold text-muted-foreground',
 );
@@ -256,16 +256,22 @@ const SKELETON_CLASSES =
 
 /** Clases de cada pieza, ya mezcladas (sin clases estáticas que choquen con un binding). */
 const UI = {
-  selectHead: cn(HEAD_CLASSES, 'sticky left-0 z-[2] box-border w-11 min-w-11 max-w-11 pr-0 pl-3.5'),
+  selectHead: cn(
+    HEAD_CLASSES,
+    'sticky start-0 z-[2] box-border w-11 min-w-11 max-w-11 pe-0 ps-3.5',
+  ),
   expandHead: cn(HEAD_CLASSES, 'sticky z-[2] box-border w-9 min-w-9 max-w-9 px-0'),
   actionsHead: cn(HEAD_CLASSES, 'w-14'),
-  selectCell: cn(CELL_CLASSES, 'sticky left-0 z-[1] box-border w-11 min-w-11 max-w-11 pr-0 pl-3.5'),
+  selectCell: cn(
+    CELL_CLASSES,
+    'sticky start-0 z-[1] box-border w-11 min-w-11 max-w-11 pe-0 ps-3.5',
+  ),
   expandCell: cn(CELL_CLASSES, 'sticky z-[1] box-border w-9 min-w-9 max-w-9 px-0'),
   actionsCell: cn(CELL_CLASSES, 'px-2 text-center'),
   clearSelection: cn(ICON_BUTTON_CLASSES, 'h-[30px] px-2.5 text-[13px] font-medium'),
   clearSearch: cn(
     ICON_BUTTON_CLASSES,
-    'absolute top-1/2 right-2 size-[22px] -translate-y-1/2 rounded-full bg-muted [&_svg]:size-3',
+    'absolute top-1/2 end-2 size-[22px] -translate-y-1/2 rounded-full bg-muted [&_svg]:size-3',
   ),
   sort: cn(
     ICON_BUTTON_CLASSES,
@@ -368,7 +374,7 @@ interface ColumnView<T> {
           <div class="relative w-[280px] max-w-full">
             <svg
               aria-hidden="true"
-              class="pointer-events-none absolute top-1/2 left-2.5 size-[15px] -translate-y-1/2 text-muted-foreground"
+              class="pointer-events-none absolute top-1/2 start-2.5 size-[15px] -translate-y-1/2 text-muted-foreground"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -485,7 +491,10 @@ interface ColumnView<T> {
 
     <div
       data-slot="scroll"
-      class="overflow-x-auto overscroll-x-contain"
+      class="overflow-x-auto overscroll-x-contain focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring"
+      role="region"
+      tabindex="0"
+      [attr.aria-label]="ariaLabel() || null"
       (scroll)="onScroll($event)"
     >
       <table
@@ -508,7 +517,7 @@ interface ColumnView<T> {
               </th>
             }
             @if (detail()) {
-              <th scope="col" [class]="ui.expandHead" [style.left]="expandLeft()">
+              <th scope="col" [class]="ui.expandHead" [style.inset-inline-start]="expandLeft()">
                 <span class="sr-only">{{ texts.details }}</span>
               </th>
             }
@@ -516,7 +525,7 @@ interface ColumnView<T> {
               <th
                 scope="col"
                 [class]="col.headClass"
-                [style.left]="col.left"
+                [style.inset-inline-start]="col.left"
                 [style.width]="col.column.width ?? null"
                 [style.min-width]="col.left !== null ? col.column.width : null"
                 [style.max-width]="col.left !== null ? col.column.width : null"
@@ -584,7 +593,7 @@ interface ColumnView<T> {
                         @if (col.filtered) {
                           <span
                             aria-hidden="true"
-                            class="absolute top-0.5 right-0.5 size-1.5 rounded-full bg-info"
+                            class="absolute top-0.5 end-0.5 size-1.5 rounded-full bg-info"
                           ></span>
                         }
                       </button>
@@ -624,11 +633,7 @@ interface ColumnView<T> {
             }
           } @else {
             @for (row of pageRows(); track rowId()(row); let i = $index) {
-              <tr
-                class="group/row"
-                [attr.aria-selected]="selectable() ? isSelected(row) : null"
-                [attr.data-selected]="isSelected(row) ? '' : null"
-              >
+              <tr class="group/row" [attr.data-selected]="isSelected(row) ? '' : null">
                 @if (selectable()) {
                   <td [class]="ui.selectCell">
                     <mimi-checkbox
@@ -639,7 +644,7 @@ interface ColumnView<T> {
                   </td>
                 }
                 @if (detail()) {
-                  <td [class]="ui.expandCell" [style.left]="expandLeft()">
+                  <td [class]="ui.expandCell" [style.inset-inline-start]="expandLeft()">
                     <button
                       type="button"
                       data-slot="expand"
@@ -666,7 +671,7 @@ interface ColumnView<T> {
                 @for (col of columnViews(); track col.column.id) {
                   <td
                     [class]="col.cellClass"
-                    [style.left]="col.left"
+                    [style.inset-inline-start]="col.left"
                     [style.min-width]="col.left !== null ? col.column.width : null"
                     [style.max-width]="col.left !== null ? col.column.width : null"
                   >
@@ -699,7 +704,7 @@ interface ColumnView<T> {
                       class="border-b border-border bg-[color:var(--mimi-table-expanded-bg,var(--mimi-muted))] p-0"
                       [attr.colspan]="colCount()"
                     >
-                      <div class="sticky left-0 w-fit max-w-full px-5 py-4" [id]="detailId(i)">
+                      <div class="sticky start-0 w-fit max-w-full px-5 py-4" [id]="detailId(i)">
                         <ng-container
                           [mimiTableOutlet]="detail.templateRef"
                           [mimiTableOutletItem]="row"
@@ -715,7 +720,7 @@ interface ColumnView<T> {
                 <td class="border-b border-border p-0" [attr.colspan]="colCount()">
                   <div
                     data-slot="empty"
-                    class="sticky left-0 flex w-full max-w-[760px] flex-col items-center gap-2 px-6 py-14 text-center"
+                    class="sticky start-0 flex w-full max-w-[760px] flex-col items-center gap-2 px-6 py-14 text-center"
                   >
                     <span
                       class="inline-flex size-[52px] items-center justify-center rounded-full bg-muted text-muted-foreground"
@@ -855,7 +860,7 @@ export class MimiDataTable<T = any> {
       const left = sticky ? (offsets.length ? `calc(${offsets.join(' + ')})` : '0px') : null;
       if (sticky) offsets.push(column.width!);
       const edge = sticky && i === lastSticky;
-      const extra = cn(edge && EDGE_CLASSES, column.align === 'end' && 'text-right');
+      const extra = cn(edge && EDGE_CLASSES, column.align === 'end' && 'text-end');
       return {
         column,
         left,

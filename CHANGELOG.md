@@ -6,6 +6,20 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 
 Sin versión todavía: sale en la siguiente que se publique.
 
+### Grupo 3: datos (cuatro componentes y la pantalla de clientes)
+
+Cuatro componentes nuevos y un Block. Todo es aditivo: no cambia nada de lo publicado en la 0.4.0 (salvo lo que dice «Si ya los tienes», abajo). Se agregan con `ng g mimi <nombre>` y traen lo que necesitan (`@angular/cdk`, `@angular/aria`, otros componentes).
+
+- **Tree** (`ng g mimi tree`): árbol por datos (`nodes`) con selección simple o múltiple (casillas con estado parcial) y carga diferida (`loadChildren`). Teclado de la APG; funciona con `[formField]`, `formControlName` y `ngModel`. Base propia (el `ngTree` de `@angular/aria` no tiene casillas ni carga diferida).
+- **Sortable List** (`ng g mimi sortable-list`): lista que se reordena con el puntero o el dedo (`@angular/cdk/drag-drop`) y con el teclado desde el asa (Espacio, flechas, Escape), con anuncios para lectores de pantalla.
+- **Command** (`ng g mimi command`): paleta de comandos. `mimi-command` en la página y `mimi-command-dialog` con ⌘K o Ctrl+K; búsqueda sin tildes (y por `keywords`), grupos, íconos con tono, atajos y «sin resultados» con una acción. Usa Dialog y la lista de Combobox.
+- **Data Table** (`ng g mimi data-table`): tabla con búsqueda, filtros por columna (chips), orden, paginación (Pagination), selección (Checkbox, con barra de acciones), detalle expandible, acciones por fila, columnas fijas y dos densidades; en el cliente o, con `[total]`, en el servidor. Tabla nativa, no el `grid` de aria.
+- **`table-01`** (`ng g mimi table-01`): la pantalla «Clientes» como **página** (se genera en `src/app/pages/table/`, clase `TablePage`, con su `table.routes.ts` y la línea para `app.routes.ts`, como las demás pantallas): resumen y Data Table en escritorio; lista de tarjetas, píldoras de estado y barra de acciones en móvil.
+- **Tokens:** las variables `--mimi-tree-*`, `--mimi-sortable-*`, `--mimi-command-*` y `--mimi-table-*` (con su tipo en `provideMimiTheme`: `tree`, `sortable`, `command` y `dataTable`), en las páginas de cada componente.
+- **Textos:** cada componente trae `provideMimi<Nombre>Text(MIMI_<NOMBRE>_TEXT_ES)`, como los demás.
+- **Si ya los tienes:** `Checkbox` exporta ahora los estilos de su casilla (`MIMI_CHECKBOX_BOX_STYLES`) para el Tree; no cambia su aspecto ni su API. Solo importa si pides el Tree (lo usa): si modificaste `checkbox.ts`, `ng g mimi` no lo reemplaza (te avisa, como siempre) y el Tree no compilará hasta que agregues esa exportación a mano o uses `--overwrite` (que reemplaza tu Checkbox).
+- **Cómo actualizar desde la 0.4.0:** `npm i -D @mimi-ng/cli@<versión>` y `ng g mimi <los componentes que usas>`. Nada que migrar; los componentes nuevos son opcionales.
+
 ### Los Blocks de pantalla se generan como páginas tuyas (B.11)
 
 **Cambia lo que hace `ng g mimi` con `login-01`, `login-02`, `signup-01`, `otp-01` y `settings-01` en un proyecto que no los tiene** (RUPTURA respecto de la 0.4.0). Antes copiaba el Block tal cual a `src/app/blocks/login-01/` (clase `Login01`, selector `mimi-login-01`); ahora genera una página tuya:
