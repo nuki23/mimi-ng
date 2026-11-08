@@ -2,6 +2,7 @@ import { Directionality } from '@angular/cdk/bidi';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
   ElementRef,
   Injector,
@@ -345,6 +346,9 @@ export class MimiTree<T = unknown> implements FormValueControl<string | null | s
   private readonly dir = inject(Directionality, { optional: true });
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly injector = inject(Injector);
+  /** Una carga diferida que termina después de destruirse no escribe señales (G3.P). */
+  private destroyed = false;
+  private readonly markDestroyed = inject(DestroyRef).onDestroy(() => (this.destroyed = true));
   protected readonly nodeTemplate = contentChild(MimiTreeNodeTemplate);
   private readonly items = viewChildren<ElementRef<HTMLElement>>('item');
 
@@ -548,12 +552,14 @@ export class MimiTree<T = unknown> implements FormValueControl<string | null | s
     this.announcement.set(this.text.loading);
     try {
       const children = await loader(node);
+      if (this.destroyed) return;
       this.loaded.update((map) => new Map(map).set(node.id, children));
       this.setStatus(node.id, null);
       this.announcement.set('');
       // Un padre marcado marca también lo que acaba de llegar.
       if (this.multiple() && this.checkedIds().has(node.id)) this.check(node, true);
     } catch {
+      if (this.destroyed) return;
       this.setStatus(node.id, 'error');
       this.announcement.set(this.text.loadError);
     }

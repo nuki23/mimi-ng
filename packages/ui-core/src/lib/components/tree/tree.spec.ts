@@ -3,7 +3,8 @@ import { Component, EventEmitter, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormField, form } from '@angular/forms/signals';
-import { MimiTreeImports, type MimiTreeNode } from './tree';
+import { By } from '@angular/platform-browser';
+import { MimiTree, MimiTreeImports, type MimiTreeNode } from './tree';
 import { MIMI_TREE_TEXT_ES, provideMimiTreeText } from './tree-texts';
 
 const FILES: MimiTreeNode[] = [
@@ -300,6 +301,28 @@ describe('MimiTree', () => {
     item('single', 'assets').click(); // abre: reintenta
     await settle(fixture);
     expect(host.calls).toBe(2);
+  });
+
+  it('load() no escribe señales si el árbol se destruyó mientras cargaba (G3.P)', async () => {
+    for (const outcome of ['resolve', 'reject'] as const) {
+      const { fixture, host, item } = await setup();
+      const tree = fixture.debugElement.query(By.directive(MimiTree)).componentInstance as {
+        announcement(): string;
+        loaded(): Map<string, unknown>;
+        status(): Map<string, unknown>;
+      };
+      item('single', 'assets').click();
+      await settle(fixture);
+      expect(tree.announcement()).toBe('Loading…');
+      fixture.destroy();
+      if (outcome === 'resolve') host.resolve([{ id: 'logo', label: 'logo.svg' }]);
+      else host.reject();
+      await settle(fixture);
+      // Nada cambió después de destruirse: ni los hijos, ni el estado, ni el anuncio.
+      expect(tree.loaded().size, outcome).toBe(0);
+      expect(tree.status().get('assets'), outcome).toBe('loading');
+      expect(tree.announcement(), outcome).toBe('Loading…');
+    }
   });
 
   it('múltiple: casillas con estado parcial en aria-checked y cascada', async () => {
