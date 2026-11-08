@@ -390,6 +390,34 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     expect(total).toBe(5);
   });
 
+  it('el id del detalle sigue a la fila, no a su lugar en la página (G3.P)', async () => {
+    const { table, host, fixture } = await setup();
+    host.pageSize.set(5);
+    await settle(fixture);
+    const expand = () =>
+      Array.from(table.querySelectorAll<HTMLButtonElement>('[data-slot="expand"]')).find((b) =>
+        b.getAttribute('aria-label')!.includes('Acme'),
+      )!;
+    expand().click();
+    await settle(fixture);
+    const before = expand().getAttribute('aria-controls')!;
+    expect(document.getElementById(before)!.textContent).toContain('Detalle Acme');
+    // Ordenar de la Z a la A mueve la fila: su id no cambia.
+    host.sort.set({ column: 'name', direction: 'desc' });
+    await settle(fixture);
+    const after = expand().getAttribute('aria-controls')!;
+    expect(after).toBe(before);
+    expect(document.getElementById(after)!.textContent).toContain('Detalle Acme');
+    // Y es válido como id (sin espacios) y distinto al de otra fila.
+    expect(after).not.toMatch(/\s/);
+    host.expanded.set([1, 2]);
+    await settle(fixture);
+    const ids = Array.from(table.querySelectorAll<HTMLElement>('[data-slot="detail"] [id]')).map(
+      (d) => d.id,
+    );
+    expect(new Set(ids).size).toBe(2);
+  });
+
   it('sin barra, sin casillas ni columnas extra; class del usuario con cn() y tokens', async () => {
     const { root, table, host, fixture } = await setup();
     const plain = root.querySelector('[data-test="plain"]')!;

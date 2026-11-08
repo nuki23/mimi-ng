@@ -632,7 +632,7 @@ interface ColumnView<T> {
               </tr>
             }
           } @else {
-            @for (row of pageRows(); track rowId()(row); let i = $index) {
+            @for (row of pageRows(); track rowId()(row)) {
               <tr class="group/row" [attr.data-selected]="isSelected(row) ? '' : null">
                 @if (selectable()) {
                   <td [class]="ui.selectCell">
@@ -651,7 +651,7 @@ interface ColumnView<T> {
                       [class]="ui.expand"
                       [attr.aria-label]="texts.expand(rowLabel(row))"
                       [attr.aria-expanded]="isExpanded(row)"
-                      [attr.aria-controls]="isExpanded(row) ? detailId(i) : null"
+                      [attr.aria-controls]="isExpanded(row) ? detailId(row) : null"
                       (click)="toggleExpanded(row)"
                     >
                       <svg
@@ -704,7 +704,7 @@ interface ColumnView<T> {
                       class="border-b border-border bg-[color:var(--mimi-table-expanded-bg,var(--mimi-muted))] p-0"
                       [attr.colspan]="colCount()"
                     >
-                      <div class="sticky start-0 w-fit max-w-full px-5 py-4" [id]="detailId(i)">
+                      <div class="sticky start-0 w-fit max-w-full px-5 py-4" [id]="detailId(row)">
                         <ng-container
                           [mimiTableOutlet]="detail.templateRef"
                           [mimiTableOutletItem]="row"
@@ -1012,8 +1012,17 @@ export class MimiDataTable<T = any> {
     return first ? String(this.valueOf(first, row) ?? '') : '';
   }
 
-  protected detailId(index: number): string {
-    return `${this.baseId}-detail-${index}`;
+  /** Un número por id de fila: el id del detalle sigue a la fila, no a su lugar en la página. */
+  private readonly detailKeys = new Map<unknown, number>();
+
+  protected detailId(row: T): string {
+    const id = this.rowId()(row);
+    let key = this.detailKeys.get(id);
+    if (key === undefined) {
+      key = this.detailKeys.size;
+      this.detailKeys.set(id, key);
+    }
+    return `${this.baseId}-detail-${key}`;
   }
 
   protected sortIcon(sort: ColumnView<T>['sort']): readonly string[] {
