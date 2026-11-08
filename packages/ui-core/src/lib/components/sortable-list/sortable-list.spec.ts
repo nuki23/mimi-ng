@@ -138,6 +138,28 @@ describe('MimiSortableList', () => {
     expect(host.events).toEqual([]);
   });
 
+  it('Escape durante un agarre no sube (no cierra el diálogo que lo contiene); fuera del agarre sí (G3.P)', async () => {
+    const { fixture, el, handles } = await setup();
+    // Un padre que cierra con Escape, como un diálogo.
+    const reached: string[] = [];
+    const onKey = (e: Event) => reached.push((e as KeyboardEvent).key);
+    el.addEventListener('keydown', onKey);
+    handles()[0].focus();
+    press(handles()[0], 'Escape'); // sin agarre: se propaga
+    expect(reached).toEqual(['Escape']);
+    reached.length = 0;
+    press(handles()[0], ' ');
+    await settle(fixture);
+    reached.length = 0;
+    press(handles()[0], 'Escape'); // cancela el agarre: se queda aquí
+    await settle(fixture);
+    expect(handles()[0].getAttribute('aria-pressed')).toBe('false');
+    expect(reached).toEqual([]);
+    press(handles()[0], 'Escape'); // otra vez sin agarre: sube
+    expect(reached).toEqual(['Escape']);
+    el.removeEventListener('keydown', onKey);
+  });
+
   it('si el foco sale del asa con el elemento agarrado, se suelta donde está', async () => {
     const { fixture, el, host, handles, status } = await setup();
     handles()[3].focus();

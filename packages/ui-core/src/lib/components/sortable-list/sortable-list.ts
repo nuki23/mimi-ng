@@ -401,7 +401,9 @@ export class MimiSortableList<T = unknown> {
         this.drop();
         return;
       case 'Escape':
+        // Cancela el agarre y nada más: no cierra el diálogo que contenga la lista (G3.P).
         event.preventDefault();
+        event.stopPropagation();
         this.cancelKeyboardGrab(true);
         return;
       default:
