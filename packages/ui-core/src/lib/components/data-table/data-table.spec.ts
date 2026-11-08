@@ -367,6 +367,29 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     expect(names()).toEqual(['Delta', 'Acme', 'Énfasis']);
   });
 
+  it('modo servidor: si el total baja y la página queda fuera de rango, se ajusta (G3.P)', async () => {
+    const { host, table, fixture } = await setup();
+    const range = () => table.querySelector('[data-slot="range"]')!.textContent!;
+    const bounds = () =>
+      range()
+        .match(/(\d+)–(\d+) of (\d+)/)!
+        .slice(1)
+        .map(Number);
+    host.total.set(42);
+    host.data.set([CLIENTS[0], CLIENTS[1]]);
+    host.page.set(21);
+    await settle(fixture);
+    expect(range()).toBe('41–42 of 42');
+    // Llega un total menor y, todavía, la página vieja sin filas.
+    host.data.set([]);
+    host.total.set(5);
+    await settle(fixture);
+    expect(host.page()).toBe(3);
+    const [from, to, total] = bounds();
+    expect(from).toBeLessThanOrEqual(to);
+    expect(total).toBe(5);
+  });
+
   it('sin barra, sin casillas ni columnas extra; class del usuario con cn() y tokens', async () => {
     const { root, table, host, fixture } = await setup();
     const plain = root.querySelector('[data-test="plain"]')!;

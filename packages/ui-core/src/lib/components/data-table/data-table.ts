@@ -962,7 +962,8 @@ export class MimiDataTable<T = any> {
   protected readonly rangeText = computed(() => {
     const count = this.count();
     const from = Math.min((this.page() - 1) * this.pageSize() + 1, count);
-    const to = Math.min(from + this.pageRows().length - 1, count);
+    // Nunca «desde > hasta»: una página sin filas todavía (modo servidor) cuenta como la fila `from`.
+    const to = Math.max(from, Math.min(from + this.pageRows().length - 1, count));
     return this.texts.range(from, to, count);
   });
 
@@ -975,9 +976,12 @@ export class MimiDataTable<T = any> {
     return this.count() ? this.rangeText() : this.texts.noResults;
   });
 
-  /** Si la búsqueda o los filtros dejan la página fuera de rango, vuelve a la última. */
+  /**
+   * Si la búsqueda, los filtros o (con `total`) un total menor dejan la página fuera de rango,
+   * vuelve a la última (G3.P).
+   */
   private readonly clampPage = effect(() => {
-    if (this.server() || this.loading()) return;
+    if (this.loading()) return;
     const pages = Math.max(1, Math.ceil(this.count() / this.pageSize()));
     if (untracked(this.page) > pages) untracked(() => this.page.set(pages));
   });
