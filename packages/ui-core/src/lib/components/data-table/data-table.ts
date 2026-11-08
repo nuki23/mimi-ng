@@ -248,8 +248,8 @@ const HEAD_CLASSES = cn(
  * `--mimi-table-sticky-shadow` propio se usa tal cual en las dos direcciones.
  */
 const EDGE_CLASSES = cn(
-  'rtl:[--mimi-table-sticky-dir:-1]',
-  'group-data-[scrolled]/data-table:shadow-[shadow:var(--mimi-table-sticky-shadow,calc(6px_*_var(--mimi-table-sticky-dir,1))_0_10px_-6px_oklch(0_0_0/.25))]',
+  'rtl:[--sticky-dir:-1]',
+  'group-data-[scrolled]/data-table:shadow-[shadow:var(--mimi-table-sticky-shadow,calc(6px_*_var(--sticky-dir,1))_0_10px_-6px_oklch(0_0_0/.25))]',
 );
 
 const ICON_BUTTON_CLASSES = cn(

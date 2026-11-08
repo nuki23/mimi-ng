@@ -242,7 +242,7 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Filtro:** el diseño abre un diálogo con casillas (y un cuadro "Contiene…" para el texto); Mimi usa un Dropdown Menu con casillas de menú y no tiene filtro de texto por columna (para otra versión).
   - **Ancho de las columnas:** las fijas necesitan `width`; el diseño las fija en la hoja. Sin `width`, no se fijan.
   - **Sin diseño:** la columna de acciones es una plantilla (el menú del ejemplo es el Dropdown Menu), las filas de esqueleto (tres barras, no las columnas del diseño), «sin datos» (distinto de «sin resultados») y la barra con selección en móvil (la barra se parte en varias líneas).
-  - **RTL:** Data Table usa propiedades lógicas (`start-0`, `ps/pe`, `text-end`, `inset-inline-start`); la sombra de la columna fija se invierte en RTL con una variable interna (`--mimi-table-sticky-dir`, 1 o -1; arreglo de la G3.P) y el desplazamiento negativo de RTL cuenta como «desplazada». Un `--mimi-table-sticky-shadow` propio se usa tal cual en las dos direcciones. Sin diseño RTL.
+  - **RTL:** Data Table usa propiedades lógicas (`start-0`, `ps/pe`, `text-end`, `inset-inline-start`); la sombra de la columna fija se invierte en RTL con una variable interna (`--sticky-dir`, 1 o -1, interna y sin prefijo `--mimi-` porque no es un token; arreglo de la G3.P) y el desplazamiento negativo de RTL cuenta como «desplazada». Un `--mimi-table-sticky-shadow` propio se usa tal cual en las dos direcciones. Sin diseño RTL.
   - **Sombra de la columna fija:** aparece con cualquier desplazamiento horizontal (el diseño la ata a la tabla desplazada); el borde interior de 1px no se dibuja.
 
   Command (G3.3, 07/11/2026):

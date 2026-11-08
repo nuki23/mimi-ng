@@ -348,8 +348,8 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     expect(start(cells[2])).toMatch(/^calc\((44px \+ 36px|80px)\)$/);
     expect(cells[2].className).toContain('group-data-[scrolled]/data-table:shadow-');
     // RTL (G3.P): la sombra se invierte con una variable que vale -1 en RTL, no con un lado fijo.
-    expect(cells[2].className).toContain('rtl:[--mimi-table-sticky-dir:-1]');
-    expect(cells[2].className).toContain('calc(6px_*_var(--mimi-table-sticky-dir,1))');
+    expect(cells[2].className).toContain('rtl:[--sticky-dir:-1]');
+    expect(cells[2].className).toContain('calc(6px_*_var(--sticky-dir,1))');
     expect(cells[3].className).not.toContain('sticky');
     expect(cells[4].className).toContain('text-end');
     // La región de desplazamiento se alcanza con el teclado (Firefox y Safari) y tiene nombre.
