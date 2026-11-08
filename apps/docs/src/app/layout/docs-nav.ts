@@ -71,6 +71,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Tree', path: '/docs/components/tree', status: 'ready' },
       { title: 'Sortable List', path: '/docs/components/sortable-list', status: 'ready' },
       { title: 'Command', path: '/docs/components/command', status: 'ready' },
+      { title: 'Data Table', path: '/docs/components/data-table', status: 'ready' },
     ],
   },
   {

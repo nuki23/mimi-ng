@@ -16,6 +16,7 @@ export * from './lib/components/checkbox';
 export * from './lib/components/form-field';
 export * from './lib/components/popover';
 export * from './lib/components/command';
+export * from './lib/components/data-table';
 export * from './lib/components/sortable-list';
 export * from './lib/components/tooltip';
 export * from './lib/components/tree';

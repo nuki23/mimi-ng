@@ -612,6 +612,30 @@ export interface MimiCommandTokens {
 }
 
 /**
+ * Data Table. Los fondos (tabla, encabezado, hover, elegida, detalle) y la sombra de la columna
+ * fija van en el CSS (`--mimi-table-bg`, `-head-bg`, `-row-hover`, `-row-selected`,
+ * `-expanded-bg`, `-sticky-shadow`).
+ */
+export interface MimiTableTokens {
+  /** Alto de fila en la densidad compacta (42px). */
+  rowHeight?: string;
+  /** Alto de fila en la densidad cómoda (60px). */
+  rowHeightComfortable?: string;
+  /** Alto del encabezado, compacta (38px). */
+  headHeight?: string;
+  /** Alto del encabezado, cómoda (44px). */
+  headHeightComfortable?: string;
+  /** Texto de las celdas, compacta (13px). */
+  fontSize?: string;
+  /** Texto de las celdas, cómoda (14px). */
+  fontSizeComfortable?: string;
+  /** Relleno horizontal de la celda (10px). */
+  cellPx?: string;
+  /** Alto mínimo de la barra (56px). */
+  toolbarHeight?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -653,6 +677,7 @@ export interface MimiComponentTokens {
   tree?: MimiTreeTokens;
   sortable?: MimiSortableTokens;
   command?: MimiCommandTokens;
+  dataTable?: MimiTableTokens;
 }
 
 export interface MimiThemePreset {

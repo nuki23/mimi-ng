@@ -134,7 +134,7 @@ Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md); las tareas detal
 - [x] G3.1 Tree (07/11/2026; pendiente de comprobación manual: NVDA y navegador real) · v0.5.0 · L · depende: G2.P, 2.10, G3.0 · [docs/plan/grupo-3/G3.1.md](plan/grupo-3/G3.1.md)
 - [x] G3.2 Sortable List (07/11/2026; pendiente de comprobación manual: NVDA y teléfono real) · v0.5.0 · M · depende: G2.P, G3.0 · [docs/plan/grupo-3/G3.2.md](plan/grupo-3/G3.2.md)
 - [x] G3.3 Command (⌘K) (07/11/2026; pendiente de comprobación manual: NVDA y navegador real) · v0.5.0 · L · depende: G2.P, G1.6, G2.8 · [docs/plan/grupo-3/G3.3.md](plan/grupo-3/G3.3.md)
-- [ ] G3.4 Data Table · v0.5.0 · — · depende: G2.P, 2.10, G1.3, G1.11, 2.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [x] G3.4 Data Table (07/11/2026; pendiente de comprobación manual: NVDA y navegador real) · v0.5.0 · L · depende: G2.P, 2.10, G1.3, G1.11, 2.2 · [docs/plan/grupo-3/G3.4.md](plan/grupo-3/G3.4.md)
 - [ ] B.9 `table-01` · v0.5.0 · — · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] G3.P Puerta del Grupo 3 · v0.5.0 · — · depende: G3.1 a G3.4, B.9, B.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 

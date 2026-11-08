@@ -229,6 +229,14 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Sin diseño:** la lista deshabilitada (asas al 50 %) y el asa con foco (el contorno `ring` de los botones).
   - **Contenido del elemento:** el número, el título, el dato y la etiqueta del diseño son del usuario (plantilla `mimiSortableItem`); el ejemplo del sitio los reproduce con Badge.
 
+  Data Table (G3.4, 07/11/2026):
+  - **Sin navegación por celdas:** el diseño no dice si es una tabla o un `grid`; Mimi usa una `<table>` nativa con botones que se recorren con Tab.
+  - **Casilla del encabezado:** marca la página visible (el diseño marca «todas»); la barra cuenta todas las elegidas.
+  - **Filtro:** el diseño abre un diálogo con casillas (y un cuadro "Contiene…" para el texto); Mimi usa un Dropdown Menu con casillas de menú y no tiene filtro de texto por columna (para otra versión).
+  - **Ancho de las columnas:** las fijas necesitan `width`; el diseño las fija en la hoja. Sin `width`, no se fijan.
+  - **Sin diseño:** la columna de acciones es una plantilla (el menú del ejemplo es el Dropdown Menu), las filas de esqueleto (tres barras, no las columnas del diseño), «sin datos» (distinto de «sin resultados») y la barra con selección en móvil (la barra se parte en varias líneas).
+  - **Sombra de la columna fija:** aparece con cualquier desplazamiento horizontal (el diseño la ata a la tabla desplazada); el borde interior de 1px no se dibuja.
+
   Command (G3.3, 07/11/2026):
   - **Título de grupo:** relleno `6px 8px 4px` (el de la lista compartida con Combobox, ítem `option-list`), no el `8px 10px 4px` del diseño; el tamaño, el peso y el color son los del diseño.
   - **Alto de la lista:** el diseño lo fija en 332px; Mimi lo usa como máximo (`--mimi-command-list-height`) y la lista se acorta al filtrar, así que el panel cambia de alto mientras se escribe.

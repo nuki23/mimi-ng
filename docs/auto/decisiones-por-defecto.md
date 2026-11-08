@@ -1,5 +1,14 @@
 # Decisiones por defecto (modo autónomo)
 
+| G3.4-a | Base técnica | <table> nativa, no el grid de aria (celdas con controles que se recorren con Tab); excepción documentada | grid de aria (navegación por celdas) | Más simple | No | |
+| G3.4-b | API | Por datos: data, columns, rowId, y estado con model(); celdas y partes por plantilla (mimiTableCell, Detail, Actions, Bulk, Empty) | Columnas declaradas en la plantilla | Más simple | No | |
+| G3.4-c | Cliente o servidor | Sin total, procesa data; con total, data es la página y solo emite los cambios | Siempre en el cliente | Más simple | No | |
+| G3.4-d | Seleccionar todo | La casilla del encabezado marca la página visible; la barra cuenta todas | Todas las filas | Más simple | No | |
+| G3.4-e | Filtro por columna | Menú con casillas de menú y un chip por valor; sin filtros de texto ni rango | Diálogo con campo de texto | Más simple | No | |
+| G3.4-f | Acciones por fila | Plantilla; el ejemplo usa Dropdown Menu | Un menú fijo | Más simple | No | |
+| G3.4-g | Densidad | mimi-toggle-group en la barra; model density | Solo por token | Más simple | No | |
+| G3.4-h | Columnas fijas | sticky + width en columnas iniciales; sombra con data-scrolled | Todas las columnas | Más simple | No | |
+
 Decisiones que tomó Claude Code en modo autónomo sobre una «PENDIENTE DE DECIDIR» (`CLAUDE.md`, «Modo autónomo»; `docs/plan.md`, «Decidido por defecto»). Cada una está también en su tarea. Las revisa el usuario; las RUPTURAS, a más tardar en la 0.9.9.
 
 - **Base:** «Recomendación» (la de la tarea) o «Más simple» (sin recomendación, la opción más simple y coherente con la spec).

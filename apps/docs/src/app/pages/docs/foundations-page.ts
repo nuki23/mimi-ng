@@ -39,6 +39,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   select: ['forms', 'cdk', 'aria'],
   combobox: ['forms', 'cdk', 'aria'],
   command: ['cdk', 'aria'],
+  'data-table': ['forms', 'cdk', 'aria'],
   calendar: ['cdk'],
   'date-picker': ['forms', 'cdk'],
   'date-range': ['forms', 'cdk'],
@@ -119,6 +120,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiCommandText',
     spanish: 'MIMI_COMMAND_TEXT_ES',
     file: 'command/command-texts',
+  },
+  {
+    component: 'Data Table',
+    provider: 'provideMimiDataTableText',
+    spanish: 'MIMI_DATA_TABLE_TEXT_ES',
+    file: 'data-table/data-table-texts',
   },
   {
     component: 'Calendario, Date Picker y Date Range',

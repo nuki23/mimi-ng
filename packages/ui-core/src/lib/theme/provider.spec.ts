@@ -411,6 +411,16 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
           itemRadius: '4px',
           iconSize: '24px',
         },
+        dataTable: {
+          rowHeight: '40px',
+          rowHeightComfortable: '56px',
+          headHeight: '36px',
+          headHeightComfortable: '42px',
+          fontSize: '12px',
+          fontSizeComfortable: '15px',
+          cellPx: '12px',
+          toolbarHeight: '60px',
+        },
       },
     });
     for (const line of [
@@ -549,6 +559,14 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
       '--mimi-command-item-height: 36px;',
       '--mimi-command-item-radius: 4px;',
       '--mimi-command-icon-size: 24px;',
+      '--mimi-table-row-height: 40px;',
+      '--mimi-table-row-height-comfortable: 56px;',
+      '--mimi-table-head-height: 36px;',
+      '--mimi-table-head-height-comfortable: 42px;',
+      '--mimi-table-font-size: 12px;',
+      '--mimi-table-font-size-comfortable: 15px;',
+      '--mimi-table-cell-px: 12px;',
+      '--mimi-table-toolbar-height: 60px;',
     ]) {
       expect(css).toContain(line);
     }

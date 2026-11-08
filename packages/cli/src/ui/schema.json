@@ -64,6 +64,10 @@
             "label": "context-menu"
           },
           {
+            "value": "data-table",
+            "label": "data-table"
+          },
+          {
             "value": "date-picker",
             "label": "date-picker"
           },

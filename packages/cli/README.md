@@ -82,6 +82,7 @@ export class App {}
 - **Command**: `ng g mimi command` · [documentación](https://ng.mimiworks.dev/docs/components/command)
 - **Confirm**: `ng g mimi confirm` · [documentación](https://ng.mimiworks.dev/docs/components/confirm)
 - **Context Menu**: `ng g mimi context-menu` · [documentación](https://ng.mimiworks.dev/docs/components/context-menu)
+- **Data Table**: `ng g mimi data-table` · [documentación](https://ng.mimiworks.dev/docs/components/data-table)
 - **Date Picker**: `ng g mimi date-picker` · [documentación](https://ng.mimiworks.dev/docs/components/date-picker)
 - **Date Range**: `ng g mimi date-range` · [documentación](https://ng.mimiworks.dev/docs/components/date-range)
 - **Dialog**: `ng g mimi dialog` · [documentación](https://ng.mimiworks.dev/docs/components/dialog)

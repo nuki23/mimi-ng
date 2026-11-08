@@ -54,7 +54,8 @@ export type TokenComponent =
   | 'colorPicker'
   | 'tree'
   | 'sortable'
-  | 'command';
+  | 'command'
+  | 'dataTable';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -95,6 +96,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   tree: 'tree',
   sortable: 'sortable',
   command: 'command',
+  dataTable: 'table',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1949,6 +1951,95 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-accent',
       preset: false,
       description: 'Fondo del comando activo.',
+    },
+  ],
+  dataTable: [
+    {
+      name: '--mimi-table-row-height',
+      default: '42px',
+      preset: true,
+      description: 'Alto de fila (compacta).',
+    },
+    {
+      name: '--mimi-table-row-height-comfortable',
+      default: '60px',
+      preset: true,
+      description: 'Alto de fila (cómoda).',
+    },
+    {
+      name: '--mimi-table-head-height',
+      default: '38px',
+      preset: true,
+      description: 'Alto del encabezado (compacta).',
+    },
+    {
+      name: '--mimi-table-head-height-comfortable',
+      default: '44px',
+      preset: true,
+      description: 'Alto del encabezado (cómoda).',
+    },
+    {
+      name: '--mimi-table-font-size',
+      default: '13px',
+      preset: true,
+      description: 'Texto de las celdas (compacta).',
+    },
+    {
+      name: '--mimi-table-font-size-comfortable',
+      default: '14px',
+      preset: true,
+      description: 'Texto de las celdas (cómoda).',
+    },
+    {
+      name: '--mimi-table-cell-px',
+      default: '10px',
+      preset: true,
+      description: 'Relleno horizontal de la celda.',
+    },
+    {
+      name: '--mimi-table-toolbar-height',
+      default: '56px',
+      preset: true,
+      description: 'Alto mínimo de la barra de herramientas.',
+    },
+    {
+      name: '--mimi-table-bg',
+      default: 'card',
+      inherits: '--mimi-card',
+      preset: false,
+      description: 'Fondo de la tabla y de las filas.',
+    },
+    {
+      name: '--mimi-table-head-bg',
+      default: 'muted',
+      inherits: '--mimi-muted',
+      preset: false,
+      description: 'Fondo del encabezado.',
+    },
+    {
+      name: '--mimi-table-row-hover',
+      default: 'color-mix(in oklab, var(--mimi-foreground) 3.5%, var(--mimi-card))',
+      preset: false,
+      description: 'Fila en hover.',
+    },
+    {
+      name: '--mimi-table-row-selected',
+      default: 'color-mix(in oklab, var(--mimi-info) 8%, var(--mimi-card))',
+      preset: false,
+      description: 'Fila elegida.',
+    },
+    {
+      name: '--mimi-table-expanded-bg',
+      default: 'muted',
+      inherits: '--mimi-muted',
+      preset: false,
+      description: 'Fondo del detalle de una fila expandida.',
+    },
+    {
+      name: '--mimi-table-sticky-shadow',
+      default: '6px 0 10px -6px oklch(0 0 0 / .25)',
+      preset: false,
+      description: 'Sombra de la columna fija al desplazar.',
     },
   ],
 };

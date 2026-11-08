@@ -184,6 +184,23 @@
       },
       "registryDependencies": ["button", "input", "select", "utils/cn"]
     },
+    "data-table": {
+      "type": "component",
+      "files": [
+        "components/data-table/data-table.ts",
+        "components/data-table/data-table-texts.ts",
+        "components/data-table/index.ts"
+      ],
+      "registryDependencies": [
+        "checkbox",
+        "chip",
+        "dropdown-menu",
+        "input",
+        "pagination",
+        "toggle-group",
+        "utils/cn"
+      ]
+    },
     "input-mask": {
       "type": "component",
       "files": ["components/input-mask/input-mask.ts", "components/input-mask/index.ts"],
