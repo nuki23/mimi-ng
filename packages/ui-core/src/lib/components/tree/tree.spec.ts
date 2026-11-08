@@ -113,6 +113,30 @@ class FormsHost {
   model: string | null = null;
 }
 
+@Component({
+  imports: [MimiTreeImports],
+  template: `
+    <mimi-tree aria-label="Con campos" [nodes]="nodes" [(value)]="selected">
+      <ng-template mimiTreeNode let-node>
+        <input aria-label="Nombre" />
+        <textarea aria-label="Nota"></textarea>
+        <select aria-label="Tipo">
+          <option>uno</option>
+        </select>
+        <span contenteditable="true">editable</span>
+        <button type="button">Acción</button>
+      </ng-template>
+    </mimi-tree>
+  `,
+})
+class ControlsHost {
+  readonly nodes: MimiTreeNode[] = [
+    { id: 'a', label: 'alfa' },
+    { id: 'b', label: 'beta' },
+  ];
+  readonly selected = signal<string | null | string[]>(null);
+}
+
 const settle = async (fixture: { whenStable(): Promise<unknown> }) => {
   for (let i = 0; i < 3; i++) {
     await new Promise((r) => setTimeout(r));
@@ -322,6 +346,28 @@ describe('MimiTree', () => {
       (b) => b.textContent,
     );
     expect(labels).toEqual(['1:src', '1:assets', '1:mimi.json', '1:package.json']);
+  });
+
+  it('el teclado del árbol no intercepta teclas de un campo o botón dentro del nodo (G3.P)', async () => {
+    const fixture = TestBed.createComponent(ControlsHost);
+    await settle(fixture);
+    const el = fixture.nativeElement as HTMLElement;
+    const row = el.querySelector<HTMLElement>('[role="treeitem"][data-id="a"]')!;
+    const controls = ['input', 'textarea', 'select', '[contenteditable]', 'button'].map(
+      (selector) => row.querySelector<HTMLElement>(selector)!,
+    );
+    for (const control of controls) {
+      for (const key of [' ', '*', 'a', 'Enter', 'ArrowDown', 'Home']) {
+        const event = new KeyboardEvent('keydown', { key, bubbles: true, cancelable: true });
+        control.dispatchEvent(event);
+        expect(event.defaultPrevented, `${control.tagName} ${key}`).toBe(false);
+      }
+    }
+    // En la fila misma, el teclado sigue funcionando.
+    const space = new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true });
+    row.dispatchEvent(space);
+    expect(space.defaultPrevented).toBe(true);
+    expect(fixture.componentInstance.selected()).toBe('a');
   });
 
   it('regresión NG0103: la plantilla propia no repite la detección de cambios sin fin', async () => {

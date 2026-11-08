@@ -642,6 +642,15 @@ export class MimiTree<T = unknown> implements FormValueControl<string | null | s
   }
 
   protected onKeydown(event: KeyboardEvent): void {
+    // Un campo o botón dentro de la plantilla del nodo se queda con sus teclas (G3.P).
+    const origin = event.target as Element | null;
+    if (
+      origin?.closest?.(
+        'input, textarea, select, button, [contenteditable]:not([contenteditable="false"])',
+      )
+    ) {
+      return;
+    }
     const rows = this.nodeRows();
     const index = rows.findIndex((row) => row.node.id === this.tabStop());
     const row = rows[index];
