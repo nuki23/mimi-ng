@@ -23,6 +23,7 @@ import {
   effect,
   inject,
   input,
+  isDevMode,
   model,
   output,
   signal,
@@ -157,7 +158,7 @@ let nextId = 0;
       [class]="listClasses"
       (cdkDropListDropped)="onDrop($event)"
     >
-      @for (item of items(); track trackItem(item); let index = $index) {
+      @for (item of items(); track trackItem(item, $index); let index = $index) {
         <li
           cdkDrag
           cdkDragPreviewContainer="parent"
@@ -278,8 +279,11 @@ export class MimiSortableList<T = unknown> {
   readonly items = model<T[]>([]);
   /** Nombre de un elemento para el asa y los anuncios. Por defecto, `String(item)`. */
   readonly itemLabel = input<(item: T) => string>((item) => String(item));
-  /** Clave estable de cada elemento (`track`). Por defecto, el propio elemento. */
-  readonly trackBy = input<(item: T) => unknown>((item) => item);
+  /**
+   * Clave estable de cada elemento (`track`). Por defecto, el propio elemento; si hay elementos
+   * repetidos (primitivos iguales), el índice, y en desarrollo avisa de que falta `trackBy` (G3.P).
+   */
+  readonly trackBy = input<((item: T) => unknown) | undefined>(undefined);
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
@@ -345,8 +349,29 @@ export class MimiSortableList<T = unknown> {
     return this.itemLabel()(item);
   }
 
-  protected trackItem(item: T): unknown {
-    return this.trackBy()(item);
+  /** Sin `trackBy`, el elemento mismo solo vale si no se repite (si no, NG0955 y vistas mezcladas). */
+  private readonly repeated = computed(() => {
+    if (this.trackBy()) return false;
+    const items = this.items();
+    return new Set(items).size !== items.length;
+  });
+
+  private warnedRepeated = false;
+  private readonly warnRepeated = isDevMode()
+    ? effect(() => {
+        if (!this.repeated() || this.warnedRepeated) return;
+        this.warnedRepeated = true;
+        console.warn(
+          '[Mimi] Sortable List: hay elementos repetidos y falta `trackBy`; se identifican por su ' +
+            'lugar. Usa `[trackBy]="x => x.id"` para que las vistas sigan a cada elemento.',
+        );
+      })
+    : null;
+
+  protected trackItem(item: T, index: number): unknown {
+    const trackBy = this.trackBy();
+    if (trackBy) return trackBy(item);
+    return this.repeated() ? index : item;
   }
 
   // ── Puntero y dedo (cdk) ─────────────────────────────────────────────────────────────

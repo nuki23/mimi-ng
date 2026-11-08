@@ -82,8 +82,9 @@ export class SortableListPage {
     {
       name: 'trackBy',
       type: '(item: T) => unknown',
-      default: 'el elemento',
-      description: 'Clave estable de cada elemento (por ejemplo, su id): la usa la animación.',
+      default: 'el elemento (el lugar, si se repite)',
+      description:
+        'Clave estable de cada elemento (por ejemplo, su id): la usa la animación. Si hay elementos repetidos (textos o números iguales) y no la das, se identifican por su lugar y en desarrollo se avisa.',
     },
     { name: 'disabled', type: 'boolean', default: 'false', description: 'No se puede reordenar.' },
     {

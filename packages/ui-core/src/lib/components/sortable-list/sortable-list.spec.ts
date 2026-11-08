@@ -48,6 +48,14 @@ class Host {
   readonly byId = (task: Task) => task.id;
 }
 
+@Component({
+  imports: [MimiSortableListImports],
+  template: `<mimi-sortable-list aria-label="Repetidos" [(items)]="words" />`,
+})
+class DuplicatesHost {
+  readonly words = signal(['uno', 'uno', 'dos']);
+}
+
 const settle = async (fixture: { whenStable(): Promise<unknown> }) => {
   for (let i = 0; i < 3; i++) {
     await new Promise((r) => setTimeout(r));
@@ -158,6 +166,30 @@ describe('MimiSortableList', () => {
     press(handles()[0], 'Escape'); // otra vez sin agarre: sube
     expect(reached).toEqual(['Escape']);
     el.removeEventListener('keydown', onKey);
+  });
+
+  it('trackBy por defecto con primitivos repetidos: sin NG0955, el orden se respeta y avisa (G3.P)', async () => {
+    const errors = vi.spyOn(console, 'error');
+    const warns = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const fixture = TestBed.createComponent(DuplicatesHost);
+    await settle(fixture);
+    const el = fixture.nativeElement as HTMLElement;
+    const texts = () =>
+      Array.from(el.querySelectorAll('li [class*="truncate"]')).map((s) => s.textContent!.trim());
+    const handles = () =>
+      Array.from(el.querySelectorAll<HTMLButtonElement>('[data-slot="handle"]'));
+    expect(texts()).toEqual(['uno', 'uno', 'dos']);
+    handles()[1].focus();
+    press(handles()[1], ' ');
+    press(handles()[1], 'ArrowDown');
+    await settle(fixture);
+    expect(fixture.componentInstance.words()).toEqual(['uno', 'dos', 'uno']);
+    expect(texts()).toEqual(['uno', 'dos', 'uno']);
+    expect(warns.mock.calls.flat().join(' ')).toMatch(/\[Mimi\] Sortable List: .*trackBy/);
+    const calls = [...errors.mock.calls, ...warns.mock.calls];
+    expect(calls.filter((args) => args.map(String).join(' ').includes('NG0955'))).toEqual([]);
+    errors.mockRestore();
+    warns.mockRestore();
   });
 
   it('si el foco sale del asa con el elemento agarrado, se suelta donde está', async () => {
