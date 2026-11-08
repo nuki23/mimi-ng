@@ -105,6 +105,24 @@ class Host {
   readonly density = signal<'compact' | 'comfortable'>('compact');
 }
 
+@Component({
+  imports: [MimiDataTableImports],
+  template: `
+    <mimi-data-table
+      aria-label="Sin id"
+      selectable
+      [data]="rows"
+      [columns]="columns"
+      [(selection)]="selection"
+    />
+  `,
+})
+class NoIdHost {
+  readonly rows = [{ name: 'Ana' }, { name: 'Beto' }, { name: 'Cris' }];
+  readonly columns: MimiTableColumn<{ name: string }>[] = [{ id: 'name', header: 'Nombre' }];
+  readonly selection = signal<unknown[]>([]);
+}
+
 const settle = async (fixture: { whenStable(): Promise<unknown> }) => {
   for (let i = 0; i < 3; i++) {
     await new Promise((r) => setTimeout(r));
@@ -388,6 +406,31 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     const [from, to, total] = bounds();
     expect(from).toBeLessThanOrEqual(to);
     expect(total).toBe(5);
+  });
+
+  it('sin rowId y sin id en las filas: sin NG0955, cada fila se elige sola y avisa en desarrollo (G3.P)', async () => {
+    const errors = vi.spyOn(console, 'error');
+    const warns = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const fixture = TestBed.createComponent(NoIdHost);
+    document.body.appendChild(fixture.nativeElement);
+    await settle(fixture);
+    const el = fixture.nativeElement as HTMLElement;
+    const boxes = () => Array.from(el.querySelectorAll<HTMLElement>('tbody [role="checkbox"]'));
+    expect(boxes()).toHaveLength(3);
+    boxes()[1].click();
+    await settle(fixture);
+    expect(fixture.componentInstance.selection()).toHaveLength(1);
+    expect(
+      Array.from(el.querySelectorAll('tbody tr[data-selected]')).map((r) => r.textContent!.trim()),
+    ).toEqual(['Beto']);
+    // El aviso en modo desarrollo dice qué falta.
+    expect(warns.mock.calls.flat().join(' ')).toMatch(/\[Mimi\] Data Table: .*rowId/);
+    // Angular registra NG0955 (claves repetidas) con console.warn o console.error.
+    const calls = [...errors.mock.calls, ...warns.mock.calls];
+    expect(calls.filter((args) => args.map(String).join(' ').includes('NG0955'))).toEqual([]);
+    errors.mockRestore();
+    warns.mockRestore();
+    fixture.nativeElement.remove();
   });
 
   it('el id del detalle sigue a la fila, no a su lugar en la página (G3.P)', async () => {

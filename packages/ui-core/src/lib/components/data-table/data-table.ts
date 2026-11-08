@@ -12,6 +12,7 @@ import {
   effect,
   inject,
   input,
+  isDevMode,
   model,
   signal,
   untracked,
@@ -304,6 +305,9 @@ function compareValues(a: unknown, b: unknown): number {
   if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
   return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' });
 }
+
+/** `row.id` o, sin él, la propia fila: nunca `undefined`, que repetiría la clave de todas. */
+const DEFAULT_ROW_ID = (row: unknown): unknown => (row as { id?: unknown } | null)?.id ?? row;
 
 /** Una columna con lo que la plantilla necesita ya calculado. */
 interface ColumnView<T> {
@@ -798,8 +802,11 @@ export class MimiDataTable<T = any> {
   /** Las filas (o, con `total`, las de la página actual). */
   readonly data = input<readonly T[]>([]);
   readonly columns = input<readonly MimiTableColumn<T>[]>([]);
-  /** Identificador estable de cada fila. Por defecto, `row.id`. */
-  readonly rowId = input<(row: T) => unknown>((row) => (row as { id?: unknown }).id);
+  /**
+   * Identificador estable de cada fila. Por defecto, `row.id`; si la fila no tiene `id`, la propia
+   * fila (el objeto), y en modo desarrollo avisa de que falta `rowId` (G3.P).
+   */
+  readonly rowId = input<(row: T) => unknown>(DEFAULT_ROW_ID);
   /** Agrega la columna de casillas y la barra de selección. */
   readonly selectable = input(false, { transform: booleanAttribute });
   /** Muestra la barra (búsqueda, chips, densidad). Por defecto, `true`. */
@@ -985,6 +992,22 @@ export class MimiDataTable<T = any> {
     const pages = Math.max(1, Math.ceil(this.count() / this.pageSize()));
     if (untracked(this.page) > pages) untracked(() => this.page.set(pages));
   });
+
+  /** En desarrollo, avisa una vez si las filas no traen `id` y no hay `rowId` (G3.P). */
+  private warnedRowId = false;
+  private readonly warnRowId = isDevMode()
+    ? effect(() => {
+        const data = this.data();
+        if (this.warnedRowId || this.rowId() !== DEFAULT_ROW_ID) return;
+        if (!data.some((row) => (row as { id?: unknown } | null)?.id == null)) return;
+        this.warnedRowId = true;
+        console.warn(
+          '[Mimi] Data Table: las filas no tienen `id` y falta `rowId`. Se identifican por el ' +
+            'objeto, así que la selección y el detalle abierto se pierden si `data` trae objetos ' +
+            'nuevos. Usa `[rowId]="fila => fila.codigo"`.',
+        );
+      })
+    : null;
 
   /**
    * Al buscar o filtrar (sin `total`), la selección pierde las filas que ya no se ven: la barra

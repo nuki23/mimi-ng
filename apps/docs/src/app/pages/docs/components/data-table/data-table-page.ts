@@ -96,8 +96,9 @@ export class DataTablePage {
     {
       name: 'rowId',
       type: '(row: T) => unknown',
-      default: 'row.id',
-      description: 'Identificador estable de cada fila (selección, detalle).',
+      default: 'row.id, o la fila misma',
+      description:
+        'Identificador estable de cada fila (selección, detalle). Si las filas no traen id y no lo das, se identifican por el objeto (la selección se pierde si data trae objetos nuevos) y en desarrollo se avisa.',
     },
     {
       name: 'selectable',
