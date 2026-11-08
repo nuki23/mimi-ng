@@ -255,6 +255,11 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./blocks/settings-01-page').then((m) => m.Settings01Page),
   },
   {
+    path: 'blocks/table-01',
+    title: 'table-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/table-01-page').then((m) => m.Table01Page),
+  },
+  {
     path: 'blocks/pricing-01',
     title: 'pricing-01 · Blocks · Mimi',
     loadComponent: () => import('./blocks/pricing-01-page').then((m) => m.Pricing01Page),

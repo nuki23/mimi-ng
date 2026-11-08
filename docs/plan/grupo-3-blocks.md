@@ -20,7 +20,7 @@ Componentes de la spec 4 (tabla del Grupo 3) y el Block que usa Data Table.
   - Depende de: G2.P, G1.6 (Dialog, hecha), G2.8 (lógica de lista de Combobox) · Bloquea: 5.8
 - [x] G3.4 Data Table (ordenar, filtrar, paginar, seleccionar, columnas fijas). Usa Checkbox, Dropdown Menu y Pagination. Diseño: `Data Table` (en `F4 Data Table y Pagination`). Detalle: [grupo-3/G3.4.md](grupo-3/G3.4.md) (07/11/2026; pendiente de comprobación manual).
   - Depende de: G2.P, 2.10 (Checkbox), G1.3 (Dropdown Menu), G1.11 (Pagination), 2.2 (Input); todas hechas · Bloquea: B.8, B.9
-- [ ] B.9 `table-01` (tabla con filtros; usa Data Table). Diseño: `Block table-01`.
+- [x] B.9 `table-01` (tabla con filtros; usa Data Table). Diseño: `Block table-01`. Hecha el 07/11/2026 como **página** (B.9-a, decidido por defecto; B.11 pedía declararlo): `kind: page`, `Table01`, la CLI la genera como `TablePage`; detalle en `docs/auto/grupo-3-2026-11-07.md`, «B.9». Pendiente de comprobación manual: teléfono real y NVDA (M.20, punto 12).
   - Depende de: B.1, G3.4
 - [ ] G3.P Puerta del Grupo 3 (v0.5.0): la lista de «Puerta del grupo».
   - Depende de: G3.1 a G3.4, B.9, B.P (la 0.4.0 se publica antes)

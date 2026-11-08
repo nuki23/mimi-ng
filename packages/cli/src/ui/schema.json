@@ -202,6 +202,10 @@
           {
             "value": "signup-01",
             "label": "signup-01 (Block, página)"
+          },
+          {
+            "value": "table-01",
+            "label": "table-01 (Block, página)"
           }
         ]
       }

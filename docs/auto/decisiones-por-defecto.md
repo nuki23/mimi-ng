@@ -8,6 +8,8 @@
 | G3.4-f | Acciones por fila | Plantilla; el ejemplo usa Dropdown Menu | Un menú fijo | Más simple | No | |
 | G3.4-g | Densidad | mimi-toggle-group en la barra; model density | Solo por token | Más simple | No | |
 | G3.4-h | Columnas fijas | sticky + width en columnas iniciales; sombra con data-scrolled | Todas las columnas | Más simple | No | |
+| B.9-a | ¿table-01 es página o sección? | Página (`kind: page`): lleva su `h1` y es una pantalla completa; la CLI la genera como `TablePage` en `aliases.pages` | Sección (`aliases.blocks`, dentro de otra página) | Más simple | No (Block nuevo) | |
+| B.9-b | Escritorio y móvil | Las dos vistas en el mismo Block, alternadas con `md:` (la oculta, `display: none`) | Una sola vista que se adapta | Más simple | No | |
 
 Decisiones que tomó Claude Code en modo autónomo sobre una «PENDIENTE DE DECIDIR» (`CLAUDE.md`, «Modo autónomo»; `docs/plan.md`, «Decidido por defecto»). Cada una está también en su tarea. Las revisa el usuario; las RUPTURAS, a más tardar en la 0.9.9.
 

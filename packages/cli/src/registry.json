@@ -618,6 +618,16 @@
         "utils/cn"
       ]
     },
+    "table-01": {
+      "type": "block",
+      "kind": "page",
+      "files": [
+        "blocks/table-01/table-01.ts",
+        "blocks/table-01/table-01.html",
+        "blocks/table-01/index.ts"
+      ],
+      "registryDependencies": ["badge", "button", "checkbox", "data-table", "input", "utils/cn"]
+    },
     "pricing-01": {
       "type": "block",
       "kind": "section",

@@ -229,6 +229,13 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Sin diseño:** la lista deshabilitada (asas al 50 %) y el asa con foco (el contorno `ring` de los botones).
   - **Contenido del elemento:** el número, el título, el dato y la etiqueta del diseño son del usuario (plantilla `mimiSortableItem`); el ejemplo del sitio los reproduce con Badge.
 
+  table-01 (B.9, 07/11/2026):
+  - **Escritorio y móvil con CSS:** el diseño cambia de vista con una propiedad (`mobile`); Mimi dibuja las dos y las alterna con `md:` (la oculta, `display: none`). El punto de corte (768px) no está en el diseño.
+  - **Textos en inglés** (B.1-i); el diseño los tiene en español.
+  - **Tabla de escritorio:** la Data Table de Mimi (columnas Customer, Status, Plan, MRR, Users y Country; el diseño tiene más: país con prefijo, última actividad, creado). Estado con Badge `soft`; sin el avatar de iniciales ni el menú de acciones por fila del diseño (la plantilla `mimiTableActions` está disponible).
+  - **Resumen por estado:** lista con un punto de color y el número, sin las tarjetas del diseño.
+  - **Móvil, sin diseño:** la barra de acciones (el diseño la fija abajo; sin menú de fila, sin «Export» con ícono) y el estado vacío («No customers match.»).
+
   Data Table (G3.4, 07/11/2026):
   - **Sin navegación por celdas:** el diseño no dice si es una tabla o un `grid`; Mimi usa una `<table>` nativa con botones que se recorren con Tab.
   - **Casilla del encabezado:** marca la página visible (el diseño marca «todas»); la barra cuenta todas las elegidas.
