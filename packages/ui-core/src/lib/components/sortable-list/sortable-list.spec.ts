@@ -201,6 +201,34 @@ describe('MimiSortableList', () => {
     expect(list.className).toContain('max-w-md');
   });
 
+  it('regresión NG0103: la plantilla propia sigue el índice y el agarre sin repetir la detección', async () => {
+    // MimiSortableOutlet recibía un objeto de contexto nuevo en cada detección de cambios y su
+    // efecto se repetía sin fin (NG0103, G3.2). Recibe cada dato por separado.
+    const errors = vi.spyOn(console, 'error');
+    const { fixture, host, list, handles } = await setup();
+    const contents = () =>
+      Array.from(list.querySelectorAll('[data-test="content"]')).map((s) => s.textContent);
+    handles()[1].focus();
+    press(handles()[1], ' ');
+    await settle(fixture);
+    press(handles()[1], 'ArrowDown');
+    await settle(fixture);
+    host.extra.set('gap-4');
+    await settle(fixture);
+    expect(contents()).toEqual([
+      '1·Revisar contraste·false',
+      '2·Migrar Select·false',
+      '3·Diseñar Tabs·true',
+      '4·Escribir docs·false',
+    ]);
+    // Angular lo registra como console.error('ERROR', error): se miran todos los argumentos.
+    const ng0103 = errors.mock.calls.filter((args) =>
+      args.map(String).join(' ').includes('NG0103'),
+    );
+    expect(ng0103).toEqual([]);
+    errors.mockRestore();
+  });
+
   it('textos en español', async () => {
     TestBed.configureTestingModule({ providers: [provideMimiSortableText(MIMI_SORTABLE_TEXT_ES)] });
     const { fixture, list, handles, status } = await setup();

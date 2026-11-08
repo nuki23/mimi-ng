@@ -324,6 +324,30 @@ describe('MimiTree', () => {
     expect(labels).toEqual(['1:src', '1:assets', '1:mimi.json', '1:package.json']);
   });
 
+  it('regresión NG0103: la plantilla propia no repite la detección de cambios sin fin', async () => {
+    // MimiTreeOutlet recibía un objeto de contexto nuevo en cada detección de cambios y su
+    // efecto se repetía sin fin (NG0103, G3.2). Recibe cada dato por separado y reutiliza la vista.
+    const errors = vi.spyOn(console, 'error');
+    const { fixture, tree, item } = await setup();
+    const custom = () => Array.from(tree('custom').querySelectorAll('[data-test="custom-label"]'));
+    const before = custom()[1];
+    item('custom', 'src').click();
+    await settle(fixture);
+    press(item('custom', 'src'), 'ArrowDown');
+    await settle(fixture);
+    fixture.componentInstance.extra.set('p-0');
+    await settle(fixture);
+    expect(custom().map((b) => b.textContent)).toContain('2:app');
+    // La vista de «assets» es la misma: se actualiza su contexto, no se vuelve a crear.
+    expect(custom().find((b) => b.textContent === '1:assets')).toBe(before);
+    // Angular lo registra como console.error('ERROR', error): se miran todos los argumentos.
+    const ng0103 = errors.mock.calls.filter((args) =>
+      args.map(String).join(' ').includes('NG0103'),
+    );
+    expect(ng0103).toEqual([]);
+    errors.mockRestore();
+  });
+
   it('class del usuario con cn(); tokens de la tabla en el anfitrión y en las filas', async () => {
     const { fixture, host, tree, item } = await setup();
     const single = tree('single') as HTMLElement;

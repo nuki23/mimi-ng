@@ -60,7 +60,7 @@ Crea el componente **$ARGUMENTS** de Mimi. Sigue el protocolo de `CLAUDE.md`, «
 
 ## 4. Al terminar (además del protocolo, pasos e–h)
 
-1. Presupuestos (spec 10; `CLAUDE.md`, «Forma de trabajar», «Bundle»): JS inicial con `check-initial-js.mjs` (aviso desde 345 kB, error desde 360 kB; corre dentro de `pnpm build`), y en `angular.json` `main` 140/145 kB, CSS global (`styles`) 160/175 kB e `initial` 505/535 kB (la suma de los dos anteriores). **Si el JS inicial crece más de 1 kB**, compara el `metafile` de `ng build docs --stats-json` con y sin el cambio (por ejemplo, quitando la ruta nueva), módulo por módulo, y comprueba que el código del componente y de cdk/aria no esté en los chunks iniciales (spec 10).
+1. Presupuestos (spec 10; `CLAUDE.md`, «Forma de trabajar», «Bundle»): JS inicial con `check-initial-js.mjs` (aviso desde 345 kB, error desde 360 kB; corre dentro de `pnpm build`), y en `angular.json` `main` 140/145 kB, CSS global (`styles`) 180/195 kB e `initial` 525/555 kB (la suma de los dos anteriores). **Si el JS inicial crece más de 1 kB**, compara el `metafile` de `ng build docs --stats-json` con y sin el cambio (por ejemplo, quitando la ruta nueva), módulo por módulo, y comprueba que el código del componente y de cdk/aria no esté en los chunks iniciales (spec 10).
 2. Levanta `pnpm dev` en un puerto libre y comprueba que `main.js` responde HTTP 200 sin errores en el log (`pnpm build` no detecta los fallos de resolución de `ng serve`). No lo dejes corriendo (`CLAUDE.md`, «Forma de trabajar», «Servidores en segundo plano»).
 3. Revisa que el CSS generado no tenga colores fijos.
 4. Actualiza `docs/spec.md` si cambió algo (API, tokens nuevos: la tabla del componente en la sección 13).

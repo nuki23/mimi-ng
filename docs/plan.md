@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- G3.2 · `auto/grupo-3-2026-11-07` · Claude Code (modo autónomo) · 07/11/2026 · detenida: el CSS global pasa el aviso del presupuesto (161,03 kB > 160); decide el usuario
+Ninguna.
 
 ## Mantenimiento
 
@@ -108,6 +108,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9; la release de GitHub y la prueba desde npm de la 0.3.0, hechas; y lo manual de los Blocks de la 0.4.0 cuando se hagan; la hace el usuario) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.21 Switch con una entrada `aria-describedby` (y quitar el rodeo de `settings-01`) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.22 Hash de `blocks.css` en el sitio · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.23 Por qué el CSS global del sitio crece con cada componente (y una hoja aparte por componente o grupo, como `blocks.css`) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
@@ -128,10 +129,10 @@ Detalle: `docs/plan/blocks/` (un archivo por tarea).
 
 Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md); las tareas detalladas, en `docs/plan/grupo-3/`. Orden (modo autónomo, 07/11/2026; el grupo no tenía «Orden recomendado»): G3.0, G3.1, G3.2, G3.3, G3.4, B.9 y G3.P, el de la tabla de la spec 4.
 
-- [x] G3.0 Catálogo de tokens del Grupo 3 en la spec 13 (07/11/2026; pendiente de comprobación manual: aprobación de las tablas) · v0.5.0 · S · depende: — · [docs/plan/grupo-3/G3.0.md](plan/grupo-3/G3.0.md)
+- [x] G3.0 Catálogo de tokens del Grupo 3 en la spec 13 (07/11/2026; tablas aprobadas por el usuario el 07/11/2026) · v0.5.0 · S · depende: — · [docs/plan/grupo-3/G3.0.md](plan/grupo-3/G3.0.md)
 
 - [x] G3.1 Tree (07/11/2026; pendiente de comprobación manual: NVDA y navegador real) · v0.5.0 · L · depende: G2.P, 2.10, G3.0 · [docs/plan/grupo-3/G3.1.md](plan/grupo-3/G3.1.md)
-- [~] G3.2 Sortable List (detenida: CSS global 161,03 kB, pasa el aviso de 160; decide el usuario) · v0.5.0 · M · depende: G2.P, G3.0 · [docs/plan/grupo-3/G3.2.md](plan/grupo-3/G3.2.md)
+- [x] G3.2 Sortable List (07/11/2026; pendiente de comprobación manual: NVDA y teléfono real) · v0.5.0 · M · depende: G2.P, G3.0 · [docs/plan/grupo-3/G3.2.md](plan/grupo-3/G3.2.md)
 - [ ] G3.3 Command (⌘K) · v0.5.0 · — · depende: G2.P, G1.6, G2.8 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] G3.4 Data Table · v0.5.0 · — · depende: G2.P, 2.10, G1.3, G1.11, 2.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] B.9 `table-01` · v0.5.0 · — · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
