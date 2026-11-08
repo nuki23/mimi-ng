@@ -242,9 +242,15 @@ const HEAD_CLASSES = cn(
   'bg-[color:var(--mimi-table-head-bg,var(--mimi-muted))] text-[12.5px] font-semibold text-muted-foreground',
 );
 
-/** Sombra de la última columna fija, solo con la tabla desplazada. */
-const EDGE_CLASSES =
-  'group-data-[scrolled]/data-table:shadow-[shadow:var(--mimi-table-sticky-shadow,6px_0_10px_-6px_oklch(0_0_0/.25))]';
+/**
+ * Sombra de la última columna fija, solo con la tabla desplazada. El desplazamiento horizontal
+ * vale 1 y en RTL -1 (la sombra cae del lado del contenido que pasa por debajo); un
+ * `--mimi-table-sticky-shadow` propio se usa tal cual en las dos direcciones.
+ */
+const EDGE_CLASSES = cn(
+  'rtl:[--mimi-table-sticky-dir:-1]',
+  'group-data-[scrolled]/data-table:shadow-[shadow:var(--mimi-table-sticky-shadow,calc(6px_*_var(--mimi-table-sticky-dir,1))_0_10px_-6px_oklch(0_0_0/.25))]',
+);
 
 const ICON_BUTTON_CLASSES = cn(
   'inline-flex shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] border-0 bg-transparent text-muted-foreground',
@@ -1131,7 +1137,8 @@ export class MimiDataTable<T = any> {
   }
 
   protected onScroll(event: Event): void {
-    this.scrolled.set((event.target as HTMLElement).scrollLeft > 0);
+    // En RTL el desplazamiento horizontal es negativo.
+    this.scrolled.set(Math.abs((event.target as HTMLElement).scrollLeft) > 0);
   }
 }
 

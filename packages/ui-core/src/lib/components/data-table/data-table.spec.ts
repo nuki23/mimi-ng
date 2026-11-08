@@ -347,6 +347,9 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     // jsdom simplifica el calc() de la casilla (44px) y el expandir (36px).
     expect(start(cells[2])).toMatch(/^calc\((44px \+ 36px|80px)\)$/);
     expect(cells[2].className).toContain('group-data-[scrolled]/data-table:shadow-');
+    // RTL (G3.P): la sombra se invierte con una variable que vale -1 en RTL, no con un lado fijo.
+    expect(cells[2].className).toContain('rtl:[--mimi-table-sticky-dir:-1]');
+    expect(cells[2].className).toContain('calc(6px_*_var(--mimi-table-sticky-dir,1))');
     expect(cells[3].className).not.toContain('sticky');
     expect(cells[4].className).toContain('text-end');
     // La región de desplazamiento se alcanza con el teclado (Firefox y Safari) y tiene nombre.
@@ -406,6 +409,19 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     const [from, to, total] = bounds();
     expect(from).toBeLessThanOrEqual(to);
     expect(total).toBe(5);
+  });
+
+  it('desplazada en RTL (scrollLeft negativo) también marca data-scrolled (G3.P)', async () => {
+    const { table, fixture } = await setup();
+    const scroller = table.querySelector<HTMLElement>('[data-slot="scroll"]')!;
+    Object.defineProperty(scroller, 'scrollLeft', { value: -24, configurable: true });
+    scroller.dispatchEvent(new Event('scroll'));
+    await settle(fixture);
+    expect(table.hasAttribute('data-scrolled')).toBe(true);
+    Object.defineProperty(scroller, 'scrollLeft', { value: 0, configurable: true });
+    scroller.dispatchEvent(new Event('scroll'));
+    await settle(fixture);
+    expect(table.hasAttribute('data-scrolled')).toBe(false);
   });
 
   it('sin rowId y sin id en las filas: sin NG0955, cada fila se elige sola y avisa en desarrollo (G3.P)', async () => {
