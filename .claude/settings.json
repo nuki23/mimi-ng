@@ -130,7 +130,7 @@
       "Edit(/.claude/settings.json)",
       "Bash(sed -i:*)",
       "Bash(node -e:*)",
-      "Bash(node --eval:*)",
+      "Bash(node --eval:*)"
     ]
   }
 }
