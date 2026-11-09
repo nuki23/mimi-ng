@@ -2,11 +2,11 @@
 
 Lo ejecuta **el usuario** (el dueño del proyecto). Claude prepara la versión, comprueba lo que puede (`/cerrar-grupo`) y da estos comandos, pero no publica nada (`CLAUDE.md`, «Forma de trabajar», «Commit y push»). Aquí no hay tokens ni claves: cada servicio usa su propio inicio de sesión.
 
-En los comandos, `X.Y.Z` es la versión (por ejemplo, `0.4.0`) y `X.Y.W` la anterior (por ejemplo, `0.3.0`).
+En los comandos, `X.Y.Z` es la versión (por ejemplo, `0.5.0`) y `X.Y.W` la anterior (por ejemplo, `0.4.0`).
 
 ## Antes de publicar
 
-1. La puerta del grupo (`G<n>.P`; en la 0.4.0, la de los Blocks, `B.P`) recorrida, con `/cerrar-grupo`, y todo lo suyo hecho: spec, CHANGELOG, conteos, `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
+1. La puerta del grupo (`G<n>.P`; en la 0.4.0, la de los Blocks, `B.P`; en la 0.5.0, la `G3.P`) recorrida, con `/cerrar-grupo`, y todo lo suyo hecho: spec, CHANGELOG, conteos, `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
 2. La versión en `packages/cli/package.json` (`"version": "X.Y.Z"`) y la sección `## X.Y.Z (DD/MM/AAAA): …` en `CHANGELOG.md`.
 3. El commit de la versión hecho y subido (`git status --short` sin cambios pendientes). La etiqueta va sobre ese commit.
 
@@ -110,13 +110,17 @@ En un proyecto limpio, **fuera del repositorio**, en una **ruta corta** (por eje
   - **Desde la B.11** (la versión siguiente a la 0.4.0): las páginas (`login-01`, `settings-01`…) quedan en `src/app/pages/<nombre>/` (`login.ts`, `login.html`, `login.routes.ts`, `LoginPage`); pega en `app.routes.ts` la línea que imprime `ng g mimi`. `mimi.json` tiene `aliases.pages`. Agrega también una sección (`pricing-01`, a `src/app/blocks/`) y, con la página de `login-01` ya generada, `ng g mimi login-02` tiene que fallar sin escribir nada (carpeta ocupada) y `ng g mimi login-02 --name sign-in` generar `sign-in/`.
   - **Desde la B.11, en el 3 y el 4:** desde la versión anterior con pantallas de la 0.4.0 (una modificada): siguen en `src/app/blocks/` y se actualizan ahí (la modificada, bloqueada con su aviso), con el aviso de que ahora se generan como páginas; una página nueva escribe `aliases.pages`; al borrar la carpeta de una pantalla y volver a ejecutar, pasa a página. En el 5, una página nueva agrega `@source "./app/pages";`.
 - En el 3, `ng g mimi login-01` en el proyecto de la versión anterior: escribe `aliases.blocks` en `mimi.json` la primera vez, y avisa si falta `@source not "../.mimi";` en el CSS global.
-- **5. Proyecto con `source(none)`:** como el 3, pero con `@import "tailwindcss" source(none);` en el CSS global antes de `ng add @mimi-ng/cli@X.Y.W`. Con la nueva, `ng g mimi login-01` tiene que agregar `@source "./app/blocks";` (lo dice en el resumen) y la pantalla tiene que verse con sus estilos.
+- **5. Proyecto con `source(none)`:** como el 3, pero con `@import "tailwindcss" source(none);` en el CSS global antes de `ng add @mimi-ng/cli@X.Y.W`. Con la nueva, `ng g mimi login-01` tiene que agregar `@source "./app/pages";` (con `pricing-01`, `@source "./app/blocks";`; lo dice en el resumen) y la pantalla tiene que verse con sus estilos.
 
 En cada uno: `ng build` sin avisos y `ng serve` abre la página.
 
+**Antes de publicar, con el `.tgz` real** (lo que hizo la preparación de la 0.5.0, `docs/auto/release-0.5.0-2026-11-09.md`): `npm pack --pack-destination C:\t\rXYZ` en `packages/cli` y, en lugar de `ng add @mimi-ng/cli`, `npx ng add "C:\t\rXYZ\mimi-ng-cli-X.Y.Z.tgz" --skip-confirmation` (y `npm i -D "<ruta del .tgz>"` para actualizar). La versión anterior sale de npm (`ng add @mimi-ng/cli@X.Y.W`). Proyectos nuevos con `npx @angular/cli@22 new <nombre> --style=tailwind --skip-git --defaults --ssr=false --ai-config=none --package-manager=npm`. Comprueba también el contenido del `.tgz` (`tar -tzf`): sin `.spec.`, sin `testing/`, sin rutas personales ni correos. Con servidores y esperas, siempre con `timeout`, y se mata solo el PID del puerto que se usó.
+
+**El CSS tiene que traer las utilidades de Tailwind.** En «se ve con sus estilos», no basta con que `ng build` termine bien: comprueba que `dist/<proyecto>/browser/styles-*.css` contiene clases de la pantalla (por ejemplo, `grep -cF 'gap-\[18px\]'` y `bg-background`; un CSS de unos 30 kB sin utilidades es el síntoma). En la preparación de la 0.5.0, los proyectos nuevos instalaron Tailwind 4.3.5 y Windows (Control de aplicaciones) bloqueó su binario nativo (`@tailwindcss/oxide-win32-x64-msvc`, `ERR_DLOPEN_FAILED`): Tailwind cae al respaldo WASI, no escanea nada y `ng build` termina «bien» con el CSS vacío de utilidades. Es del equipo, no de Mimi. Para esa prueba se fijó `tailwindcss` y `@tailwindcss/postcss` a 4.3.3 (la del repositorio, que sí carga) con `npm i -D --save-exact` (con pnpm, editar `package.json` sin el `^` y `pnpm install`). La política no se desactiva.
+
 ## Dónde se anota el resultado
 
-En el historial del grupo, `docs/historial/plan-grupo-<n>.md` (la 0.4.0, en `docs/historial/plan-blocks.md`, que ya tiene la sección para el registro), en una sección «Publicación de la X.Y.Z (registro)» como la de la 0.2.0 en `plan-grupo-1.md`: fecha y hora de `npm publish`, que es `latest`, la etiqueta y su commit, si hubo release en GitHub, el despliegue y los escenarios con su resultado. Lo escribe Claude con los datos que dé el usuario, al cerrar la puerta.
+En el historial del grupo, `docs/historial/plan-grupo-<n>.md` (la 0.4.0, en `docs/historial/plan-blocks.md`; la 0.5.0, en `docs/historial/plan-grupo-3.md`, que se crea sin esa sección: agrégala al registrar), en una sección «Publicación de la X.Y.Z (registro)» como la de la 0.2.0 en `plan-grupo-1.md`: fecha y hora de `npm publish`, que es `latest`, la etiqueta y su commit, si hubo release en GitHub, el despliegue y los escenarios con su resultado. Lo escribe Claude con los datos que dé el usuario, al cerrar la puerta.
 
 ## Si algo sale mal
 
