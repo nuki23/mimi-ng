@@ -130,3 +130,10 @@ Se activa solo cuando el prompt de la sesión dice «modo autónomo». Mientras 
 - se llega a una puerta de grupo (`G<n>.P`): se hace su informe y se para.
 
 **A8. Siguen prohibidos:** push a `main`, fusionar a `main` (`gh pr merge` incluido), `--force`, publicar (npm, etiquetas, releases, despliegues), tocar los respaldos (`mimi-ng-respaldo-*`, `*.bundle`) y hacer commit de `.vscode/`. Los permisos del repo (`.claude/settings.json`) refuerzan algunas de estas reglas, pero son patrones de texto que se pueden esquivar: la regla vale aunque un comando no esté denegado. `.claude/settings.json` no se edita (está denegado); si hay que cambiarlo, lo hace el usuario.
+
+**A9. Esperas y procesos de fondo con límite de tiempo.** Ninguna espera ni proceso de fondo queda sin límite de tiempo (en este modo, tampoco los subagentes que lances: pídeselo en su prompt):
+
+- Todo bucle de espera lleva un tope (por ejemplo, 3 minutos para que un servidor arranque): `timeout 180 bash -c 'until …; do sleep 3; done'`. Si se cumple, se mata el proceso y se trata como **fallo** (no se espera más ni se vuelve a lanzar sin diagnosticar la causa). Un bucle que espera a un servidor mira también que el proceso siga vivo.
+- Al buscar una línea en el registro de un servidor, quita los códigos de color (ANSI) o busca solo lo que no los parte (`4312`, no `localhost:4312`): el color lo parte y el bucle no termina nunca.
+- Antes de levantar un servidor, comprueba que el puerto está libre (`netstat -ano | grep :<puerto>`); si no lo está, averigua de quién es y no lo mates si no es tuyo. Con `NG_CLI_ANALYTICS=false` para que Angular CLI no pregunte nada.
+- **Al terminar** (y si se interrumpe), mata los servidores y procesos que lanzaste (comprueba con `netstat` que el puerto queda libre) y borra lo temporal que dejaste fuera del repo. Los procesos de fondo (`run_in_background`) también llevan `timeout`.

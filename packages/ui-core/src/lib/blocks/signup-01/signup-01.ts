@@ -40,8 +40,18 @@ let nextId = 0;
  * contraseña con reglas, confirmación y un botón que dice qué falta.
  * Diseño: docs/design/Block signup-01.dc.html.
  *
- * Es una pantalla: ponla en tus rutas (`{ path: 'signup', component: Signup01 }`). El texto de
- * los beneficios y los mensajes están en la plantilla y en este archivo: cámbialos aquí.
+ * Es una página: `ng g mimi signup-01` la genera en tu carpeta de páginas (`aliases.pages` de
+ * mimi.json; por defecto, `src/app/pages/signup/`, u otro nombre con `--name`) junto con su
+ * archivo de rutas (`signup.routes.ts`, con la página en carga diferida), y te da la línea para
+ * `app.routes.ts`:
+ *
+ * ```ts
+ * { path: 'signup', loadChildren: () => import('./pages/signup/signup.routes').then((m) => m.SIGNUP_ROUTES) },
+ * ```
+ *
+ * El texto de los beneficios y los mensajes están en la plantilla y en este archivo: cámbialos
+ * aquí, y conecta tu registro en `onSubmit`. Si la usas dentro de otra página, sus entradas y
+ * salidas siguen ahí:
  *
  * ```html
  * <mimi-signup-01 [loading]="auth.loading()" [error]="auth.error()" (submitted)="auth.signUp($event)" />

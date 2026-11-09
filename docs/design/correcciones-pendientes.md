@@ -211,11 +211,53 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Objetivo del Slider:** el anfitrión del Slider mide 24px de alto (el diseño, 20px, el alto del pulgar) para que en el rango estrecho los objetivos de los dos pulgares no se toquen (2.5.8). El aspecto no cambia.
   - **Objetivos chicos que cumplen por espaciado:** el botón de quitar del chip (18 × 18px, Tags Input y Combobox) y la barra de tono del Color Picker (12px de alto). Si se quiere un área táctil mayor, definirla en el diseño.
 
+  Grupo 3 (G3.0), al escribir las tablas de tokens (07/11/2026, spec 13, «Grupo 3»):
+  - **Sin hoja de variables:** ningún componente del Grupo 3 está en `mimi-variables-*.css` ni en `tokens-mimi.css`; las tablas salen de los estilos de `F4 Command Tree Sortable` y `Data Table`. Pasar los valores a la hoja de tokens.
+  - **Radios fijos en Command:** la caja del ícono (7px) y las teclas `kbd` (5px; 4px en el pie) no usan tokens de radio.
+  - **Colores fijos en la sombra de la columna fija de Data Table** (`oklch(0 0 0 / .25)`) y en las mezclas de hover y elegida (`color-mix` con `foreground` 3,5 % e `info` 8 % sobre `card`): no hay globales para ellos; quedan como tokens propios de la tabla.
+  - **Casillas dibujadas a mano:** Tree (selección múltiple) y Data Table dibujan su casilla (16px, check de 12px); Mimi usa su Checkbox, con el mismo tamaño.
+
+  Tree (G3.1, 07/11/2026):
+  - **La casilla no es un botón:** el diseño pone un `<button role="checkbox">` y un botón para el chevrón dentro de cada `treeitem` del múltiple; Mimi no pone controles enfocables dentro de un nodo (la casilla es visual, con los estilos de Checkbox, y el estado va en el `aria-checked` del nodo) y el chevrón es un `span` que se puede pulsar. Sin `aria-multiselectable` (es de `aria-selected`; el múltiple usa `aria-checked`).
+  - **Íconos y colores de los archivos:** son del usuario (plantilla `mimiTreeNode`); el ejemplo del sitio usa los del diseño (`folder`, `file-code`… con los `-soft-foreground`).
+  - **Sin diseño:** la fila de error de la carga diferida (texto en `destructive-soft-foreground`, 12,5px, como «Cargando…»), los nodos deshabilitados (opacidad 50 %) y el árbol deshabilitado.
+  - **Fila «Cargando…» (Tree):** el diseño la pinta dentro del árbol; Mimi la oculta a los lectores (`aria-hidden`) y anuncia el texto en una región `role="status"` aparte (los hijos de un `tree` solo pueden ser `treeitem` o `group`).
+
+  Sortable List (G3.2, 07/11/2026):
+  - **Agarrado con el teclado:** el diseño solo dibuja el arrastre con el puntero (girado y escalado); con el teclado, el elemento agarrado lleva la sombra y el anillo del levantado, sin girar (se mueve paso a paso) y con el asa en `accent`.
+  - **Hueco:** del alto del elemento que se arrastra (el diseño, 56px fijos), para elementos con más contenido.
+  - **Sin diseño:** la lista deshabilitada (asas al 50 %) y el asa con foco (el contorno `ring` de los botones).
+  - **Contenido del elemento:** el número, el título, el dato y la etiqueta del diseño son del usuario (plantilla `mimiSortableItem`); el ejemplo del sitio los reproduce con Badge.
+
+  table-01 (B.9, 07/11/2026):
+  - **Escritorio y móvil con CSS:** el diseño cambia de vista con una propiedad (`mobile`); Mimi dibuja las dos y las alterna con `md:` (la oculta, `display: none`). El punto de corte (768px) no está en el diseño.
+  - **Textos en inglés** (B.1-i); el diseño los tiene en español.
+  - **Tabla de escritorio:** la Data Table de Mimi (columnas Customer, Status, Plan, MRR, Users y Country; el diseño tiene más: país con prefijo, última actividad, creado). Estado con Badge `soft`; sin el avatar de iniciales ni el menú de acciones por fila del diseño (la plantilla `mimiTableActions` está disponible).
+  - **Resumen por estado:** lista con un punto de color y el número, sin las tarjetas del diseño.
+  - **Móvil, sin diseño:** la barra de acciones (el diseño la fija abajo; sin menú de fila, sin «Export» con ícono) y el estado vacío («No customers match.»).
+
+  Data Table (G3.4, 07/11/2026):
+  - **Sin navegación por celdas:** el diseño no dice si es una tabla o un `grid`; Mimi usa una `<table>` nativa con botones que se recorren con Tab.
+  - **Casilla del encabezado:** marca la página visible (el diseño marca «todas»); la barra cuenta todas las elegidas.
+  - **Filtro:** el diseño abre un diálogo con casillas (y un cuadro "Contiene…" para el texto); Mimi usa un Dropdown Menu con casillas de menú y no tiene filtro de texto por columna (para otra versión).
+  - **Ancho de las columnas:** las fijas necesitan `width`; el diseño las fija en la hoja. Sin `width`, no se fijan.
+  - **Sin diseño:** la columna de acciones es una plantilla (el menú del ejemplo es el Dropdown Menu), las filas de esqueleto (tres barras, no las columnas del diseño), «sin datos» (distinto de «sin resultados») y la barra con selección en móvil (la barra se parte en varias líneas).
+  - **RTL:** Data Table usa propiedades lógicas (`start-0`, `ps/pe`, `text-end`, `inset-inline-start`); la sombra de la columna fija se invierte en RTL con una variable interna (`--sticky-dir`, 1 o -1, interna y sin prefijo `--mimi-` porque no es un token; arreglo de la G3.P) y el desplazamiento negativo de RTL cuenta como «desplazada». Un `--mimi-table-sticky-shadow` propio se usa tal cual en las dos direcciones. Sin diseño RTL.
+  - **Sombra de la columna fija:** aparece con cualquier desplazamiento horizontal (el diseño la ata a la tabla desplazada); el borde interior de 1px no se dibuja.
+
+  Command (G3.3, 07/11/2026):
+  - **Título de grupo:** relleno `6px 8px 4px` (el de la lista compartida con Combobox, ítem `option-list`), no el `8px 10px 4px` del diseño; el tamaño, el peso y el color son los del diseño.
+  - **Alto de la lista:** el diseño lo fija en 332px; Mimi lo usa como máximo (`--mimi-command-list-height`) y la lista se acorta al filtrar, así que el panel cambia de alto mientras se escribe.
+  - **Posición del panel en una pantalla real:** el diseño lo pone a 36px del borde de arriba dentro de un marco de 500px; Mimi usa esos 36px en la pantalla (`--mimi-command-top`). En móvil tapa la cabecera del sitio. Confirmar con el diseño (por ejemplo, un porcentaje del alto).
+  - **Sin diseño:** comandos deshabilitados (opacidad 50 %, sin ejecutar), la paleta dentro de la página (borde, radio de tarjeta y sombra `popover`, sin la tecla `esc`) y el disparador en Windows (el ejemplo muestra «Ctrl K» fuera de Mac).
+  - **Atajos de la derecha:** se muestran en `kbd`, ocultos a los lectores (los símbolos ⌘ ⇧ se leen mal); Mimi no los registra.
+  - **Disparador del diseño:** la caja de Input de 220 × 34px con «Buscar…» y ⌘K no es una pieza de Command; el ejemplo del sitio la escribe con clases.
+
   Blocks: la página del sitio (B.1, 07/11/2026):
   - **Página de un Block sin diseño:** `Mimi F6 Blocks.dc.html` es el índice de los Blocks, no la página de documentación. La página (`/docs/blocks/<nombre>`) se armó con lo que ya tiene el sitio: título, descripción, la vista previa en un marco con borde y fondo `muted`, `InstallCommand`, «Componentes que usa» como enlaces en píldora, el código con `CodeBlock` (un bloque por archivo) y la tabla de API. Pedir el diseño de la página.
   - **Marco de la vista previa:** `iframe` de 760px de alto, con tres `mimi-toggle-group` encima (Escritorio · Móvil (375 px), Claro · Oscuro y el estado) y el enlace «Abrir en una pestaña». El ancho móvil (375px) es el de los marcos de `F6 Blocks`; el alto y los controles no están en el diseño.
   - **Páginas y secciones (B.11, 07/11/2026):** sin diseño. La sección «Instalación» de un Block de tipo página dice qué archivos genera (`login/login.ts`, `.html`, `.routes.ts`, `LoginPage`) y muestra la línea para `app.routes.ts` en un `CodeBlock`; la de una sección (`pricing-01`) dice que va dentro de una página. Las notas cambian con el tipo (`--name`, `aliases.pages`, las pantallas de la 0.4.0). «Código» muestra los archivos como los genera la CLI. Si se pide el diseño de la página de un Block, incluir los dos tipos.
-  - **`pricing-01` como sección con `min-h-svh`:** el Block ocupa al menos el alto de la pantalla (así lo dibuja el índice de `F6 Blocks`, a pantalla completa). Como sección dentro de una página con más partes, quizá convenga quitarlo; no se cambió en la B.11 (cambiaría lo publicado en la 0.4.0). Decidirlo con el diseño.
+  - **`pricing-01` sin `min-h-svh` (07/11/2026, pedido del usuario):** el índice de `F6 Blocks` lo dibuja a pantalla completa, pero es una sección (B.11-a) y va dentro de una página con más partes, así que ya no fuerza el alto de la pantalla (`class="min-h-svh"` lo devuelve). Lo demás del marco (fondo, márgenes, el `h1` del título) no cambia. **Pendiente de decidir con el diseño:** como sección, su título quizá debería ser un `h2` (hoy es el único `h1`, y la página que la contiene tendrá el suyo).
 
   login-01 (B.2, 07/11/2026):
   - **Error de credenciales sin diseño:** un `role="alert"` encima del botón, con el ícono `circle-alert` y los colores de error suave (`destructive-soft-bg`, `destructive-soft-foreground`, radio `--mimi-radius`), derivados del error de Input. Pedir el diseño.

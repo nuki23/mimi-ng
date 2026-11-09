@@ -52,12 +52,20 @@
             "label": "combobox"
           },
           {
+            "value": "command",
+            "label": "command"
+          },
+          {
             "value": "confirm",
             "label": "confirm"
           },
           {
             "value": "context-menu",
             "label": "context-menu"
+          },
+          {
+            "value": "data-table",
+            "label": "data-table"
           },
           {
             "value": "date-picker",
@@ -132,6 +140,10 @@
             "label": "slider"
           },
           {
+            "value": "sortable-list",
+            "label": "sortable-list"
+          },
+          {
             "value": "switch",
             "label": "switch"
           },
@@ -164,6 +176,10 @@
             "label": "tooltip"
           },
           {
+            "value": "tree",
+            "label": "tree"
+          },
+          {
             "value": "login-01",
             "label": "login-01 (Block, página)"
           },
@@ -186,6 +202,10 @@
           {
             "value": "signup-01",
             "label": "signup-01 (Block, página)"
+          },
+          {
+            "value": "table-01",
+            "label": "table-01 (Block, página)"
           }
         ]
       }

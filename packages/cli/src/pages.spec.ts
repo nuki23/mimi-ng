@@ -112,7 +112,14 @@ describe('registro (B.11-a)', () => {
     expect(blocks.length).toBeGreaterThan(0);
     for (const [name, item] of blocks) expect(['page', 'section'], name).toContain(item.kind);
     const pages = blocks.filter(([, item]) => item.kind === 'page').map(([name]) => name);
-    expect(pages.sort()).toEqual(['login-01', 'login-02', 'otp-01', 'settings-01', 'signup-01']);
+    expect(pages.sort()).toEqual([
+      'login-01',
+      'login-02',
+      'otp-01',
+      'settings-01',
+      'signup-01',
+      'table-01',
+    ]);
     // Y ningún ítem que no sea un Block tiene `kind`.
     for (const [name, item] of Object.entries(registry.items)) {
       if (item.type !== 'block') expect(item.kind, name).toBeUndefined();
@@ -142,6 +149,22 @@ describe('conversión de un Block en página (utils/pages)', () => {
   const pageBlocks = Object.entries(registry.items)
     .filter(([, item]) => item.kind === 'page')
     .map(([name]) => name);
+
+  it.each(pageBlocks)(
+    '%s: el comentario de cabecera dice lo que genera la CLI (la línea exacta de app.routes.ts)',
+    (item) => {
+      const name = defaultPageName(item);
+      const source = readFileSync(join(UI_CORE_LIB, `blocks/${item}/${item}.ts`), 'utf8');
+      const result = renderPageFile(source, target(item));
+      expect(result).toContain(routeLine(target(item), `./pages/${name}/${name}.routes`));
+      expect(result).toContain(`\`${name}.routes.ts\``);
+      expect(result).toContain('aliases.pages');
+      expect(result).toContain(`ng g mimi ${item}`);
+      // Nada de la forma de la 0.4.0 (`{ path: 'login', component: Login01 }`).
+      expect(result).not.toMatch(/component: \w+ \}/);
+      expect(source).not.toMatch(/component: \w+ \}/);
+    },
+  );
 
   it.each(pageBlocks)(
     '%s: sin restos del Block, con la clase y el selector de la página',

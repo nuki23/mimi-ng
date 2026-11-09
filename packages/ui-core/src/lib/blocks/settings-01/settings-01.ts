@@ -146,9 +146,19 @@ let nextId = 0;
  * de peligro, facturación y una barra de «cambios sin guardar».
  * Diseño: docs/design/Block settings-01.dc.html.
  *
- * Es una pantalla: ponla en tus rutas y dale tus datos (`profile`, `preferences`, `sessions`,
- * `plan`). Sin datos, muestra los del ejemplo. «Guardar» emite `saved` con el formulario; las
- * acciones (foto, sesiones, borrar la cuenta, cambiar de plan) son salidas: tu app decide.
+ * Es una página: `ng g mimi settings-01` la genera en tu carpeta de páginas (`aliases.pages` de
+ * mimi.json; por defecto, `src/app/pages/settings/`, u otro nombre con `--name`) junto con su
+ * archivo de rutas (`settings.routes.ts`, con la página en carga diferida), y te da la línea
+ * para `app.routes.ts`:
+ *
+ * ```ts
+ * { path: 'settings', loadChildren: () => import('./pages/settings/settings.routes').then((m) => m.SETTINGS_ROUTES) },
+ * ```
+ *
+ * Dale tus datos (`profile`, `preferences`, `sessions`, `plan`) aquí mismo o, si la usas dentro
+ * de otra página, por sus entradas. Sin datos, muestra los del ejemplo. «Guardar» emite `saved`
+ * con el formulario; las acciones (foto, sesiones, borrar la cuenta, cambiar de plan) son
+ * salidas: tu app decide.
  *
  * ```html
  * <mimi-settings-01 [profile]="me()" [saving]="saving()" (saved)="save($event)" (deleteAccount)="confirmDelete()" />

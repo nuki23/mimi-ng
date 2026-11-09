@@ -1,0 +1,128 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Command</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Una paleta de comandos: se abre con ⌘K o Ctrl+K, filtra mientras escribes y ejecuta el comando
+    elegido con Enter. También se puede poner dentro de la página.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="command" />
+  <p class="text-pretty">
+    Trae Dialog y la lista de Combobox; usa
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/aria</code>
+    y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@angular/cdk</code>,
+    que la CLI agrega si faltan.
+  </p>
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <p class="text-pretty">Cada comando:</p>
+  <app-code-block [code]="item" lang="typescript" />
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="dialog" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Diálogo con atajo, íconos y tonos
+  </h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >mimi-command-dialog</code
+    >
+    escucha ⌘K (Mac) o Ctrl+K en toda la página. El ícono de cada comando va en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;ng-template mimiCommandIcon let-item&gt;</code
+    >; su caja toma el color de <code class="font-mono text-[13px]">tone</code>. Los atajos de la
+    derecha solo se muestran: regístralos tú si los quieres.
+  </p>
+  <app-code-preview [code]="source.dialog">
+    <app-command-dialog-example />
+  </app-code-preview>
+
+  <h3 id="inline" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    En la página, con «sin resultados» y deshabilitado
+  </h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-command</code>
+    es la paleta sola. Escape vacía lo escrito; las palabras de
+    <code class="font-mono text-[13px]">keywords</code> también encuentran el comando («ocultar»).
+    Lo que marques con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiCommandEmpty</code>
+    aparece cuando no hay resultados.
+  </p>
+  <app-code-preview [code]="source.inline">
+    <app-command-inline-example />
+  </app-code-preview>
+
+  <h3 id="texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textos</h3>
+  <p class="text-pretty">
+    El buscador, el pie, «sin resultados» y el número de resultados están en inglés; esta página usa
+    los de español.
+  </p>
+  <app-code-block [code]="texts" lang="typescript" />
+
+  <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Teclado y accesibilidad
+  </h3>
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      El buscador es un combobox siempre abierto con su lista (patrón de la APG): el foco se queda
+      en el campo y el comando activo se indica con
+      <code class="font-mono text-[13px]">aria-activedescendant</code>.
+    </li>
+    <li>
+      ↑ y ↓ mueven el activo (con vuelta), Inicio y Fin van a los extremos, Enter ejecuta. Los
+      comandos deshabilitados se saltan.
+    </li>
+    <li>Cada grupo tiene su nombre; el número de resultados se anuncia al escribir.</li>
+    <li>
+      El diálogo encierra el foco, lo lleva al buscador al abrir y lo devuelve al cerrar. Escape lo
+      cierra; en la paleta suelta, vacía lo escrito.
+    </li>
+  </ul>
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <p class="text-pretty">
+    <code class="font-mono text-[13px]">mimi-command</code> (la paleta) y
+    <code class="font-mono text-[13px]">mimi-command-dialog</code> (en un diálogo) comparten las
+    entradas, salvo las marcadas.
+  </p>
+  @for (
+    table of [
+      { title: 'Entrada', rows: api },
+      { title: 'Salida', rows: outputs },
+      { title: 'Pieza', rows: parts },
+    ];
+    track table.title
+  ) {
+    <div class="overflow-x-auto rounded-card border">
+      <table class="w-full text-left text-sm">
+        <thead class="bg-muted text-muted-foreground">
+          <tr>
+            <th scope="col" class="px-4 py-2.5 font-medium">{{ table.title }}</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+            <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of table.rows; track row.name) {
+            <tr class="border-t align-top">
+              <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+              <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">
+                {{ row.type }}
+              </td>
+              <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+              <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="command" />
+</article>

@@ -68,6 +68,10 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Date Range', path: '/docs/components/date-range', status: 'ready' },
       { title: 'File Upload', path: '/docs/components/file-upload', status: 'ready' },
       { title: 'Color Picker', path: '/docs/components/color-picker', status: 'ready' },
+      { title: 'Tree', path: '/docs/components/tree', status: 'ready' },
+      { title: 'Sortable List', path: '/docs/components/sortable-list', status: 'ready' },
+      { title: 'Command', path: '/docs/components/command', status: 'ready' },
+      { title: 'Data Table', path: '/docs/components/data-table', status: 'ready' },
     ],
   },
   {
@@ -80,6 +84,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'signup-01', path: '/docs/blocks/signup-01', status: 'ready' },
       { title: 'otp-01', path: '/docs/blocks/otp-01', status: 'ready' },
       { title: 'settings-01', path: '/docs/blocks/settings-01', status: 'ready' },
+      { title: 'table-01', path: '/docs/blocks/table-01', status: 'ready' },
       { title: 'pricing-01', path: '/docs/blocks/pricing-01', status: 'ready' },
     ],
   },

@@ -127,7 +127,10 @@
       "PowerShell(gh pr merge*)",
       "Read(//**/mimi-ng-respaldo-*/**)",
       "Read(//**/*.bundle)",
-      "Edit(/.claude/settings.json)"
+      "Edit(/.claude/settings.json)",
+      "Bash(sed -i:*)",
+      "Bash(node -e:*)",
+      "Bash(node --eval:*)"
     ]
   }
 }

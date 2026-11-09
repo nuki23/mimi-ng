@@ -51,7 +51,11 @@ export type TokenComponent =
   | 'combobox'
   | 'date'
   | 'fileUpload'
-  | 'colorPicker';
+  | 'colorPicker'
+  | 'tree'
+  | 'sortable'
+  | 'command'
+  | 'dataTable';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -89,6 +93,10 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   date: 'date',
   fileUpload: 'upload',
   colorPicker: 'color-picker',
+  tree: 'tree',
+  sortable: 'sortable',
+  command: 'command',
+  dataTable: 'table',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1763,6 +1771,275 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       default: 'oklch(0 0 0 / .1)',
       preset: false,
       description: 'Borde interior de las muestras.',
+    },
+  ],
+  tree: [
+    {
+      name: '--mimi-tree-padding',
+      default: '6px',
+      preset: true,
+      description: 'Relleno del contenedor.',
+    },
+    {
+      name: '--mimi-tree-row-height',
+      default: '32px',
+      preset: true,
+      description: 'Alto de cada nodo.',
+    },
+    {
+      name: '--mimi-tree-row-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio del nodo.',
+    },
+    {
+      name: '--mimi-tree-indent',
+      default: '18px',
+      preset: true,
+      description: 'Sangría por nivel.',
+    },
+    {
+      name: '--mimi-tree-font-size',
+      default: '13.5px',
+      preset: true,
+      description: 'Tamaño de texto.',
+    },
+    {
+      name: '--mimi-tree-bg',
+      default: 'card',
+      inherits: '--mimi-card',
+      preset: false,
+      description: 'Fondo del contenedor.',
+    },
+    {
+      name: '--mimi-tree-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo del nodo en hover.',
+    },
+    {
+      name: '--mimi-tree-selected',
+      default: 'primary',
+      inherits: '--mimi-primary',
+      preset: false,
+      description: 'Fondo del nodo elegido (simple).',
+    },
+    {
+      name: '--mimi-tree-selected-fg',
+      default: 'primary-foreground',
+      inherits: '--mimi-primary-foreground',
+      preset: false,
+      description: 'Texto del nodo elegido.',
+    },
+  ],
+  sortable: [
+    {
+      name: '--mimi-sortable-item-height',
+      default: '56px',
+      preset: true,
+      description: 'Alto mínimo de cada elemento.',
+    },
+    {
+      name: '--mimi-sortable-gap',
+      default: '8px',
+      preset: true,
+      description: 'Separación entre elementos.',
+    },
+    {
+      name: '--mimi-sortable-radius',
+      default: 'radius',
+      inherits: '--mimi-radius',
+      preset: true,
+      description: 'Radio del elemento y del hueco.',
+    },
+    {
+      name: '--mimi-sortable-lift',
+      default: 'rotate(-1.5deg) scale(1.03)',
+      preset: true,
+      description: 'Giro y escala del elemento que se arrastra.',
+    },
+    {
+      name: '--mimi-sortable-easing',
+      default: 'cubic-bezier(.2, .8, .2, 1)',
+      preset: true,
+      description: 'Curva del reacomodo.',
+    },
+    {
+      name: '--mimi-sortable-bg',
+      default: 'card',
+      inherits: '--mimi-card',
+      preset: false,
+      description: 'Fondo del elemento.',
+    },
+    {
+      name: '--mimi-sortable-handle-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo del asa en hover y al arrastrar.',
+    },
+    {
+      name: '--mimi-sortable-drop',
+      default: 'info',
+      inherits: '--mimi-info',
+      preset: false,
+      description: 'Borde del hueco y anillo del elemento levantado.',
+    },
+    {
+      name: '--mimi-sortable-drop-bg',
+      default: 'info-soft',
+      inherits: '--mimi-info-soft',
+      preset: false,
+      description: 'Fondo del hueco donde caerá.',
+    },
+  ],
+  command: [
+    {
+      name: '--mimi-command-width',
+      default: '560px',
+      preset: true,
+      description: 'Ancho del panel en el diálogo.',
+    },
+    {
+      name: '--mimi-command-top',
+      default: '36px',
+      preset: true,
+      description: 'Distancia del panel al borde superior en el diálogo.',
+    },
+    {
+      name: '--mimi-command-input-height',
+      default: '52px',
+      preset: true,
+      description: 'Alto de la fila del buscador.',
+    },
+    {
+      name: '--mimi-command-input-font-size',
+      default: '15px',
+      preset: true,
+      description: 'Tamaño del texto del buscador.',
+    },
+    {
+      name: '--mimi-command-list-height',
+      default: '332px',
+      preset: true,
+      description: 'Alto máximo de la lista.',
+    },
+    {
+      name: '--mimi-command-item-height',
+      default: '40px',
+      preset: true,
+      description: 'Alto de cada comando.',
+    },
+    {
+      name: '--mimi-command-item-radius',
+      default: 'radius-sm',
+      inherits: '--mimi-radius-sm',
+      preset: true,
+      description: 'Radio del comando.',
+    },
+    {
+      name: '--mimi-command-icon-size',
+      default: '26px',
+      preset: true,
+      description: 'Caja del ícono del comando.',
+    },
+    {
+      name: '--mimi-command-active',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo del comando activo.',
+    },
+  ],
+  dataTable: [
+    {
+      name: '--mimi-table-row-height',
+      default: '42px',
+      preset: true,
+      description: 'Alto de fila (compacta).',
+    },
+    {
+      name: '--mimi-table-row-height-comfortable',
+      default: '60px',
+      preset: true,
+      description: 'Alto de fila (cómoda).',
+    },
+    {
+      name: '--mimi-table-head-height',
+      default: '38px',
+      preset: true,
+      description: 'Alto del encabezado (compacta).',
+    },
+    {
+      name: '--mimi-table-head-height-comfortable',
+      default: '44px',
+      preset: true,
+      description: 'Alto del encabezado (cómoda).',
+    },
+    {
+      name: '--mimi-table-font-size',
+      default: '13px',
+      preset: true,
+      description: 'Texto de las celdas (compacta).',
+    },
+    {
+      name: '--mimi-table-font-size-comfortable',
+      default: '14px',
+      preset: true,
+      description: 'Texto de las celdas (cómoda).',
+    },
+    {
+      name: '--mimi-table-cell-px',
+      default: '10px',
+      preset: true,
+      description: 'Relleno horizontal de la celda.',
+    },
+    {
+      name: '--mimi-table-toolbar-height',
+      default: '56px',
+      preset: true,
+      description: 'Alto mínimo de la barra de herramientas.',
+    },
+    {
+      name: '--mimi-table-bg',
+      default: 'card',
+      inherits: '--mimi-card',
+      preset: false,
+      description: 'Fondo de la tabla y de las filas.',
+    },
+    {
+      name: '--mimi-table-head-bg',
+      default: 'muted',
+      inherits: '--mimi-muted',
+      preset: false,
+      description: 'Fondo del encabezado.',
+    },
+    {
+      name: '--mimi-table-row-hover',
+      default: 'color-mix(in oklab, var(--mimi-foreground) 3.5%, var(--mimi-card))',
+      preset: false,
+      description: 'Fila en hover.',
+    },
+    {
+      name: '--mimi-table-row-selected',
+      default: 'color-mix(in oklab, var(--mimi-info) 8%, var(--mimi-card))',
+      preset: false,
+      description: 'Fila elegida.',
+    },
+    {
+      name: '--mimi-table-expanded-bg',
+      default: 'muted',
+      inherits: '--mimi-muted',
+      preset: false,
+      description: 'Fondo del detalle de una fila expandida.',
+    },
+    {
+      name: '--mimi-table-sticky-shadow',
+      default: '6px 0 10px -6px oklch(0 0 0 / .25)',
+      preset: false,
+      description: 'Sombra de la columna fija al desplazar.',
     },
   ],
 };

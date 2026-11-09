@@ -134,6 +134,17 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./components/combobox/combobox-page').then((m) => m.ComboboxPage),
   },
   {
+    path: 'components/data-table',
+    title: 'Data Table · Mimi',
+    loadComponent: () =>
+      import('./components/data-table/data-table-page').then((m) => m.DataTablePage),
+  },
+  {
+    path: 'components/command',
+    title: 'Command · Mimi',
+    loadComponent: () => import('./components/command/command-page').then((m) => m.CommandPage),
+  },
+  {
     path: 'components/date-picker',
     title: 'Date Picker · Mimi',
     loadComponent: () =>
@@ -156,6 +167,17 @@ export const DOCS_ROUTES: Routes = [
     title: 'Color Picker · Mimi',
     loadComponent: () =>
       import('./components/color-picker/color-picker-page').then((m) => m.ColorPickerPage),
+  },
+  {
+    path: 'components/tree',
+    title: 'Tree · Mimi',
+    loadComponent: () => import('./components/tree/tree-page').then((m) => m.TreePage),
+  },
+  {
+    path: 'components/sortable-list',
+    title: 'Sortable List · Mimi',
+    loadComponent: () =>
+      import('./components/sortable-list/sortable-list-page').then((m) => m.SortableListPage),
   },
   {
     path: 'components/tags-input',
@@ -231,6 +253,11 @@ export const DOCS_ROUTES: Routes = [
     path: 'blocks/settings-01',
     title: 'settings-01 · Blocks · Mimi',
     loadComponent: () => import('./blocks/settings-01-page').then((m) => m.Settings01Page),
+  },
+  {
+    path: 'blocks/table-01',
+    title: 'table-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/table-01-page').then((m) => m.Table01Page),
   },
   {
     path: 'blocks/pricing-01',

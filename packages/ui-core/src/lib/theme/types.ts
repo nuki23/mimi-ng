@@ -556,6 +556,86 @@ export interface MimiColorPickerTokens {
 }
 
 /**
+ * Tree. Fondo, hover y el nodo elegido van en el CSS (`--mimi-tree-bg`, `-hover`, `-selected`,
+ * `-selected-fg`).
+ */
+export interface MimiTreeTokens {
+  /** Relleno del contenedor (6px). */
+  padding?: string;
+  /** Alto de cada nodo (32px). */
+  rowHeight?: string;
+  /** Radio del nodo (el global `radius-sm`). */
+  rowRadius?: string;
+  /** Sangría por nivel (18px). */
+  indent?: string;
+  /** Tamaño de texto (13.5px). */
+  fontSize?: string;
+}
+
+/**
+ * Sortable List. Fondo, el hover del asa y los colores del hueco van en el CSS
+ * (`--mimi-sortable-bg`, `-handle-hover`, `-drop`, `-drop-bg`).
+ */
+export interface MimiSortableTokens {
+  /** Alto mínimo de cada elemento (56px). */
+  itemHeight?: string;
+  /** Separación entre elementos (8px). */
+  gap?: string;
+  /** Radio del elemento y del hueco (el global `radius`). */
+  radius?: string;
+  /** Giro y escala del elemento levantado (`rotate(-1.5deg) scale(1.03)`). */
+  lift?: string;
+  /** Curva del reacomodo (`cubic-bezier(.2, .8, .2, 1)`). */
+  easing?: string;
+}
+
+/**
+ * Command. El fondo del comando activo va en el CSS (`--mimi-command-active`).
+ */
+export interface MimiCommandTokens {
+  /** Ancho del panel en el diálogo (560px). */
+  width?: string;
+  /** Distancia del panel al borde superior en el diálogo (36px). */
+  top?: string;
+  /** Alto de la fila del buscador (52px). */
+  inputHeight?: string;
+  /** Tamaño del texto del buscador (15px). */
+  inputFontSize?: string;
+  /** Alto máximo de la lista (332px). */
+  listHeight?: string;
+  /** Alto de cada comando (40px). */
+  itemHeight?: string;
+  /** Radio del comando (el global `radius-sm`). */
+  itemRadius?: string;
+  /** Caja del ícono del comando (26px). */
+  iconSize?: string;
+}
+
+/**
+ * Data Table. Los fondos (tabla, encabezado, hover, elegida, detalle) y la sombra de la columna
+ * fija van en el CSS (`--mimi-table-bg`, `-head-bg`, `-row-hover`, `-row-selected`,
+ * `-expanded-bg`, `-sticky-shadow`).
+ */
+export interface MimiTableTokens {
+  /** Alto de fila en la densidad compacta (42px). */
+  rowHeight?: string;
+  /** Alto de fila en la densidad cómoda (60px). */
+  rowHeightComfortable?: string;
+  /** Alto del encabezado, compacta (38px). */
+  headHeight?: string;
+  /** Alto del encabezado, cómoda (44px). */
+  headHeightComfortable?: string;
+  /** Texto de las celdas, compacta (13px). */
+  fontSize?: string;
+  /** Texto de las celdas, cómoda (14px). */
+  fontSizeComfortable?: string;
+  /** Relleno horizontal de la celda (10px). */
+  cellPx?: string;
+  /** Alto mínimo de la barra (56px). */
+  toolbarHeight?: string;
+}
+
+/**
  * Tokens por componente (spec 13). Solo los que no dependen del modo: los colores de los
  * componentes (`--mimi-<prefijo>-bg`, `-fg`, `-border`…) se cambian en el CSS (spec 6.2).
  */
@@ -594,6 +674,10 @@ export interface MimiComponentTokens {
   date?: MimiDateTokens;
   fileUpload?: MimiFileUploadTokens;
   colorPicker?: MimiColorPickerTokens;
+  tree?: MimiTreeTokens;
+  sortable?: MimiSortableTokens;
+  command?: MimiCommandTokens;
+  dataTable?: MimiTableTokens;
 }
 
 export interface MimiThemePreset {

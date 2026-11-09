@@ -184,6 +184,23 @@
       },
       "registryDependencies": ["button", "input", "select", "utils/cn"]
     },
+    "data-table": {
+      "type": "component",
+      "files": [
+        "components/data-table/data-table.ts",
+        "components/data-table/data-table-texts.ts",
+        "components/data-table/index.ts"
+      ],
+      "registryDependencies": [
+        "checkbox",
+        "chip",
+        "dropdown-menu",
+        "input",
+        "pagination",
+        "toggle-group",
+        "utils/cn"
+      ]
+    },
     "input-mask": {
       "type": "component",
       "files": ["components/input-mask/input-mask.ts", "components/input-mask/index.ts"],
@@ -229,6 +246,18 @@
       "files": ["components/progress/progress.ts", "components/progress/index.ts"],
       "registryDependencies": ["utils/cn"]
     },
+    "sortable-list": {
+      "type": "component",
+      "files": [
+        "components/sortable-list/sortable-list.ts",
+        "components/sortable-list/sortable-list-texts.ts",
+        "components/sortable-list/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4"
+      },
+      "registryDependencies": ["utils/cn"]
+    },
     "slider": {
       "type": "component",
       "files": [
@@ -262,6 +291,18 @@
         "utils/field-state",
         "utils/overlay"
       ]
+    },
+    "command": {
+      "type": "component",
+      "files": [
+        "components/command/command.ts",
+        "components/command/command-texts.ts",
+        "components/command/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/aria": "^22.2.4"
+      },
+      "registryDependencies": ["dialog", "option-list", "utils/cn"]
     },
     "calendar": {
       "type": "component",
@@ -472,6 +513,19 @@
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": ["utils/cn", "utils/overlay"]
     },
+    "tree": {
+      "type": "component",
+      "files": [
+        "components/tree/tree.ts",
+        "components/tree/tree-texts.ts",
+        "components/tree/index.ts"
+      ],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4",
+        "@angular/forms": "^22.0.0"
+      },
+      "registryDependencies": ["checkbox", "utils/cn"]
+    },
     "textarea": {
       "type": "component",
       "files": [
@@ -563,6 +617,16 @@
         "textarea",
         "utils/cn"
       ]
+    },
+    "table-01": {
+      "type": "block",
+      "kind": "page",
+      "files": [
+        "blocks/table-01/table-01.ts",
+        "blocks/table-01/table-01.html",
+        "blocks/table-01/index.ts"
+      ],
+      "registryDependencies": ["badge", "button", "checkbox", "data-table", "input", "utils/cn"]
     },
     "pricing-01": {
       "type": "block",

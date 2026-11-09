@@ -10,6 +10,7 @@ import { Login02Page } from './login-02-page';
 import { Otp01Page } from './otp-01-page';
 import { Pricing01Page } from './pricing-01-page';
 import { Settings01Page } from './settings-01-page';
+import { Table01Page } from './table-01-page';
 import { Signup01Page } from './signup-01-page';
 
 interface Case {
@@ -69,6 +70,13 @@ const CASES: Case[] = [
       'form-field',
     ],
     states: ['notifications', 'security', 'billing'],
+  },
+  {
+    name: 'table-01',
+    kind: 'page',
+    page: Table01Page,
+    components: ['data-table', 'badge', 'button', 'checkbox', 'input'],
+    states: ['selected'],
   },
   {
     name: 'pricing-01',

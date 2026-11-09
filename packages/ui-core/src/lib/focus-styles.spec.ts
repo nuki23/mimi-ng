@@ -70,6 +70,14 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
     count: 2,
     why: 'Campo de dentro: el anillo lo pinta la caja con focus-within. Panel: el foco no entra (la opción activa lleva fondo).',
   },
+  'components/tree/tree.ts': {
+    count: 2,
+    why: 'Contenedor role="tree": el foco va a los nodos. Nodo: anillo interior (inset box-shadow con ring) en focus-visible, como el diseño.',
+  },
+  'components/command/command.ts': {
+    count: 1,
+    why: 'Buscador: tiene el cursor de texto y el comando activo lleva fondo (como el buscador de Select y el diseño).',
+  },
   'components/option-list/option-list.ts': {
     count: 1,
     why: 'La lista (tabindex="-1", activedescendant): el foco se queda en el campo y la opción activa lleva fondo.',

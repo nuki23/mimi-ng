@@ -167,7 +167,7 @@ export class Pricing01 {
 
   protected readonly classes = computed(() =>
     cn(
-      'flex min-h-svh w-full flex-col items-center gap-7 bg-background px-[18px] pt-9 pb-8 text-foreground md:px-10 md:py-14',
+      'flex w-full flex-col items-center gap-7 bg-background px-[18px] pt-9 pb-8 text-foreground md:px-10 md:py-14',
       this.userClass(),
     ),
   );

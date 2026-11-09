@@ -23,6 +23,10 @@ export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {
     load: () => import('./otp-01-demo').then((m) => m.Otp01Demo),
     states: { resend: { resendSeconds: 0 } },
   },
+  'table-01': {
+    load: () => import('@/blocks/table-01').then((m) => m.Table01),
+    states: { selected: { selection: [2, 8] } },
+  },
   'pricing-01': {
     load: () => import('@/blocks/pricing-01').then((m) => m.Pricing01),
     states: { yearly: { period: 'yearly' } },

@@ -6,6 +6,20 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 
 Sin versión todavía: sale en la siguiente que se publique.
 
+### Grupo 3: datos (cuatro componentes y la pantalla de clientes)
+
+Cuatro componentes nuevos y un Block. Todo es aditivo: no cambia nada de lo publicado en la 0.4.0 (salvo lo que dice «Si ya los tienes», abajo). Se agregan con `ng g mimi <nombre>` y traen lo que necesitan (`@angular/cdk`, `@angular/aria`, otros componentes).
+
+- **Tree** (`ng g mimi tree`): árbol por datos (`nodes`) con selección simple o múltiple (casillas con estado parcial) y carga diferida (`loadChildren`). Teclado de la APG; funciona con `[formField]`, `formControlName` y `ngModel`. Base propia (el `ngTree` de `@angular/aria` no tiene casillas ni carga diferida).
+- **Sortable List** (`ng g mimi sortable-list`): lista que se reordena con el puntero o el dedo (`@angular/cdk/drag-drop`) y con el teclado desde el asa (Espacio, flechas, Escape), con anuncios para lectores de pantalla.
+- **Command** (`ng g mimi command`): paleta de comandos. `mimi-command` en la página y `mimi-command-dialog` con ⌘K o Ctrl+K; búsqueda sin tildes (y por `keywords`), grupos, íconos con tono, atajos y «sin resultados» con una acción. Usa Dialog y la lista de Combobox.
+- **Data Table** (`ng g mimi data-table`): tabla con búsqueda, filtros por columna (chips), orden, paginación (Pagination), selección (Checkbox, con barra de acciones), detalle expandible, acciones por fila, columnas fijas y dos densidades; en el cliente o, con `[total]`, en el servidor. Tabla nativa, no el `grid` de aria.
+- **`table-01`** (`ng g mimi table-01`): la pantalla «Clientes» como **página** (se genera en `src/app/pages/table/`, clase `TablePage`, con su `table.routes.ts` y la línea para `app.routes.ts`, como las demás pantallas): resumen y Data Table en escritorio; lista de tarjetas, píldoras de estado y barra de acciones en móvil.
+- **Tokens:** las variables `--mimi-tree-*`, `--mimi-sortable-*`, `--mimi-command-*` y `--mimi-table-*` (con su tipo en `provideMimiTheme`: `tree`, `sortable`, `command` y `dataTable`), en las páginas de cada componente.
+- **Textos:** cada componente trae `provideMimi<Nombre>Text(MIMI_<NOMBRE>_TEXT_ES)`, como los demás.
+- **Si ya los tienes:** `Checkbox` exporta ahora los estilos de su casilla (`MIMI_CHECKBOX_BOX_STYLES`) para el Tree; no cambia su aspecto ni su API. Solo importa si pides el Tree (lo usa): si modificaste `checkbox.ts`, `ng g mimi` no lo reemplaza (te avisa, como siempre) y el Tree no compilará hasta que agregues esa exportación a mano o uses `--overwrite` (que reemplaza tu Checkbox).
+- **Cómo actualizar desde la 0.4.0:** `npm i -D @mimi-ng/cli@<versión>` y `ng g mimi <los componentes que usas>`. Nada que migrar; los componentes nuevos son opcionales.
+
 ### Los Blocks de pantalla se generan como páginas tuyas (B.11)
 
 **Cambia lo que hace `ng g mimi` con `login-01`, `login-02`, `signup-01`, `otp-01` y `settings-01` en un proyecto que no los tiene** (RUPTURA respecto de la 0.4.0). Antes copiaba el Block tal cual a `src/app/blocks/login-01/` (clase `Login01`, selector `mimi-login-01`); ahora genera una página tuya:
@@ -28,6 +42,10 @@ Al terminar, `ng g mimi` te da la línea exacta para las rutas de `app.routes.ts
 - **Si la carpeta ya existe** (por ejemplo, `login-02` cuando ya tienes la página de `login-01` en `pages/login/`), `ng g mimi` no escribe nada y te pide otro nombre con `--name`, también con `--overwrite`.
 - **Se actualiza como siempre:** Mimi sigue la página por su nombre del registro (`login-01`), aunque le pongas otro: `mimi.json → blocks.login-01` guarda su versión, su carpeta (`path`) y su nombre (`name`), y sus copias originales van a `.mimi/base/pages/login-01/`. Todo o nada, el aviso si la modificaste, `--overwrite` y el aviso de un componente actualizado que usa tu Block funcionan igual. Si mueves la carpeta, cambia `path` en `mimi.json`.
 - **Con `source(none)`**, `ng add` y `ng g mimi` agregan también el `@source` de la carpeta de páginas.
+
+- **El comentario de cabecera** de los cinco Blocks de página describe ahora lo que genera la CLI (la carpeta de `aliases.pages`, `<nombre>.routes.ts` y la línea para `app.routes.ts`), en vez de `{ path: 'login', component: Login01 }`. Solo cambia el comentario: una pantalla de la 0.4.0 sin modificar se actualiza por él («actualizado de 0.4.0 a …»).
+
+- **`pricing-01` ya no ocupa el alto de la pantalla** (se quita `min-h-svh` del anfitrión): es una sección y va dentro de una página, junto a otras partes. Si la tienes sola en una ruta y quieres el alto de antes, pásale `class="min-h-svh"`. Una copia de la 0.4.0 sin modificar se actualiza con el cambio.
 
 **Si ya instalaste una pantalla con la 0.4.0**, no cambia nada: sigue en `src/app/blocks/login-01/` (`Login01`), tus rutas siguen funcionando y `ng g mimi` la sigue actualizando ahí, con las mismas reglas. Para pasarla a página: guarda tus cambios (por ejemplo, en git), borra la carpeta `src/app/blocks/login-01/`, ejecuta `ng g mimi login-01`, pega la línea nueva en `app.routes.ts` y quita la ruta vieja.
 
