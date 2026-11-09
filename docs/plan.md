@@ -122,17 +122,54 @@ Cerrada el 07/11/2026 (puerta B.P) y **publicada el 07/11/2026** (`@mimi-ng/cli@
 
 ## Grupo 3 y Blocks como páginas → v0.5.0: datos
 
-Cerrado (puerta G3.P, revisada por el usuario; versión 0.5.0 preparada el 09/11/2026, **por publicar**: lo hace el usuario con `docs/proceso/release.md`). Las tareas están en «Terminado» y su texto en `docs/historial/plan-grupo-3.md` y `docs/historial/grupo-3/`.
+Cerrado (puerta G3.P, revisada por el usuario; **0.5.0 publicada el 09/11/2026**, `2026-11-09T16:26Z` en npm, registro en `docs/historial/plan-grupo-3.md`). Las tareas están en «Terminado» y su texto en `docs/historial/plan-grupo-3.md` y `docs/historial/grupo-3/`.
 
-## Grupo 4 → v0.6.0: estructura
+## Refinamiento → v0.6.0 y v0.7.0 (plan del 09/11/2026, sin empezar)
 
-Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md) (B.8, en [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)).
+Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio «uso corto por defecto, composición cuando la necesites», reparto, orden y rupturas). Origen: las peticiones del usuario tras probar la 0.5.0 ([peticiones-usuario.md](plan/refinamiento/peticiones-usuario.md)). **Tres decisiones son del usuario y no se adoptan por defecto:** PD-1 Card, PD-2 API de Table/Data Table y PD-3 API de los mensajes de error de Form Field ([decisiones-usuario.md](plan/refinamiento/decisiones-usuario.md)). Combobox y Select: [combobox-vs-select.md](plan/refinamiento/combobox-vs-select.md).
 
-- [ ] G4.1 Accordion · v0.6.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.2 Sheet/Drawer · v0.6.0 · — · depende: G3.P, G1.6 · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.3 Stepper · v0.6.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] B.8 `dashboard-01` · v0.6.0 · — · depende: B.1, G3.4, G4.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G4.P Puerta del Grupo 4 · v0.6.0 · — · depende: G4.1 a G4.3, B.8 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+**0.6.0** (detalle: [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)):
+
+- [ ] R.0 Tema de marca (escala de violeta en OKLCH desde `#793EEA`, primario `#793EEA` en claro y `#A88FFF` en oscuro, contrastes AA con prueba; logo y favicon del sitio) · v0.6.0 · L · depende: archivos del usuario (solo el sitio) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.1 Escala común de tamaños `sm/md/lg` (tema, tipo, herencia `mimiSize`; `default` → `md`, RUPTURA con alias) · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.2 Tamaños en los controles de formulario · v0.6.0 · L · depende: R.1, R.9 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.3 Switch y Checkbox: páginas separadas y tamaños · v0.6.0 · S · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.4 Toast: tamaños (por defecto y por aviso) · v0.6.0 · M · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.5 Toast: variante `outline` con el color del tono · v0.6.0 · S · depende: R.0 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.6 Dialog: tamaños `sm/md/lg` como anchos máximos · v0.6.0 · S · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.7 Dialog como servicio (lo que falta sobre el servicio existente) · v0.6.0 · M · depende: R.6 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.8 Tamaños en el resto de componentes; los Blocks los heredan · v0.6.0 · L · depende: R.1, R.2, R.3 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.9 Efecto de clic uniforme (con `prefers-reduced-motion`) · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.10 Errores visuales: Tabs y Toggle Group en oscuro, Skeleton · v0.6.0 · S · depende: R.0 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.11 Blocks en carga: todo deshabilitado · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.12 `readonly` en todos los componentes de formulario · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.13 Ejemplos de formularios (Signal Forms, Reactive, Template y Form Field) · v0.6.0 · M · depende: R.14, R.15 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.14 Form Field: atajos y mensajes de error (**PENDIENTE DE DECIDIR (usuario): PD-3**) · v0.6.0 · M · depende: PD-3, R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.15 Select: `mimi-option` e íconos de limpiar y carga sobre el chevron · v0.6.0 · L · depende: M.9 (conviene) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.16 Combobox con la misma API que Select · v0.6.0 · M · depende: R.15, M.9 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.17 Tabs: atajo `<mimi-tab label>` · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.18 Input OTP: cantidad de dígitos que quepa y ejemplos · v0.6.0 · S · depende: R.2 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.24 Auditoría de «uso corto» en todos los componentes · v0.6.0 · M · depende: R.1, R.14, R.15 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.P6 Puerta de la 0.6.0 · v0.6.0 · — · depende: R.0 a R.18, R.24 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+
+**0.7.0** (detalle: [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)):
+
+- [ ] R.19 Card como superficie `mimiCard` (**PENDIENTE DE DECIDIR (usuario): PD-1**) · v0.7.0 · M · depende: PD-1, R.1, R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.20 Table de directivas y Data Table fácil de llenar (**PENDIENTE DE DECIDIR (usuario): PD-2**) · v0.7.0 · L · depende: PD-2, R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.21 Sortable List con listas conectadas · v0.7.0 · L · depende: R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.22 Block `kanban-01` · v0.7.0 · M · depende: R.21, R.19 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.23 Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.P7 Puerta de la 0.7.0 · v0.7.0 · — · depende: R.19 a R.23 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+
+## Grupo 4 → v0.8.0: estructura
+
+Movido de la 0.6.0 a la **0.8.0** (09/11/2026: la 0.6.0 y la 0.7.0 son el plan de refinamiento, arriba). Sin cambios de contenido. Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md) (B.8, en [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)).
+
+- [ ] G4.1 Accordion · v0.8.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] G4.2 Sheet/Drawer · v0.8.0 · — · depende: G3.P, G1.6 (y la 0.7.0 publicada: usa los tamaños de R.1) · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] G4.3 Stepper · v0.8.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] B.8 `dashboard-01` · v0.8.0 · — · depende: B.1, G3.4, G4.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+- [ ] G4.P Puerta del Grupo 4 · v0.8.0 · — · depende: G4.1 a G4.3, B.8 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 
 ## Mimi Effects (sin versión asignada)
 
@@ -308,7 +345,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] B.7 `pricing-01` (07/11/2026; pendiente de comprobación manual).
 - [x] B.P Puerta de los Blocks (07/11/2026, después de los arreglos de la revisión independiente; la 0.4.0, publicada por el usuario el 07/11/2026, con la release de GitHub como Latest).
 
-**Grupo 3 y Blocks como páginas, v0.5.0** (`docs/historial/plan-grupo-3.md`, con el texto de cada tarea en `docs/historial/grupo-3/` y `docs/historial/blocks/B.11.md`; puerta revisada por el usuario, versión preparada el 09/11/2026, por publicar). Lo manual que quedó pendiente en cada tarea sigue en la M.20.
+**Grupo 3 y Blocks como páginas, v0.5.0** (`docs/historial/plan-grupo-3.md`, con el texto de cada tarea en `docs/historial/grupo-3/` y `docs/historial/blocks/B.11.md`; puerta revisada por el usuario; publicada el 09/11/2026, `2026-11-09T16:26Z` en npm). Lo manual que quedó pendiente en cada tarea sigue en la M.20.
 
 - [x] B.11 Los Blocks de pantalla se generan como páginas del usuario (`ng g mimi login-01` → `src/app/pages/login/`, `LoginPage`, con su `login.routes.ts`; 07/11/2026; pendiente de comprobación manual: navegador real).
 - [x] G3.0 Catálogo de tokens del Grupo 3 en la spec 13 (07/11/2026; tablas aprobadas por el usuario).
