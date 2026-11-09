@@ -199,6 +199,17 @@ El repo está en 0.5.0 (no se subió la versión); para que el escenario de actu
 
 **Al terminar:** puertos 4251, 4252 y 4260 sin escucha (los servidores se mataron por su PID, cada espera con `timeout`); `C:\t\q60` y `C:\t\r060` borrados. **No son de esta sesión y no se tocaron:** las carpetas de `C:\t` que ya estaban (`app-npm`, `b040`, `b040p`, `b11`, `g3`, `m4`, `r030`, `r050`, `vh`).
 
+## Revisor independiente (solo lectura, sobre `git diff main..HEAD`)
+
+**Sin bugs confirmados.** Repasó `utils/size.ts`, `Button.sizeResolved`, OTP, Dialog, Form Field, Toast, el CSS del tema y los Blocks inertes. **Sospechas sin confirmar (no corregidas):**
+
+1. `<mimi-tab>`: un `label` sin letras latinas ni dígitos («日本», «🔥») da valor `''` y la pestaña no se puede elegir; dos labels que normalizan igual («Facturación» y «Facturacion») dan valores duplicados. Se evita dando `value`. **Pendiente:** aviso en desarrollo.
+2. `inputs` de Dialog con una clave inexistente: `setInput` lanza NG0303 con el diálogo ya creado a medias.
+3. Los Blocks inertes pierden el foco (vuelve al `body`); conviene devolverlo al terminar o anunciar.
+4. Toast `outline` de color por defecto: ya anotado como RUPTURA visual.
+
+**Del estado del plan (aceptado):** R.18 se marcó `[x]` aunque «depende: R.2» (tamaño del OTP) no está hecho: lo hecho no necesita tamaño; R.5 depende de R.0, que es parcial (el logo no afecta al color). Quedan `size="default"` en el ejemplo de Pagination (R.8, no ejecutada). **Rupturas que faltaban en la lista:** `data-size="default"` → `"md"` (Button, Input, Avatar) y el tipo de `separatorAfter` del OTP; ya están en `decisiones-por-defecto.md` y se pasan al CHANGELOG al cerrar la 0.6.0. **Contraste:** nadie comprobó aún que el violeta de marca y el azul `info` (tono 255) se distinguen.
+
 ## Alertas para el revisor y el usuario
 
 1. **Muchas tareas sin ejecutar** (tabla de arriba): el titular de la 0.6.0, «tamaños `sm/md/lg` en TODOS los componentes», está hecho solo en Button, Input, Avatar y Dialog (ancho).

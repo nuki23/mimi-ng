@@ -136,6 +136,19 @@ Rama `auto/blocks-paginas-2026-11-07`. El diseño lo dio el usuario en el prompt
 | B.11-h | `ng g mimi login-01` en un proyecto sin la pantalla | Crea la página en `aliases.pages` (antes, `src/app/blocks/login-01/` con `Login01` y `mimi-login-01`)                                                           | El prompt                                                | **Sí**  |          |
 | B.11-i | `source(none)`                                      | `init` y `ng g mimi` agregan el `@source` de la carpeta de páginas                                                                                              | Más simple (la regla G1)                                 | No      |          |
 
+## Decididas por defecto: refinamiento 0.6.0 (09/11/2026)
+
+Pendientes de revisión del usuario. Detalle en `docs/auto/refinamiento-0.6.0-2026-11-09.md`.
+
+- **R.11 Blocks en carga:** el anfitrión queda `inert` y con `aria-busy` en vez de la directiva `mimiDisabled` del plan (más simple; cubre todo lo de dentro). Contra: los lectores de pantalla no ven el Block inerte y el foco vuelve al `body`.
+- **R.9 clic uniforme:** `scale-90` → token pequeño; `0.985`, `0.99`, `0.96` y `0.94` → `--mimi-press-scale` (0,975).
+- **R.5 Toast:** `outline` (por defecto) es de color; `neutral` conserva la tarjeta de la 0.5.0. **RUPTURA visual.**
+- **R.1 tamaños:** `default` es alias de `md` con aviso hasta la 0.7.0. **RUPTURA:** también `data-size="default"` → `data-size="md"`.
+- **R.7 Dialog:** `padding` de un solo valor lateral.
+- **R.14 Form Field:** prioridad `<mimi-form-error>` > `message` del validador > `[errors]` > `provideMimiErrorMessages` > predeterminado.
+- **R.0 tema:** el violeta es el tema por defecto y el neutro anterior es `MIMI_THEME_NEUTRAL`; hover del primario en claro hacia `foreground`.
+- **R.18 OTP:** `separatorAfter` pasa de `number` a `number | number[]`. **RUPTURA de tipo** para quien lo lea por código (en plantilla, `separatorAfter="3"` sigue igual).
+
 ## Decididas por el usuario: refinamiento (09/11/2026)
 
 No son decisiones por defecto: el usuario eligió las opciones de `docs/plan/refinamiento/decisiones-usuario.md` en el prompt de la rama `auto/refinamiento-0.6.0-2026-11-09`.
