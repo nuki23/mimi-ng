@@ -132,10 +132,10 @@ export class ToastPage {
     },
     {
       name: 'variant',
-      type: "'outline' | 'solid'",
+      type: "'neutral' | 'outline' | 'solid'",
       default: "'outline'",
       description:
-        'Tarjeta con borde, o del color del tono (solid sin tono se ve como la tarjeta).',
+        'outline: contorno y fondo suave del color del tono. neutral: la tarjeta con solo el ícono de color (el outline de la 0.5.0). solid: fondo del color del tono. Sin tono, las tres se ven como la tarjeta.',
     },
     {
       name: 'id',

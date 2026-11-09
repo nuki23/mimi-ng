@@ -206,6 +206,33 @@ describe('injectMimiToast', { timeout: 20_000 }, () => {
     expect(row(li).classList).toContain('border');
   });
 
+  it('outline lleva el color del tono (borde y fondo suave); neutral es la tarjeta de la 0.5.0 (R.5)', async () => {
+    const { toast, settle, items, row, slot } = await setup();
+    const TONES = [
+      ['success', 'success', 'bg-success-soft'],
+      ['warning', 'warning', 'bg-warning-soft'],
+      ['info', 'info', 'bg-info-soft'],
+      ['error', 'destructive', 'bg-destructive-soft-bg'],
+    ] as const;
+    for (const [method, token, soft] of TONES) {
+      (toast as unknown as Record<string, (t: string, o?: object) => void>)[method]('Con tono');
+      await settle();
+      const li = items()[0];
+      expect(li.dataset['variant'], method).toBe('outline');
+      expect(row(li).classList, method).toContain(`border-${token}-border`);
+      expect(row(li).classList, method).toContain(soft);
+      expect(slot(li, 'icon')!.classList, method).toContain(`text-${token}-soft-foreground`);
+    }
+
+    toast.success('Neutra', { variant: 'neutral' });
+    await settle();
+    const neutral = items()[0];
+    expect(neutral.dataset['variant']).toBe('neutral');
+    expect(row(neutral).classList).not.toContain('bg-success-soft');
+    expect(row(neutral).classList).toContain('border');
+    expect(slot(neutral, 'icon')!.classList).toContain('text-success-soft-foreground');
+  });
+
   it('class va al toast y gana', async () => {
     const { toast, settle, items, row } = await setup();
     toast('Propio', { class: 'rounded-none border-0' });

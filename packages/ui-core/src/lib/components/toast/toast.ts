@@ -46,7 +46,12 @@ import { MIMI_TOAST_TEXT } from './toast-texts';
  */
 
 /** Cómo se ve: tarjeta con borde (por defecto) o del color del tono. */
-export type MimiToastVariant = 'outline' | 'solid';
+/**
+ * `outline` (por defecto): contorno y fondo suave con el color del tono; `neutral`: la tarjeta
+ * neutra con solo el ícono de color (el `outline` de la 0.5.0); `solid`: fondo del color del tono.
+ * Sin tono, las tres se ven como la tarjeta neutra.
+ */
+export type MimiToastVariant = 'neutral' | 'outline' | 'solid';
 
 /** Botón de acción del toast. Al pulsarlo, el toast se cierra. */
 export interface MimiToastAction {
@@ -149,12 +154,26 @@ const OUTLINE =
   'border border-[color:var(--mimi-toast-border,var(--mimi-border))] bg-[color:var(--mimi-toast-bg,var(--mimi-popover))] text-popover-foreground shadow-[shadow:var(--mimi-toast-shadow,var(--mimi-shadow-popover))]';
 
 /** Colores de cada tono en cada variante (spec 4, «Variante y tono»). */
+const TONAL_SHADOW = 'shadow-[shadow:var(--mimi-toast-shadow,var(--mimi-shadow-popover))]';
 const TONE_CLASSES = {
-  success: { outline: OUTLINE, solid: 'bg-success text-success-foreground shadow-success-hover' },
-  warning: { outline: OUTLINE, solid: 'bg-warning text-warning-foreground shadow-warning-hover' },
-  info: { outline: OUTLINE, solid: 'bg-info text-info-foreground shadow-info-hover' },
+  success: {
+    neutral: OUTLINE,
+    outline: `border border-success-border bg-success-soft text-popover-foreground ${TONAL_SHADOW}`,
+    solid: 'bg-success text-success-foreground shadow-success-hover',
+  },
+  warning: {
+    neutral: OUTLINE,
+    outline: `border border-warning-border bg-warning-soft text-popover-foreground ${TONAL_SHADOW}`,
+    solid: 'bg-warning text-warning-foreground shadow-warning-hover',
+  },
+  info: {
+    neutral: OUTLINE,
+    outline: `border border-info-border bg-info-soft text-popover-foreground ${TONAL_SHADOW}`,
+    solid: 'bg-info text-info-foreground shadow-info-hover',
+  },
   danger: {
-    outline: OUTLINE,
+    neutral: OUTLINE,
+    outline: `border border-destructive-border bg-destructive-soft-bg text-popover-foreground ${TONAL_SHADOW}`,
     solid: 'bg-destructive text-destructive-foreground shadow-destructive-hover',
   },
 } as const satisfies Record<ToastTone, Record<MimiToastVariant, string>>;
@@ -176,7 +195,7 @@ const toastVariants = cva(
   ],
   {
     variants: {
-      variant: { outline: '', solid: '' },
+      variant: { neutral: '', outline: '', solid: '' },
       tone: { success: '', warning: '', info: '', danger: '' },
     },
     compoundVariants: Object.entries(TONE_CLASSES).flatMap(([tone, byVariant]) =>
@@ -403,9 +422,11 @@ class MimiToastItem {
   protected readonly entered = signal(false);
 
   /** El sólido sin tono se ve como la tarjeta (el diseño no lo muestra). */
-  protected readonly variant = computed<MimiToastVariant>(() =>
-    this.toast().variant === 'solid' && this.toast().tone ? 'solid' : 'outline',
-  );
+  protected readonly variant = computed<MimiToastVariant>(() => {
+    const { variant, tone } = this.toast();
+    if (!tone) return 'outline';
+    return variant === 'solid' || variant === 'neutral' ? variant : 'outline';
+  });
   private readonly solid = computed(() => this.variant() === 'solid');
 
   protected readonly hostClasses = computed(() =>
