@@ -122,7 +122,7 @@ Cerrada el 07/11/2026 (puerta B.P) y **publicada el 07/11/2026** (`@mimi-ng/cli@
 
 ## Grupo 3 y Blocks como páginas → v0.5.0: datos
 
-Cerrado (puerta G3.P, revisada por el usuario; versión 0.5.0 preparada el 09/11/2026, **por publicar**: lo hace el usuario con `docs/proceso/release.md`). Las tareas están en «Terminado» y su texto en `docs/historial/plan-grupo-3.md` y `docs/historial/grupo-3/`.
+Cerrado (puerta G3.P, revisada por el usuario; **0.5.0 publicada el 09/11/2026**, `2026-11-09T16:26Z` en npm, registro en `docs/historial/plan-grupo-3.md`). Las tareas están en «Terminado» y su texto en `docs/historial/plan-grupo-3.md` y `docs/historial/grupo-3/`.
 
 ## Grupo 4 → v0.6.0: estructura
 
@@ -308,7 +308,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] B.7 `pricing-01` (07/11/2026; pendiente de comprobación manual).
 - [x] B.P Puerta de los Blocks (07/11/2026, después de los arreglos de la revisión independiente; la 0.4.0, publicada por el usuario el 07/11/2026, con la release de GitHub como Latest).
 
-**Grupo 3 y Blocks como páginas, v0.5.0** (`docs/historial/plan-grupo-3.md`, con el texto de cada tarea en `docs/historial/grupo-3/` y `docs/historial/blocks/B.11.md`; puerta revisada por el usuario, versión preparada el 09/11/2026, por publicar). Lo manual que quedó pendiente en cada tarea sigue en la M.20.
+**Grupo 3 y Blocks como páginas, v0.5.0** (`docs/historial/plan-grupo-3.md`, con el texto de cada tarea en `docs/historial/grupo-3/` y `docs/historial/blocks/B.11.md`; puerta revisada por el usuario; publicada el 09/11/2026, `2026-11-09T16:26Z` en npm). Lo manual que quedó pendiente en cada tarea sigue en la M.20.
 
 - [x] B.11 Los Blocks de pantalla se generan como páginas del usuario (`ng g mimi login-01` → `src/app/pages/login/`, `LoginPage`, con su `login.routes.ts`; 07/11/2026; pendiente de comprobación manual: navegador real).
 - [x] G3.0 Catálogo de tokens del Grupo 3 en la spec 13 (07/11/2026; tablas aprobadas por el usuario).

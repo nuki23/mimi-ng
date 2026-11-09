@@ -22,3 +22,15 @@ Informes del modo autónomo de este grupo: `docs/auto/grupo-3-2026-11-07.md` (la
   - Depende de: B.1, G3.4
 - [x] G3.P Puerta del Grupo 3 (v0.5.0): la lista de «Puerta del grupo». **Recorrida el 07/11/2026 en modo autónomo** (manual: M.20 10 a 13; subir la versión, publicar y repetir S3 con el `.tgz` real): informe en `docs/auto/grupo-3-2026-11-07.md`, «G3.P». **Revisada por el usuario** (fusión del PR #11, 09/11/2026); la versión se subió a 0.5.0 en `docs/auto/release-0.5.0-2026-11-09.md`, que repite los escenarios con el `.tgz` real. La publicación la hace el usuario (`docs/proceso/release.md`).
   - Depende de: G3.1 a G3.4, B.9, B.P (la 0.4.0 se publicó antes)
+
+## Publicación de la 0.5.0 (registro)
+
+La hizo el usuario (`docs/proceso/release.md`). Los datos los obtuvo Claude el 09/11/2026 de npm y de git (no de lo que dijo el usuario):
+
+- `@mimi-ng/cli@0.5.0` publicada en npm el `2026-11-09T16:26:51.620Z` (UTC; las 11:26 en Colombia, UTC−5), según `npm view @mimi-ng/cli time --json`.
+- `npm view @mimi-ng/cli dist-tags`: `{ latest: '0.5.0' }`. Versiones: 0.1.0, 0.1.1, 0.2.0, 0.3.0, 0.4.0 y 0.5.0.
+- Paquete publicado: 165 archivos, 1 064 100 bytes sin empaquetar, shasum `dbe980911a3bdb47a118416a67a8706214a131b7`. (El del empaquetado local de la preparación era `4b127f4d…`: `prepublishOnly` recompila, y el shasum cambia.)
+- Etiqueta anotada `v0.5.0` (objeto `4261a4a`) sobre `e4e967f`, la fusión del PR #12 (`auto/release-0.5.0-2026-11-09`); `git ls-remote --tags origin` la confirma.
+- Release de GitHub y despliegue del sitio: no consta en el repositorio ni en npm (el usuario lo dirá si quiere que se anote).
+- Prueba desde npm: el usuario instaló y probó la 0.5.0 desde npm y le funcionó (dato del usuario, 09/11/2026). Los escenarios con el `.tgz` real, antes de publicar, están en `docs/auto/release-0.5.0-2026-11-09.md`.
+- De esa prueba salió la lista de peticiones que origina el plan de refinamiento (`docs/plan/refinamiento/`).
