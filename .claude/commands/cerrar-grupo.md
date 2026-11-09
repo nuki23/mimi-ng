@@ -8,7 +8,7 @@ Recorre la puerta **$ARGUMENTS** del plan de Mimi. **No publiques nada**: ni npm
 ## 1. Leer
 
 1. La puerta general: «Puerta del grupo» en «Cómo usar este plan» (`docs/plan.md`), los nueve puntos.
-2. La puerta del grupo: su archivo en `docs/plan/` (por ejemplo, la G3.P en `docs/plan/grupo-3-blocks.md`; la G2.P, ya cerrada, está en `docs/historial/grupo-2/G2.P.md`; búscalo con `grep -rln "$ARGUMENTS" docs/plan/`), con lo específico del grupo y sus «Criterios de hecho».
+2. La puerta del grupo: su archivo en `docs/plan/` (por ejemplo, la G4.P en `docs/plan/grupo-4.md`; la G2.P, ya cerrada, está en `docs/historial/grupo-2/G2.P.md`, y la G3.P, en `docs/historial/plan-grupo-3.md`; búscalo con `grep -rln "$ARGUMENTS" docs/plan/`), con lo específico del grupo y sus «Criterios de hecho».
 3. El índice del grupo en `docs/plan.md`: todas sus tareas tienen que estar `[x]` (salvo la puerta). Si alguna no lo está, detente y dilo: la puerta no se recorre con tareas abiertas.
 4. `docs/proceso/release.md` (lo que hace el usuario al final).
 

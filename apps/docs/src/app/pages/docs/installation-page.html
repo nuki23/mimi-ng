@@ -193,7 +193,7 @@
     <li>
       Los que no tocaste se actualizan solos cuando ejecutas
       <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng g mimi</code> con
-      una versión nueva de la CLI, y te dice cuáles («button actualizado de 0.3.0 a 0.4.0»). Si tu
+      una versión nueva de la CLI, y te dice cuáles («button actualizado de 0.4.0 a 0.5.0»). Si tu
       Prettier les dio otro formato, no cuentan como modificados.
     </li>
     <li>
@@ -277,5 +277,45 @@
       rel="noopener noreferrer"
       >documentación de pnpm</a
     >.
+  </p>
+
+  <h2 id="no-styles" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Si los componentes salen sin estilos
+  </h2>
+  <p class="text-pretty">
+    Si
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ng build</code>
+    termina bien pero los componentes salen sin estilos, y el CSS compilado pesa mucho menos de lo
+    normal (en una prueba, unos 33 kB en vez de unos 100 kB), puede que tu sistema esté bloqueando
+    el binario nativo de Tailwind. Lo vimos en Windows, con el Control de aplicaciones, que bloqueó
+    el binario de Tailwind 4.3.5: Tailwind usa entonces un respaldo que no escanea tus archivos, y
+    no da ningún error. No es de Mimi, pero lo notarás aquí.
+  </p>
+  <p class="text-pretty">
+    Para comprobarlo, busca una clase de tus componentes (por ejemplo
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">bg-background</code>)
+    en el
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">styles-*.css</code>
+    de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >dist/&lt;proyecto&gt;/browser</code
+    >: si no está, Tailwind no escaneó nada. Y para ver si es el bloqueo, carga el binario desde la
+    raíz del proyecto (Windows x64):
+  </p>
+  <app-code-block [code]="tailwindNativeCheck" lang="bash" prompt="$" />
+  <p class="text-pretty">
+    Si falla con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >ERR_DLOPEN_FAILED</code
+    >
+    (en Windows en español: «Una directiva de Control de aplicaciones bloqueó este archivo»), tienes
+    dos caminos: permitir ese archivo en la política de tu sistema (con quien la administre), o
+    fijar una versión de Tailwind cuyo binario sí cargue. En la prueba donde lo vimos, la 4.3.3
+    cargó:
+  </p>
+  <app-code-block [code]="tailwindPin" lang="bash" prompt="$" />
+  <p class="text-pretty">
+    No desactives la política de seguridad de tu equipo para esto. Con otra versión, o en otro
+    equipo, el resultado puede ser distinto.
   </p>
 </article>

@@ -140,6 +140,18 @@ El Block es tuyo; si lo modificas, `ng g mimi` no lo vuelve a tocar al actualiza
 
 Desde pnpm 10, los scripts de instalación de las dependencias están bloqueados hasta que los apruebes, y la instalación puede fallar con `ERR_PNPM_IGNORED_BUILDS`. Apruébalos con `pnpm approve-builds`. Más detalles en la [página de Instalación](https://ng.mimiworks.dev/docs/installation).
 
+## Si los componentes salen sin estilos
+
+Si `ng build` termina bien pero los componentes salen sin estilos, y el CSS compilado pesa mucho menos de lo normal (en una prueba, unos 33 kB en vez de unos 100 kB), puede que tu sistema bloquee el binario nativo de Tailwind. Lo vimos en Windows, con el Control de aplicaciones, que bloqueó el binario de Tailwind 4.3.5: Tailwind usa entonces un respaldo que no escanea tus archivos, y no da ningún error. No es de Mimi.
+
+Para comprobarlo, busca una clase de tus componentes (por ejemplo `bg-background`) en el `styles-*.css` de `dist/<proyecto>/browser`: si no está, Tailwind no escaneó nada. Para ver si es el bloqueo, carga el binario desde la raíz del proyecto (Windows x64):
+
+```sh
+node -e "require('./node_modules/@tailwindcss/oxide-win32-x64-msvc/tailwindcss-oxide.win32-x64-msvc.node')"
+```
+
+Si falla con `ERR_DLOPEN_FAILED`, permite ese archivo en la política de tu sistema (con quien la administre) o fija una versión de Tailwind cuyo binario cargue; en la prueba donde lo vimos, la 4.3.3: `npm i -D --save-exact tailwindcss@4.3.3 @tailwindcss/postcss@4.3.3`. No desactives la política de seguridad para esto. Con otra versión, o en otro equipo, el resultado puede ser distinto.
+
 ## Licencia
 
 MIT. Incluye íconos de Lucide (ISC); ver `THIRD_PARTY_NOTICES.md`.
