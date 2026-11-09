@@ -145,6 +145,13 @@ export class FormFieldPage {
             'Texto de la etiqueta, enlazada al control. Sin label, puedes proyectar tu propio <label>.',
         },
         {
+          name: 'errors',
+          type: 'Record<string, string | ((e) => string)>',
+          default: '—',
+          description:
+            'Mensajes de error de este campo, por clave (required, email, minlength…). El message del propio validador (Signal Forms, withMessage) gana; lo que no esté sigue en provideMimiErrorMessages.',
+        },
+        {
           name: 'class',
           type: 'string',
           default: "''",

@@ -157,8 +157,11 @@ function fromSignalError(error: { kind: string; message?: string }): MimiFieldEr
 /** ValidationErrors de Reactive Forms / ngModel → MimiFieldError[], en orden. */
 function fromValidationErrors(errors: ValidationErrors | null): MimiFieldError[] {
   if (!errors) return [];
-  return Object.entries(errors).map(([key, value]) => ({
-    kind: key.toLowerCase(),
-    params: value && typeof value === 'object' ? (value as Record<string, unknown>) : {},
-  }));
+  return Object.entries(errors).map(([key, value]) => {
+    const params = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
+    // El validador puede llevar su mensaje: `{ taken: { message: 'Ese usuario ya existe.' } }` o
+    // `withMessage(Validators.required, '…')` (PD-3, opción B).
+    const message = typeof params['message'] === 'string' ? params['message'] : undefined;
+    return { kind: key.toLowerCase(), message, params };
+  });
 }

@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { MIMI_FIELD_CONTROL } from '@/components/ui/utils/field-state';
-import { MIMI_ERROR_MESSAGES, mimiErrorText } from './error-messages';
+import { MIMI_ERROR_MESSAGES, type MimiErrorMessages, mimiErrorText } from './error-messages';
 import { MIMI_FORM_FIELD_CONTEXT, type MimiFormFieldContext, MimiFormError } from './form-error';
 
 let nextId = 0;
@@ -56,6 +56,13 @@ let nextId = 0;
 export class MimiFormField implements MimiFormFieldContext {
   /** Texto de la etiqueta. También puedes proyectar tu propio `<label>`. */
   readonly label = input<string>();
+  /**
+   * Mensajes de error de este campo, por clave (`required`, `email`, `minlength`…): un texto o una
+   * función con los datos del error. Lo que no esté sigue en `provideMimiErrorMessages`. Sirve en
+   * los tres sistemas de formularios; en Signal Forms y Reactive, el `message` del propio
+   * validador gana (`withMessage`).
+   */
+  readonly errors = input<MimiErrorMessages>();
   readonly userClass = input('', { alias: 'class' });
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
@@ -72,9 +79,16 @@ export class MimiFormField implements MimiFormFieldContext {
   protected readonly disabled = computed(() => this.control()?.fieldState.disabled() ?? false);
   readonly message = computed(() => {
     const error = this.control()?.fieldState.errors()[0];
-    return error
-      ? mimiErrorText(error, this.messages)
-      : mimiErrorText({ kind: 'default', params: {} }, this.messages);
+    if (!error) return mimiErrorText({ kind: 'default', params: {} }, this.messages);
+    // Orden (PD-3): <mimi-form-error> explícito > `message` del validador > `errors` del campo >
+    // provideMimiErrorMessages > predeterminado.
+    if (error.message) return error.message;
+    const local = this.errors();
+    if (local) {
+      const entry = Object.entries(local).find(([key]) => key.toLowerCase() === error.kind)?.[1];
+      if (entry !== undefined) return typeof entry === 'function' ? entry(error.params) : entry;
+    }
+    return mimiErrorText(error, this.messages);
   });
 
   protected readonly classes = computed(() =>
