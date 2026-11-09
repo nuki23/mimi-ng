@@ -12,7 +12,7 @@ Hechas y cerradas el 07/11/2026 (puerta B.P; la publicación la hace el usuario)
 
 Hecho y cerrado (puerta G3.P, revisada por el usuario; versión 0.5.0 preparada el 09/11/2026, la publicación la hace el usuario). El texto de G3.0 a G3.4 está en `docs/historial/grupo-3/`, el de B.11 en `docs/historial/blocks/B.11.md`, y el de B.9 y la G3.P en `docs/historial/plan-grupo-3.md`.
 
-## Block con el Grupo 4 → v0.6.0
+## Block con el Grupo 4 → v0.8.0 (era la 0.6.0; movido el 09/11/2026, ver `docs/plan/refinamiento/plan.md`)
 
 - [ ] B.8 `dashboard-01` (usa Data Table; barra lateral y cajón en móvil). Diseño: `Block dashboard-01`.
   - Depende de: B.1, G3.4, G4.2 (Sheet: el botón «Abrir menú» del diseño en móvil) · Bloquea: G4.P
