@@ -72,7 +72,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 
 Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proceso/release.md`. La puerta la recorre el comando `/cerrar-grupo`; las tareas, `/componente` y `/tarea`, con el protocolo de `CLAUDE.md`, «Forma de trabajar».
 
-**Historial:** `docs/historial/plan-fase-0-3.md`, `plan-0.1.x.md`, `plan-grupo-1.md` (incluye la Fase 4 y la publicación de la 0.2.0), `plan-grupo-2.md` (índice del Grupo 2, con la 5.2, la 5.17 y la publicación de la 0.3.0; el texto de cada tarea, en `docs/historial/grupo-2/`), `plan-blocks.md` (índice de los Blocks de la 0.4.0; el texto de cada tarea, en `docs/historial/blocks/`), `plan-plataforma.md` y `decisiones.md`.
+**Historial:** `docs/historial/plan-fase-0-3.md`, `plan-0.1.x.md`, `plan-grupo-1.md` (incluye la Fase 4 y la publicación de la 0.2.0), `plan-grupo-2.md` (índice del Grupo 2, con la 5.2, la 5.17 y la publicación de la 0.3.0; el texto de cada tarea, en `docs/historial/grupo-2/`), `plan-blocks.md` (índice de los Blocks de la 0.4.0; el texto de cada tarea, en `docs/historial/blocks/`), `plan-grupo-3.md` (índice del Grupo 3 y de B.9 y B.11 de la 0.5.0; el texto, en `docs/historial/grupo-3/` y `docs/historial/blocks/B.11.md`), `plan-plataforma.md` y `decisiones.md`.
 
 **Al cerrar un grupo** (desde el Grupo 2): los archivos de sus tareas pasan tal cual de `docs/plan/<grupo>/` a `docs/historial/<grupo>/` (con `git mv`, sin reescribirlos), y `docs/historial/plan-<grupo>.md` lleva el índice, el registro de la publicación y lo que se movió de otros lugares (por ejemplo, «Decididas» de `docs/plan/decisiones.md`). Lo manual que quede pendiente no se deja solo en el historial: va a una tarea abierta (por ejemplo, la M.20).
 
@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- G3.P · `auto/grupo-3-2026-11-07` · Claude Code (modo autónomo) · 07/11/2026 · a falta de comprobación del usuario (manual, versión y publicación)
+_Ninguna._
 
 ## Mantenimiento
 
@@ -119,24 +119,9 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 
 Cerrada el 07/11/2026 (puerta B.P) y **publicada el 07/11/2026** (`@mimi-ng/cli@0.4.0`, registro en `docs/historial/plan-blocks.md`). Las tareas están en «Terminado» y su texto en `docs/historial/blocks/` (índice: `docs/historial/plan-blocks.md`). `table-01` va con el Grupo 3 (0.5.0) y `dashboard-01` con el Grupo 4 (0.6.0).
 
-## Blocks: páginas del usuario (por publicar)
+## Grupo 3 y Blocks como páginas → v0.5.0: datos
 
-Detalle: `docs/plan/blocks/` (un archivo por tarea).
-
-- [x] B.11 Los Blocks de pantalla se generan como páginas del usuario (`ng g mimi login-01` → `src/app/pages/login/`, `LoginPage`, con su `login.routes.ts`; 07/11/2026, pendiente de comprobación manual: navegador real) · sin versión · L · depende: B.P · [docs/plan/blocks/B.11.md](plan/blocks/B.11.md)
-
-## Grupo 3 → v0.5.0: datos
-
-Detalle: [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md); las tareas detalladas, en `docs/plan/grupo-3/`. Orden (modo autónomo, 07/11/2026; el grupo no tenía «Orden recomendado»): G3.0, G3.1, G3.2, G3.3, G3.4, B.9 y G3.P, el de la tabla de la spec 4.
-
-- [x] G3.0 Catálogo de tokens del Grupo 3 en la spec 13 (07/11/2026; tablas aprobadas por el usuario el 07/11/2026) · v0.5.0 · S · depende: — · [docs/plan/grupo-3/G3.0.md](plan/grupo-3/G3.0.md)
-
-- [x] G3.1 Tree (07/11/2026; pendiente de comprobación manual: NVDA y navegador real) · v0.5.0 · L · depende: G2.P, 2.10, G3.0 · [docs/plan/grupo-3/G3.1.md](plan/grupo-3/G3.1.md)
-- [x] G3.2 Sortable List (07/11/2026; pendiente de comprobación manual: NVDA y teléfono real) · v0.5.0 · M · depende: G2.P, G3.0 · [docs/plan/grupo-3/G3.2.md](plan/grupo-3/G3.2.md)
-- [x] G3.3 Command (⌘K) (07/11/2026; pendiente de comprobación manual: NVDA y navegador real) · v0.5.0 · L · depende: G2.P, G1.6, G2.8 · [docs/plan/grupo-3/G3.3.md](plan/grupo-3/G3.3.md)
-- [x] G3.4 Data Table (07/11/2026; pendiente de comprobación manual: NVDA y navegador real) · v0.5.0 · L · depende: G2.P, 2.10, G1.3, G1.11, 2.2 · [docs/plan/grupo-3/G3.4.md](plan/grupo-3/G3.4.md)
-- [x] B.9 `table-01` (07/11/2026; pendiente de comprobación manual: teléfono real y NVDA) · v0.5.0 · M · depende: B.1, G3.4 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [~] G3.P Puerta del Grupo 3 (a falta de comprobación del usuario: manual, versión y publicación) · v0.5.0 · — · depende: G3.1 a G3.4, B.9, B.P · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
+Cerrado (puerta G3.P, revisada por el usuario; versión 0.5.0 preparada el 09/11/2026, **por publicar**: lo hace el usuario con `docs/proceso/release.md`). Las tareas están en «Terminado» y su texto en `docs/historial/plan-grupo-3.md` y `docs/historial/grupo-3/`.
 
 ## Grupo 4 → v0.6.0: estructura
 
@@ -321,6 +306,17 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] B.6 `settings-01` (07/11/2026; pendiente de comprobación manual).
 - [x] B.7 `pricing-01` (07/11/2026; pendiente de comprobación manual).
 - [x] B.P Puerta de los Blocks (07/11/2026, después de los arreglos de la revisión independiente; la 0.4.0, publicada por el usuario el 07/11/2026, con la release de GitHub como Latest).
+
+**Grupo 3 y Blocks como páginas, v0.5.0** (`docs/historial/plan-grupo-3.md`, con el texto de cada tarea en `docs/historial/grupo-3/` y `docs/historial/blocks/B.11.md`; puerta revisada por el usuario, versión preparada el 09/11/2026, por publicar). Lo manual que quedó pendiente en cada tarea sigue en la M.20.
+
+- [x] B.11 Los Blocks de pantalla se generan como páginas del usuario (`ng g mimi login-01` → `src/app/pages/login/`, `LoginPage`, con su `login.routes.ts`; 07/11/2026; pendiente de comprobación manual: navegador real).
+- [x] G3.0 Catálogo de tokens del Grupo 3 en la spec 13 (07/11/2026; tablas aprobadas por el usuario).
+- [x] G3.1 Tree (07/11/2026; pendiente de comprobación manual: NVDA y navegador real).
+- [x] G3.2 Sortable List (07/11/2026; pendiente de comprobación manual: NVDA y teléfono real).
+- [x] G3.3 Command (⌘K) (07/11/2026; pendiente de comprobación manual: NVDA y navegador real).
+- [x] G3.4 Data Table (07/11/2026; pendiente de comprobación manual: NVDA y navegador real).
+- [x] B.9 `table-01` (07/11/2026; pendiente de comprobación manual: teléfono real y NVDA).
+- [x] G3.P Puerta del Grupo 3 (07/11/2026, con ocho arreglos el 08/11/2026; revisada por el usuario; pendiente de comprobación manual en la M.20, puntos 10 a 13).
 
 **Tandas de diseño** (texto completo en la línea)
 
