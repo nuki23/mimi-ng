@@ -134,7 +134,7 @@ const indicatorVariants = cva(
     variants: {
       variant: {
         underline: 'rounded-[2px] bg-[color:var(--mimi-tabs-indicator,var(--mimi-foreground))]',
-        pill: 'rounded-[var(--mimi-radius)] bg-[color:var(--mimi-tabs-pill-active,var(--mimi-card))] shadow-neutral',
+        pill: 'rounded-[var(--mimi-radius)] bg-[color:var(--mimi-tabs-pill-active,var(--mimi-card))] shadow-[shadow:var(--mimi-tabs-pill-shadow,var(--mimi-shadow-neutral))]',
       },
       orientation: {
         horizontal:

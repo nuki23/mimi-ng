@@ -354,7 +354,7 @@ describe('MimiTabs', { timeout: 20_000 }, () => {
     for (const cls of [
       'w-[calc((100%_-_8px)_/_var(--mimi-tabs-count))]',
       'bg-[color:var(--mimi-tabs-pill-active,var(--mimi-card))]',
-      'shadow-neutral',
+      'shadow-[shadow:var(--mimi-tabs-pill-shadow,var(--mimi-shadow-neutral))]',
       'start-[4px]',
     ]) {
       expect(indicator().classList).toContain(cls);
