@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   LOCALE_ID,
+  booleanAttribute,
   computed,
   inject,
   input,
@@ -103,7 +104,13 @@ export const TABLE_01_CUSTOMERS: Table01Customer[] = Array.from({ length: 36 }, 
   selector: 'mimi-table-01',
   imports: [MimiBadge, MimiButton, MimiCheckbox, MimiDataTableImports, MimiInput],
   templateUrl: './table-01.html',
-  host: { '[class]': 'classes()' },
+  host: {
+    '[class]': 'classes()',
+    // Cargando: nada se puede editar, pulsar ni enfocar (búsqueda, filtros, filas, botones).
+    '[attr.data-state]': 'loading() ? "loading" : null',
+    '[attr.inert]': 'loading() ? "" : null',
+    '[attr.aria-busy]': 'loading() ? "true" : null',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Table01 {
@@ -114,6 +121,8 @@ export class Table01 {
   readonly locale = input<string | undefined>(undefined);
   /** Ids de las filas elegidas. Admite `[(selection)]`. */
   readonly selection = model<unknown[]>([]);
+  /** Mientras tu app carga o procesa los clientes: la tabla muestra «cargando» y todo queda inerte. */
+  readonly loading = input(false, { transform: booleanAttribute });
   readonly userClass = input('', { alias: 'class' });
 
   /** «New customer». */

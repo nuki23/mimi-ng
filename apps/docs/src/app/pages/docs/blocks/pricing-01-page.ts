@@ -81,7 +81,10 @@ export class Pricing01Page {
     { name: 'pricing-01/index.ts', code: indexSource as string, lang: 'typescript' },
   ];
 
-  protected readonly states: BlockState[] = [{ id: 'yearly', label: 'Anual' }];
+  protected readonly states: BlockState[] = [
+    { id: 'yearly', label: 'Anual' },
+    { id: 'loading', label: 'Cargando' },
+  ];
 
   protected readonly inputs: BlockApiRow[] = [
     {

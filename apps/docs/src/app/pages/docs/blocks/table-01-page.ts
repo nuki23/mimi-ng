@@ -92,7 +92,10 @@ export class Table01Page {
     htmlSource as string,
   );
 
-  protected readonly states: BlockState[] = [{ id: 'selected', label: 'Con filas elegidas' }];
+  protected readonly states: BlockState[] = [
+    { id: 'selected', label: 'Con filas elegidas' },
+    { id: 'loading', label: 'Cargando' },
+  ];
 
   protected readonly inputs: BlockApiRow[] = [
     {

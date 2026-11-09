@@ -981,7 +981,16 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       default: 'card',
       inherits: '--mimi-card',
       preset: false,
-      description: 'Fondo de la pestaña elegida en la píldora.',
+      description:
+        'Fondo de la pestaña elegida en la píldora (en oscuro, más claro que el contenedor).',
+    },
+    {
+      name: '--mimi-tabs-pill-shadow',
+      default: 'shadow-neutral',
+      inherits: '--mimi-shadow-neutral',
+      preset: false,
+      description:
+        'Sombra de la pestaña elegida en la píldora (en oscuro, corta: no sale del margen del contenedor).',
     },
   ],
   toolbar: [

@@ -128,6 +128,7 @@ export class Settings01Page {
     { id: 'notifications', label: 'Notificaciones' },
     { id: 'security', label: 'Seguridad' },
     { id: 'billing', label: 'Facturación' },
+    { id: 'saving', label: 'Guardando' },
   ];
 
   protected readonly inputs: BlockApiRow[] = [

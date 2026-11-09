@@ -31,4 +31,14 @@ PD-1 opción B, PD-2 opción C y PD-3 opciones A + B registradas como «Decidido
 
 **Bundle:** CSS global 170,44 → **171,12 kB** crudo (24,45 → 24,53 gzip); JS inicial sin cambios (333,31 / 106,25). Límite: 180 kB de aviso.
 
-**Archivos:** `theme/theme-base.css`, `components/tabs/tabs.ts` y `tabs.spec.ts`, `theme/pill-dark.spec.ts` (nuevo), `components/skeleton/skeleton.spec.ts`, los dos ejemplos de `apps/docs/.../skeleton/examples/`, `docs/plan.md`, `R-0.6.0.md`.
+**Archivos:** `theme/theme-base.css`, `components/tabs/tabs.ts` y `tabs.spec.ts`, `theme/pill-dark.spec.ts` (nuevo), `components/skeleton/skeleton.spec.ts`, los dos ejemplos de `apps/docs/.../skeleton/examples/`, `docs/plan.md`, `R-0.6.0.md`. (Un arreglo posterior, en el commit de R.11: `apps/docs/src/app/code/component-tokens.ts` no listaba `--mimi-tabs-pill-shadow` y `pnpm test` del sitio lo exige; no lo vi antes porque en R.10 corrí solo `test:ui-core`.)
+
+## R.11 Blocks en carga (hecha)
+
+**Antes:** `login-01`, `login-02`, `signup-01` y `otp-01` solo marcaban el botón de enviar (`aria-disabled`, `aria-busy`, spinner); campos, botones de redes y enlaces seguían editables. `pricing-01`, `table-01` no tenían entrada de carga y `settings-01` solo ignoraba el guardado repetido.
+
+**Decisión por defecto (pendiente de revisión del usuario), distinta de la propuesta del plan:** el plan proponía una directiva `mimiDisabled` que propaga `disabled` a cada control. Es mucho más grande y la misma idea aparece en R.23. En su lugar, **el anfitrión del Block queda `inert` y con `aria-busy="true"`** mientras carga: el navegador no enfoca ni activa nada dentro (campos, casillas, redes, enlaces, botones). Ventaja: cubre todo, también lo que se agregue al Block, sin tocar cada control. **Contra, a anotar:** los lectores de pantalla no ven el contenido de un Block inerte; la app debe anunciar el progreso (Toast, `LiveAnnouncer`). Cambio de comportamiento visible: el botón de enviar ya no recibe foco al pulsar (ya se ignoraba el reenvío).
+
+**Hecho:** `inert` y `aria-busy` en `login-01`, `login-02`, `signup-01`, `otp-01`, `settings-01` (con `saving`); `loading` nuevo en `pricing-01` y `table-01` (en `table-01` también pasa a la Data Table, que ya tiene «cargando»); estados «Cargando»/«Guardando» en las vistas previas del sitio (`block-previews.ts`, las tres páginas y `block-pages.spec.ts`). **Pruebas:** `block-loading.spec.ts` (7 Blocks × sin carga, con carga y de vuelta); ui-core 915, docs 192 en verde. **Bundle:** sin cambios (JS inicial 333,31 / 106,25; CSS global 171,12 / 24,53): las clases de los Blocks van en `blocks.css`.
+
+**No hecho:** la directiva `mimiDisabled` (se pospone). **NO COMPROBADO (manual, usuario):** que el flujo con un lector de pantalla sea aceptable con el Block inerte.

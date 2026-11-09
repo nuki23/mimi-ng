@@ -66,6 +66,9 @@ let nextId = 0;
   host: {
     '[class]': 'classes()',
     '[attr.data-state]': 'loading() ? "loading" : null',
+    // Cargando: nada se puede editar, pulsar ni enfocar (campos, redes, enlaces).
+    '[attr.inert]': 'loading() ? "" : null',
+    '[attr.aria-busy]': 'loading() ? "true" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

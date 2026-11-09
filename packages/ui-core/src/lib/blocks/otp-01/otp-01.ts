@@ -54,6 +54,9 @@ let nextId = 0;
   host: {
     '[class]': 'classes()',
     '[attr.data-state]': 'shownStatus()',
+    // Cargando: nada se puede editar, pulsar ni enfocar (casillas, reenviar, cambiar correo).
+    '[attr.inert]': 'loading() ? "" : null',
+    '[attr.aria-busy]': 'loading() ? "true" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

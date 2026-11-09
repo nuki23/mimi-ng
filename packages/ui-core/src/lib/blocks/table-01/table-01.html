@@ -67,6 +67,7 @@
     aria-label="Customers"
     searchPlaceholder="Search customer, email or ID…"
     selectable
+    [loading]="loading()"
     [data]="customers()"
     [columns]="columns()"
     [(selection)]="selection"

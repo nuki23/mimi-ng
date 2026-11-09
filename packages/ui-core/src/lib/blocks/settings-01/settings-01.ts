@@ -186,6 +186,9 @@ let nextId = 0;
   host: {
     '[class]': 'classes()',
     '[attr.data-state]': 'changed() ? "changed" : null',
+    // Guardando: nada se puede editar, pulsar ni enfocar.
+    '[attr.inert]': 'saving() ? "" : null',
+    '[attr.aria-busy]': 'saving() ? "true" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
