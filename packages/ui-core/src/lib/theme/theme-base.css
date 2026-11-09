@@ -6,14 +6,37 @@
 
 /* ── Claro ─────────────────────────────────────── */
 :root {
-  /* Colores */
-  --mimi-background: oklch(1 0 0);
-  --mimi-foreground: oklch(0.145 0 0);
+  /*
+   * Marca de Mimi (R.0): escala de violeta en OKLCH, tono 292. Las dos anclas son los colores de
+   * la marca: 600 = #793EEA y 400 = #A88FFF; el resto sale de la curva de luminosidad y croma
+   * (algunos pasos claros salen del gamut sRGB y el navegador los recorta).
+   * Contrastes (WCAG, calculados): #793EEA sobre #FAFAFA 5,45:1 (texto y botón en claro);
+   * #A88FFF sobre #171717 6,86:1 (texto y botón en oscuro); #793EEA sobre #171717 solo 3,15:1 y
+   * #A88FFF sobre #FAFAFA 2,50:1: no van nunca como texto en esos fondos (`--mimi-brand-text`).
+   */
+  --mimi-brand-50: oklch(0.975 0.016 292);
+  --mimi-brand-100: oklch(0.953 0.032 292);
+  --mimi-brand-200: oklch(0.91 0.062 292);
+  --mimi-brand-300: oklch(0.84 0.115 292);
+  --mimi-brand-400: oklch(0.72 0.16 292);
+  --mimi-brand-500: oklch(0.64 0.2 292);
+  --mimi-brand-600: oklch(0.54 0.239 292);
+  --mimi-brand-700: oklch(0.49 0.24 292);
+  --mimi-brand-800: oklch(0.43 0.2 292);
+  --mimi-brand-900: oklch(0.36 0.15 292);
+  --mimi-brand-950: oklch(0.27 0.1 292);
+  --mimi-brand-gradient: linear-gradient(135deg, var(--mimi-brand-600), var(--mimi-brand-400));
+  /* Texto de énfasis de marca: la única forma permitida de texto violeta. */
+  --mimi-brand-text: var(--mimi-brand-600);
+
+  /* Colores: neutros de la marca, #FAFAFA y #171717 */
+  --mimi-background: oklch(0.985 0 0);
+  --mimi-foreground: oklch(0.205 0 0);
   --mimi-card: oklch(1 0 0);
-  --mimi-card-foreground: oklch(0.145 0 0);
+  --mimi-card-foreground: oklch(0.205 0 0);
   --mimi-popover: oklch(1 0 0);
-  --mimi-popover-foreground: oklch(0.145 0 0);
-  --mimi-primary: oklch(0.205 0 0);
+  --mimi-popover-foreground: oklch(0.205 0 0);
+  --mimi-primary: var(--mimi-brand-600);
   --mimi-primary-foreground: oklch(0.985 0 0);
   --mimi-secondary: oklch(0.97 0 0);
   --mimi-secondary-foreground: oklch(0.205 0 0);
@@ -28,7 +51,7 @@
   --mimi-input-background: oklch(1 0 0);
   /* Borde de un campo con el puntero encima (tokens-mimi.css; lo usa Pagination desde la G1.11). */
   --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 30%, var(--mimi-input));
-  --mimi-ring: oklch(0.708 0 0);
+  --mimi-ring: var(--mimi-brand-500);
 
   /* Tonos (contraste AA verificado en el diseño) */
   --mimi-success: oklch(0.527 0.137 150);
@@ -151,7 +174,9 @@
   --mimi-glow: var(--mimi-glow-primary);
 
   /* Derivados */
-  --mimi-primary-hover: color-mix(in oklch, var(--mimi-primary) 88%, var(--mimi-background));
+  /* En claro el texto del botón es casi blanco: el hover se oscurece hacia foreground (5,9:1 con
+     el violeta de la marca; con `background` quedaba en 4,24:1, R.0). En oscuro, ver `.dark`. */
+  --mimi-primary-hover: color-mix(in oklch, var(--mimi-primary) 88%, var(--mimi-foreground));
   --mimi-secondary-hover: color-mix(in oklch, var(--mimi-secondary) 80%, var(--mimi-foreground) 6%);
   /* Hover de los sólidos con texto blanco: se aleja del texto, hacia foreground (AA, V.1). En
      oscuro el texto es oscuro y el hover sigue yendo hacia el fondo. */
@@ -235,19 +260,22 @@
 
 /* ── Oscuro ────────────────────────────────────── */
 .dark {
-  --mimi-background: oklch(0.145 0 0);
+  /* Neutros de la marca en oscuro: fondo #171717, texto #FAFAFA; las superficies suben (R.0). */
+  --mimi-background: oklch(0.205 0 0);
   --mimi-foreground: oklch(0.985 0 0);
-  --mimi-card: oklch(0.175 0 0);
+  --mimi-card: oklch(0.235 0 0);
   --mimi-card-foreground: oklch(0.985 0 0);
-  --mimi-popover: oklch(0.205 0 0);
+  --mimi-popover: oklch(0.26 0 0);
   --mimi-popover-foreground: oklch(0.985 0 0);
-  --mimi-primary: oklch(0.922 0 0);
+  /* #A88FFF con texto #171717 (6,86:1); #793EEA sobre #171717 daría 3,15:1: no sirve para texto. */
+  --mimi-primary: var(--mimi-brand-400);
   --mimi-primary-foreground: oklch(0.205 0 0);
-  --mimi-secondary: oklch(0.269 0 0);
+  --mimi-brand-text: var(--mimi-brand-400);
+  --mimi-secondary: oklch(0.3 0 0);
   --mimi-secondary-foreground: oklch(0.985 0 0);
-  --mimi-muted: oklch(0.225 0 0);
-  --mimi-muted-foreground: oklch(0.708 0 0);
-  --mimi-accent: oklch(0.269 0 0);
+  --mimi-muted: oklch(0.27 0 0);
+  --mimi-muted-foreground: oklch(0.74 0 0);
+  --mimi-accent: oklch(0.3 0 0);
   --mimi-accent-foreground: oklch(0.985 0 0);
   --mimi-destructive: oklch(0.704 0.191 22.216);
   --mimi-destructive-foreground: oklch(0.2 0.04 25);
@@ -255,7 +283,7 @@
   --mimi-input: oklch(1 0 0 / 15%);
   --mimi-input-background: oklch(1 0 0 / 4.5%);
   --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 30%, var(--mimi-input));
-  --mimi-ring: oklch(0.556 0 0);
+  --mimi-ring: var(--mimi-brand-400);
 
   --mimi-success: oklch(0.72 0.15 150);
   --mimi-success-foreground: oklch(0.2 0.05 150);
@@ -443,6 +471,18 @@
 @theme inline {
   --color-background: var(--mimi-background);
   --color-foreground: var(--mimi-foreground);
+  --color-brand-50: var(--mimi-brand-50);
+  --color-brand-100: var(--mimi-brand-100);
+  --color-brand-200: var(--mimi-brand-200);
+  --color-brand-300: var(--mimi-brand-300);
+  --color-brand-400: var(--mimi-brand-400);
+  --color-brand-500: var(--mimi-brand-500);
+  --color-brand-600: var(--mimi-brand-600);
+  --color-brand-700: var(--mimi-brand-700);
+  --color-brand-800: var(--mimi-brand-800);
+  --color-brand-900: var(--mimi-brand-900);
+  --color-brand-950: var(--mimi-brand-950);
+  --color-brand-text: var(--mimi-brand-text);
   --color-card: var(--mimi-card);
   --color-card-foreground: var(--mimi-card-foreground);
   --color-popover: var(--mimi-popover);

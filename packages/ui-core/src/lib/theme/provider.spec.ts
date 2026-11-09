@@ -7,6 +7,7 @@ import {
   mimiThemeToCss,
   provideMimiTheme,
 } from './provider';
+import { MIMI_THEME_NEUTRAL } from './neutral';
 
 describe('mimiThemeToCss', () => {
   it('devuelve cadena vacía con un preset vacío', () => {
@@ -716,6 +717,29 @@ describe('theme-base.css: derivados de las variantes con tono (V.1)', () => {
         );
       }
     }
+  });
+
+  it('el preset neutral (R.0) devuelve el tema anterior a la marca', () => {
+    const css = mimiThemeToCss(MIMI_THEME_NEUTRAL);
+    expect(css).toContain('--mimi-primary: oklch(0.205 0 0);');
+    expect(css).toContain('--mimi-background: oklch(1 0 0);');
+    // En oscuro: el primario claro y el fondo de antes.
+    const dark = css.slice(css.lastIndexOf('.dark'));
+    expect(dark).toContain('--mimi-primary: oklch(0.922 0 0);');
+    expect(dark).toContain('--mimi-background: oklch(0.145 0 0);');
+    expect(dark).toContain('--mimi-card: oklch(0.175 0 0);');
+  });
+
+  it('la marca: escala de violeta con las dos anclas y se expone a Tailwind', () => {
+    const root = block(':root');
+    expect(root).toContain('--mimi-brand-600: oklch(0.54 0.239 292);');
+    expect(root).toContain('--mimi-brand-400: oklch(0.72 0.16 292);');
+    for (const step of [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]) {
+      expect(root).toContain(`--mimi-brand-${step}:`);
+      expect(block('@theme inline')).toContain(`--color-brand-${step}: var(--mimi-brand-${step});`);
+    }
+    expect(root).toContain('--mimi-primary: var(--mimi-brand-600);');
+    expect(block('.dark')).toContain('--mimi-primary: var(--mimi-brand-400);');
   });
 
   it('se exponen a Tailwind y no se emiten desde el preset', () => {

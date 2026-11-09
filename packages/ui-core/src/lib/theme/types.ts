@@ -29,6 +29,14 @@ export interface MimiColorTokens {
   /** Borde de un campo con el puntero encima (por defecto, mezcla de foreground e input). */
   inputHover?: string;
   ring?: string;
+  /**
+   * Texto de énfasis de la marca (R.0): la única forma de texto violeta. En claro, `brand-600`
+   * (5,4:1 sobre el fondo); en oscuro, `brand-400` (6,9:1). El violeta de la marca nunca va como
+   * texto sobre el fondo oscuro, ni el claro sobre el claro.
+   */
+  brandText?: string;
+  /** Degradado de la marca (fondos y acentos, nunca texto fino). */
+  brandGradient?: string;
   /** Fondo que oscurece la página detrás de paneles y diálogos. */
   overlay?: string;
   success?: string;

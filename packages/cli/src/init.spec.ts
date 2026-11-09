@@ -24,6 +24,7 @@ const BASE_FILES = [
   'theme/theme-base.css',
   'theme/types.ts',
   'theme/provider.ts',
+  'theme/neutral.ts',
   'theme/index.ts',
   'utils/cn.ts',
   'utils/control-styles.ts',

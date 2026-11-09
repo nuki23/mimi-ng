@@ -63,7 +63,13 @@
     },
     "theme": {
       "type": "theme",
-      "files": ["theme/theme-base.css", "theme/types.ts", "theme/provider.ts", "theme/index.ts"]
+      "files": [
+        "theme/theme-base.css",
+        "theme/types.ts",
+        "theme/provider.ts",
+        "theme/neutral.ts",
+        "theme/index.ts"
+      ]
     },
     "avatar": {
       "type": "component",

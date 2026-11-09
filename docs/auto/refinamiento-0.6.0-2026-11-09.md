@@ -106,3 +106,17 @@ console.log('listo', Object.keys(out).length, 'archivos');
 **Bundle:** JS inicial 333,31 → **333,95 kB** (+0,64: `size.ts` entra por Button) / 106,25 → 106,54 gzip; CSS global 170,83 kB (sin cambio).
 
 **No hecho (queda abierta, `[~]`):** Progress y Pagination (R.8); la página «Tamaños» del sitio; la tabla «qué cambia el tamaño» de la spec; tokens de texto, padding e ícono por tamaño (se mantienen los de cada componente).
+
+## R.0 Tema de marca: la parte de color (hecha; logo y favicon, a la espera)
+
+**Hecho:** escala `--mimi-brand-50…950` (anclas exactas `600` = `#793EEA` = `oklch(0.54 0.239 292)`, `400` = `#A88FFF` = `oklch(0.72 0.16 292)`; los demás pasos, mi curva, a revisar por el usuario en la página de Tema); `--mimi-brand-gradient`, `--mimi-brand-text` (600 en claro, 400 en oscuro) y su exposición a Tailwind (`bg-brand-600`, `text-brand-text`…). **Primario** `brand-600` en claro (texto `oklch(0.985)`) y `brand-400` en oscuro (texto `oklch(0.205)`); **anillo** `brand-500` / `brand-400`. **Neutros** `#FAFAFA`/`#171717` (`oklch(0.985)`/`oklch(0.205)`); en oscuro las superficies suben (tarjeta 0,235, popover 0,26, muted 0,27, secundario y acento 0,30, texto atenuado 0,74). **Hover del primario** hacia `foreground` en vez de hacia el fondo (con el fondo `#FAFAFA` el violeta aclarado daba 4,24:1, bajo AA; ahora pasa). **`MIMI_THEME_NEUTRAL`** (`theme/neutral.ts`, ítem `theme` del registro): el tema anterior para quien no quiera el violeta. Tipo: `brandText` y `brandGradient` en `MimiColorTokens`. La fuente no cambia (Outfit y Geist Mono).
+
+**Contrastes (calculados, comprobados por `contrast.spec.ts`, 5 pares nuevos × claro y oscuro, más una prueba de cifras):** `#793EEA` sobre `#FAFAFA` 5,45:1; texto `#FAFAFA` sobre `#793EEA` 5,45:1; `#A88FFF` sobre `#171717` 6,86:1; texto `#171717` sobre `#A88FFF` 6,86:1; prohibidos como texto: `#793EEA` sobre `#171717` 3,15:1 y `#A88FFF` sobre `#FAFAFA` 2,50:1 (la prueba exige que den menos de AA). Toda la suite de contraste previa (cada texto de cada componente sobre su fondo, en reposo y en hover, claro y oscuro) sigue pasando con la paleta nueva. Una cifra del diseño (`success-soft-foreground`, 6,83 → 6,57) cambió porque el suave se mezcla sobre el fondo nuevo `#FAFAFA`; actualizada con su nota.
+
+**Comprobado en Chrome sin ventana:** la página de Button en claro y en oscuro (fondo, texto, logo del sitio violeta en ambos).
+
+**RUPTURA (visual) para el CHANGELOG de la puerta:** cambian los colores por defecto (primario violeta, neutros `#FAFAFA`/`#171717`, superficies oscuras más claras). Quien tenga `theme-base.css` sin modificar lo recibe con `ng g mimi`; quien lo modificó, el aviso de siempre. Para conservar el tema de antes: `provideMimiTheme(MIMI_THEME_NEUTRAL)`.
+
+**Bundle:** CSS global 170,83 → **171,44 kB** (24,48 → 24,61 gzip); JS inicial sin cambios (333,95 / 106,54). **Pruebas:** ui-core 934, CLI 202, docs 192.
+
+**Pendiente (`[~]`):** logo (SVG) y favicon en el sitio (`site-header.html`, `mobile-nav.html`, `public/`, `index.html`, `theme-color`): **a la espera de los archivos del logo** que traerá el usuario. **NO COMPROBADO (usuario):** que la curva intermedia de la escala (50 a 950) le guste; la página de Tema del sitio no muestra todavía la escala.
