@@ -147,7 +147,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [ ] R.14 Form Field: atajos y mensajes de error (PD-3, decidido por el usuario el 09/11/2026: opciones A + B) · v0.6.0 · M · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.15 Select: `mimi-option` e íconos de limpiar y carga sobre el chevron · v0.6.0 · L · depende: M.9 (conviene) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.16 Combobox con la misma API que Select · v0.6.0 · M · depende: R.15, M.9 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.17 Tabs: atajo `<mimi-tab label>` · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.17 (09/11/2026) Tabs: atajo `<mimi-tab label>` · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [x] R.18 (09/11/2026) Input OTP: cantidad de dígitos que quepa y ejemplos · v0.6.0 · S · depende: R.2 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.24 Auditoría de «uso corto» en todos los componentes · v0.6.0 · M · depende: R.1, R.14, R.15 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.P6 Puerta de la 0.6.0 · v0.6.0 · — · depende: R.0 a R.18, R.24 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)

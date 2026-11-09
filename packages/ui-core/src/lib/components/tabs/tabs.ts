@@ -5,6 +5,8 @@ import {
   DOCUMENT,
   Directive,
   ElementRef,
+  InjectionToken,
+  type Signal,
   TemplateRef,
   ViewContainerRef,
   afterRenderEffect,
@@ -12,6 +14,7 @@ import {
   computed,
   contentChildren,
   effect,
+  forwardRef,
   inject,
   input,
   isDevMode,
@@ -43,11 +46,30 @@ import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 export type MimiTabsVariant = 'underline' | 'pill';
 
 /**
+ * Lo que `mimi-tabs` necesita de una pestaña: la da `ng-template[mimiTab]` (el contenido se crea
+ * al elegirla) o el elemento `mimi-tab` (el contenido se crea con la página; R.17).
+ * @internal
+ */
+export interface MimiTabLike {
+  readonly value: Signal<string>;
+  readonly label: Signal<string>;
+  readonly count: Signal<number | string | null | undefined>;
+  readonly disabled: Signal<boolean>;
+  readonly template: TemplateRef<unknown>;
+}
+
+/** @internal */
+export const MIMI_TAB = new InjectionToken<MimiTabLike>('MIMI_TAB');
+
+/**
  * Una pestaña: `<ng-template mimiTab="cuenta" label="Cuenta">contenido del panel</ng-template>`.
  * El contenido no se crea hasta que la pestaña se elige.
  */
-@Directive({ selector: 'ng-template[mimiTab]' })
-export class MimiTab {
+@Directive({
+  selector: 'ng-template[mimiTab]',
+  providers: [{ provide: MIMI_TAB, useExisting: forwardRef(() => MimiTab) }],
+})
+export class MimiTab implements MimiTabLike {
   /**
    * El valor de la pestaña (único y no vacío). No es `input.required`: las pestañas declaradas en
    * un `@for` se ven antes de recibir su valor, y vacío significa «todavía no» (NG0950).
@@ -61,6 +83,45 @@ export class MimiTab {
   readonly disabled = input(false, { transform: booleanAttribute });
   /** Uso interno: el contenido del panel. */
   readonly template = inject<TemplateRef<unknown>>(TemplateRef);
+}
+
+/**
+ * La pestaña como elemento, más corta (R.17): `<mimi-tab label="Cuenta">contenido</mimi-tab>`.
+ * Convive con `ng-template[mimiTab]` (se pueden mezclar; el orden es el del DOM).
+ *
+ * **El contenido se crea con la página**, esté o no elegida la pestaña (un elemento proyecta su
+ * contenido al declararlo): para un panel costoso o con datos, usa `ng-template[mimiTab]`, que
+ * lo crea al elegirla, o pon un `<ng-template>` con `@defer` dentro. Sin `value`, el valor es el
+ * `label` en minúsculas y con guiones (`Facturación` → `facturacion`).
+ */
+@Component({
+  selector: 'mimi-tab',
+  template: '<ng-template><ng-content /></ng-template>',
+  providers: [{ provide: MIMI_TAB, useExisting: forwardRef(() => MimiTabElement) }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class MimiTabElement implements MimiTabLike {
+  readonly valueInput = input('', { alias: 'value' });
+  readonly label = input('');
+  readonly count = input<number | string | null | undefined>(undefined);
+  readonly disabled = input(false, { transform: booleanAttribute });
+  /** El valor: el dado o, sin él, el `label` en minúsculas, sin tildes y con guiones. */
+  readonly value = computed(
+    () =>
+      this.valueInput() ||
+      this.label()
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, ''),
+  );
+  private readonly content = viewChild.required(TemplateRef);
+  /** Uso interno: el contenido del panel. */
+  get template(): TemplateRef<unknown> {
+    return this.content();
+  }
 }
 
 /**
@@ -324,14 +385,14 @@ export class MimiTabs {
   /** Clases de los paneles. */
   readonly panelClass = input('');
 
-  protected readonly tabs = contentChildren(MimiTab);
+  protected readonly tabs = contentChildren(MIMI_TAB);
   private readonly labels = contentChildren(MimiTabLabel);
   private readonly list = viewChild<ElementRef<HTMLElement>>('list');
 
   /** Sube para recrear el `ngTabList` (choque 2). */
   protected readonly generation = signal(0);
   /** Pestañas con etiqueta propia sin texto visible: `label` es su nombre accesible. */
-  protected readonly iconOnly = signal<ReadonlySet<MimiTab>>(new Set());
+  protected readonly iconOnly = signal<ReadonlySet<MimiTabLike>>(new Set());
 
   private readonly firstEnabled = computed(() =>
     this.tabs().find((tab) => tab.value() && !tab.disabled()),
@@ -410,7 +471,7 @@ export class MimiTabs {
       if (!this.focusInside(tabs)) this.generation.update((n) => n + 1);
     });
   });
-  private lastTabs: readonly MimiTab[] | null = null;
+  private lastTabs: readonly MimiTabLike[] | null = null;
 
   constructor() {
     afterRenderEffect({
@@ -419,7 +480,7 @@ export class MimiTabs {
         const tabs = this.tabs();
         if (!list) return;
         // Etiquetas propias sin texto visible (solo ícono): label pasa a ser el nombre.
-        const iconOnly = new Set<MimiTab>();
+        const iconOnly = new Set<MimiTabLike>();
         const buttons = Array.from(list.querySelectorAll<HTMLElement>('[role="tab"]'));
         for (const tab of tabs) {
           if (!this.labelFor(tab)) continue;
@@ -436,7 +497,7 @@ export class MimiTabs {
     });
   }
 
-  protected labelFor(tab: MimiTab): TemplateRef<unknown> | undefined {
+  protected labelFor(tab: MimiTabLike): TemplateRef<unknown> | undefined {
     return this.labels().find((label) => label.value() === tab.value())?.template;
   }
 
@@ -463,7 +524,7 @@ export class MimiTabs {
   }
 
   /** El foco está en una pestaña que sigue existiendo. */
-  private focusInside(tabs: readonly MimiTab[]): boolean {
+  private focusInside(tabs: readonly MimiTabLike[]): boolean {
     const active = this.document.activeElement;
     const list = this.list()?.nativeElement;
     if (!active || !list?.contains(active)) return false;
@@ -472,7 +533,7 @@ export class MimiTabs {
   }
 
   private warned = false;
-  private warn(tabs: readonly MimiTab[], iconOnly: ReadonlySet<MimiTab>): void {
+  private warn(tabs: readonly MimiTabLike[], iconOnly: ReadonlySet<MimiTabLike>): void {
     if (this.warned) return;
     const values = tabs.map((tab) => tab.value());
     const problems = [
@@ -488,4 +549,4 @@ export class MimiTabs {
 }
 
 /** Todas las piezas de Tabs, para importarlas juntas. */
-export const MimiTabsImports = [MimiTabs, MimiTab, MimiTabLabel] as const;
+export const MimiTabsImports = [MimiTabs, MimiTab, MimiTabElement, MimiTabLabel] as const;
