@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/data-table';
 import { MimiInput } from '@/components/ui/input';
 import { cn } from '@/components/ui/utils/cn';
+import { restoreFocusAfterBusy } from '@/components/ui/utils/busy';
 
 export type Table01Status = 'active' | 'trial' | 'past-due' | 'canceled';
 
@@ -123,6 +124,8 @@ export class Table01 {
   readonly selection = model<unknown[]>([]);
   /** Mientras tu app carga o procesa los clientes: la tabla muestra «cargando» y todo queda inerte. */
   readonly loading = input(false, { transform: booleanAttribute });
+  /** Al terminar de cargar, el foco vuelve a quien lanzó la acción y se anuncia (los Blocks inertes no los ven los lectores). */
+  private readonly focusBack = restoreFocusAfterBusy(this.loading);
   readonly userClass = input('', { alias: 'class' });
 
   /** «New customer». */

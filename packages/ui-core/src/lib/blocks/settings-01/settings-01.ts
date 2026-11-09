@@ -36,6 +36,7 @@ import { MimiSwitch } from '@/components/ui/switch';
 import { MimiTabsImports } from '@/components/ui/tabs';
 import { MimiTextarea } from '@/components/ui/textarea';
 import { cn } from '@/components/ui/utils/cn';
+import { restoreFocusAfterBusy } from '@/components/ui/utils/busy';
 
 export type Settings01Tab = 'profile' | 'notifications' | 'security' | 'billing';
 
@@ -199,6 +200,8 @@ export class Settings01 {
   readonly plan = input<Settings01Plan>(SETTINGS_01_PLAN);
   /** Mientras tu app guarda: «Saving…» en el botón. */
   readonly saving = input(false, { transform: booleanAttribute });
+  /** Al terminar de guardar, el foco vuelve a quien lanzó la acción y se anuncia (los Blocks inertes no los ven los lectores). */
+  private readonly focusBack = restoreFocusAfterBusy(this.saving);
   /** La sección elegida. Admite `[(tab)]`. */
   readonly tab = model<Settings01Tab>('profile');
   readonly userClass = input('', { alias: 'class' });

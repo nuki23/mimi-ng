@@ -22,6 +22,13 @@
         "@angular/forms": "^22.0.0"
       }
     },
+    "utils/busy": {
+      "type": "util",
+      "files": ["utils/busy.ts"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4"
+      }
+    },
     "utils/size": {
       "type": "util",
       "files": ["utils/size.ts"]
@@ -572,6 +579,7 @@
         "input",
         "password",
         "separator",
+        "utils/busy",
         "utils/cn"
       ]
     },
@@ -586,7 +594,7 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["avatar", "button", "form-field", "input", "utils/cn"]
+      "registryDependencies": ["avatar", "button", "form-field", "input", "utils/busy", "utils/cn"]
     },
     "signup-01": {
       "type": "block",
@@ -599,13 +607,21 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["button", "checkbox", "form-field", "input", "password", "utils/cn"]
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "form-field",
+        "input",
+        "password",
+        "utils/busy",
+        "utils/cn"
+      ]
     },
     "otp-01": {
       "type": "block",
       "kind": "page",
       "files": ["blocks/otp-01/otp-01.ts", "blocks/otp-01/otp-01.html", "blocks/otp-01/index.ts"],
-      "registryDependencies": ["button", "card", "input-otp", "utils/cn"]
+      "registryDependencies": ["button", "card", "input-otp", "utils/busy", "utils/cn"]
     },
     "settings-01": {
       "type": "block",
@@ -630,6 +646,7 @@
         "switch",
         "tabs",
         "textarea",
+        "utils/busy",
         "utils/cn"
       ]
     },
@@ -641,7 +658,15 @@
         "blocks/table-01/table-01.html",
         "blocks/table-01/index.ts"
       ],
-      "registryDependencies": ["badge", "button", "checkbox", "data-table", "input", "utils/cn"]
+      "registryDependencies": [
+        "badge",
+        "button",
+        "checkbox",
+        "data-table",
+        "input",
+        "utils/busy",
+        "utils/cn"
+      ]
     },
     "pricing-01": {
       "type": "block",
@@ -651,7 +676,7 @@
         "blocks/pricing-01/pricing-01.html",
         "blocks/pricing-01/index.ts"
       ],
-      "registryDependencies": ["badge", "button", "toggle-group", "utils/cn"]
+      "registryDependencies": ["badge", "button", "toggle-group", "utils/busy", "utils/cn"]
     }
   }
 }
