@@ -75,6 +75,19 @@ describe('MimiDialogService: tamaños, inputs y resultado (R.6, R.7)', () => {
     expect(panel()!.classList).not.toContain('p-2');
   });
 
+  it('inputs con una clave que el componente no tiene: error claro, antes de crear nada', async () => {
+    const service = TestBed.inject(MimiDialogService);
+    expect(() => service.open(Upload, { inputs: { titel: 'Typo' } })).toThrowError(
+      /Dialog: «titel» no es una entrada de _?Upload.*title.*risk/s,
+    );
+    await tick();
+    // Nada quedó a medias: ni panel, ni contenedor del CDK.
+    expect(panel()).toBeNull();
+    expect(document.querySelector('.cdk-dialog-container')).toBeNull();
+    // Con una plantilla no hay entradas a las que asignar.
+    expect(() => service.open(Upload, { inputs: { title: 'ok' } })).not.toThrow();
+  });
+
   it('inputs: las entradas del componente llegan antes de pintarse; close(resultado) llega a closed y a result()', async () => {
     const service = TestBed.inject(MimiDialogService);
     const ref = service.open<{ saved: string }>(Upload, {

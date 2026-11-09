@@ -22,6 +22,7 @@ import {
   isDevMode,
   model,
   output,
+  reflectComponentType,
   signal,
   untracked,
   viewChild,
@@ -174,6 +175,33 @@ export class MimiDialogRef<R = unknown> {
     this.result.set(result);
     this.closedSubject.next(result);
     this.closedSubject.complete();
+  }
+}
+
+/**
+ * Comprueba las claves de `inputs` contra las entradas del componente que se abre (con el nombre
+ * que se usa en la plantilla). Lanza un error que dice cuál sobra y cuáles hay.
+ */
+function validateInputs(
+  content: Type<unknown> | TemplateRef<unknown>,
+  inputs: Record<string, unknown> | undefined,
+): void {
+  const keys = Object.keys(inputs ?? {});
+  if (!keys.length) return;
+  if (content instanceof TemplateRef) {
+    throw new Error(
+      `[Mimi] Dialog: «inputs» solo vale con un componente; con una plantilla usa «data» (${keys.join(', ')}).`,
+    );
+  }
+  const mirror = reflectComponentType(content);
+  if (!mirror) return;
+  const valid = mirror.inputs.map((input) => input.templateName);
+  const unknown = keys.filter((key) => !valid.includes(key));
+  if (unknown.length) {
+    throw new Error(
+      `[Mimi] Dialog: «${unknown.join('», «')}» no es una entrada de ${content.name}. ` +
+        `Entradas que tiene: ${valid.length ? valid.join(', ') : '(ninguna)'}.`,
+    );
   }
 }
 
@@ -418,6 +446,8 @@ export class MimiDialogService {
     content: Type<unknown> | TemplateRef<unknown>,
     config: MimiDialogConfig<D> = {},
   ): MimiDialogRef<R> {
+    // Antes de crear nada: un error en `inputs` no deja un diálogo a medias.
+    validateInputs(content, config.inputs);
     const ref = new MimiDialogRef<R>();
     const tracked = ref as MimiDialogRef<unknown>;
     this.refs.add(tracked);
