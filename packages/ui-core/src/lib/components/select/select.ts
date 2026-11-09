@@ -212,7 +212,7 @@ const GROUP_LABEL_CLASSES =
 const OPTION_CLASSES = cn(
   'flex h-[var(--mimi-select-option-height,34px)] shrink-0 cursor-pointer items-center gap-2 px-2 text-sm select-none',
   'rounded-[var(--mimi-select-option-radius,var(--mimi-radius-sm))]',
-  'transition-[background-color] duration-120 ease-[ease] active:scale-[0.985]',
+  'transition-[background-color] duration-120 ease-[ease] active:scale-(--mimi-press-scale)',
   'data-[active=true]:bg-[color:var(--mimi-select-option-hover,var(--mimi-accent))]',
   'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:active:scale-100',
 );
@@ -493,7 +493,7 @@ const BUTTON_CLASSES =
 
 const CLEAR_CLASSES = cn(
   'relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
-  'mimi-transition hover:bg-accent hover:text-foreground active:scale-90',
+  'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );
 

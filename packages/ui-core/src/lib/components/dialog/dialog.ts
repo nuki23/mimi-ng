@@ -162,7 +162,7 @@ const PANEL_CLASSES = cn(
 const CLOSE_CLASSES = cn(
   'absolute top-3 right-3 inline-flex size-[var(--mimi-dialog-close-size,32px)] cursor-pointer items-center justify-center',
   'rounded-[var(--mimi-radius-sm)] bg-transparent text-muted-foreground',
-  'mimi-transition hover:bg-accent hover:text-foreground active:scale-90',
+  'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );
 

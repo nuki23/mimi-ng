@@ -60,17 +60,17 @@ const ICON = {
 
 const NAV_CLASSES = cn(
   'inline-flex size-[30px] shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] border border-border bg-transparent text-foreground [&_svg]:size-4',
-  'mimi-transition hover:bg-accent active:scale-90',
+  'mimi-transition hover:bg-accent active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );
 const TITLE_BUTTON_CLASSES = cn(
   'inline-flex h-[30px] cursor-pointer items-center gap-1 rounded-[var(--mimi-radius-sm)] border-0 bg-transparent px-2.5 text-sm font-semibold text-foreground [&_svg]:size-3.5',
-  'mimi-transition hover:bg-accent active:scale-[0.96]',
+  'mimi-transition hover:bg-accent active:scale-(--mimi-press-scale)',
   buttonFocusStyles,
 );
 const CELL_BASE = cn(
   'relative inline-flex size-[var(--mimi-date-cell-size,36px)] cursor-pointer items-center justify-center text-[13.5px] tabular-nums select-none',
-  'rounded-[var(--mimi-date-cell-radius,var(--mimi-radius-sm))] mimi-transition active:scale-90',
+  'rounded-[var(--mimi-date-cell-radius,var(--mimi-radius-sm))] mimi-transition active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );
 /** Clases de cada estado del día, elegidas en TypeScript (spec 10: sin variantes encadenadas). */
@@ -108,7 +108,7 @@ const BAND = {
   both: 'flex justify-center',
 } as const;
 const PICK_BASE = cn(
-  'h-11 cursor-pointer rounded-[var(--mimi-radius-sm)] border-0 text-sm tabular-nums mimi-transition hover:shadow-[shadow:inset_0_0_0_1px_var(--mimi-border)] active:scale-[0.94]',
+  'h-11 cursor-pointer rounded-[var(--mimi-radius-sm)] border-0 text-sm tabular-nums mimi-transition hover:shadow-[shadow:inset_0_0_0_1px_var(--mimi-border)] active:scale-(--mimi-press-scale)',
   buttonFocusStyles,
 );
 const PICK = {
@@ -284,7 +284,7 @@ const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase() + text.s
         <button
           type="button"
           data-slot="go-today"
-          class="h-7 cursor-pointer rounded-[var(--mimi-radius-sm)] border border-border bg-transparent px-2.5 text-[12.5px] font-medium text-foreground mimi-transition hover:bg-accent active:scale-[0.94]"
+          class="h-7 cursor-pointer rounded-[var(--mimi-radius-sm)] border border-border bg-transparent px-2.5 text-[12.5px] font-medium text-foreground mimi-transition hover:bg-accent active:scale-(--mimi-press-scale)"
           [class]="focusClasses"
           (click)="goToday()"
         >

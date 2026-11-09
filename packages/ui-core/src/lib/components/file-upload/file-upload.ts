@@ -90,7 +90,7 @@ export function mimiFormatFileSize(bytes: number, locale: string): string {
 const ZONE_BASE = cn(
   'flex w-full cursor-pointer flex-col items-center justify-center gap-2 p-4 text-center font-sans text-foreground',
   'min-h-[var(--mimi-upload-height,176px)] rounded-[var(--mimi-upload-radius,var(--mimi-radius-card,1rem))] border-2',
-  'mimi-transition active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)] disabled:active:scale-100',
+  'mimi-transition active:scale-(--mimi-press-scale) disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)] disabled:active:scale-100',
   buttonFocusStyles,
 );
 const ZONE = {

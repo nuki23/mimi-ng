@@ -61,7 +61,7 @@ const THUMB =
 /** El foco del área y del tono: el contorno de los botones (separado 2px). */
 const SLIDER_FOCUS = buttonFocusStyles;
 const SWATCH_BASE = cn(
-  'size-full cursor-pointer border-0 shadow-[shadow:inset_0_0_0_1px_var(--mimi-color-picker-swatch-border,oklch(0_0_0/.1))] mimi-transition hover:scale-[1.12] active:scale-90',
+  'size-full cursor-pointer border-0 shadow-[shadow:inset_0_0_0_1px_var(--mimi-color-picker-swatch-border,oklch(0_0_0/.1))] mimi-transition hover:scale-[1.12] active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );
 const SWATCH = {

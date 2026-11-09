@@ -139,7 +139,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [ ] R.6 Dialog: tamaños `sm/md/lg` como anchos máximos · v0.6.0 · S · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.7 Dialog como servicio (lo que falta sobre el servicio existente) · v0.6.0 · M · depende: R.6 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.8 Tamaños en el resto de componentes; los Blocks los heredan · v0.6.0 · L · depende: R.1, R.2, R.3 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.9 Efecto de clic uniforme (con `prefers-reduced-motion`) · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.9 Efecto de clic uniforme (con `prefers-reduced-motion`) (09/11/2026) · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [x] R.10 Errores visuales: Tabs y Toggle Group en oscuro, Skeleton (09/11/2026) · v0.6.0 · S · depende: R.0 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [x] R.11 Blocks en carga: todo deshabilitado (09/11/2026) · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.12 `readonly` en todos los componentes de formulario · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)

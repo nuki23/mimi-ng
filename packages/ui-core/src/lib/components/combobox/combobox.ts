@@ -109,7 +109,7 @@ const LIST_CLASSES = 'max-h-[var(--mimi-combobox-menu-max-height,228px)]';
 const OPTION_CLASSES = cn(
   'flex min-h-[var(--mimi-combobox-option-height,34px)] shrink-0 cursor-pointer items-center gap-2 px-2 text-sm select-none',
   'rounded-[var(--mimi-combobox-option-radius,var(--mimi-radius-sm))]',
-  'transition-[background-color] duration-120 ease-[ease] active:scale-[0.985]',
+  'transition-[background-color] duration-120 ease-[ease] active:scale-(--mimi-press-scale)',
   'data-[active=true]:bg-[color:var(--mimi-combobox-option-hover,var(--mimi-accent))]',
   'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:active:scale-100',
 );

@@ -59,7 +59,7 @@ const DEFAULT_FORMAT: Intl.DateTimeFormatOptions = {
 };
 
 const PRESET_BASE = cn(
-  'h-8 cursor-pointer rounded-[var(--mimi-radius-sm)] border-0 px-2 text-left text-[13px] text-foreground mimi-transition hover:bg-accent active:scale-[0.96]',
+  'h-8 cursor-pointer rounded-[var(--mimi-radius-sm)] border-0 px-2 text-left text-[13px] text-foreground mimi-transition hover:bg-accent active:scale-(--mimi-press-scale)',
   buttonFocusStyles,
 );
 const PRESET = {

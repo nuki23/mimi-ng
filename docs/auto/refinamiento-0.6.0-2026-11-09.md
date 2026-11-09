@@ -42,3 +42,55 @@ PD-1 opción B, PD-2 opción C y PD-3 opciones A + B registradas como «Decidido
 **Hecho:** `inert` y `aria-busy` en `login-01`, `login-02`, `signup-01`, `otp-01`, `settings-01` (con `saving`); `loading` nuevo en `pricing-01` y `table-01` (en `table-01` también pasa a la Data Table, que ya tiene «cargando»); estados «Cargando»/«Guardando» en las vistas previas del sitio (`block-previews.ts`, las tres páginas y `block-pages.spec.ts`). **Pruebas:** `block-loading.spec.ts` (7 Blocks × sin carga, con carga y de vuelta); ui-core 915, docs 192 en verde. **Bundle:** sin cambios (JS inicial 333,31 / 106,25; CSS global 171,12 / 24,53): las clases de los Blocks van en `blocks.css`.
 
 **No hecho:** la directiva `mimiDisabled` (se pospone). **NO COMPROBADO (manual, usuario):** que el flujo con un lector de pantalla sea aceptable con el Block inerte.
+
+## R.9 Efecto de clic uniforme (hecha)
+
+**Antes:** los tokens `--mimi-press-scale` (0,975) y `--mimi-press-scale-sm` (0,9) ya existían, con `prefers-reduced-motion` a 1, pero 9 archivos escribían números sueltos: `active:scale-90` (Calendar ×2, Color Picker, Dialog, Select), `[0.985]` (Combobox, File Upload, Menu, Select), `[0.99]` (Command), `[0.96]` (Calendar, Date Range) y `[0.94]` (Calendar ×2): hundimientos de 0,90 a 0,99 y **ignoraban el movimiento reducido**.
+
+**Decisión por defecto (pendiente de revisión):** `scale-90` → el token pequeño (mismo valor, 0,9); los `0.985`, `0.99`, `0.96` y `0.94` → `--mimi-press-scale` (0,975). Los elementos «sin hundimiento» del plan (filas y celdas) no se tocaron más: ya usaban el token o `active:scale-100`. Cambio visual: las filas de Select/Combobox/Menu/Command se hunden un poco más (0,985 → 0,975) y las celdas del Calendar un poco menos (0,94/0,96 → 0,975).
+
+**Prueba:** `press-scale.spec.ts` recorre `components/` y `blocks/` y falla si aparece `active:scale-<número>` (salvo `scale-100`), y comprueba los tokens y el movimiento reducido. ui-core 917 en verde.
+
+**Bundle:** CSS global 171,12 → **170,83 kB** (24,53 → 24,48 gzip); JS inicial sin cambios.
+
+**Script de edición múltiple** (la misma sustitución en 9 archivos; guardado fuera del repo, en el directorio temporal; falla sin escribir nada si no encuentra lo esperado). `git diff --stat` **antes de Prettier** y **después**: iguales, 9 archivos, 14 inserciones y 14 borrados (Prettier no cambió nada). Archivos: `calendar`, `color-picker`, `combobox`, `command`, `date-range`, `dialog`, `file-upload`, `menu`, `select` (`components/<x>/<x>.ts`). Texto completo:
+
+```js
+// R.9: sustituye los `active:scale-…` con números sueltos por los tokens de clic del tema.
+// Falla y no escribe nada si algún archivo no tiene exactamente lo esperado.
+import { readFileSync, writeFileSync } from 'node:fs';
+const root = 'C:/dev/mimi-ng/packages/ui-core/src/lib/components/';
+const SM = 'active:scale-(--mimi-press-scale-sm)';
+const MD = 'active:scale-(--mimi-press-scale)';
+const plan = {
+  'calendar/calendar.ts': [
+    ['active:scale-90', SM, 2],
+    ['active:scale-[0.96]', MD, 1],
+    ['active:scale-[0.94]', MD, 2],
+  ],
+  'color-picker/color-picker.ts': [['active:scale-90', SM, 1]],
+  'combobox/combobox.ts': [['active:scale-[0.985]', MD, 1]],
+  'command/command.ts': [['active:scale-[0.99]', MD, 1]],
+  'date-range/date-range.ts': [['active:scale-[0.96]', MD, 1]],
+  'dialog/dialog.ts': [['active:scale-90', SM, 1]],
+  'file-upload/file-upload.ts': [['active:scale-[0.985]', MD, 1]],
+  'menu/menu.ts': [['active:scale-[0.985]', MD, 1]],
+  'select/select.ts': [
+    ['active:scale-[0.985]', MD, 1],
+    ['active:scale-90', SM, 1],
+  ],
+};
+const out = {};
+for (const [file, edits] of Object.entries(plan)) {
+  let text = readFileSync(root + file, 'utf8');
+  for (const [from, to, count] of edits) {
+    const found = text.split(from).length - 1;
+    if (found !== count)
+      throw new Error(`${file}: «${from}» aparece ${found} veces y se esperaban ${count}`);
+    text = text.split(from).join(to);
+  }
+  out[file] = text;
+}
+for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text);
+console.log('listo', Object.keys(out).length, 'archivos');
+```

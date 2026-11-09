@@ -182,7 +182,7 @@ const LIST_CLASSES = 'max-h-[var(--mimi-command-list-height,332px)] p-1.5';
 const OPTION_CLASSES = cn(
   'group/command-item flex h-[var(--mimi-command-item-height,40px)] shrink-0 cursor-pointer items-center gap-2.5 px-2.5 text-sm select-none',
   'rounded-[var(--mimi-command-item-radius,var(--mimi-radius-sm))]',
-  'transition-[background-color] duration-100 ease-[ease] active:scale-[0.99]',
+  'transition-[background-color] duration-100 ease-[ease] active:scale-(--mimi-press-scale)',
   'data-[active=true]:bg-[color:var(--mimi-command-active,var(--mimi-accent))]',
   'aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
 );
