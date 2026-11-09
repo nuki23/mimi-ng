@@ -2,9 +2,9 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
-## Por publicar
+## 0.5.0 (09/11/2026): datos y páginas
 
-Sin versión todavía: sale en la siguiente que se publique.
+Cuatro componentes de datos nuevos, la pantalla de clientes (`table-01`) y un cambio en cómo `ng g mimi` genera las pantallas (**RUPTURA**, abajo: «Los Blocks de pantalla se generan como páginas tuyas»).
 
 ### Grupo 3: datos (cuatro componentes y la pantalla de clientes)
 
@@ -18,7 +18,11 @@ Cuatro componentes nuevos y un Block. Todo es aditivo: no cambia nada de lo publ
 - **Tokens:** las variables `--mimi-tree-*`, `--mimi-sortable-*`, `--mimi-command-*` y `--mimi-table-*` (con su tipo en `provideMimiTheme`: `tree`, `sortable`, `command` y `dataTable`), en las páginas de cada componente.
 - **Textos:** cada componente trae `provideMimi<Nombre>Text(MIMI_<NOMBRE>_TEXT_ES)`, como los demás.
 - **Si ya los tienes:** `Checkbox` exporta ahora los estilos de su casilla (`MIMI_CHECKBOX_BOX_STYLES`) para el Tree; no cambia su aspecto ni su API. Solo importa si pides el Tree (lo usa): si modificaste `checkbox.ts`, `ng g mimi` no lo reemplaza (te avisa, como siempre) y el Tree no compilará hasta que agregues esa exportación a mano o uses `--overwrite` (que reemplaza tu Checkbox).
-- **Cómo actualizar desde la 0.4.0:** `npm i -D @mimi-ng/cli@<versión>` y `ng g mimi <los componentes que usas>`. Nada que migrar; los componentes nuevos son opcionales.
+- **Arreglos de la revisión de la puerta del grupo** (los componentes son nuevos en esta versión, así que no cambian nada publicado):
+  - **Data Table:** la selección se poda al buscar o filtrar (la barra de acciones no cuenta filas ocultas); en modo servidor la página se ajusta si el total baja y el rango nunca muestra «desde» mayor que «hasta»; el `id` del detalle sigue al id de la fila y no al índice de la página; sin `rowId` ni `id` en las filas se identifican por el objeto, sin el error NG0955, y avisa en desarrollo; la sombra de la columna fija va del lado correcto en RTL; la tabla usa propiedades lógicas para RTL (salvo el relleno de la barra y del pie y el margen del botón de orden, que siguen físicos: tarea M.24); las filas ya no llevan `aria-selected`.
+  - **Tree:** el teclado no intercepta las teclas de un campo o botón dentro del nodo; `load()` no escribe señales después de destruirse el árbol.
+  - **Sortable List:** Escape durante un agarre con teclado no sube al diálogo que la contenga; sin `trackBy` y con elementos repetidos se identifican por su lugar, sin NG0955, y avisa en desarrollo.
+- **Cómo actualizar desde la 0.4.0:** `npm i -D @mimi-ng/cli@0.5.0` y `ng g mimi <los componentes que usas>`. Nada que migrar salvo lo de las pantallas (abajo); los componentes nuevos son opcionales.
 
 ### Los Blocks de pantalla se generan como páginas tuyas (B.11)
 
