@@ -96,14 +96,23 @@ export class DialogPage {
   protected readonly usageService = [
     "import { MIMI_DIALOG_DATA, MimiDialogRef, MimiDialogService } from '@/components/ui/dialog';",
     '',
-    '// Quien abre:',
-    'const ref = inject(MimiDialogService).open<string>(RenameProjectDialog, { data: project });',
-    'ref.afterClosed().subscribe((name) => { /* undefined si se canceló */ });',
+    '// Quien abre: tu componente (con su HTML, CSS y TS), tamaño y los datos que quieras.',
+    'const ref = inject(MimiDialogService).open<string>(RenameProjectDialog, {',
+    "  size: 'sm', // 'sm' 360px | 'md' 420px (por defecto) | 'lg' 560px; se adapta a pantallas chicas",
+    "  inputs: { title: 'Renombrar proyecto', project }, // las entradas de tu componente",
+    "  padding: '12px', // relleno de la cabecera, el cuerpo y el pie (opcional)",
+    "  panelClass: 'rounded-xl', // clases del panel (opcional)",
+    '});',
+    'ref.closed.subscribe((name) => { /* undefined si se canceló */ });',
     '',
-    '// Dentro de RenameProjectDialog:',
-    'project = inject<Project>(MIMI_DIALOG_DATA);',
-    'ref = inject<MimiDialogRef<string>>(MimiDialogRef);',
+    '// Dentro de RenameProjectDialog: entradas normales y ref.close(resultado).',
+    "title = input('');",
+    'project = input.required<Project>();',
+    'private ref = inject<MimiDialogRef<string>>(MimiDialogRef);',
     "save() { this.ref.close('Nombre nuevo'); }",
+    '',
+    '// Otra forma de pasar datos: data, con inject(MIMI_DIALOG_DATA).',
+    '// open(RenameProjectDialog, { data: project })  →  project = inject<Project>(MIMI_DIALOG_DATA);',
   ].join('\n');
 
   protected readonly depsCss = [
@@ -172,10 +181,32 @@ export class DialogPage {
       description: 'Ancho máximo. Nunca supera el ancho de la pantalla menos 32px.',
     },
     {
-      name: 'class',
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description:
+        'Ancho del panel: sm 360px, md 420px (el de siempre) o lg 560px; baja a la pantalla menos 32px. width y maxWidth mandan sobre él.',
+    },
+    {
+      name: 'padding',
+      type: 'string',
+      default: '24px (16px en sm)',
+      description:
+        'Relleno lateral de la cabecera, el cuerpo y el pie (un valor CSS, la variable --mimi-dialog-padding).',
+    },
+    {
+      name: 'inputs',
+      type: 'Record<string, unknown>',
+      default: '—',
+      description:
+        'Solo con un componente: los valores de sus entradas (input()), asignados antes de pintarse. Alternativa a data con inject(MIMI_DIALOG_DATA).',
+    },
+    {
+      name: 'class / panelClass',
       type: 'string',
       default: "''",
-      description: 'Clases del panel, mezcladas con cn(): tus clases ganan.',
+      description:
+        'Clases del panel, mezcladas con cn(): tus clases ganan. panelClass es el nombre de cdk Dialog; si das las dos, gana class.',
     },
     {
       name: 'closeOnEscape',
@@ -240,9 +271,14 @@ export class DialogPage {
       description: 'Cierra el diálogo, con un resultado opcional.',
     },
     {
-      name: 'MimiDialogRef.afterClosed()',
+      name: 'MimiDialogRef.closed / afterClosed()',
       description:
-        'Observable que emite una vez, con el resultado, cuando el diálogo ya se cerró (undefined si se canceló).',
+        'Observable que emite una vez, con el resultado, cuando el diálogo ya se cerró (undefined si se canceló). `closed` es el nombre de cdk Dialog y `afterClosed()` el de siempre: son lo mismo.',
+    },
+    {
+      name: 'MimiDialogRef.result',
+      description:
+        'El resultado como señal: undefined hasta que el diálogo se cierra con close(resultado).',
     },
     {
       name: '<mimi-dialog> [(open)] y (closed)',

@@ -149,7 +149,7 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/overlay"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/overlay", "utils/size"]
     },
     "tabs": {
       "type": "component",
