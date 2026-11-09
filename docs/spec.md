@@ -665,7 +665,7 @@ Idempotente: `ng g mimi button` dos veces no cambia nada ni vuelve a instalar.
 }
 ```
 
-(La versión `0.5.0` del ejemplo es ilustrativa: la B.11 sale en la siguiente versión que se publique.)
+(La B.11 sale en la 0.5.0, la versión del ejemplo; `pricing-01` es una sección y conserva la versión con la que se instaló.)
 
 **Alias válidos (M2, desde la 0.4.0):** `aliases.components`, `aliases.blocks` y `aliases.pages` (B.11), y `path` de una página en `blocks`, son rutas relativas a la raíz del workspace y dentro de ella. `init` y `ng g mimi` fallan antes de escribir nada, con «mimi.json → aliases.blocks es una ruta absoluta: "C:\\proyecto\\blocks". Usa una ruta relativa a la raíz del workspace y dentro de ella (por ejemplo "src/app/blocks"). No se cambió nada.», si un alias es absoluto (`/x`, `C:\x`, `~/x`), tiene `..`, está vacío o apunta a la raíz (antes, `C:\x` creaba una carpeta «C:» en el proyecto). Pruebas: `blocks.spec.ts`, «M2».
 

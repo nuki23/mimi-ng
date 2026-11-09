@@ -86,7 +86,7 @@ export class InstallationPage {
     '    "pages": "src/app/pages"',
     '  },',
     '  "components": {',
-    '    "button": { "version": "0.4.0" }',
+    '    "button": { "version": "0.5.0" }',
     '  }',
     '}',
   ].join('\n');
