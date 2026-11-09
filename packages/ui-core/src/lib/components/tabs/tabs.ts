@@ -61,6 +61,15 @@ export interface MimiTabLike {
 /** @internal */
 export const MIMI_TAB = new InjectionToken<MimiTabLike>('MIMI_TAB');
 
+/** Lo que un `<mimi-tab>` le pide a su `mimi-tabs`: las pestañas, para el índice y los repetidos. @internal */
+export interface MimiTabGroup {
+  readonly tabs: Signal<readonly MimiTabLike[]>;
+  warnMissingValue(label: string, value: string): void;
+}
+
+/** @internal */
+export const MIMI_TAB_GROUP = new InjectionToken<MimiTabGroup>('MIMI_TAB_GROUP');
+
 /**
  * Una pestaña: `<ng-template mimiTab="cuenta" label="Cuenta">contenido del panel</ng-template>`.
  * El contenido no se crea hasta que la pestaña se elige.
@@ -105,18 +114,35 @@ export class MimiTabElement implements MimiTabLike {
   readonly label = input('');
   readonly count = input<number | string | null | undefined>(undefined);
   readonly disabled = input(false, { transform: booleanAttribute });
-  /** El valor: el dado o, sin él, el `label` en minúsculas, sin tildes y con guiones. */
-  readonly value = computed(
-    () =>
-      this.valueInput() ||
-      this.label()
-        .normalize('NFD')
-        .replace(/[̀-ͯ]/g, '')
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, ''),
+  private readonly group = inject(MIMI_TAB_GROUP, { optional: true });
+  /** El `label` en minúsculas, sin tildes y con guiones; vacío si no tiene letras latinas ni dígitos. */
+  private readonly slug = computed(() =>
+    this.label()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, ''),
   );
+  /**
+   * El valor: el dado o, sin él, el `label` en minúsculas y con guiones. Si el label no da un valor
+   * (sin letras latinas ni dígitos), el índice de la pestaña; si el valor ya lo tiene una pestaña
+   * anterior, un sufijo (`facturacion`, `facturacion-2`). Sin `value` y con uno de esos dos casos,
+   * avisa en desarrollo (una vez por grupo de pestañas).
+   */
+  readonly value = computed(() => {
+    const given = this.valueInput();
+    if (given) return given;
+    const tabs = this.group?.tabs() ?? [];
+    const index = Math.max(0, tabs.indexOf(this));
+    const base = this.slug() || String(index);
+    const taken = new Set(tabs.slice(0, index).map((tab) => tab.value()));
+    let value = base;
+    for (let n = 2; taken.has(value); n++) value = `${base}-${n}`;
+    if (value !== this.slug()) this.group?.warnMissingValue(this.label(), value);
+    return value;
+  });
   private readonly content = viewChild.required(TemplateRef);
   /** Uso interno: el contenido del panel. */
   get template(): TemplateRef<unknown> {
@@ -272,6 +298,7 @@ const COUNT_CLASSES =
  */
 @Component({
   selector: 'mimi-tabs',
+  providers: [{ provide: MIMI_TAB_GROUP, useExisting: forwardRef(() => MimiTabs) }],
   imports: [Tabs, TabList, Tab, TabPanel, TabContent, MimiTabsOutlet],
   template: `
     <div ngTabs class="contents">
@@ -366,7 +393,7 @@ const COUNT_CLASSES =
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MimiTabs {
+export class MimiTabs implements MimiTabGroup {
   private readonly document = inject(DOCUMENT);
 
   /** La pestaña elegida. Admite `[(value)]`. */
@@ -385,7 +412,19 @@ export class MimiTabs {
   /** Clases de los paneles. */
   readonly panelClass = input('');
 
-  protected readonly tabs = contentChildren(MIMI_TAB);
+  /** Uso interno (lo lee `<mimi-tab>` para su índice y los valores repetidos). */
+  readonly tabs = contentChildren(MIMI_TAB);
+
+  private warnedMissing = false;
+  /** Uso interno: aviso en desarrollo de un `<mimi-tab>` sin `value` cuyo valor no sale limpio del label. */
+  warnMissingValue(label: string, value: string): void {
+    if (!isDevMode() || this.warnedMissing) return;
+    this.warnedMissing = true;
+    console.warn(
+      `[Mimi] Tabs: <mimi-tab label="${label}"> no tiene value y su label no da un valor único: ` +
+        `usa «${value}». Pon value="…" en la pestaña.`,
+    );
+  }
   private readonly labels = contentChildren(MimiTabLabel);
   private readonly list = viewChild<ElementRef<HTMLElement>>('list');
 
