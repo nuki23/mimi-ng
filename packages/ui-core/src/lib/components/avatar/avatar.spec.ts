@@ -23,7 +23,7 @@ import type { AvatarSize } from './avatar.variants';
   `,
 })
 class Host {
-  readonly size = signal<AvatarSize>('default');
+  readonly size = signal<AvatarSize>('md');
   readonly src = signal<string | null>('/avatars/avatar-1.svg');
   readonly extra = signal('');
   readonly imgExtra = signal('');
@@ -53,7 +53,7 @@ describe('MimiAvatar', () => {
 
   it.each<[AvatarSize, string, string]>([
     ['sm', 'size-[var(--mimi-avatar-size-sm,2rem)]', 'text-xs'],
-    ['default', 'size-[var(--mimi-avatar-size,2.5rem)]', 'text-sm'],
+    ['md', 'size-[var(--mimi-avatar-size,2.5rem)]', 'text-sm'],
     ['lg', 'size-[var(--mimi-avatar-size-lg,3.5rem)]', 'text-lg'],
   ])('tamaño %s', async (size, box, text) => {
     const { host, avatar, update } = await setup();

@@ -86,6 +86,7 @@ describe('mimi (alias ui)', () => {
         'utils/cn.ts',
         'utils/control-styles.ts',
         'utils/field-state.ts',
+        'utils/size.ts',
       ].sort(),
     );
     expect(result.readContent(`/${UI}/utils/field-state.ts`)).toBe(

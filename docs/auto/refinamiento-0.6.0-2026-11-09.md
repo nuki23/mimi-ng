@@ -94,3 +94,15 @@ for (const [file, edits] of Object.entries(plan)) {
 for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text);
 console.log('listo', Object.keys(out).length, 'archivos');
 ```
+
+## R.1 Escala común de tamaños (hecha en parte)
+
+**Hecho:** `utils/size.ts` (nuevo, sin `@angular/forms`): `MimiSize = 'sm' | 'md' | 'lg'`, `MIMI_SIZE`, la directiva **`mimiSize`** (`<form mimiSize="sm">` da el tamaño a todos los controles de dentro; el `size` propio gana; el contenedor más cercano gana) y `injectMimiSize` (propio → contenedor → `md`). **Button, Input y Avatar:** la variante `default` pasa a `md` (RUPTURA suave), `default` sigue aceptándose como alias con un aviso en desarrollo («`[Mimi] Size: …`», una vez por componente; se quita en la 0.7.0); `data-size` muestra el tamaño resuelto; Button conserva `icon` sin heredarlo. Registro de la CLI: ítem `utils/size` y dependencia en `avatar`, `button` e `input` (las pruebas de la CLI lo exigen). Las tablas de la API del sitio (Button, Input, Avatar) al día.
+
+**RUPTURA para el CHANGELOG de la puerta:** `size="default"` de Button, Input y Avatar → `md` (alias hasta la 0.7.0); el valor por defecto de `size` ya no es `'default'` sino «sin valor» (hereda de `mimiSize` o `md`); `ButtonSize`, `InputSize` y `AvatarSize` ya no incluyen `default`.
+
+**Pruebas:** `utils/size.spec.ts` (herencia, el propio gana, el contenedor más cercano, alias y aviso, misma altura de Button e Input en `sm`), specs de Button, Input y Avatar al día, `registry.spec.ts` y `ui.spec.ts`. ui-core 921, docs 192, CLI 202, en verde.
+
+**Bundle:** JS inicial 333,31 → **333,95 kB** (+0,64: `size.ts` entra por Button) / 106,25 → 106,54 gzip; CSS global 170,83 kB (sin cambio).
+
+**No hecho (queda abierta, `[~]`):** Progress y Pagination (R.8); la página «Tamaños» del sitio; la tabla «qué cambia el tamaño» de la spec; tokens de texto, padding e ícono por tamaño (se mantienen los de cada componente).

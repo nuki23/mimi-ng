@@ -119,8 +119,8 @@ export class InputPage {
   protected readonly inputApi: ApiRow[] = [
     {
       name: 'size',
-      type: "'sm' | 'default' | 'lg'",
-      default: "'default'",
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md' (o el del contenedor con mimiSize)",
       description:
         'Alto y tamaño de letra, iguales a los de Button. Reemplaza al atributo nativo size de <input> (el ancho en caracteres): para el ancho, usa class.',
     },

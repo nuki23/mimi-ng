@@ -23,7 +23,7 @@ import type { InputSize } from './input.variants';
   `,
 })
 class Host {
-  readonly size = signal<InputSize>('default');
+  readonly size = signal<InputSize>('md');
   readonly showError = signal<boolean | undefined>(undefined);
   readonly reactiveShowError = signal<boolean | undefined>(undefined);
   readonly extra = signal('');
@@ -64,7 +64,7 @@ describe('MimiInput', () => {
     const { get } = await setup();
     const el = get('plain');
     expect(el.tagName).toBe('INPUT');
-    expect(el.dataset['size']).toBe('default');
+    expect(el.dataset['size']).toBe('md');
     expect(el.classList).toContain(
       'h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))]',
     );

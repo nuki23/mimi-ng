@@ -125,8 +125,7 @@ export const buttonVariants = cva(
         danger: '',
       },
       size: {
-        default:
-          'h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))] gap-[var(--mimi-btn-gap,0.5rem)] px-[var(--mimi-btn-px,var(--mimi-btn-padding-x,1rem))] text-[length:var(--mimi-btn-font-size,0.875rem)]',
+        md: 'h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))] gap-[var(--mimi-btn-gap,0.5rem)] px-[var(--mimi-btn-px,var(--mimi-btn-padding-x,1rem))] text-[length:var(--mimi-btn-font-size,0.875rem)]',
         sm: 'h-[var(--mimi-btn-height-sm,var(--mimi-control-height-sm,2rem))] gap-1.5 px-3 text-[13px]',
         lg: 'h-[var(--mimi-btn-height-lg,var(--mimi-control-height-lg,3rem))] gap-2 px-6 text-[15px]',
         icon: 'size-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))] p-0',
@@ -142,9 +141,9 @@ export const buttonVariants = cva(
         })),
       ),
       // El enlace del diseño solo tiene 4px de padding horizontal.
-      { variant: 'link', size: ['default', 'sm', 'lg'], class: 'px-1' },
+      { variant: 'link', size: ['md', 'sm', 'lg'], class: 'px-1' },
     ],
-    defaultVariants: { variant: 'solid', tone: 'primary', size: 'default' },
+    defaultVariants: { variant: 'solid', tone: 'primary', size: 'md' },
   },
 );
 

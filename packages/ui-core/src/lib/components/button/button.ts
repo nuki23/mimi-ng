@@ -12,6 +12,7 @@ import {
   isDevMode,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
+import { type MimiSizeInput, injectMimiSize } from '@/components/ui/utils/size';
 import {
   type ButtonSize,
   type ButtonTone,
@@ -68,7 +69,7 @@ let warnedShortcutWithTone = false;
     '[class]': 'classes()',
     '[attr.data-variant]': 'resolved().variant',
     '[attr.data-tone]': 'resolved().tone',
-    '[attr.data-size]': 'size()',
+    '[attr.data-size]': 'sizeResolved()',
     '[attr.data-loading]': 'loading() ? "" : null',
     '[attr.data-disabled]': 'isDisabled() ? "" : null',
     '[attr.disabled]': 'isNativeButton && isDisabled() ? "" : null',
@@ -81,7 +82,19 @@ export class MimiButton {
   /** Incluye los atajos de la 0.1.x (`ButtonVariantShortcut`, deprecados). */
   readonly variant = input<ButtonVariant>('solid');
   readonly tone = input<ButtonTone>();
-  readonly size = input<ButtonSize>('default');
+  /**
+   * `sm | md | lg | icon`. Sin `size`, el del contenedor `mimiSize` o `md`. `default` es el nombre
+   * viejo de `md` (se quita en la 0.7.0).
+   */
+  readonly size = input<ButtonSize | 'default'>();
+  /** El tamaño de verdad: el propio, el del contenedor o `md` (`icon` no se hereda). */
+  protected readonly sizeResolved = (() => {
+    const inherited = injectMimiSize(
+      computed(() => (this.size() === 'icon' ? undefined : (this.size() as MimiSizeInput))),
+      'MimiButton',
+    );
+    return computed<ButtonSize>(() => (this.size() === 'icon' ? 'icon' : inherited()));
+  })();
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly loading = input(false, { transform: booleanAttribute });
   readonly userClass = input('', { alias: 'class' });
@@ -109,7 +122,7 @@ export class MimiButton {
       buttonVariants({
         variant: this.resolved().variant,
         tone: this.resolved().tone,
-        size: this.size(),
+        size: this.sizeResolved(),
       }),
       // El diseño deshabilitado no tiene sombra; cargando la conserva.
       this.disabled() && !this.loading() && 'shadow-none',

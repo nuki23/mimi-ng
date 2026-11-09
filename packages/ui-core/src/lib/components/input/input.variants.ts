@@ -28,12 +28,11 @@ export const inputVariants = cva(
     variants: {
       size: {
         sm: 'h-[var(--mimi-input-height-sm,var(--mimi-control-height-sm,2rem))] text-[13px]',
-        default:
-          'h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))] text-[length:var(--mimi-input-font-size,0.875rem)]',
+        md: 'h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))] text-[length:var(--mimi-input-font-size,0.875rem)]',
         lg: 'h-[var(--mimi-input-height-lg,var(--mimi-control-height-lg,3rem))] text-[15px]',
       },
     },
-    defaultVariants: { size: 'default' },
+    defaultVariants: { size: 'md' },
   },
 );
 

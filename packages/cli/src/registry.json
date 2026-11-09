@@ -22,6 +22,10 @@
         "@angular/forms": "^22.0.0"
       }
     },
+    "utils/size": {
+      "type": "util",
+      "files": ["utils/size.ts"]
+    },
     "utils/overlay": {
       "type": "util",
       "files": ["utils/overlay.ts"],
@@ -71,7 +75,7 @@
       "dependencies": {
         "class-variance-authority": "^0.7.1"
       },
-      "registryDependencies": ["utils/cn"]
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "badge": {
       "type": "component",
@@ -95,7 +99,7 @@
       "dependencies": {
         "class-variance-authority": "^0.7.1"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "card": {
       "type": "component",
@@ -448,7 +452,12 @@
       "dependencies": {
         "class-variance-authority": "^0.7.1"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/size"
+      ]
     },
     "popover": {
       "type": "component",

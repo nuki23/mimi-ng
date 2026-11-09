@@ -11,11 +11,11 @@ export const avatarVariants = cva(
     variants: {
       size: {
         sm: 'size-[var(--mimi-avatar-size-sm,2rem)] text-xs',
-        default: 'size-[var(--mimi-avatar-size,2.5rem)] text-sm',
+        md: 'size-[var(--mimi-avatar-size,2.5rem)] text-sm',
         lg: 'size-[var(--mimi-avatar-size-lg,3.5rem)] text-lg',
       },
     },
-    defaultVariants: { size: 'default' },
+    defaultVariants: { size: 'md' },
   },
 );
 

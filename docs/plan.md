@@ -131,7 +131,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 **0.6.0** (detalle: [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)):
 
 - [ ] R.0 Tema de marca (escala de violeta en OKLCH desde `#793EEA`, primario `#793EEA` en claro y `#A88FFF` en oscuro, contrastes AA con prueba; logo y favicon del sitio) · v0.6.0 · L · depende: archivos del usuario (solo el sitio) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.1 Escala común de tamaños `sm/md/lg` (tema, tipo, herencia `mimiSize`; `default` → `md`, RUPTURA con alias) · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [~] R.1 (hecha en parte, 09/11/2026: tipo, `mimiSize`, alias en Button, Input y Avatar; faltan Progress y Pagination, a R.8) Escala común de tamaños `sm/md/lg` (tema, tipo, herencia `mimiSize`; `default` → `md`, RUPTURA con alias) · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.2 Tamaños en los controles de formulario · v0.6.0 · L · depende: R.1, R.9 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.3 Switch y Checkbox: páginas separadas y tamaños · v0.6.0 · S · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.4 Toast: tamaños (por defecto y por aviso) · v0.6.0 · M · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)

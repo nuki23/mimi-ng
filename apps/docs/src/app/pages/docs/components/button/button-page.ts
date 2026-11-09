@@ -99,9 +99,10 @@ export class ButtonPage {
     },
     {
       name: 'size',
-      type: "'default' | 'sm' | 'lg' | 'icon'",
-      default: "'default'",
-      description: 'Tamaño. icon es cuadrado y necesita aria-label.',
+      type: "'sm' | 'md' | 'lg' | 'icon'",
+      default: "'md' (o el del contenedor con mimiSize)",
+      description:
+        'Tamaño. icon es cuadrado y necesita aria-label. `default` es el nombre viejo de `md` (se quita en la 0.7.0).',
     },
     {
       name: 'disabled',
