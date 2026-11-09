@@ -15,11 +15,7 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
 
-Tres, **del usuario, de gusto: no se adoptan por defecto** (aunque la sesión sea en modo autónomo), cada una con 2 o 3 opciones, ejemplos de código y recomendación en [refinamiento/decisiones-usuario.md](refinamiento/decisiones-usuario.md) (09/11/2026):
-
-- **PD-1 Diseño de Card** (R.19, 0.7.0): A solo superficie `mimiCard`, B superficie + piezas opcionales como directivas, C un componente con entradas. Recomendación: B.
-- **PD-2 API de Table y Data Table** (R.20, 0.7.0): A dos capas separadas, B columnas como directivas, C estado «headless» + directivas de estilo (la Data Table por datos queda como atajo). Recomendación: C.
-- **PD-3 API de los mensajes de error de Form Field** (R.14, 0.6.0): A `[errors]` en el campo, B el mensaje viaja con el validador (`withMessage`; Signal Forms ya lo hace), C varios `mimi-form-error` por clave. Recomendación: A + B.
+Ninguna abierta. Las tres de gusto del plan de refinamiento (PD-1, PD-2 y PD-3) las **decidió el usuario el 09/11/2026** y salieron de este índice: PD-1 Card, opción B; PD-2 Table y Data Table, opción C; PD-3 mensajes de error de Form Field, opciones A + B. Quedan como «Decidido por el usuario» en [refinamiento/decisiones-usuario.md](refinamiento/decisiones-usuario.md), en las tareas R.14, R.19 y R.20 y en `docs/auto/decisiones-por-defecto.md`.
 
 **(b) Se deciden al empezar su tarea.**
 

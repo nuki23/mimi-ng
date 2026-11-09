@@ -136,6 +136,14 @@ Rama `auto/blocks-paginas-2026-11-07`. El diseño lo dio el usuario en el prompt
 | B.11-h | `ng g mimi login-01` en un proyecto sin la pantalla | Crea la página en `aliases.pages` (antes, `src/app/blocks/login-01/` con `Login01` y `mimi-login-01`)                                                           | El prompt                                                | **Sí**  |          |
 | B.11-i | `source(none)`                                      | `init` y `ng g mimi` agregan el `@source` de la carpeta de páginas                                                                                              | Más simple (la regla G1)                                 | No      |          |
 
+## Decididas por el usuario: refinamiento (09/11/2026)
+
+No son decisiones por defecto: el usuario eligió las opciones de `docs/plan/refinamiento/decisiones-usuario.md` en el prompt de la rama `auto/refinamiento-0.6.0-2026-11-09`.
+
+- **PD-1 Card (R.19, 0.7.0): opción B.** Superficie `mimiCard` (sobre cualquier elemento) más piezas opcionales como directivas (`mimiCardHeader`, `mimiCardTitle`, `mimiCardDescription`, `mimiCardContent`, `mimiCardFooter`) con un solo padding. Base: «Decidido por el usuario».
+- **PD-2 Table y Data Table (R.20, 0.7.0): opción C.** Estado «headless» (`mimiTableState`) más directivas de estilo (`mimiTable`…); la Data Table por datos queda como atajo. Base: «Decidido por el usuario».
+- **PD-3 Mensajes de error de Form Field (R.14, 0.6.0): opciones A + B.** `[errors]` en el campo (mapa clave → texto o función) y el mensaje que viaja con el validador (`withMessage` en Reactive Forms; en Signal Forms ya funciona). Prioridad: `<mimi-form-error>` explícito > `message` del validador > `[errors]` del campo > `provideMimiErrorMessages` > predeterminado. Base: «Decidido por el usuario».
+
 ## Decididas por el usuario: Blocks 0.4.0 (07/11/2026)
 
 No son decisiones por defecto: el usuario adoptó las 20 recomendaciones de «Blocks 0.4.0» (`docs/plan/decisiones.md`) al aprobar el plan de la 0.4.0, en el prompt de la rama `auto/blocks-0.4.0-2026-11-06`. Se registran aquí para que estén todas en un lugar; cada una está en su tarea como «Decidido por el usuario (07/11/2026…)». Ninguna es RUPTURA (la B.10 es una entrada nueva con el valor de antes por defecto).

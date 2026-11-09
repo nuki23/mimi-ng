@@ -126,7 +126,7 @@ Cerrado (puerta G3.P, revisada por el usuario; **0.5.0 publicada el 09/11/2026**
 
 ## Refinamiento → v0.6.0 y v0.7.0 (plan del 09/11/2026, sin empezar)
 
-Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio «uso corto por defecto, composición cuando la necesites», reparto, orden y rupturas). Origen: las peticiones del usuario tras probar la 0.5.0 ([peticiones-usuario.md](plan/refinamiento/peticiones-usuario.md)). **Tres decisiones son del usuario y no se adoptan por defecto:** PD-1 Card, PD-2 API de Table/Data Table y PD-3 API de los mensajes de error de Form Field ([decisiones-usuario.md](plan/refinamiento/decisiones-usuario.md)). Combobox y Select: [combobox-vs-select.md](plan/refinamiento/combobox-vs-select.md).
+Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio «uso corto por defecto, composición cuando la necesites», reparto, orden y rupturas). Origen: las peticiones del usuario tras probar la 0.5.0 ([peticiones-usuario.md](plan/refinamiento/peticiones-usuario.md)). **Tres decisiones del usuario (09/11/2026, ya tomadas):** PD-1 Card, opción B; PD-2 API de Table/Data Table, opción C; PD-3 API de los mensajes de error de Form Field, opciones A + B ([decisiones-usuario.md](plan/refinamiento/decisiones-usuario.md)). Combobox y Select: [combobox-vs-select.md](plan/refinamiento/combobox-vs-select.md).
 
 **0.6.0** (detalle: [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)):
 
@@ -144,7 +144,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [ ] R.11 Blocks en carga: todo deshabilitado · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.12 `readonly` en todos los componentes de formulario · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.13 Ejemplos de formularios (Signal Forms, Reactive, Template y Form Field) · v0.6.0 · M · depende: R.14, R.15 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.14 Form Field: atajos y mensajes de error (**PENDIENTE DE DECIDIR (usuario): PD-3**) · v0.6.0 · M · depende: PD-3, R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [ ] R.14 Form Field: atajos y mensajes de error (PD-3, decidido por el usuario el 09/11/2026: opciones A + B) · v0.6.0 · M · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.15 Select: `mimi-option` e íconos de limpiar y carga sobre el chevron · v0.6.0 · L · depende: M.9 (conviene) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.16 Combobox con la misma API que Select · v0.6.0 · M · depende: R.15, M.9 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [ ] R.17 Tabs: atajo `<mimi-tab label>` · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
@@ -154,8 +154,8 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 
 **0.7.0** (detalle: [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)):
 
-- [ ] R.19 Card como superficie `mimiCard` (**PENDIENTE DE DECIDIR (usuario): PD-1**) · v0.7.0 · M · depende: PD-1, R.1, R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [ ] R.20 Table de directivas y Data Table fácil de llenar (**PENDIENTE DE DECIDIR (usuario): PD-2**) · v0.7.0 · L · depende: PD-2, R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.19 Card como superficie `mimiCard` (PD-1, decidido por el usuario el 09/11/2026: opción B) · v0.7.0 · M · depende: R.1, R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.20 Table de directivas y Data Table fácil de llenar (PD-2, decidido por el usuario el 09/11/2026: opción C) · v0.7.0 · L · depende: R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.21 Sortable List con listas conectadas · v0.7.0 · L · depende: R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.22 Block `kanban-01` · v0.7.0 · M · depende: R.21, R.19 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.23 Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
