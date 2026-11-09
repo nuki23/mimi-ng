@@ -161,6 +161,29 @@ describe('MimiInputOtp', () => {
     expect(host.code()).toBe('ab12');
   });
 
+  it('R.18: 10 casillas: maxlength, pegado largo, separadores en lista y casillas que se encogen', async () => {
+    const { host, fixture, boxes, part, input, type } = await setup();
+    host.length.set(10);
+    host.after.set([3, 6] as unknown as number);
+    await settle(fixture);
+    expect(boxes('plain').length).toBe(10);
+    expect(input('plain').getAttribute('maxlength')).toBe('10');
+    const separators = part('plain').querySelectorAll('[data-slot="separator"]');
+    expect(separators.length).toBe(2);
+    expect(separators[0].previousElementSibling).toBe(boxes('plain')[2]);
+    expect(separators[1].previousElementSibling).toBe(boxes('plain')[5]);
+    // Un código más largo que la longitud se recorta.
+    await type('plain', '12345678901234');
+    expect(host.code()).toBe('1234567890');
+    // Con muchas casillas no desborda: las casillas se encogen y la fila no pasa del ancho del padre.
+    expect(
+      boxes('plain').every(
+        (b) => b.classList.contains('min-w-0') && b.classList.contains('shrink'),
+      ),
+    ).toBe(true);
+    expect(part('plain').classList).toContain('max-w-full');
+  });
+
   it('class del usuario en la fila', async () => {
     const { host, fixture, part } = await setup();
     host.extra.set('gap-4');

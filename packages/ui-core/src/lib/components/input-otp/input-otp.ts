@@ -28,7 +28,7 @@ import {
  */
 
 const BOX_BASE =
-  'relative flex shrink-0 items-center justify-center border font-semibold tabular-nums text-foreground mimi-transition w-[var(--mimi-otp-width,46px)] h-[var(--mimi-otp-height,54px)] rounded-[var(--mimi-otp-radius,var(--mimi-radius,0.75rem))] text-[length:var(--mimi-otp-font-size,22px)] bg-[color:var(--mimi-otp-bg,var(--mimi-input-background))]';
+  'relative flex min-w-0 shrink items-center justify-center border font-semibold tabular-nums text-foreground mimi-transition w-[var(--mimi-otp-width,46px)] h-[var(--mimi-otp-height,54px)] rounded-[var(--mimi-otp-radius,var(--mimi-radius,0.75rem))] text-[length:var(--mimi-otp-font-size,22px)] bg-[color:var(--mimi-otp-bg,var(--mimi-input-background))]';
 /** Borde y anillo de cada casilla según el estado (elegidos en TypeScript: menos CSS global). */
 const BOX_STATE = {
   idle: 'border-[color:var(--mimi-otp-border,var(--mimi-input))]',
@@ -116,10 +116,17 @@ export class MimiInputOtp implements FormValueControl<string>, MimiFieldControl 
   readonly value = model('');
   /** Cuántas casillas (6 en el diseño). */
   readonly length = input(6, { transform: numberAttribute });
-  /** Después de qué casilla va el guion (3 en el diseño). Sin él, no hay guion. */
-  readonly separatorAfter = input<number | undefined, unknown>(undefined, {
-    transform: (v: unknown) =>
-      v === null || v === undefined || v === '' ? undefined : numberAttribute(v),
+  /**
+   * Después de qué casilla va el guion (3 en el diseño), o una lista (`[3, 6]`, o `"3,6"`).
+   * Sin él, no hay guion.
+   */
+  readonly separatorAfter = input<readonly number[] | undefined, unknown>(undefined, {
+    transform: (v: unknown): readonly number[] | undefined => {
+      if (v === null || v === undefined || v === '') return undefined;
+      const list = Array.isArray(v) ? v : typeof v === 'string' ? v.split(',') : [v];
+      const numbers = list.map((n) => numberAttribute(n)).filter((n) => Number.isFinite(n));
+      return numbers.length ? numbers : undefined;
+    },
   });
   /** Letras y dígitos (algunos códigos los tienen). Por defecto, solo dígitos. */
   readonly alphanumeric = input(false, { transform: booleanAttribute });
@@ -179,7 +186,7 @@ export class MimiInputOtp implements FormValueControl<string>, MimiFieldControl 
       const active = this.focused() && !this.disabled() && i === activeIndex && !status;
       return {
         char: chars[i] ?? '',
-        separator: after !== undefined && after > 0 && after < length && i === after,
+        separator: !!after && i > 0 && i < length && after.includes(i),
         active,
         caret: active && !chars[i],
         classes: cn(BOX_BASE, BOX_STATE[status ?? (active ? 'active' : 'idle')]),
@@ -189,7 +196,8 @@ export class MimiInputOtp implements FormValueControl<string>, MimiFieldControl 
 
   protected readonly classes = computed(() =>
     cn(
-      'relative inline-flex items-center gap-[var(--mimi-otp-gap,8px)] align-middle font-sans',
+      // max-w-full: con muchas casillas (length 10) las casillas se encogen en vez de desbordar.
+      'relative inline-flex max-w-full items-center gap-[var(--mimi-otp-gap,8px)] align-middle font-sans',
       'data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
       // Error: la fila se sacude una vez (sin movimiento con «reducir movimiento»).
       'data-[invalid]:animate-[mimi-shake_.4s] motion-reduce:data-[invalid]:animate-none',

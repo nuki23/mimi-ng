@@ -68,12 +68,19 @@ export class InputOtpPage {
       description:
         'El código, sin espacios ni guiones. Admite [(value)], [formField], formControlName y [(ngModel)].',
     },
-    { name: 'length', type: 'number', default: '6', description: 'Cuántas casillas.' },
+    {
+      name: 'length',
+      type: 'number',
+      default: '6',
+      description:
+        'Cuántas casillas (4, 6, 8, 10…; sin tope). Con muchas, las casillas se encogen para caber en el ancho disponible; un código pegado más largo se recorta.',
+    },
     {
       name: 'separatorAfter',
-      type: 'number',
+      type: 'number | number[]',
       default: '—',
-      description: 'Después de qué casilla va el guion (3 en el diseño). Sin él, no hay guion.',
+      description:
+        'Después de qué casilla va el guion (3 en el diseño), o una lista: [3, 6]. Sin él, no hay guion.',
     },
     {
       name: 'alphanumeric',
