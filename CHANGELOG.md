@@ -6,6 +6,10 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 
 Cuatro componentes de datos nuevos, la pantalla de clientes (`table-01`) y un cambio en cómo `ng g mimi` genera las pantallas (**RUPTURA**, abajo: «Los Blocks de pantalla se generan como páginas tuyas»).
 
+### Documentación
+
+- **Si los componentes salen sin estilos** aunque `ng build` termina bien (README de la CLI y página de Instalación): si el CSS compilado pesa mucho menos de lo normal, puede que el sistema (por ejemplo, el Control de aplicaciones de Windows) bloquee el binario nativo de Tailwind, que entonces usa un respaldo que no escanea los archivos. Las dos páginas explican cómo comprobarlo y qué hacer (permitir el binario o fijar otra versión de Tailwind). No es un cambio de Mimi.
+
 ### Grupo 3: datos (cuatro componentes y la pantalla de clientes)
 
 Cuatro componentes nuevos y un Block. Todo es aditivo: no cambia nada de lo publicado en la 0.4.0 (salvo lo que dice «Si ya los tienes», abajo). Se agregan con `ng g mimi <nombre>` y traen lo que necesitan (`@angular/cdk`, `@angular/aria`, otros componentes).

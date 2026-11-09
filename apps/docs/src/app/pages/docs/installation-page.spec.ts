@@ -31,6 +31,7 @@ describe('InstallationPage', () => {
       'files',
       'updates',
       'pnpm',
+      'no-styles',
     ]);
     // La CLI ya está publicada en npm (tarea L.6).
     expect(el.textContent).not.toContain('disponible pronto');

@@ -104,4 +104,10 @@ export class InstallationPage {
     '  lmdb: true',
     '  msgpackr-extract: true',
   ].join('\n');
+
+  protected readonly tailwindNativeCheck =
+    'node -e "require(\'./node_modules/@tailwindcss/oxide-win32-x64-msvc/tailwindcss-oxide.win32-x64-msvc.node\')"';
+
+  protected readonly tailwindPin =
+    'npm i -D --save-exact tailwindcss@4.3.3 @tailwindcss/postcss@4.3.3';
 }
