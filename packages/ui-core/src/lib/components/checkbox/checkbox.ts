@@ -61,6 +61,7 @@ export const MIMI_CHECKBOX_BOX_STYLES = cn(
       [attr.aria-checked]="indeterminate() ? 'mixed' : checked()"
       [attr.aria-invalid]="showInvalid() || null"
       [attr.aria-required]="required() || null"
+      [attr.aria-readonly]="readonly() || null"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabelledby() || null"
       [attr.data-state]="state()"
@@ -126,6 +127,8 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
   /** Estado mixto ("algunos"): gana a `checked`. Al hacer clic se marca y deja de ser mixto. */
   readonly indeterminate = model(false);
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -176,7 +179,7 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
 
   /** Alterna el estado (no hace nada si está deshabilitada). Desde mixta, pasa a marcada. */
   toggle(): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     if (this.indeterminate()) {
       this.indeterminate.set(false);
       this.checked.set(true);

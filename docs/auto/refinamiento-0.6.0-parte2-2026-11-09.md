@@ -169,6 +169,51 @@ for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text)
 
 **R.14:** `mimi-form-field` suma `description` (entre la etiqueta y el control), `hint` (debajo del control) y `required` (asterisco `aria-hidden` en la etiqueta y `aria-required` en el control); los ids de `description` y `hint` se agregan al `aria-describedby` del control **antes** del error, cada uno una sola vez, respetando los que el control ya tenía. Pruebas en rojo antes (2) y en verde después: `field-shortcuts.spec.ts`. ui-core 964, docs 195, CLI 202 en verde; tabla de la API al día. **Bundle:** CSS global 176,53 → 176,58 kB; JS inicial 333,97 / 105,79. **R.14 sigue `[~]`:** faltan los ejemplos con más elementos y el diagrama «control → primer error → texto» de la página.
 
+## R.12 `readonly` en los controles (hecha en parte: 6 de 11 que faltaban)
+
+**Ya lo tenían (comprobado):** Input Mask, Input OTP, Number Input, Tags Input; Input y Textarea por ser nativos. **Hecho ahora:** Checkbox, Switch, Select, Combobox, Date Picker y Date Range (semántica del `<input readonly>`: el valor se ve, se puede enfocar y copiar, **no cambia**, no abre su panel, **sí se envía**). Checkbox y Switch: `toggle()` ignora el clic y la barra espaciadora y el rol lleva `aria-readonly`; Select y Combobox: el `readonly` del `ngCombobox` de aria (que escribe `aria-readonly` él mismo; mi primer intento con `[attr.aria-readonly]` lo pisaba y lo vi en la prueba), el panel no se abre y Select no muestra «limpiar»; el Combobox pone además `readOnly` nativo al `<input>` y descarta el texto; Date Picker y Date Range: el Popover recibe una entrada nueva **`blocked`** (el trigger no abre el panel pero sigue enfocable; un `open` puesto desde fuera sigue funcionando). **Pruebas:** `readonly-controls.spec.ts` (3 de 3 en rojo antes de implementar, en verde después). ui-core 967, docs 195, CLI 202 en verde.
+
+**Script de edición múltiple** (la entrada `readonly` y `aria-readonly` en 6 archivos; fuera del repo, falla sin escribir si no encuentra exactamente una vez lo esperado). `git diff --stat` antes de Prettier: 6 archivos, 18 inserciones; después: igual. Texto completo:
+
+```js
+import { readFileSync, writeFileSync } from 'node:fs';
+const root = 'C:/dev/mimi-ng/packages/ui-core/src/lib/components/';
+const files = [
+  'switch/switch.ts',
+  'checkbox/checkbox.ts',
+  'select/select.ts',
+  'combobox/combobox.ts',
+  'date-picker/date-picker.ts',
+  'date-range/date-range.ts',
+];
+const INPUT = '  readonly disabled = input(false, { transform: booleanAttribute });\n';
+const ATTR = '[attr.aria-required]="required() || null"\n';
+const out = {};
+for (const file of files) {
+  let text = readFileSync(root + file, 'utf8');
+  for (const needle of [INPUT, ATTR]) {
+    const found = text.split(needle).length - 1;
+    if (found !== 1)
+      throw new Error(`${file}: «${needle.trim()}» aparece ${found} veces (se esperaba 1)`);
+  }
+  text = text.replace(
+    INPUT,
+    INPUT +
+      '  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */\n' +
+      '  readonly readonly = input(false, { transform: booleanAttribute });\n',
+  );
+  const at = text.indexOf(ATTR);
+  const indent = text.slice(text.lastIndexOf('\n', at) + 1, at);
+  text = text.replace(ATTR, ATTR + indent + '[attr.aria-readonly]="readonly() || null"\n');
+  out[file] = text;
+}
+for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text);
+```
+
+(Después se cambió a mano `[attr.aria-readonly]` por `[readonly]` en Select y Combobox, por lo dicho arriba.)
+
+**No hecho (R.12 queda `[~]`):** Slider, Color Picker, File Upload, Toggle Group y Password; el aspecto de «solo lectura» (`data-readonly`, fondo propio, `--mimi-input-readonly-bg`); el ejemplo «Solo lectura» en cada página y las filas de la API. **Bundle:** ver la medición de abajo.
+
 ## Punto exacto donde quedo
 
 Hecho: 1a, 1b, 1c, 1d, la escala en el tema (R.1), R.2, R.3, R.4, R.8 (Pagination, Progress, Tabs, Toggle Group, Badge), R.7 y los atajos de R.14. **Sigue:** R.12, R.24, R.13, R.15 y R.16 (midiendo el CSS, hoy 176,58 kB) y la puerta. (Ya no aplica la línea siguiente, de antes:) R.8 (resto de componentes y Progress/Pagination), luego 3 (R.7, R.12, R.13, R.14, R.15, R.16, R.24) y la puerta.

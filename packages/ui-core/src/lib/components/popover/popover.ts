@@ -145,6 +145,11 @@ export class MimiPopover {
 
   /** Abierto o cerrado. Admite `[(open)]`. */
   readonly open = model(false);
+  /**
+   * El trigger no abre el panel (el control de dentro está en solo lectura, R.12): sigue
+   * enfocable, y un `open` puesto desde fuera sigue funcionando.
+   */
+  readonly blocked = input(false, { transform: booleanAttribute });
   /** Lado preferido. Si no cabe, pasa al lado opuesto. */
   readonly side = input<MimiPopoverSide>('bottom');
   /** Alineación con el trigger. */
@@ -210,6 +215,7 @@ export class MimiPopover {
 
   /** Abre o cierra (lo usa el trigger). */
   toggle(): void {
+    if (this.blocked()) return;
     this.open.update((open) => !open);
   }
 

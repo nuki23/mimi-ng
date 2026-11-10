@@ -86,6 +86,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
       [arrow]="false"
       [class]="panelClasses()"
       [(open)]="open"
+      [blocked]="readonly()"
       (openChange)="onOpenChange($event)"
       aria-label="{{ texts.pickDate }}"
     >
@@ -101,6 +102,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
         [attr.aria-describedby]="valueId"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.aria-required]="required() || null"
+        [attr.aria-readonly]="readonly() || null"
         [attr.data-placeholder]="label() ? null : ''"
       >
         <svg
@@ -173,6 +175,8 @@ export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFi
   readonly format = input<Intl.DateTimeFormatOptions>(DEFAULT_FORMAT);
   readonly placeholder = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });

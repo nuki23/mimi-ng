@@ -48,6 +48,7 @@ let nextId = 0;
       [attr.aria-checked]="checked()"
       [attr.aria-invalid]="showInvalid() || null"
       [attr.aria-required]="required() || null"
+      [attr.aria-readonly]="readonly() || null"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabelledby() || null"
       [attr.data-state]="state()"
@@ -77,6 +78,8 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
   /** Encendido o apagado. Con `[(checked)]` o un formulario. */
   readonly checked = model(false);
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -132,7 +135,7 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
 
   /** Alterna el estado (no hace nada si está deshabilitado). */
   toggle(): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     this.checked.update((value) => !value);
   }
 

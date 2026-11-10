@@ -550,6 +550,7 @@ const SEARCH_INPUT_CLASSES =
         [preserveContent]="true"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.aria-required]="required() || null"
+        [readonly]="readonly()"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
         (expandedChange)="setOpen($event)"
@@ -770,6 +771,8 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   /** Cargando: spinner en el disparador y, en el panel, el estado de carga en vez de la lista. */
   readonly loading = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -894,7 +897,8 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   });
 
   protected readonly showClear = computed(
-    () => this.clearable() && !this.disabled() && this.selectedOption() !== null,
+    () =>
+      this.clearable() && !this.disabled() && !this.readonly() && this.selectedOption() !== null,
   );
 
   /** Abierto (aria-expanded). */
@@ -935,7 +939,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
 
   /** Abre o cierra. Lo llama aria (clic, ↓, Enter, Espacio, Escape, foco fuera) y Mimi. */
   protected setOpen(open: boolean): void {
-    if (open && this.disabled()) return;
+    if (open && (this.disabled() || this.readonly())) return;
     this.open.set(open);
   }
 
