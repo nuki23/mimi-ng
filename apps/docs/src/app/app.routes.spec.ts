@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { routes } from './app.routes';
+import { COMPONENTS_STYLES_WAIT_MS } from './core/components-styles';
 import { HighlighterService } from './code/highlighter.service';
 import { PAGE_EXAMPLES_TIMEOUT } from './code/code-preview.testing';
 import { DOCS_ROUTES } from './pages/docs/docs.routes';
@@ -22,6 +23,8 @@ describe('Rutas de la app', () => {
     TestBed.configureTestingModule({
       providers: [
         provideRouter(routes),
+        // jsdom no carga hojas de estilo: sin esto, la navegación esperaría el tope del guardián.
+        { provide: COMPONENTS_STYLES_WAIT_MS, useValue: 0 },
         // Sin resaltado real: el código de los ejemplos no hace falta aquí.
         {
           provide: HighlighterService,

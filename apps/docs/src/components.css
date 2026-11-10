@@ -1,0 +1,24 @@
+/* Hoja de las páginas de componentes (/docs/components/…; mantenimiento M.23): las clases de los
+   ejemplos y de los componentes que solo usan esas páginas, que no van en el CSS global del sitio
+   (styles.css las excluye con @source not). La pide el guardián de /docs (core/components-styles.ts;
+   angular.json: inject false) antes de pintar la primera página de componentes.
+
+   Va dentro de `@scope (article, .cdk-overlay-container)`: sus utilidades solo valen dentro del
+   artículo de una página de componentes y en los overlays (los paneles de Tooltip, menús,
+   Combobox…, que el CDK monta fuera del artículo). Así una clase como `.hidden` de esta hoja no
+   pisa a `.lg:block` del CSS global en el menú ni en la cabecera: el orden de las utilidades de
+   Tailwind es por hoja, no entre hojas. */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@reference '@mimi-ng/ui-core/theme.css';
+
+@source './app/pages/docs/components';
+@source '../../../packages/ui-core/src/lib/components';
+@source not '../../../packages/ui-core/src/**/*.spec.ts';
+@source not './app/**/*.spec.ts';
+
+@scope (article, .cdk-overlay-container) {
+  @layer utilities {
+    @tailwind utilities source(none);
+  }
+}
