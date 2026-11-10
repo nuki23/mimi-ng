@@ -296,6 +296,14 @@
   --mimi-toast-icon: 18px;
   --mimi-toast-circle: 34px;
   --mimi-toast-w: var(--mimi-toast-width, 340px);
+  /* Tabs (alto de la pestaña subrayada y de la píldora, y texto de la píldora), Toggle Group, Badge. */
+  --mimi-tabs-h-u: var(--mimi-tabs-height, 44px);
+  --mimi-tabs-h-p: 34px;
+  --mimi-tabs-text-p: 13.5px;
+  --mimi-toggle-h: var(--mimi-toggle-group-item-height, 32px);
+  --mimi-toggle-px: var(--mimi-toggle-group-item-px, 12px);
+  --mimi-badge-h: var(--mimi-badge-height, 22px);
+  --mimi-badge-px-s: var(--mimi-badge-px, 0.625rem);
 }
 
 [data-size='sm'] {
@@ -323,6 +331,13 @@
   --mimi-toast-icon: 16px;
   --mimi-toast-circle: 28px;
   --mimi-toast-w: 288px;
+  --mimi-tabs-h-u: 36px;
+  --mimi-tabs-h-p: 30px;
+  --mimi-tabs-text-p: 12.5px;
+  --mimi-toggle-h: 28px;
+  --mimi-toggle-px: 10px;
+  --mimi-badge-h: 18px;
+  --mimi-badge-px-s: 0.5rem;
 }
 
 [data-size='lg'] {
@@ -350,6 +365,13 @@
   --mimi-toast-icon: 20px;
   --mimi-toast-circle: 40px;
   --mimi-toast-w: 400px;
+  --mimi-tabs-h-u: 52px;
+  --mimi-tabs-h-p: 40px;
+  --mimi-tabs-text-p: 15px;
+  --mimi-toggle-h: 40px;
+  --mimi-toggle-px: 16px;
+  --mimi-badge-h: 26px;
+  --mimi-badge-px-s: 0.75rem;
 }
 
 .dark {

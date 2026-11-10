@@ -23,6 +23,7 @@ import {
 import type { FormValueControl } from '@angular/forms/signals';
 import { cva } from 'class-variance-authority';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 
 /*
@@ -97,7 +98,7 @@ const INDICATOR_STYLE = {
 
 const ITEM_CLASSES = cn(
   'relative inline-flex min-w-[var(--mimi-toggle-group-icon-width,44px)] cursor-pointer items-center justify-center gap-1.5 border-0 bg-transparent whitespace-nowrap',
-  'h-[var(--mimi-toggle-group-item-height,32px)] px-[var(--mimi-toggle-group-item-px,12px)]',
+  'h-[var(--mimi-toggle-h,var(--mimi-toggle-group-item-height,32px))] px-[var(--mimi-toggle-px,var(--mimi-toggle-group-item-px,12px))]',
   'rounded-[var(--mimi-toggle-group-radius,var(--mimi-radius))]',
   'text-[length:var(--mimi-toggle-group-font-size,13.5px)] font-medium text-[color:var(--mimi-toggle-group-fg,var(--mimi-muted-foreground))]',
   '[&_svg]:size-4 [&_svg]:shrink-0',
@@ -190,6 +191,7 @@ export class MimiToggleGroupItem implements FocusableOption {
  */
 @Component({
   selector: 'mimi-toggle-group',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     @if (!multiple()) {
       <span

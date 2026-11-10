@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { MimiBadge } from '@/components/ui/badge';
+import { MimiTabs } from '@/components/ui/tabs';
+import { MimiToggleGroup } from '@/components/ui/toggle-group';
 import { MimiCheckbox } from '@/components/ui/checkbox';
 import { MimiSwitch } from '@/components/ui/switch';
 import { MimiColorPicker } from '@/components/ui/color-picker';
@@ -33,6 +36,9 @@ import { MimiSizeScope, type MimiSizeInput } from './size';
     MimiTextarea,
     MimiSwitch,
     MimiCheckbox,
+    MimiTabs,
+    MimiToggleGroup,
+    MimiBadge,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -49,6 +55,9 @@ import { MimiSizeScope, type MimiSizeInput } from './size';
       <textarea mimiTextarea data-test="textarea" aria-label="j"></textarea>
       <mimi-switch data-test="switch">Modo avión</mimi-switch>
       <mimi-checkbox data-test="checkbox">Recordarme</mimi-checkbox>
+      <mimi-tabs data-test="tabs" aria-label="t" />
+      <mimi-toggle-group data-test="toggle" aria-label="g" />
+      <span mimiBadge data-test="badge">Nuevo</span>
       <mimi-select data-test="own" size="lg" aria-label="k" />
     </section>
     <mimi-select data-test="outside" aria-label="l" />
@@ -72,6 +81,9 @@ const CONTROLS = [
   'textarea',
   'switch',
   'checkbox',
+  'tabs',
+  'toggle',
+  'badge',
 ];
 
 describe('tamaños en los controles de formulario (R.2)', () => {

@@ -96,6 +96,13 @@ const GLOBALS = new Set([
   '--mimi-toast-icon',
   '--mimi-toast-circle',
   '--mimi-toast-w',
+  '--mimi-tabs-h-u',
+  '--mimi-tabs-h-p',
+  '--mimi-tabs-text-p',
+  '--mimi-toggle-h',
+  '--mimi-toggle-px',
+  '--mimi-badge-h',
+  '--mimi-badge-px-s',
   // Lo mismo en Toggle Group (G2.1).
   '--mimi-toggle-group-count',
   '--mimi-toggle-group-index',

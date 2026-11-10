@@ -70,6 +70,17 @@ describe('escala de tamaños en el tema ([data-size])', () => {
     expect(at('toast-w')).toEqual(['288px', 'var(--mimi-toast-width, 340px)', '400px']);
   });
 
+  it('Tabs, Toggle Group y Badge: alto, relleno y texto por tamaño; md es el de siempre', () => {
+    const at = (name: string) => [sm, md, lg].map((b) => scaleVar(b, name));
+    expect(at('tabs-h-u')).toEqual(['36px', 'var(--mimi-tabs-height, 44px)', '52px']);
+    expect(at('tabs-h-p')).toEqual(['30px', '34px', '40px']);
+    expect(at('tabs-text-p')).toEqual(['12.5px', '13.5px', '15px']);
+    expect(at('toggle-h')).toEqual(['28px', 'var(--mimi-toggle-group-item-height, 32px)', '40px']);
+    expect(at('toggle-px')).toEqual(['10px', 'var(--mimi-toggle-group-item-px, 12px)', '16px']);
+    expect(at('badge-h')).toEqual(['18px', 'var(--mimi-badge-height, 22px)', '26px']);
+    expect(at('badge-px-s')).toEqual(['0.5rem', 'var(--mimi-badge-px, 0.625rem)', '0.75rem']);
+  });
+
   it('los tokens por tamaño de siempre (btn, input y avatar) se resuelven en su bloque, sin filtrarse', () => {
     expect(scaleVar(sm, 'btn-h')).toBe('var(--mimi-btn-height-sm, var(--mimi-size-height))');
     expect(scaleVar(md, 'btn-h')).toBe('var(--mimi-btn-height, var(--mimi-size-height))');

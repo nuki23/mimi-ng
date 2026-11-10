@@ -1,5 +1,6 @@
 import { Directive, computed, input, isDevMode } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   type BadgeTone,
   type BadgeVariant,
@@ -21,6 +22,7 @@ let warnedShortcutWithTone = false;
  */
 @Directive({
   selector: 'span[mimiBadge]',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   exportAs: 'mimiBadge',
   host: {
     '[class]': 'classes()',

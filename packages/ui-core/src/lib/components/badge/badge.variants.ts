@@ -71,7 +71,7 @@ const TONE_CLASSES = {
  */
 export const badgeVariants = cva(
   [
-    'inline-flex h-[var(--mimi-badge-height,22px)] shrink-0 items-center gap-1 rounded-badge border px-[var(--mimi-badge-px,0.625rem)]',
+    'inline-flex h-[var(--mimi-badge-h,var(--mimi-badge-height,22px))] shrink-0 items-center gap-1 rounded-badge border px-[var(--mimi-badge-px-s,var(--mimi-badge-px,0.625rem))]',
     'font-sans text-[length:var(--mimi-badge-font-size,0.75rem)] leading-none font-[weight:var(--mimi-badge-font-weight,600)] whitespace-nowrap',
     '[&_svg]:pointer-events-none [&_svg]:size-3 [&_svg]:shrink-0',
   ],

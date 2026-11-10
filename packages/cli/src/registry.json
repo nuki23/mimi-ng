@@ -100,7 +100,7 @@
       "dependencies": {
         "class-variance-authority": "^0.7.1"
       },
-      "registryDependencies": ["utils/cn"]
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "button": {
       "type": "component",
@@ -172,7 +172,7 @@
       "peerDependencies": {
         "@angular/aria": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "toast": {
       "type": "component",
@@ -438,7 +438,7 @@
         "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "toolbar": {
       "type": "component",

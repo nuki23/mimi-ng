@@ -25,6 +25,7 @@ import {
 } from '@angular/core';
 import { cva } from 'class-variance-authority';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 
 /*
@@ -269,9 +270,10 @@ const tabVariants = cva(
   {
     variants: {
       variant: {
-        underline: 'h-[var(--mimi-tabs-height,44px)] gap-2 text-sm',
+        underline:
+          'h-[var(--mimi-tabs-h-u,var(--mimi-tabs-height,44px))] gap-2 text-[length:var(--mimi-size-text,0.875rem)]',
         // 34px sin token (el token de alto es el de la subrayada): plan D6.
-        pill: 'h-[34px] gap-1.5 rounded-[var(--mimi-radius)] text-[13.5px] [&_svg]:size-[15px] [&_svg]:shrink-0',
+        pill: 'h-[var(--mimi-tabs-h-p,34px)] gap-1.5 rounded-[var(--mimi-radius)] text-[length:var(--mimi-tabs-text-p,13.5px)] [&_svg]:size-[15px] [&_svg]:shrink-0',
       },
       // En vertical, el texto al inicio, como una navegación lateral.
       orientation: { horizontal: '', vertical: 'justify-start px-3 text-start' },
@@ -298,6 +300,7 @@ const COUNT_CLASSES =
  */
 @Component({
   selector: 'mimi-tabs',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   providers: [{ provide: MIMI_TAB_GROUP, useExisting: forwardRef(() => MimiTabs) }],
   imports: [Tabs, TabList, Tab, TabPanel, TabContent, MimiTabsOutlet],
   template: `
