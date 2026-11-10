@@ -129,7 +129,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
       </button>
       <ng-template mimiPopoverContent>
         <mimi-calendar
-          [size]="sized.resolved()"
+          [size]="sized.effective()"
           [value]="calendarValue()"
           [min]="min() ?? null"
           [max]="max() ?? null"

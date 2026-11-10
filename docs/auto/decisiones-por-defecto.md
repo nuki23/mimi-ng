@@ -196,6 +196,13 @@ Los diseños que faltan (estados de error de `login-01`, imagen de `login-02`, e
 - **Aceptadas** (no estaban en la tabla porque no eran PENDIENTE DE DECIDIR, sino alertas de los informes): las versiones exactas de Angular en el `package.json` raíz (M.2) y `minDate`/`maxDate` en el Date Range (G2.9b).
 - **G2.9, una sola tabla de tokens para las fechas: se aparta de la recomendación de la tarea.** La recomendación era «decidirlo junto con ¿Date Range aparte?: si es aparte, dos tablas». Se eligió una (`--mimi-date-*`) aunque el Date Range es un componente aparte, **por qué:** los dos usan el mismo `mimi-calendar`, que pinta los días, el elegido, hoy y la banda del rango; con dos prefijos, el calendario tendría que leer los tokens de los dos componentes (o duplicarlos) y la prueba de la tabla (`component-tokens.spec.ts`) tomaría `--mimi-date-range-*` como tokens de `date`; el único token propio del rango es `--mimi-date-presets-width`. **Qué se pierde:** no se puede dar un aspecto distinto al calendario del Date Picker y al del Date Range con tokens (por ejemplo, días más grandes solo en el rango): cambiar `--mimi-date-*` cambia los dos, salvo que la app lo acote con una clase propia (`class="[--mimi-date-cell-size:40px]"` en uno de ellos); en el Theme Studio, los dos componentes comparten un grupo de variables; y el nombre `--mimi-date-range` es la banda (no un prefijo), así que no queda libre un prefijo `date-range` para el futuro sin renombrar.
 
+## Decididas por el usuario (10/11/2026), tercera tanda de la 0.6.0
+
+- **`@scope` en el sitio:** el sitio de documentación puede exigir un navegador con `@scope` (Chrome 118, Safari 17.4, Firefox 128). Se anota en la página de Instalación como requisito **del sitio, no de la librería** (los componentes que copia la CLI no usan `@scope`).
+- **Data Table conserva `density` y `size`**, cada uno documentado; el solape va a la lista de nombres de la 0.9.9 (abajo).
+- **M.9 queda como tarea propia** (cambiar `MimiSelectList` por `MimiOptionList`); no se hace en la 0.6.0.
+- **`MimiSized` no escribe `data-size` sin `size` propio:** el `md` vive por defecto en el tema (`:root`) y cada control hereda el del contenedor `[data-size]` más cercano.
+
 ## Para la revisión de la 0.9.9: nombres incoherentes
 
 Anotados a pedido del usuario (05/11/2026), tras la revisión independiente de la rama. No se cambian ahora; se deciden en la revisión de la API antes de la 1.0, junto con las RUPTURAS de la tabla.
@@ -203,6 +210,7 @@ Anotados a pedido del usuario (05/11/2026), tras la revisión independiente de l
 - **`success` en Input OTP frente a `tone`:** Input OTP marca el código correcto con un booleano `success` (`input-otp.ts`); Badge, Button, Menu y Progress expresan el color con `tone`.
 - **`min`/`max` frente a `minDate`/`maxDate`:** el Date Picker usa `min`/`max` (con el tipo del valor, `FormValueControl`); el Date Range usa `minDate`/`maxDate`, porque `FormValueControl` daría a `min`/`max` el tipo del periodo (aceptado por el usuario el 05/11/2026, pero los dos nombres conviven).
 - **Selector `mimi-date-range` y clase `MimiDateRangePicker`:** el selector no dice «picker» y la clase sí (el Date Picker es `mimi-date-picker` / `MimiDatePicker`).
+- **Data Table: `density` y `size` se solapan (decidido por el usuario el 10/11/2026):** las dos entradas se conservan y cada una se documenta en la página (`size` escala el alto de fila y de cabecera con la escala del tema; `density` elige entre compacta y cómoda, y `comfortable` mantiene su alto fijo). Si el solape molesta, se resuelve aquí, en la revisión de la API de la 0.9.9.
 - **`MIMI_DATE_PICKER_TEXT` en `calendar/`:** el token de textos lleva el nombre del Date Picker, pero vive en `calendar/calendar-texts.ts` y lo usan también el calendario suelto y el Date Range.
 
 ## Arreglos tras la puerta del Grupo 3 (08/11/2026)

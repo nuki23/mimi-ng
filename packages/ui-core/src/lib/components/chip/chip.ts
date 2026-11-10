@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
-import { type MimiSize } from '@/components/ui/utils/size';
+import { MimiSized } from '@/components/ui/utils/size';
 import { MIMI_CHIP_TEXT } from './chip-texts';
 
 /*
@@ -43,6 +43,7 @@ const REMOVE_CLASSES = cn(
  */
 @Component({
   selector: 'mimi-chip',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <span class="min-w-0 truncate"><ng-content /></span>
     @if (removable()) {
@@ -72,8 +73,6 @@ const REMOVE_CLASSES = cn(
   host: {
     '[class]': 'classes()',
     '[attr.data-invalid]': 'invalid() ? "" : null',
-    // Sin `size`, sin `data-size`: el chip toma el del Combobox o Tags Input que lo contiene.
-    '[attr.data-size]': 'size() ?? null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -86,8 +85,6 @@ export class MimiChip {
   readonly label = input<string>();
   /** Con error (por ejemplo, el duplicado que se intentó agregar). */
   readonly invalid = input(false, { transform: booleanAttribute });
-  /** `sm | md | lg`. Por defecto, el del contenedor (Tags Input, Combobox, `mimiSize`) o `md`. */
-  readonly size = input<MimiSize>();
   readonly userClass = input('', { alias: 'class' });
 
   /** Se pulsó el botón de quitar. */

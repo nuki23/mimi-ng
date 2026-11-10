@@ -12,7 +12,7 @@ import {
   untracked,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
-import { injectMimiSize } from '@/components/ui/utils/size';
+import { injectMimiSize, normalizeMimiSize } from '@/components/ui/utils/size';
 import { type AvatarSize, type AvatarStatus, avatarVariants } from './avatar.variants';
 
 /**
@@ -31,7 +31,8 @@ import { type AvatarSize, type AvatarStatus, avatarVariants } from './avatar.var
   template: '<ng-content />',
   host: {
     '[class]': 'classes()',
-    '[attr.data-size]': 'sizeResolved()',
+    // Solo el `size` propio: sin él, el `md` del tema o el del contenedor `[data-size]`.
+    '[attr.data-size]': 'ownSize()',
     '[attr.data-state]': 'status()',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,6 +41,7 @@ export class MimiAvatar {
   /** `sm | md | lg`. Sin `size`, el del contenedor `mimiSize` o `md` (`default` = `md`, deprecado). */
   readonly size = input<AvatarSize | 'default'>();
   protected readonly sizeResolved = injectMimiSize(this.size, 'MimiAvatar');
+  protected readonly ownSize = computed(() => normalizeMimiSize(this.size(), 'MimiAvatar') ?? null);
   readonly userClass = input('', { alias: 'class' });
 
   /** Estado de la imagen. Lo escribe `img[mimiAvatarImage]`; sin imagen queda en `idle`. */

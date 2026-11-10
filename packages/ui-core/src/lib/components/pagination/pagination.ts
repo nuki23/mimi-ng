@@ -197,7 +197,6 @@ let warnedSize = false;
             [options]="sizeOptions()"
             [value]="safeSize()"
             [blocked]="disabled()"
-            [size]="shownSize()"
             (changed)="changeSize($event)"
           />
         } @placeholder {

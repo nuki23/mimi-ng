@@ -98,12 +98,18 @@ describe('tamaños en los controles de formulario (R.2)', () => {
 
   it('sin size propio heredan el del contenedor; el propio gana; sin nada, md', async () => {
     const { q, host, fixture } = await setup();
-    for (const t of CONTROLS) expect(q(t).dataset['size'], t).toBe('sm');
+    // Sin `size` propio no escriben data-size: lo hereda del contenedor por la cascada de CSS.
+    const near = (e: HTMLElement) => e.closest('[data-size]')?.getAttribute('data-size') ?? null;
+    for (const t of CONTROLS) {
+      expect(q(t).hasAttribute('data-size'), t).toBe(false);
+      expect(near(q(t)), t).toBe('sm');
+    }
     expect(q('own').dataset['size']).toBe('lg');
     expect(q('explicit').dataset['size']).toBe('sm');
-    expect(q('outside').dataset['size']).toBe('md');
+    expect(q('outside').hasAttribute('data-size')).toBe(false);
+    expect(near(q('outside'))).toBeNull();
     host.scope.set('lg');
     await fixture.whenStable();
-    for (const t of CONTROLS) expect(q(t).dataset['size'], t).toBe('lg');
+    for (const t of CONTROLS) expect(near(q(t)), t).toBe('lg');
   });
 });

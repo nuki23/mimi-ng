@@ -114,7 +114,7 @@ export class MimiPopoverOutlet {
         [attr.data-state]="state()"
         [attr.data-side]="placedSide()"
         [attr.data-align]="align()"
-        [attr.data-size]="sized.resolved()"
+        [attr.data-size]="sized.effective()"
         [attr.inert]="state() === 'closed' ? '' : null"
         [style.--mimi-popover-arrow-offset]="arrowOffset()"
       >

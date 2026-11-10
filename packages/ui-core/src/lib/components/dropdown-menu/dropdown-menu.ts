@@ -84,7 +84,7 @@ let nextId = 0;
           [align]="align()"
           [initialFocus]="focusTarget"
           [focusExempt]="trigger()?.element"
-          [size]="sized.resolved()"
+          [size]="sized.effective()"
           [class]="userClass()"
           (closeRequest)="close($event)"
         />

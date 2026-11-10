@@ -22,6 +22,8 @@ describe('selector «por página» y la escala', () => {
     await new Promise((r) => setTimeout(r, 50));
     await fixture.whenStable();
     const select = (fixture.nativeElement as HTMLElement).querySelector('mimi-select')!;
-    expect(select.getAttribute('data-size')).toBe('lg');
+    // Sin `size` propio no escribe `data-size`: lo hereda de Pagination por la cascada.
+    expect(select.hasAttribute('data-size')).toBe(false);
+    expect(select.closest('[data-size]')?.getAttribute('data-size')).toBe('lg');
   });
 });

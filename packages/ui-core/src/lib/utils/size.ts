@@ -1,5 +1,6 @@
 import {
   Directive,
+  ElementRef,
   InjectionToken,
   type Signal,
   computed,
@@ -67,11 +68,32 @@ export function injectMimiSize(
  * `hostDirectives: [{ directive: MimiSized, inputs: ['size'] }]` y recibe `size` (`sm | md | lg`),
  * el `data-size` que activa la escala del tema y la herencia de `mimiSize`. Sin código propio.
  */
-@Directive({ host: { '[attr.data-size]': 'resolved()' } })
+@Directive({ host: { '[attr.data-size]': 'own()' } })
 export class MimiSized {
   readonly size = input<MimiSizeInput>();
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private readonly scope = inject(MIMI_SIZE, { optional: true });
+  /**
+   * Solo el `size` propio se escribe en `data-size`. Sin él no hay atributo: el `md` vive en el
+   * tema (`:root`) y el control hereda, por la cascada de CSS, el `[data-size]` más cercano (un
+   * `mimiSize` o cualquier contenedor que lo lleve).
+   */
+  protected readonly own = computed(() => normalizeMimiSize(this.size(), 'MimiSized') ?? null);
   /** El tamaño de verdad (el propio, el del contenedor `mimiSize` o `md`). */
   readonly resolved = injectMimiSize(this.size, 'MimiSized');
+
+  /**
+   * Como `resolved`, pero mirando también el `[data-size]` más cercano en el DOM. Para lo que se
+   * pinta en un overlay (fuera del anfitrión, la cascada no llega): se llama al pintar.
+   */
+  effective(): MimiSize {
+    const own = this.own();
+    if (own) return own;
+    const scoped = this.scope?.size();
+    if (scoped) return scoped;
+    const near = this.element.parentElement?.closest<HTMLElement>('[data-size]')?.dataset['size'];
+    return near === 'sm' || near === 'lg' || near === 'md' ? near : 'md';
+  }
 }
 
 /**

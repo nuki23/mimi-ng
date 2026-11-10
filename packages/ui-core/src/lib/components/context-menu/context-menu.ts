@@ -91,7 +91,7 @@ const handled = new WeakSet<Event>();
             [menuId]="menuId"
             [label]="ariaLabel() ?? ''"
             [state]="state()"
-            [size]="sized.resolved()"
+            [size]="sized.effective()"
             [class]="userClass()"
             (closeRequest)="close($event)"
           />

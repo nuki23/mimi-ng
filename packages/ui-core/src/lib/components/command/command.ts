@@ -483,7 +483,7 @@ const DIALOG_PANEL_CLASSES = cn(
       <ng-template mimiDialogContent>
         <mimi-command
           class="max-h-[inherit] rounded-none border-0 shadow-none"
-          [size]="sized.resolved()"
+          [size]="sized.effective()"
           [items]="items()"
           [placeholder]="placeholder()"
           [aria-label]="label()"

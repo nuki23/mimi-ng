@@ -172,7 +172,7 @@ let nextId = 0;
         <div class="flex flex-col gap-2 p-[var(--mimi-date-padding,12px)]">
           <mimi-calendar
             mode="range"
-            [size]="sized.resolved()"
+            [size]="sized.effective()"
             [rangeStart]="shownStart()"
             [rangeEnd]="shownEnd()"
             [min]="minDate() ?? null"
