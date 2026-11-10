@@ -26,7 +26,7 @@ describe('ComboboxPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(6);
+      expect(previews.length).toBe(7);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-combobox input[role="combobox"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/combobox';");

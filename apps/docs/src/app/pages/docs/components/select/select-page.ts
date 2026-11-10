@@ -6,6 +6,7 @@ import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { SelectBasicExample } from './examples/select-basic.example';
 import { SelectCustomClassExample } from './examples/select-custom-class.example';
+import { SelectDeclarativeExample } from './examples/select-declarative.example';
 import { SelectGroupsExample } from './examples/select-groups.example';
 import { SelectNgModelExample } from './examples/select-ng-model.example';
 import { SelectReactiveFormsExample } from './examples/select-reactive-forms.example';
@@ -19,6 +20,8 @@ import { SelectStatesExample } from './examples/select-states.example';
 import basicSource from './examples/select-basic.example' with { loader: 'text' };
 // @ts-expect-error
 import customClassSource from './examples/select-custom-class.example' with { loader: 'text' };
+// @ts-expect-error
+import declarativeSource from './examples/select-declarative.example' with { loader: 'text' };
 // @ts-expect-error
 import groupsSource from './examples/select-groups.example' with { loader: 'text' };
 // @ts-expect-error
@@ -44,6 +47,7 @@ import statesSource from './examples/select-states.example' with { loader: 'text
     InstallCommand,
     SelectBasicExample,
     SelectCustomClassExample,
+    SelectDeclarativeExample,
     SelectGroupsExample,
     SelectNgModelExample,
     SelectReactiveFormsExample,
@@ -62,6 +66,7 @@ export class SelectPage {
   protected readonly source = {
     basic: basicSource as string,
     customClass: customClassSource as string,
+    declarative: declarativeSource as string,
     groups: groupsSource as string,
     ngModel: ngModelSource as string,
     reactiveForms: reactiveFormsSource as string,

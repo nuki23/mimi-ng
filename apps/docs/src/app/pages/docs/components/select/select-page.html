@@ -80,6 +80,25 @@
     <app-select-groups-example />
   </app-code-preview>
 
+  <h3 id="declarative" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con <code class="font-mono text-[0.9em]">&lt;mimi-option&gt;</code>
+  </h3>
+  <p class="text-pretty">
+    Las mismas opciones, escritas en la plantilla en vez de en un arreglo. El texto de dentro es la
+    etiqueta; <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">value</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">hint</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">disabled</code> son
+    entradas, y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-optgroup</code>
+    agrupa. Si das
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[options]</code>, gana
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[options]</code>. El
+    Combobox acepta las mismas.
+  </p>
+  <app-code-preview [code]="source.declarative">
+    <app-select-declarative-example />
+  </app-code-preview>
+
   <h3 id="server" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Búsqueda en el servidor</h3>
   <p class="text-pretty">
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(searchChange)</code>

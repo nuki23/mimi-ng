@@ -45,9 +45,11 @@ import {
   mimiWaitForExit,
 } from '@/components/ui/utils/overlay';
 import {
+  MimiHighlight,
   MimiOptgroup,
   MimiOptionItem,
   mimiDeclaredOptions,
+  mimiNormalizeText,
 } from '@/components/ui/option-list/option-list';
 import { MIMI_SELECT_TEXT } from './select-texts';
 
@@ -95,14 +97,9 @@ const TYPEAHEAD_DELAY = 500;
 
 let nextId = 0;
 
-/** Minúsculas y sin tildes, para comparar textos. */
-function normalize(text: string): string {
-  return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-}
-
 /** Filtro predeterminado: la etiqueta contiene la búsqueda, sin tildes ni mayúsculas. */
 const defaultFilter: MimiSelectFilter = (option, query) =>
-  normalize(option.label).includes(normalize(query));
+  mimiNormalizeText(option.label).includes(mimiNormalizeText(query));
 
 interface Row {
   /** Clave interna: posición en la lista completa (estable aunque se filtre). */
@@ -139,22 +136,9 @@ const ICON = {
   host: { '[class]': 'classes()' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MimiSelectHighlight {
-  readonly text = input.required<string>();
-  readonly query = input('');
-  readonly userClass = input('', { alias: 'class' });
-
-  protected readonly classes = computed(() => cn('min-w-0 truncate', this.userClass()));
-
-  protected readonly parts = computed(() => {
-    const text = this.text();
-    const query = normalize(this.query());
-    const start = query ? normalize(text).indexOf(query) : -1;
-    if (start < 0) return { before: text, match: '', after: '' };
-    const end = start + query.length;
-    return { before: text.slice(0, start), match: text.slice(start, end), after: text.slice(end) };
-  });
-}
+// M.9: la lógica (entradas, comparar sin tildes, partir el texto) es la de `MimiHighlight` de
+// option-list; aquí solo queda el selector propio y la plantilla.
+export class MimiSelectHighlight extends MimiHighlight {}
 
 /**
  * Contenido propio de cada opción, en la lista y en el disparador:

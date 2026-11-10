@@ -33,6 +33,18 @@
     <app-combobox-city-example />
   </app-code-preview>
 
+  <h3 id="declarative" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con <code class="font-mono text-[0.9em]">&lt;mimi-option&gt;</code>
+  </h3>
+  <p class="text-pretty">
+    La misma API que Select: opciones y grupos escritos en la plantilla, con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">clearable</code> para
+    quitar el valor desde el sitio del chevron.
+  </p>
+  <app-code-preview [code]="source.declarative">
+    <app-combobox-declarative-example />
+  </app-code-preview>
+
   <h3 id="multiple" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Múltiple con chips</h3>
   <p class="text-pretty">
     Enter agrega o quita la opción activa sin cerrar; Backspace con el campo vacío quita el último

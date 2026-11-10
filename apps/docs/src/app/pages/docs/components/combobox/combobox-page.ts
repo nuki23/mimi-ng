@@ -10,6 +10,7 @@ import { ComboboxAsyncExample } from './examples/combobox-async.example';
 import { ComboboxCityExample } from './examples/combobox-city.example';
 import { ComboboxCreateExample } from './examples/combobox-create.example';
 import { ComboboxCustomExample } from './examples/combobox-custom.example';
+import { ComboboxDeclarativeExample } from './examples/combobox-declarative.example';
 import { ComboboxFormsExample } from './examples/combobox-forms.example';
 import { ComboboxMultipleExample } from './examples/combobox-multiple.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
@@ -18,6 +19,8 @@ import { ComboboxMultipleExample } from './examples/combobox-multiple.example';
 import asyncSource from './examples/combobox-async.example' with { loader: 'text' };
 // @ts-expect-error
 import citySource from './examples/combobox-city.example' with { loader: 'text' };
+// @ts-expect-error
+import declarativeSource from './examples/combobox-declarative.example' with { loader: 'text' };
 // @ts-expect-error
 import createSource from './examples/combobox-create.example' with { loader: 'text' };
 // @ts-expect-error
@@ -48,6 +51,7 @@ interface ApiRow {
     ComboboxAsyncExample,
     ComboboxFormsExample,
     ComboboxCustomExample,
+    ComboboxDeclarativeExample,
   ],
   providers: [
     provideMimiComboboxText(MIMI_COMBOBOX_TEXT_ES),
@@ -65,6 +69,7 @@ export class ComboboxPage {
     async: asyncSource as string,
     forms: formsSource as string,
     custom: customSource as string,
+    declarative: declarativeSource as string,
   };
 
   protected readonly usage = [

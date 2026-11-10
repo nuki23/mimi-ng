@@ -22,7 +22,7 @@ describe('SelectPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(9);
+      expect(previews.length).toBe(10);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-select button[role="combobox"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/select';");
