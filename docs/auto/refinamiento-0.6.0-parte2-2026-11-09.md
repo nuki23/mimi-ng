@@ -153,6 +153,10 @@ for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text)
 
 **No comprobado:** el aspecto real de los avisos `sm` y `lg` en un navegador y el apilado mezclado (no hay diseño de Toast `sm`/`lg`: se anota en `docs/design/correcciones-pendientes.md`).
 
+## R.1 (resto) y R.8, primera parte: Pagination y Progress (hechas)
+
+**Pagination:** `size` pasa a `sm` (por defecto, como el diseño) `| md | lg`; `default` sigue aceptándose como `md` con aviso. Sus botones, el campo de página y el selector «N / pág.» leen el alto y el texto de la escala del tema por el `data-size` de su anfitrión (el selector de tamaño de página dejó de tener `size` propio). **Progress:** `sm | md | lg` (`default` = `md` con aviso): círculo de 44, 76 y 96 px y **barra de 4, 8 y 12 px** (antes solo el círculo tenía tamaño); `md` es lo de siempre. Registro: ambos dependen de `utils/size`. **Pruebas:** `pagination.spec.ts` (`data-size`, clases por la escala, `lg` y el alias) y `progress.spec.ts` al día; ui-core 960, docs 195, CLI 202 en verde. Ejemplo de Pagination con los tres tamaños y tablas de la API al día. **Bundle:** CSS global 175,50 → **175,51 kB** (25,44 gzip); JS inicial 333,97 / 105,79: **migrar a la escala del tema casi no suma CSS.**
+
 ## Punto exacto donde quedo
 
 Hecho: 1a, 1b, 1c, 1d, la escala en el tema (R.1) con Button, Input y Avatar, R.2 (10 controles), R.3 y R.4. **Sigue:** R.8 (resto de componentes y Progress/Pagination), luego 3 (R.7, R.12, R.13, R.14, R.15, R.16, R.24) y la puerta.

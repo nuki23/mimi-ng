@@ -17,6 +17,7 @@ import { cva } from 'class-variance-authority';
 import { MimiButton } from '@/components/ui/button';
 import { MimiInput } from '@/components/ui/input';
 import { cn } from '@/components/ui/utils/cn';
+import { normalizeMimiSize } from '@/components/ui/utils/size';
 import { MimiPaginationPageSize } from './pagination-page-size';
 import { MIMI_PAGINATION_TEXT } from './pagination-texts';
 
@@ -29,8 +30,8 @@ import { MIMI_PAGINATION_TEXT } from './pagination-texts';
  * `aria-disabled` en los extremos (no `disabled`), para que el foco no se pierda al llegar.
  */
 
-/** `sm` (por defecto, como el diseño) o `default`, con los nombres de tamaño de Button e Input. */
-export type MimiPaginationSize = 'sm' | 'default';
+/** `sm` (por defecto, como el diseño), `md` o `lg`; `default` es el nombre viejo de `md`. */
+export type MimiPaginationSize = 'sm' | 'md' | 'lg';
 export type MimiPaginationVariant = 'inline' | 'floating';
 
 /** Lo que emite `paginate`: el estado final de cada acción del usuario. */
@@ -47,7 +48,11 @@ const paginationVariants = cva(
   ],
   {
     variants: {
-      size: { sm: 'gap-[4px] p-[3px] text-[13px]', default: 'gap-[6px] p-[4px] text-sm' },
+      size: {
+        sm: 'gap-[4px] p-[3px] text-[length:var(--mimi-size-text,13px)]',
+        md: 'gap-[6px] p-[4px] text-[length:var(--mimi-size-text,0.875rem)]',
+        lg: 'gap-[8px] p-[5px] text-[length:var(--mimi-size-text,15px)]',
+      },
       // La flotante solo cambia la sombra; la posición se da con `class`.
       variant: {
         inline: 'shadow-neutral',
@@ -58,11 +63,9 @@ const paginationVariants = cva(
   },
 );
 
-const ARROW_CLASSES = {
-  sm: 'size-[var(--mimi-pagination-item-size,var(--mimi-control-height-sm,2rem))] rounded-full [&_svg]:size-4',
-  default:
-    'size-[var(--mimi-pagination-item-size,var(--mimi-control-height,2.5rem))] rounded-full [&_svg]:size-[18px]',
-} satisfies Record<MimiPaginationSize, string>;
+// La escala vive en el tema (`[data-size]` en el anfitrión): alto del botón e ícono (16/18/20 px).
+const ARROW_CLASSES =
+  'size-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))] rounded-full [&_svg]:size-[calc(var(--mimi-size-icon,0.875rem)_+_0.125rem)]';
 // 0,9 en vez del 0,88 del diseño (plan D6); deshabilitado, sin escala (también con Espacio).
 const ARROW_PRESS = 'active:scale-(--mimi-press-scale-sm) aria-disabled:active:scale-100';
 
@@ -137,7 +140,7 @@ let warnedSize = false;
         inputmode="numeric"
         autocomplete="off"
         enterkeyhint="go"
-        [size]="size()"
+        [size]="shownSize()"
         [class]="inputClasses()"
         [showError]="error()"
         [value]="fieldValue()"
@@ -193,7 +196,6 @@ let warnedSize = false;
           <mimi-pagination-page-size
             [options]="sizeOptions()"
             [value]="safeSize()"
-            [size]="size()"
             [blocked]="disabled()"
             (changed)="changeSize($event)"
           />
@@ -222,7 +224,7 @@ let warnedSize = false;
     role: 'navigation',
     '[attr.aria-label]': 'ariaLabel() || text.label',
     '[class]': 'classes()',
-    '[attr.data-size]': 'size()',
+    '[attr.data-size]': 'shownSize()',
     '[attr.data-variant]': 'variant()',
     '[attr.data-disabled]': 'disabled() ? "" : null',
   },
@@ -242,7 +244,11 @@ export class MimiPagination {
   /** Tamaños para elegir. Vacío (por defecto), sin selector. */
   readonly pageSizeOptions = input<readonly number[]>([]);
   /** `sm` (por defecto, controles de 32px) o `md` (40px). */
-  readonly size = input<MimiPaginationSize>('sm');
+  readonly size = input<MimiPaginationSize | 'default'>('sm');
+  /** El tamaño de verdad (`default` = `md`, con aviso en desarrollo). */
+  protected readonly shownSize = computed<MimiPaginationSize>(
+    () => normalizeMimiSize(this.size(), 'MimiPagination') ?? 'sm',
+  );
   /** `floating` solo cambia la sombra; la posición va en `class`. */
   readonly variant = input<MimiPaginationVariant>('inline');
   /** Todo deshabilitado (por ejemplo, mientras carga), sin sacar el foco de donde esté. */
@@ -300,28 +306,26 @@ export class MimiPagination {
   protected readonly errorId = `mimi-pagination-error-${nextId++}`;
 
   protected readonly classes = computed(() =>
-    cn(paginationVariants({ size: this.size(), variant: this.variant() }), this.userClass()),
+    cn(paginationVariants({ size: this.shownSize(), variant: this.variant() }), this.userClass()),
   );
   /**
    * Clases propias de ← y → sobre las de `mimiBtn` ghost de ícono. No se le pasa `disabled` a
    * Button (sería nativo y el foco se perdería en los extremos): se usa `aria-disabled`.
    */
-  protected readonly arrowClasses = computed(() => cn(ARROW_CLASSES[this.size()], ARROW_PRESS));
+  protected readonly arrowClasses = computed(() => cn(ARROW_CLASSES, ARROW_PRESS));
   protected readonly inputClasses = computed(() =>
     cn(
       INPUT_CLASSES,
-      this.size() === 'default'
-        ? 'w-[var(--mimi-pagination-input-width,52px)]'
-        : 'w-[var(--mimi-pagination-input-width,44px)]',
+      this.shownSize() === 'sm'
+        ? 'w-[var(--mimi-pagination-input-width,44px)]'
+        : 'w-[var(--mimi-pagination-input-width,52px)]',
     ),
   );
   protected readonly errorClasses = ERROR_CLASSES;
   protected readonly placeholderClasses = computed(() =>
     cn(
       'inline-flex items-center gap-1 rounded-full pr-2 pl-2.5 font-semibold whitespace-nowrap tabular-nums',
-      this.size() === 'default'
-        ? 'h-[var(--mimi-pagination-item-size,var(--mimi-control-height,2.5rem))] text-sm'
-        : 'h-[var(--mimi-pagination-item-size,var(--mimi-control-height-sm,2rem))] text-[13px]',
+      'h-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))] text-[length:var(--mimi-size-text,13px)]',
     ),
   );
 

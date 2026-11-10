@@ -10,6 +10,7 @@ import {
   numberAttribute,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
+import { normalizeMimiSize } from '@/components/ui/utils/size';
 
 /*
  * Progress (docs/design/Mimi F5 Estructura.dc.html, «4 · Progress»; prefijo de tokens
@@ -24,8 +25,11 @@ import { cn } from '@/components/ui/utils/cn';
 /** Tonos del diseño (spec 4, «Variante y tono»; el diseño escribe `destructive`). */
 export type MimiProgressTone = 'primary' | 'success' | 'warning' | 'info' | 'danger';
 export type MimiProgressShape = 'bar' | 'circle';
-/** Solo el círculo: 76px (`default`) o 44px (`sm`), los del diseño. */
-export type MimiProgressSize = 'default' | 'sm';
+/**
+ * Círculo: 44px (`sm`), 76px (`md`, el del diseño) y 96px (`lg`); barra: 4px, 8px y 12px de alto.
+ * `default` es el nombre viejo de `md`.
+ */
+export type MimiProgressSize = 'sm' | 'md' | 'lg';
 
 /*
  * Pista: el token del componente, el global `--mimi-track` y, para un tema anterior a la 0.3.0
@@ -51,12 +55,17 @@ const FILL_STROKE: Record<MimiProgressTone, string> = {
 };
 
 const BAR_CLASSES =
-  'relative block w-full h-[var(--mimi-progress-height,8px)] overflow-hidden rounded-full bg-[color:var(--mimi-progress-track,var(--mimi-track,var(--mimi-input)))]';
+  'relative block w-full overflow-hidden rounded-full bg-[color:var(--mimi-progress-track,var(--mimi-track,var(--mimi-input)))]';
+const BAR_HEIGHT: Record<MimiProgressSize, string> = {
+  sm: 'h-1',
+  md: 'h-[var(--mimi-progress-height,8px)]',
+  lg: 'h-3',
+};
 const CIRCLE_CLASSES: Record<MimiProgressSize, string> = {
-  default:
-    'relative inline-grid shrink-0 place-items-center size-[var(--mimi-progress-circle-size,76px)] text-[16px]',
+  md: 'relative inline-grid shrink-0 place-items-center size-[var(--mimi-progress-circle-size,76px)] text-[16px]',
   // 44px, trazo 4 y texto de 11px: el pequeño del diseño, sin token propio (spec 13).
   sm: 'relative inline-grid shrink-0 place-items-center size-11 text-[11px]',
+  lg: 'relative inline-grid shrink-0 place-items-center size-24 text-[20px]',
 };
 
 /** Barra determinada: el ancho anima 0,35 s con la curva del diseño. */
@@ -76,8 +85,9 @@ const SPIN = 'animate-[mimi-spin_1s_linear_infinite] motion-reduce:animate-mimi-
 
 /** Grosor del trazo, en unidades del `viewBox` de 36. */
 const STROKE: Record<MimiProgressSize, string> = {
-  default: '[stroke-width:var(--mimi-progress-circle-width,3)]',
+  md: '[stroke-width:var(--mimi-progress-circle-width,3)]',
   sm: '[stroke-width:4]',
+  lg: '[stroke-width:var(--mimi-progress-circle-width,3)]',
 };
 
 /**
@@ -128,7 +138,7 @@ const STROKE: Record<MimiProgressSize, string> = {
     '[attr.data-state]': 'determinate() ? "determinate" : "indeterminate"',
     '[attr.data-tone]': 'tone()',
     '[attr.data-shape]': 'shape()',
-    '[attr.data-size]': 'shape() === "circle" ? size() : null',
+    '[attr.data-size]': 'shown()',
     '[class]': 'classes()',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -145,8 +155,12 @@ export class MimiProgress {
   readonly max = input(100, { transform: numberAttribute });
   readonly tone = input<MimiProgressTone>('primary');
   readonly shape = input<MimiProgressShape>('bar');
-  /** Tamaño del círculo. */
-  readonly size = input<MimiProgressSize>('default');
+  /** `sm | md | lg` (la barra y el círculo); `default` es el nombre viejo de `md`. */
+  readonly size = input<MimiProgressSize | 'default'>('md');
+  /** El tamaño de verdad (`default` = `md`, con aviso en desarrollo). */
+  protected readonly shown = computed<MimiProgressSize>(
+    () => normalizeMimiSize(this.size(), 'MimiProgress') ?? 'md',
+  );
   /** Nombre accesible (obligatorio, o `aria-labelledby`). */
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
@@ -170,7 +184,7 @@ export class MimiProgress {
   /** En el círculo grande, «64%»; en el pequeño, «64» (como el diseño). */
   protected readonly circleText = computed(() => {
     const n = Math.round(this.percent());
-    return this.size() === 'sm' ? `${n}` : `${n}%`;
+    return this.shown() === 'sm' ? `${n}` : `${n}%`;
   });
   protected readonly dashArray = computed(() =>
     this.determinate() ? `${this.percent()} 100` : '28 100',
@@ -178,7 +192,9 @@ export class MimiProgress {
 
   protected readonly classes = computed(() =>
     cn(
-      this.shape() === 'bar' ? BAR_CLASSES : CIRCLE_CLASSES[this.size()],
+      this.shape() === 'bar'
+        ? [BAR_CLASSES, BAR_HEIGHT[this.shown()]]
+        : CIRCLE_CLASSES[this.shown()],
       'align-middle font-sans',
       this.userClass(),
     ),
@@ -188,11 +204,11 @@ export class MimiProgress {
   protected readonly trackClass = computed(() =>
     cn(
       'fill-none stroke-[color:var(--mimi-progress-track,var(--mimi-track,var(--mimi-input)))]',
-      STROKE[this.size()],
+      STROKE[this.shown()],
     ),
   );
   protected readonly arcClass = computed(() =>
-    cn(ARC, FILL_STROKE[this.tone()], STROKE[this.size()]),
+    cn(ARC, FILL_STROKE[this.tone()], STROKE[this.shown()]),
   );
   protected readonly spinClass = computed(() =>
     cn('absolute inset-0 size-full -rotate-90', !this.determinate() && SPIN),

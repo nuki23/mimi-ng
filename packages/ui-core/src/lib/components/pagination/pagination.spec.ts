@@ -319,18 +319,20 @@ describe('MimiPagination', { timeout: 20_000 }, () => {
     ]) {
       expect(nav.classList).toContain(cls);
     }
+    // La escala vive en el tema: el alto sale de --mimi-size-height (2rem en sm) por data-size.
+    expect(nav.dataset['size']).toBe('sm');
     expect(next().classList).toContain(
-      'size-[var(--mimi-pagination-item-size,var(--mimi-control-height-sm,2rem))]',
+      'size-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))]',
     );
     expect(next().classList).toContain('active:scale-(--mimi-press-scale-sm)');
     expect(field().classList).toContain('w-[var(--mimi-pagination-input-width,44px)]');
     expect(field().classList).not.toContain('w-full');
-    h.size.set('default');
+    h.size.set('md');
     h.variant.set('floating');
     h.off.set(true);
     h.extra.set('p-2 absolute bottom-4');
     await settle(fixture);
-    expect(nav.dataset['size']).toBe('default');
+    expect(nav.dataset['size']).toBe('md');
     expect(nav.dataset['variant']).toBe('floating');
     expect(nav.dataset['disabled']).toBe('');
     expect(nav.classList).toContain(
@@ -338,9 +340,13 @@ describe('MimiPagination', { timeout: 20_000 }, () => {
     );
     expect(nav.classList).toContain('p-2');
     expect(nav.classList).not.toContain('p-[4px]');
-    expect(next().classList).toContain(
-      'size-[var(--mimi-pagination-item-size,var(--mimi-control-height,2.5rem))]',
-    );
     expect(field().classList).toContain('w-[var(--mimi-pagination-input-width,52px)]');
+    // lg: tercer tamaño de la escala, y `default` sigue aceptándose como `md`.
+    h.size.set('lg');
+    await settle(fixture);
+    expect(nav.dataset['size']).toBe('lg');
+    h.size.set('default' as never);
+    await settle(fixture);
+    expect(nav.dataset['size']).toBe('md');
   });
 });

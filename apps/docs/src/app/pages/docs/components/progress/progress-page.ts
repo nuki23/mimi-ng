@@ -101,9 +101,10 @@ export class ProgressPage {
     },
     {
       name: 'size',
-      type: "'default' | 'sm'",
-      default: "'default'",
-      description: 'Solo el círculo: 76px o 44px.',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description:
+        'Círculo: 44, 76 o 96px. Barra: 4, 8 o 12px de alto. `default` es el nombre viejo de `md`.',
     },
     {
       name: 'class',

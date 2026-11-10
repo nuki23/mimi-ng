@@ -39,7 +39,6 @@ export class MimiPaginationPageSize {
 
   readonly options = input.required<readonly number[]>();
   readonly value = input.required<number>();
-  readonly size = input<'sm' | 'default'>('sm');
   /** Mientras está deshabilitado, una elección se descarta (sin `disabled` nativo: no se pierde el foco). */
   readonly blocked = input(false);
   readonly changed = output<number>();
@@ -58,9 +57,8 @@ export class MimiPaginationPageSize {
       'hover:bg-accent data-[state=open]:bg-accent has-[[role=combobox]:active]:scale-95',
       // El chevron mira hacia arriba (el panel abre arriba) y mide 14px.
       '[&>svg:last-child]:size-3.5 [&>svg:last-child]:-scale-y-100',
-      this.size() === 'default'
-        ? 'h-[var(--mimi-pagination-item-size,var(--mimi-control-height,2.5rem))] text-sm'
-        : 'h-[var(--mimi-pagination-item-size,var(--mimi-control-height-sm,2rem))] text-[13px]',
+      // Alto y texto de la escala del tema: `data-size` está en el anfitrión de Pagination.
+      'h-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))] text-[length:var(--mimi-size-text,13px)]',
     ].join(' '),
   );
 
