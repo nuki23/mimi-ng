@@ -260,9 +260,20 @@ export class MimiPassword {
   /** Clases de la caja, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
 
+  /** El componente puso `readOnly` (y lo puede quitar); si lo puso el usuario, no se toca. */
+  private setByUs = false;
   private readonly syncReadonly = effect(() => {
     const element = this.inputElement();
-    if (element && this.readonly()) element.readOnly = true;
+    if (!element) return;
+    if (this.readonly()) {
+      if (!element.readOnly) {
+        element.readOnly = true;
+        this.setByUs = true;
+      }
+    } else if (this.setByUs) {
+      element.readOnly = false;
+      this.setByUs = false;
+    }
   });
 
   private readonly field = contentChild(MimiInput);

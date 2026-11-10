@@ -148,9 +148,12 @@ export class MimiFormField implements MimiFormFieldContext {
         this.hint() ? this.hintId : null,
         this.errorId,
       ].filter((id): id is string => !!id);
-      const missing = wanted.filter((id) => !describedBy.includes(id));
-      if (missing.length) {
-        element.setAttribute('aria-describedby', [...describedBy, ...missing].join(' '));
+      // Los ids de la descripción y la ayuda que ya no existen se quitan (no quedan colgando).
+      const ours = [this.descriptionId, this.hintId];
+      const kept = describedBy.filter((id) => !ours.includes(id) || wanted.includes(id));
+      const missing = wanted.filter((id) => !kept.includes(id));
+      if (missing.length || kept.length !== describedBy.length) {
+        element.setAttribute('aria-describedby', [...kept, ...missing].join(' '));
       }
       if (this.required() && !element.hasAttribute('aria-required')) {
         element.setAttribute('aria-required', 'true');

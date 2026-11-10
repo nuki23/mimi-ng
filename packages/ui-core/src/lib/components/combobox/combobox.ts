@@ -111,7 +111,8 @@ const INPUT_BASE =
   'min-w-0 flex-1 border-0 bg-transparent font-sans text-sm text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed';
 const INPUT_MODE_CLASSES = {
   single: cn(INPUT_BASE, 'h-full p-0'),
-  multiple: cn(INPUT_BASE, 'h-7 min-w-20 px-1'),
+  // El alto del campo sigue al del chip (la escala del tema), para que la caja no crezca en `sm`.
+  multiple: cn(INPUT_BASE, 'h-[var(--mimi-chip-h,var(--mimi-chip-height,26px))] min-w-20 px-1'),
 } as const;
 
 const PANEL_CLASSES =
@@ -195,9 +196,12 @@ export class MimiComboboxOption {
       <ng-content select="[mimiComboboxStart]" />
       @if (multiple()) {
         @for (chip of shownChips(); track $index) {
-          <mimi-chip [label]="chip.label" [removable]="!disabled()" (remove)="removeAt($index)">{{
-            chip.label
-          }}</mimi-chip>
+          <mimi-chip
+            [label]="chip.label"
+            [removable]="!disabled() && !readonly()"
+            (remove)="removeAt($index)"
+            >{{ chip.label }}</mimi-chip
+          >
         }
         @if (hiddenCount(); as count) {
           <span data-slot="more" class="px-0.5 text-xs text-muted-foreground">{{
@@ -815,7 +819,13 @@ export class MimiCombobox<T = unknown>
     if (this.disabled() || event.isComposing || event.ctrlKey || event.metaKey) return;
     const { key, altKey } = event;
     // Múltiple: Backspace con el campo vacío quita el último chip (diseño).
-    if (key === 'Backspace' && this.multiple() && !this.draft() && this.chips().length) {
+    if (
+      key === 'Backspace' &&
+      this.multiple() &&
+      !this.readonly() &&
+      !this.draft() &&
+      this.chips().length
+    ) {
       event.preventDefault();
       this.removeAt(this.chips().length - 1);
       return;
@@ -827,7 +837,7 @@ export class MimiCombobox<T = unknown>
         // Rodeo: aria solo abre con ↓ sin modificadores.
         event.preventDefault();
         this.setOpen(true);
-      } else if (key === 'Escape' && (this.draft() || this.selectedOption())) {
+      } else if (key === 'Escape' && !this.readonly() && (this.draft() || this.selectedOption())) {
         // Como la APG: Escape con el panel cerrado vacía el campo.
         event.preventDefault();
         this.clear();
