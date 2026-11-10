@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../../../code/code-block';
+import { FormsTabs } from '../../../../code/forms-tabs';
 import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
@@ -68,6 +69,7 @@ const CLASS: ApiRow = {
   selector: 'app-input-page',
   imports: [
     CodeBlock,
+    FormsTabs,
     CssVariables,
     CodePreview,
     InstallCommand,
