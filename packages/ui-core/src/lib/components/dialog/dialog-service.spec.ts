@@ -75,6 +75,30 @@ describe('MimiDialogService: tamaños, inputs y resultado (R.6, R.7)', () => {
     expect(panel()!.classList).not.toContain('p-2');
   });
 
+  it("chrome: 'none': sin X y sin relleno; el contenido es todo el panel (R.7)", async () => {
+    const service = TestBed.inject(MimiDialogService);
+    service.open(Upload, { chrome: 'none', inputs: { title: 'Libre' } });
+    await tick();
+    expect(panel()!.querySelector('[data-slot="close"]')).toBeNull();
+    expect(panel()!.hasAttribute('data-close-button')).toBe(false);
+    expect(panel()!.style.getPropertyValue('--mimi-dialog-padding')).toBe('0px');
+    // El contenido sigue ahí, con su título.
+    expect(panel()!.querySelector('h2')!.textContent).toBe('Libre');
+    service.closeAll();
+    await tick();
+    await tick();
+    // Con chrome por defecto, la X está; un padding explícito gana a chrome: 'none'.
+    service.open(Upload, {});
+    await tick();
+    expect(panel()!.querySelector('[data-slot="close"]')).not.toBeNull();
+    service.closeAll();
+    await tick();
+    await tick();
+    service.open(Upload, { chrome: 'none', padding: '12px' });
+    await tick();
+    expect(panel()!.style.getPropertyValue('--mimi-dialog-padding')).toBe('12px');
+  });
+
   it('inputs con una clave que el componente no tiene: error claro, antes de crear nada', async () => {
     const service = TestBed.inject(MimiDialogService);
     expect(() => service.open(Upload, { inputs: { titel: 'Typo' } })).toThrowError(

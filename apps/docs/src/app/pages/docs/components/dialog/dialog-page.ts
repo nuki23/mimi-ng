@@ -195,6 +195,13 @@ export class DialogPage {
         'Relleno lateral de la cabecera, el cuerpo y el pie (un valor CSS, la variable --mimi-dialog-padding).',
     },
     {
+      name: 'chrome',
+      type: "'default' | 'none'",
+      default: "'default'",
+      description:
+        'none: el contenido es todo el panel, sin X ni relleno (Mimi no te amarra a un diseño). closeButton y padding explícitos mandan sobre él; la cabecera, el cuerpo y el pie siguen siendo opcionales.',
+    },
+    {
       name: 'inputs',
       type: 'Record<string, unknown>',
       default: '—',

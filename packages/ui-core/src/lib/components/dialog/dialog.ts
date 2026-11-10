@@ -68,6 +68,12 @@ export interface MimiDialogConfig<D = unknown> {
    */
   padding?: string;
   /**
+   * `'none'`: el contenido es todo el panel, sin diseño impuesto: sin X y sin relleno (las piezas
+   * `mimi-dialog-header`, `-body` y `-footer` siguen siendo opcionales y llevan el suyo si las
+   * usas). `closeButton` y `padding` explícitos mandan sobre él. Por defecto, `'default'`.
+   */
+  chrome?: 'default' | 'none';
+  /**
    * Valores de las entradas del componente que se abre (`open(Comp, { inputs: { title: 'Hola' } })`),
    * en vez de `inject(MIMI_DIALOG_DATA)`. Solo con un componente (no con una plantilla).
    */
@@ -339,7 +345,9 @@ export class MimiDialogShell {
 
   private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
 
-  protected readonly closeButton = this.options.config.closeButton ?? true;
+  /** Con `chrome: 'none'`, sin X (a menos que se pida `closeButton: true`). */
+  protected readonly closeButton =
+    this.options.config.closeButton ?? this.options.config.chrome !== 'none';
   protected readonly closeClasses = CLOSE_CLASSES;
   protected readonly classes = cn(
     PANEL_CLASSES,
@@ -355,7 +363,12 @@ export class MimiDialogShell {
         : null;
   /** El relleno de las piezas: el dado o, en `sm`, 16px. */
   protected readonly padding =
-    this.options.config.padding ?? (this.options.config.size === 'sm' ? '16px' : null);
+    this.options.config.padding ??
+    (this.options.config.chrome === 'none'
+      ? '0px'
+      : this.options.config.size === 'sm'
+        ? '16px'
+        : null);
   /** El máximo del usuario, sin salirse de la pantalla (sin él, lo limita la clase del panel). */
   protected readonly maxWidth = this.options.config.maxWidth
     ? `min(${this.options.config.maxWidth}, calc(100vw - 32px))`
