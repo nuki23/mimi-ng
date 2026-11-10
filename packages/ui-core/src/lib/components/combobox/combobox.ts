@@ -38,6 +38,7 @@ import {
   mimiNormalizeText,
 } from '@/components/ui/option-list/option-list';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -89,9 +90,10 @@ const BOX_CLASSES = cn(
 
 /** Simple: el alto de los controles. Múltiple: la caja de Tags Input, que crece con los chips. */
 const BOX_MODE_CLASSES = {
-  single: 'h-[var(--mimi-combobox-height,var(--mimi-control-height,2.5rem))] gap-2 pl-3',
+  single:
+    'h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] gap-2 pl-3',
   multiple:
-    'min-h-[var(--mimi-combobox-height,var(--mimi-control-height,2.5rem))] flex-wrap gap-1.5 py-[5px] pl-1.5',
+    'min-h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] flex-wrap gap-1.5 py-[5px] pl-1.5',
 } as const;
 
 const INPUT_BASE =
@@ -166,6 +168,7 @@ export class MimiComboboxOption {
  */
 @Component({
   selector: 'mimi-combobox',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [Combobox, ComboboxPopup, CdkConnectedOverlay, MimiOptionList, MimiChip],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiCombobox }],
   template: `

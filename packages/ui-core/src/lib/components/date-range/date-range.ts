@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/date-picker/date-picker';
 import { MimiPopover, MimiPopoverContent, MimiPopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import {
   MIMI_FIELD_CONTROL,
@@ -90,6 +91,7 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-date-range',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [MimiPopover, MimiPopoverTrigger, MimiPopoverContent, MimiCalendar],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiDateRangePicker }],
   template: `

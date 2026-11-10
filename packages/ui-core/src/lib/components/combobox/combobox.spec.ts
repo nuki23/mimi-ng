@@ -256,7 +256,7 @@ describe('MimiCombobox', { timeout: 20_000 }, () => {
     expect(host('plain').hasAttribute('aria-label')).toBe(false);
     expect(panel()).toBeNull();
     for (const cls of [
-      'h-[var(--mimi-combobox-height,var(--mimi-control-height,2.5rem))]',
+      'h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))]',
       'rounded-[var(--mimi-combobox-radius,var(--mimi-radius,0.75rem))]',
       'border-input',
       'bg-input-background',
@@ -576,7 +576,7 @@ describe('MimiCombobox', { timeout: 20_000 }, () => {
       expect(chipLabels(host('multi'))).toEqual(['Angular']);
       expect(box('multi').classList).toContain('flex-wrap');
       expect(box('multi').classList).toContain(
-        'min-h-[var(--mimi-combobox-height,var(--mimi-control-height,2.5rem))]',
+        'min-h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))]',
       );
       expect(input('multi').hasAttribute('placeholder')).toBe(false);
       const el = input('multi');

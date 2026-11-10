@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { type FormValueControl, transformedValue } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   injectFieldState,
@@ -69,7 +70,7 @@ function caretAfterDigits(masked: string, count: number): number {
  */
 const BOX_CLASSES = cn(
   'relative flex w-full min-w-0 cursor-text items-center gap-[var(--mimi-mask-gap,8px)] px-3 font-sans text-foreground mimi-transition',
-  'h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))]',
+  'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))]',
   'border border-input bg-input-background',
   'not-data-[disabled]:hover:border-input-hover',
   'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft',
@@ -139,6 +140,7 @@ export class MimiMaskEnd {
  */
 @Component({
   selector: 'mimi-input-mask',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <ng-content select="[mimiMaskPrefix], [mimiMaskStart]" />
     <span class="relative flex h-full min-w-0 flex-1 items-center">

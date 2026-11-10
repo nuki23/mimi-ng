@@ -1,5 +1,6 @@
 import { Directive, ElementRef, computed, inject, input } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -14,6 +15,7 @@ import { textareaVariants } from './textarea.variants';
  */
 @Directive({
   selector: 'textarea[mimiTextarea]',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   // mimi-form-field lo encuentra por este token (utils/field-state.ts).
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiTextarea }],
   exportAs: 'mimiTextarea',

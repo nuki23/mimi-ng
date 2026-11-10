@@ -63,6 +63,17 @@ export function injectMimiSize(
 }
 
 /**
+ * El `size` de un control, como directiva de anfitrión (R.2, R.8): el componente la declara con
+ * `hostDirectives: [{ directive: MimiSized, inputs: ['size'] }]` y recibe `size` (`sm | md | lg`),
+ * el `data-size` que activa la escala del tema y la herencia de `mimiSize`. Sin código propio.
+ */
+@Directive({ host: { '[attr.data-size]': 'resolved()' } })
+export class MimiSized {
+  readonly size = input<MimiSizeInput>();
+  protected readonly resolved = injectMimiSize(this.size, 'MimiSized');
+}
+
+/**
  * Da un tamaño a todos los controles de un contenedor, en vez de escribirlo en cada uno:
  * `<form mimiSize="sm">…</form>`. El `size` propio de un control gana.
  */

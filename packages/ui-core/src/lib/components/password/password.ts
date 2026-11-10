@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { MimiInput } from '@/components/ui/input';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import { MIMI_PASSWORD_TEXT } from './password-texts';
 
@@ -54,7 +55,7 @@ export function mimiPasswordLevel(
 
 const BOX_CLASSES = cn(
   'relative flex w-full min-w-0 items-center gap-1.5 font-sans text-foreground mimi-transition',
-  'h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))] ps-3 pe-1',
+  'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))] ps-3 pe-1',
   'border border-input bg-input-background',
   'not-data-[disabled]:hover:border-input-hover',
   'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft',
@@ -102,6 +103,7 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-password',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <div
       data-slot="box"

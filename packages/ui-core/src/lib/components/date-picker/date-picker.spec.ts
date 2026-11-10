@@ -117,7 +117,9 @@ describe('MimiDatePicker', { timeout: 20_000 }, () => {
     expect(button.getAttribute('aria-label')).toBe('Fecha de entrega');
     expect(button.textContent?.trim()).toBe('Elige una fecha');
     expect(button.hasAttribute('data-placeholder')).toBe(true);
-    expect(button.classList).toContain('h-[var(--mimi-control-height,2.5rem)]');
+    expect(button.classList).toContain(
+      'h-[var(--mimi-size-height,var(--mimi-control-height,2.5rem))]',
+    );
     expect(button.classList).toContain('bg-input-background');
     // El valor describe al botón (con aria-label, el lector lo lee igual).
     const described = document.getElementById(button.getAttribute('aria-describedby')!);

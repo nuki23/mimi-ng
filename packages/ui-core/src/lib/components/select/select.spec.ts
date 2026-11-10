@@ -230,7 +230,7 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
     expect(btn.textContent?.trim()).toBe('Selecciona un país');
     expect(panel()).toBeNull();
     for (const cls of [
-      'h-[var(--mimi-select-height,var(--mimi-control-height,2.5rem))]',
+      'h-[var(--mimi-select-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))]',
       'rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
       'border-[color:var(--mimi-select-border,var(--mimi-input))]',
       'bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-background))]',
@@ -692,7 +692,7 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
       expect(box('plain').classList).toContain(cls);
     expect(box('plain').classList).not.toContain('w-full');
     expect(box('plain').classList).not.toContain(
-      'h-[var(--mimi-select-height,var(--mimi-control-height,2.5rem))]',
+      'h-[var(--mimi-select-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))]',
     );
     expect(box('plain').classList).not.toContain(
       'rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',

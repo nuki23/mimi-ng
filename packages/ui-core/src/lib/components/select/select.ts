@@ -27,6 +27,7 @@ import {
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import {
   MIMI_FIELD_CONTROL,
@@ -477,7 +478,7 @@ export class MimiSelectList {
 
 const TRIGGER_CLASSES = cn(
   'group/select relative flex w-full min-w-0 items-center gap-2 pr-2.5 pl-3 font-sans text-sm text-foreground mimi-transition',
-  'h-[var(--mimi-select-height,var(--mimi-control-height,2.5rem))] rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
+  'h-[var(--mimi-select-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
   'border border-[color:var(--mimi-select-border,var(--mimi-input))] bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-background))]',
   // Foco, error y deshabilitado como en Input (utils/control-styles.ts). Aquí el foco y
   // aria-invalid están en el botón de dentro, así que la caja los lee con has-[] y data-*.
@@ -515,6 +516,7 @@ const SEARCH_INPUT_CLASSES =
  */
 @Component({
   selector: 'mimi-select',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [
     Combobox,
     ComboboxPopup,

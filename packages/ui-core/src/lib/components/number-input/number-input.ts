@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   injectFieldState,
@@ -47,7 +48,7 @@ const decimals = (n: number): number => {
 
 const BOX_CLASSES = cn(
   'relative flex w-full min-w-0 items-center gap-0.5 font-sans text-foreground mimi-transition',
-  'h-[var(--mimi-number-height,var(--mimi-control-height,2.5rem))] rounded-[var(--mimi-number-radius,var(--mimi-radius,0.75rem))] px-[var(--mimi-number-px,4px)]',
+  'h-[var(--mimi-number-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-number-radius,var(--mimi-radius,0.75rem))] px-[var(--mimi-number-px,4px)]',
   'border border-input bg-input-background',
   // Hover, foco, error y deshabilitado como Input; el foco está en el input de dentro.
   'not-data-[disabled]:hover:border-input-hover',
@@ -86,6 +87,7 @@ const REPEAT_EVERY = 80;
  */
 @Component({
   selector: 'mimi-number-input',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <button
       type="button"

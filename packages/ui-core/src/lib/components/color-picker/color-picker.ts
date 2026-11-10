@@ -18,6 +18,7 @@ import type { FormValueControl } from '@angular/forms/signals';
 import { MimiInput } from '@/components/ui/input';
 import { MimiPopover, MimiPopoverContent, MimiPopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   buttonFocusStyles,
   controlInvalidStyles,
@@ -108,6 +109,7 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-color-picker',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [MimiInput],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiColorPicker }],
   template: `
@@ -579,7 +581,7 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
 
 /** El disparador: la caja de Input con la muestra y el valor. */
 const TRIGGER_CLASSES = cn(
-  'flex h-[var(--mimi-control-height,2.5rem)] w-full min-w-0 cursor-pointer items-center gap-2 px-3 text-left font-mono text-sm text-foreground',
+  'flex h-[var(--mimi-size-height,var(--mimi-control-height,2.5rem))] w-full min-w-0 cursor-pointer items-center gap-2 px-3 text-left font-mono text-sm text-foreground',
   'rounded-[var(--mimi-radius,0.75rem)] border border-input bg-input-background not-disabled:hover:border-input-hover',
   'disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
   fieldFocusStyles,
