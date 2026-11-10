@@ -2,6 +2,8 @@
 export {
   type MimiOption,
   type MimiOptionGroup,
+  MimiOptgroup,
+  MimiOptionItem,
   MimiSelect,
   type MimiSelectFilter,
   MimiSelectHighlight,

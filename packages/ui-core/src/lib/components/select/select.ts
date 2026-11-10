@@ -15,6 +15,8 @@ import {
   booleanAttribute,
   computed,
   contentChild,
+  contentChildren,
+  DestroyRef,
   effect,
   inject,
   input,
@@ -170,6 +172,61 @@ export class MimiSelectOption {
   ): context is MimiSelectOptionContext {
     return true;
   }
+}
+
+/** Un grupo declarativo: `<mimi-optgroup label="Europa">…<mimi-option>…</mimi-optgroup>`. */
+@Component({
+  selector: 'mimi-optgroup',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { hidden: '' },
+  template: '<ng-content />',
+})
+export class MimiOptgroup {
+  readonly label = input.required<string>();
+}
+
+/**
+ * Una opción declarativa, alternativa a `[options]`:
+ * `<mimi-option value="es" hint="UE">España</mimi-option>`. El texto es la etiqueta (o `label`).
+ * El Select las lee y pinta él mismo; el elemento no se ve.
+ */
+@Component({
+  selector: 'mimi-option',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { hidden: '' },
+  template: '<ng-content />',
+})
+export class MimiOptionItem<T = unknown> {
+  readonly value = input.required<T>();
+  readonly label = input<string>();
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly hint = input<string>();
+  readonly group = inject(MimiOptgroup, { optional: true });
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  /** Sube cuando cambia el texto de dentro, para que el Select relea la etiqueta. */
+  private readonly textVersion = signal(0);
+
+  constructor() {
+    if (typeof MutationObserver === 'undefined') return;
+    const observer = new MutationObserver(() => this.textVersion.update((v) => v + 1));
+    observer.observe(this.host.nativeElement, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+    inject(DestroyRef).onDestroy(() => observer.disconnect());
+  }
+
+  /** Lo que el Select pinta. */
+  readonly option = computed<MimiOption<T>>(() => {
+    this.textVersion();
+    return {
+      label: this.label() ?? (this.host.nativeElement.textContent ?? '').trim(),
+      value: this.value(),
+      disabled: this.disabled(),
+      hint: this.hint(),
+    };
+  });
 }
 
 /**
@@ -573,16 +630,38 @@ const SEARCH_INPUT_CLASSES =
           <span class="min-w-0 flex-1 truncate text-muted-foreground">{{ placeholder() }}</span>
         }
       </button>
-      @if (showClear()) {
-        <button
-          type="button"
-          [class]="clearClasses"
-          [attr.aria-label]="text.clear"
-          (click)="clear()"
-        >
+      <!-- Un solo icono al final, en el sitio del chevron: cargando > limpiar > chevron. -->
+      <span
+        data-slot="end-icon"
+        class="relative z-10 inline-flex size-6 shrink-0 items-center justify-center"
+        [attr.data-icon]="endIcon()"
+      >
+        @if (endIcon() === 'clear') {
+          <button
+            type="button"
+            [class]="clearClasses"
+            [attr.aria-label]="text.clear"
+            (click)="clear()"
+          >
+            <svg
+              aria-hidden="true"
+              class="size-3.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              [attr.viewBox]="icon.viewBox"
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        } @else if (endIcon() === 'loading') {
           <svg
             aria-hidden="true"
-            class="size-3.5"
+            data-slot="spinner"
+            class="size-4 shrink-0 animate-[mimi-spin_0.8s_linear_infinite] text-muted-foreground"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
@@ -590,38 +669,23 @@ const SEARCH_INPUT_CLASSES =
             stroke-linejoin="round"
             [attr.viewBox]="icon.viewBox"
           >
-            <path d="M18 6 6 18" />
-            <path d="m6 6 12 12" />
+            <path [attr.d]="icon.spinner" />
           </svg>
-        </button>
-      }
-      @if (loading()) {
-        <svg
-          aria-hidden="true"
-          data-slot="spinner"
-          class="size-4 shrink-0 animate-[mimi-spin_0.8s_linear_infinite] text-muted-foreground"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          [attr.viewBox]="icon.viewBox"
-        >
-          <path [attr.d]="icon.spinner" />
-        </svg>
-      }
-      <svg
-        aria-hidden="true"
-        class="size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/select:rotate-180"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        [attr.viewBox]="icon.viewBox"
-      >
-        <path [attr.d]="icon.chevron" />
-      </svg>
+        } @else {
+          <svg
+            aria-hidden="true"
+            class="size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/select:rotate-180"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            [attr.viewBox]="icon.viewBox"
+          >
+            <path [attr.d]="icon.chevron" />
+          </svg>
+        }
+      </span>
     </div>
 
     <!-- El popup de aria va por fuera del overlay: así el disparador tiene aria-haspopup cerrado. -->
@@ -832,13 +896,39 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly classes = computed(() => cn(TRIGGER_CLASSES, this.userClass()));
   protected readonly panelClasses = computed(() => cn(PANEL_CLASSES, this.panelClass()));
 
+  private readonly declared = contentChildren(MimiOptionItem, { descendants: true });
+
+  /** `[options]` si se dio; si no, las `<mimi-option>` (las de un mismo `<mimi-optgroup>` juntas). */
+  private readonly items = computed<readonly (MimiOption<T> | MimiOptionGroup<T>)[]>(() => {
+    const given = this.options();
+    if (given.length > 0) return given;
+    const result: (MimiOption<T> | MimiOptionGroup<T>)[] = [];
+    const open = new Map<MimiOptgroup, MimiOption<T>[]>();
+    for (const item of this.declared()) {
+      const option = item.option() as MimiOption<T>;
+      if (!item.group) {
+        result.push(option);
+        continue;
+      }
+      const existing = open.get(item.group);
+      if (existing) {
+        existing.push(option);
+      } else {
+        const options: MimiOption<T>[] = [option];
+        open.set(item.group, options);
+        result.push({ label: item.group.label(), options });
+      }
+    }
+    return result;
+  });
+
   /** Todas las opciones, con su clave interna, en secciones (sueltas o de un grupo). */
   private readonly sections = computed<Section[]>(() => {
     const sections: Section[] = [];
     let loose: Section | null = null;
     let index = 0;
     const row = (option: MimiOption<T>): Row => ({ key: String(index++), option });
-    for (const item of this.options()) {
+    for (const item of this.items()) {
       const id = `${this.listId}-group-${sections.length}`;
       if ('options' in item) {
         loose = null;
@@ -899,6 +989,11 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly showClear = computed(
     () =>
       this.clearable() && !this.disabled() && !this.readonly() && this.selectedOption() !== null,
+  );
+
+  /** Qué icono ocupa el sitio del chevron. */
+  protected readonly endIcon = computed(() =>
+    this.loading() ? 'loading' : this.showClear() ? 'clear' : 'chevron',
   );
 
   /** Abierto (aria-expanded). */
@@ -1089,4 +1184,10 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
 }
 
 /** Todas las piezas de Select, para importarlas juntas. */
-export const MimiSelectImports = [MimiSelect, MimiSelectOption, MimiSelectHighlight] as const;
+export const MimiSelectImports = [
+  MimiSelect,
+  MimiSelectOption,
+  MimiSelectHighlight,
+  MimiOptionItem,
+  MimiOptgroup,
+] as const;
