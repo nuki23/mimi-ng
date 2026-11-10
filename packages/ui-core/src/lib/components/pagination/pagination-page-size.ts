@@ -22,6 +22,7 @@ import { MIMI_PAGINATION_TEXT } from './pagination-texts';
     <mimi-select
       side="top"
       align="end"
+      [size]="size()"
       [matchWidth]="false"
       [options]="selectOptions()"
       [(value)]="selected"
@@ -41,6 +42,8 @@ export class MimiPaginationPageSize {
   readonly value = input.required<number>();
   /** Mientras está deshabilitado, una elección se descarta (sin `disabled` nativo: no se pierde el foco). */
   readonly blocked = input(false);
+  /** El tamaño de Pagination: el Select de dentro lo lleva en su propio `data-size`. */
+  readonly size = input<'sm' | 'md' | 'lg'>('sm');
   readonly changed = output<number>();
 
   /** Lo que muestra Select; vuelve al valor de Pagination si se descarta una elección. */

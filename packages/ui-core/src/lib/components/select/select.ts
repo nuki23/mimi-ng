@@ -499,7 +499,7 @@ const BUTTON_CLASSES =
   'flex h-full min-w-0 flex-1 cursor-pointer items-center gap-2 bg-transparent text-left outline-none after:absolute after:inset-0 disabled:cursor-not-allowed';
 
 const CLEAR_CLASSES = cn(
-  'relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
+  'pointer-events-auto relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
   'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );
@@ -582,7 +582,7 @@ const SEARCH_INPUT_CLASSES =
       <!-- Un solo icono al final, en el sitio del chevron: cargando > limpiar > chevron. -->
       <span
         data-slot="end-icon"
-        class="relative z-10 inline-flex size-6 shrink-0 items-center justify-center"
+        class="pointer-events-none relative z-10 inline-flex size-6 shrink-0 items-center justify-center"
         [attr.data-icon]="endIcon()"
       >
         @if (endIcon() === 'clear') {
