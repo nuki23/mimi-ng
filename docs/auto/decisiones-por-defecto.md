@@ -147,6 +147,9 @@ Pendientes de revisión del usuario. Detalle en `docs/auto/refinamiento-0.6.0-20
 - **R.7 Dialog:** `padding` de un solo valor lateral.
 - **R.14 Form Field:** prioridad `<mimi-form-error>` > `message` del validador > `[errors]` > `provideMimiErrorMessages` > predeterminado.
 - **R.0 tema:** el violeta es el tema por defecto y el neutro anterior es `MIMI_THEME_NEUTRAL`; hover del primario en claro hacia `foreground`.
+- **1d `info`:** el azul `info` se ajusta (claro `oklch(0.44 0.17 255)`, oscuro `oklch(0.83 0.11 250)`) porque tenía la misma luminosidad que el violeta de marca; ΔL ≥ 0,08 con prueba. **Cambio visual.**
+- **1a `<mimi-tab>`:** sin `value`, el índice si el label no da valor y un sufijo si se repite; el aviso en desarrollo solo salta cuando el valor no sale limpio del label.
+- **1c Blocks:** al terminar de cargar devuelven el foco al control que lanzó la acción y anuncian «Loading…»/«Done.» (en inglés, fijos).
 - **R.18 OTP:** `separatorAfter` pasa de `number` a `number | number[]`. **RUPTURA de tipo** para quien lo lea por código (en plantilla, `separatorAfter="3"` sigue igual).
 
 ## Decididas por el usuario: refinamiento (09/11/2026)

@@ -60,7 +60,8 @@
   --mimi-warning: oklch(0.795 0.162 75);
   --mimi-warning-foreground: oklch(0.28 0.07 55);
   --mimi-warning-soft-foreground: oklch(0.45 0.11 60);
-  --mimi-info: oklch(0.546 0.19 255);
+  /* Más oscuro que el violeta de marca (0,54): se distingue por luminosidad (ΔL ≥ 0,08, 1d). */
+  --mimi-info: oklch(0.44 0.17 255);
   --mimi-info-foreground: oklch(0.985 0 0);
   --mimi-info-soft-foreground: oklch(0.45 0.17 255);
   --mimi-destructive-soft-foreground: oklch(0.5 0.2 27);
@@ -291,7 +292,8 @@
   --mimi-warning: oklch(0.81 0.15 78);
   --mimi-warning-foreground: oklch(0.22 0.05 60);
   --mimi-warning-soft-foreground: oklch(0.87 0.12 80);
-  --mimi-info: oklch(0.72 0.14 250);
+  /* Más claro que el violeta de marca (0,72): se distingue por luminosidad (ΔL ≥ 0,08, 1d). */
+  --mimi-info: oklch(0.83 0.11 250);
   --mimi-info-foreground: oklch(0.2 0.05 250);
   --mimi-info-soft-foreground: oklch(0.84 0.1 250);
   --mimi-destructive-soft-foreground: oklch(0.82 0.12 22);

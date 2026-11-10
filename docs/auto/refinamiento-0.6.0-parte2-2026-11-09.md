@@ -58,6 +58,10 @@ console.log('listo', Object.keys(out).length, 'archivos');
 
 Pruebas: ui-core 953 (`busy.spec.ts` 2, `block-loading.spec.ts` sigue), docs 192, CLI 202, en verde.
 
+## 1d. El violeta de marca y el azul `info` se distinguen por luminosidad (commit `fix(theme)…`)
+
+**Comprobado primero (prueba en rojo):** el primario de marca y `info` tenían **la misma luminosidad OKLCH** (claro: 0,54 frente a 0,546, ΔL 0,006; oscuro: 0,72 frente a 0,72, ΔL 0) y solo 37° de tono (292 frente a 255): no se distinguían sin color. **Ajuste, registrado como decisión por defecto:** `info` claro `oklch(0.546 0.19 255)` → `oklch(0.44 0.17 255)` (ΔL 0,10; su texto blanco pasa de 4,79:1 a 7,48:1) e `info` oscuro `oklch(0.72 0.14 250)` → `oklch(0.83 0.11 250)` (ΔL 0,11). **Prueba nueva** en `contrast.spec.ts`: ΔL ≥ 0,08 en claro y oscuro. Toda la suite de contraste AA (cada texto de cada componente, reposo y hover, claro y oscuro) sigue pasando con el `info` nuevo; la cifra del diseño de `info-foreground` sobre `info` se actualizó (4,79 → 7,48) con su nota. **Cambio visual** (azul más oscuro en claro y más claro en oscuro) para el CHANGELOG. ui-core 954 en verde.
+
 ## Punto exacto donde quedo
 
-Hecho: 1a, 1b, 1c. **Sigue: 1d** (distinguir el violeta de marca y el azul `info`), luego 2 (tamaños), 3 (R.7, R.12, R.13, R.14, R.15, R.16, R.24) y la puerta.
+Hecho: 1a, 1b, 1c, 1d. **Sigue: 2** (escala de tamaños por `[data-size]` en el tema y R.2, R.3, R.4, R.8, lo que falta de R.1), luego 3 (R.7, R.12, R.13, R.14, R.15, R.16, R.24) y la puerta.

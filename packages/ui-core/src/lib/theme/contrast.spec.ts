@@ -209,11 +209,26 @@ describe('Contraste AA de los tokens (theme-base.css)', () => {
     };
     expect(ratio('success-foreground', 'success')).toBeCloseTo(4.81, 1);
     expect(ratio('warning-foreground', 'warning')).toBeCloseTo(7.64, 1);
-    expect(ratio('info-foreground', 'info')).toBeCloseTo(4.79, 1);
+    // 4,79 en el diseño; el info más oscuro (1d, para distinguirlo del violeta) da 7,48.
+    expect(ratio('info-foreground', 'info')).toBeCloseTo(7.48, 1);
     expect(ratio('destructive-foreground', 'destructive')).toBeCloseTo(4.56, 1);
     // 6,83 en el diseño (fondo blanco); con el fondo #FAFAFA de la marca (R.0), el suave se mezcla
     // sobre él y da 6,57.
     expect(ratio('success-soft-foreground', 'success-soft')).toBeCloseTo(6.57, 1);
+  });
+
+  it('marca frente a info: se distinguen por luminosidad, no solo por tono (claro y oscuro)', () => {
+    // Revisión de la 0.6.0, 1d: el violeta (tono 292) y el azul info (tono 255) estaban a solo 37°
+    // y con la misma luminosidad (0,54 en claro y 0,72 en oscuro): un daltónico o una pantalla
+    // sin color no los distinguía. Se pide una diferencia de luminosidad OKLCH de al menos 0,08.
+    for (const [modeName, mode] of [
+      ['claro', contrastBlock(':root')],
+      ['oscuro', new Map([...contrastBlock(':root'), ...contrastBlock('.dark')])],
+    ] as const) {
+      const { color } = contrastResolver(mode);
+      const delta = Math.abs(color('var(--mimi-info)').L - color('var(--mimi-primary)').L);
+      expect(delta, `${modeName}: ΔL ${delta.toFixed(3)}`).toBeGreaterThanOrEqual(0.08);
+    }
   });
 
   it('marca (R.0): las cifras de la paleta #793EEA / #A88FFF / #171717 / #FAFAFA', () => {
