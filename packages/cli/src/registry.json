@@ -316,6 +316,7 @@
         "chip",
         "option-list",
         "utils/cn",
+        "utils/control-styles",
         "utils/field-state",
         "utils/overlay",
         "utils/size"
@@ -510,6 +511,7 @@
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": [
+        "option-list",
         "utils/cn",
         "utils/control-styles",
         "utils/field-state",

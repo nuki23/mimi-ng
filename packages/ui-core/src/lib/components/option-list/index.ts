@@ -2,6 +2,8 @@
 // (se quedan en './option-list', para los componentes de Mimi que tienen lista).
 export {
   MimiHighlight,
+  MimiOptgroup,
+  MimiOptionItem,
   type MimiListFilter,
   type MimiListOption,
   type MimiListOptionContext,

@@ -12,6 +12,7 @@ import {
   booleanAttribute,
   computed,
   contentChild,
+  contentChildren,
   effect,
   inject,
   input,
@@ -32,12 +33,16 @@ import {
   type MimiListOptionContext,
   type MimiListOptionGroup,
   type MimiListRow,
+  MimiOptgroup,
+  MimiOptionItem,
   MimiOptionList,
+  mimiDeclaredOptions,
   mimiFilterSections,
   mimiListSections,
   mimiNormalizeText,
 } from '@/components/ui/option-list/option-list';
 import { cn } from '@/components/ui/utils/cn';
+import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
@@ -70,6 +75,12 @@ import { MIMI_COMBOBOX_TEXT } from './combobox-texts';
 const OFFSET = 2;
 
 let nextId = 0;
+
+const CLEAR_CLASSES = cn(
+  'relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
+  'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
+  buttonFocusStyles,
+);
 
 const ICON = {
   viewBox: '0 0 24 24',
@@ -221,34 +232,63 @@ export class MimiComboboxOption {
         (keydown)="onKeydown($event)"
         (click)="setOpen(true)"
       />
-      @if (loading()) {
-        <svg
-          aria-hidden="true"
-          data-slot="spinner"
-          class="size-4 shrink-0 animate-[mimi-spin_0.8s_linear_infinite] text-muted-foreground"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          [attr.viewBox]="icon.viewBox"
-        >
-          <path [attr.d]="icon.spinner" />
-        </svg>
-      }
-      <svg
-        aria-hidden="true"
-        data-slot="chevron"
-        class="size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/combobox:rotate-180"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        [attr.viewBox]="icon.viewBox"
+      <!-- Un solo icono al final, en el sitio del chevron: cargando > limpiar > chevron. -->
+      <span
+        data-slot="end-icon"
+        class="relative z-10 inline-flex size-6 shrink-0 items-center justify-center"
+        [attr.data-icon]="endIcon()"
       >
-        <path [attr.d]="icon.chevron" />
-      </svg>
+        @if (endIcon() === 'clear') {
+          <button
+            type="button"
+            [class]="clearClasses"
+            [attr.aria-label]="texts.clear ?? 'Clear'"
+            (click)="clearAll()"
+          >
+            <svg
+              aria-hidden="true"
+              class="size-3.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              [attr.viewBox]="icon.viewBox"
+            >
+              <path d="M18 6 6 18" />
+              <path d="m6 6 12 12" />
+            </svg>
+          </button>
+        } @else if (endIcon() === 'loading') {
+          <svg
+            aria-hidden="true"
+            data-slot="spinner"
+            class="size-4 shrink-0 animate-[mimi-spin_0.8s_linear_infinite] text-muted-foreground"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            [attr.viewBox]="icon.viewBox"
+          >
+            <path [attr.d]="icon.spinner" />
+          </svg>
+        } @else {
+          <svg
+            aria-hidden="true"
+            data-slot="chevron"
+            class="size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/combobox:rotate-180"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            [attr.viewBox]="icon.viewBox"
+          >
+            <path [attr.d]="icon.chevron" />
+          </svg>
+        }
+      </span>
     </div>
     @if (help(); as help) {
       <span data-slot="help" class="text-xs text-muted-foreground" [id]="helpId">{{ help }}</span>
@@ -350,6 +390,8 @@ export class MimiCombobox<T = unknown>
   readonly creatable = input(false, { transform: booleanAttribute });
   /** Cargando: spinner en el campo y, en el panel, el estado de carga en vez de la lista. */
   readonly loading = input(false, { transform: booleanAttribute });
+  /** Botón para quitar el valor (en el múltiple, todos), en el sitio del chevron. */
+  readonly clearable = input(false, { transform: booleanAttribute });
   readonly placeholder = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
   /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
@@ -400,6 +442,25 @@ export class MimiCombobox<T = unknown>
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly icon = ICON;
+  protected readonly clearClasses = CLEAR_CLASSES;
+  private readonly declared = contentChildren(MimiOptionItem, { descendants: true });
+  /** `[options]` si se dio; si no, las `<mimi-option>` (como en Select). */
+  private readonly items = computed<readonly (MimiListOption<T> | MimiListOptionGroup<T>)[]>(() => {
+    const given = this.options();
+    return given.length > 0 ? given : mimiDeclaredOptions<T>(this.declared());
+  });
+  private readonly hasValue = computed(() => {
+    const value = this.value();
+    return Array.isArray(value) ? value.length > 0 : value != null;
+  });
+  /** Qué icono ocupa el sitio del chevron. */
+  protected readonly endIcon = computed(() =>
+    this.loading()
+      ? 'loading'
+      : this.clearable() && this.hasValue() && !this.disabled() && !this.readonly()
+        ? 'clear'
+        : 'chevron',
+  );
   protected readonly listClasses = LIST_CLASSES;
   protected readonly optionClasses = OPTION_CLASSES;
   protected readonly optionMultipleClasses = OPTION_MULTIPLE_CLASSES;
@@ -418,7 +479,7 @@ export class MimiCombobox<T = unknown>
   );
   protected readonly panelClasses = computed(() => cn(PANEL_CLASSES, this.panelClass()));
 
-  private readonly sections = computed(() => mimiListSections<T>(this.options(), this.listId));
+  private readonly sections = computed(() => mimiListSections<T>(this.items(), this.listId));
   private readonly rows = computed(() => this.sections().flatMap((section) => section.rows));
 
   /** El texto del campo. */
@@ -733,6 +794,13 @@ export class MimiCombobox<T = unknown>
    * Escape con el panel cerrado: vacía el campo y, en simple, quita el valor. En el múltiple los
    * chips se quedan (se quitan uno a uno).
    */
+  protected clearAll(): void {
+    this.pendingCreate.set(null);
+    this.resetDraft();
+    this.value.set(this.multiple() ? [] : null);
+    this.field().nativeElement.focus();
+  }
+
   private clear(): void {
     this.pendingCreate.set(null);
     this.resetDraft();
@@ -802,4 +870,10 @@ export class MimiCombobox<T = unknown>
 }
 
 /** Todas las piezas del Combobox, para importarlas juntas. */
-export const MimiComboboxImports = [MimiCombobox, MimiComboboxStart, MimiComboboxOption] as const;
+export const MimiComboboxImports = [
+  MimiCombobox,
+  MimiComboboxStart,
+  MimiComboboxOption,
+  MimiOptionItem,
+  MimiOptgroup,
+] as const;

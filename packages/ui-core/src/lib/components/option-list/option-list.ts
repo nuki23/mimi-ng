@@ -3,8 +3,10 @@ import { Listbox, Option } from '@angular/aria/listbox';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
   type EmbeddedViewRef,
+  ElementRef,
   TemplateRef,
   ViewContainerRef,
   afterRenderEffect,
@@ -53,6 +55,85 @@ export interface MimiListOptionContext<T = unknown> {
   $implicit: MimiListOption<T>;
   /** Lo escrito (para resaltar). */
   query: string;
+}
+
+/** Un grupo declarativo: `<mimi-optgroup label="Europa">…<mimi-option>…</mimi-optgroup>`. */
+@Component({
+  selector: 'mimi-optgroup',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { hidden: '' },
+  template: '<ng-content />',
+})
+export class MimiOptgroup {
+  readonly label = input.required<string>();
+}
+
+/**
+ * Una opción declarativa, alternativa a `[options]` en Select y Combobox:
+ * `<mimi-option value="es" hint="UE">España</mimi-option>`. El texto es la etiqueta (o `label`).
+ * El componente las lee y pinta él mismo; el elemento no se ve.
+ */
+@Component({
+  selector: 'mimi-option',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { hidden: '' },
+  template: '<ng-content />',
+})
+export class MimiOptionItem<T = unknown> {
+  readonly value = input.required<T>();
+  readonly label = input<string>();
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly hint = input<string>();
+  readonly group = inject(MimiOptgroup, { optional: true });
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  /** Sube cuando cambia el texto de dentro, para que la lista relea la etiqueta. */
+  private readonly textVersion = signal(0);
+
+  constructor() {
+    if (typeof MutationObserver === 'undefined') return;
+    const observer = new MutationObserver(() => this.textVersion.update((v) => v + 1));
+    observer.observe(this.host.nativeElement, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+    inject(DestroyRef).onDestroy(() => observer.disconnect());
+  }
+
+  /** Lo que la lista pinta. */
+  readonly option = computed<MimiListOption<T>>(() => {
+    this.textVersion();
+    return {
+      label: this.label() ?? (this.host.nativeElement.textContent ?? '').trim(),
+      value: this.value(),
+      disabled: this.disabled(),
+      hint: this.hint(),
+    };
+  });
+}
+
+/** Las `<mimi-option>` en el orden del DOM, con las de un mismo `<mimi-optgroup>` juntas. */
+export function mimiDeclaredOptions<T>(
+  items: readonly MimiOptionItem<T>[],
+): (MimiListOption<T> | MimiListOptionGroup<T>)[] {
+  const result: (MimiListOption<T> | MimiListOptionGroup<T>)[] = [];
+  const groups = new Map<MimiOptgroup, MimiListOption<T>[]>();
+  for (const item of items) {
+    const option = item.option();
+    if (!item.group) {
+      result.push(option);
+      continue;
+    }
+    const existing = groups.get(item.group);
+    if (existing) {
+      existing.push(option);
+    } else {
+      const options: MimiListOption<T>[] = [option];
+      groups.set(item.group, options);
+      result.push({ label: item.group.label(), options });
+    }
+  }
+  return result;
 }
 
 /** Minúsculas y sin tildes, para comparar textos. */

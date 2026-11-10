@@ -23,6 +23,8 @@ export interface MimiComboboxText {
   help: string;
   /** Chips ocultos con el múltiple cerrado y sin foco: «+2». */
   more: (count: number) => string;
+  /** Nombre accesible del botón de limpiar (`clearable`). Si falta: «Clear». */
+  clear?: string;
 }
 
 /** Textos predeterminados (inglés). */
@@ -35,6 +37,7 @@ export const MIMI_COMBOBOX_TEXT_EN: MimiComboboxText = {
   results: (count) => `${count} ${count === 1 ? 'result' : 'results'}`,
   help: 'Enter adds · Backspace removes the last one',
   more: (count) => `+${count}`,
+  clear: 'Clear selection',
 };
 
 /** Textos en español: `provideMimiComboboxText(MIMI_COMBOBOX_TEXT_ES)`. */
@@ -47,6 +50,7 @@ export const MIMI_COMBOBOX_TEXT_ES: MimiComboboxText = {
   results: (count) => `${count} ${count === 1 ? 'resultado' : 'resultados'}`,
   help: 'Enter agrega · Backspace quita el último chip',
   more: (count) => `+${count}`,
+  clear: 'Limpiar selección',
 };
 
 /** Textos activos. Sin `provideMimiComboboxText`, los predeterminados en inglés. */
