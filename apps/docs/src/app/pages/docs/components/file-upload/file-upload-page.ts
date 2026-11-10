@@ -8,6 +8,7 @@ import { InstallCommand } from '../../../../code/install-command';
 import { FileUploadBasicExample } from './examples/file-upload-basic.example';
 import { FileUploadFormsExample } from './examples/file-upload-forms.example';
 import { FileUploadListExample } from './examples/file-upload-list.example';
+import { FileUploadReadonlyExample } from './examples/file-upload-readonly.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -16,6 +17,8 @@ import basicSource from './examples/file-upload-basic.example' with { loader: 't
 import formsSource from './examples/file-upload-forms.example' with { loader: 'text' };
 // @ts-expect-error
 import listSource from './examples/file-upload-list.example' with { loader: 'text' };
+// @ts-expect-error
+import readonlySource from './examples/file-upload-readonly.example' with { loader: 'text' };
 
 interface ApiRow {
   name: string;
@@ -35,6 +38,7 @@ interface ApiRow {
     FileUploadBasicExample,
     FileUploadListExample,
     FileUploadFormsExample,
+    FileUploadReadonlyExample,
   ],
   providers: [
     provideMimiFileUploadText(MIMI_FILE_UPLOAD_TEXT_ES),
@@ -48,6 +52,7 @@ export class FileUploadPage {
     basic: basicSource as string,
     list: listSource as string,
     forms: formsSource as string,
+    readonly: readonlySource as string,
   };
 
   protected readonly usage = [
@@ -125,6 +130,13 @@ export class FileUploadPage {
       type: '—',
       default: '—',
       description: 'De la zona de soltar.',
+    },
+    {
+      name: 'readonly',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Solo lectura: no abre el selector ni acepta archivos soltados. La zona es un botón (no admite aria-readonly): queda enfocable y con aria-disabled.',
     },
   ];
 }

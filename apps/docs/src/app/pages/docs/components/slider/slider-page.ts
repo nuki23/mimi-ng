@@ -7,6 +7,7 @@ import { InstallCommand } from '../../../../code/install-command';
 import { SliderBasicExample } from './examples/slider-basic.example';
 import { SliderMarksExample } from './examples/slider-marks.example';
 import { SliderRangeExample } from './examples/slider-range.example';
+import { SliderReadonlyExample } from './examples/slider-readonly.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -15,6 +16,8 @@ import basicSource from './examples/slider-basic.example' with { loader: 'text' 
 import marksSource from './examples/slider-marks.example' with { loader: 'text' };
 // @ts-expect-error
 import rangeSource from './examples/slider-range.example' with { loader: 'text' };
+// @ts-expect-error
+import readonlySource from './examples/slider-readonly.example' with { loader: 'text' };
 
 interface ApiRow {
   name: string;
@@ -34,6 +37,7 @@ interface ApiRow {
     SliderBasicExample,
     SliderRangeExample,
     SliderMarksExample,
+    SliderReadonlyExample,
   ],
   providers: [provideMimiSliderText(MIMI_SLIDER_TEXT_ES)],
   templateUrl: './slider-page.html',
@@ -44,6 +48,7 @@ export class SliderPage {
     basic: basicSource as string,
     range: rangeSource as string,
     marks: marksSource as string,
+    readonly: readonlySource as string,
   };
 
   protected readonly usage = [
@@ -102,6 +107,13 @@ export class SliderPage {
       description: 'La burbuja: al arrastrar y con el foco, siempre o nunca.',
     },
     { name: 'disabled', type: 'boolean', default: 'false', description: 'Deshabilitado.' },
+    {
+      name: 'readonly',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Solo lectura: el valor se ve y el pulgar se enfoca (aria-readonly), pero no se mueve ni con el puntero ni con el teclado.',
+    },
     {
       name: 'aria-label / aria-labelledby',
       type: 'string',

@@ -140,6 +140,7 @@ let nextId = 0;
       [id]="controlId()"
       [class]="zoneClasses()"
       [disabled]="disabled()"
+      [attr.aria-disabled]="readonly() ? 'true' : null"
       [attr.aria-labelledby]="labelledBy()"
       [attr.aria-describedby]="hint() ? hintId : null"
       [attr.aria-invalid]="showInvalid() || null"
@@ -195,6 +196,7 @@ let nextId = 0;
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-readonly]': 'readonly() ? "" : null',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -227,6 +229,11 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   /** Qué se acepta («PNG, JPG o PDF · hasta 10 MB»): describe la zona. */
   readonly hint = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /**
+   * Solo lectura (R.12): no abre el selector ni acepta archivos soltados. El botón es un `button`
+   * (no admite `aria-readonly`): queda con `aria-disabled` y se puede enfocar.
+   */
+  readonly readonly = input(false, { transform: booleanAttribute });
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
   readonly dirty = input(false, { transform: booleanAttribute });
@@ -281,7 +288,7 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
 
   /** Abre el selector de archivos del sistema. */
   openPicker(): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     this.picker().nativeElement.click();
   }
 
@@ -294,7 +301,7 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   }
 
   protected onDragEnter(event: DragEvent): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     event.preventDefault();
     // Al entrar en la zona (no al pasar a un hijo) se cuentan los archivos que llegan.
     if (this.depth === 0) this.dragCount.set(event.dataTransfer?.items?.length ?? 0);
@@ -303,7 +310,7 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   }
 
   protected onDragOver(event: DragEvent): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     event.preventDefault();
     if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy';
   }
@@ -317,7 +324,7 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
     event.preventDefault();
     this.depth = 0;
     this.over.set(false);
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     this.add(Array.from(event.dataTransfer?.files ?? []));
     this.touch.emit();
   }

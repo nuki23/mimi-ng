@@ -127,6 +127,7 @@ let nextId = 0;
       [attr.aria-valuenow]="saturation()"
       [attr.aria-valuetext]="texts.areaValue(saturation(), brightness())"
       [attr.aria-disabled]="disabled() || null"
+      [attr.aria-readonly]="readonly() || null"
       (pointerdown)="onAreaPointer($event, true)"
       (pointermove)="onAreaPointer($event, false)"
       (pointerup)="endDrag($event)"
@@ -158,6 +159,7 @@ let nextId = 0;
         [attr.aria-valuemax]="360"
         [attr.aria-valuenow]="hue()"
         [attr.aria-disabled]="disabled() || null"
+        [attr.aria-readonly]="readonly() || null"
         (pointerdown)="onHuePointer($event, true)"
         (pointermove)="onHuePointer($event, false)"
         (pointerup)="endDrag($event)"
@@ -213,6 +215,7 @@ let nextId = 0;
         class="h-8 min-w-0 flex-1 font-mono text-xs"
         [value]="draft()"
         [disabled]="disabled()"
+        [readOnly]="readonly()"
         [attr.aria-label]="texts.value"
         [attr.aria-invalid]="draftInvalid() || null"
         [attr.aria-describedby]="clipped() ? clippedId : null"
@@ -288,6 +291,7 @@ let nextId = 0;
   host: {
     '[class]': 'classes()',
     '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-readonly]': 'readonly() ? "" : null',
     '[attr.aria-label]': 'null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -306,6 +310,8 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
   /** Formato del campo al empezar (HEX u OKLCH). El valor sigue siendo hex. */
   readonly format = input<MimiColorFormat>('hex');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el color se ve y se enfoca, pero no cambia (área, tono, paleta ni campo). */
+  readonly readonly = input(false, { transform: booleanAttribute });
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
   readonly dirty = input(false, { transform: booleanAttribute });
@@ -418,7 +424,7 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
   }
 
   private setHsv(hsv: MimiHsv): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     this.hsv.set(hsv);
     this.value.set(fromHsv(hsv));
     this.clipped.set(false);
@@ -459,7 +465,7 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
   }
 
   protected onAreaPointer(event: PointerEvent, start: boolean): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     const element = this.area().nativeElement;
     if (start) this.startDrag(event, element);
     else if (this.dragging !== element) return;
@@ -468,7 +474,7 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
   }
 
   protected onHuePointer(event: PointerEvent, start: boolean): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     const element = this.hueBar().nativeElement;
     if (start) this.startDrag(event, element);
     else if (this.dragging !== element) return;
@@ -546,7 +552,7 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
 
   protected pickSwatch(color: string): void {
     const hex = mimiNormalizeHex(color);
-    if (!hex || this.disabled()) return;
+    if (!hex || this.disabled() || this.readonly()) return;
     this.value.set(hex);
     this.clipped.set(false);
     this.draftInvalid.set(false);
@@ -556,6 +562,7 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
 
   /** Enter o salir del campo: lo escrito pasa a ser el valor si se entiende. */
   protected commitDraft(): void {
+    if (this.readonly()) return;
     const text = (this.draft() ?? '').trim();
     const current = mimiNormalizeHex(this.value());
     const shown = current
@@ -608,6 +615,7 @@ let nextInputId = 0;
     <mimi-popover
       align="start"
       [arrow]="false"
+      [blocked]="readonly()"
       [class]="panelClasses()"
       [(open)]="open"
       (openChange)="onOpenChange($event)"
@@ -620,6 +628,7 @@ let nextInputId = 0;
         [id]="controlId()"
         [class]="classes()"
         [disabled]="disabled()"
+        [attr.aria-readonly]="readonly() || null"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
         [attr.aria-describedby]="valueId"
@@ -647,6 +656,7 @@ let nextInputId = 0;
           [(recent)]="recent"
           [showRecent]="showRecent()"
           [format]="format()"
+          [readonly]="readonly()"
           (valueChange)="value.set($event)"
         />
       </ng-template>
@@ -661,6 +671,7 @@ let nextInputId = 0;
     '[attr.data-state]': 'open() ? "open" : "closed"',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-readonly]': 'readonly() ? "" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -674,6 +685,8 @@ export class MimiColorInput implements FormValueControl<string>, MimiFieldContro
   readonly format = input<MimiColorFormat>('hex');
   readonly placeholder = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): se ve el color y el campo se enfoca, pero el panel no se abre. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
   readonly dirty = input(false, { transform: booleanAttribute });

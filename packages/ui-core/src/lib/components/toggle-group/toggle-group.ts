@@ -215,6 +215,9 @@ export class MimiToggleGroupItem implements FocusableOption {
     '[attr.aria-label]': 'ariaLabel() || null',
     '[attr.aria-labelledby]': 'ariaLabelledby() || null',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
+    // aria-readonly vale en el radiogrupo (simple), no en el grupo de interruptores (múltiple).
+    '[attr.aria-readonly]': 'readonly() && !multiple() ? "true" : null',
+    '[attr.data-readonly]': 'readonly() ? "" : null',
     '[attr.aria-invalid]': 'showInvalid() ? "true" : null',
     '[attr.aria-required]': 'required() && !multiple() ? "true" : null',
     '[attr.data-variant]': 'variant()',
@@ -240,6 +243,8 @@ export class MimiToggleGroup<T = unknown> implements FormValueControl<T | null |
   /** `solid`: el elegido en `primary`. */
   readonly variant = input<MimiToggleGroupVariant>('default');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): se ve lo elegido y las flechas mueven el foco, pero no cambia. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -323,7 +328,7 @@ export class MimiToggleGroup<T = unknown> implements FormValueControl<T | null |
 
   /** Uso interno: el clic (y Espacio o Enter, que el navegador convierte en clic). */
   select(item: MimiToggleGroupItem): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     const value = item.value() as T;
     if (this.multiple()) {
       const current = this.selected() as T[];

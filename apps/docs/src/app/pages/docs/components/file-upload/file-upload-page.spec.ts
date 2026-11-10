@@ -22,7 +22,7 @@ describe('FileUploadPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(3);
+      expect(previews.length).toBe(4);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-file-upload, mimi-file-list')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/file-upload';");

@@ -6,6 +6,7 @@ import {
   afterNextRender,
   afterRenderEffect,
   booleanAttribute,
+  effect,
   computed,
   contentChild,
   inject,
@@ -110,6 +111,7 @@ let nextId = 0;
       [class]="boxClasses()"
       [attr.data-invalid]="invalid() ? '' : null"
       [attr.data-disabled]="isDisabled() ? '' : null"
+      [attr.data-readonly]="readonly() ? '' : null"
     >
       <ng-content />
       <button
@@ -249,8 +251,19 @@ export class MimiPassword {
   readonly rules = input<readonly MimiPasswordRule[] | undefined>(undefined);
   /** Nivel propio (0 a 3). Por defecto, la heurística de las reglas (orientativa). */
   readonly strength = input<((value: string) => MimiPasswordLevel) | undefined>(undefined);
+  /**
+   * Solo lectura (R.12): el `<input>` de dentro queda `readonly` (se ve y se enfoca, no se edita).
+   * El ojo sigue funcionando: mostrar el valor no lo cambia. Un `readonly` escrito en el propio
+   * `<input>` o puesto por Signal Forms también vale.
+   */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Clases de la caja, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
+
+  private readonly syncReadonly = effect(() => {
+    const element = this.inputElement();
+    if (element && this.readonly()) element.readOnly = true;
+  });
 
   private readonly field = contentChild(MimiInput);
   /** El input del usuario: el de mimiInput o, si no lo usa, el primero que haya. */

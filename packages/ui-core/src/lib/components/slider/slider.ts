@@ -132,6 +132,7 @@ const FILL = {
         [attr.aria-valuetext]="thumb.text"
         [attr.aria-orientation]="'horizontal'"
         [attr.aria-disabled]="disabled() || null"
+        [attr.aria-readonly]="readonly() || null"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.data-dragging]="dragging() === $index ? '' : null"
         (keydown)="onKeydown($event, $index)"
@@ -156,6 +157,7 @@ const FILL = {
     '[class]': 'classes()',
     '[attr.data-range]': 'range() ? "" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-readonly]': 'readonly() ? "" : null',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
@@ -192,6 +194,8 @@ export class MimiSlider implements FormValueControl<MimiSliderValue>, MimiFieldC
   readonly format = input<(value: number) => string>((value) => String(value));
   readonly showValue = input<MimiSliderShowValue>('auto');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se enfoca, pero no se mueve ni con el puntero ni con el teclado. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -323,7 +327,7 @@ export class MimiSlider implements FormValueControl<MimiSliderValue>, MimiFieldC
   );
 
   protected onKeydown(event: KeyboardEvent, index: number): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     const step = this.step() > 0 ? this.step() : 1;
     const rtl = this.dir() === 'rtl';
     const current = this.values()[index];
@@ -344,7 +348,7 @@ export class MimiSlider implements FormValueControl<MimiSliderValue>, MimiFieldC
 
   /** Puntero en el contenedor: mueve el pulgar más cercano, le da el foco y lo arrastra. */
   protected onPointerDown(event: PointerEvent): void {
-    if (this.disabled() || event.button !== 0) return;
+    if (this.disabled() || this.readonly() || event.button !== 0) return;
     const value = this.valueAt(event.clientX);
     if (value === null) return;
     const values = this.values();

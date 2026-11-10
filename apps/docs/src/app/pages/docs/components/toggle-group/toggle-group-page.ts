@@ -8,6 +8,7 @@ import { ToggleGroupDisabledExample } from './examples/toggle-group-disabled.exa
 import { ToggleGroupFormsExample } from './examples/toggle-group-forms.example';
 import { ToggleGroupIconsExample } from './examples/toggle-group-icons.example';
 import { ToggleGroupMultipleExample } from './examples/toggle-group-multiple.example';
+import { ToggleGroupReadonlyExample } from './examples/toggle-group-readonly.example';
 import { ToggleGroupSolidExample } from './examples/toggle-group-solid.example';
 import { ToggleGroupTextExample } from './examples/toggle-group-text.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
@@ -26,6 +27,8 @@ import multipleSource from './examples/toggle-group-multiple.example' with { loa
 import solidSource from './examples/toggle-group-solid.example' with { loader: 'text' };
 // @ts-expect-error
 import textSource from './examples/toggle-group-text.example' with { loader: 'text' };
+// @ts-expect-error
+import readonlySource from './examples/toggle-group-readonly.example' with { loader: 'text' };
 
 interface ApiRow {
   name: string;
@@ -47,6 +50,7 @@ interface ApiRow {
     ToggleGroupMultipleExample,
     ToggleGroupSolidExample,
     ToggleGroupDisabledExample,
+    ToggleGroupReadonlyExample,
     ToggleGroupFormsExample,
     ToggleGroupCustomExample,
   ],
@@ -60,6 +64,7 @@ export class ToggleGroupPage {
     multiple: multipleSource as string,
     solid: solidSource as string,
     disabled: disabledSource as string,
+    readonly: readonlySource as string,
     forms: formsSource as string,
     custom: customSource as string,
   };
@@ -113,6 +118,13 @@ export class ToggleGroupPage {
       type: 'boolean',
       default: 'false',
       description: 'Deshabilita el grupo entero (también desde el formulario).',
+    },
+    {
+      name: 'readonly',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Solo lectura: se ve lo elegido y las flechas mueven el foco, pero no cambia. aria-readonly en el modo simple.',
     },
     {
       name: 'class',
