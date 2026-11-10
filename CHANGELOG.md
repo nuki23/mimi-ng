@@ -2,6 +2,57 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
+## 0.6.0 (por publicar): tema de marca, tamaños y formularios
+
+> **Borrador.** La versión y la fecha las pone quien publica (`docs/proceso/release.md`). Falta decidir si sale con lo que dice «No incluido». Detalle y evidencia: `docs/auto/refinamiento-0.6.0-*.md`.
+
+### Rupturas (qué cambia en algo que ya tenías y qué hacer)
+
+- **El tema por defecto es violeta.** El primario es `#793EEA` en claro y `#A88FFF` en oscuro, con una escala `--mimi-brand-50…950` en OKLCH; `info` se ajusta para distinguirse del violeta. El neutro anterior sigue disponible: `provideMimiTheme(MIMI_THEME_NEUTRAL)`. **Si ya tienes tu tema, no cambia nada; si usabas el predeterminado, verás el violeta.**
+- **`size="default"` se llama ahora `md`** (Button, Input, Avatar, Progress, Pagination…). `default` se sigue aceptando con un aviso en desarrollo y **se quita en la 0.7.0**. También cambia `data-size="default"` → `data-size="md"` para quien lo use en CSS o en pruebas.
+- **Sin `size`, un control no escribe `data-size`.** El `md` vive en el tema (`:root`) y cada control hereda el del contenedor `[data-size]` más cercano (un `mimiSize` o cualquier contenedor con el atributo). Si leías `data-size="md"` de un control sin `size`, ya no está.
+- **Toast `outline` es de color** (por defecto): el borde y el ícono toman el tono. La tarjeta neutra de la 0.5.0 es `variant="neutral"`.
+- **Los Blocks quedan inertes mientras cargan** (`[loading]`): el anfitrión lleva `inert` y `aria-busy`, el foco vuelve al control que lanzó la acción y se anuncia «Loading…» / «Done.» (en inglés, fijo). Instala `utils/busy` con ellos.
+- **`separatorAfter` de Input OTP** pasa de `number` a `number | number[]` (varias separaciones). En plantilla, `separatorAfter="3"` sigue igual; cambia solo el tipo si lo lees por código.
+- **Select instala también `option-list`** (para `<mimi-option>`): un archivo más en `components/ui/`. No cambia su API.
+- **El texto `clear` del Combobox** (`MimiComboboxText`) es **opcional** (si falta, «Clear»); el Combobox gana `clearable`.
+- **Las medidas de los componentes salen de la escala** (`--mimi-size-*` y derivadas por `[data-size]`): si sobrescribes un token de medida (`--mimi-btn-height`, `--mimi-input-height`…) **en un contenedor** y no en `:root`, el cambio ya no llega a los controles de dentro (se resuelve en `:root`); ponlo en `:root` o en el contenedor con su `data-size`.
+- **Dialog:** `padding` es un solo valor lateral. **Data Table:** conserva `density` y gana `size` (alto de fila y de cabecera); `comfortable` mantiene su alto fijo.
+
+### Tamaños `sm / md / lg` en todos los componentes (R.1, R.2, R.3, R.4, R.8)
+
+- Una escala común en el tema (`[data-size]`), `size` en cada control y `mimiSize="sm"` en un contenedor (un formulario entero, sin repetirlo). Página nueva: **Tamaños**, con la escala y qué cambia en cada componente.
+- Hechos: Button, Input, Avatar, Select, Combobox, Number Input, Password, Input Mask, Tags Input, Date Picker, Date Range, Color Picker, Textarea, Switch, Checkbox (con su página), Toast (`size` por aviso y `provideMimiToast({ size })`), Pagination, Progress, Tabs, Toggle Group, Badge, Dialog, Chip, Slider, Toolbar, Calendar, Dropdown y Context Menu, Command, Tree, Sortable List, Data Table, Tooltip y Popover. **Card** llega con `mimiCard` en la 0.7.0.
+- Lo que se pinta en un panel flotante (menús, Popover, Tooltip, el Calendar de un Date Picker) toma el tamaño de su disparador.
+
+### Formularios
+
+- **`readonly`** en Checkbox, Switch, Select, Combobox, Date Picker, Date Range, Slider, Color Picker, File Upload, Toggle Group y Password: el valor se ve y se enfoca, no se cambia (`aria-readonly` donde el rol lo admite; File Upload usa `aria-disabled` porque su zona es un botón).
+- **Form Field:** `label`, `description`, `hint` y `required` como atajos (con sus ids en `aria-describedby` y el asterisco oculto a los lectores); `[errors]` en el campo y mensajes que viajan con el validador (`withMessage` en Reactive Forms, `message` en Signal Forms). Prioridad: `<mimi-form-error>` > `message` del validador > `[errors]` > `provideMimiErrorMessages` > predeterminado.
+- **`<mimi-option>` y `<mimi-optgroup>`** como alternativa a `[options]` en Select y Combobox; un solo icono al final (cargando, limpiar o chevron). Combobox con `clearable`.
+- **Dialog como servicio:** `size`, `inputs` (validadas contra el componente antes de crear el diálogo), `padding`, `panelClass`, `ref.closed`, `ref.result` y `chrome: 'none'`.
+- **Tabs:** atajo `<mimi-tab label>`; sin `value`, el valor sale del texto, del índice o con un sufijo, con un aviso en desarrollo.
+- **Input OTP:** la cantidad de dígitos que quepa y `separatorAfter` en lista.
+
+### Arreglos
+
+- Tabs y Toggle Group en oscuro, y Skeleton; efecto de clic uniforme (`--mimi-press-scale`).
+- Los Blocks con `[loading]` devuelven el foco al terminar.
+- Select: el chevron y el spinner abren el panel; Combobox `readonly` no deja quitar chips ni vaciar con Escape; Password vuelve a ser editable al quitar `readonly`; Form Field quita de `aria-describedby` lo que ya no existe; el Combobox múltiple mide lo mismo que los demás controles en `sm`.
+
+### Documentación
+
+- Páginas nuevas o ampliadas: **Tamaños**, **Checkbox** (separada de Switch), pestañas «Con formularios» (Signal Forms, Reactive y plantilla) en 17 páginas, ejemplos de solo lectura y de `<mimi-option>`.
+- **Requisito del sitio (no de la librería):** el sitio de documentación usa `@scope` de CSS (Chrome 118, Safari 17.4, Firefox 128). Los componentes que copia la CLI no lo usan.
+
+### No incluido en esta versión
+
+R.0 (el logo y el favicon, a la espera de los archivos), M.9 completa (la lista de Select sobre `option-list`), el aspecto de solo lectura (`data-readonly`) y los ejemplos de solo lectura de los seis primeros controles, y R.14 (más ejemplos y el diagrama).
+
+### Cómo actualizar desde la 0.5.0
+
+`npm i -D @mimi-ng/cli@0.6.0` y `ng g mimi <los componentes que usas>`. Lo que modificaste no se sobrescribe (con `--overwrite` sí). Revisa «Rupturas», arriba.
+
 ## 0.5.0 (09/11/2026): datos y páginas
 
 Cuatro componentes de datos nuevos, la pantalla de clientes (`table-01`) y un cambio en cómo `ng g mimi` genera las pantallas (**RUPTURA**, abajo: «Los Blocks de pantalla se generan como páginas tuyas»).
