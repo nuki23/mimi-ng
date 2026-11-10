@@ -1,3 +1,6 @@
+// Módulo (no script): sin esto, sus constantes chocan con las de otras pruebas del sitio.
+export {};
+
 /**
  * R.24, «uso corto por defecto»: el bloque «Uso» de cada página de componente (lo primero que ve
  * quien llega) tiene una plantilla de pocas líneas. Si una página crece, o se rediseña el uso o se
@@ -11,7 +14,7 @@ const usageFs = usageNode.getBuiltinModule('node:fs') as {
   existsSync(p: string): boolean;
   readFileSync(p: string, e: 'utf8'): string;
 };
-const ROOT = `${usageNode.cwd()}/apps/docs/src/app/pages/docs/components/`;
+const PAGES_DIR = `${usageNode.cwd()}/apps/docs/src/app/pages/docs/components/`;
 
 /** Páginas que se usan con un servicio (`toast.success('…')`, `confirm.open(…)`): sin plantilla. */
 const SERVICE_ONLY = new Set(['toast', 'confirm']);
@@ -33,8 +36,8 @@ function templateLines(page: string): number | null {
 
 describe('Uso corto en las páginas de componentes (R.24)', () => {
   const pages = usageFs
-    .readdirSync(ROOT)
-    .filter((dir) => usageFs.existsSync(`${ROOT}${dir}/${dir}-page.ts`));
+    .readdirSync(PAGES_DIR)
+    .filter((dir) => usageFs.existsSync(`${PAGES_DIR}${dir}/${dir}-page.ts`));
 
   it('hay páginas que medir', () => {
     expect(pages.length).toBeGreaterThan(30);
@@ -43,7 +46,7 @@ describe('Uso corto en las páginas de componentes (R.24)', () => {
   for (const dir of pages) {
     if (SERVICE_ONLY.has(dir)) continue;
     it(`${dir}: la plantilla del bloque «Uso» cabe en ${EXCEPTIONS[dir] ?? MAX_LINES} líneas`, () => {
-      const lines = templateLines(`${ROOT}${dir}/${dir}-page.ts`);
+      const lines = templateLines(`${PAGES_DIR}${dir}/${dir}-page.ts`);
       expect(lines, 'no se encontró la plantilla del bloque «Uso»').not.toBeNull();
       expect(lines!).toBeLessThanOrEqual(EXCEPTIONS[dir] ?? MAX_LINES);
     });

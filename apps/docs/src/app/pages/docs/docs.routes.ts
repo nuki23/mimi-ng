@@ -23,6 +23,11 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./foundations-page').then((m) => m.FoundationsPage),
   },
   {
+    path: 'sizes',
+    title: 'Tamaños · Mimi',
+    loadComponent: () => import('./sizes-page').then((m) => m.SizesPage),
+  },
+  {
     path: 'theme',
     title: 'Tema · Mimi',
     loadComponent: () => import('./theme/theme-page').then((m) => m.ThemePage),
