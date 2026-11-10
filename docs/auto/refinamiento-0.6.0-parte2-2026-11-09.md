@@ -214,6 +214,10 @@ for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text)
 
 **No hecho (R.12 queda `[~]`):** Slider, Color Picker, File Upload, Toggle Group y Password; el aspecto de «solo lectura» (`data-readonly`, fondo propio, `--mimi-input-readonly-bg`); el ejemplo «Solo lectura» en cada página y las filas de la API. **Bundle:** ver la medición de abajo.
 
+## R.24 Auditoría de «uso corto» (hecha en parte)
+
+`docs/plan/refinamiento/uso-corto.md`: los atajos que existen, los casos largos con su tarea y lo que la auditoría **no** hizo. **El criterio del plan, medido y con prueba:** un formulario de contacto completo (Input, Select, Textarea, Checkbox y Button dentro de Form Field, con `required`, `hint` y error al enviar) ocupa **7 líneas** de plantilla (límite 12), y `short-use.spec.ts` lo renderiza y comprueba (5 campos, 2 asteriscos, la ayuda, 3 errores al enviar sin rellenar) y falla si el formulario deja de caber en 12 líneas. ui-core 969 en verde. **No hecho (queda `[~]`):** el recorrido de los 43 componentes con la tabla de líneas, y los atajos que dependen de R.15, R.16, R.13, R.19, R.20 y R.23.
+
 ## Punto exacto donde quedo
 
 Hecho: 1a, 1b, 1c, 1d, la escala en el tema (R.1), R.2, R.3, R.4, R.8 (Pagination, Progress, Tabs, Toggle Group, Badge), R.7 y los atajos de R.14. **Sigue:** R.12, R.24, R.13, R.15 y R.16 (midiendo el CSS, hoy 176,58 kB) y la puerta. (Ya no aplica la línea siguiente, de antes:) R.8 (resto de componentes y Progress/Pagination), luego 3 (R.7, R.12, R.13, R.14, R.15, R.16, R.24) y la puerta.
