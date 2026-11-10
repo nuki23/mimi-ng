@@ -75,6 +75,16 @@ const GLOBALS = new Set([
   // Cuántas pestañas hay y cuál se pinta: las escribe Tabs para colocar el indicador.
   '--mimi-tabs-count',
   '--mimi-tabs-index',
+  // Derivadas de la escala de tamaños (theme-base.css, `[data-size]`): las resuelve el tema por
+  // tamaño a partir de los tokens públicos (`--mimi-btn-height`, `-sm`, `-lg`…).
+  '--mimi-btn-h',
+  '--mimi-btn-text',
+  '--mimi-btn-gap-s',
+  '--mimi-btn-px-s',
+  '--mimi-input-h',
+  '--mimi-input-text',
+  '--mimi-avatar-s',
+  '--mimi-avatar-text',
   // Lo mismo en Toggle Group (G2.1).
   '--mimi-toggle-group-count',
   '--mimi-toggle-group-index',
@@ -108,10 +118,16 @@ describe('Variables CSS de cada componente (component-tokens.ts)', () => {
       const listed = COMPONENT_TOKENS[component].map((t) => t.name);
       // Todo lo que usa el código está en la tabla.
       expect([...inCode].filter((name) => !listed.includes(name))).toEqual([]);
-      // Todo lo de la tabla existe (en el componente o, como --mimi-badge-radius, en el tema).
-      expect(listed.filter((name) => !inCode.has(name) && !themeBase.includes(`${name}:`))).toEqual(
-        [],
-      );
+      // Todo lo de la tabla existe: en el componente, declarado en el tema (--mimi-badge-radius) o
+      // leído por la escala de tamaños del tema (--mimi-btn-height-sm: `var(--mimi-btn-height-sm, …)`).
+      expect(
+        listed.filter(
+          (name) =>
+            !inCode.has(name) &&
+            !themeBase.includes(`${name}:`) &&
+            !themeBase.includes(`var(${name},`),
+        ),
+      ).toEqual([]);
     });
   }
 

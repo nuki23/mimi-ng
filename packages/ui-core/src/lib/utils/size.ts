@@ -69,6 +69,9 @@ export function injectMimiSize(
 @Directive({
   selector: '[mimiSize]',
   providers: [{ provide: MIMI_SIZE, useExisting: forwardRef(() => MimiSizeScope) }],
+  // `data-size` en el contenedor: la escala del tema (`[data-size]`) llega por la cascada de CSS
+  // también a los componentes que no tienen `size` propio.
+  host: { '[attr.data-size]': 'size()' },
 })
 export class MimiSizeScope implements MimiSizeContext {
   readonly mimiSize = input.required<MimiSizeInput>();

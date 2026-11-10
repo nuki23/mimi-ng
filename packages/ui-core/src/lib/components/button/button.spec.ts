@@ -109,7 +109,7 @@ describe('MimiButton', () => {
     expect(button.classList).toContain('bg-primary');
     expect(button.classList).toContain('shadow-primary');
     expect(button.classList).toContain(
-      'h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))]',
+      'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]',
     );
     expect(button.classList).toContain('focus-visible:outline-ring');
     expect(button.classList).toContain(
@@ -271,10 +271,11 @@ describe('MimiButton', () => {
   });
 
   it.each<[ButtonSize, string]>([
-    ['sm', 'h-[var(--mimi-btn-height-sm,var(--mimi-control-height-sm,2rem))]'],
-    ['md', 'h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))]'],
-    ['lg', 'h-[var(--mimi-btn-height-lg,var(--mimi-control-height-lg,3rem))]'],
-    ['icon', 'size-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))]'],
+    // La escala vive en el tema (`[data-size]`): los tres tamaños de texto llevan las mismas clases.
+    ['sm', 'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]'],
+    ['md', 'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]'],
+    ['lg', 'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]'],
+    ['icon', 'size-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]'],
   ])('tamaño %s con la cascada de alturas', async (size, expected) => {
     const { host, button, update } = await setup();
     await update(() => host.size.set(size));

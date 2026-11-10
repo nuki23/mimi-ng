@@ -260,6 +260,64 @@
 }
 
 /* ── Oscuro ────────────────────────────────────── */
+/*
+ * Escala de tamaños (R.1, R.8): UNA sola vez, aquí. Cada componente pone `data-size="sm|md|lg"`
+ * (o lo hereda de un contenedor `mimiSize`) y lee estas variables, sin clases propias por tamaño:
+ * alto, relleno lateral, texto, ícono y hueco. `md` es el de `:root` (por defecto).
+ *
+ * Las variables `--mimi-btn-h`, `--mimi-input-h` y `--mimi-avatar-s` llevan además los tokens por
+ * tamaño de siempre (`--mimi-btn-height`, `-sm` y `-lg`…): se resuelven en cada bloque, así un
+ * `md` dentro de un `sm` no hereda el alto del `sm`.
+ */
+:root,
+[data-size='md'] {
+  --mimi-size-height: var(--mimi-control-height, 2.5rem);
+  --mimi-size-px: 1rem;
+  --mimi-size-text: 0.875rem;
+  --mimi-size-icon: var(--mimi-icon-size, 1rem);
+  --mimi-size-gap: 0.5rem;
+  --mimi-btn-h: var(--mimi-btn-height, var(--mimi-size-height));
+  --mimi-btn-text: var(--mimi-btn-font-size, var(--mimi-size-text));
+  --mimi-btn-gap-s: var(--mimi-btn-gap, var(--mimi-size-gap));
+  --mimi-btn-px-s: var(--mimi-btn-px, var(--mimi-btn-padding-x, var(--mimi-size-px)));
+  --mimi-input-h: var(--mimi-input-height, var(--mimi-size-height));
+  --mimi-input-text: var(--mimi-input-font-size, var(--mimi-size-text));
+  --mimi-avatar-s: var(--mimi-avatar-size, 2.5rem);
+  --mimi-avatar-text: 0.875rem;
+}
+
+[data-size='sm'] {
+  --mimi-size-height: var(--mimi-control-height-sm, 2rem);
+  --mimi-size-px: 0.75rem;
+  --mimi-size-text: 13px;
+  --mimi-size-icon: var(--mimi-icon-size-sm, 0.875rem);
+  --mimi-size-gap: 0.375rem;
+  --mimi-btn-h: var(--mimi-btn-height-sm, var(--mimi-size-height));
+  --mimi-btn-text: var(--mimi-size-text);
+  --mimi-btn-gap-s: var(--mimi-size-gap);
+  --mimi-btn-px-s: var(--mimi-size-px);
+  --mimi-input-h: var(--mimi-input-height-sm, var(--mimi-size-height));
+  --mimi-input-text: var(--mimi-size-text);
+  --mimi-avatar-s: var(--mimi-avatar-size-sm, 2rem);
+  --mimi-avatar-text: 0.75rem;
+}
+
+[data-size='lg'] {
+  --mimi-size-height: var(--mimi-control-height-lg, 3rem);
+  --mimi-size-px: 1.5rem;
+  --mimi-size-text: 15px;
+  --mimi-size-icon: 1.125rem;
+  --mimi-size-gap: 0.5rem;
+  --mimi-btn-h: var(--mimi-btn-height-lg, var(--mimi-size-height));
+  --mimi-btn-text: var(--mimi-size-text);
+  --mimi-btn-gap-s: var(--mimi-size-gap);
+  --mimi-btn-px-s: var(--mimi-size-px);
+  --mimi-input-h: var(--mimi-input-height-lg, var(--mimi-size-height));
+  --mimi-input-text: var(--mimi-size-text);
+  --mimi-avatar-s: var(--mimi-avatar-size-lg, 3.5rem);
+  --mimi-avatar-text: 1.125rem;
+}
+
 .dark {
   /* Neutros de la marca en oscuro: fondo #171717, texto #FAFAFA; las superficies suben (R.0). */
   --mimi-background: oklch(0.205 0 0);

@@ -10,6 +10,10 @@ import {
  * Tailwind las detecte. Cascada de la spec 6.2: --mimi-input-* → --mimi-control-* /
  * --mimi-radius → valor del diseño.
  */
+/** Alto y texto de un campo: salen de la escala de tamaños del tema. */
+const SIZE_SCALE =
+  'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))] text-[length:var(--mimi-input-text,var(--mimi-input-font-size,0.875rem))]';
+
 export const inputVariants = cva(
   [
     'w-full min-w-0 rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))]',
@@ -27,9 +31,10 @@ export const inputVariants = cva(
   {
     variants: {
       size: {
-        sm: 'h-[var(--mimi-input-height-sm,var(--mimi-control-height-sm,2rem))] text-[13px]',
-        md: 'h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))] text-[length:var(--mimi-input-font-size,0.875rem)]',
-        lg: 'h-[var(--mimi-input-height-lg,var(--mimi-control-height-lg,3rem))] text-[15px]',
+        // La escala vive en el tema (`[data-size]`, theme-base.css): mismas clases, otras variables.
+        sm: SIZE_SCALE,
+        md: SIZE_SCALE,
+        lg: SIZE_SCALE,
       },
     },
     defaultVariants: { size: 'md' },

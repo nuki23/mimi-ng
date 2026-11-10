@@ -54,10 +54,14 @@ describe('escala de tamaños (R.1)', () => {
 
   it('los controles del mismo tamaño dan la misma altura (variables de la escala)', async () => {
     const { q } = await setup();
-    const heightOf = (id: string) =>
-      [...q(id).classList].find((c) => /^h-\[var\(--mimi-(btn|input)-height-sm/.test(c))!;
-    expect(heightOf('inherit')).toContain('var(--mimi-control-height-sm,2rem)');
-    expect(heightOf('field')).toContain('var(--mimi-control-height-sm,2rem)');
+    // Botón y campo leen su alto de la escala del tema; `sm` (data-size) lo resuelve a 2rem, lo
+    // comprueba `theme/size-scale.spec.ts`.
+    expect(q('inherit').dataset['size']).toBe('sm');
+    expect(q('field').dataset['size']).toBe('sm');
+    expect([...q('inherit').classList].join(' ')).toContain('h-[var(--mimi-btn-h,');
+    expect([...q('field').classList].join(' ')).toContain('h-[var(--mimi-input-h,');
+    // Un contenedor con mimiSize pone data-size: la escala llega por CSS a quien no tiene size.
+    expect(q('inherit').closest('[data-size]')).not.toBeNull();
   });
 
   it('`default` es un alias de `md` y avisa una vez en desarrollo', async () => {
