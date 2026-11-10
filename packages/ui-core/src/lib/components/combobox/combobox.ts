@@ -104,7 +104,7 @@ const BOX_MODE_CLASSES = {
   single:
     'h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] gap-2 pl-3',
   multiple:
-    'min-h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] flex-wrap gap-1.5 py-[5px] pl-1.5',
+    'min-h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] flex-wrap gap-1.5 py-[5px] pl-1.5 in-data-[size=sm]:py-[3px]',
 } as const;
 
 const INPUT_BASE =
