@@ -287,6 +287,15 @@
   --mimi-switch-w: var(--mimi-switch-width, 2.25rem);
   --mimi-switch-h: var(--mimi-switch-height, 1.25rem);
   --mimi-checkbox-s: var(--mimi-checkbox-size, 1rem);
+  /* Toast (R.4): alto mínimo, relleno, título, descripción, ícono, círculo del ícono y ancho. */
+  --mimi-toast-min-h: 68px;
+  --mimi-toast-py: 0.75rem;
+  --mimi-toast-pl: 0.875rem;
+  --mimi-toast-title: 0.875rem;
+  --mimi-toast-desc: 12.5px;
+  --mimi-toast-icon: 18px;
+  --mimi-toast-circle: 34px;
+  --mimi-toast-w: var(--mimi-toast-width, 340px);
 }
 
 [data-size='sm'] {
@@ -306,6 +315,14 @@
   --mimi-switch-w: 2rem;
   --mimi-switch-h: 1.125rem;
   --mimi-checkbox-s: 0.875rem;
+  --mimi-toast-min-h: 48px;
+  --mimi-toast-py: 0.5rem;
+  --mimi-toast-pl: 0.75rem;
+  --mimi-toast-title: 13px;
+  --mimi-toast-desc: 12px;
+  --mimi-toast-icon: 16px;
+  --mimi-toast-circle: 28px;
+  --mimi-toast-w: 288px;
 }
 
 [data-size='lg'] {
@@ -325,6 +342,14 @@
   --mimi-switch-w: 2.75rem;
   --mimi-switch-h: 1.5rem;
   --mimi-checkbox-s: 1.25rem;
+  --mimi-toast-min-h: 84px;
+  --mimi-toast-py: 1rem;
+  --mimi-toast-pl: 1.125rem;
+  --mimi-toast-title: 15px;
+  --mimi-toast-desc: 14px;
+  --mimi-toast-icon: 20px;
+  --mimi-toast-circle: 40px;
+  --mimi-toast-w: 400px;
 }
 
 .dark {

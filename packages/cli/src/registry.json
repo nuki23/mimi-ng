@@ -188,7 +188,13 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["button", "utils/cn", "utils/control-styles", "utils/overlay"]
+      "registryDependencies": [
+        "button",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/overlay",
+        "utils/size"
+      ]
     },
     "pagination": {
       "type": "component",

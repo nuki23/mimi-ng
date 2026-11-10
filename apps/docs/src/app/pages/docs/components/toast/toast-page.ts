@@ -125,6 +125,13 @@ export class ToastPage {
       description: 'Milisegundos hasta cerrarse. Infinity: no se cierra solo.',
     },
     {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "el de provideMimiToast, o 'md'",
+      description:
+        'Tamaño de este aviso (relleno, texto e ícono): sm, md o lg. El ancho de la pila es el de provideMimiToast({ size }), así que un aviso lg en una pila sm solo crece por dentro.',
+    },
+    {
       name: 'icon',
       type: 'TemplateRef | false',
       default: 'el del tono',
@@ -169,5 +176,12 @@ export class ToastPage {
     { name: 'position', type: 'MimiToastPosition', default: "'bottom-right'" },
     { name: 'duration', type: 'number', default: '6000' },
     { name: 'hotkey', type: 'string', default: "'F8'" },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description:
+        'Tamaño de todos los avisos y ancho de la pila: sm 288px, md 340px (el de siempre), lg 400px.',
+    },
   ];
 }

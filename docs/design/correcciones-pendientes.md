@@ -314,3 +314,10 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Precios del ejemplo:** en USD (12/10 y 24/20 por persona y mes), con `Intl.NumberFormat`; el diseño usa 190/158 y 240/199 pesos.
   - **Interruptor mensual/anual:** `mimi-toggle-group` redondeado (`rounded-full` con `class`), con su fondo deslizante; el «−17%» es un `mimiBadge` dentro del botón Anual.
   - **«Custom»:** el diseño dice «A medida»; sin unidad ni nota.
+
+## Refinamiento 0.6.0 (09/11/2026): sin diseño de Claude Design
+
+- **Tamaños `sm` y `lg` de Toast, Switch, Checkbox, Dialog y de los controles:** el diseño solo muestra `md`. Las medidas de `sm` y `lg` (Toast: alto mínimo 48/84 px, ancho 288/400 px; Switch 32×18 y 44×24; Checkbox 14 y 20 px; Dialog 360 y 560 px) las eligió el plan: pendientes de revisión en Claude Design.
+- **Escala de violeta de la marca (`--mimi-brand-50…950`):** solo las anclas `600` (`#793EEA`) y `400` (`#A88FFF`) vienen de la marca; los pasos intermedios son una curva propuesta.
+- **Toast `outline` de color y `neutral`:** sin diseño (el diseño solo muestra la tarjeta neutra y el sólido).
+- **`info` más oscuro en claro (`oklch(0.44 0.17 255)`) y más claro en oscuro (`oklch(0.83 0.11 250)`):** ajustado para distinguirlo del violeta de marca por luminosidad.

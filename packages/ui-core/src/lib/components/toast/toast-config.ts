@@ -1,4 +1,5 @@
 import { InjectionToken, type Provider } from '@angular/core';
+import type { MimiSize } from '@/components/ui/utils/size';
 
 /*
  * Opciones globales de Toast, en archivo propio y sin el componente: así `provideMimiToast()` se
@@ -17,12 +18,18 @@ export interface MimiToastConfig {
   duration: number;
   /** Tecla (`KeyboardEvent.key`) que lleva el foco a los toasts. Por defecto, `F8`. */
   hotkey: string;
+  /**
+   * Tamaño de los toasts (R.4): `sm` (288px de ancho, texto y relleno chicos), `md` (340px, el de
+   * siempre) o `lg` (400px). Cada aviso puede pedir otro con `size`; el ancho de la pila es este.
+   */
+  size: MimiSize;
 }
 
 export const MIMI_TOAST_DEFAULTS: MimiToastConfig = {
   position: 'bottom-right',
   duration: 6000,
   hotkey: 'F8',
+  size: 'md',
 };
 
 /** Opciones activas. Sin `provideMimiToast`, las predeterminadas. */

@@ -58,6 +58,18 @@ describe('escala de tamaños en el tema ([data-size])', () => {
     ]);
   });
 
+  it('Toast: alto mínimo, relleno, texto, ícono y ancho por tamaño; md es el de siempre', () => {
+    const at = (name: string) => [sm, md, lg].map((b) => scaleVar(b, name));
+    expect(at('toast-min-h')).toEqual(['48px', '68px', '84px']);
+    expect(at('toast-py')).toEqual(['0.5rem', '0.75rem', '1rem']);
+    expect(at('toast-pl')).toEqual(['0.75rem', '0.875rem', '1.125rem']);
+    expect(at('toast-title')).toEqual(['13px', '0.875rem', '15px']);
+    expect(at('toast-desc')).toEqual(['12px', '12.5px', '14px']);
+    expect(at('toast-icon')).toEqual(['16px', '18px', '20px']);
+    expect(at('toast-circle')).toEqual(['28px', '34px', '40px']);
+    expect(at('toast-w')).toEqual(['288px', 'var(--mimi-toast-width, 340px)', '400px']);
+  });
+
   it('los tokens por tamaño de siempre (btn, input y avatar) se resuelven en su bloque, sin filtrarse', () => {
     expect(scaleVar(sm, 'btn-h')).toBe('var(--mimi-btn-height-sm, var(--mimi-size-height))');
     expect(scaleVar(md, 'btn-h')).toBe('var(--mimi-btn-height, var(--mimi-size-height))');
