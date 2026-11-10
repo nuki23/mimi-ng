@@ -163,6 +163,12 @@ for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text)
 
 **Parada por presupuesto de CSS (decisión del prompt):** el CSS global está a **176,53 kB**, a 3,5 kB del aviso de 180 y a 1,5 kB de mi umbral de parada. **Lo que no se hizo de R.8 y por qué:** Chip, Slider, Toolbar, Calendar, Menu/Dropdown/Context, Command, Tree, Sortable List, Data Table (`size` en lugar de `density`), Tooltip, Popover y Card (este último depende de R.19, 0.7.0): cada uno agregaría variables y clases por tamaño y empujaría el CSS hacia el aviso; hace falta que el usuario decida entre subir el presupuesto (spec 10, solo lo decide él) o seguir con M.23 (reducir el CSS global del sitio) antes de seguir con tamaños. **Sin cambiar de tarea:** sigo con lo que casi no suma CSS (R.7, R.14, R.24, R.12), midiendo.
 
+## R.7 (completa): `chrome: 'none'` y R.14 (completa): atajos del Form Field
+
+**R.7:** `chrome: 'none'` en `MimiDialogConfig`: sin X y sin relleno (`--mimi-dialog-padding: 0px`); `closeButton` y `padding` explícitos mandan sobre él; la cabecera, el cuerpo y el pie ya eran opcionales. Prueba en rojo antes (no compilaba) y en verde después; tabla de la API al día. **Pendiente de R.7:** que Confirm use `size="sm"` por defecto: **no hecho** (cambiaría el aspecto de Confirm sin diseño; queda como propuesta).
+
+**R.14:** `mimi-form-field` suma `description` (entre la etiqueta y el control), `hint` (debajo del control) y `required` (asterisco `aria-hidden` en la etiqueta y `aria-required` en el control); los ids de `description` y `hint` se agregan al `aria-describedby` del control **antes** del error, cada uno una sola vez, respetando los que el control ya tenía. Pruebas en rojo antes (2) y en verde después: `field-shortcuts.spec.ts`. ui-core 964, docs 195, CLI 202 en verde; tabla de la API al día. **Bundle:** CSS global 176,53 → 176,58 kB; JS inicial 333,97 / 105,79. **R.14 sigue `[~]`:** faltan los ejemplos con más elementos y el diagrama «control → primer error → texto» de la página.
+
 ## Punto exacto donde quedo
 
-Hecho: 1a, 1b, 1c, 1d, la escala en el tema (R.1) con Button, Input y Avatar, R.2 (10 controles), R.3 y R.4. **Sigue:** R.8 (resto de componentes y Progress/Pagination), luego 3 (R.7, R.12, R.13, R.14, R.15, R.16, R.24) y la puerta.
+Hecho: 1a, 1b, 1c, 1d, la escala en el tema (R.1), R.2, R.3, R.4, R.8 (Pagination, Progress, Tabs, Toggle Group, Badge), R.7 y los atajos de R.14. **Sigue:** R.12, R.24, R.13, R.15 y R.16 (midiendo el CSS, hoy 176,58 kB) y la puerta. (Ya no aplica la línea siguiente, de antes:) R.8 (resto de componentes y Progress/Pagination), luego 3 (R.7, R.12, R.13, R.14, R.15, R.16, R.24) y la puerta.
