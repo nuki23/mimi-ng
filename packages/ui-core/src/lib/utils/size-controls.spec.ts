@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { MimiCheckbox } from '@/components/ui/checkbox';
+import { MimiSwitch } from '@/components/ui/switch';
 import { MimiColorPicker } from '@/components/ui/color-picker';
 import { MimiCombobox } from '@/components/ui/combobox';
 import { MimiDatePicker } from '@/components/ui/date-picker';
@@ -29,6 +31,8 @@ import { MimiSizeScope, type MimiSizeInput } from './size';
     MimiDateRangePicker,
     MimiColorPicker,
     MimiTextarea,
+    MimiSwitch,
+    MimiCheckbox,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -43,6 +47,8 @@ import { MimiSizeScope, type MimiSizeInput } from './size';
       <mimi-date-range data-test="range" aria-label="h" />
       <mimi-color-picker data-test="color" aria-label="i" />
       <textarea mimiTextarea data-test="textarea" aria-label="j"></textarea>
+      <mimi-switch data-test="switch">Modo avión</mimi-switch>
+      <mimi-checkbox data-test="checkbox">Recordarme</mimi-checkbox>
       <mimi-select data-test="own" size="lg" aria-label="k" />
     </section>
     <mimi-select data-test="outside" aria-label="l" />
@@ -64,6 +70,8 @@ const CONTROLS = [
   'range',
   'color',
   'textarea',
+  'switch',
+  'checkbox',
 ];
 
 describe('tamaños en los controles de formulario (R.2)', () => {

@@ -219,8 +219,13 @@ export const DOCS_ROUTES: Routes = [
   },
   {
     path: 'components/switch',
-    title: 'Switch y Checkbox · Mimi',
+    title: 'Switch · Mimi',
     loadComponent: () => import('./components/switch/switch-page').then((m) => m.SwitchPage),
+  },
+  {
+    path: 'components/checkbox',
+    title: 'Checkbox · Mimi',
+    loadComponent: () => import('./components/checkbox/checkbox-page').then((m) => m.CheckboxPage),
   },
   {
     path: 'components/form-field',

@@ -1,28 +1,27 @@
 <article class="flex flex-col gap-5">
-  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Switch y Checkbox</h1>
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Switch</h1>
   <p class="text-lg text-pretty text-muted-foreground">
-    Controles de sí o no. El switch aplica un ajuste al instante; el checkbox marca una opción que
-    se confirma después, por ejemplo al enviar un formulario.
+    Un control de sí o no que aplica un ajuste al instante. Para marcar una opción que se confirma
+    después (por ejemplo, al enviar un formulario), usa el
+    <a class="font-medium underline underline-offset-4" href="/docs/components/checkbox">Checkbox</a
+    >.
   </p>
 
   <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
     Instalación
   </h2>
   <app-install-command name="switch" />
-  <app-install-command name="checkbox" />
 
   <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
   <app-code-block [code]="usage" lang="angular-ts" />
   <p class="text-pretty">
-    El texto de adentro es la etiqueta: al hacer clic en él, el control se alterna. Por dentro son
-    un
+    El texto de adentro es la etiqueta: al hacer clic en él, el control se alterna. Por dentro es un
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
       >&lt;button type="button"&gt;</code
     >
     con
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="switch"</code> o
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="checkbox"</code>,
-    así que nunca envían el formulario que los contiene.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="switch"</code>,
+    así que nunca envía el formulario que lo contiene.
   </p>
 
   <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
@@ -37,25 +36,17 @@
     <app-switch-states-example />
   </app-code-preview>
 
-  <h3 id="checkbox-states" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
-    Estados del checkbox
-  </h3>
+  <h3 id="sizes" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tamaños</h3>
   <p class="text-pretty">
-    Sin marcar, marcada, mixta y deshabilitada. Se alterna con Espacio; Enter no hace nada, como
-    pide el patrón de accesibilidad para casillas.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">sm</code> (32×18 px),
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">md</code> (36×20 px,
+    por defecto) y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">lg</code> (44×24 px).
+    Para dar el mismo tamaño a todo un formulario, ponlo una vez en su contenedor con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiSize</code>.
   </p>
-  <app-code-preview [code]="source.checkboxStates">
-    <app-checkbox-states-example />
-  </app-code-preview>
-
-  <h3 id="select-all" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Seleccionar todo</h3>
-  <p class="text-pretty">
-    Con
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">indeterminate</code>,
-    la casilla principal muestra un guion cuando solo algunas están marcadas.
-  </p>
-  <app-code-preview [code]="source.checkboxSelectAll">
-    <app-checkbox-select-all-example />
+  <app-code-preview [code]="source.sizes">
+    <app-switch-sizes-example />
   </app-code-preview>
 
   <h3 id="labels" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Etiquetas</h3>
@@ -92,7 +83,10 @@
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">formControlName</code>
     y
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[(ngModel)]</code>.
-    Envía el formulario sin marcar la casilla: queda con el borde de error.
+    Este ejemplo usa el switch y el
+    <a class="font-medium underline underline-offset-4" href="/docs/components/checkbox">checkbox</a
+    >, que se comportan igual con los formularios. Envía el formulario sin marcar la casilla: queda
+    con el borde de error.
   </p>
   <app-code-preview [code]="source.reactiveForms">
     <app-switch-reactive-forms-example />
@@ -140,13 +134,12 @@
     </div>
   }
   <p class="text-pretty">
-    Los dos emiten
+    Emite
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">touch</code> al perder
     el foco (marca el campo como tocado). Los colores salen de los tokens
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-switch-off</code
     >,
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-primary</code>,
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-input</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-primary</code> y
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
       >--mimi-shadow-thumb</code
     >; la escala al presionar, de
@@ -157,8 +150,5 @@
   </p>
 
   <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
-  <p class="font-semibold">Switch</p>
   <app-css-variables component="switch" />
-  <p class="font-semibold">Checkbox</p>
-  <app-css-variables component="checkbox" />
 </article>

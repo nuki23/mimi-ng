@@ -81,7 +81,7 @@ export class Table01Page {
     { name: 'data-table', path: '/docs/components/data-table' },
     { name: 'badge', path: '/docs/components/badge' },
     { name: 'button', path: '/docs/components/button' },
-    { name: 'checkbox', path: '/docs/components/switch' },
+    { name: 'checkbox', path: '/docs/components/checkbox' },
     { name: 'input', path: '/docs/components/input' },
   ];
 

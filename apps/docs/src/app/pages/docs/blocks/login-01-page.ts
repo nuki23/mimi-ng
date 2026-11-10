@@ -79,7 +79,7 @@ export class Login01Page {
     { name: 'card', path: '/docs/components/card' },
     { name: 'input', path: '/docs/components/input' },
     { name: 'password', path: '/docs/components/password' },
-    { name: 'checkbox', path: '/docs/components/switch' },
+    { name: 'checkbox', path: '/docs/components/checkbox' },
     { name: 'button', path: '/docs/components/button' },
     { name: 'form-field', path: '/docs/components/form-field' },
     { name: 'separator', path: '/docs/components/separator' },

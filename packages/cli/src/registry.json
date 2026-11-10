@@ -125,7 +125,12 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/size"
+      ]
     },
     "confirm": {
       "type": "component",
@@ -529,7 +534,12 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/size"
+      ]
     },
     "tooltip": {
       "type": "component",

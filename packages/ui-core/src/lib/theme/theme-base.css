@@ -284,6 +284,9 @@
   --mimi-input-text: var(--mimi-input-font-size, var(--mimi-size-text));
   --mimi-avatar-s: var(--mimi-avatar-size, 2.5rem);
   --mimi-avatar-text: 0.875rem;
+  --mimi-switch-w: var(--mimi-switch-width, 2.25rem);
+  --mimi-switch-h: var(--mimi-switch-height, 1.25rem);
+  --mimi-checkbox-s: var(--mimi-checkbox-size, 1rem);
 }
 
 [data-size='sm'] {
@@ -300,6 +303,9 @@
   --mimi-input-text: var(--mimi-size-text);
   --mimi-avatar-s: var(--mimi-avatar-size-sm, 2rem);
   --mimi-avatar-text: 0.75rem;
+  --mimi-switch-w: 2rem;
+  --mimi-switch-h: 1.125rem;
+  --mimi-checkbox-s: 0.875rem;
 }
 
 [data-size='lg'] {
@@ -316,6 +322,9 @@
   --mimi-input-text: var(--mimi-size-text);
   --mimi-avatar-s: var(--mimi-avatar-size-lg, 3.5rem);
   --mimi-avatar-text: 1.125rem;
+  --mimi-switch-w: 2.75rem;
+  --mimi-switch-h: 1.5rem;
+  --mimi-checkbox-s: 1.25rem;
 }
 
 .dark {

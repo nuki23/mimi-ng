@@ -81,7 +81,7 @@ describe('MimiCheckbox', () => {
     expect(btn.getAttribute('role')).toBe('checkbox');
     expect(btn.getAttribute('aria-checked')).toBe('false');
     for (const cls of [
-      'size-[var(--mimi-checkbox-size,1rem)]',
+      'size-[var(--mimi-checkbox-s,var(--mimi-checkbox-size,1rem))]',
       'rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))]',
       'border',
       'border-[color:var(--mimi-checkbox-border,var(--mimi-input))]',

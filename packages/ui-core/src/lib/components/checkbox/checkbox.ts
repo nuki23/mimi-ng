@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import type { FormCheckboxControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles, controlDisabledStyles } from '@/components/ui/utils/control-styles';
 import {
   MIMI_FIELD_CONTROL,
@@ -26,7 +27,7 @@ let nextId = 0;
  * casillas sin un control enfocable dentro del nodo (plan, G3.1-d).
  */
 export const MIMI_CHECKBOX_BOX_STYLES = cn(
-  'inline-flex size-[var(--mimi-checkbox-size,1rem)] shrink-0 items-center justify-center rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))] border border-[color:var(--mimi-checkbox-border,var(--mimi-input))] bg-input-background text-[color:var(--mimi-checkbox-check,var(--mimi-primary-foreground))]',
+  'inline-flex size-[var(--mimi-checkbox-s,var(--mimi-checkbox-size,1rem))] shrink-0 items-center justify-center rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))] border border-[color:var(--mimi-checkbox-border,var(--mimi-input))] bg-input-background text-[color:var(--mimi-checkbox-check,var(--mimi-primary-foreground))]',
   'mimi-transition active:scale-(--mimi-press-scale-sm)',
   'data-[state=checked]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:shadow-primary',
   'data-[state=indeterminate]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:shadow-primary',
@@ -46,6 +47,7 @@ export const MIMI_CHECKBOX_BOX_STYLES = cn(
  */
 @Component({
   selector: 'mimi-checkbox',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   // mimi-form-field lo encuentra por este token para mostrar el mensaje de error.
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiCheckbox }],
   template: `
@@ -157,7 +159,10 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly classes = computed(() =>
-    cn('inline-flex items-center gap-2.5 text-sm', this.userClass()),
+    cn(
+      'inline-flex items-center gap-2.5 text-[length:var(--mimi-size-text,0.875rem)]',
+      this.userClass(),
+    ),
   );
 
   protected readonly boxClasses = cn(

@@ -85,6 +85,9 @@ const GLOBALS = new Set([
   '--mimi-input-text',
   '--mimi-avatar-s',
   '--mimi-avatar-text',
+  '--mimi-switch-w',
+  '--mimi-switch-h',
+  '--mimi-checkbox-s',
   // Lo mismo en Toggle Group (G2.1).
   '--mimi-toggle-group-count',
   '--mimi-toggle-group-index',

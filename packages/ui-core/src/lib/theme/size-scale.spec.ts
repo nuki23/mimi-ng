@@ -40,6 +40,24 @@ describe('escala de tamaños en el tema ([data-size])', () => {
     expect([sm, md, lg].map((b) => scaleVar(b, 'size-px'))).toEqual(['0.75rem', '1rem', '1.5rem']);
   });
 
+  it('Switch y Checkbox: pista 32×18 / 36×20 / 44×24 y casilla 14 / 16 / 20 px', () => {
+    expect([sm, md, lg].map((b) => scaleVar(b, 'switch-w'))).toEqual([
+      '2rem',
+      'var(--mimi-switch-width, 2.25rem)',
+      '2.75rem',
+    ]);
+    expect([sm, md, lg].map((b) => scaleVar(b, 'switch-h'))).toEqual([
+      '1.125rem',
+      'var(--mimi-switch-height, 1.25rem)',
+      '1.5rem',
+    ]);
+    expect([sm, md, lg].map((b) => scaleVar(b, 'checkbox-s'))).toEqual([
+      '0.875rem',
+      'var(--mimi-checkbox-size, 1rem)',
+      '1.25rem',
+    ]);
+  });
+
   it('los tokens por tamaño de siempre (btn, input y avatar) se resuelven en su bloque, sin filtrarse', () => {
     expect(scaleVar(sm, 'btn-h')).toBe('var(--mimi-btn-height-sm, var(--mimi-size-height))');
     expect(scaleVar(md, 'btn-h')).toBe('var(--mimi-btn-height, var(--mimi-size-height))');

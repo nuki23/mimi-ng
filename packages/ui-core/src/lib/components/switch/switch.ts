@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import type { FormCheckboxControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles, controlDisabledStyles } from '@/components/ui/utils/control-styles';
 import {
   MIMI_FIELD_CONTROL,
@@ -33,6 +34,7 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-switch',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   // mimi-form-field lo encuentra por este token para mostrar el mensaje de error.
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiSwitch }],
   template: `
@@ -106,12 +108,15 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly classes = computed(() =>
-    cn('inline-flex items-center gap-2.5 text-sm', this.userClass()),
+    cn(
+      'inline-flex items-center gap-2.5 text-[length:var(--mimi-size-text,0.875rem)]',
+      this.userClass(),
+    ),
   );
 
   // Pista: 36×20 (--mimi-switch-width/-height), 2px de padding. Encendida: primary con su sombra.
   protected readonly trackClasses = cn(
-    'peer group inline-flex h-[var(--mimi-switch-height,1.25rem)] w-[var(--mimi-switch-width,2.25rem)] shrink-0 items-center rounded-full bg-[color:var(--mimi-switch-track-off,var(--mimi-switch-off))] p-0.5',
+    'peer group inline-flex h-[var(--mimi-switch-h,var(--mimi-switch-height,1.25rem))] w-[var(--mimi-switch-w,var(--mimi-switch-width,2.25rem))] shrink-0 items-center rounded-full bg-[color:var(--mimi-switch-track-off,var(--mimi-switch-off))] p-0.5',
     'mimi-transition active:scale-(--mimi-press-scale-sm)',
     'data-[state=checked]:bg-[color:var(--mimi-switch-track-on,var(--mimi-primary))] data-[state=checked]:shadow-primary disabled:shadow-none',
     buttonFocusStyles,
@@ -120,8 +125,8 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
 
   // Pulgar: alto de la pista menos el padding (16px); al encender se desplaza ancho − alto (16px).
   protected readonly thumbClasses = cn(
-    'pointer-events-none block size-[calc(var(--mimi-switch-height,1.25rem)_-_0.25rem)] rounded-full bg-[color:var(--mimi-switch-thumb,var(--mimi-background))] shadow-thumb mimi-transition',
-    'group-data-[state=checked]:translate-x-[calc(var(--mimi-switch-width,2.25rem)_-_var(--mimi-switch-height,1.25rem))] group-data-[state=checked]:bg-primary-foreground',
+    'pointer-events-none block size-[calc(var(--mimi-switch-h,var(--mimi-switch-height,1.25rem))_-_0.25rem)] rounded-full bg-[color:var(--mimi-switch-thumb,var(--mimi-background))] shadow-thumb mimi-transition',
+    'group-data-[state=checked]:translate-x-[calc(var(--mimi-switch-w,var(--mimi-switch-width,2.25rem))_-_var(--mimi-switch-h,var(--mimi-switch-height,1.25rem)))] group-data-[state=checked]:bg-primary-foreground',
     'group-disabled:shadow-none',
   );
 

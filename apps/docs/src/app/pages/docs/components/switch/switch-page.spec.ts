@@ -20,7 +20,8 @@ describe('SwitchPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(7);
+      // Estados, tamaños, etiquetas, Signal Forms, Reactive Forms y class (el Checkbox, aparte).
+      expect(previews.length).toBe(6);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-switch, mimi-checkbox')).not.toBeNull();
         expect(code).toMatch(
@@ -28,7 +29,7 @@ describe('SwitchPage', () => {
         );
         expect(code).toMatch(/export class (Switch|Checkbox)\w+Example/);
       }
-      expect(el.querySelectorAll('app-install-command').length).toBe(2);
+      expect(el.querySelectorAll('app-install-command').length).toBe(1);
       expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
         'installation',
         'usage',
@@ -36,12 +37,13 @@ describe('SwitchPage', () => {
         'api',
       ]);
       expect(el.querySelector('h3#api-switch')).not.toBeNull();
-      expect(el.querySelector('h3#api-checkbox')).not.toBeNull();
+      expect(el.querySelector('h3#api-checkbox')).toBeNull();
+      expect(el.querySelector('h3#sizes')).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );
 
-  it('seleccionar todo: mixta con algunas marcadas, marcada al hacer clic', async () => {
+  it('los tres tamaños del switch ponen su data-size', async () => {
     TestBed.configureTestingModule({
       providers: [
         {
@@ -53,13 +55,10 @@ describe('SwitchPage', () => {
     const fixture = TestBed.createComponent(SwitchPage);
     await settle(fixture);
     const example = (fixture.nativeElement as HTMLElement).querySelector(
-      'app-checkbox-select-all-example',
+      'app-switch-sizes-example',
     )!;
-    const [all, ...items] = Array.from(example.querySelectorAll('button[role="checkbox"]'));
-    expect(all.getAttribute('aria-checked')).toBe('mixed');
-    (all as HTMLButtonElement).click();
-    await fixture.whenStable();
-    expect(all.getAttribute('aria-checked')).toBe('true');
-    expect(items.every((i) => i.getAttribute('aria-checked') === 'true')).toBe(true);
+    expect(
+      Array.from(example.querySelectorAll('mimi-switch')).map((s) => s.getAttribute('data-size')),
+    ).toEqual(['sm', 'md', 'lg']);
   });
 });
