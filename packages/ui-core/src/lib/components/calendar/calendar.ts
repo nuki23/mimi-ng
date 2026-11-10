@@ -16,6 +16,7 @@ import {
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { MimiSized } from '@/components/ui/utils/size';
 import { MIMI_DATE_PICKER_TEXT } from './calendar-texts';
 import {
   MIMI_TODAY,
@@ -59,17 +60,17 @@ const ICON = {
 } as const;
 
 const NAV_CLASSES = cn(
-  'inline-flex size-[30px] shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] border border-border bg-transparent text-foreground [&_svg]:size-4',
+  'inline-flex size-[var(--mimi-cal-nav,30px)] shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] border border-border bg-transparent text-foreground [&_svg]:size-4',
   'mimi-transition hover:bg-accent active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );
 const TITLE_BUTTON_CLASSES = cn(
-  'inline-flex h-[30px] cursor-pointer items-center gap-1 rounded-[var(--mimi-radius-sm)] border-0 bg-transparent px-2.5 text-sm font-semibold text-foreground [&_svg]:size-3.5',
+  'inline-flex h-[var(--mimi-cal-nav,30px)] cursor-pointer items-center gap-1 rounded-[var(--mimi-radius-sm)] border-0 bg-transparent px-2.5 text-sm font-semibold text-foreground [&_svg]:size-3.5',
   'mimi-transition hover:bg-accent active:scale-(--mimi-press-scale)',
   buttonFocusStyles,
 );
 const CELL_BASE = cn(
-  'relative inline-flex size-[var(--mimi-date-cell-size,36px)] cursor-pointer items-center justify-center text-[13.5px] tabular-nums select-none',
+  'relative inline-flex size-[var(--mimi-cal-cell,var(--mimi-date-cell-size,36px))] cursor-pointer items-center justify-center text-[13.5px] tabular-nums select-none',
   'rounded-[var(--mimi-date-cell-radius,var(--mimi-radius-sm))] mimi-transition active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );
@@ -132,6 +133,7 @@ const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase() + text.s
  */
 @Component({
   selector: 'mimi-calendar',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <div class="flex items-center justify-between gap-2">
       <button
@@ -198,7 +200,7 @@ const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase() + text.s
       @case ('days') {
         <div
           role="grid"
-          class="grid grid-cols-[repeat(7,var(--mimi-date-cell-size,36px))] gap-y-0.5"
+          class="grid grid-cols-[repeat(7,var(--mimi-cal-cell,var(--mimi-date-cell-size,36px)))] gap-y-0.5"
           [attr.aria-labelledby]="titleId"
           (keydown)="onGridKeydown($event)"
         >

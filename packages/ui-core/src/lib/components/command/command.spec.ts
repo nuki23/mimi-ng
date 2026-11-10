@@ -225,16 +225,18 @@ describe('MimiCommand', { timeout: 20_000 }, () => {
     const { inline, options, host, fixture } = await setup();
     expect(inline.className).toContain('rounded-[var(--mimi-radius-card)]');
     expect(inline.querySelector('[data-slot="search"]')!.className).toContain(
-      'h-[var(--mimi-command-input-height,52px)]',
+      'h-[var(--mimi-command-input-h,var(--mimi-command-input-height,52px))]',
     );
     expect(inline.querySelector('input')!.className).toContain(
-      'text-[length:var(--mimi-command-input-font-size,15px)]',
+      'text-[length:var(--mimi-command-text,var(--mimi-command-input-font-size,15px))]',
     );
     expect(inline.querySelector('[role="listbox"]')!.className).toContain(
       'max-h-[var(--mimi-command-list-height,332px)]',
     );
     const option = options()[0];
-    expect(option.className).toContain('h-[var(--mimi-command-item-height,40px)]');
+    expect(option.className).toContain(
+      'h-[var(--mimi-command-item-h,var(--mimi-command-item-height,40px))]',
+    );
     expect(option.className).toContain(
       'rounded-[var(--mimi-command-item-radius,var(--mimi-radius-sm))]',
     );

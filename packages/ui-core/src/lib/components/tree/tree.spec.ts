@@ -421,7 +421,9 @@ describe('MimiTree', () => {
     const { fixture, host, tree, item } = await setup();
     const single = tree('single') as HTMLElement;
     expect(single.className).toContain('p-[var(--mimi-tree-padding,6px)]');
-    expect(single.className).toContain('text-[length:var(--mimi-tree-font-size,13.5px)]');
+    expect(single.className).toContain(
+      'text-[length:var(--mimi-tree-text,var(--mimi-tree-font-size,13.5px))]',
+    );
     expect(single.className).toContain('bg-[color:var(--mimi-tree-bg,var(--mimi-card))]');
     host.extra.set('p-0 bg-muted');
     await settle(fixture);
@@ -430,7 +432,7 @@ describe('MimiTree', () => {
     expect(single.className).toContain('bg-muted');
     expect(single.className).not.toContain('bg-[color:var(--mimi-tree-bg');
     const row = item('single', 'src');
-    expect(row.className).toContain('h-[var(--mimi-tree-row-height,32px)]');
+    expect(row.className).toContain('h-[var(--mimi-tree-row-h,var(--mimi-tree-row-height,32px))]');
     expect(row.style.paddingInlineStart).toBe('calc(6px + 0 * var(--mimi-tree-indent, 18px))');
     expect(item('single', 'app').style.paddingInlineStart).toContain('1 * var(--mimi-tree-indent');
     expect(row.getAttribute('data-state')).toBe('open');

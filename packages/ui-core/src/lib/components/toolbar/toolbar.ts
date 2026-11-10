@@ -24,6 +24,7 @@ import {
 import { cva } from 'class-variance-authority';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { MimiSized } from '@/components/ui/utils/size';
 
 /*
  * mimi-toolbar (docs/design/Mimi F2 Toast Tabs Toolbar.dc.html, «4 · Toolbar»; prefijo de tokens
@@ -60,8 +61,8 @@ const toolbarVariants = cva(
 );
 
 const ITEM_CLASSES = cn(
-  'relative inline-flex size-[var(--mimi-toolbar-item-size,40px)] shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-foreground',
-  '[&_svg]:size-[18px] [&_svg]:shrink-0',
+  'relative inline-flex size-[var(--mimi-toolbar-item-s,var(--mimi-toolbar-item-size,40px))] shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-foreground',
+  '[&_svg]:size-[var(--mimi-toolbar-icon,18px)] [&_svg]:shrink-0',
   // Las transiciones del diseño; con movimiento reducido, solo los colores.
   '[transition:background-color_.2s_ease,color_.2s_ease,box-shadow_.35s_cubic-bezier(.2,.8,.2,1),scale_.15s_cubic-bezier(.2,.8,.2,1)]',
   'motion-reduce:[transition:background-color_.2s_ease,color_.2s_ease]',
@@ -173,6 +174,7 @@ export class MimiToolbarItem implements FocusableOption {
  */
 @Component({
   selector: 'mimi-toolbar',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: '<ng-content />',
   host: {
     role: 'toolbar',

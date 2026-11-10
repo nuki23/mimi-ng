@@ -24,6 +24,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_OVERLAY_ANIMATION,
   MIMI_VIEWPORT_MARGIN,
@@ -81,6 +82,7 @@ export class MimiPopoverOutlet {
  */
 @Component({
   selector: 'mimi-popover',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [CdkConnectedOverlay, MimiPopoverOutlet],
   template: `
     <ng-content />
@@ -112,6 +114,7 @@ export class MimiPopoverOutlet {
         [attr.data-state]="state()"
         [attr.data-side]="placedSide()"
         [attr.data-align]="align()"
+        [attr.data-size]="sized.resolved()"
         [attr.inert]="state() === 'closed' ? '' : null"
         [style.--mimi-popover-arrow-offset]="arrowOffset()"
       >
@@ -178,6 +181,8 @@ export class MimiPopover {
   protected readonly arrowOffset = signal<string | null>(null);
   protected readonly viewportMargin = MIMI_VIEWPORT_MARGIN;
 
+  /** El panel va en un overlay, fuera del anfitrión: lleva su propio `data-size`. */
+  protected readonly sized = inject(MimiSized);
   protected readonly originElement = computed(() => this.trigger()?.element ?? null);
 
   /** Lado y alineación pedidos, el lado opuesto y, por último, los otros dos lados. */
@@ -187,7 +192,7 @@ export class MimiPopover {
 
   protected readonly panelClasses = computed(() =>
     cn(
-      'relative flex w-[300px] max-w-[calc(100vw_-_16px)] flex-col gap-3 outline-none',
+      'relative flex w-[var(--mimi-popover-w,300px)] max-w-[calc(100vw_-_16px)] flex-col gap-3 outline-none',
       'rounded-[var(--mimi-popover-radius,var(--mimi-radius))] border border-[color:var(--mimi-popover-border,var(--mimi-border))]',
       'bg-[color:var(--mimi-popover-bg,var(--mimi-popover))] text-popover-foreground',
       'p-[var(--mimi-popover-padding,16px)] shadow-[shadow:var(--mimi-popover-shadow,var(--mimi-shadow-popover))]',

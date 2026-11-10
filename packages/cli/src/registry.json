@@ -58,7 +58,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "option-list": {
       "type": "util",
@@ -148,7 +148,7 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["menu", "utils/overlay"]
+      "registryDependencies": ["menu", "utils/overlay", "utils/size"]
     },
     "dialog": {
       "type": "component",
@@ -226,7 +226,8 @@
         "input",
         "pagination",
         "toggle-group",
-        "utils/cn"
+        "utils/cn",
+        "utils/size"
       ]
     },
     "input-mask": {
@@ -284,7 +285,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn"]
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "slider": {
       "type": "component",
@@ -297,7 +298,12 @@
         "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/size"
+      ]
     },
     "combobox": {
       "type": "component",
@@ -332,7 +338,7 @@
       "peerDependencies": {
         "@angular/aria": "^22.2.4"
       },
-      "registryDependencies": ["dialog", "option-list", "utils/cn"]
+      "registryDependencies": ["dialog", "option-list", "utils/cn", "utils/size"]
     },
     "calendar": {
       "type": "component",
@@ -345,7 +351,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "date-picker": {
       "type": "component",
@@ -450,7 +456,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "dropdown-menu": {
       "type": "component",
@@ -459,7 +465,7 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["menu", "utils/overlay"]
+      "registryDependencies": ["menu", "utils/overlay", "utils/size"]
     },
     "form-field": {
       "type": "component",
@@ -495,7 +501,7 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["utils/cn", "utils/overlay"]
+      "registryDependencies": ["utils/cn", "utils/overlay", "utils/size"]
     },
     "select": {
       "type": "component",
@@ -556,7 +562,7 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["utils/cn", "utils/overlay"]
+      "registryDependencies": ["utils/cn", "utils/overlay", "utils/size"]
     },
     "tree": {
       "type": "component",
@@ -569,7 +575,7 @@
         "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["checkbox", "utils/cn"]
+      "registryDependencies": ["checkbox", "utils/cn", "utils/size"]
     },
     "textarea": {
       "type": "component",

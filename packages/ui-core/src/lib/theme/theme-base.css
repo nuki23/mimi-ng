@@ -304,6 +304,28 @@
   --mimi-toggle-px: var(--mimi-toggle-group-item-px, 12px);
   --mimi-badge-h: var(--mimi-badge-height, 22px);
   --mimi-badge-px-s: var(--mimi-badge-px, 0.625rem);
+  --mimi-chip-h: var(--mimi-chip-height, 26px);
+  --mimi-chip-text: var(--mimi-chip-font-size, 13px);
+  --mimi-slider-h: var(--mimi-slider-height, 6px);
+  --mimi-slider-thumb-s: var(--mimi-slider-thumb-size, 20px);
+  --mimi-toolbar-item-s: var(--mimi-toolbar-item-size, 40px);
+  --mimi-toolbar-icon: 18px;
+  --mimi-cal-cell: var(--mimi-date-cell-size, 36px);
+  --mimi-cal-nav: 30px;
+  --mimi-menu-item-h: var(--mimi-menu-item-height, 32px);
+  --mimi-menu-text: 14px;
+  --mimi-command-input-h: var(--mimi-command-input-height, 52px);
+  --mimi-command-item-h: var(--mimi-command-item-height, 40px);
+  --mimi-command-text: var(--mimi-command-input-font-size, 15px);
+  --mimi-tree-row-h: var(--mimi-tree-row-height, 32px);
+  --mimi-tree-text: var(--mimi-tree-font-size, 13.5px);
+  --mimi-sortable-item-h: var(--mimi-sortable-item-height, 56px);
+  --mimi-sortable-gap-s: var(--mimi-sortable-gap, 8px);
+  --mimi-table-row-h: var(--mimi-table-row-height, 42px);
+  --mimi-table-head-h: var(--mimi-table-head-height, 38px);
+  --mimi-tooltip-text: var(--mimi-tooltip-font-size, 12.5px);
+  --mimi-tooltip-px: 10px;
+  --mimi-popover-w: 300px;
 }
 
 [data-size='sm'] {
@@ -338,6 +360,28 @@
   --mimi-toggle-px: 10px;
   --mimi-badge-h: 18px;
   --mimi-badge-px-s: 0.5rem;
+  --mimi-chip-h: 22px;
+  --mimi-chip-text: 12px;
+  --mimi-slider-h: 4px;
+  --mimi-slider-thumb-s: 16px;
+  --mimi-toolbar-item-s: 32px;
+  --mimi-toolbar-icon: 16px;
+  --mimi-cal-cell: 32px;
+  --mimi-cal-nav: 28px;
+  --mimi-menu-item-h: 28px;
+  --mimi-menu-text: 13px;
+  --mimi-command-input-h: 44px;
+  --mimi-command-item-h: 34px;
+  --mimi-command-text: 14px;
+  --mimi-tree-row-h: 28px;
+  --mimi-tree-text: 12.5px;
+  --mimi-sortable-item-h: 44px;
+  --mimi-sortable-gap-s: 6px;
+  --mimi-table-row-h: 34px;
+  --mimi-table-head-h: 32px;
+  --mimi-tooltip-text: 11.5px;
+  --mimi-tooltip-px: 8px;
+  --mimi-popover-w: 260px;
 }
 
 [data-size='lg'] {
@@ -372,6 +416,28 @@
   --mimi-toggle-px: 16px;
   --mimi-badge-h: 26px;
   --mimi-badge-px-s: 0.75rem;
+  --mimi-chip-h: 30px;
+  --mimi-chip-text: 14px;
+  --mimi-slider-h: 8px;
+  --mimi-slider-thumb-s: 24px;
+  --mimi-toolbar-item-s: 48px;
+  --mimi-toolbar-icon: 20px;
+  --mimi-cal-cell: 40px;
+  --mimi-cal-nav: 34px;
+  --mimi-menu-item-h: 36px;
+  --mimi-menu-text: 15px;
+  --mimi-command-input-h: 60px;
+  --mimi-command-item-h: 46px;
+  --mimi-command-text: 16px;
+  --mimi-tree-row-h: 36px;
+  --mimi-tree-text: 14.5px;
+  --mimi-sortable-item-h: 68px;
+  --mimi-sortable-gap-s: 10px;
+  --mimi-table-row-h: 50px;
+  --mimi-table-head-h: 44px;
+  --mimi-tooltip-text: 13.5px;
+  --mimi-tooltip-px: 12px;
+  --mimi-popover-w: 360px;
 }
 
 .dark {

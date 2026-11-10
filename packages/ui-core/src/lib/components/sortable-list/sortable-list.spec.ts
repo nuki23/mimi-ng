@@ -243,9 +243,11 @@ describe('MimiSortableList', () => {
       'Reorder uno',
     );
     const ul = list.querySelector('ul')!;
-    expect(ul.className).toContain('gap-[var(--mimi-sortable-gap,8px)]');
+    expect(ul.className).toContain('gap-[var(--mimi-sortable-gap-s,var(--mimi-sortable-gap,8px))]');
     const li = ul.querySelector('li')!;
-    expect(li.className).toContain('min-h-[var(--mimi-sortable-item-height,56px)]');
+    expect(li.className).toContain(
+      'min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))]',
+    );
     expect(li.className).toContain('rounded-[var(--mimi-sortable-radius,var(--mimi-radius))]');
     expect(li.className).toContain('bg-[color:var(--mimi-sortable-bg,var(--mimi-card))]');
     host.extra.set('gap-4 max-w-md');

@@ -30,6 +30,7 @@ import {
 } from '@angular/core';
 import { MimiMenuItemsImports } from '@/components/ui/menu';
 import { MimiMenuPanel } from '@/components/ui/menu/menu';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_VIEWPORT_MARGIN,
   mimiConnectedPositions,
@@ -64,6 +65,7 @@ const handled = new WeakSet<Event>();
  */
 @Component({
   selector: 'mimi-context-menu',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [CdkConnectedOverlay, MimiMenuPanel],
   template: `
     <ng-content />
@@ -89,6 +91,7 @@ const handled = new WeakSet<Event>();
             [menuId]="menuId"
             [label]="ariaLabel() ?? ''"
             [state]="state()"
+            [size]="sized.resolved()"
             [class]="userClass()"
             (closeRequest)="close($event)"
           />
@@ -120,6 +123,7 @@ export class MimiContextMenu {
   readonly userClass = input('', { alias: 'class' });
 
   protected readonly content = contentChild(MimiContextMenuContent);
+  protected readonly sized = inject(MimiSized);
   private readonly panel = viewChild(MimiMenuPanel);
 
   readonly menuId = `mimi-context-menu-${nextId++}`;

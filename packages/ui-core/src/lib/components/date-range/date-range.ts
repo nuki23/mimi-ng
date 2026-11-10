@@ -172,6 +172,7 @@ let nextId = 0;
         <div class="flex flex-col gap-2 p-[var(--mimi-date-padding,12px)]">
           <mimi-calendar
             mode="range"
+            [size]="sized.resolved()"
             [rangeStart]="shownStart()"
             [rangeEnd]="shownEnd()"
             [min]="minDate() ?? null"
@@ -205,6 +206,8 @@ export class MimiDateRangePicker
 {
   private readonly defaultLocale = inject(LOCALE_ID);
   protected readonly texts = inject(MIMI_DATE_PICKER_TEXT);
+  /** El panel va en un overlay, fuera del anfitrión: el calendario recibe el tamaño. */
+  protected readonly sized = inject(MimiSized);
 
   /** El periodo (`{ start: '2026-09-24', end: '2026-09-30' }`), o `null`. */
   readonly value = model<MimiDateRange | null>(null);

@@ -16,6 +16,7 @@ import {
 import type { FormValueControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   injectFieldState,
@@ -47,7 +48,7 @@ export type MimiSliderValue = number | [number, number] | null;
 
 const THUMB_BASE = cn(
   'absolute top-1/2 box-border -translate-y-1/2 cursor-grab rounded-full border-2',
-  'size-[var(--mimi-slider-thumb-size,20px)] bg-[color:var(--mimi-slider-thumb,var(--mimi-thumb,var(--mimi-background)))]',
+  'size-[var(--mimi-slider-thumb-s,var(--mimi-slider-thumb-size,20px))] bg-[color:var(--mimi-slider-thumb,var(--mimi-thumb,var(--mimi-background)))]',
   'shadow-[shadow:var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
   '[transition:box-shadow_.2s_ease,scale_.15s_cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none',
   // Hover y arrastre suman el halo a la sombra del pulgar (su token), con tipo (estilos 8).
@@ -77,16 +78,17 @@ const FILL = {
  */
 @Component({
   selector: 'mimi-slider',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <span
       aria-hidden="true"
       data-slot="track"
-      class="absolute inset-x-0 h-[var(--mimi-slider-height,6px)] rounded-full bg-[color:var(--mimi-slider-track,var(--mimi-track,var(--mimi-input)))]"
+      class="absolute inset-x-0 h-[var(--mimi-slider-h,var(--mimi-slider-height,6px))] rounded-full bg-[color:var(--mimi-slider-track,var(--mimi-track,var(--mimi-input)))]"
     ></span>
     <span
       aria-hidden="true"
       data-slot="fill"
-      class="absolute h-[var(--mimi-slider-height,6px)] rounded-full"
+      class="absolute h-[var(--mimi-slider-h,var(--mimi-slider-height,6px))] rounded-full"
       [class]="fillClass()"
       [style.inset-inline-start.%]="fillStart()"
       [style.width.%]="fillWidth()"

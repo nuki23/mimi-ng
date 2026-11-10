@@ -31,6 +31,7 @@ import {
   mimiNormalizeText,
 } from '@/components/ui/option-list/option-list';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { MIMI_COMMAND_TEXT } from './command-texts';
 
 /*
@@ -163,10 +164,10 @@ const HOST_CLASSES = cn(
 );
 
 const SEARCH_CLASSES =
-  'flex h-[var(--mimi-command-input-height,52px)] shrink-0 items-center gap-2.5 border-b border-border pr-3.5 pl-4';
+  'flex h-[var(--mimi-command-input-h,var(--mimi-command-input-height,52px))] shrink-0 items-center gap-2.5 border-b border-border pr-3.5 pl-4';
 
 const INPUT_CLASSES =
-  'h-full min-w-0 flex-1 bg-transparent text-[length:var(--mimi-command-input-font-size,15px)] text-foreground outline-none placeholder:text-muted-foreground';
+  'h-full min-w-0 flex-1 bg-transparent text-[length:var(--mimi-command-text,var(--mimi-command-input-font-size,15px))] text-foreground outline-none placeholder:text-muted-foreground';
 
 const KBD_CLASSES =
   'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-[5px] border border-border bg-background px-[5px] font-mono text-[11px] text-muted-foreground';
@@ -180,7 +181,7 @@ const FOOTER_KBD_CLASSES =
 const LIST_CLASSES = 'max-h-[var(--mimi-command-list-height,332px)] p-1.5';
 
 const OPTION_CLASSES = cn(
-  'group/command-item flex h-[var(--mimi-command-item-height,40px)] shrink-0 cursor-pointer items-center gap-2.5 px-2.5 text-sm select-none',
+  'group/command-item flex h-[var(--mimi-command-item-h,var(--mimi-command-item-height,40px))] shrink-0 cursor-pointer items-center gap-2.5 px-2.5 text-sm select-none',
   'rounded-[var(--mimi-command-item-radius,var(--mimi-radius-sm))]',
   'transition-[background-color] duration-100 ease-[ease] active:scale-(--mimi-press-scale)',
   'data-[active=true]:bg-[color:var(--mimi-command-active,var(--mimi-accent))]',
@@ -230,6 +231,7 @@ const toOption = (item: MimiCommandItem): MimiListOption<MimiCommandItem> => ({
  */
 @Component({
   selector: 'mimi-command',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [Combobox, ComboboxPopup, MimiOptionList, MimiHighlight, MimiCommandOutlet],
   template: `
     <div data-slot="search" [class]="searchClasses">
@@ -466,6 +468,7 @@ const DIALOG_PANEL_CLASSES = cn(
  */
 @Component({
   selector: 'mimi-command-dialog',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [MimiDialog, MimiDialogContent, MimiCommand],
   providers: [{ provide: MIMI_COMMAND_HOST, useExisting: forwardRef(() => MimiCommandDialog) }],
   template: `
@@ -480,6 +483,7 @@ const DIALOG_PANEL_CLASSES = cn(
       <ng-template mimiDialogContent>
         <mimi-command
           class="max-h-[inherit] rounded-none border-0 shadow-none"
+          [size]="sized.resolved()"
           [items]="items()"
           [placeholder]="placeholder()"
           [aria-label]="label()"
@@ -502,6 +506,8 @@ const DIALOG_PANEL_CLASSES = cn(
 })
 export class MimiCommandDialog<T = unknown> implements MimiCommandHost {
   protected readonly texts = inject(MIMI_COMMAND_TEXT);
+  /** La paleta va en un diálogo (overlay): recibe el tamaño. */
+  protected readonly sized = inject(MimiSized);
 
   /** Abierta o cerrada. Admite `[(open)]`. */
   readonly open = model(false);

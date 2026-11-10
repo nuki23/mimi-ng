@@ -21,6 +21,7 @@ import {
 } from '@angular/core';
 import { MimiMenuItemsImports } from '@/components/ui/menu';
 import { MimiMenuPanel } from '@/components/ui/menu/menu';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_VIEWPORT_MARGIN,
   type MimiOverlayAlign,
@@ -55,6 +56,7 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-dropdown-menu',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [CdkConnectedOverlay, MimiMenuPanel],
   template: `
     <ng-content />
@@ -82,6 +84,7 @@ let nextId = 0;
           [align]="align()"
           [initialFocus]="focusTarget"
           [focusExempt]="trigger()?.element"
+          [size]="sized.resolved()"
           [class]="userClass()"
           (closeRequest)="close($event)"
         />
@@ -114,6 +117,7 @@ export class MimiDropdownMenu {
 
   protected readonly trigger = contentChild(MimiDropdownMenuTrigger);
   protected readonly content = contentChild(MimiDropdownMenuContent);
+  protected readonly sized = inject(MimiSized);
   private readonly panel = viewChild(MimiMenuPanel);
 
   /** id del menú (aria-controls del trigger). */

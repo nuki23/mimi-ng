@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { type MimiSize } from '@/components/ui/utils/size';
 import { MIMI_CHIP_TEXT } from './chip-texts';
 
 /*
@@ -20,7 +21,7 @@ import { MIMI_CHIP_TEXT } from './chip-texts';
 
 const CHIP_BASE = cn(
   'inline-flex max-w-full min-w-0 shrink-0 items-center gap-1 ps-2.5 font-medium whitespace-nowrap mimi-transition',
-  'h-[var(--mimi-chip-height,26px)] rounded-[var(--mimi-chip-radius,var(--mimi-badge-radius,999px))] text-[length:var(--mimi-chip-font-size,13px)]',
+  'h-[var(--mimi-chip-h,var(--mimi-chip-height,26px))] rounded-[var(--mimi-chip-radius,var(--mimi-badge-radius,999px))] text-[length:var(--mimi-chip-text,var(--mimi-chip-font-size,13px))]',
 );
 /** Colores: el global `--mimi-chip` (G2.0b, con respaldo) o, con error, el suave de `danger`. */
 const CHIP_TONE = {
@@ -71,6 +72,8 @@ const REMOVE_CLASSES = cn(
   host: {
     '[class]': 'classes()',
     '[attr.data-invalid]': 'invalid() ? "" : null',
+    // Sin `size`, sin `data-size`: el chip toma el del Combobox o Tags Input que lo contiene.
+    '[attr.data-size]': 'size() ?? null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -83,6 +86,8 @@ export class MimiChip {
   readonly label = input<string>();
   /** Con error (por ejemplo, el duplicado que se intentó agregar). */
   readonly invalid = input(false, { transform: booleanAttribute });
+  /** `sm | md | lg`. Por defecto, el del contenedor (Tags Input, Combobox, `mimiSize`) o `md`. */
+  readonly size = input<MimiSize>();
   readonly userClass = input('', { alias: 'class' });
 
   /** Se pulsó el botón de quitar. */

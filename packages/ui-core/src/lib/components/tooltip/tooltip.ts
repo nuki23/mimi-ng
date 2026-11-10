@@ -26,6 +26,7 @@ import {
   untracked,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
+import type { MimiSize } from '@/components/ui/utils/size';
 import {
   MIMI_OVERLAY_ANIMATION,
   MIMI_VIEWPORT_MARGIN,
@@ -94,6 +95,7 @@ function normalizeName(value: string): string {
       [class]="classes()"
       [attr.data-state]="state()"
       [attr.data-side]="side()"
+      [attr.data-size]="size()"
       [style.--mimi-tooltip-arrow-offset]="arrowOffset()"
       (pointerleave)="pointerLeave.emit($event.relatedTarget)"
     >
@@ -119,14 +121,15 @@ export class MimiTooltipPanel {
   readonly state = input<'open' | 'closed'>('closed');
   readonly arrowOffset = input<string | null>(null);
   readonly userClass = input('');
+  readonly size = input<MimiSize | null>(null);
   /** El puntero sale del tooltip, hacia este elemento (si vuelve al trigger, sigue abierto). */
   readonly pointerLeave = output<EventTarget | null>();
 
   protected readonly classes = computed(() =>
     cn(
-      'relative flex w-max max-w-[calc(100vw_-_16px)] items-center gap-2 px-2.5 py-1.5',
+      'relative flex w-max max-w-[calc(100vw_-_16px)] items-center gap-2 px-[var(--mimi-tooltip-px,10px)] py-1.5',
       'rounded-[var(--mimi-tooltip-radius,8px)] bg-[color:var(--mimi-tooltip-bg,var(--mimi-tooltip))] text-[color:var(--mimi-tooltip-fg,var(--mimi-tooltip-foreground))]',
-      'text-[length:var(--mimi-tooltip-font-size,12.5px)] font-medium shadow-[shadow:var(--mimi-shadow-neutral)]',
+      'text-[length:var(--mimi-tooltip-text,var(--mimi-tooltip-font-size,12.5px))] font-medium shadow-[shadow:var(--mimi-shadow-neutral)]',
       // Puente invisible sobre la separación: el puntero pasa del trigger al tooltip sin salir.
       "before:absolute before:content-['']",
       'data-[side=top]:before:inset-x-0 data-[side=top]:before:top-full data-[side=top]:before:h-[10px]',
@@ -190,6 +193,18 @@ export class MimiTooltip {
   readonly arrow = input(true, { alias: 'mimiTooltipArrow', transform: booleanAttribute });
   /** Clases del tooltip, mezcladas con `cn()`. */
   readonly tooltipClass = input('', { alias: 'mimiTooltipClass' });
+  /**
+   * `sm | md | lg`. Por defecto, el del `[data-size]` más cercano al disparador (un formulario con
+   * `mimiSize`) o `md`: el tooltip vive en un overlay, fuera de ese contenedor.
+   */
+  readonly size = input<MimiSize>(undefined, { alias: 'mimiTooltipSize' });
+  private panelSize(): MimiSize | null {
+    return (
+      this.size() ??
+      (this.element.closest<HTMLElement>('[data-size]')?.dataset['size'] as MimiSize | undefined) ??
+      null
+    );
+  }
 
   /** id del tooltip (role="tooltip"). */
   readonly tooltipId = `mimi-tooltip-${nextId++}`;
@@ -219,6 +234,7 @@ export class MimiTooltip {
       side: this.placedSide(),
       arrowOffset: this.arrowOffset(),
       userClass: this.tooltipClass(),
+      size: this.panelSize(),
     };
     untracked(() => {
       if (!this.panelRef) return;
@@ -313,6 +329,7 @@ export class MimiTooltip {
       side: this.side(),
       arrowOffset: this.arrowOffset(),
       userClass: this.tooltipClass(),
+      size: this.panelSize(),
       state: 'open',
     })) {
       this.panelRef!.setInput(name, value);

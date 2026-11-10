@@ -70,7 +70,8 @@ export function injectMimiSize(
 @Directive({ host: { '[attr.data-size]': 'resolved()' } })
 export class MimiSized {
   readonly size = input<MimiSizeInput>();
-  protected readonly resolved = injectMimiSize(this.size, 'MimiSized');
+  /** El tamaño de verdad (el propio, el del contenedor `mimiSize` o `md`). */
+  readonly resolved = injectMimiSize(this.size, 'MimiSized');
 }
 
 /**

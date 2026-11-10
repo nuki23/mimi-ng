@@ -77,6 +77,28 @@ const GLOBALS = new Set([
   '--mimi-tabs-index',
   // Derivadas de la escala de tamaños (theme-base.css, `[data-size]`): las resuelve el tema por
   // tamaño a partir de los tokens públicos (`--mimi-btn-height`, `-sm`, `-lg`…).
+  // R.8: derivadas por tamaño de Chip, Slider, Toolbar, Menú, Command, Tree, Sortable List, Data
+  // Table, Tooltip y Popover.
+  '--mimi-chip-h',
+  '--mimi-chip-text',
+  '--mimi-slider-h',
+  '--mimi-slider-thumb-s',
+  '--mimi-toolbar-item-s',
+  '--mimi-toolbar-icon',
+  '--mimi-menu-item-h',
+  '--mimi-menu-text',
+  '--mimi-command-input-h',
+  '--mimi-command-item-h',
+  '--mimi-command-text',
+  '--mimi-tree-row-h',
+  '--mimi-tree-text',
+  '--mimi-sortable-item-h',
+  '--mimi-sortable-gap-s',
+  '--mimi-table-row-h',
+  '--mimi-table-head-h',
+  '--mimi-tooltip-text',
+  '--mimi-tooltip-px',
+  '--mimi-popover-w',
   '--mimi-btn-h',
   '--mimi-btn-text',
   '--mimi-btn-gap-s',

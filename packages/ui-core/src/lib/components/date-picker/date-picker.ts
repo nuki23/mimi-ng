@@ -129,6 +129,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
       </button>
       <ng-template mimiPopoverContent>
         <mimi-calendar
+          [size]="sized.resolved()"
           [value]="calendarValue()"
           [min]="min() ?? null"
           [max]="max() ?? null"
@@ -155,6 +156,8 @@ const toDate = (value: unknown): MimiDate | undefined =>
 export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFieldControl {
   private readonly defaultLocale = inject(LOCALE_ID);
   protected readonly texts = inject(MIMI_DATE_PICKER_TEXT);
+  /** El panel va en un overlay, fuera del anfitrión: el calendario recibe el tamaño. */
+  protected readonly sized = inject(MimiSized);
 
   /** La fecha elegida (`'2026-09-30'`), o `null`. Con `[(value)]` o un formulario. */
   readonly value = model<MimiDate | null>(null);

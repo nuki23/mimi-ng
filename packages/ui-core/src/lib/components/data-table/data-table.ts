@@ -29,6 +29,7 @@ import { MimiInput } from '@/components/ui/input';
 import { MimiPagination } from '@/components/ui/pagination';
 import { MimiToggleGroup, MimiToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { MIMI_DATA_TABLE_TEXT } from './data-table-texts';
 
 /*
@@ -231,13 +232,13 @@ const CELL_BG = cn(
 );
 
 const CELL_CLASSES = cn(
-  'h-[var(--mimi-table-row-height,42px)] border-b border-border px-[var(--mimi-table-cell-px,10px)]',
+  'h-[var(--mimi-table-row-h,var(--mimi-table-row-height,42px))] border-b border-border px-[var(--mimi-table-cell-px,10px)]',
   'group-data-[density=comfortable]/data-table:h-[var(--mimi-table-row-height-comfortable,60px)]',
   CELL_BG,
 );
 
 const HEAD_CLASSES = cn(
-  'h-[var(--mimi-table-head-height,38px)] border-b border-border px-[var(--mimi-table-cell-px,10px)] text-start whitespace-nowrap',
+  'h-[var(--mimi-table-head-h,var(--mimi-table-head-height,38px))] border-b border-border px-[var(--mimi-table-cell-px,10px)] text-start whitespace-nowrap',
   'group-data-[density=comfortable]/data-table:h-[var(--mimi-table-head-height-comfortable,44px)]',
   'bg-[color:var(--mimi-table-head-bg,var(--mimi-muted))] text-[12.5px] font-semibold text-muted-foreground',
 );
@@ -337,6 +338,7 @@ interface ColumnView<T> {
  */
 @Component({
   selector: 'mimi-data-table',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [
     MimiCheckbox,
     MimiChip,
