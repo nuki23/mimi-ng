@@ -28,8 +28,11 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 ### Formularios
 
 - **`readonly`** en Checkbox, Switch, Select, Combobox, Date Picker, Date Range, Slider, Color Picker, File Upload, Toggle Group y Password: el valor se ve y se enfoca, no se cambia (`aria-readonly` donde el rol lo admite; File Upload usa `aria-disabled` porque su zona es un botón).
+- **Select y Combobox: `<mimi-option>` es la forma normal.** Todos los ejemplos del sitio, los fragmentos «Con formularios» y el bloque «Uso» usan `<mimi-option>` / `<mimi-optgroup>` (con `@for` y `[value]` enlazado cuando los datos vienen de una señal); `[options]` queda como alternativa para listas generadas por código y sigue ganando si se da. Añadidos, sin rupturas, la misma API en los dos:
+  - **`searchMode="client" | "server"`** (por defecto `client`): con `server` el componente muestra las opciones que llegan, sin volver a filtrar; ya no hace falta `[filterWith]="() => true"`. `filterWith` sigue para filtros propios en `client`.
+  - **`compareWith="id"`**: además de una función, el nombre de un campo para comparar valores que son objetos (tipo `MimiCompareWith`).
 - **Form Field:** `label`, `description`, `hint` y `required` como atajos (con sus ids en `aria-describedby` y el asterisco oculto a los lectores); `[errors]` en el campo y mensajes que viajan con el validador (`withMessage` en Reactive Forms, `message` en Signal Forms). Prioridad: `<mimi-form-error>` > `message` del validador > `[errors]` > `provideMimiErrorMessages` > predeterminado.
-- **`<mimi-option>` y `<mimi-optgroup>`** como alternativa a `[options]` en Select y Combobox; un solo icono al final (cargando, limpiar o chevron). Combobox con `clearable`.
+- **`<mimi-option>` y `<mimi-optgroup>`** en Select y Combobox (ver arriba); un solo icono al final (cargando, limpiar o chevron). Combobox con `clearable`.
 - **Dialog como servicio:** `size`, `inputs` (validadas contra el componente antes de crear el diálogo), `padding`, `panelClass`, `ref.closed`, `ref.result` y `chrome: 'none'`.
 - **Tabs:** atajo `<mimi-tab label>`; sin `value`, el valor sale del texto, del índice o con un sufijo, con un aviso en desarrollo.
 - **Input OTP:** la cantidad de dígitos que quepa y `separatorAfter` en lista.

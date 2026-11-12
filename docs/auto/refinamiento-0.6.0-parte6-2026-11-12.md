@@ -136,3 +136,33 @@ Los deshabilitados no abren, y el de «cargando» muestra `aria-busy` sin opcion
 **Prueba añadida:** `combobox-page.spec.ts` comprueba que el campo de «Opción propia» muestra «Sol Díaz», el valor guardado que reconoce `compareWith="email"`.
 
 **Limpieza:** se detuvo el servidor del 4280 (tarea y proceso `node` por PID) y se comprobó con `netstat` que el puerto quedó libre. El script, `playwright-core` y las capturas se borran del directorio temporal al terminar.
+
+## 5. CHANGELOG, página de API y spec
+
+- **`CHANGELOG.md`** («0.6.0 (por publicar)», «Formularios»): una entrada nueva, **como añadido y no como ruptura**. Dice que `<mimi-option>` es la forma normal y `[options]` la alternativa, y presenta `searchMode` y `compareWith="id"`. La línea anterior («como alternativa a `[options]`») ya no se contradice: remite a la nueva.
+- **Tablas de API** (`select-page.ts`, `combobox-page.ts`):
+  - fila nueva `searchMode`;
+  - `compareWith` con su tipo `función | string` y el atajo;
+  - `filterWith` aclara que solo cuenta en `'client'`;
+  - `options` se describe como alternativa (en el punto 1).
+- **Spec:**
+  - «Principio de uso»: la forma corta de Select es `<mimi-select>` con sus `<mimi-option>`.
+  - Filas de Select y Combobox del catálogo: `<mimi-option>` como forma normal, `searchMode` y `compareWith` con nombre de campo.
+
+## Verificación final (con los cinco puntos)
+
+- **`pnpm build`** en verde:
+  - JS inicial: **334,87 kB crudo / 106,24 kB gzip** (antes, 334,87 / 106,24; sin cambio);
+  - CSS global: **111,56 kB / 17,13 kB** (sin cambio).
+  - El código nuevo (`searchMode`, `mimiCompareFn`) va en los chunks diferidos de Select y Combobox, no en el JS inicial.
+- **`pnpm test`** en verde: docs **246** (antes, 245), ui-core **1007** (antes, 997: +6 de `searchMode`, +4 de `compareWith`), CLI **202**.
+- **`pnpm format:check`** en verde.
+
+## Alertas para el revisor
+
+1. **Un ejemplo con `[options]` por página** (Select y Combobox), no uno solo entre las dos (ver punto 1).
+2. **`searchMode` es un nombre decidido por defecto.** Está registrado en `docs/auto/decisiones-por-defecto.md`. Con `'server'` también se ignora `filterWith`.
+3. **`compareWith` acepta cualquier `string`**, no `keyof T`, y no avisa si el campo no existe (ver punto 3).
+4. **Revisión con Playwright, no con NVDA.** La accesibilidad del panel no cambió y no se volvió a revisar con un lector de pantalla.
+
+**No se subió la versión ni se publicó nada.** Los cinco commits están en `auto/refinamiento-0.6.0-2026-11-09`, con push. Fusionar a `main` lo hace el usuario.

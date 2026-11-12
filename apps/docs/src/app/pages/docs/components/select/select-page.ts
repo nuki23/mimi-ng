@@ -174,13 +174,21 @@ export class SelectPage {
       type: '(option, query) => boolean',
       default: '—',
       description:
-        'Filtro propio. Por defecto, la etiqueta contiene la búsqueda, sin tildes ni mayúsculas.',
+        "Filtro propio. Por defecto, la etiqueta contiene la búsqueda, sin tildes ni mayúsculas. Solo cuenta con searchMode='client'.",
+    },
+    {
+      name: 'searchMode',
+      type: "'client' | 'server'",
+      default: "'client'",
+      description:
+        "Dónde se filtra lo que se busca. Con 'server', tu app filtra al recibir (searchChange) y el Select muestra las opciones que llegan, sin volver a filtrarlas.",
     },
     {
       name: 'compareWith',
-      type: '(a: T, b: T) => boolean',
+      type: '((a: T, b: T) => boolean) | string',
       default: 'Object.is',
-      description: 'Compara el valor con el de cada opción. Úsalo cuando los valores son objetos.',
+      description:
+        'Compara el valor con el de cada opción, cuando los valores son objetos: una función o el nombre de un campo (compareWith="id").',
     },
     {
       name: 'clearable',

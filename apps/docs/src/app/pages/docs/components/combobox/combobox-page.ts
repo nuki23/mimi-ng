@@ -161,13 +161,21 @@ export class ComboboxPage {
       name: 'filterWith',
       type: '(option, text) => boolean',
       default: 'sin tildes ni mayúsculas',
-      description: 'Filtro propio. Con el filtro en el servidor, () => true.',
+      description: "Filtro propio. Solo cuenta con searchMode='client'.",
+    },
+    {
+      name: 'searchMode',
+      type: "'client' | 'server'",
+      default: "'client'",
+      description:
+        "Dónde se filtra lo que se escribe. Con 'server', tu app filtra al recibir (searchChange) y el Combobox muestra las opciones que llegan, sin volver a filtrarlas.",
     },
     {
       name: 'compareWith',
-      type: '(a, b) => boolean',
+      type: '((a, b) => boolean) | string',
       default: 'Object.is',
-      description: 'Compara el valor con el de cada opción (para objetos).',
+      description:
+        'Compara el valor con el de cada opción (para objetos): una función o el nombre de un campo (compareWith="id").',
     },
     {
       name: 'side / align',
