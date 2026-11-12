@@ -720,8 +720,23 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
       ['bottom', 'end'],
       ['bottom', 'center'],
     ]);
+    // jsdom no mide: el disparador «mide» 200px. El panel mide al menos eso (min-width) y puede
+    // crecer con una opción larga: no se le fija el ancho (informe del usuario, 12/11/2026).
+    const rect = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      width: 200,
+      height: 40,
+      top: 0,
+      left: 0,
+      right: 200,
+      bottom: 40,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect);
     await open('plain');
-    expect(pane().style.width).not.toBe('');
+    expect(pane().style.minWidth).toBe('200px');
+    expect(pane().style.width).toBe('');
+    rect.mockRestore();
     await press(trigger('plain'), 'Escape');
     h.side.set('top');
     h.align.set('end');
@@ -736,8 +751,9 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
       ['top', 'center'],
     ]);
     await open('plain');
-    // Sin matchWidth, el CDK no le fija el ancho del disparador.
+    // Sin matchWidth, ni ancho ni mínimo: lo que pida el contenido.
     expect(pane().style.width).toBe('');
+    expect(pane().style.minWidth).toBe('');
     // El atributo HTML `align` (antiguo) alinearía el texto: no queda en el anfitrión.
     expect(
       fixture.nativeElement.querySelector('mimi-select[data-test="plain"]').hasAttribute('align'),

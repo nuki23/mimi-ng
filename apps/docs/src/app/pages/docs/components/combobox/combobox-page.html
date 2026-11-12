@@ -23,6 +23,19 @@
 
   <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
 
+  <h3 id="declarative" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con <code class="font-mono text-[0.9em]">&lt;mimi-option&gt;</code>
+  </h3>
+  <p class="text-pretty">
+    La misma API que Select: opciones y grupos escritos en la plantilla (también dentro de un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;for</code>), con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">clearable</code> para
+    quitar el valor desde el sitio del chevron.
+  </p>
+  <app-code-preview [code]="source.declarative">
+    <app-combobox-declarative-example />
+  </app-code-preview>
+
   <h3 id="city" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
     Con ícono y texto secundario
   </h3>
@@ -31,18 +44,6 @@
   </p>
   <app-code-preview [code]="source.city">
     <app-combobox-city-example />
-  </app-code-preview>
-
-  <h3 id="declarative" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
-    Con <code class="font-mono text-[0.9em]">&lt;mimi-option&gt;</code>
-  </h3>
-  <p class="text-pretty">
-    La misma API que Select: opciones y grupos escritos en la plantilla, con
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">clearable</code> para
-    quitar el valor desde el sitio del chevron.
-  </p>
-  <app-code-preview [code]="source.declarative">
-    <app-combobox-declarative-example />
   </app-code-preview>
 
   <h3 id="multiple" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Múltiple con chips</h3>

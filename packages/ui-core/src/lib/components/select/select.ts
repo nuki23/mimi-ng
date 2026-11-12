@@ -489,7 +489,7 @@ const CLEAR_CLASSES = cn(
 );
 
 const PANEL_CLASSES =
-  'w-full overflow-hidden rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))] border border-border bg-[color:var(--mimi-select-menu-bg,var(--mimi-popover))] font-sans text-sm text-popover-foreground shadow-[shadow:var(--mimi-select-menu-shadow,var(--mimi-shadow-popover))] outline-none';
+  'w-full max-w-[calc(100vw_-_16px)] overflow-hidden rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))] border border-border bg-[color:var(--mimi-select-menu-bg,var(--mimi-popover))] font-sans text-sm text-popover-foreground shadow-[shadow:var(--mimi-select-menu-shadow,var(--mimi-shadow-popover))] outline-none';
 
 const SEARCH_INPUT_CLASSES =
   'h-full min-w-0 flex-1 border-0 bg-transparent font-sans text-sm text-foreground outline-none placeholder:text-muted-foreground';
@@ -634,7 +634,7 @@ const SEARCH_INPUT_CLASSES =
         [cdkConnectedOverlayPositions]="positions()"
         [cdkConnectedOverlayViewportMargin]="viewportMargin"
         [cdkConnectedOverlayDisableClose]="true"
-        [cdkConnectedOverlayMatchWidth]="matchWidth()"
+        [cdkConnectedOverlayMinWidth]="matchWidth() ? (boxWidth() ?? '') : ''"
         cdkConnectedOverlayUsePopover="inline"
         cdkConnectedOverlayTransformOriginOn="[data-mimi-overlay-panel]"
         (detach)="onDetach()"
@@ -787,7 +787,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   readonly side = input<MimiOverlaySide>('bottom');
   /** Alineación del panel con el disparador (como Popover). */
   readonly align = input<MimiOverlayAlign>('start');
-  /** El panel mide lo mismo que el disparador. Con `false`, lo que pida su contenido. */
+  /** El panel mide al menos lo que el disparador (más si una opción lo pide). Con `false`, lo que pida su contenido. */
   readonly matchWidth = input(true, { transform: booleanAttribute });
 
   /** Se emite cuando el foco sale del Select (disparador y panel): marca el control como tocado. */
@@ -797,6 +797,13 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
 
   protected readonly optionTemplate = contentChild(MimiSelectOption);
   private readonly trigger = viewChild.required<ElementRef<HTMLButtonElement>>('trigger');
+  private readonly box = viewChild.required<ElementRef<HTMLElement>>('box');
+  /**
+   * Ancho del disparador al abrir: con `matchWidth`, el panel mide **al menos** eso y crece si una
+   * opción lo pide. Antes medía exactamente eso: con un valor corto («Pro») el disparador, y con él
+   * el panel, quedaban de 78px y las etiquetas no se veían (informe del usuario, 12/11/2026).
+   */
+  protected readonly boxWidth = signal<number | null>(null);
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
   private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
   private readonly list = viewChild(MimiSelectList);
@@ -962,6 +969,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   private show(): void {
     this.closing++;
     const trigger = this.trigger().nativeElement;
+    this.boxWidth.set(this.box().nativeElement.getBoundingClientRect().width || null);
     this.panelLabel.set(
       this.ariaLabel() || trigger.labels?.[0]?.textContent?.trim() || this.placeholder(),
     );

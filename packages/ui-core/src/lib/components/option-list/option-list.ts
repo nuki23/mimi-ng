@@ -65,7 +65,8 @@ export interface MimiListOptionContext<T = unknown> {
   template: '<ng-content />',
 })
 export class MimiOptgroup {
-  readonly label = input.required<string>();
+  /** Etiqueta del grupo. No es `input.required` por lo mismo que `value` de `mimi-option`. */
+  readonly label = input('');
 }
 
 /**
@@ -80,7 +81,7 @@ export class MimiOptgroup {
   template: '<ng-content />',
 })
 export class MimiOptionItem<T = unknown> {
-  readonly value = input.required<T>();
+  readonly value = input<T>();
   readonly label = input<string>();
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly hint = input<string>();
@@ -100,12 +101,19 @@ export class MimiOptionItem<T = unknown> {
     inject(DestroyRef).onDestroy(() => observer.disconnect());
   }
 
-  /** Lo que la lista pinta. */
-  readonly option = computed<MimiListOption<T>>(() => {
+  /**
+   * Lo que la lista pinta, o `null` mientras `value` no llegó. Con `[value]` enlazado (dentro de
+   * un `@for`, por ejemplo) la lista puede leer la opción antes de que Angular le pase la entrada;
+   * por eso `value` no es `input.required`: leer una requerida sin valor lanza NG0950 y rompía la
+   * lista entera.
+   */
+  readonly option = computed<MimiListOption<T> | null>(() => {
     this.textVersion();
+    const value = this.value();
+    if (value === undefined) return null;
     return {
       label: this.label() ?? (this.host.nativeElement.textContent ?? '').trim(),
-      value: this.value(),
+      value,
       disabled: this.disabled(),
       hint: this.hint(),
     };
@@ -120,6 +128,7 @@ export function mimiDeclaredOptions<T>(
   const groups = new Map<MimiOptgroup, MimiListOption<T>[]>();
   for (const item of items) {
     const option = item.option();
+    if (!option) continue;
     if (!item.group) {
       result.push(option);
       continue;

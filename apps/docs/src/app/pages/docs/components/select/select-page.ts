@@ -250,7 +250,7 @@ export class SelectPage {
       type: 'boolean',
       default: 'true',
       description:
-        'El panel mide lo mismo que el disparador. Con false, lo que pida su contenido (por ejemplo, un min-w en panelClass).',
+        'El panel mide al menos lo que el disparador y crece si una opción es más larga. Con false, lo que pida su contenido (por ejemplo, un min-w en panelClass).',
     },
   ];
 

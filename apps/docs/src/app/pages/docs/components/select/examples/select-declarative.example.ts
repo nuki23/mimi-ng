@@ -5,7 +5,7 @@ import { MimiSelectImports } from '@/components/ui/select';
   selector: 'app-select-declarative-example',
   imports: [MimiSelectImports],
   template: `
-    <div class="flex w-full max-w-xs flex-col gap-1.5">
+    <div class="flex w-80 max-w-full flex-col gap-1.5">
       <label for="select-declarative" class="text-sm font-medium">Plan</label>
       <mimi-select
         id="select-declarative"
