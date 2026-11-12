@@ -54,3 +54,34 @@ Encargo (12/11/2026): `<mimi-option>` quedó a medias (solo había un ejemplo nu
 En verde junto con `declared-options.spec.ts`: 2 archivos, 9 pruebas.
 
 **Archivos:** `option-list/option-list.ts`, `option-list/index.ts`, `select/select.ts`, `combobox/combobox.ts`, `search-mode.spec.ts` (nuevo), los dos ejemplos de servidor, `select-page.html`, `combobox-page.html`, `docs/auto/decisiones-por-defecto.md` y este informe.
+
+Con todo ui-core: 84 archivos, 1003 pruebas en verde; CLI, 202 en verde.
+
+## 3. `compareWith` con atajo: el nombre de un campo
+
+**Plan breve.** Que `compareWith` acepte una función o un nombre de campo, con la misma lógica en Select y Combobox (una función compartida en `option-list`), y usarlo en los ejemplos con objetos.
+
+**Qué se hizo.**
+
+- `option-list.ts`: tipo `MimiCompareWith<T> = ((a: T, b: T) => boolean) | string` y `mimiCompareFn()`. Con un nombre, dos objetos son iguales si ese campo es igual (`Object.is`). Si alguno no es un objeto (un valor suelto), se compara con `Object.is`. Las dos cosas se exportan en el índice de `option-list`.
+- `select.ts` y `combobox.ts`: `compareWith = input<MimiCompareWith<T>>(Object.is)`, convertido una sola vez con un `computed`.
+- **El tipo es `string`, no `keyof T`.** Con `<mimi-option>` el tipo `T` no siempre se deduce, y con `keyof T` el atajo dejaría de compilar en esos casos. No hay aviso si el campo no existe: no coincide nada y no hay opción elegida (lo cubre una prueba).
+- Ejemplos con objetos:
+  - `select-server.example.ts`: `compareWith="id"`. El valor inicial es **otro objeto** con el mismo `id` (como uno guardado) y el disparador lo reconoce. Se quitó `sameUser`.
+  - `combobox-custom.example.ts`: `compareWith="email"`, con un valor inicial guardado igual.
+  - La página de Select explica el atajo en «Búsqueda en el servidor».
+
+**Pruebas** (`packages/ui-core/src/lib/compare-with.spec.ts`, nuevo; 4 casos):
+
+- `compareWith="id"` en Select y Combobox, con otro objeto del mismo `id`: el disparador y el campo muestran «Bruno»;
+- con una función, sigue igual;
+- con un campo que no coincide, no hay opción elegida;
+- `mimiCompareFn` con objetos, valores sueltos, `null` y una función (la devuelve tal cual).
+
+En verde. Las pruebas de las páginas de Select y Combobox siguen en verde. `pnpm build` en verde: JS inicial **334,87 kB / 106,23 kB gzip**, CSS global **111,56 kB / 17,13 kB** (sin cambio).
+
+**Archivos:**
+
+- ui-core: `option-list/option-list.ts`, `option-list/index.ts`, `select/select.ts`, `combobox/combobox.ts`, `compare-with.spec.ts` (nuevo).
+- Sitio: `select-server.example.ts`, `combobox-custom.example.ts`, `select-page.html`.
+- Este informe.

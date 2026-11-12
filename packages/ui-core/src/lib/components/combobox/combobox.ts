@@ -36,7 +36,9 @@ import {
   MimiOptgroup,
   MimiOptionItem,
   MimiOptionList,
+  type MimiCompareWith,
   type MimiSearchMode,
+  mimiCompareFn,
   mimiDeclaredOptions,
   mimiFilterSections,
   mimiListSections,
@@ -388,8 +390,12 @@ export class MimiCombobox<T = unknown>
    * Backspace quita el último»); vacía, sin ayuda.
    */
   readonly hint = input<string | undefined>(undefined);
-  /** Compara el valor con el de cada opción (para objetos). Por defecto, `Object.is`. */
-  readonly compareWith = input<(a: T, b: T) => boolean>(Object.is);
+  /**
+   * Compara el valor con el de cada opción (para objetos): una función o el nombre de un campo
+   * (`compareWith="id"`). Por defecto, `Object.is`.
+   */
+  readonly compareWith = input<MimiCompareWith<T>>(Object.is);
+  private readonly compare = computed(() => mimiCompareFn(this.compareWith()));
   /** Filtro propio. Por defecto: la etiqueta contiene lo escrito, sin tildes ni mayúsculas. */
   readonly filterWith = input<MimiListFilter<T>>();
   /**
@@ -516,7 +522,7 @@ export class MimiCombobox<T = unknown>
   );
 
   private matches(option: MimiListOption<T>, value: T | null | undefined): boolean {
-    return value != null && this.compareWith()(option.value, value);
+    return value != null && this.compare()(option.value, value);
   }
 
   /** Los valores elegidos como arreglo: uno (o ninguno) en simple, todos en el múltiple. */

@@ -114,8 +114,9 @@
     avisa de cada cambio del buscador y
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">loading</code> muestra
     el estado de carga mientras llegan las opciones. Los valores son objetos, así que
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">compareWith</code> los
-    compara por id. Si la opción elegida ya no está en la lista, el disparador conserva su texto.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">compareWith="id"</code>
+    los compara por ese campo (también acepta una función). Si la opción elegida ya no está en la
+    lista, el disparador conserva su texto.
   </p>
   <app-code-preview [code]="source.server">
     <app-select-server-example />

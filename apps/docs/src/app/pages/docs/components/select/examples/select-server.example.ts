@@ -27,11 +27,12 @@ const USERS: User[] = [
         search
         searchPlaceholder="Buscar por nombre…"
         searchMode="server"
+        compareWith="id"
         [(value)]="user"
         [loading]="loading()"
-        [compareWith]="sameUser"
         (searchChange)="load($event)"
       >
+        <!-- Los valores son objetos: compareWith="id" los compara por su id. -->
         @for (u of users(); track u.id) {
           <mimi-option [value]="u">{{ u.name }}</mimi-option>
         }
@@ -42,12 +43,10 @@ const USERS: User[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectServerExample {
-  protected readonly user = signal<User | null>(null);
+  // Otro objeto con el mismo id (por ejemplo, el que vino guardado): compareWith lo reconoce.
+  protected readonly user = signal<User | null>({ id: 3, name: 'Camila Rojas' });
   protected readonly users = signal<User[]>(this.find(''));
   protected readonly loading = signal(false);
-
-  // Los valores son objetos: se comparan por id.
-  protected readonly sameUser = (a: User, b: User) => a.id === b.id;
 
   private timer: ReturnType<typeof setTimeout> | undefined;
 

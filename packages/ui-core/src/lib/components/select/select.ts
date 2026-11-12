@@ -48,7 +48,9 @@ import {
   MimiHighlight,
   MimiOptgroup,
   MimiOptionItem,
+  type MimiCompareWith,
   type MimiSearchMode,
+  mimiCompareFn,
   mimiDeclaredOptions,
   mimiNormalizeText,
 } from '@/components/ui/option-list/option-list';
@@ -761,8 +763,12 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   readonly options = input<readonly (MimiOption<T> | MimiOptionGroup<T>)[]>([]);
   /** Valor de la opción elegida, o `null`. Con `[(value)]` o un formulario. */
   readonly value = model<T | null>(null);
-  /** Compara el valor con el de cada opción (para objetos). Por defecto, `Object.is`. */
-  readonly compareWith = input<(a: T, b: T) => boolean>(Object.is);
+  /**
+   * Compara el valor con el de cada opción (para objetos): una función o el nombre de un campo
+   * (`compareWith="id"`). Por defecto, `Object.is`.
+   */
+  readonly compareWith = input<MimiCompareWith<T>>(Object.is);
+  private readonly compare = computed(() => mimiCompareFn(this.compareWith()));
   readonly placeholder = input('');
   /** Muestra el buscador dentro del panel. */
   readonly search = input(false, { transform: booleanAttribute });
@@ -894,7 +900,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   );
 
   private matches(option: MimiOption, value: T | null): boolean {
-    return value != null && this.compareWith()(option.value as T, value);
+    return value != null && this.compare()(option.value as T, value);
   }
 
   /** Rodeo: aria compara por identidad, así que cada opción lleva una clave interna. */

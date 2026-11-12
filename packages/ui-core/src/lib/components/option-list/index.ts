@@ -9,6 +9,8 @@ export {
   type MimiListOptionContext,
   type MimiListOptionGroup,
   type MimiSearchMode,
+  type MimiCompareWith,
+  mimiCompareFn,
   mimiDefaultListFilter,
   mimiNormalizeText,
 } from './option-list';

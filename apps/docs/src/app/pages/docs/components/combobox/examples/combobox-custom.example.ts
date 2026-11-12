@@ -19,9 +19,11 @@ interface Person {
         placeholder="Busca por nombre o correo"
         class="rounded-full"
         panelClass="rounded-2xl"
+        compareWith="email"
         [filterWith]="byNameOrEmail"
         [(value)]="person"
       >
+        <!-- Los valores son objetos: compareWith="email" los compara por su correo. -->
         @for (p of people(); track p.email) {
           <mimi-option [value]="p">{{ p.name }}</mimi-option>
         }
@@ -37,7 +39,8 @@ interface Person {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComboboxCustomExample {
-  protected readonly person = signal<Person | null>(null);
+  // Otro objeto con el mismo correo (por ejemplo, el que vino guardado): compareWith lo reconoce.
+  protected readonly person = signal<Person | null>({ name: 'Sol Díaz', email: 'sol@ejemplo.com' });
   protected readonly people = signal<Person[]>([
     { name: 'Ana Ruiz', email: 'ana@ejemplo.com' },
     { name: 'Luis Pérez', email: 'luis@ejemplo.com' },

@@ -57,6 +57,28 @@ export type MimiListFilter<T = unknown> = (option: MimiListOption<T>, query: str
  */
 export type MimiSearchMode = 'client' | 'server';
 
+/**
+ * Cómo comparan Select y Combobox el valor con el de cada opción: una función o, como atajo, el
+ * nombre de un campo (`compareWith="id"`: dos objetos son iguales si tienen el mismo `id`).
+ */
+export type MimiCompareWith<T = unknown> = ((a: T, b: T) => boolean) | string;
+
+/**
+ * La función de `compareWith`. Con un nombre de campo compara ese campo de los dos objetos; si
+ * alguno no es un objeto (un valor suelto), compara con `Object.is`.
+ */
+export function mimiCompareFn<T>(compare: MimiCompareWith<T>): (a: T, b: T) => boolean {
+  if (typeof compare === 'function') return compare;
+  return (a, b) => {
+    if (Object.is(a, b)) return true;
+    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;
+    return Object.is(
+      (a as Record<string, unknown>)[compare],
+      (b as Record<string, unknown>)[compare],
+    );
+  };
+}
+
 /** Contexto de la plantilla propia de una opción: `let-option let-query="query"`. */
 export interface MimiListOptionContext<T = unknown> {
   $implicit: MimiListOption<T>;
