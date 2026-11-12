@@ -4,6 +4,7 @@ import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { TabsBasicExample } from './examples/tabs-basic.example';
+import { TabsShortcutExample } from './examples/tabs-shortcut.example';
 import { TabsControlledExample } from './examples/tabs-controlled.example';
 import { TabsCustomClassExample } from './examples/tabs-custom-class.example';
 import { TabsDisabledExample } from './examples/tabs-disabled.example';
@@ -15,6 +16,8 @@ import { TabsVerticalExample } from './examples/tabs-vertical.example';
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
 import basicSource from './examples/tabs-basic.example' with { loader: 'text' };
+// @ts-expect-error
+import shortcutSource from './examples/tabs-shortcut.example' with { loader: 'text' };
 // @ts-expect-error
 import controlledSource from './examples/tabs-controlled.example' with { loader: 'text' };
 // @ts-expect-error
@@ -39,6 +42,7 @@ import verticalSource from './examples/tabs-vertical.example' with { loader: 'te
     CssVariables,
     InstallCommand,
     TabsBasicExample,
+    TabsShortcutExample,
     TabsControlledExample,
     TabsCustomClassExample,
     TabsDisabledExample,
@@ -53,6 +57,7 @@ import verticalSource from './examples/tabs-vertical.example' with { loader: 'te
 export class TabsPage {
   protected readonly source = {
     basic: basicSource as string,
+    shortcut: shortcutSource as string,
     controlled: controlledSource as string,
     customClass: customClassSource as string,
     disabled: disabledSource as string,
