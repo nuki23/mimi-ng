@@ -52,6 +52,8 @@ describe('ComboboxPage', () => {
       );
       expect(values).toContain('Diseño');
       expect(values).toContain('Python');
+      // compareWith="email": el valor guardado (otro objeto) se reconoce y muestra su texto.
+      expect(values).toContain('Sol Díaz');
       // El múltiple: chips con el texto de quitar en español.
       expect(
         el

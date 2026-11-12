@@ -85,3 +85,54 @@ En verde. Las pruebas de las páginas de Select y Combobox siguen en verde. `pnp
 - ui-core: `option-list/option-list.ts`, `option-list/index.ts`, `select/select.ts`, `combobox/combobox.ts`, `compare-with.spec.ts` (nuevo).
 - Sitio: `select-server.example.ts`, `combobox-custom.example.ts`, `select-page.html`.
 - Este informe.
+
+## 4. Revisión con Playwright en el sitio servido (claro y oscuro)
+
+**Cómo.** Sitio servido con `pnpm ng serve docs --port 4280` (el 4200 lo tenía otro proceso, que no se tocó), lanzado con `timeout` y esperado con un bucle de 3 minutos como tope. Script `review.mjs` con `playwright-core` 1.56.1 y el Chrome instalado, **fuera del repo** (en el directorio temporal de la sesión). Contextos con `colorScheme: 'light'` y `'dark'`; se comprobó que `<html>` lleva `dark` en el oscuro.
+
+**Qué hace en cada ejemplo** de las páginas de Select y Combobox (y en el Select del ejemplo de Dialog con formulario):
+
+1. abre el panel;
+2. cuenta las opciones visibles (`role="option"`);
+3. elige una habilitada que no esté marcada;
+4. comprueba el texto del disparador, el valor del campo o el chip.
+
+Los deshabilitados no abren, y el de «cargando» muestra `aria-busy` sin opciones.
+
+**Resultado: 56 comprobaciones (28 por tema), todas OK, sin errores de consola.**
+
+| Página   | Ejemplo                         | Opciones         | Elegida → mostrada                                    |
+| -------- | ------------------------------- | ---------------- | ----------------------------------------------------- |
+| Select   | `<mimi-option>`                 | 5                | Gratis                                                |
+| Select   | Con etiqueta                    | 6                | Bogotá (UTC−5)                                        |
+| Select   | Con búsqueda (plantilla propia) | 8                | Argentina → «AR Argentina»                            |
+| Select   | Grupos                          | 5                | Gratis                                                |
+| Select   | Estados (limpiar / error)       | 3 / 3            | Pequeño; deshabilitado no abre; cargando sin opciones |
+| Select   | Reactive / Signal / ngModel     | 3 / 3 / 4        | Administrador / English / Peso mexicano               |
+| Select   | Personalizado                   | 3                | Más antiguos                                          |
+| Select   | Alternativa `[options]`         | 12               | Enero                                                 |
+| Combobox | `<mimi-option>`                 | 4                | Madrid                                                |
+| Combobox | Ciudad                          | 8                | Bogotá                                                |
+| Combobox | Múltiple                        | 6                | chips «Angular · TypeScript · Tailwind CSS»           |
+| Combobox | Crear                           | 3                | Desarrollo                                            |
+| Combobox | Formularios (3 + deshabilitado) | 5 cada uno       | TypeScript; el deshabilitado muestra «TypeScript»     |
+| Combobox | Opción propia                   | 3                | Ana Ruiz                                              |
+| Combobox | Alternativa `[options]`         | 24 (en 2 grupos) | 08:00                                                 |
+| Dialog   | Formulario (Select en el panel) | 3                | Administrador                                         |
+
+**Búsqueda en el servidor, con carga (`searchMode="server"`):**
+
+- **Select:**
+  - al abrir muestra «Camila Rojas», el valor inicial: otro objeto con el mismo `id`, reconocido con `compareWith="id"`;
+  - hay 6 opciones;
+  - con «zzz» sale la carga (`aria-busy` en el panel y el spinner en el disparador) y después 0 opciones;
+  - con «an» sale la carga y después «Ana Morales»; al elegirla, el disparador y `value:` dicen «Ana Morales».
+- **Combobox:**
+  - con «Tokio» sale la carga (el esqueleto y el spinner) y después «Sin resultados para «Tokio»» con la ayuda propia;
+  - con «sa» sale la carga y después «Santiago»; al elegirla, el campo dice «Santiago».
+
+**Observación, sin cambio.** En el ejemplo de servidor del Select, al elegir se ve el spinner unos 600 ms. Al cerrarse, el panel emite `searchChange('')` (ya lo hacía) y el ejemplo vuelve a pedir la lista completa al «servidor». Es lo que haría una app real. No se tocó.
+
+**Prueba añadida:** `combobox-page.spec.ts` comprueba que el campo de «Opción propia» muestra «Sol Díaz», el valor guardado que reconoce `compareWith="email"`.
+
+**Limpieza:** se detuvo el servidor del 4280 (tarea y proceso `node` por PID) y se comprobó con `netstat` que el puerto quedó libre. El script, `playwright-core` y las capturas se borran del directorio temporal al terminar.
