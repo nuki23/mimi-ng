@@ -28,6 +28,13 @@ function value(body: string, name: string): string {
 }
 
 describe('página de Tamaños', () => {
+  it('la receta de «una zona» se apoya en el tema: cada [data-size] recalcula desde el token', () => {
+    // Lo que documenta la página: con data-size en el contenedor, el token de la zona llega.
+    expect(block(":root,\n[data-size='md']")).toMatch(/--mimi-btn-h:\s*var\(--mimi-btn-height,/);
+    expect(block("[data-size='sm']")).toMatch(/--mimi-btn-h:\s*var\(--mimi-btn-height-sm,/);
+    expect(block("[data-size='lg']")).toMatch(/--mimi-btn-h:\s*var\(--mimi-btn-height-lg,/);
+  });
+
   it('la escala que muestra es la del tema', () => {
     const blocks = {
       sm: block("[data-size='sm']"),

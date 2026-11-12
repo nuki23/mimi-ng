@@ -141,5 +141,14 @@ export class SizesPage {
   protected readonly scale = SIZE_SCALE;
   protected readonly components = SIZE_COMPONENTS;
   protected readonly how = HOW;
+  protected readonly zone = [
+    '<!-- Llega: el contenedor lleva data-size (o mimiSize) -->',
+    '<section data-size="md" style="--mimi-btn-height: 2.25rem">',
+    '  <button mimiBtn>Guardar</button>',
+    '</section>',
+    '',
+    '<!-- No llega: sin data-size, el botón usa la medida calculada en :root -->',
+    '<section style="--mimi-btn-height: 2.25rem">…</section>',
+  ].join('\n');
   protected readonly demo = ['sm', 'md', 'lg'] as const;
 }

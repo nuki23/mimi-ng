@@ -55,6 +55,33 @@
     }
   </div>
 
+  <h3 id="zone" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Cambiar una medida en una zona
+  </h3>
+  <p class="text-pretty" data-test="zone">
+    Un token de medida (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-btn-height</code
+    >,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-input-height</code
+    >…) cambiado en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">:root</code> llega a
+    todo. Para cambiarlo solo en una zona, pon el token
+    <strong>en un contenedor con <code class="font-mono text-[0.9em]">data-size</code></strong>
+    (o <code class="font-mono text-[0.9em]">mimiSize</code>): ahí el tema vuelve a calcular las
+    medidas con el valor de la zona. Sin
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-size</code>, el
+    cambio no llega a los controles de dentro (las medidas ya vienen calculadas desde
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">:root</code>). En
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">sm</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">lg</code>, el token
+    lleva el sufijo:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-btn-height-sm</code
+    >.
+  </p>
+  <app-code-block [code]="zone" lang="angular-html" />
+
   <h2 id="scale" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">La escala</h2>
   <p class="text-pretty">
     Son las variables
