@@ -10,6 +10,7 @@ import { SelectCustomClassExample } from './examples/select-custom-class.example
 import { SelectDeclarativeExample } from './examples/select-declarative.example';
 import { SelectGroupsExample } from './examples/select-groups.example';
 import { SelectNgModelExample } from './examples/select-ng-model.example';
+import { SelectOptionsExample } from './examples/select-options.example';
 import { SelectReactiveFormsExample } from './examples/select-reactive-forms.example';
 import { SelectSearchExample } from './examples/select-search.example';
 import { SelectServerExample } from './examples/select-server.example';
@@ -27,6 +28,8 @@ import declarativeSource from './examples/select-declarative.example' with { loa
 import groupsSource from './examples/select-groups.example' with { loader: 'text' };
 // @ts-expect-error
 import ngModelSource from './examples/select-ng-model.example' with { loader: 'text' };
+// @ts-expect-error
+import optionsSource from './examples/select-options.example' with { loader: 'text' };
 // @ts-expect-error
 import reactiveFormsSource from './examples/select-reactive-forms.example' with { loader: 'text' };
 // @ts-expect-error
@@ -52,6 +55,7 @@ import statesSource from './examples/select-states.example' with { loader: 'text
     SelectDeclarativeExample,
     SelectGroupsExample,
     SelectNgModelExample,
+    SelectOptionsExample,
     SelectReactiveFormsExample,
     SelectSearchExample,
     SelectServerExample,
@@ -71,6 +75,7 @@ export class SelectPage {
     declarative: declarativeSource as string,
     groups: groupsSource as string,
     ngModel: ngModelSource as string,
+    options: optionsSource as string,
     reactiveForms: reactiveFormsSource as string,
     search: searchSource as string,
     server: serverSource as string,
@@ -79,30 +84,22 @@ export class SelectPage {
   };
 
   protected readonly usage = [
-    "import { type MimiOption, MimiSelect } from '@/components/ui/select';",
+    "import { MimiSelectImports } from '@/components/ui/select';",
     '',
     '@Component({',
     "  selector: 'app-country-field',",
-    '  imports: [MimiSelect],',
+    '  imports: [MimiSelectImports],',
     '  template: `',
     '    <label for="country">País</label>',
-    '    <mimi-select',
-    '      id="country"',
-    '      placeholder="Selecciona un país"',
-    '      search',
-    '      clearable',
-    '      [(value)]="country"',
-    '      [options]="countries"',
-    '    />',
+    '    <mimi-select id="country" placeholder="Selecciona un país" search clearable [(value)]="country">',
+    '      <mimi-option value="CO">Colombia</mimi-option>',
+    '      <mimi-option value="MX">México</mimi-option>',
+    '      <mimi-option value="PE" disabled hint="Sin cobertura">Perú</mimi-option>',
+    '    </mimi-select>',
     '  `,',
     '})',
     'export class CountryFieldComponent {',
     '  country = signal<string | null>(null);',
-    '  countries: MimiOption<string>[] = [',
-    "    { label: 'Colombia', value: 'CO' },",
-    "    { label: 'México', value: 'MX' },",
-    "    { label: 'Perú', value: 'PE', disabled: true, hint: 'Sin cobertura' },",
-    '  ];',
     '}',
   ].join('\n');
 
@@ -151,7 +148,8 @@ export class SelectPage {
       name: 'options',
       type: '(MimiOption<T> | MimiOptionGroup<T>)[]',
       default: '[]',
-      description: 'Opciones sueltas, grupos o las dos cosas.',
+      description:
+        'Alternativa a <mimi-option> para listas armadas por código: opciones sueltas, grupos o las dos cosas. Si se da, gana sobre las <mimi-option>.',
     },
     {
       name: 'placeholder',

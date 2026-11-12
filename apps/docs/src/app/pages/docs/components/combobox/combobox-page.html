@@ -78,9 +78,6 @@
     <app-combobox-custom-example />
   </app-code-preview>
 
-  <h3 id="texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textos</h3>
-  <app-code-block [code]="texts" lang="angular-ts" />
-
   <h3 id="forms-tabs" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
     Con formularios: Signal Forms, Reactive y plantilla
   </h3>
@@ -89,6 +86,34 @@
     Angular: no hace falta un adaptador.
   </p>
   <app-forms-tabs component="combobox" />
+
+  <h3 id="options" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Alternativa: <code class="font-mono text-[0.9em]">[options]</code> para listas generadas por
+    código
+  </h3>
+  <p class="text-pretty">
+    Si la lista ya la arma tu código, pásala entera con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[options]</code>:
+    opciones
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >{{ '{' }} label, value {{ '}' }}</code
+    >
+    y grupos
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >{{ '{' }} label, options {{ '}' }}</code
+    >, la misma forma que en Select. Si das
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[options]</code>, gana
+    sobre las
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;mimi-option&gt;</code
+    >.
+  </p>
+  <app-code-preview [code]="source.options">
+    <app-combobox-options-example />
+  </app-code-preview>
+
+  <h3 id="texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textos</h3>
+  <app-code-block [code]="texts" lang="angular-ts" />
 
   <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
     Teclado y accesibilidad

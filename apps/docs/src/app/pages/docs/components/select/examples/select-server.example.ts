@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
-import { type MimiOption, MimiSelect } from '@/components/ui/select';
+import { MimiSelectImports } from '@/components/ui/select';
 
 interface User {
   id: number;
@@ -17,7 +17,7 @@ const USERS: User[] = [
 
 @Component({
   selector: 'app-select-server-example',
-  imports: [MimiSelect],
+  imports: [MimiSelectImports],
   template: `
     <div class="flex w-full max-w-xs flex-col gap-1.5">
       <label for="select-server" class="text-sm font-medium">Responsable</label>
@@ -27,12 +27,15 @@ const USERS: User[] = [
         search
         searchPlaceholder="Buscar por nombre…"
         [(value)]="user"
-        [options]="options()"
         [loading]="loading()"
         [compareWith]="sameUser"
         [filterWith]="serverFilters"
         (searchChange)="load($event)"
-      />
+      >
+        @for (u of users(); track u.id) {
+          <mimi-option [value]="u">{{ u.name }}</mimi-option>
+        }
+      </mimi-select>
       <p class="font-mono text-[13px] text-muted-foreground">value: {{ user()?.name ?? 'null' }}</p>
     </div>
   `,
@@ -40,7 +43,7 @@ const USERS: User[] = [
 })
 export class SelectServerExample {
   protected readonly user = signal<User | null>(null);
-  protected readonly options = signal<MimiOption<User>[]>(this.find(''));
+  protected readonly users = signal<User[]>(this.find(''));
   protected readonly loading = signal(false);
 
   // Los valores son objetos: se comparan por id.
@@ -59,15 +62,12 @@ export class SelectServerExample {
     clearTimeout(this.timer);
     this.loading.set(true);
     this.timer = setTimeout(() => {
-      this.options.set(this.find(query));
+      this.users.set(this.find(query));
       this.loading.set(false);
     }, 600);
   }
 
-  private find(query: string): MimiOption<User>[] {
-    return USERS.filter((u) => u.name.toLowerCase().includes(query.toLowerCase())).map((u) => ({
-      label: u.name,
-      value: u,
-    }));
+  private find(query: string): User[] {
+    return USERS.filter((u) => u.name.toLowerCase().includes(query.toLowerCase()));
   }
 }

@@ -498,8 +498,14 @@ const SEARCH_INPUT_CLASSES =
  * Lista desplegable de una sola opción:
  *
  * ```html
- * <mimi-select [(value)]="pais" [options]="paises" placeholder="Selecciona un país" search clearable />
+ * <mimi-select [(value)]="pais" placeholder="Selecciona un país" search clearable>
+ *   @for (p of paises(); track p.code) {
+ *     <mimi-option [value]="p.code">{{ p.nombre }}</mimi-option>
+ *   }
+ * </mimi-select>
  * ```
+ *
+ * Para una lista armada por código, `[options]` es la alternativa (gana sobre las `<mimi-option>`).
  *
  * Implementa `FormValueControl`: funciona con `[formField]`, `formControlName` y `[(ngModel)]`
  * sin adaptador (spec, sección 8). `class` va al disparador y `panelClass` al panel.

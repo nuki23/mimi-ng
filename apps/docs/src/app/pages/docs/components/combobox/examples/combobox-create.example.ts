@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { MimiComboboxImports } from '@/components/ui/combobox';
-import type { MimiListOption } from '@/components/ui/option-list';
+
+interface Category {
+  id: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-combobox-create-example',
@@ -13,23 +17,26 @@ import type { MimiListOption } from '@/components/ui/option-list';
         id="category"
         placeholder="Elige o crea una"
         creatable
-        [options]="categories()"
         [(value)]="category"
         (create)="add($event)"
-      />
+      >
+        @for (c of categories(); track c.id) {
+          <mimi-option [value]="c.id">{{ c.name }}</mimi-option>
+        }
+      </mimi-combobox>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComboboxCreateExample {
   protected readonly category = signal<string | null>('diseño');
-  protected readonly categories = signal<MimiListOption<string>[]>([
-    { label: 'Diseño', value: 'diseño' },
-    { label: 'Desarrollo', value: 'desarrollo' },
-    { label: 'Ventas', value: 'ventas' },
+  protected readonly categories = signal<Category[]>([
+    { id: 'diseño', name: 'Diseño' },
+    { id: 'desarrollo', name: 'Desarrollo' },
+    { id: 'ventas', name: 'Ventas' },
   ]);
 
-  protected add(label: string): void {
-    this.categories.update((list) => [...list, { label, value: label.toLowerCase() }]);
+  protected add(name: string): void {
+    this.categories.update((list) => [...list, { id: name.toLowerCase(), name }]);
   }
 }

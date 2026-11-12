@@ -5,7 +5,6 @@ import {
   MimiComboboxImports,
   provideMimiComboboxText,
 } from '@/components/ui/combobox';
-import type { MimiListOption } from '@/components/ui/option-list';
 
 const ALL = [
   'Asunción',
@@ -42,13 +41,15 @@ const ALL = [
       <mimi-combobox
         id="remote-city"
         placeholder="Escribe al menos 2 letras"
-        [options]="results()"
         [loading]="loading()"
         [filterWith]="all"
         [(value)]="city"
         (searchChange)="search($event)"
       >
         <svg mimiComboboxStart lucideMapPin></svg>
+        @for (name of results(); track name) {
+          <mimi-option [value]="name">{{ name }}</mimi-option>
+        }
       </mimi-combobox>
     </div>
   `,
@@ -56,7 +57,7 @@ const ALL = [
 })
 export class ComboboxAsyncExample {
   protected readonly city = signal<string | null>(null);
-  protected readonly results = signal<MimiListOption<string>[]>([]);
+  protected readonly results = signal<string[]>([]);
   protected readonly loading = signal(false);
   protected readonly all = () => true;
   private timer?: ReturnType<typeof setTimeout>;
@@ -77,12 +78,7 @@ export class ComboboxAsyncExample {
     this.loading.set(true);
     this.timer = setTimeout(() => {
       const plain = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-      this.results.set(
-        ALL.filter((name) => plain(name).includes(plain(query))).map((name) => ({
-          label: name,
-          value: name,
-        })),
-      );
+      this.results.set(ALL.filter((name) => plain(name).includes(plain(query))));
       this.loading.set(false);
     }, 600);
   }

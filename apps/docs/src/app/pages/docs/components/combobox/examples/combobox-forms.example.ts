@@ -3,7 +3,6 @@ import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { form, FormField, required } from '@angular/forms/signals';
 import { MimiComboboxImports } from '@/components/ui/combobox';
 import { MimiFormField } from '@/components/ui/form-field';
-import type { MimiListOption } from '@/components/ui/option-list';
 
 @Component({
   selector: 'app-combobox-forms-example',
@@ -12,32 +11,44 @@ import type { MimiListOption } from '@/components/ui/option-list';
     <div class="grid w-full max-w-2xl gap-5 sm:grid-cols-2">
       <!-- Obligatorio: el error aparece al salir sin elegir. -->
       <mimi-form-field label="Lenguaje (Signal Forms)">
-        <mimi-combobox
-          placeholder="Elige uno"
-          [options]="languages"
-          [formField]="profile.language"
-        />
+        <mimi-combobox placeholder="Elige uno" [formField]="profile.language">
+          @for (l of languages; track l.id) {
+            <mimi-option [value]="l.id">{{ l.name }}</mimi-option>
+          }
+        </mimi-combobox>
       </mimi-form-field>
       <mimi-form-field label="Lenguaje (Reactive)">
-        <mimi-combobox placeholder="Elige uno" [options]="languages" [formControl]="language" />
+        <mimi-combobox placeholder="Elige uno" [formControl]="language">
+          @for (l of languages; track l.id) {
+            <mimi-option [value]="l.id">{{ l.name }}</mimi-option>
+          }
+        </mimi-combobox>
       </mimi-form-field>
       <mimi-form-field label="Lenguaje (ngModel)">
-        <mimi-combobox name="lang" [options]="languages" [(ngModel)]="model" />
+        <mimi-combobox name="lang" [(ngModel)]="model">
+          @for (l of languages; track l.id) {
+            <mimi-option [value]="l.id">{{ l.name }}</mimi-option>
+          }
+        </mimi-combobox>
       </mimi-form-field>
       <mimi-form-field label="Deshabilitado">
-        <mimi-combobox [options]="languages" value="ts" disabled />
+        <mimi-combobox value="ts" disabled>
+          @for (l of languages; track l.id) {
+            <mimi-option [value]="l.id">{{ l.name }}</mimi-option>
+          }
+        </mimi-combobox>
       </mimi-form-field>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComboboxFormsExample {
-  protected readonly languages: MimiListOption<string>[] = [
-    { label: 'TypeScript', value: 'ts' },
-    { label: 'JavaScript', value: 'js' },
-    { label: 'Python', value: 'py' },
-    { label: 'Rust', value: 'rs' },
-    { label: 'Go', value: 'go' },
+  protected readonly languages = [
+    { id: 'ts', name: 'TypeScript' },
+    { id: 'js', name: 'JavaScript' },
+    { id: 'py', name: 'Python' },
+    { id: 'rs', name: 'Rust' },
+    { id: 'go', name: 'Go' },
   ];
   protected readonly data = signal({ language: null as string | null });
   protected readonly profile = form(this.data, (p) => required(p.language));

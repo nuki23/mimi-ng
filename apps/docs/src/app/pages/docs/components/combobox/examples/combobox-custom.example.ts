@@ -19,10 +19,12 @@ interface Person {
         placeholder="Busca por nombre o correo"
         class="rounded-full"
         panelClass="rounded-2xl"
-        [options]="people"
         [filterWith]="byNameOrEmail"
         [(value)]="person"
       >
+        @for (p of people(); track p.email) {
+          <mimi-option [value]="p">{{ p.name }}</mimi-option>
+        }
         <ng-template mimiComboboxOption let-option let-query="query">
           <span class="flex min-w-0 flex-col py-1">
             <mimi-highlight [text]="option.label" [query]="query" />
@@ -36,18 +38,18 @@ interface Person {
 })
 export class ComboboxCustomExample {
   protected readonly person = signal<Person | null>(null);
-  protected readonly people: MimiListOption<Person>[] = [
+  protected readonly people = signal<Person[]>([
     { name: 'Ana Ruiz', email: 'ana@ejemplo.com' },
     { name: 'Luis Pérez', email: 'luis@ejemplo.com' },
     { name: 'Sol Díaz', email: 'sol@ejemplo.com' },
-  ].map((p) => ({ label: p.name, value: p }));
+  ]);
 
   /** La plantilla recibe la opción sin su tipo: se lee con una función tipada. */
   protected emailOf(option: MimiListOption): string {
     return (option.value as Person).email;
   }
 
-  /** Busca también en el correo. */
+  /** Filtro propio: busca también en el correo. */
   protected readonly byNameOrEmail = (option: MimiListOption<Person>, query: string) =>
     `${option.label} ${option.value.email}`.toLowerCase().includes(query.toLowerCase());
 }

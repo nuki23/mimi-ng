@@ -170,9 +170,14 @@ export class MimiComboboxOption {
  * Combobox: se escribe para filtrar y se elige una opción.
  *
  * ```html
- * <mimi-combobox aria-label="Ciudad" [(value)]="ciudad" [options]="ciudades" creatable
- *   (create)="agregar($event)" />
+ * <mimi-combobox aria-label="Ciudad" [(value)]="ciudad" creatable (create)="agregar($event)">
+ *   @for (c of ciudades(); track c.id) {
+ *     <mimi-option [value]="c.id">{{ c.nombre }}</mimi-option>
+ *   }
+ * </mimi-combobox>
  * ```
+ *
+ * Para una lista armada por código, `[options]` es la alternativa (gana sobre las `<mimi-option>`).
  *
  * Implementa `FormValueControl`: funciona con `[formField]`, `formControlName` y `[(ngModel)]`
  * sin adaptador (spec 8). Lo escrito no es el valor hasta que se elige o se crea una opción.

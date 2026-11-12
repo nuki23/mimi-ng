@@ -39,6 +39,22 @@ describe('Con formularios (R.13)', () => {
     expect(formsSnippet(FORMS_SPECS['number-input'], 'signal')).not.toContain('[min]');
   });
 
+  it('Select y Combobox usan <mimi-option> (la forma normal), sin [options]', () => {
+    for (const [key, imports] of [
+      ['select', 'MimiSelectImports'],
+      ['combobox', 'MimiComboboxImports'],
+    ] as const) {
+      for (const kind of FORMS_KINDS) {
+        const text = formsSnippet(FORMS_SPECS[key], kind);
+        expect(text, key).not.toContain('[options]');
+        expect(text, key).toContain(`import { ${imports} } from '@/components/ui/${key}';`);
+        // El control y sus opciones quedan sangrados dentro de mimi-form-field.
+        expect(text, key).toMatch(/\n {6,}<mimi-option value="\w+">\w+<\/mimi-option>\n/);
+        expect(text, key).toMatch(new RegExp(`\\n {4,}</mimi-${key}>\\n {2,}</mimi-form-field>`));
+      }
+    }
+  });
+
   it('cada clave es una página de componente que existe', () => {
     const fs = (
       globalThis as unknown as { process: { getBuiltinModule(id: string): unknown; cwd(): string } }

@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { MimiComboboxImports } from '@/components/ui/combobox';
-import type { MimiListOption } from '@/components/ui/option-list';
+
+interface Tech {
+  id: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-combobox-multiple-example',
@@ -14,10 +18,13 @@ import type { MimiListOption } from '@/components/ui/option-list';
         multiple
         creatable
         placeholder="Agrega tecnologías"
-        [options]="techs()"
         [(value)]="chosen"
         (create)="add($event)"
-      />
+      >
+        @for (t of techs(); track t.id) {
+          <mimi-option [value]="t.id">{{ t.name }}</mimi-option>
+        }
+      </mimi-combobox>
       <p class="text-[13px] text-muted-foreground">Elegidas: {{ chosen().join(', ') || '—' }}</p>
     </div>
   `,
@@ -25,16 +32,16 @@ import type { MimiListOption } from '@/components/ui/option-list';
 })
 export class ComboboxMultipleExample {
   protected readonly chosen = signal<string[]>(['angular', 'typescript']);
-  protected readonly techs = signal<MimiListOption<string>[]>([
-    { label: 'Angular', value: 'angular' },
-    { label: 'TypeScript', value: 'typescript' },
-    { label: 'Tailwind CSS', value: 'tailwind' },
-    { label: 'RxJS', value: 'rxjs' },
-    { label: 'Signals', value: 'signals' },
-    { label: 'Vitest', value: 'vitest' },
+  protected readonly techs = signal<Tech[]>([
+    { id: 'angular', name: 'Angular' },
+    { id: 'typescript', name: 'TypeScript' },
+    { id: 'tailwind', name: 'Tailwind CSS' },
+    { id: 'rxjs', name: 'RxJS' },
+    { id: 'signals', name: 'Signals' },
+    { id: 'vitest', name: 'Vitest' },
   ]);
 
-  protected add(label: string): void {
-    this.techs.update((list) => [...list, { label, value: label.toLowerCase() }]);
+  protected add(name: string): void {
+    this.techs.update((list) => [...list, { id: name.toLowerCase(), name }]);
   }
 }

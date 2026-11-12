@@ -56,7 +56,8 @@ const indent = (text: string, spaces: number): string =>
 /** El fragmento de una pestaña. */
 export function formsSnippet(spec: FormsSpec, kind: FormsKind): string {
   const control = spec.markup.replace('{{attrs}}', attrsFor(kind, spec.field));
-  const field = `<mimi-form-field label="${spec.label}">\n  ${control}\n</mimi-form-field>`;
+  // El control puede ocupar varias líneas (Select y Combobox con sus <mimi-option>).
+  const field = `<mimi-form-field label="${spec.label}">\n${indent(control, 2)}\n</mimi-form-field>`;
   const more = spec.more ?? [];
   const components = ['MimiFormField', ...spec.imports, ...more.flatMap((m) => m.names)].join(', ');
   const own = [...spec.imports, ...(spec.types ?? []).map((t) => `type ${t}`)].join(', ');
@@ -125,8 +126,13 @@ export function formsSnippet(spec: FormsSpec, kind: FormsKind): string {
   ].join('\n');
 }
 
-const OPTIONS = (name: string, a: string, b: string) =>
-  `protected readonly ${name} = [\n  { label: '${a}', value: '${a.toLowerCase()}' },\n  { label: '${b}', value: '${b.toLowerCase()}' },\n];`;
+/** Un control con sus `<mimi-option>` (la forma normal de Select y Combobox). */
+const WITH_OPTIONS = (open: string, tag: string, ...labels: string[]) =>
+  [
+    `${open} {{attrs}}>`,
+    ...labels.map((l) => `  <mimi-option value="${l.toLowerCase()}">${l}</mimi-option>`),
+    `</${tag}>`,
+  ].join('\n');
 
 /** Un componente por clave: la clave es la misma de la ruta de su página. */
 export const FORMS_SPECS: Record<string, FormsSpec> = {
@@ -145,10 +151,14 @@ export const FORMS_SPECS: Record<string, FormsSpec> = {
     field: 'role',
     init: "'editor'",
     type: 'string | null',
-    imports: ['MimiSelect'],
+    imports: ['MimiSelectImports'],
     path: 'select',
-    markup: '<mimi-select placeholder="Elige un rol" [options]="roles" {{attrs}} />',
-    extra: OPTIONS('roles', 'Admin', 'Editor'),
+    markup: WITH_OPTIONS(
+      '<mimi-select placeholder="Elige un rol"',
+      'mimi-select',
+      'Admin',
+      'Editor',
+    ),
     message: 'Elige un rol.',
   },
   combobox: {
@@ -156,10 +166,14 @@ export const FORMS_SPECS: Record<string, FormsSpec> = {
     field: 'city',
     init: 'null',
     type: 'string | null',
-    imports: ['MimiCombobox'],
+    imports: ['MimiComboboxImports'],
     path: 'combobox',
-    markup: '<mimi-combobox placeholder="Busca una ciudad" [options]="cities" {{attrs}} />',
-    extra: OPTIONS('cities', 'Lima', 'Madrid'),
+    markup: WITH_OPTIONS(
+      '<mimi-combobox placeholder="Busca una ciudad"',
+      'mimi-combobox',
+      'Lima',
+      'Madrid',
+    ),
     message: 'Elige una ciudad.',
   },
   'number-input': {

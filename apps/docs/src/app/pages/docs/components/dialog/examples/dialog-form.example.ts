@@ -4,7 +4,7 @@ import { MimiButton } from '@/components/ui/button';
 import { MimiDialogImports } from '@/components/ui/dialog';
 import { MimiFormField } from '@/components/ui/form-field';
 import { MimiInput } from '@/components/ui/input';
-import { type MimiOption, MimiSelect } from '@/components/ui/select';
+import { MimiSelectImports } from '@/components/ui/select';
 import { MimiSwitch } from '@/components/ui/switch';
 
 @Component({
@@ -15,7 +15,7 @@ import { MimiSwitch } from '@/components/ui/switch';
     MimiButton,
     MimiFormField,
     MimiInput,
-    MimiSelect,
+    MimiSelectImports,
     MimiSwitch,
   ],
   template: `
@@ -34,11 +34,11 @@ import { MimiSwitch } from '@/components/ui/switch';
                 <input mimiInput type="email" formControlName="email" autocomplete="email" />
               </mimi-form-field>
               <mimi-form-field label="Rol">
-                <mimi-select
-                  formControlName="role"
-                  placeholder="Selecciona un rol"
-                  [options]="roles"
-                />
+                <mimi-select formControlName="role" placeholder="Selecciona un rol">
+                  <mimi-option value="admin">Administrador</mimi-option>
+                  <mimi-option value="editor">Editor</mimi-option>
+                  <mimi-option value="viewer">Lector</mimi-option>
+                </mimi-select>
               </mimi-form-field>
               <mimi-switch formControlName="publish">Puede publicar sin revisión</mimi-switch>
             </mimi-dialog-body>
@@ -69,11 +69,6 @@ export class DialogFormExample {
     role: new FormControl<string | null>(null, Validators.required),
     publish: new FormControl(false, { nonNullable: true }),
   });
-  protected readonly roles: MimiOption<string>[] = [
-    { label: 'Administrador', value: 'admin' },
-    { label: 'Editor', value: 'editor' },
-    { label: 'Lector', value: 'viewer' },
-  ];
 
   protected invite(): void {
     this.form.markAllAsTouched();
