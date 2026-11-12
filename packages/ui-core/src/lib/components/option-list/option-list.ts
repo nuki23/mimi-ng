@@ -80,7 +80,7 @@ export function mimiCompareFn<T>(compare: MimiCompareWith<T>): (a: T, b: T) => b
     if (!warned && !(compare in b)) {
       warned = true;
       console.warn(
-        `[Mimi] compareWith="${compare}": el valor no tiene el campo «${compare}», así que no coincide con ninguna opción. Revisa el nombre del campo.`,
+        `[Mimi] Select o Combobox: compareWith="${compare}": el valor no tiene el campo «${compare}», así que no coincide con ninguna opción. Revisa el nombre del campo.`,
       );
     }
     return Object.is(
