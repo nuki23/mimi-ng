@@ -36,6 +36,7 @@ import {
   MimiOptgroup,
   MimiOptionItem,
   MimiOptionList,
+  type MimiSearchMode,
   mimiDeclaredOptions,
   mimiFilterSections,
   mimiListSections,
@@ -392,6 +393,11 @@ export class MimiCombobox<T = unknown>
   /** Filtro propio. Por defecto: la etiqueta contiene lo escrito, sin tildes ni mayúsculas. */
   readonly filterWith = input<MimiListFilter<T>>();
   /**
+   * Dónde se filtra: `'client'` (aquí, con `filterWith` o el predeterminado) o `'server'` (la app
+   * filtra al recibir `(searchChange)` y el Combobox muestra lo que llega, sin volver a filtrar).
+   */
+  readonly searchMode = input<MimiSearchMode>('client');
+  /**
    * Ofrece «Crear "<texto>"» cuando lo escrito no coincide con ninguna opción. Al elegirla se
    * emite `(create)`: la opción la agrega la app a `options`, y el Combobox la elige en cuanto
    * aparece.
@@ -502,6 +508,7 @@ export class MimiCombobox<T = unknown>
 
   protected readonly visibleSections = computed(() => {
     if (this.loading()) return [];
+    if (this.searchMode() === 'server') return this.sections();
     return mimiFilterSections(this.sections(), this.query(), this.filterWith());
   });
   private readonly count = computed(() =>

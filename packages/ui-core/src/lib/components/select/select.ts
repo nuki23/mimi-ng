@@ -48,6 +48,7 @@ import {
   MimiHighlight,
   MimiOptgroup,
   MimiOptionItem,
+  type MimiSearchMode,
   mimiDeclaredOptions,
   mimiNormalizeText,
 } from '@/components/ui/option-list/option-list';
@@ -769,6 +770,11 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   readonly searchPlaceholder = input('');
   /** Filtro propio. Por defecto: la etiqueta contiene la búsqueda, sin tildes ni mayúsculas. */
   readonly filterWith = input<MimiSelectFilter<T>>();
+  /**
+   * Dónde se filtra: `'client'` (aquí, con `filterWith` o el predeterminado) o `'server'` (la app
+   * filtra al recibir `(searchChange)` y el Select muestra lo que llega, sin volver a filtrar).
+   */
+  readonly searchMode = input<MimiSearchMode>('client');
   /** Muestra el botón de limpiar cuando hay un valor. */
   readonly clearable = input(false, { transform: booleanAttribute });
   /** Cargando: spinner en el disparador y, en el panel, el estado de carga en vez de la lista. */
@@ -877,7 +883,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly visibleSections = computed<Section[]>(() => {
     if (this.loading()) return [];
     const query = this.search() ? this.query() : '';
-    if (!query) return this.sections();
+    if (!query || this.searchMode() === 'server') return this.sections();
     const filter = (this.filterWith() ?? defaultFilter) as MimiSelectFilter;
     return this.sections()
       .map((section) => ({ ...section, rows: section.rows.filter((r) => filter(r.option, query)) }))

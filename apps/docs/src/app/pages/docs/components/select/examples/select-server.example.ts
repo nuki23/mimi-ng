@@ -26,10 +26,10 @@ const USERS: User[] = [
         placeholder="Busca una persona"
         search
         searchPlaceholder="Buscar por nombre…"
+        searchMode="server"
         [(value)]="user"
         [loading]="loading()"
         [compareWith]="sameUser"
-        [filterWith]="serverFilters"
         (searchChange)="load($event)"
       >
         @for (u of users(); track u.id) {
@@ -48,8 +48,6 @@ export class SelectServerExample {
 
   // Los valores son objetos: se comparan por id.
   protected readonly sameUser = (a: User, b: User) => a.id === b.id;
-  // El servidor ya filtró: Select muestra lo que recibe.
-  protected readonly serverFilters = () => true;
 
   private timer: ReturnType<typeof setTimeout> | undefined;
 

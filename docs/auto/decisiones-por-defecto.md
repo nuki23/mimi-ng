@@ -151,6 +151,7 @@ Pendientes de revisión del usuario. Detalle en `docs/auto/refinamiento-0.6.0-20
 - **1a `<mimi-tab>`:** sin `value`, el índice si el label no da valor y un sufijo si se repite; el aviso en desarrollo solo salta cuando el valor no sale limpio del label.
 - **1c Blocks:** al terminar de cargar devuelven el foco al control que lanzó la acción y anuncian «Loading…»/«Done.» (en inglés, fijos).
 - **R.18 OTP:** `separatorAfter` pasa de `number` a `number | number[]`. **RUPTURA de tipo** para quien lo lea por código (en plantilla, `separatorAfter="3"` sigue igual).
+- **Búsqueda en servidor (12/11/2026, sexta tanda; `docs/auto/refinamiento-0.6.0-parte6-2026-11-12.md`):** la entrada se llama **`searchMode`**, `'client' | 'server'`, por defecto `'client'`, igual en Select y Combobox (tipo `MimiSearchMode` en `option-list`). Base: «Más simple» (el plan no traía Recomendación; es el nombre que proponía el usuario). Con `'server'` no se filtra nada, ni con `filterWith`. Alternativas: `serverSide` (booleano), `filter="none"`. No es ruptura (añadido).
 
 ## Decididas por el usuario: refinamiento (09/11/2026)
 

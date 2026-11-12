@@ -37,12 +37,12 @@ const ALL = [
   template: `
     <div class="flex w-full max-w-xs flex-col gap-1.5">
       <label for="remote-city" class="text-sm font-medium">Ciudad (servidor simulado)</label>
-      <!-- El filtro lo hace el «servidor»: filterWith deja pasar todo lo que llega. -->
+      <!-- searchMode="server": filtra el «servidor»; el Combobox muestra lo que llega. -->
       <mimi-combobox
         id="remote-city"
         placeholder="Escribe al menos 2 letras"
+        searchMode="server"
         [loading]="loading()"
-        [filterWith]="all"
         [(value)]="city"
         (searchChange)="search($event)"
       >
@@ -59,7 +59,6 @@ export class ComboboxAsyncExample {
   protected readonly city = signal<string | null>(null);
   protected readonly results = signal<string[]>([]);
   protected readonly loading = signal(false);
-  protected readonly all = () => true;
   private timer?: ReturnType<typeof setTimeout>;
 
   constructor() {

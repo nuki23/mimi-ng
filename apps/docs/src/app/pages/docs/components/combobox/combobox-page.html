@@ -61,7 +61,15 @@
   </app-code-preview>
 
   <h3 id="async" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Búsqueda en el servidor</h3>
-  <p class="text-pretty">Prueba «sa» (carga) y «Tokio» (sin resultados).</p>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >searchMode="server"</code
+    >
+    deja el filtro a tu servidor: el Combobox muestra las opciones que llegan, sin volver a
+    filtrarlas, y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(searchChange)</code>
+    avisa de lo que se escribe. Prueba «sa» (carga) y «Tokio» (sin resultados).
+  </p>
   <app-code-preview [code]="source.async">
     <app-combobox-async-example />
   </app-code-preview>

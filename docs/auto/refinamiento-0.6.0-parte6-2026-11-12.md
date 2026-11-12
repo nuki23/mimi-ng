@@ -32,3 +32,25 @@ Encargo (12/11/2026): `<mimi-option>` quedó a medias (solo había un ejemplo nu
 - ui-core (solo el comentario de uso): `select/select.ts`, `combobox/combobox.ts`.
 
 **Alerta para el revisor.** «Deja UN solo ejemplo» se leyó como **uno por página** (Select y Combobox documentan cada uno su `[options]`). Si querías uno solo entre las dos, se quita `combobox-options.example.ts`.
+
+## 2. Búsqueda en servidor sin trucos: `searchMode`
+
+**Plan breve.** Una entrada con la misma API en los dos componentes; con `'server'` la lista muestra las opciones tal cual llegan. Usarla en los dos ejemplos de servidor en lugar de `[filterWith]="() => true"`.
+
+**Nombre.** El plan no traía Recomendación para esta entrada (`grep` en `docs/plan/`): se tomó **`searchMode="client" | "server"`**, por defecto `"client"`, el que proponías. Registrado en `docs/auto/decisiones-por-defecto.md` («Decididas por defecto: refinamiento 0.6.0»).
+
+**Qué se hizo.**
+
+- `option-list.ts`: tipo `MimiSearchMode` (exportado en el índice de `option-list`).
+- `select.ts` y `combobox.ts`: `searchMode = input<MimiSearchMode>('client')`. Con `'server'`, `visibleSections` devuelve todas las opciones (en el Select, aunque haya texto en el buscador). `filterWith` sigue igual para filtros propios y **solo cuenta en `'client'`**. Lo demás no cambia: `(searchChange)`, el resaltado de lo escrito, el contador del Select y la fila «Crear» del Combobox.
+- Ejemplos: `select-server.example.ts` y `combobox-async.example.ts` usan `searchMode="server"`; se quitaron `serverFilters` / `all`. Las páginas lo explican en «Búsqueda en el servidor».
+
+**Pruebas** (`packages/ui-core/src/lib/search-mode.spec.ts`, nuevo; 6 casos, los mismos para Select y Combobox, con `<mimi-option>` en un `@for`):
+
+- por defecto filtra sin tildes («cami» → «Camila»);
+- con `'server'`, «zzz» deja las 3 opciones y `(searchChange)` recibe «zzz»; al cambiar la señal, la lista es la nueva;
+- un `filterWith` propio filtra en `'client'` y se ignora en `'server'`.
+
+En verde junto con `declared-options.spec.ts`: 2 archivos, 9 pruebas.
+
+**Archivos:** `option-list/option-list.ts`, `option-list/index.ts`, `select/select.ts`, `combobox/combobox.ts`, `search-mode.spec.ts` (nuevo), los dos ejemplos de servidor, `select-page.html`, `combobox-page.html`, `docs/auto/decisiones-por-defecto.md` y este informe.

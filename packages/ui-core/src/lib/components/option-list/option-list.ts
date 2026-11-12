@@ -50,6 +50,13 @@ export interface MimiListOptionGroup<T = unknown> {
 /** Decide si una opción coincide con lo escrito. */
 export type MimiListFilter<T = unknown> = (option: MimiListOption<T>, query: string) => boolean;
 
+/**
+ * Dónde se filtra lo que se busca en Select y Combobox: `'client'` (el componente, con `filterWith`
+ * o el filtro sin tildes) o `'server'` (la app, al recibir `(searchChange)`: se muestra tal cual lo
+ * que llega en las opciones).
+ */
+export type MimiSearchMode = 'client' | 'server';
+
 /** Contexto de la plantilla propia de una opción: `let-option let-query="query"`. */
 export interface MimiListOptionContext<T = unknown> {
   $implicit: MimiListOption<T>;
