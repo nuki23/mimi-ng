@@ -15,6 +15,7 @@ import {
   effect,
   inject,
   input,
+  isDevMode,
   output,
   signal,
   untracked,
@@ -66,12 +67,22 @@ export type MimiCompareWith<T = unknown> = ((a: T, b: T) => boolean) | string;
 /**
  * La función de `compareWith`. Con un nombre de campo compara ese campo de los dos objetos; si
  * alguno no es un objeto (un valor suelto), compara con `Object.is`.
+ *
+ * En desarrollo avisa una vez si el valor (`b`, el elegido) es un objeto sin ese campo: casi
+ * siempre es un nombre mal escrito (`compareWith="ID"`) y no coincidiría ninguna opción.
  */
 export function mimiCompareFn<T>(compare: MimiCompareWith<T>): (a: T, b: T) => boolean {
   if (typeof compare === 'function') return compare;
+  let warned = !isDevMode();
   return (a, b) => {
     if (Object.is(a, b)) return true;
     if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;
+    if (!warned && !(compare in b)) {
+      warned = true;
+      console.warn(
+        `[Mimi] compareWith="${compare}": el valor no tiene el campo «${compare}», así que no coincide con ninguna opción. Revisa el nombre del campo.`,
+      );
+    }
     return Object.is(
       (a as Record<string, unknown>)[compare],
       (b as Record<string, unknown>)[compare],

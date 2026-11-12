@@ -93,4 +93,34 @@ describe('compareWith: función o nombre de un campo (Select y Combobox)', () =>
     const fn = (a: unknown, b: unknown) => a === b;
     expect(mimiCompareFn(fn)).toBe(fn);
   });
+
+  it('en desarrollo avisa una vez si el valor no tiene el campo', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    try {
+      const byId = mimiCompareFn<unknown>('ID');
+      byId({ id: 1 }, { id: 1 });
+      byId({ id: 2 }, { id: 1 });
+      expect(warn).toHaveBeenCalledTimes(1);
+      expect(String(warn.mock.calls[0][0])).toContain('compareWith="ID"');
+      warn.mockClear();
+      // Con el campo correcto, o con valores sueltos, no avisa.
+      const ok = mimiCompareFn<unknown>('id');
+      ok({ id: 1 }, { id: 1 });
+      ok('a', 'b');
+      expect(warn).not.toHaveBeenCalled();
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it('Select y Combobox con un campo que no existe avisan (una vez cada uno)', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    try {
+      await setup('ID');
+      const calls = warn.mock.calls.filter((c) => String(c[0]).includes('compareWith="ID"'));
+      expect(calls.length).toBe(2);
+    } finally {
+      warn.mockRestore();
+    }
+  });
 });
