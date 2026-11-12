@@ -9,6 +9,7 @@ import { ToastBasicExample } from './examples/toast-basic.example';
 import { ToastCustomClassExample } from './examples/toast-custom-class.example';
 import { ToastInDialogExample } from './examples/toast-in-dialog.example';
 import { ToastPromiseExample } from './examples/toast-promise.example';
+import { ToastSizesExample } from './examples/toast-sizes.example';
 import { ToastSolidExample } from './examples/toast-solid.example';
 import { ToastTonesExample } from './examples/toast-tones.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
@@ -23,6 +24,8 @@ import customClassSource from './examples/toast-custom-class.example' with { loa
 import inDialogSource from './examples/toast-in-dialog.example' with { loader: 'text' };
 // @ts-expect-error
 import promiseSource from './examples/toast-promise.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/toast-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import solidSource from './examples/toast-solid.example' with { loader: 'text' };
 // @ts-expect-error
@@ -41,6 +44,7 @@ import tonesSource from './examples/toast-tones.example' with { loader: 'text' }
     ToastCustomClassExample,
     ToastInDialogExample,
     ToastPromiseExample,
+    ToastSizesExample,
     ToastSolidExample,
     ToastTonesExample,
   ],
@@ -56,6 +60,7 @@ export class ToastPage {
     customClass: customClassSource as string,
     inDialog: inDialogSource as string,
     promise: promiseSource as string,
+    sizes: sizesSource as string,
     solid: solidSource as string,
     tones: tonesSource as string,
   };

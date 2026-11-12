@@ -102,3 +102,12 @@ En verde. Con la suite completa de ui-core: 1017 pruebas, 1016 en verde. La que 
 - se ve el ícono separador;
 - Signal Forms marca «El código tiene 6 dígitos.» con 3 dígitos y queda válido con 6;
 - Reactive Forms marca el error vacío y queda válido con 4.
+
+## A3. Toast: los tamaños sm, md y lg en su página y en la portada
+
+- **Página de Toast:** ejemplo nuevo «Tamaños» (`toast-sizes.example.ts`), después de «Tonos». Tiene un botón por tamaño, del mismo tamaño que el aviso que abre. La frase explica `size` por aviso y `provideMimiToast({ size })` para todos.
+- **Portada:** tarjeta nueva «Avisos» (`home/showcase-toasts.ts`) debajo de «Equipo», en la columna derecha, con los tres botones. La frase de la vitrina nombra Toast. Toast ya está en el CSS global y la portada es una ruta diferida: no entra nada al JS inicial (ver la verificación final).
+- **Pruebas:**
+  - `toast-page.spec.ts`: 8 ejemplos; los tres botones y el código con `size`.
+  - `home-page.spec.ts`: la tarjeta tiene los tres botones y cada uno crea un aviso con su `data-size`.
+- **Playwright** (claro y oscuro, en la página y en la portada, **6 de 6 OK, sin errores de consola**): los tres avisos aparecen y crecen. Alto en px: sm 57, md 68, lg 84.

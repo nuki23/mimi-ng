@@ -93,8 +93,8 @@
         Hecho con Mimi
       </h2>
       <p class="text-pretty text-muted-foreground">
-        Un formulario real con Card, FormField, Input, Switch, Checkbox, Avatar, Badge y Button.
-        Pruébalo.
+        Un formulario real con Card, FormField, Input, Switch, Checkbox, Avatar, Badge, Button y
+        Toast. Pruébalo.
       </p>
       <!-- B.P-a: un enlace a los Blocks, sin rediseñar la landing. -->
       <p class="text-pretty text-muted-foreground">
@@ -111,7 +111,10 @@
       class="mx-auto grid max-w-[960px] items-start gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)]"
     >
       <app-showcase-preferences />
-      <app-showcase-team />
+      <div class="flex flex-col gap-6">
+        <app-showcase-team />
+        <app-showcase-toasts />
+      </div>
     </div>
   </section>
 </div>
