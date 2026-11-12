@@ -489,6 +489,16 @@ const CLEAR_CLASSES = cn(
   'pointer-events-auto relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
   'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
+  // La X solo se ve con el ratón encima, el foco dentro o el panel abierto; en pantallas sin
+  // ratón, mientras haya valor (informe del usuario, 12/11/2026). Si no, el chevron.
+  'hidden group-hover/select:inline-flex group-focus-within/select:inline-flex group-data-[state=open]/select:inline-flex [@media(hover:none)]:inline-flex',
+);
+const CHEVRON_CLASSES =
+  'size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/select:rotate-180';
+/** El chevron cuando hay X: se esconde cuando la X se ve. */
+const CHEVRON_WITH_CLEAR_CLASSES = cn(
+  CHEVRON_CLASSES,
+  'group-hover/select:hidden group-focus-within/select:hidden group-data-[state=open]/select:hidden [@media(hover:none)]:hidden',
 );
 
 const PANEL_CLASSES =
@@ -578,28 +588,7 @@ const SEARCH_INPUT_CLASSES =
         class="pointer-events-none relative z-10 inline-flex size-6 shrink-0 items-center justify-center"
         [attr.data-icon]="endIcon()"
       >
-        @if (endIcon() === 'clear') {
-          <button
-            type="button"
-            [class]="clearClasses"
-            [attr.aria-label]="text.clear"
-            (click)="clear()"
-          >
-            <svg
-              aria-hidden="true"
-              class="size-3.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              [attr.viewBox]="icon.viewBox"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          </button>
-        } @else if (endIcon() === 'loading') {
+        @if (endIcon() === 'loading') {
           <svg
             aria-hidden="true"
             data-slot="spinner"
@@ -614,9 +603,33 @@ const SEARCH_INPUT_CLASSES =
             <path [attr.d]="icon.spinner" />
           </svg>
         } @else {
+          @if (endIcon() === 'clear') {
+            <button
+              type="button"
+              data-slot="clear"
+              [class]="clearClasses"
+              [attr.aria-label]="text.clear"
+              (click)="clear()"
+            >
+              <svg
+                aria-hidden="true"
+                class="size-3.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                [attr.viewBox]="icon.viewBox"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          }
           <svg
             aria-hidden="true"
-            class="size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/select:rotate-180"
+            data-slot="chevron"
+            [class]="endIcon() === 'clear' ? chevronWithClearClasses : chevronClasses"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
@@ -843,6 +856,8 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly icon = ICON;
   protected readonly buttonClasses = BUTTON_CLASSES;
   protected readonly clearClasses = CLEAR_CLASSES;
+  protected readonly chevronClasses = CHEVRON_CLASSES;
+  protected readonly chevronWithClearClasses = CHEVRON_WITH_CLEAR_CLASSES;
   protected readonly searchInputClasses = SEARCH_INPUT_CLASSES;
   protected readonly viewportMargin = MIMI_VIEWPORT_MARGIN;
   /** En el lado pedido (debajo, por defecto); si no cabe, en el opuesto. Con las tres
@@ -1060,6 +1075,12 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
     if (this.disabled() || event.ctrlKey || event.metaKey) return;
     const { key, altKey } = event;
     if (this.state() !== 'open') {
+      // Supr o Retroceso en el disparador quitan el valor, si se puede limpiar.
+      if ((key === 'Delete' || key === 'Backspace') && this.showClear()) {
+        event.preventDefault();
+        this.clear();
+        return;
+      }
       // Rodeo: aria solo abre con ↓, Enter y Espacio (sin modificadores).
       if (key === 'ArrowUp' || (key === 'ArrowDown' && altKey)) {
         event.preventDefault();

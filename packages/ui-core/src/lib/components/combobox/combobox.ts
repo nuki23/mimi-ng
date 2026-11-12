@@ -83,6 +83,16 @@ const CLEAR_CLASSES = cn(
   'relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
   'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
+  // La X solo se ve con el ratón encima, el foco dentro o el panel abierto; en pantallas sin
+  // ratón, mientras haya valor (como en Select). Si no, el chevron.
+  'hidden group-hover/combobox:inline-flex group-focus-within/combobox:inline-flex group-data-[state=open]/combobox:inline-flex [@media(hover:none)]:inline-flex',
+);
+const CHEVRON_CLASSES =
+  'size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/combobox:rotate-180';
+/** El chevron cuando hay X: se esconde cuando la X se ve. */
+const CHEVRON_WITH_CLEAR_CLASSES = cn(
+  CHEVRON_CLASSES,
+  'group-hover/combobox:hidden group-focus-within/combobox:hidden group-data-[state=open]/combobox:hidden [@media(hover:none)]:hidden',
 );
 
 const ICON = {
@@ -250,28 +260,7 @@ export class MimiComboboxOption {
         class="relative z-10 inline-flex size-6 shrink-0 items-center justify-center"
         [attr.data-icon]="endIcon()"
       >
-        @if (endIcon() === 'clear') {
-          <button
-            type="button"
-            [class]="clearClasses"
-            [attr.aria-label]="texts.clear ?? 'Clear'"
-            (click)="clearAll()"
-          >
-            <svg
-              aria-hidden="true"
-              class="size-3.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              [attr.viewBox]="icon.viewBox"
-            >
-              <path d="M18 6 6 18" />
-              <path d="m6 6 12 12" />
-            </svg>
-          </button>
-        } @else if (endIcon() === 'loading') {
+        @if (endIcon() === 'loading') {
           <svg
             aria-hidden="true"
             data-slot="spinner"
@@ -286,10 +275,33 @@ export class MimiComboboxOption {
             <path [attr.d]="icon.spinner" />
           </svg>
         } @else {
+          @if (endIcon() === 'clear') {
+            <button
+              type="button"
+              data-slot="clear"
+              [class]="clearClasses"
+              [attr.aria-label]="texts.clear ?? 'Clear'"
+              (click)="clearAll()"
+            >
+              <svg
+                aria-hidden="true"
+                class="size-3.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                [attr.viewBox]="icon.viewBox"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          }
           <svg
             aria-hidden="true"
             data-slot="chevron"
-            class="size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/combobox:rotate-180"
+            [class]="endIcon() === 'clear' ? chevronWithClearClasses : chevronClasses"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
@@ -464,6 +476,8 @@ export class MimiCombobox<T = unknown>
 
   protected readonly icon = ICON;
   protected readonly clearClasses = CLEAR_CLASSES;
+  protected readonly chevronClasses = CHEVRON_CLASSES;
+  protected readonly chevronWithClearClasses = CHEVRON_WITH_CLEAR_CLASSES;
   private readonly declared = contentChildren(MimiOptionItem, { descendants: true });
   /** `[options]` si se dio; si no, las `<mimi-option>` (como en Select). */
   private readonly items = computed<readonly (MimiListOption<T> | MimiListOptionGroup<T>)[]>(() => {
@@ -836,6 +850,17 @@ export class MimiCombobox<T = unknown>
   protected onKeydown(event: KeyboardEvent): void {
     if (this.disabled() || event.isComposing || event.ctrlKey || event.metaKey) return;
     const { key, altKey } = event;
+    // Con clearable, Supr o Retroceso quitan el valor si el campo muestra la opción elegida (no se
+    // está escribiendo); en el múltiple, Supr con el campo vacío quita todos los chips.
+    if (this.endIcon() === 'clear' && (key === 'Delete' || key === 'Backspace')) {
+      const single = !this.multiple() && !this.typed();
+      const all = this.multiple() && key === 'Delete' && !this.draft();
+      if (single || all) {
+        event.preventDefault();
+        this.clearAll();
+        return;
+      }
+    }
     // Múltiple: Backspace con el campo vacío quita el último chip (diseño).
     if (
       key === 'Backspace' &&
