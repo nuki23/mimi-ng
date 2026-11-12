@@ -24,6 +24,21 @@ describe('Con formularios (R.13)', () => {
     }
   });
 
+  it('los 7 fragmentos que no compilaban (12/11/2026) quedan bien', () => {
+    // Compilados con `ng build` en un proyecto de prueba: Password importaba MimiInput de su
+    // archivo, Tree ponía un tipo en `imports` y Number Input enlazaba [min]/[max] junto a
+    // [formField] (Signal Forms no lo admite).
+    for (const kind of FORMS_KINDS) {
+      const password = formsSnippet(FORMS_SPECS['password'], kind);
+      expect(password).toContain("import { MimiInput } from '@/components/ui/input';");
+      expect(password).toContain("import { MimiPassword } from '@/components/ui/password';");
+      const tree = formsSnippet(FORMS_SPECS['tree'], kind);
+      expect(tree).toContain("import { MimiTree, type MimiTreeNode } from '@/components/ui/tree';");
+      expect(tree).not.toMatch(/imports: \[[^\]]*type /);
+    }
+    expect(formsSnippet(FORMS_SPECS['number-input'], 'signal')).not.toContain('[min]');
+  });
+
   it('cada clave es una página de componente que existe', () => {
     const fs = (
       globalThis as unknown as { process: { getBuiltinModule(id: string): unknown; cwd(): string } }

@@ -15,6 +15,10 @@ export interface FormsSpec {
   /** Importes del componente: nombres y archivo (`@/components/ui/<path>`). */
   imports: readonly string[];
   path: string;
+  /** Tipos del mismo archivo (van en el import con `type`, no en `imports` del componente). */
+  types?: readonly string[];
+  /** Otros componentes de otro archivo de Mimi (Password necesita Input). */
+  more?: readonly { names: readonly string[]; path: string }[];
   /**
    * El control, con `{{attrs}} ` donde van los atributos del formulario (`[formField]`,
    * `formControlName` o `[(ngModel)]`). Con una envoltura (Password), `{{attrs}}` va en el `<input>`.
@@ -53,8 +57,14 @@ const indent = (text: string, spaces: number): string =>
 export function formsSnippet(spec: FormsSpec, kind: FormsKind): string {
   const control = spec.markup.replace('{{attrs}}', attrsFor(kind, spec.field));
   const field = `<mimi-form-field label="${spec.label}">\n  ${control}\n</mimi-form-field>`;
-  const components = ['MimiFormField', ...spec.imports].join(', ');
-  const lib = `import { MimiFormField } from '@/components/ui/form-field';\nimport { ${spec.imports.join(', ')} } from '@/components/ui/${spec.path}';`;
+  const more = spec.more ?? [];
+  const components = ['MimiFormField', ...spec.imports, ...more.flatMap((m) => m.names)].join(', ');
+  const own = [...spec.imports, ...(spec.types ?? []).map((t) => `type ${t}`)].join(', ');
+  const lib = [
+    "import { MimiFormField } from '@/components/ui/form-field';",
+    ...more.map((m) => `import { ${m.names.join(', ')} } from '@/components/ui/${m.path}';`),
+    `import { ${own} } from '@/components/ui/${spec.path}';`,
+  ].join('\n');
   const extra = spec.extra ? `\n${indent(spec.extra, 2)}` : '';
 
   if (kind === 'signal') {
@@ -159,7 +169,8 @@ export const FORMS_SPECS: Record<string, FormsSpec> = {
     type: 'number | null',
     imports: ['MimiNumberInput'],
     path: 'number-input',
-    markup: '<mimi-number-input [min]="1" [max]="12" {{attrs}} />',
+    // Sin [min]/[max]: con Signal Forms van en el esquema (min(), max()), no en el control.
+    markup: '<mimi-number-input {{attrs}} />',
     message: 'Indica cuántos asientos.',
   },
   password: {
@@ -167,8 +178,9 @@ export const FORMS_SPECS: Record<string, FormsSpec> = {
     field: 'password',
     init: "''",
     type: 'string',
-    imports: ['MimiPassword', 'MimiInput'],
+    imports: ['MimiPassword'],
     path: 'password',
+    more: [{ names: ['MimiInput'], path: 'input' }],
     markup:
       '<mimi-password>\n    <input mimiInput type="password" autocomplete="new-password" {{attrs}} />\n  </mimi-password>',
     message: 'Escribe una contraseña.',
@@ -289,8 +301,9 @@ export const FORMS_SPECS: Record<string, FormsSpec> = {
     field: 'categories',
     init: '[]',
     type: 'string[]',
-    imports: ['MimiTree', 'type MimiTreeNode'],
+    imports: ['MimiTree'],
     path: 'tree',
+    types: ['MimiTreeNode'],
     markup: '<mimi-tree aria-label="Categorías" multiple [nodes]="nodes" {{attrs}} />',
     extra:
       "protected readonly nodes: MimiTreeNode[] = [\n  { id: 'ropa', label: 'Ropa' },\n  { id: 'hogar', label: 'Hogar' },\n];",
