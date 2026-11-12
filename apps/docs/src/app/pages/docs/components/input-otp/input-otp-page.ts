@@ -5,13 +5,24 @@ import { FormsTabs } from '../../../../code/forms-tabs';
 import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
-import { InputOtpFormsExample } from './examples/input-otp-forms.example';
+import { InputOtpPlaygroundExample } from './examples/input-otp-playground.example';
+import { InputOtpReactiveFormsExample } from './examples/input-otp-reactive-forms.example';
+import { InputOtpSeparatorExample } from './examples/input-otp-separator.example';
+import { InputOtpSignalFormsExample } from './examples/input-otp-signal-forms.example';
 import { InputOtpStatesExample } from './examples/input-otp-states.example';
 import { InputOtpVerifyExample } from './examples/input-otp-verify.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
-import formsSource from './examples/input-otp-forms.example' with { loader: 'text' };
+import playgroundSource from './examples/input-otp-playground.example' with { loader: 'text' };
+// @ts-expect-error
+import reactiveFormsSource from './examples/input-otp-reactive-forms.example' with {
+  loader: 'text',
+};
+// @ts-expect-error
+import separatorSource from './examples/input-otp-separator.example' with { loader: 'text' };
+// @ts-expect-error
+import signalFormsSource from './examples/input-otp-signal-forms.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/input-otp-states.example' with { loader: 'text' };
 // @ts-expect-error
@@ -33,9 +44,12 @@ interface ApiRow {
     CodePreview,
     CssVariables,
     InstallCommand,
+    InputOtpPlaygroundExample,
     InputOtpVerifyExample,
+    InputOtpSeparatorExample,
     InputOtpStatesExample,
-    InputOtpFormsExample,
+    InputOtpSignalFormsExample,
+    InputOtpReactiveFormsExample,
   ],
   providers: [provideMimiErrorMessages(MIMI_ERROR_MESSAGES_ES)],
   templateUrl: './input-otp-page.html',
@@ -43,9 +57,12 @@ interface ApiRow {
 })
 export class InputOtpPage {
   protected readonly source = {
+    playground: playgroundSource as string,
     verify: verifySource as string,
+    separator: separatorSource as string,
     states: statesSource as string,
-    forms: formsSource as string,
+    signalForms: signalFormsSource as string,
+    reactiveForms: reactiveFormsSource as string,
   };
 
   protected readonly usage = [
@@ -82,7 +99,14 @@ export class InputOtpPage {
       type: 'number | number[]',
       default: '—',
       description:
-        'Después de qué casilla va el guion (3 en el diseño), o una lista: [3, 6]. Sin él, no hay guion.',
+        'Después de qué casilla va el separador (3 en el diseño), o una lista para varios grupos: [3], [4, 8]. Sin él, no hay separador.',
+    },
+    {
+      name: 'separator',
+      type: 'string',
+      default: "''",
+      description:
+        'Separador propio, como texto: "·", "/". Sin él, el guion del diseño. Para un ícono u otro contenido, <ng-template mimiInputOtpSeparator> (gana sobre este).',
     },
     {
       name: 'alphanumeric',

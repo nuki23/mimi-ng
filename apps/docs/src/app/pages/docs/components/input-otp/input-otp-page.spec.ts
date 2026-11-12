@@ -22,7 +22,27 @@ describe('InputOtpPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(3);
+      expect(previews.length).toBe(6);
+      // El primero es el interactivo: 8 casillas en dos mitades, y el código que lo hace.
+      const playground = previews[0].example!;
+      expect(playground.querySelectorAll('mimi-input-otp [data-slot="box"]').length).toBe(8);
+      expect(playground.querySelectorAll('mimi-input-otp [data-slot="separator"]').length).toBe(1);
+      expect(playground.querySelector('pre')!.textContent).toContain(
+        '<mimi-input-otp [length]="8" [separatorAfter]="[4]" />',
+      );
+      // Separador propio: «·» dos veces y un ícono.
+      const separators = Array.from(
+        el.querySelectorAll<HTMLElement>(
+          'app-input-otp-separator-example mimi-input-otp [data-slot="separator"]',
+        ),
+      );
+      expect(separators.map((s) => s.textContent!.trim())).toEqual(['·', '·', '']);
+      expect(separators[2].querySelector('svg')).not.toBeNull();
+      // Signal Forms y Reactive Forms tienen su ejemplo propio.
+      expect(el.querySelector('app-input-otp-signal-forms-example mimi-input-otp')).not.toBeNull();
+      expect(
+        el.querySelector('app-input-otp-reactive-forms-example mimi-input-otp'),
+      ).not.toBeNull();
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-input-otp input')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/input-otp';");

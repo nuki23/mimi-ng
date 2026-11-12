@@ -321,3 +321,5 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
 - **Escala de violeta de la marca (`--mimi-brand-50…950`):** solo las anclas `600` (`#793EEA`) y `400` (`#A88FFF`) vienen de la marca; los pasos intermedios son una curva propuesta.
 - **Toast `outline` de color y `neutral`:** sin diseño (el diseño solo muestra la tarjeta neutra y el sólido).
 - **`info` más oscuro en claro (`oklch(0.44 0.17 255)`) y más claro en oscuro (`oklch(0.83 0.11 250)`):** ajustado para distinguirlo del violeta de marca por luminosidad.
+- **Input OTP, separador propio (12/11/2026):** sin diseño. Un carácter (`separator="·"`) o contenido (`<ng-template mimiInputOtpSeparator>`), en `text-lg font-semibold text-muted-foreground` y con los SVG a 16 px; el diseño solo trae el guion (`--mimi-otp-separator`).
+- **Select y Combobox, la X de limpiar (12/11/2026):** el diseño la muestra siempre en el sitio del chevron. Mimi la muestra solo con el ratón encima, con el foco dentro o con el panel abierto (en pantallas táctiles, siempre con valor), y si no, el chevron. Lo pidió el usuario.

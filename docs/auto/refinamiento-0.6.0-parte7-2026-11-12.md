@@ -50,3 +50,55 @@ En verde. Con la suite completa de ui-core: 1017 pruebas, 1016 en verde. La que 
 - Al salir: vuelve el chevron.
 - Supr con el foco: limpia; el Select vuelve al placeholder y el Combobox queda vacío.
 - Contexto táctil (`isMobile`, `hasTouch`; `matchMedia('(hover: none)')` = `true`): X visible con valor, sin ratón ni foco, y sin chevron.
+
+## A2. Input OTP: longitud, grupos y separador propio
+
+**Comprobado sin cambios:**
+
+- `length` acepta cualquier entero positivo; los decimales se redondean hacia abajo, y 0 o un valor no válido vuelve a 6.
+- `separatorAfter` acepta un número, una lista (`[3]`, `[4, 8]`) o `"3,6"`.
+- Las posiciones fuera de la fila se ignoran.
+
+**Faltaba y se añadió: el separador propio.**
+
+- `separator="·"` (texto) o `<ng-template mimiInputOtpSeparator>` (cualquier contenido, por ejemplo un ícono), que gana sobre el texto. Sin ninguno, el guion del diseño.
+- Se pinta en cada separación, `aria-hidden`, con `text-muted-foreground` y los SVG a 16 px.
+- Nuevos `MimiInputOtpSeparator` y `MimiInputOtpImports`. El índice del componente exporta solo la API pública: `MimiOtpOutlet`, que pinta la plantilla sin `@angular/common`, es interno.
+- Anotado en `correcciones-pendientes.md` (sin diseño).
+
+**Página** (6 ejemplos):
+
+- **Casillas y grupos**, el primero e interactivo:
+  - Number Input para las casillas (1–12);
+  - Select para los grupos: sin grupos, en dos mitades, de 2, 3 o 4;
+  - Toggle Group para el separador: guion, «·» o «/»;
+  - debajo, la línea de código que lo hace.
+- Verificación, sin cambios.
+- **Separador propio** (nuevo).
+- Estados y longitud, sin cambios.
+- **Signal Forms** y **Reactive Forms**, separados, cada uno con su botón y su error. Sustituyen al ejemplo «Formularios», que juntaba los tres sistemas; el de ngModel sigue en las pestañas «Con formularios».
+- La API documenta `separator` y los grupos.
+
+**Pruebas:**
+
+- `input-otp.spec.ts`, +2:
+  - longitudes de 1 a 12, `[2]`, `[4]`, `[3, 6]`, `[4, 8]`, posiciones fuera de la fila, decimales y 0;
+  - separador de texto y plantilla, que gana y se repite.
+- `input-otp-page.spec.ts`:
+  - 6 ejemplos;
+  - el interactivo empieza con 8 casillas, un separador y su código;
+  - el separador propio pinta «·», «·» y el ícono.
+- En verde: 20 en ui-core y la página.
+
+**Playwright** (claro y oscuro, **24 de 24 OK, sin errores de consola**):
+
+- el interactivo:
+  - empieza con 8 casillas `[4]`;
+  - con 12 casillas queda en dos mitades `[6]`;
+  - «De 4 en 4» da `[4, 8]` y 2 separadores;
+  - «/» cambia los separadores y el código;
+  - se escriben 12 dígitos;
+  - cabe en su contenedor (670 de 670 px);
+- se ve el ícono separador;
+- Signal Forms marca «El código tiene 6 dígitos.» con 3 dígitos y queda válido con 6;
+- Reactive Forms marca el error vacío y queda válido con 4.
