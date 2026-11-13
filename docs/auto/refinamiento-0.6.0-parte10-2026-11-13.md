@@ -58,3 +58,20 @@ Nota sobre la prueba: al principio fallaban algunos, pero por la prueba misma. `
 - Llegar con Tab y elegir con el ratón: X oculta.
 - En táctil (`hasTouch`, 400 px), con valor: X visible.
 - Sin errores de consola.
+
+## 4. Tags Input en solo lectura: etiquetas que se distinguen
+
+**Causa:** el fondo de solo lectura (`--mimi-input-readonly`, 70 % de `muted`) es casi igual al del chip (`secondary`): las etiquetas no se veían.
+
+**Arreglo:** en solo lectura, el chip toma el fondo del campo (`--mimi-input-bg`) y un borde de 1 px con el token nuevo **`--mimi-tags-chip-readonly-border`** (por defecto, `muted-foreground`). Se le pasa por la entrada `class` de Chip, así que Chip no cambia. Token en `component-tokens.ts` y en la tabla de Tags Input de la spec.
+
+**Prueba que falla antes:** `tags-input.spec.ts`, caso nuevo: sin solo lectura, el chip sin borde; con solo lectura, el borde y el fondo. Falló antes del arreglo.
+
+**Playwright** (`tags.mjs`, `/docs/states`, columna «Solo lectura»; colores pintados pasados a sRGB): **10 de 10 OK**.
+
+| Tema   | Borde / fondo del campo | Texto de la etiqueta | Fondo de la etiqueta / campo |
+| ------ | ----------------------- | -------------------- | ---------------------------- |
+| Claro  | **4,79:1**              | 17,89:1              | 1,06:1                       |
+| Oscuro | **6,7:1**               | 13,08:1              | 1,13:1                       |
+
+El borde es lo que lleva el contraste de 3:1 (el fondo solo aclara). La etiqueta normal sigue sin borde. Captura: `docs/auto/capturas/2026-11-13/tags-readonly-*.png`.

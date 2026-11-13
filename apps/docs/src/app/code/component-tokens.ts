@@ -1475,6 +1475,13 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       preset: false,
       description: 'Borde con el límite alcanzado.',
     },
+    {
+      name: '--mimi-tags-chip-readonly-border',
+      default: 'muted-foreground',
+      inherits: '--mimi-muted-foreground',
+      preset: false,
+      description: 'Borde de las etiquetas en solo lectura (contraste de 3:1 con el fondo).',
+    },
   ],
   slider: [
     {

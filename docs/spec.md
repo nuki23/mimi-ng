@@ -2173,12 +2173,13 @@ Carácter de peso 600 con cifras tabulares. Separador de 12×2px. Cursor de 2×2
 
 Diseño: `F3 Archivos Tags Toggle Color`, §10 (el chip, también en `F3 Combobox Fechas Hora`, §1, múltiple). El chip es el ítem compartido `chip` de la CLI (decidido el 03/11/2026): lo usan Tags Input y el Combobox múltiple.
 
-| Variable                      | Qué controla                    | Hereda de | Valor por defecto                                                 | Preset |
-| ----------------------------- | ------------------------------- | --------- | ----------------------------------------------------------------- | ------ |
-| `--mimi-tags-gap`             | Separación entre chips          | —         | `6px`                                                             | Sí     |
-| `--mimi-tags-padding`         | Relleno de la caja              | —         | `5px 10px 5px 6px`                                                | Sí     |
-| `--mimi-tags-input-min-width` | Ancho mínimo del campo de texto | —         | `120px`                                                           | Sí     |
-| `--mimi-tags-full-border`     | Borde con el límite alcanzado   | —         | `color-mix(in oklab, var(--mimi-warning) 70%, var(--mimi-input))` | No     |
+| Variable                           | Qué controla                                                                                      | Hereda de                 | Valor por defecto                                                 | Preset |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------- | ----------------------------------------------------------------- | ------ |
+| `--mimi-tags-gap`                  | Separación entre chips                                                                            | —                         | `6px`                                                             | Sí     |
+| `--mimi-tags-padding`              | Relleno de la caja                                                                                | —                         | `5px 10px 5px 6px`                                                | Sí     |
+| `--mimi-tags-input-min-width`      | Ancho mínimo del campo de texto                                                                   | —                         | `120px`                                                           | Sí     |
+| `--mimi-tags-full-border`          | Borde con el límite alcanzado                                                                     | —                         | `color-mix(in oklab, var(--mimi-warning) 70%, var(--mimi-input))` | No     |
+| `--mimi-tags-chip-readonly-border` | Borde de las etiquetas en solo lectura (13/11/2026; contraste ≥ 3:1 con el fondo de solo lectura) | `--mimi-muted-foreground` | —                                                                 | No     |
 
 | Variable                  | Qué controla    | Hereda de                | Valor por defecto | Preset |
 | ------------------------- | --------------- | ------------------------ | ----------------- | ------ |

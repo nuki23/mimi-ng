@@ -74,6 +74,7 @@ const trim = (tag: string): string => tag.trim();
           [label]="tag"
           [removable]="!disabled() && !readonly()"
           [invalid]="tag === conflict()"
+          [class]="readonly() ? readonlyChipClasses : ''"
           (remove)="removeAt($index)"
           >{{ tag }}</mimi-chip
         >
@@ -174,6 +175,13 @@ export class MimiTagsInput implements FormValueControl<string[]>, MimiFieldContr
 
   private static nextId = 0;
   private readonly baseId = `mimi-tags-input-${MimiTagsInput.nextId++}`;
+  /**
+   * Las etiquetas en solo lectura (13/11/2026): el fondo de solo lectura (70 % de `muted`) es casi
+   * el del chip (`secondary`), así que el chip toma el fondo del campo y un borde con contraste de
+   * al menos 3:1 con el fondo de solo lectura, en claro y oscuro.
+   */
+  protected readonly readonlyChipClasses =
+    'border border-[color:var(--mimi-tags-chip-readonly-border,var(--mimi-muted-foreground))] bg-[color:var(--mimi-input-bg,var(--mimi-input-background))]';
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly messageId = `${this.baseId}-message`;
   protected readonly countId = `${this.baseId}-count`;
