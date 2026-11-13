@@ -158,4 +158,17 @@ En el navegador, al cargar, la fila Password ya salía oculta (`type=password`) 
 
 **Playwright** (`password.mjs`, claro y oscuro): **30 de 30 OK**. Password oculto en las 7 columnas; «mostrar» con `type=text` y el ojo pulsado en 6, sin campo en deshabilitado. Sin errores.
 
+## 9. `/docs/states` no enfoca ningún control al cargar
+
+**No se reprodujo** con el código actual (después de los puntos 1 a 8). Se buscó de cuatro formas, en claro y oscuro:
+
+- `nofocus.mjs`: el foco a los 0, 0,5, 1,5 y 3 s de cargar está en `body`, y también al llegar navegando desde otra página. La página no se desplaza sola: `scrollY` 0 y ningún contenedor con scroll. Un `scrollIntoView` al cargar se vería como si enfocara un control.
+- `focusprobe.mjs`, con el `focus()` de los elementos interceptado antes de cargar la página: `document.hasFocus()` es `true`, no hay ningún `[autofocus]`, y no hubo ni una llamada a `focus()` ni un evento `focusin`.
+- En el código: ninguna versión de la página llamó a `focus()`. Los `focus()` de los componentes van todos detrás de una acción del usuario (teclas, clic, abrir un panel). El del Tree, por ejemplo, solo con las flechas.
+- La fila «mostrar» del punto 8 pulsa el ojo con `click()`, que no mueve el foco (comprobado aquí mismo).
+
+**Lo que puede parecer un control enfocado:** la columna «Foco (teclado)» lo fuerza a la vista a propósito (anillo y borde de la marca). **Pendiente del usuario:** si lo ve otra vez, decir qué control y en qué navegador; con eso se puede seguir.
+
+**Prueba que lo vigila** (`states-page.spec.ts`, caso nuevo): durante la carga no hay ningún `focusin` y el foco no queda dentro de la página. No hay error que reproducir, así que no hay prueba «que falle antes». **8 de 8 OK** en Playwright.
+
 **Bundle** (después de los puntos 2 a 5): JS inicial **334,89 kB / 106,23 kB gzip** (sin cambio: `overlay.ts` ahora importa el CDK en ejecución, pero solo lo usan componentes que ya lo cargaban); CSS global **124,86 kB / 18,39 kB gzip** (desde el punto 1, +2,16 kB crudo, +0,22 kB gzip). Pruebas: ui-core 1058, docs 253, CLI 202.

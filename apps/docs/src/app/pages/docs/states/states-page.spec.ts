@@ -131,6 +131,26 @@ describe('Página «Estados»', () => {
   );
 
   it(
+    'no enfoca ningún control al cargar (13/11/2026)',
+    async () => {
+      TestBed.configureTestingModule({ providers: [provideRouter([])] });
+      const focused: string[] = [];
+      const log = (event: FocusEvent) =>
+        focused.push((event.target as HTMLElement).tagName.toLowerCase());
+      document.addEventListener('focusin', log, true);
+      const fixture = TestBed.createComponent(StatesPage);
+      document.body.appendChild(fixture.nativeElement);
+      await settle(fixture);
+      await new Promise((r) => setTimeout(r, 50));
+      document.removeEventListener('focusin', log, true);
+      expect(focused).toEqual([]);
+      expect((fixture.nativeElement as HTMLElement).contains(document.activeElement)).toBe(false);
+      fixture.destroy();
+    },
+    STATES_PAGE_TIMEOUT,
+  );
+
+  it(
     'Password: oculto en todas las columnas; la fila «mostrar», con el texto a la vista',
     async () => {
       TestBed.configureTestingModule({ providers: [provideRouter([])] });
