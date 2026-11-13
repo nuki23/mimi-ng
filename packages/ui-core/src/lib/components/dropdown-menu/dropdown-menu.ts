@@ -215,6 +215,9 @@ export class MimiDropdownMenu {
 @Directive({
   selector: '[mimiDropdownMenuTrigger]',
   host: {
+    // Con el menú abierto, el contorno del foco de Button, aunque se haya abierto con el ratón
+    // (como los campos con panel, 13/11/2026). Se suma a las clases del botón, no las reemplaza.
+    class: 'aria-expanded:outline-2 aria-expanded:outline-offset-2 aria-expanded:outline-ring',
     'aria-haspopup': 'menu',
     '[id]': 'id',
     '[attr.aria-expanded]': 'menu.open()',

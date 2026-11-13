@@ -25,3 +25,18 @@ Un commit por punto. Playwright con `playwright-core` 1.56.1 y el Chrome instala
 **Bundle:** JS inicial **334,89 kB / 106,23 kB gzip** (sin cambio); CSS global **122,70 kB / 18,17 kB gzip** (antes 122,39 / 18,15). Pruebas: ui-core 1047, docs 253, CLI 202.
 
 Nota sobre la prueba: al principio fallaban algunos, pero por la prueba misma. `querySelector(':active')` devolvía `<html>`; las filas de abajo estaban fuera de la vista; y el Escape llegaba antes de que se abriera el panel. Se corrigió la prueba, no los componentes.
+
+## 2. Controles con panel: abiertos, con el borde y el anillo de la marca
+
+**Causa:** Combobox mantiene el borde y el anillo porque el foco se queda en su input (`focus-within`). Select solo los ponía con el foco de teclado (`data-focus-visible`), y Date Picker, Date Range y Color Picker, con `focus-visible` en su botón; abiertos con el ratón no tenían ninguno.
+
+**Arreglo**, en las piezas comunes (`utils/field-styles.ts`):
+
+- `fieldTriggerBoxStyles` (Select): con `data-state="open"` de la caja, el borde `--mimi-input-border-focus` y el halo.
+- `fieldTriggerStyles` (Date Picker, Date Range, Color Picker): con `aria-expanded` del botón (lo pone `mimiPopoverTrigger`), lo mismo.
+- Con error, el borde y el halo de error también abiertos.
+- **Menús:** `mimiDropdownMenuTrigger` suma el contorno del foco de Button (`aria-expanded:outline-2 …outline-ring`) mientras el menú está abierto. La clase se suma a las del botón; no las reemplaza. Context Menu no tiene disparador visible.
+
+**Prueba que falla antes:** `field-open.spec.ts` (nuevo, 3 casos: la caja del Select, el botón del Date Picker y el disparador del menú). Falló en los 3 antes del arreglo.
+
+**Playwright** (`open.mjs`, clic con el ratón y el ratón fuera para que no cuente el hover, claro y oscuro): **28 de 28 OK**. Combobox, Select, Date Picker, Date Range y Color Picker abiertos tienen el borde igual a `--mimi-ring` (`oklch(0.64 0.2 292)` en claro, `0.72 0.16 292` en oscuro) y el halo. Al cerrar, el borde vuelve a otro color: con Escape, el foco vuelve al botón por teclado y queda el anillo de foco, que es lo correcto. El menú abierto tiene contorno sólido de 2 px; cerrado, ninguno. Sin errores de consola.
