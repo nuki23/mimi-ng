@@ -183,3 +183,44 @@ Captura: `docs/auto/capturas/2026-11-12/unificacion/paso5-*.png`.
 **Pruebas:** ui-core 1047, docs 253, CLI 202, en verde.
 
 **Bundle:** JS inicial **334,89 kB / 106,23 kB gzip** (antes 335,83 / 106,59: **−0,94 kB**; se fue el código de la comparación, que compartía un trozo con el inicial); CSS global **122,39 kB / 18,15 kB gzip** (antes 122,53 / 18,19).
+
+## 6. CHANGELOG, spec y registro
+
+- **CHANGELOG, «0.6.0 (por publicar)»:** sección nueva **«Estados de los controles: un solo juego para todos»**, con los cambios visibles: hover en Input y Textarea, hover más suave en oscuro, grises malva, profundidad, solo lectura, error unificado, deshabilitado con el token, Tree y colores de selección. También: el ítem nuevo `utils/field-styles` del registro de la CLI (quién lo pide y quién deja `control-styles`) y qué hacer si personalizaste los tokens que cambian de valor. Una línea en «Rupturas» (cambia el aspecto, no la API), «Estados» en «Documentación», y «No incluido» ya no lista el aspecto de solo lectura.
+- **Registro de la CLI:** el ítem `utils/field-styles` (tipo `util`, `utils/field-styles.ts`) ya estaba desde el paso 1, con 12 componentes que lo piden; `registry.spec.ts` compara los imports con las dependencias (en verde).
+- **Spec:** «`field-styles.ts`» junto a `control-styles.ts` (las piezas, los estados comunes, la profundidad A y la página Estados con su prueba); `controlDisabledStyles` y `controlPressStyles` al día.
+- **`.claude/commands/componente.md`:** un control de formulario nuevo usa `field-styles.ts` y entra en `/docs/states`.
+
+## Verificación final
+
+| Criterio                                                                      | Evidencia                                                                                                       |
+| ----------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| 1. Un solo juego de estados, aplicado a los 18 controles y marcado            | `field-states.spec.ts`; `docs/plan/controles/inventario.md` («Parte 2: unificados», 18 ✓); `fields.mjs` 206/206 |
+| 2. Profundidad A, con «reducir movimiento»                                    | `field-depth.spec.ts`; `depth.mjs` 68/68                                                                        |
+| 3. Grises malva suave en claro y oscuro, AA, tabla de tokens                  | `gray-tint.spec.ts`, `contrast.spec.ts`; spec sección 13; `grays.mjs` 16/16                                     |
+| 4. Tree y los usos de info                                                    | `selection-colors.spec.ts`; `selection.mjs` 18/18 (contraste mínimo 4,70)                                       |
+| 5. `/docs/states` solo con lo elegido, prueba de cobertura, punto del revisor | `states-page.spec.ts` (3 casos); `page.mjs` 24/24; `cerrar-grupo.md`                                            |
+| 6. CHANGELOG y registro                                                       | `CHANGELOG.md`; `registry.json` (`utils/field-styles`)                                                          |
+| `pnpm build`, `pnpm test`, `pnpm format:check`                                | en verde: ui-core 1047, docs 253, CLI 202; «All matched files use Prettier code style!»                         |
+| Bundle sin subir presupuestos                                                 | JS inicial 334,89 / 106,23 gzip (aviso en 345); CSS global 122,39 / 18,15 gzip (`styles` avisa en 180)          |
+| Servidores cerrados y temporales borrados                                     | puerto 4280 libre (`netstat`); carpeta de Playwright y registros del servidor borrados                          |
+
+**Bundle de toda la tanda** (antes del paso 1 → ahora): JS inicial 335,84 / 106,59 → **334,89 / 106,23 kB gzip**; CSS global 115,59 / 17,66 → **122,39 / 18,15 kB gzip** (+6,8 kB crudo, +0,49 kB gzip, casi todo del paso 1).
+
+## Alertas para el revisor
+
+- **Tree deshabilitado** se arregló sin que estuviera en el encargo: al meterlo en la cuadrícula se vio que no se atenuaba. Es el mismo criterio del paso 1 (deshabilitado con el token en todos).
+- **`group2-tokens.spec.ts`** ahora tiene una lista de excepciones al diseño (`G2_OVERRIDES`) para los dos tokens de soltar. `docs/design/tokens-mimi.css` no se tocó: sigue diciendo `info`.
+- **El texto violeta** (Tree elegido, contador de Tabs, «Crear», filtro e insignia de Data Table) usa `text-primary`, como pidió el usuario para Tree. Con el tema de fábrica es igual a `brand-text` y pasa AA (4,70 lo más bajo). **Con un primario propio claro** (por ejemplo, amarillo), ese texto podría no llegar a 4,5:1: es la misma regla que ya vale para `primary` sobre fondo (spec 6.1).
+- **La tabla de colores de la spec (sección 13)** seguía con los valores del tema neutro de antes de la R.0. Ahora tiene los de fábrica, también `primary`, `ring` e `info`, no solo los grises.
+- **Playwright:** a mitad del paso 5, el servidor de desarrollo dejó de recompilar después de un error intermedio. Se reinició y se repitieron todas las comprobaciones (los números de arriba son de esa segunda pasada).
+- **NO COMPROBADO (manual, usuario):** una mirada propia a `/docs/states` y a las páginas de Tree, Toolbar, Data Table, Tabs, Combobox y File Upload en claro y oscuro; el filtro activo y la insignia de Data Table no se midieron en el navegador (solo la prueba de archivos).
+- **No se subió la versión ni se publicó nada.**
+
+## Archivos de esta tanda (pasos 3 a 6)
+
+- **Tema:** `packages/ui-core/src/lib/theme/theme-base.css`, `neutral.ts`, `gray-tint.spec.ts` (nuevo), `group2-tokens.spec.ts`.
+- **Componentes:** `tree/tree.ts` y `tree.spec.ts`, `toolbar/toolbar.ts` y `toolbar.spec.ts`, `data-table/data-table.ts`, `file-upload/file-upload.ts`, `option-list/option-list.ts`, `tabs/tabs.ts` y `tabs.spec.ts`, `combobox/combobox.spec.ts`; `packages/ui-core/src/lib/selection-colors.spec.ts` (nuevo).
+- **Sitio:** `apps/docs/src/app/pages/docs/states/states-page.ts`, `.html` y `.spec.ts`; `gray-tints.ts` (borrado); `apps/docs/src/app/code/component-tokens.ts`.
+- **Docs:** `docs/spec.md`, `CHANGELOG.md`, `docs/design/correcciones-pendientes.md`, `docs/plan/controles/inventario.md`, este informe, capturas `docs/auto/capturas/2026-11-12/unificacion/paso3-*.png` y `paso5-*.png`.
+- **Comandos:** `.claude/commands/cerrar-grupo.md`, `.claude/commands/componente.md`.

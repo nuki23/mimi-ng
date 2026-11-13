@@ -1209,16 +1209,40 @@ export const fieldFocusStyles =
   'outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring-soft';
 
 // Sin pointer-events-none en disabled: anularía cursor-not-allowed. a[mimiBtn] sí lo necesita.
+// La opacidad es el token --mimi-disabled-opacity (0,5), desde el 12/11/2026.
 export const controlDisabledStyles =
-  'disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50';
+  'disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:pointer-events-none aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]';
 
 // Borde rojo fijo; halo destructive-soft solo al enfocar
 export const controlInvalidStyles =
   'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive-soft';
 
-// Solo botones. Switch y Checkbox tienen su propia escala.
-export const controlPressStyles = 'mimi-transition active:scale-(--mimi-press-scale)';
+// Solo botones: se hunde y le crece el halo (profundidad A). Switch y Checkbox tienen su escala.
+export const controlPressStyles =
+  'mimi-transition active:scale-(--mimi-press-scale) active:ring-3 active:ring-ring-soft';
 ```
+
+**`field-styles.ts`** (12/11/2026, Parte 2 de la unificación de los controles): **un solo juego de estados para todos los controles de formulario**. Va en un archivo aparte de `control-styles.ts` para que el JS inicial de quien usa solo Button no crezca, y cada pieza es un solo literal para que el empaquetador quite las que no se usan. En el registro de la CLI es el ítem `utils/field-styles` (tipo `util`), que piden Input, Textarea, Select, Combobox, Tags Input, Number Input, Password, Input Mask, Date Picker, Color Picker, Checkbox y Switch.
+
+| Pieza                    | Para                                                                      |
+| ------------------------ | ------------------------------------------------------------------------- |
+| `fieldBoxStyles`         | caja de un campo compuesto (Number Input, Password, Combobox, Tags, Mask) |
+| `fieldNativeStyles`      | lo que suman Input y Textarea (hover, clic, `readonly` nativo)            |
+| `fieldTriggerStyles`     | `<button>` con aspecto de campo (Date Picker, Date Range, Color Picker)   |
+| `fieldTriggerBoxStyles`  | caja del Select (desde sus `data-*`, con el `data-focus-visible` del CDK) |
+| `fieldButtonHoverStyles` | botones dentro de un campo (− y + de Number Input, el ojo de Password)    |
+| `choicePressStyles`      | Checkbox y Switch                                                         |
+
+Los estados, iguales en todos (tokens de Input: `--mimi-input-border`, `-border-hover`, `-border-focus`, `-focus-ring-width`, `-error`):
+
+- **Borde y hover:** el borde de Input; al pasar el ratón, `--mimi-input-border-hover`.
+- **Foco:** borde `ring` y halo `ring-soft` (los campos); el contorno de 2 px en los de elegir (Checkbox, Switch, Slider, Toggle Group) y en Button.
+- **Clic (profundidad A, decidida por el usuario):** a todos les crece el halo; **se hunden solo los que funcionan como botón** (Select, Date Picker, Date Range, Color Picker, File Upload, Checkbox, Switch, Toggle Group, Button); los de escribir no. Con «reducir movimiento», nada se hunde (las escalas son tokens que el tema pone a 1) y el halo se queda.
+- **Deshabilitado:** `--mimi-disabled-opacity`, también en Button, Checkbox, Switch, Tree y las opciones de las listas.
+- **Solo lectura:** fondo `--mimi-input-readonly` (70 % de `muted` con el fondo del campo), sin hover ni clic; la caja lleva `data-readonly` o `aria-readonly`.
+- **Error:** borde `--mimi-input-error` con el halo de error solo con el foco; en Switch y Toggle Group, que no tienen borde, un filo de 1 px del mismo color.
+
+**La página Fundamentos › Estados (`/docs/states`)** muestra cada control de formulario en los siete estados forzados. Su prueba falla si un componente que implementa `FormValueControl` o `FormCheckboxControl` (o lee el formulario con `injectFieldState()`) no tiene fila: un control nuevo entra ahí y usa estas piezas.
 
 **`outline-none` y el anillo de foco.** En Tailwind 4, `outline-none` pone `--tw-outline-style: none` y `focus-visible:outline-2` toma el estilo de esa variable: si un elemento tiene las dos clases, el anillo de foco no se ve. Pasó en Tabs (fila y paneles, 5.11) y en el toast enfocado con F8 (paso A antes de la G1.10). Por eso:
 

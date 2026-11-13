@@ -17,6 +17,7 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 - **Select instala también `option-list`** (para `<mimi-option>`): un archivo más en `components/ui/`. No cambia su API.
 - **El texto `clear` del Combobox** (`MimiComboboxText`) es **opcional** (si falta, «Clear»); el Combobox gana `clearable`.
 - **Las medidas de los componentes salen de la escala** (`--mimi-size-*` y derivadas por `[data-size]`): si sobrescribes un token de medida (`--mimi-btn-height`, `--mimi-input-height`…) **en un contenedor** y no en `:root`, el cambio ya no llega a los controles de dentro (las medidas vienen calculadas desde `:root`). **Cómo cambiarlo:** pon el token en `:root` (todo) o en un contenedor **con `data-size`** (o `mimiSize`), que vuelve a calcular las medidas con el valor de la zona: `<section data-size="md" style="--mimi-btn-height: 2.25rem">`. En `sm` y `lg`, el token con su sufijo (`--mimi-btn-height-sm`). Explicado en la página «Tamaños». Arreglarlo sin `data-size` exigiría declarar las ~60 variables derivadas en cada elemento (`*`): no se hizo.
+- **Cambian los estados visuales de los controles** (hover, clic, solo lectura, error, deshabilitado), los grises del tema, la selección del Tree y los colores de selección (`info` → marca). La API no cambia; el aspecto sí. Detalle en «Estados de los controles», abajo.
 - **Dialog:** `padding` es un solo valor lateral. **Data Table:** conserva `density` y gana `size` (alto de fila y de cabecera); `comfortable` mantiene su alto fijo.
 
 ### Tamaños `sm / md / lg` en todos los componentes (R.1, R.2, R.3, R.4, R.8)
@@ -38,6 +39,22 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 - **Tabs:** atajo `<mimi-tab label>`; sin `value`, el valor sale del texto, del índice o con un sufijo, con un aviso en desarrollo.
 - **Input OTP:** la cantidad de dígitos que quepa, `separatorAfter` en lista (grupos: `[3]`, `[4, 8]`) y **separador propio**: un carácter (`separator="·"`) o contenido (`<ng-template mimiInputOtpSeparator>`, con `MimiInputOtpImports`).
 
+### Estados de los controles: un solo juego para todos
+
+Los 18 controles de formulario (y Tree) dibujan igual el hover, el foco, el clic, el deshabilitado, la solo lectura y el error, con un archivo nuevo compartido. **Son cambios visibles: si tienes capturas o pruebas visuales, se moverán.**
+
+- **Hover en Input y Textarea** (no tenían) y en Select; el borde se oscurece al pasar el ratón.
+- **Hover más suave en oscuro:** `--mimi-input-hover` mezcla el 14 % de `foreground` (antes, 30 %; el borde quedaba casi blanco). En claro no cambia.
+- **Grises «malva suave»:** fondo, texto, tarjeta, popover, `secondary`, `muted`, `accent`, bordes y campos llevan el tono 292 de la marca con croma 0,006 (0,003 en los casi blancos y casi negros), con la misma luminosidad: el contraste no cambia (AA en claro y oscuro). `MIMI_THEME_NEUTRAL` vuelve al neutro puro.
+- **Profundidad al hacer clic:** a todos les crece el halo (`ring-soft`), como a Button; **se hunden solo los que funcionan como botón** (Select, Date Picker, Date Range, Color Picker, File Upload, Checkbox, Switch, Toggle Group, Button); los de escribir no. Con «reducir movimiento», nada se hunde.
+- **Solo lectura con aspecto propio y común:** fondo `--mimi-input-readonly` (nuevo; `inputReadonly` en el preset), sin hover ni clic, y la caja marcada con `data-readonly` o `aria-readonly`. File Upload en solo lectura se titula «Archivos (solo lectura)» (texto nuevo opcional `readonly` de `MimiFileUploadText`; en inglés, «Files (read-only)»).
+- **Error unificado:** borde `--mimi-input-error` con el halo solo con el foco. **Switch gana el error** (un filo rojo de 1 px); Checkbox lo marca también cuando está marcada; Input OTP pone el halo solo en la casilla con el foco (antes, en todas).
+- **Deshabilitado con el token** `--mimi-disabled-opacity` en todos (antes, `opacity-50` fijo en Button, Checkbox, Switch, Input, Textarea y las opciones de las listas). **Tree deshabilitado entero** ahora se atenúa (antes no se veía distinto).
+- **Tree:** el nodo elegido es fondo `primary-subtle` con texto `primary` (antes, `primary` sólido con texto blanco); el anillo, solo con el teclado. `--mimi-tree-selected` y `--mimi-tree-selected-fg` cambian de valor por defecto.
+- **Colores de selección con la marca, no con `info`:** el azul queda solo para los avisos. Toolbar (anillo de hover y de la herramienta activa: `--mimi-toolbar-ring` → `ring`; contador `primary`), File Upload con un archivo encima (borde `ring`, fondo `primary-subtle`, halo `ring-soft`; `--mimi-dropzone-active` y `--mimi-dropzone-active-border` cambian de valor), Data Table (fila elegida, filtro activo e insignia de selección), la fila «Crear» del Combobox y el contador de Tabs.
+- **CLI:** ítem nuevo **`utils/field-styles`** (`utils/field-styles.ts`) en el registro; lo instalan con ellos Input, Textarea, Select, Combobox, Tags Input, Number Input, Password, Input Mask, Date Picker, Color Picker, Checkbox y Switch. Date Picker y File Upload ya no piden `utils/control-styles`.
+- **Si personalizaste** `--mimi-tree-selected(-fg)`, `--mimi-toolbar-ring`, `--mimi-dropzone-active(-border)` o `--mimi-table-row-selected`, tu valor sigue ganando. Si copiaste a mano clases de estado de un componente, vuelve a generarlo con `ng g mimi <componente> --overwrite` o compáralo con el nuevo.
+
 ### Arreglos
 
 - Tabs y Toggle Group en oscuro, y Skeleton; efecto de clic uniforme (`--mimi-press-scale`).
@@ -46,12 +63,12 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 
 ### Documentación
 
-- Páginas nuevas o ampliadas: **Tamaños**, **Checkbox** (separada de Switch), pestañas «Con formularios» (Signal Forms, Reactive y plantilla) en 17 páginas, ejemplos de solo lectura y de `<mimi-option>`.
+- Páginas nuevas o ampliadas: **Tamaños**, **Estados** (Fundamentos: cada control de formulario en los siete estados, en claro y oscuro), **Checkbox** (separada de Switch), pestañas «Con formularios» (Signal Forms, Reactive y plantilla) en 17 páginas, ejemplos de solo lectura y de `<mimi-option>`.
 - **Requisito del sitio (no de la librería):** el sitio de documentación usa `@scope` de CSS (Chrome 118, Safari 17.4, Firefox 128). Los componentes que copia la CLI no lo usan.
 
 ### No incluido en esta versión
 
-R.0 (el logo y el favicon, a la espera de los archivos), M.9 completa (la lista de Select sobre `option-list`), el aspecto de solo lectura (`data-readonly`) y los ejemplos de solo lectura de los seis primeros controles, y R.14 (más ejemplos y el diagrama).
+R.0 (el logo y el favicon, a la espera de los archivos), M.9 completa (la lista de Select sobre `option-list`), los ejemplos de solo lectura de los seis primeros controles (el aspecto de solo lectura ya está: ver «Estados de los controles») y R.14 (más ejemplos y el diagrama).
 
 ### Cómo actualizar desde la 0.5.0
 
