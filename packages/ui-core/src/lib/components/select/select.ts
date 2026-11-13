@@ -490,16 +490,17 @@ const CLEAR_CLASSES = cn(
   'pointer-events-auto relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
   'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
-  // La X solo se ve con el ratón encima, el foco dentro o el panel abierto; en pantallas sin
-  // ratón, mientras haya valor (informe del usuario, 12/11/2026). Si no, el chevron.
-  'hidden group-hover/select:inline-flex group-focus-within/select:inline-flex group-data-[state=open]/select:inline-flex [@media(hover:none)]:inline-flex',
+  // La X solo se ve con el ratón encima, el foco que llegó por teclado o el panel abierto; en
+  // pantallas sin ratón, mientras haya valor (informes del usuario, 12 y 13/11/2026). Si no, el
+  // chevron. Con `focus-within` se quedaba después de elegir con el ratón.
+  'hidden group-hover/select:inline-flex group-data-[focus-keyboard]/select:inline-flex group-data-[state=open]/select:inline-flex [@media(hover:none)]:inline-flex',
 );
 const CHEVRON_CLASSES =
   'size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/select:rotate-180';
 /** El chevron cuando hay X: se esconde cuando la X se ve. */
 const CHEVRON_WITH_CLEAR_CLASSES = cn(
   CHEVRON_CLASSES,
-  'group-hover/select:hidden group-focus-within/select:hidden group-data-[state=open]/select:hidden [@media(hover:none)]:hidden',
+  'group-hover/select:hidden group-data-[focus-keyboard]/select:hidden group-data-[state=open]/select:hidden [@media(hover:none)]:hidden',
 );
 
 const PANEL_CLASSES =
@@ -545,6 +546,7 @@ const SEARCH_INPUT_CLASSES =
       [attr.data-invalid]="showInvalid() ? '' : null"
       [attr.data-disabled]="disabled() ? '' : null"
       [attr.data-focus-visible]="focusVisible() ? '' : null"
+      [attr.data-focus-keyboard]="focusKeyboard() ? '' : null"
       [attr.data-readonly]="readonly() ? '' : null"
       [attr.data-placeholder]="selectedOption() ? null : ''"
     >
@@ -781,14 +783,36 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
    * foco al campo con error): solo entonces se pinta el anillo, como `:focus-visible`.
    */
   protected readonly focusVisible = signal(false);
+  /**
+   * El foco está en la caja (el disparador o la X) y llegó con el teclado: muestra la X. El foco
+   * que vuelve desde el código después de elegir con el ratón no cuenta (13/11/2026).
+   */
+  protected readonly focusKeyboard = signal(false);
   private readonly destroyRef = inject(DestroyRef);
 
   private readonly watchFocus = afterNextRender(() => {
     const trigger = this.trigger().nativeElement;
+    const box = this.box().nativeElement;
     this.focusMonitor
       .monitor(trigger)
       .subscribe((origin) => this.focusVisible.set(origin === 'keyboard' || origin === 'program'));
-    this.destroyRef.onDestroy(() => this.focusMonitor.stopMonitoring(trigger));
+    this.focusMonitor
+      .monitor(box, true)
+      .subscribe((origin) =>
+        this.focusKeyboard.set(
+          origin === 'keyboard' ||
+            (origin === 'program' && this.modality.mostRecentModality === 'keyboard'),
+        ),
+      );
+    // Con el ratón o el dedo, la X deja de verse aunque el foco no salga.
+    const modality = this.modality.modalityDetected.subscribe((m) => {
+      if (m !== 'keyboard') this.focusKeyboard.set(false);
+    });
+    this.destroyRef.onDestroy(() => {
+      modality.unsubscribe();
+      this.focusMonitor.stopMonitoring(trigger);
+      this.focusMonitor.stopMonitoring(box);
+    });
   });
 
   /** Opciones sueltas o en grupos (`{ label, options }`). */

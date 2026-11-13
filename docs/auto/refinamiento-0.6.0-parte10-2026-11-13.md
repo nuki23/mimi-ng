@@ -40,3 +40,21 @@ Nota sobre la prueba: al principio fallaban algunos, pero por la prueba misma. `
 **Prueba que falla antes:** `field-open.spec.ts` (nuevo, 3 casos: la caja del Select, el botón del Date Picker y el disparador del menú). Falló en los 3 antes del arreglo.
 
 **Playwright** (`open.mjs`, clic con el ratón y el ratón fuera para que no cuente el hover, claro y oscuro): **28 de 28 OK**. Combobox, Select, Date Picker, Date Range y Color Picker abiertos tienen el borde igual a `--mimi-ring` (`oklch(0.64 0.2 292)` en claro, `0.72 0.16 292` en oscuro) y el halo. Al cerrar, el borde vuelve a otro color: con Escape, el foco vuelve al botón por teclado y queda el anillo de foco, que es lo correcto. El menú abierto tiene contorno sólido de 2 px; cerrado, ninguno. Sin errores de consola.
+
+## 3. Select y Combobox: la X tras elegir con el ratón
+
+**Causa:** la X se mostraba con `group-focus-within`, y después de elegir con el ratón el foco sigue en el campo: en Combobox, en su input; en Select, vuelve a su botón desde el código. Así la X se quedaba visible.
+
+**Arreglo:** una marca nueva en la caja, **`data-focus-keyboard`**, con el `FocusMonitor` del CDK sobre toda la caja (también cuenta el foco en la X). Se pone si el foco llegó por teclado, o desde el código cuando lo último fue el teclado. Se quita en cuanto se usa el ratón o el dedo, aunque el foco no salga: así cubre el caso de llegar con Tab y luego elegir con el ratón. La X (y el chevron, al revés) se ve con el ratón encima, con `data-focus-keyboard`, con el panel abierto o, en pantallas sin ratón, mientras haya valor. El anillo de foco del Select no cambia (sigue `data-focus-visible`).
+
+**Prueba que falla antes:** `clear-visibility.spec.ts` (nuevo, 4 casos: las clases y la marca con teclado y con ratón, en Select y Combobox). Falló en los 4. La prueba anterior, `clear-button.spec.ts`, esperaba `group-focus-within` y se actualizó. Detalle de la prueba: el `mousedown` de prueba lleva `detail: 1`; con 0, el CDK lo toma por un lector de pantalla, o sea, por teclado.
+
+**Playwright** (`clear.mjs`, páginas de Select y Combobox, claro y oscuro, dos pasadas): **34 de 34 OK**.
+
+- Elegir con el ratón: X oculta y chevron visible (con el foco dentro).
+- Ratón encima: X visible.
+- Tab hasta el campo: X visible.
+- Panel abierto: X visible.
+- Llegar con Tab y elegir con el ratón: X oculta.
+- En táctil (`hasTouch`, 400 px), con valor: X visible.
+- Sin errores de consola.

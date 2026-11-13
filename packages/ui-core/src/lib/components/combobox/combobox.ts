@@ -1,8 +1,10 @@
 import { Combobox, ComboboxPopup } from '@angular/aria/combobox';
+import { FocusMonitor, InputModalityDetector } from '@angular/cdk/a11y';
 import { CdkConnectedOverlay, type ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
   ElementRef,
   Injector,
@@ -85,16 +87,16 @@ const CLEAR_CLASSES = cn(
   // Al hacer clic se hunde la caja entera (field-styles, profundidad B), no la X aparte.
   'mimi-transition hover:bg-accent hover:text-foreground',
   buttonFocusStyles,
-  // La X solo se ve con el ratón encima, el foco dentro o el panel abierto; en pantallas sin
-  // ratón, mientras haya valor (como en Select). Si no, el chevron.
-  'hidden group-hover/combobox:inline-flex group-focus-within/combobox:inline-flex group-data-[state=open]/combobox:inline-flex [@media(hover:none)]:inline-flex',
+  // La X solo se ve con el ratón encima, el foco que llegó por teclado o el panel abierto; en
+  // pantallas sin ratón, mientras haya valor (como en Select, 13/11/2026). Si no, el chevron.
+  'hidden group-hover/combobox:inline-flex group-data-[focus-keyboard]/combobox:inline-flex group-data-[state=open]/combobox:inline-flex [@media(hover:none)]:inline-flex',
 );
 const CHEVRON_CLASSES =
   'size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/combobox:rotate-180';
 /** El chevron cuando hay X: se esconde cuando la X se ve. */
 const CHEVRON_WITH_CLEAR_CLASSES = cn(
   CHEVRON_CLASSES,
-  'group-hover/combobox:hidden group-focus-within/combobox:hidden group-data-[state=open]/combobox:hidden [@media(hover:none)]:hidden',
+  'group-hover/combobox:hidden group-data-[focus-keyboard]/combobox:hidden group-data-[state=open]/combobox:hidden [@media(hover:none)]:hidden',
 );
 
 const ICON = {
@@ -208,6 +210,7 @@ export class MimiComboboxOption {
       [attr.data-invalid]="showInvalid() ? '' : null"
       [attr.data-disabled]="disabled() ? '' : null"
       [attr.data-readonly]="readonly() ? '' : null"
+      [attr.data-focus-keyboard]="focusKeyboard() ? '' : null"
       (mousedown)="onBoxMousedown($event)"
     >
       <ng-content select="[mimiComboboxStart]" />
@@ -455,8 +458,37 @@ export class MimiCombobox<T = unknown>
 
   protected readonly optionTemplate = contentChild(MimiComboboxOption);
   private readonly field = viewChild.required<ElementRef<HTMLInputElement>>('field');
+  private readonly box = viewChild.required<ElementRef<HTMLElement>>('box');
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
   private readonly list = viewChild(MimiOptionList);
+
+  private readonly focusMonitor = inject(FocusMonitor);
+  private readonly modality = inject(InputModalityDetector);
+  /**
+   * El foco está en la caja (el input o la X) y llegó con el teclado: muestra la X (13/11/2026).
+   * Con el ratón o el dedo se borra, aunque el foco no salga (al elegir una opción con el ratón).
+   */
+  protected readonly focusKeyboard = signal(false);
+  private readonly watchFocus = afterNextRender(() => {
+    const box = this.box().nativeElement;
+    const destroyRef = this.injector.get(DestroyRef);
+    const focus = this.focusMonitor
+      .monitor(box, true)
+      .subscribe((origin) =>
+        this.focusKeyboard.set(
+          origin === 'keyboard' ||
+            (origin === 'program' && this.modality.mostRecentModality === 'keyboard'),
+        ),
+      );
+    const modality = this.modality.modalityDetected.subscribe((m) => {
+      if (m !== 'keyboard') this.focusKeyboard.set(false);
+    });
+    destroyRef.onDestroy(() => {
+      focus.unsubscribe();
+      modality.unsubscribe();
+      this.focusMonitor.stopMonitoring(box);
+    });
+  });
 
   /** Estado del formulario, con los errores, para el mensaje de mimi-form-field. */
   readonly fieldState = injectFieldState();

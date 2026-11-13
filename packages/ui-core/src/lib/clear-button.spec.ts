@@ -78,7 +78,8 @@ describe('X de limpiar de Select y Combobox', () => {
       const chevron = q(`[data-test="${test}"] [data-slot="chevron"]`);
       const reveal = [
         `group-hover/${group}:inline-flex`,
-        `group-focus-within/${group}:inline-flex`,
+        // El foco que llegó por teclado (13/11/2026; antes, `focus-within`: ver clear-visibility).
+        `group-data-[focus-keyboard]/${group}:inline-flex`,
         `group-data-[state=open]/${group}:inline-flex`,
         '[@media(hover:none)]:inline-flex',
       ];
