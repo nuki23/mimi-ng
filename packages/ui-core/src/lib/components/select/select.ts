@@ -1,9 +1,11 @@
+import { FocusMonitor, InputModalityDetector } from '@angular/cdk/a11y';
 import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
 import { CdkConnectedOverlay, type ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
   ElementRef,
   type EmbeddedViewRef,
@@ -473,10 +475,12 @@ const TRIGGER_CLASSES = cn(
   'group/select relative flex w-full min-w-0 items-center gap-2 pr-2.5 pl-3 font-sans text-sm text-foreground mimi-transition',
   'h-[var(--mimi-select-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
   'border border-[color:var(--mimi-select-border,var(--mimi-input))] bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-background))]',
-  // Foco, error y deshabilitado como en Input (utils/control-styles.ts). Aquí el foco y
-  // aria-invalid están en el botón de dentro, así que la caja los lee con has-[] y data-*.
-  'has-[[role=combobox]:focus]:border-ring has-[[role=combobox]:focus]:ring-3 has-[[role=combobox]:focus]:ring-ring-soft',
-  'data-[invalid]:border-destructive data-[invalid]:has-[[role=combobox]:focus]:border-destructive data-[invalid]:has-[[role=combobox]:focus]:ring-destructive-ring',
+  // Foco, error y deshabilitado como en Input (utils/control-styles.ts). El foco está en el botón
+  // de dentro: la caja lleva `data-focus-visible` solo cuando se llegó con el teclado (o desde el
+  // código), con el origen del FocusMonitor del cdk. Antes era `:focus` y el anillo se quedaba
+  // al elegir con el ratón (informe del usuario, 12/11/2026).
+  'data-[focus-visible]:border-ring data-[focus-visible]:ring-3 data-[focus-visible]:ring-ring-soft',
+  'data-[invalid]:border-destructive data-[invalid]:data-[focus-visible]:border-destructive data-[invalid]:data-[focus-visible]:ring-destructive-ring',
   'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
   'has-[[role=combobox]:active]:scale-(--mimi-press-scale)',
 );
@@ -543,6 +547,7 @@ const SEARCH_INPUT_CLASSES =
       [attr.data-state]="open() ? 'open' : 'closed'"
       [attr.data-invalid]="showInvalid() ? '' : null"
       [attr.data-disabled]="disabled() ? '' : null"
+      [attr.data-focus-visible]="focusVisible() ? '' : null"
       [attr.data-placeholder]="selectedOption() ? null : ''"
     >
       <!-- preserveContent: el panel sigue montado mientras dura la animación de salida. -->
@@ -771,6 +776,22 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly injector = inject(Injector);
   protected readonly text = inject(MIMI_SELECT_TEXT);
+  private readonly focusMonitor = inject(FocusMonitor);
+  private readonly modality = inject(InputModalityDetector);
+  /**
+   * El disparador tiene el foco y se llegó con el teclado o desde el código (Signal Forms lleva el
+   * foco al campo con error): solo entonces se pinta el anillo, como `:focus-visible`.
+   */
+  protected readonly focusVisible = signal(false);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly watchFocus = afterNextRender(() => {
+    const trigger = this.trigger().nativeElement;
+    this.focusMonitor
+      .monitor(trigger)
+      .subscribe((origin) => this.focusVisible.set(origin === 'keyboard' || origin === 'program'));
+    this.destroyRef.onDestroy(() => this.focusMonitor.stopMonitoring(trigger));
+  });
 
   /** Opciones sueltas o en grupos (`{ label, options }`). */
   readonly options = input<readonly (MimiOption<T> | MimiOptionGroup<T>)[]>([]);
@@ -987,6 +1008,15 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
     this.trigger().nativeElement.focus(options);
   }
 
+  /**
+   * Devuelve el foco al disparador con el origen de la última interacción (ratón o teclado): así
+   * el anillo solo sale si se usó el teclado.
+   */
+  private refocus(options?: FocusOptions): void {
+    const origin = this.modality.mostRecentModality === 'keyboard' ? 'keyboard' : 'mouse';
+    this.focusMonitor.focusVia(this.trigger().nativeElement, origin, options);
+  }
+
   /** Abre o cierra. Lo llama aria (clic, ↓, Enter, Espacio, Escape, foco fuera) y Mimi. */
   protected setOpen(open: boolean): void {
     if (open && (this.disabled() || this.readonly())) return;
@@ -995,7 +1025,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
 
   /** Cierra y, con `refocus`, devuelve el foco al disparador (al elegir o con Escape). */
   private close(refocus: boolean): void {
-    if (refocus) this.focus();
+    if (refocus) this.refocus();
     this.open.set(false);
   }
 
@@ -1009,7 +1039,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
     this.state.set('open');
     this.rendered.set(true);
     // Safari no enfoca un botón al hacer clic: sin foco no habría teclado.
-    if (!this.search()) this.focus({ preventScroll: true });
+    if (!this.search()) this.refocus({ preventScroll: true });
   }
 
   private hide(): void {
@@ -1064,7 +1094,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   /** Quita el valor (botón de limpiar). */
   protected clear(): void {
     this.value.set(null);
-    this.focus();
+    this.refocus();
   }
 
   /**

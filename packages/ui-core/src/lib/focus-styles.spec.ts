@@ -44,7 +44,7 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
   },
   'components/select/select.ts': {
     count: 4,
-    why: 'Botón: el anillo lo pinta la caja con has-[[role=combobox]:focus]. Lista y panel: la opción activa lleva fondo. Buscador: tiene el cursor de texto y la opción activa.',
+    why: 'Botón: el anillo lo pinta la caja con data-[focus-visible] (origen del foco, FocusMonitor). Lista y panel: la opción activa lleva fondo. Buscador: tiene el cursor de texto y la opción activa.',
   },
   'components/popover/popover.ts': {
     count: 1,

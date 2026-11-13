@@ -234,8 +234,8 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
       'rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
       'border-[color:var(--mimi-select-border,var(--mimi-input))]',
       'bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-background))]',
-      'has-[[role=combobox]:focus]:border-ring',
-      'has-[[role=combobox]:focus]:ring-ring-soft',
+      'data-[focus-visible]:border-ring',
+      'data-[focus-visible]:ring-ring-soft',
       'data-[invalid]:border-destructive',
     ]) {
       expect(box('plain').classList).toContain(cls);
