@@ -104,3 +104,21 @@ En verde.
 
 - Los de escribir quedan con `scale: none` y el halo.
 - Los de botón quedan con `scale: 0.975` y el halo; **con «reducir movimiento», `scale: 1`** y el halo.
+
+## 3. Grises malva suave
+
+**Tema (`theme-base.css`):** los 15 grises (fondo, texto, tarjeta, popover, secondary, muted, accent y sus textos, `border`, `input` e `input-background`), en claro y oscuro, llevan el tono 292 de la marca con croma 0,006 (0,003 en los casi blancos y casi negros). La luminosidad no cambia, así que los contrastes tampoco.
+
+**`MIMI_THEME_NEUTRAL`** vuelve a poner todos los grises en croma 0 (antes solo cambiaba fondo, texto, superficies, primario y anillo; ahora también bordes, campos, muted, secondary y accent).
+
+**Pruebas:**
+
+- `gray-tint.spec.ts` (nuevo, 3 casos): los 15 grises de `:root` y `.dark` con tono 292 y la croma que toca; el preset neutro, todo en croma 0.
+- `contrast.spec.ts` (AA en claro y oscuro, con los valores de fábrica): en verde.
+- **ui-core: 1038; docs: 253; CLI: 202**, todo en verde.
+
+**Spec:** la tabla de colores globales (sección 13) tenía aún los valores del tema neutro: ahora tiene los de fábrica (grises malva, primario y anillo de la marca, `info` nuevo, `input-background` e `input-readonly`). La sección 6.1 (tema de marca) explica los grises. Anotado en `correcciones-pendientes.md` (el diseño trae croma 0).
+
+**Playwright** (`/docs/states`, claro y oscuro): los 8 grises leídos del documento tienen el tono 292; el fondo de la página es `oklch(0.985 0.003 292)` en claro y `oklch(0.205 0.006 292)` en oscuro; sin errores de consola. **16 de 16 OK.** Captura: `docs/auto/capturas/2026-11-12/unificacion/paso3-*.png`.
+
+**Bundle:** JS inicial **335,83 kB / 106,59 kB gzip** (sin cambio); CSS global **122,45 kB / 18,18 kB gzip** (antes 122,30 / 18,14: los valores de color son más largos). Sin subir presupuestos.

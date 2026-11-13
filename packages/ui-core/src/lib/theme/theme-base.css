@@ -29,26 +29,29 @@
   /* Texto de énfasis de marca: la única forma permitida de texto violeta. */
   --mimi-brand-text: var(--mimi-brand-600);
 
-  /* Colores: neutros de la marca, #FAFAFA y #171717 */
-  --mimi-background: oklch(0.985 0 0);
-  --mimi-foreground: oklch(0.205 0 0);
-  --mimi-card: oklch(1 0 0);
-  --mimi-card-foreground: oklch(0.205 0 0);
-  --mimi-popover: oklch(1 0 0);
-  --mimi-popover-foreground: oklch(0.205 0 0);
+  /* Colores: neutros de la marca, #FAFAFA y #171717, en «malva suave» (decidido por el usuario el
+     12/11/2026): el tono 292 del violeta con croma 0,006 (0,003 en los casi blancos y casi
+     negros) y la misma luminosidad que los neutros puros, así que los contrastes no cambian
+     (theme/contrast.spec.ts). El neutro puro sigue en MIMI_THEME_NEUTRAL. */
+  --mimi-background: oklch(0.985 0.003 292);
+  --mimi-foreground: oklch(0.205 0.006 292);
+  --mimi-card: oklch(1 0.003 292);
+  --mimi-card-foreground: oklch(0.205 0.006 292);
+  --mimi-popover: oklch(1 0.003 292);
+  --mimi-popover-foreground: oklch(0.205 0.006 292);
   --mimi-primary: var(--mimi-brand-600);
   --mimi-primary-foreground: oklch(0.985 0 0);
-  --mimi-secondary: oklch(0.97 0 0);
-  --mimi-secondary-foreground: oklch(0.205 0 0);
-  --mimi-muted: oklch(0.97 0 0);
-  --mimi-muted-foreground: oklch(0.54 0 0);
-  --mimi-accent: oklch(0.97 0 0);
-  --mimi-accent-foreground: oklch(0.205 0 0);
+  --mimi-secondary: oklch(0.97 0.003 292);
+  --mimi-secondary-foreground: oklch(0.205 0.006 292);
+  --mimi-muted: oklch(0.97 0.003 292);
+  --mimi-muted-foreground: oklch(0.54 0.006 292);
+  --mimi-accent: oklch(0.97 0.003 292);
+  --mimi-accent-foreground: oklch(0.205 0.006 292);
   --mimi-destructive: oklch(0.577 0.245 27.325);
   --mimi-destructive-foreground: oklch(0.985 0 0);
-  --mimi-border: oklch(0.922 0 0);
-  --mimi-input: oklch(0.88 0 0);
-  --mimi-input-background: oklch(1 0 0);
+  --mimi-border: oklch(0.922 0.006 292);
+  --mimi-input: oklch(0.88 0.006 292);
+  --mimi-input-background: oklch(1 0.003 292);
   /* Borde de un campo con el puntero encima (tokens-mimi.css; lo usa Pagination desde la G1.11). */
   --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 30%, var(--mimi-input));
   /* Fondo de un campo de solo lectura (utils/field-styles.ts, 12/11/2026): entre el del campo y
@@ -444,28 +447,29 @@
 }
 
 .dark {
-  /* Neutros de la marca en oscuro: fondo #171717, texto #FAFAFA; las superficies suben (R.0). */
-  --mimi-background: oklch(0.205 0 0);
-  --mimi-foreground: oklch(0.985 0 0);
-  --mimi-card: oklch(0.235 0 0);
-  --mimi-card-foreground: oklch(0.985 0 0);
-  --mimi-popover: oklch(0.26 0 0);
-  --mimi-popover-foreground: oklch(0.985 0 0);
+  /* Neutros de la marca en oscuro: fondo #171717, texto #FAFAFA; las superficies suben (R.0).
+     En «malva suave», como en claro: tono 292, croma 0,006 (0,003 en los casi blancos). */
+  --mimi-background: oklch(0.205 0.006 292);
+  --mimi-foreground: oklch(0.985 0.003 292);
+  --mimi-card: oklch(0.235 0.006 292);
+  --mimi-card-foreground: oklch(0.985 0.003 292);
+  --mimi-popover: oklch(0.26 0.006 292);
+  --mimi-popover-foreground: oklch(0.985 0.003 292);
   /* #A88FFF con texto #171717 (6,86:1); #793EEA sobre #171717 daría 3,15:1: no sirve para texto. */
   --mimi-primary: var(--mimi-brand-400);
   --mimi-primary-foreground: oklch(0.205 0 0);
   --mimi-brand-text: var(--mimi-brand-400);
-  --mimi-secondary: oklch(0.3 0 0);
-  --mimi-secondary-foreground: oklch(0.985 0 0);
-  --mimi-muted: oklch(0.27 0 0);
-  --mimi-muted-foreground: oklch(0.74 0 0);
-  --mimi-accent: oklch(0.3 0 0);
-  --mimi-accent-foreground: oklch(0.985 0 0);
+  --mimi-secondary: oklch(0.3 0.006 292);
+  --mimi-secondary-foreground: oklch(0.985 0.003 292);
+  --mimi-muted: oklch(0.27 0.006 292);
+  --mimi-muted-foreground: oklch(0.74 0.006 292);
+  --mimi-accent: oklch(0.3 0.006 292);
+  --mimi-accent-foreground: oklch(0.985 0.003 292);
   --mimi-destructive: oklch(0.704 0.191 22.216);
   --mimi-destructive-foreground: oklch(0.2 0.04 25);
-  --mimi-border: oklch(1 0 0 / 10%);
-  --mimi-input: oklch(1 0 0 / 15%);
-  --mimi-input-background: oklch(1 0 0 / 4.5%);
+  --mimi-border: oklch(1 0.003 292 / 10%);
+  --mimi-input: oklch(1 0.003 292 / 15%);
+  --mimi-input-background: oklch(1 0.003 292 / 4.5%);
   /* En oscuro, el 30 % del diseño dejaba el borde casi blanco al pasar el ratón (informe del
      usuario, 12/11/2026): el 14 % sube de 15 % a ~27 % de blanco, un paso visible sin destacar. */
   --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 14%, var(--mimi-input));
