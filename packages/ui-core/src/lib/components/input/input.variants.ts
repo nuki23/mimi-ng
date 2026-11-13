@@ -20,6 +20,10 @@ export const inputVariants = cva(
     'border-[length:var(--mimi-input-border-width,1px)] border-[color:var(--mimi-input-border,var(--mimi-input))] bg-[color:var(--mimi-input-bg,var(--mimi-input-background))]',
     'px-[var(--mimi-input-px,var(--mimi-input-padding-x,0.75rem))] font-sans text-[color:var(--mimi-input-fg,var(--mimi-foreground))] mimi-transition',
     'placeholder:text-[color:var(--mimi-input-placeholder,var(--mimi-input-placeholder-color,var(--mimi-muted-foreground)))]',
+    // Hover del borde (spec 13, `--mimi-input-border-hover`): el mismo que la caja de los campos
+    // compuestos (fieldBoxStyles). Con error, el hover no tapa el borde rojo.
+    'not-disabled:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+    'aria-invalid:hover:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
     fieldFocusStyles,
     'focus-visible:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))]',
     'focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)]',

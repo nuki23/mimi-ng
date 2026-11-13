@@ -238,7 +238,9 @@ describe('MimiPassword', () => {
     expect(box.className).toContain('h-12');
     expect(box.className).not.toContain('h-[var(--mimi-input-height');
     expect(box.className).toContain('[&_input::-ms-reveal]:hidden');
-    expect(box.className).toContain('focus-within:ring-3');
+    expect(box.className).toContain(
+      'focus-within:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
+    );
   });
 
   it('textos en español', async () => {

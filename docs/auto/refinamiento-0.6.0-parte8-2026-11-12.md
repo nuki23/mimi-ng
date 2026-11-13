@@ -87,3 +87,34 @@ Encargo del 12/11/2026. El usuario revisó los controles: «cada control de form
 - **Botón +:**
   - en claro, el ícono pasa de `oklch(0.54)` a `oklch(0.205)`, con fondo `oklch(0.97)`;
   - en oscuro, de `oklch(0.74)` a `oklch(0.985)`, con fondo `oklch(0.3)`.
+
+## 3. Password: los mismos bordes que Input
+
+**Causa:** las dos cosas no coincidían por ambos lados.
+
+- **Password:** pintaba su caja con clases a mano (`border border-input`, hover `input-hover`, `ring-3` fijo) en vez de los tokens de Input.
+- **Input y Textarea no tenían hover**, aunque la spec (sección 13, «Input») les da `--mimi-input-border-hover`. Por eso, al pasar el ratón, Password cambiaba y Input no.
+
+**Arreglo:**
+
+- **Password** usa `fieldBoxStyles`, la misma caja que Number Input, con los tokens de Input. El ojo usa `fieldButtonHoverStyles`.
+- **Input y Textarea** ganan el hover del borde de la spec (`not-disabled:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]`). Con error, el hover deja el borde rojo.
+- **Lista de variables CSS del sitio:** `component-tokens.ts` añade `--mimi-input-border-hover`. `component-tokens.spec.ts` toma `--mimi-input-hover` como global del tema.
+
+**Pruebas:**
+
+- `field-borders.spec.ts` (nuevo, 2 casos): Input, Textarea, Password y Number Input llevan el mismo ancho, color y hover del borde, el mismo color de error y el mismo ancho del anillo; con error, el hover no tapa el rojo.
+- `password.spec.ts`: la clase del anillo esperada.
+- Los cuatro componentes y las variables CSS: 14 + 39 en verde.
+
+**Playwright** (claro y oscuro, **6 de 6 OK**): Password y Number Input coinciden con Input en todo.
+
+| Estado                  | Claro                   | Oscuro                  |
+| ----------------------- | ----------------------- | ----------------------- |
+| Borde en reposo         | `oklch(0.88)`           | blanco al 15 %          |
+| Con hover               | `oklab(0.68)`           | blanco al 27 %          |
+| Con foco (teclado)      | `oklch(0.64 0.2 292)`   | `oklch(0.72 0.16 292)`  |
+| Con error y hover       | `oklch(0.577 0.245 27)` | `oklch(0.704 0.191 22)` |
+| Ancho del borde y radio | 1 px y 12 px            | 1 px y 12 px            |
+
+Input muestra el hover y, con error, el hover deja el rojo.

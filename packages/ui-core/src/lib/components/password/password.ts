@@ -16,7 +16,11 @@ import {
 import { MimiInput } from '@/components/ui/input';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
-import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import {
+  buttonFocusStyles,
+  fieldBoxStyles,
+  fieldButtonHoverStyles,
+} from '@/components/ui/utils/control-styles';
 import { MIMI_PASSWORD_TEXT } from './password-texts';
 
 /*
@@ -57,18 +61,16 @@ export function mimiPasswordLevel(
 const BOX_CLASSES = cn(
   'relative flex w-full min-w-0 items-center gap-1.5 font-sans text-foreground mimi-transition',
   'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))] ps-3 pe-1',
-  'border border-input bg-input-background',
-  'not-data-[disabled]:hover:border-input-hover',
-  'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft',
-  'data-[invalid]:border-destructive data-[invalid]:focus-within:border-destructive data-[invalid]:focus-within:ring-destructive-ring',
-  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
+  // Borde, hover, foco, error y deshabilitado: los de Input, con sus tokens (utils/control-styles).
+  fieldBoxStyles,
   // El input del usuario (mimiInput) va sin su caja: la caja es esta. Sin el ojo de Edge.
   '[&_input]:h-full [&_input]:min-w-0 [&_input]:flex-1 [&_input]:rounded-none [&_input]:border-0 [&_input]:bg-transparent [&_input]:p-0 [&_input]:shadow-none',
   '[&_input]:focus-visible:ring-0 [&_input]:disabled:opacity-100 [&_input::-ms-reveal]:hidden',
 );
 
 const TOGGLE_CLASSES = cn(
-  'inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-muted-foreground mimi-transition',
+  'inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 mimi-transition',
+  fieldButtonHoverStyles,
   'size-[var(--mimi-password-toggle-size,32px)] rounded-[var(--mimi-password-toggle-radius,var(--mimi-radius-sm))]',
   '[&_svg]:size-4 [&_svg]:shrink-0',
   'enabled:hover:bg-[color:var(--mimi-password-toggle-hover,var(--mimi-accent))] enabled:hover:text-foreground enabled:active:scale-(--mimi-press-scale-sm)',

@@ -455,6 +455,14 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       description: 'Color del borde.',
     },
     {
+      name: '--mimi-input-border-hover',
+      default: 'input-hover',
+      inherits: '--mimi-input-hover',
+      preset: false,
+      description:
+        'Color del borde al pasar el ratón. Lo usan también Textarea y la caja de Number Input y Password.',
+    },
+    {
       name: '--mimi-input-border-focus',
       default: 'ring',
       inherits: '--mimi-ring',

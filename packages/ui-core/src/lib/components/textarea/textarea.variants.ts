@@ -20,6 +20,9 @@ export const textareaVariants = cva([
   'font-sans text-[length:var(--mimi-input-font-size,0.875rem)] leading-[var(--mimi-textarea-line-height,1.25rem)] text-[color:var(--mimi-input-fg,var(--mimi-foreground))]',
   'resize-y mimi-transition disabled:resize-none',
   'placeholder:text-[color:var(--mimi-input-placeholder,var(--mimi-input-placeholder-color,var(--mimi-muted-foreground)))]',
+  // Hover del borde como Input (spec 13, `--mimi-input-border-hover`).
+  'not-disabled:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+  'aria-invalid:hover:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
   fieldFocusStyles,
   'focus-visible:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))]',
   'focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)]',

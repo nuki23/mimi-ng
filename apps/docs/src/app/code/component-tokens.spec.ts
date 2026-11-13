@@ -62,6 +62,8 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
  */
 const GLOBALS = new Set([
   '--mimi-input-background',
+  // Global del tema (borde de los campos con hover): respaldo de --mimi-input-border-hover.
+  '--mimi-input-hover',
   '--mimi-switch-off',
   '--mimi-card-foreground',
   // Global del Grupo 2 (G2.0b) que el chip lee como respaldo.
