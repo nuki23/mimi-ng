@@ -46,7 +46,11 @@ Los 18 controles de formulario (y Tree) dibujan igual el hover, el foco, el clic
 - **Hover en Input y Textarea** (no tenían) y en Select; el borde se oscurece al pasar el ratón.
 - **Hover más suave en oscuro:** `--mimi-input-hover` mezcla el 14 % de `foreground` (antes, 30 %; el borde quedaba casi blanco). En claro no cambia.
 - **Grises «malva suave»:** fondo, texto, tarjeta, popover, `secondary`, `muted`, `accent`, bordes y campos llevan el tono 292 de la marca con croma 0,006 (0,003 en los casi blancos y casi negros), con la misma luminosidad: el contraste no cambia (AA en claro y oscuro). `MIMI_THEME_NEUTRAL` vuelve al neutro puro.
-- **Profundidad al hacer clic:** a todos les crece el halo (`ring-soft`), como a Button; **se hunden solo los que funcionan como botón** (Select, Date Picker, Date Range, Color Picker, File Upload, Checkbox, Switch, Toggle Group, Button); los de escribir no. Con «reducir movimiento», nada se hunde.
+- **Profundidad al hacer clic: todos se hunden** y les crece el halo (`ring-soft`), como a Button, también los de escribir (Input, Textarea, Combobox, Tags Input, Number Input, Password, Input Mask). En un campo compuesto se hunde la caja entera, también al hacer clic en el texto (Number Input, en la zona del número y no solo en − y +); los botones pequeños de dentro (− y +, el ojo de Password, la X del Combobox) ya no se hunden aparte. Con «reducir movimiento», nada se hunde.
+- **Abiertos, con el borde y el anillo de la marca:** Select, Date Picker, Date Range y Color Picker los mantienen mientras su panel está abierto, aunque se haya abierto con el ratón, como Combobox. El botón que abre un Dropdown Menu muestra el contorno del foco mientras el menú está abierto.
+- **La X de limpiar de Select y Combobox** ya no se queda visible después de elegir con el ratón: se ve con el ratón encima, con el foco que llegó por teclado o con el panel abierto (en pantallas táctiles, mientras haya valor).
+- **Tags Input en solo lectura:** las etiquetas toman el fondo del campo y un borde con contraste de 3:1 o más (token nuevo `--mimi-tags-chip-readonly-border`); antes casi no se distinguían del fondo.
+- **Hover en Checkbox, Switch y Toggle Group**, con el ratón sobre todo el control (también la etiqueta): el borde de la casilla se oscurece (marcada, el relleno se intensifica), la pista del interruptor se intensifica y la opción no elegida del grupo toma un fondo suave.
 - **Solo lectura con aspecto propio y común:** fondo `--mimi-input-readonly` (nuevo; `inputReadonly` en el preset), sin hover ni clic, y la caja marcada con `data-readonly` o `aria-readonly`. File Upload en solo lectura se titula «Archivos (solo lectura)» (texto nuevo opcional `readonly` de `MimiFileUploadText`; en inglés, «Files (read-only)»).
 - **Error unificado:** borde `--mimi-input-error` con el halo solo con el foco. **Switch gana el error** (un filo rojo de 1 px); Checkbox lo marca también cuando está marcada; Input OTP pone el halo solo en la casilla con el foco (antes, en todas).
 - **Deshabilitado con el token** `--mimi-disabled-opacity` en todos (antes, `opacity-50` fijo en Button, Checkbox, Switch, Input, Textarea y las opciones de las listas). **Tree deshabilitado entero** ahora se atenúa (antes no se veía distinto).
@@ -57,13 +61,14 @@ Los 18 controles de formulario (y Tree) dibujan igual el hover, el foco, el clic
 
 ### Arreglos
 
+- **Paneles dentro de un contenedor con scroll propio** (un `overflow: auto` cualquiera): el panel de Select, Combobox, Date Picker, Date Range, Color Picker, Dropdown Menu, Context Menu (abierto con el teclado), Popover y Tooltip sigue a su campo con el scroll y se cierra si el campo sale de la vista. Antes se quedaba fijo mientras el contenido se movía. Lo hace `utils/overlay` (la directiva `MimiOverlayFollow`), que ya instalaban.
 - Tabs y Toggle Group en oscuro, y Skeleton; efecto de clic uniforme (`--mimi-press-scale`).
 - Los Blocks con `[loading]` devuelven el foco al terminar.
 - Select: el chevron y el spinner abren el panel; Combobox `readonly` no deja quitar chips ni vaciar con Escape; Password vuelve a ser editable al quitar `readonly`; Form Field quita de `aria-describedby` lo que ya no existe; el Combobox múltiple mide lo mismo que los demás controles en `sm`.
 
 ### Documentación
 
-- Páginas nuevas o ampliadas: **Tamaños**, **Estados** (Fundamentos: cada control de formulario en los siete estados, en claro y oscuro), **Checkbox** (separada de Switch), pestañas «Con formularios» (Signal Forms, Reactive y plantilla) en 17 páginas, ejemplos de solo lectura y de `<mimi-option>`.
+- Páginas nuevas o ampliadas: **Tamaños**, **Estados** (Fundamentos: cada control de formulario en los siete estados, en claro y oscuro, con Password a la vista en una fila aparte y un ejemplo de paneles en un contenedor con scroll), **Checkbox** (separada de Switch), **Textarea** (separada de Input), pestañas «Con formularios» (Signal Forms, Reactive y plantilla) en 18 páginas, ejemplos de solo lectura y de `<mimi-option>`.
 - **Requisito del sitio (no de la librería):** el sitio de documentación usa `@scope` de CSS (Chrome 118, Safari 17.4, Firefox 128). Los componentes que copia la CLI no lo usan.
 
 ### No incluido en esta versión

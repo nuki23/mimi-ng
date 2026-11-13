@@ -226,4 +226,77 @@ Todo en `oklch(L C 292)`. El resto (`foreground`, `popover`, `secondary`, `accen
 
 **Pendiente del usuario:** elegir entre neutro, malva suave y malva medio.
 
-**Bundle** (después de los puntos 2 a 5): JS inicial **334,89 kB / 106,23 kB gzip** (sin cambio: `overlay.ts` ahora importa el CDK en ejecución, pero solo lo usan componentes que ya lo cargaban); CSS global **124,86 kB / 18,39 kB gzip** (desde el punto 1, +2,16 kB crudo, +0,22 kB gzip). Pruebas: ui-core 1058, docs 253, CLI 202.
+## CHANGELOG, diseño y cierre
+
+- **CHANGELOG, «0.6.0 (por publicar)»:**
+  - la profundidad pasa a B;
+  - se suman: el borde y el anillo con el panel abierto, la X de limpiar, Tags Input en solo lectura (con su token nuevo) y el hover de Checkbox, Switch y Toggle Group;
+  - en «Arreglos», los paneles en un contenedor con scroll;
+  - en «Documentación», Textarea con su página, la fila de Password a la vista, el ejemplo de scroll y «Con formularios» en 18 páginas.
+- **`docs/design/correcciones-pendientes.md`:** apartado «Revisión del sitio (13/11/2026)», con lo que no tiene diseño o se aparta de él (profundidad B, panel abierto, X, Tags en solo lectura, hover de los de elegir). En la nota de los grises, que el usuario no ve el cambio y dónde están las capturas.
+- **Spec:** profundidad B en «`field-styles.ts`», paneles en un contenedor con scroll (`utils/overlay.ts`) y el token de Tags Input.
+
+### Bundle
+
+| Momento                      | JS inicial (crudo / gzip) | CSS global (crudo / gzip) |
+| ---------------------------- | ------------------------- | ------------------------- |
+| Antes de esta tanda          | 334,89 / 106,23 kB        | 122,39 / 18,15 kB         |
+| Después del punto 1          | 334,89 / 106,23 kB        | 122,70 / 18,17 kB         |
+| Después de los puntos 2 a 5  | 334,89 / 106,23 kB        | 124,86 / 18,39 kB         |
+| **Al final** (puntos 1 a 11) | **334,89 / 106,23 kB**    | **130,77 / 18,69 kB**     |
+
+- El JS inicial no cambia. `overlay.ts` ahora importa el CDK en ejecución, pero solo lo usan componentes que ya lo cargaban.
+- El CSS global sube **+8,38 kB crudo y +0,54 kB gzip**, por las variantes nuevas de los componentes que van en el CSS global: profundidad, panel abierto, hover de Checkbox, Switch y Toggle Group, la X y las etiquetas de solo lectura.
+- Presupuestos: `styles` avisa en 180 kB; el inicial (JS + CSS, unos 466 kB), en 525 kB. **No hace falta subir ninguno.**
+
+### Verificación final
+
+| Punto                                       | Prueba que falla antes                  | Playwright               |
+| ------------------------------------------- | --------------------------------------- | ------------------------ |
+| 1. Profundidad B                            | `field-depth.spec.ts` (3 de 4 fallaban) | 72/72 (clic real), 36/36 |
+| 2. Abierto con el borde y el anillo         | `field-open.spec.ts` (3 de 3)           | 28/28                    |
+| 3. La X de Select y Combobox                | `clear-visibility.spec.ts` (4 de 4)     | 34/34                    |
+| 4. Tags Input en solo lectura               | `tags-input.spec.ts`, caso nuevo        | 10/10 (4,79:1 y 6,7:1)   |
+| 5. Paneles en un contenedor con scroll      | `overlay-scroll.spec.ts` (el de Select) | 32/32                    |
+| 6. Input y Textarea, dos páginas            | `input-textarea-split.spec.ts` (3 de 3) | 26/26                    |
+| 7. Hover de Checkbox, Switch y Toggle Group | `choice-hover.spec.ts` (3 de 3)         | 24/24                    |
+| 8. Password oculto y fila «mostrar»         | `states-page.spec.ts`, caso nuevo       | 30/30                    |
+| 9. Sin foco al cargar                       | no se reprodujo; prueba que lo vigila   | 8/8                      |
+| 10. Input OTP con Tab                       | ya estaba bien: sin cambios             | 12/12                    |
+| 11. Grises lado a lado                      | (capturas, el tema no cambia)           | 6 imágenes               |
+
+- `pnpm test`: **ui-core 1061, docs 260, CLI 202**, en verde.
+- `pnpm build` en verde.
+- `pnpm format:check`: «All matched files use Prettier code style!».
+- Servidor de desarrollo cerrado: puerto 4280 libre, con `netstat`. Herramientas de Playwright y registros borrados del directorio temporal.
+
+### Alertas para el revisor
+
+- **Profundidad B, la caja entera:** en Number Input, Password y Combobox, los botones de dentro (− y +, el ojo, la X) ya no se hunden aparte; se hunde la caja. La X del Select está fuera de su botón y conserva su hundimiento pequeño.
+- **El disparador de un Dropdown Menu** lleva el contorno de Button mientras el menú está abierto. Es una clase de la directiva `mimiDropdownMenuTrigger`, que se suma a las del botón; funciona con cualquier botón, no solo con `mimiBtn`.
+- **Paneles con scroll:** ahora también se cierran cuando el campo sale de la pantalla con el scroll de la página. Antes el CDK los recolocaba fuera de la vista. Context Menu abierto con el puntero sigue igual: se cerraba con el scroll de la ventana, y en un contenedor con scroll no sigue al punto.
+- **`mimiInView` da por visible un elemento sin caja** (0 × 0): sin maquetar no se sabe, y así no se cierran paneles en jsdom.
+- **Punto 9 no se reprodujo.** Queda una prueba que lo vigila; si el usuario lo ve otra vez, que diga qué control y en qué navegador.
+- **Punto 10 sin cambios:** el anillo de OTP ya era el de Input.
+- **Textarea:** su tabla de la API suma `size`, que la página compartida no tenía.
+- **NO COMPROBADO (manual, usuario):**
+  - una mirada propia en el navegador a la profundidad B, que en los campos de escribir puede sentirse distinta al escribir;
+  - los paneles en un contenedor con scroll con rueda y con el dedo, en un teléfono;
+  - la elección de los grises.
+- **No se subió la versión ni se publicó nada.**
+
+### Archivos
+
+- **ui-core:**
+  - `utils/field-styles.ts` y `utils/control-styles.ts`; `utils/overlay.ts`;
+  - los componentes: `select`, `combobox`, `popover`, `dropdown-menu`, `context-menu`, `tooltip`, `number-input`, `password`, `tags-input`, `checkbox`, `switch`, `toggle-group`, `slider` (comentario) y `date-picker.spec.ts`;
+  - pruebas nuevas: `field-open.spec.ts`, `clear-visibility.spec.ts`, `choice-hover.spec.ts` y `utils/overlay-scroll.spec.ts`;
+  - pruebas cambiadas: `field-depth.spec.ts` (reescrita), `clear-button.spec.ts` y `tags-input.spec.ts`.
+- **Sitio:**
+  - `pages/docs/states/` (página, plantilla y prueba);
+  - `pages/docs/components/input/` (página y prueba);
+  - `pages/docs/components/textarea/` (nueva, con los ejemplos movidos);
+  - `docs.routes.ts`, `layout/docs-nav.ts` y `blocks/settings-01-page.ts`;
+  - `code/forms-snippets.ts`, `code/forms-tabs.spec.ts` y `code/component-tokens.ts`;
+  - `pages/docs/input-textarea-split.spec.ts` (nueva).
+- **Docs:** `CHANGELOG.md`, `docs/spec.md`, `docs/design/correcciones-pendientes.md`, `docs/auto/decisiones-por-defecto.md`, `docs/plan/controles/inventario.md` y este informe. Capturas: `docs/auto/capturas/2026-11-13/` (Tags en solo lectura, OTP con Tab y `grises/`).
