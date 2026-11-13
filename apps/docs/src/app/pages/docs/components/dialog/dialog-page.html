@@ -1,10 +1,14 @@
 <article class="flex flex-col gap-5">
   <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Dialog</h1>
   <p class="text-lg text-pretty text-muted-foreground">
-    Ventana modal centrada sobre un fondo oscurecido: para editar algo o pedir una decisión sin
-    salir de la página. El foco queda dentro, el resto de la página no se puede usar y siempre hay
-    una X para cerrar. Se usa en la plantilla o desde un servicio.
+    Ventana modal para editar algo o pedir una decisión sin salir de la página. Abre un componente
+    tuyo, le pasa datos y te devuelve su resultado.
   </p>
+
+  <!-- El ejemplo principal: el servicio abre un componente real y la página muestra el resultado. -->
+  <app-code-preview [code]="source.editUser" [files]="editUserFiles">
+    <app-dialog-edit-user-example />
+  </app-code-preview>
 
   <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
     Instalación
@@ -21,17 +25,43 @@
   <app-code-block [code]="depsCss" lang="css" />
 
   <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usageService" lang="typescript" />
   <p class="text-pretty">
-    <strong>¿Quieres abrir un componente tuyo desde el código y recibir su resultado?</strong> Es
-    <a class="font-medium underline underline-offset-4" href="#usage-service">el servicio</a>: tu
-    componente se abre dentro del panel, sin ningún diseño impuesto (la cabecera, el cuerpo y el pie
-    son piezas opcionales), con tamaño, relleno y clases a tu gusto. La forma en la plantilla,
-    abajo, es para los casos pequeños.
+    Tu componente se abre dentro del panel. La cabecera, el cuerpo y el pie (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >mimi-dialog-header</code
+    >, <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">-body</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">-footer</code>) son
+    piezas opcionales.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">afterClosed()</code>
+    entrega el resultado de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ref.close()</code>, o
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">undefined</code> si se
+    canceló.
   </p>
-  <h3 id="usage-template" class="mt-2 text-lg font-semibold tracking-[-0.01em]">En la plantilla</h3>
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="options" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tamaños y opciones</h3>
   <p class="text-pretty">
-    Para la mayoría de los casos: el contenido vive en la misma plantilla y usa los signals y los
-    formularios de tu componente.
+    El mismo contenido con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">size</code> (sm 360px,
+    md 420px, lg 560px),
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">maxWidth</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">panelClass</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">chrome: 'none'</code>
+    (sin la X ni el relleno del panel).
+  </p>
+  <app-code-preview [code]="source.options">
+    <app-dialog-options-example />
+  </app-code-preview>
+
+  <h3 id="template" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    En la plantilla: <code class="font-mono text-[0.9em]">&lt;mimi-dialog&gt;</code>
+  </h3>
+  <p class="text-pretty">
+    Para casos pequeños, el contenido puede vivir en tu propia plantilla y usar tus signals y tus
+    formularios. Los ejemplos que siguen usan esta forma.
   </p>
   <app-code-block [code]="usageTemplate" lang="angular-ts" />
   <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
@@ -44,21 +74,6 @@
       </li>
     }
   </ul>
-  <p class="text-pretty">
-    Ninguna pieza es obligatoria, pero sin
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiDialogTitle</code>
-    hay que dar un
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code>: en
-    modo desarrollo, un diálogo sin nombre avisa en la consola.
-  </p>
-
-  <h3 id="usage-service" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con el servicio</h3>
-  <p class="text-pretty">
-    Para abrir un componente desde el código, pasarle datos y esperar su resultado.
-  </p>
-  <app-code-block [code]="usageService" lang="typescript" />
-
-  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
 
   <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
   <p class="text-pretty">
@@ -108,19 +123,6 @@
     <app-dialog-long-content-example />
   </app-code-preview>
 
-  <h3 id="service" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con datos y resultado</h3>
-  <p class="text-pretty">
-    El servicio abre un componente, le pasa
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data</code> y
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">afterClosed()</code>
-    entrega el resultado:
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">undefined</code> si se
-    canceló.
-  </p>
-  <app-code-preview [code]="source.service">
-    <app-dialog-service-example />
-  </app-code-preview>
-
   <h3 id="from-menu" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Desde un menú</h3>
   <p class="text-pretty">
     Sin
@@ -166,6 +168,16 @@
     <li>
       Con un diálogo encima de otro, los lectores de pantalla solo ven el de arriba; al cerrarlo,
       vuelve el de abajo con el foco.
+    </li>
+    <li>
+      Sin
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >mimiDialogTitle</code
+      >
+      hay que dar un
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">aria-label</code>
+      (o <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ariaLabel</code>
+      al abrirlo): en desarrollo, un diálogo sin nombre avisa en la consola.
     </li>
     <li>La página de detrás no se desplaza mientras el diálogo está abierto.</li>
     <li>Con movimiento reducido, sin animación.</li>

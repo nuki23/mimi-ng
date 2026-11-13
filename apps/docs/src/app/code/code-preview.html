@@ -1,6 +1,6 @@
 <div class="relative overflow-hidden rounded-card border bg-card shadow-card">
   <!-- Antes de las pestañas en el DOM (orden de Tab: Copiar, pestañas, panel); se ve a la derecha. -->
-  <app-copy-button class="absolute end-2 top-3 z-10" [text]="code()" [withLabel]="true" />
+  <app-copy-button class="absolute end-2 top-3 z-10" [text]="copyText()" [withLabel]="true" />
 
   <mimi-tabs
     variant="pill"
@@ -33,15 +33,36 @@
       Código
     </ng-template>
     <ng-template mimiTab="code" label="Código">
-      <app-code-block
-        class="max-h-[480px] overflow-y-auto"
-        [code]="code()"
-        [lang]="lang()"
-        [bordered]="false"
-        [copyable]="false"
-        [roomy]="true"
-        label="Código del ejemplo"
-      />
+      @if (files().length) {
+        <div class="max-h-[640px] overflow-y-auto">
+          @for (file of files(); track file.name) {
+            <p
+              data-slot="file-name"
+              class="border-b px-4 py-2 font-mono text-xs text-muted-foreground [&:not(:first-child)]:border-t"
+            >
+              {{ file.name }}
+            </p>
+            <app-code-block
+              [code]="file.code"
+              [lang]="lang()"
+              [bordered]="false"
+              [copyable]="false"
+              [roomy]="true"
+              [label]="file.name"
+            />
+          }
+        </div>
+      } @else {
+        <app-code-block
+          class="max-h-[480px] overflow-y-auto"
+          [code]="code()"
+          [lang]="lang()"
+          [bordered]="false"
+          [copyable]="false"
+          [roomy]="true"
+          label="Código del ejemplo"
+        />
+      }
     </ng-template>
   </mimi-tabs>
 </div>

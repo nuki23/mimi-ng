@@ -110,4 +110,38 @@ describe('CodePreview', () => {
     expect(tabs[1].getAttribute('aria-selected')).toBe('true');
     expect(document.activeElement).toBe(tabs[1]);
   });
+
+  it('con files, la pestaña Código muestra cada archivo con su nombre y Copiar los copia todos', async () => {
+    @Component({
+      imports: [CodePreview],
+      template: `<app-code-preview [code]="files[0].code" [files]="files"
+        ><p>Demo</p></app-code-preview
+      >`,
+    })
+    class FilesHost {
+      files = [
+        { name: 'opener.ts', code: 'export class Opener {}' },
+        { name: 'dialog.ts', code: 'export class TheDialog {}' },
+      ];
+    }
+    const fixture = TestBed.createComponent(FilesHost);
+    document.body.appendChild(fixture.nativeElement);
+    await settle(fixture);
+    const el = fixture.nativeElement as HTMLElement;
+    el.querySelectorAll<HTMLButtonElement>('[role="tab"]')[1].click();
+    await settle(fixture);
+    const names = Array.from(el.querySelectorAll('[data-slot="file-name"]')).map((n) =>
+      n.textContent!.trim(),
+    );
+    expect(names).toEqual(['opener.ts', 'dialog.ts']);
+    const code = Array.from(el.querySelectorAll('[role="tabpanel"] pre')).map((p) => p.textContent);
+    expect(code.join('\n')).toContain('export class Opener {}');
+    expect(code.join('\n')).toContain('export class TheDialog {}');
+    const preview = fixture.debugElement.children[0].componentInstance as unknown as {
+      copyText(): string;
+    };
+    expect(preview.copyText()).toBe(
+      '// opener.ts\nexport class Opener {}\n\n// dialog.ts\nexport class TheDialog {}',
+    );
+  });
 });

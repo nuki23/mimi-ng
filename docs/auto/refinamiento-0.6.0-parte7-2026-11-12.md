@@ -111,3 +111,59 @@ En verde. Con la suite completa de ui-core: 1017 pruebas, 1016 en verde. La que 
   - `toast-page.spec.ts`: 8 ejemplos; los tres botones y el código con `size`.
   - `home-page.spec.ts`: la tarjeta tiene los tres botones y cada uno crea un aviso con su `data-size`.
 - **Playwright** (claro y oscuro, en la página y en la portada, **6 de 6 OK, sin errores de consola**): los tres avisos aparecen y crecen. Alto en px: sm 57, md 68, lg 84.
+
+## A4. Dialog: la página empieza con el servicio
+
+**Orden nuevo de la página:**
+
+1. Título y una frase.
+2. **El ejemplo principal**, antes de Instalación: «Editar usuario». El botón abre `EditUserDialog` (un componente real) con `inputs: { user }`. El diálogo edita el nombre (Input) y el rol (Select con `<mimi-option>`) y devuelve el usuario con `ref.close()`. La página lo muestra («Ana T. Ruiz · Admin», `resultado: guardado`). Con Escape, `resultado: cancelado`.
+   - El código va en **dos archivos cortos**: `dialog-edit-user.example.ts` (quien abre, 39 líneas) y `edit-user-dialog.ts` (el componente, 51 líneas).
+3. Instalación.
+4. Uso: solo el servicio, en 10 líneas.
+5. Ejemplos:
+   - «**Tamaños y opciones**» (`dialog-options.example.ts`): `size` sm, md y lg, `maxWidth` (pide 800 px y lo limita a 640), `panelClass` y `chrome: 'none'`, con el mismo contenido;
+   - «**En la plantilla: `<mimi-dialog>`**» va al final, con su código, la lista de piezas y los ejemplos declarativos de antes (Básico, Formulario, Sin cierre, Contenido largo, Desde un menú y Personalizado);
+   - Teclado y accesibilidad.
+6. API.
+
+**Qué más cambió:**
+
+- Se quitó `dialog-service.example.ts` (renombrar un proyecto con `data`): lo sustituye el ejemplo principal.
+- La nota «sin `mimiDialogTitle`, `aria-label`» pasó a «Teclado y accesibilidad».
+- **CodePreview** gana una entrada opcional, `files`: la pestaña Código muestra cada archivo con su nombre, y Copiar los copia todos con `// nombre`. Sin `files`, nada cambia.
+
+**Pruebas:**
+
+- `dialog-page.spec.ts`:
+  - 8 ejemplos;
+  - el primero es el del servicio y va antes de `#installation`;
+  - «Tamaños y opciones» va antes de «En la plantilla»;
+  - prueba nueva: abre el diálogo, el campo trae «Ana Torres», guarda «Ana T. Ruiz» y la página muestra el resultado.
+- `code-preview.spec.ts`: el modo de varios archivos, con los nombres, el código y el texto de Copiar.
+
+**Playwright** (claro y oscuro, **16 de 16 OK, sin errores de consola**):
+
+- el orden de la página (demo < Instalación < opciones < `<mimi-dialog>` < API);
+- el diálogo recibe el usuario;
+- la X dice «Cerrar»;
+- guardar con el rol Admin devuelve el resultado y la página lo muestra;
+- Escape cancela;
+- el código va en dos archivos;
+- anchos de 360, 420 y 560 px por `size`, 640 px con `maxWidth`;
+- `chrome: 'none'` sin X.
+
+Fallo encontrado por Playwright y arreglado antes del commit: con `width: '100%'`, el panel medía 384 px, porque el contenedor se ajusta al contenido. El ejemplo pide 800 px y lo limita con `maxWidth`.
+
+**Nota:** durante las ediciones, el servidor de desarrollo se quedó con una compilación intermedia con errores (el HTML ya estaba bien). Se reinició y la revisión se repitió entera.
+
+## Verificación de la Parte A
+
+- **`pnpm build`** en verde.
+  - **JS inicial:** **334,87 kB crudo / 106,23 kB gzip**, igual que antes de la tanda. La portada y las páginas son rutas diferidas.
+  - **CSS global:** **112,44 kB / 17,27 kB gzip** (antes, 111,56 / 17,13): **+0,88 kB crudo, +0,14 kB gzip**. Vienen de:
+    - las variantes de la X de Select (`group-hover`, `group-focus-within`, `group-data-[state=open]` y `[@media(hover:none)]`, para la X y el chevron);
+    - la tarjeta de avisos de la portada.
+  - No se subió ningún presupuesto.
+- **Pruebas en verde:** docs **249** (antes, 246), ui-core **1019** (antes, 1007), CLI **202**.
+- **`pnpm format:check`** en verde.
