@@ -146,6 +146,16 @@ export const FORMS_SPECS: Record<string, FormsSpec> = {
     markup: '<input mimiInput type="email" {{attrs}} />',
     message: 'Escribe tu correo.',
   },
+  textarea: {
+    label: 'Comentario',
+    field: 'comment',
+    init: "''",
+    type: 'string',
+    imports: ['MimiTextarea'],
+    path: 'textarea',
+    markup: '<textarea mimiTextarea rows="3" {{attrs}}></textarea>',
+    message: 'Escribe un comentario.',
+  },
   select: {
     label: 'Rol',
     field: 'role',

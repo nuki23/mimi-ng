@@ -105,4 +105,23 @@ El registro de la CLI no cambia: todos ya pedían `utils/overlay`.
 - El scroll de la página sigue moviendo el panel con ella (669 → 609 con 60 px).
 - Sin errores de consola.
 
+## 6. Input y Textarea, dos páginas
+
+Como se hizo con Switch y Checkbox:
+
+- **Textarea**, página nueva en `/docs/components/textarea`: instalación, uso, sus dos ejemplos (movidos con `git mv` desde `input/examples/`), «Con formularios» (entrada nueva `textarea` en `FORMS_SPECS`: «Comentario» con `rows="3"`), API y variables CSS. La tabla de la API suma **`size`**, que Textarea tiene (por `MimiSized`) y la página compartida no decía.
+- **Input:** solo Input. El texto enlaza a Textarea. «En fila» se queda (muestra Input, Textarea y Button alineados).
+- **Menú:** «Input» y «Textarea» (antes, «Input y Textarea»). **Rutas:** `components/input` («Input · Mimi») y `components/textarea` («Textarea · Mimi»).
+- **Enlaces:** el Block Settings 01 enlaza `textarea` a su página.
+
+**Prueba que falla antes:** `input-textarea-split.spec.ts` (nuevo, 3 casos: rutas y títulos, menú, enlaces de los Blocks). Falló en los 3. También: `textarea-page.spec.ts` nuevo (sus 2 ejemplos, sin Input, con «Con formularios»), `input-page.spec.ts` con 9 ejemplos y un solo instalador, y `forms-tabs.spec.ts` con 18 fragmentos. Docs: 258 en verde.
+
+**Playwright** (`pages.mjs`, claro y oscuro): **26 de 26 OK**.
+
+- Títulos y h1 de las dos páginas; el menú con las dos entradas y sin la de antes.
+- El enlace de Input lleva a Textarea, y la entrada del menú queda marcada.
+- La ruta nueva carga directa; Textarea con sus ejemplos, sin Input y con «Con formularios».
+- Settings 01 enlaza a Textarea.
+- Sin errores de consola.
+
 **Bundle** (después de los puntos 2 a 5): JS inicial **334,89 kB / 106,23 kB gzip** (sin cambio: `overlay.ts` ahora importa el CDK en ejecución, pero solo lo usan componentes que ya lo cargaban); CSS global **124,86 kB / 18,39 kB gzip** (desde el punto 1, +2,16 kB crudo, +0,22 kB gzip). Pruebas: ui-core 1058, docs 253, CLI 202.

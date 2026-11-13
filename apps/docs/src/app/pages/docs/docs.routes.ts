@@ -44,8 +44,13 @@ export const DOCS_ROUTES: Routes = [
   },
   {
     path: 'components/input',
-    title: 'Input y Textarea · Mimi',
+    title: 'Input · Mimi',
     loadComponent: () => import('./components/input/input-page').then((m) => m.InputPage),
+  },
+  {
+    path: 'components/textarea',
+    title: 'Textarea · Mimi',
+    loadComponent: () => import('./components/textarea/textarea-page').then((m) => m.TextareaPage),
   },
   {
     path: 'components/badge',

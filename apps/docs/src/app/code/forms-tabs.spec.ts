@@ -5,7 +5,8 @@ import { HighlighterService } from './highlighter.service';
 
 describe('Con formularios (R.13)', () => {
   it('hay un fragmento por componente y por tipo de formulario, cada uno con lo suyo', () => {
-    expect(Object.keys(FORMS_SPECS).length).toBe(17);
+    // 18: Textarea con su página propia desde el 13/11/2026.
+    expect(Object.keys(FORMS_SPECS).length).toBe(18);
     for (const [key, spec] of Object.entries(FORMS_SPECS)) {
       const signal = formsSnippet(spec, 'signal');
       const reactive = formsSnippet(spec, 'reactive');

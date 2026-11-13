@@ -38,7 +38,8 @@ export const DOCS_NAV: DocsNavSection[] = [
     title: 'Componentes',
     items: [
       { title: 'Button', path: '/docs/components/button', status: 'ready' },
-      { title: 'Input y Textarea', path: '/docs/components/input', status: 'ready' },
+      { title: 'Input', path: '/docs/components/input', status: 'ready' },
+      { title: 'Textarea', path: '/docs/components/textarea', status: 'ready' },
       { title: 'FormField', path: '/docs/components/form-field', status: 'ready' },
       { title: 'Card', path: '/docs/components/card', status: 'ready' },
       { title: 'Badge', path: '/docs/components/badge', status: 'ready' },
