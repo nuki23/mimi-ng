@@ -105,7 +105,7 @@ const ITEM_CLASSES = cn(
   '[&_svg]:size-4 [&_svg]:shrink-0',
   // Hover y clic, no en solo lectura (el grupo lleva data-readonly).
   'mimi-transition enabled:not-in-data-readonly:hover:text-[color:var(--mimi-toggle-group-active-fg,var(--mimi-foreground))]',
-  // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad A).
+  // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad B).
   'enabled:not-in-data-readonly:active:scale-(--mimi-press-scale-sm) enabled:not-in-data-readonly:active:ring-3 enabled:not-in-data-readonly:active:ring-ring-soft',
   'disabled:cursor-not-allowed in-data-readonly:cursor-default',
   buttonFocusStyles,

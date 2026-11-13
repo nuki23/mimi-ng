@@ -29,7 +29,7 @@ let nextId = 0;
  */
 export const MIMI_CHECKBOX_BOX_STYLES = cn(
   'inline-flex size-[var(--mimi-checkbox-s,var(--mimi-checkbox-size,1rem))] shrink-0 items-center justify-center rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))] border border-[color:var(--mimi-checkbox-border,var(--mimi-input))] bg-input-background text-[color:var(--mimi-checkbox-check,var(--mimi-primary-foreground))]',
-  // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad A).
+  // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad B).
   'mimi-transition',
   choicePressStyles,
   'data-[state=checked]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:shadow-primary',

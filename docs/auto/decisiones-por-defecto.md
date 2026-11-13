@@ -157,10 +157,17 @@ Pendientes de revisión del usuario. Detalle en `docs/auto/refinamiento-0.6.0-20
 
 Elegidas por el usuario en la página `/docs/states` (octava tanda; inventario en `docs/plan/controles/inventario.md`, informe en `docs/auto/refinamiento-0.6.0-parte9-2026-11-12.md`). Base: «Decidido por el usuario». Ninguna es una RUPTURA de API; todas son cambios visibles.
 
-- **Profundidad al hacer clic: A.** A todos los controles les crece el halo (`ring-soft`), como a Button. Se hunden (`--mimi-press-scale`, que es 1 con «reducir movimiento») solo los que funcionan como botón: Select, Date Picker, Date Range, Color Picker, File Upload, Checkbox, Switch, Toggle Group y Button. Los de escribir no se hunden. Alternativa descartada: B, todos se hunden.
+- **Profundidad al hacer clic: A** (sustituida por la B el 13/11/2026, ver arriba). A todos los controles les crece el halo (`ring-soft`), como a Button. Se hunden (`--mimi-press-scale`, que es 1 con «reducir movimiento») solo los que funcionan como botón: Select, Date Picker, Date Range, Color Picker, File Upload, Checkbox, Switch, Toggle Group y Button. Los de escribir no se hunden. Alternativa descartada: B, todos se hunden.
 - **Grises: malva suave.** Los neutros del tema llevan el tono 292 del violeta con croma 0,006 (la mitad en los casi blancos y casi negros), la misma luminosidad y los contrastes AA. Alternativas descartadas: neutro puro (el de antes) y malva medio (croma 0,014).
 - **Tree: fondo `primary-subtle`, texto `primary` y anillo solo para el foco de teclado.** Alternativa descartada: el actual, con fondo `primary` sólido y texto blanco.
 - **`info` (azul) pasa al violeta de la marca donde significa selección, arrastre o acento:** Toolbar (hover y herramienta activa), File Upload al arrastrar, Data Table (fila elegida, filtro activo e insignia de selección), la fila «Crear» y el contador de Tabs. Se queda solo en los avisos informativos (el tono `info` de Toast, Badge, Button, Progress y Command, y el ícono de Confirm).
+
+## Decididas por el usuario: revisión del sitio (13/11/2026)
+
+El usuario revisó el sitio y `/docs/states` después de la unificación (informe en `docs/auto/refinamiento-0.6.0-parte10-2026-11-13.md`). Base: «Decidido por el usuario».
+
+- **Profundidad al hacer clic: B (cambia la A del 12/11/2026).** Todos los controles se hunden al hacer clic, también los de escribir (Input, Textarea, Combobox, Tags Input, Number Input, Password, Input Mask), con el mismo efecto que Button: hundimiento (`--mimi-press-scale`) y halo que crece. Con «reducir movimiento», nada se hunde y el halo se queda.
+- **Grises:** el tema se queda en malva suave hasta que el usuario elija; se le dejan capturas lado a lado (neutro, malva suave y malva medio) en el informe.
 
 ## Decididas por el usuario: refinamiento (09/11/2026)
 

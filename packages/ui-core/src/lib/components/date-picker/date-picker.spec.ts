@@ -123,7 +123,7 @@ describe('MimiDatePicker', { timeout: 20_000 }, () => {
     expect(button.classList).toContain(
       'bg-[color:var(--mimi-input-bg,var(--mimi-input-background))]',
     );
-    // Funciona como botón: se hunde al hacer clic (profundidad A).
+    // Se hunde al hacer clic (profundidad B).
     expect(button.classList).toContain(
       'not-disabled:not-aria-readonly:active:scale-(--mimi-press-scale)',
     );

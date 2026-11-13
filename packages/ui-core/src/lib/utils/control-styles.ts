@@ -24,8 +24,8 @@ export const controlInvalidStyles =
   'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive-ring';
 
 /**
- * Clic de un control que funciona como botón (profundidad A, decidida por el usuario el
- * 12/11/2026): se hunde (`--mimi-press-scale`, que es 1 con «reducir movimiento») y le crece el
+ * Clic de un control que funciona como botón (profundidad B, decidida por el usuario el
+ * 13/11/2026): se hunde (`--mimi-press-scale`, que es 1 con «reducir movimiento») y le crece el
  * halo, como a Button. Los campos lo traen en `utils/field-styles.ts`; esta pieza queda para
  * botones propios.
  */

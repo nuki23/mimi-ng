@@ -73,7 +73,8 @@ const TOGGLE_CLASSES = cn(
   fieldButtonHoverStyles,
   'size-[var(--mimi-password-toggle-size,32px)] rounded-[var(--mimi-password-toggle-radius,var(--mimi-radius-sm))]',
   '[&_svg]:size-4 [&_svg]:shrink-0',
-  'enabled:hover:bg-[color:var(--mimi-password-toggle-hover,var(--mimi-accent))] enabled:hover:text-foreground enabled:active:scale-(--mimi-press-scale-sm)',
+  // Al hacer clic se hunde la caja entera (field-styles, profundidad B), no el ojo aparte.
+  'enabled:hover:bg-[color:var(--mimi-password-toggle-hover,var(--mimi-accent))] enabled:hover:text-foreground',
   'disabled:cursor-not-allowed',
   buttonFocusStyles,
 );

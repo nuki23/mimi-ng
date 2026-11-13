@@ -62,7 +62,8 @@ const BUTTON_CLASSES = cn(
   fieldButtonHoverStyles,
   'size-[var(--mimi-number-button-size,30px)] rounded-[var(--mimi-number-button-radius,var(--mimi-radius-sm))]',
   '[&_svg]:size-[15px] [&_svg]:shrink-0',
-  'not-aria-disabled:hover:bg-[color:var(--mimi-number-button-hover,var(--mimi-accent))] not-aria-disabled:active:scale-(--mimi-press-scale-sm)',
+  // Al hacer clic se hunde la caja entera (field-styles, profundidad B), no el botón aparte.
+  'not-aria-disabled:hover:bg-[color:var(--mimi-number-button-hover,var(--mimi-accent))]',
   'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
 );
 

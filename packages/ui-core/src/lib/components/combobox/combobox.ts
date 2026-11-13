@@ -82,7 +82,8 @@ let nextId = 0;
 
 const CLEAR_CLASSES = cn(
   'relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
-  'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
+  // Al hacer clic se hunde la caja entera (field-styles, profundidad B), no la X aparte.
+  'mimi-transition hover:bg-accent hover:text-foreground',
   buttonFocusStyles,
   // La X solo se ve con el ratón encima, el foco dentro o el panel abierto; en pantallas sin
   // ratón, mientras haya valor (como en Select). Si no, el chevron.

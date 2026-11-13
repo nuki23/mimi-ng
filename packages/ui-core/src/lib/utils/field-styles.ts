@@ -12,9 +12,10 @@
  *
  * - Borde: el de Input. Hover: el borde de hover (no en deshabilitado ni en solo lectura).
  * - Foco: borde del anillo y halo `ring-soft`, solo con el teclado en los que son botones.
- * - Clic (profundidad A, decidida por el usuario el 12/11/2026): a todos les crece el halo, como a
- *   Button; los que funcionan como botón además se hunden (`--mimi-press-scale`, que es 1 con
- *   «reducir movimiento»); los de escribir no.
+ * - Clic (profundidad B, decidida por el usuario el 13/11/2026; sustituye a la A): todos se
+ *   hunden (`--mimi-press-scale`, que es 1 con «reducir movimiento») y les crece el halo, como a
+ *   Button, también los de escribir. En un campo compuesto se hunde la caja entera; los botones
+ *   pequeños de dentro (− y +, el ojo, la X) no se hunden aparte.
  * - Deshabilitado: `--mimi-disabled-opacity` y cursor no permitido.
  * - Solo lectura: fondo propio, sin hover ni clic, cursor normal; se puede enfocar.
  * - Error: borde `destructive` (también con hover) y halo de error solo con el foco.
@@ -23,18 +24,19 @@
 /**
  * La caja de un campo compuesto (un `<input>` dentro: Number Input, Password, Combobox, Tags Input,
  * Input Mask). Estados en `data-invalid`, `data-disabled` y `data-readonly` de la caja; el foco,
- * con `focus-within` (está en el input de dentro). Es un campo de escribir: no se hunde.
+ * con `focus-within` (está en el input de dentro). Al hacer clic en cualquier parte (el texto o un
+ * botón de dentro), se hunde la caja entera.
  */
 export const fieldBoxStyles =
-  'border-[length:var(--mimi-input-border-width,1px)] border-[color:var(--mimi-input-border,var(--mimi-input))] bg-[color:var(--mimi-input-bg,var(--mimi-input-background))] not-data-[disabled]:not-data-[readonly]:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))] focus-within:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))] focus-within:ring-[length:var(--mimi-input-focus-ring-width,3px)] focus-within:ring-ring-soft not-data-[disabled]:not-data-[readonly]:active:ring-[length:var(--mimi-input-focus-ring-width,3px)] not-data-[disabled]:not-data-[readonly]:active:ring-ring-soft data-[invalid]:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[invalid]:hover:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[invalid]:focus-within:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[invalid]:focus-within:ring-destructive-ring data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-input-disabled-opacity,var(--mimi-disabled-opacity,0.5))] data-[readonly]:cursor-default data-[readonly]:bg-[color:var(--mimi-input-readonly)]';
+  'mimi-transition not-data-[disabled]:not-data-[readonly]:active:scale-(--mimi-press-scale) border-[length:var(--mimi-input-border-width,1px)] border-[color:var(--mimi-input-border,var(--mimi-input))] bg-[color:var(--mimi-input-bg,var(--mimi-input-background))] not-data-[disabled]:not-data-[readonly]:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))] focus-within:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))] focus-within:ring-[length:var(--mimi-input-focus-ring-width,3px)] focus-within:ring-ring-soft not-data-[disabled]:not-data-[readonly]:active:ring-[length:var(--mimi-input-focus-ring-width,3px)] not-data-[disabled]:not-data-[readonly]:active:ring-ring-soft data-[invalid]:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[invalid]:hover:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[invalid]:focus-within:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[invalid]:focus-within:ring-destructive-ring data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-input-disabled-opacity,var(--mimi-disabled-opacity,0.5))] data-[readonly]:cursor-default data-[readonly]:bg-[color:var(--mimi-input-readonly)]';
 
 /**
- * Lo que Input y Textarea añaden a sus clases: el hover, el clic (halo, sin hundirse) y la solo
- * lectura del `<input readonly>` nativo. El borde, el foco, el error y el deshabilitado ya los
+ * Lo que Input y Textarea añaden a sus clases: el hover, el clic (se hunde y le crece el halo) y la
+ * solo lectura del `<input readonly>` nativo. El borde, el foco, el error y el deshabilitado ya los
  * ponen sus variantes con los mismos tokens.
  */
 export const fieldNativeStyles =
-  'not-disabled:not-[[readonly]]:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))] aria-invalid:hover:border-[color:var(--mimi-input-error,var(--mimi-destructive))] not-disabled:not-[[readonly]]:active:ring-[length:var(--mimi-input-focus-ring-width,3px)] not-disabled:not-[[readonly]]:active:ring-ring-soft [&[readonly]]:cursor-default [&[readonly]]:bg-[color:var(--mimi-input-readonly)]';
+  'mimi-transition not-disabled:not-[[readonly]]:active:scale-(--mimi-press-scale) not-disabled:not-[[readonly]]:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))] aria-invalid:hover:border-[color:var(--mimi-input-error,var(--mimi-destructive))] not-disabled:not-[[readonly]]:active:ring-[length:var(--mimi-input-focus-ring-width,3px)] not-disabled:not-[[readonly]]:active:ring-ring-soft [&[readonly]]:cursor-default [&[readonly]]:bg-[color:var(--mimi-input-readonly)]';
 
 /**
  * Un `<button>` con aspecto de campo (el disparador de Date Picker, Date Range y Color Picker):

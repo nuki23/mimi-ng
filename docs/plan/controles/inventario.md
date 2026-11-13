@@ -13,7 +13,7 @@ Estado **después** de los arreglos 1 a 4 de la Parte 1 (12/11/2026):
 
 ## Parte 2: unificados (12/11/2026)
 
-Elecciones del usuario en `/docs/states` (12/11/2026): **profundidad A**, **grises malva suave**, **Tree con fondo `primary-subtle`** y el **azul de `info` pasa al violeta de la marca** donde significa selección, arrastre o acento.
+Elecciones del usuario en `/docs/states` (12/11/2026): **profundidad A** (cambiada a la **B**, todos se hunden, el 13/11/2026), **grises malva suave**, **Tree con fondo `primary-subtle`** y el **azul de `info` pasa al violeta de la marca** donde significa selección, arrastre o acento.
 
 El juego común vive en `utils/field-styles.ts`:
 

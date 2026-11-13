@@ -1217,7 +1217,7 @@ export const controlDisabledStyles =
 export const controlInvalidStyles =
   'aria-invalid:border-destructive aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive-soft';
 
-// Solo botones: se hunde y le crece el halo (profundidad A). Switch y Checkbox tienen su escala.
+// Solo botones: se hunde y le crece el halo (profundidad B). Switch y Checkbox tienen su escala.
 export const controlPressStyles =
   'mimi-transition active:scale-(--mimi-press-scale) active:ring-3 active:ring-ring-soft';
 ```
@@ -1237,7 +1237,7 @@ Los estados, iguales en todos (tokens de Input: `--mimi-input-border`, `-border-
 
 - **Borde y hover:** el borde de Input; al pasar el ratón, `--mimi-input-border-hover`.
 - **Foco:** borde `ring` y halo `ring-soft` (los campos); el contorno de 2 px en los de elegir (Checkbox, Switch, Slider, Toggle Group) y en Button.
-- **Clic (profundidad A, decidida por el usuario):** a todos les crece el halo; **se hunden solo los que funcionan como botón** (Select, Date Picker, Date Range, Color Picker, File Upload, Checkbox, Switch, Toggle Group, Button); los de escribir no. Con «reducir movimiento», nada se hunde (las escalas son tokens que el tema pone a 1) y el halo se queda.
+- **Clic (profundidad B, decidida por el usuario el 13/11/2026; sustituye a la A del 12/11):** **todos se hunden** (`--mimi-press-scale`; `-sm` en Checkbox, Switch y Toggle Group) y les crece el halo, como a Button, también los de escribir (Input, Textarea, Combobox, Tags Input, Number Input, Password, Input Mask). En un campo compuesto se hunde la caja entera, también al hacer clic en el texto; los botones pequeños de dentro (− y +, el ojo, la X del Combobox) no se hunden aparte. El pulgar del Slider no se hunde: crece al arrastrar. Con «reducir movimiento», nada se hunde (las escalas son tokens que el tema pone a 1) y el halo se queda.
 - **Deshabilitado:** `--mimi-disabled-opacity`, también en Button, Checkbox, Switch, Tree y las opciones de las listas.
 - **Solo lectura:** fondo `--mimi-input-readonly` (70 % de `muted` con el fondo del campo), sin hover ni clic; la caja lleva `data-readonly` o `aria-readonly`.
 - **Error:** borde `--mimi-input-error` con el halo de error solo con el foco; en Switch y Toggle Group, que no tienen borde, un filo de 1 px del mismo color.

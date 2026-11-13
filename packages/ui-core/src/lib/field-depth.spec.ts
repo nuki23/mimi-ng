@@ -1,8 +1,9 @@
 /**
- * Profundidad A al hacer clic (decidida por el usuario el 12/11/2026): a todos les crece el halo,
- * como a Button; se hunden solo los controles que funcionan como botón; los de escribir no. Con
- * «reducir movimiento», nada se hunde: el tema pone `--mimi-press-scale` y `-sm` a 1, así que
- * ningún hundimiento puede usar una escala fija. Lee los archivos con fs, como imports.spec.ts.
+ * Profundidad B al hacer clic (decidida por el usuario el 13/11/2026; sustituye a la A del
+ * 12/11/2026): TODOS los controles se hunden y les crece el halo, como a Button, también los de
+ * escribir. Con «reducir movimiento», nada se hunde: el tema pone `--mimi-press-scale` y `-sm` a 1,
+ * así que ningún hundimiento puede usar una escala fija. Lee los archivos con fs, como
+ * imports.spec.ts.
  */
 const depthNode = (
   globalThis as unknown as { process: { cwd(): string; getBuiltinModule(id: string): unknown } }
@@ -26,20 +27,26 @@ function depthConstant(name: string): string {
 const DEPTH_SINK = /active\]?:scale-\(--mimi-press-scale(-sm)?\)/;
 const DEPTH_HALO = /active\]?:ring-(3|\[length:var\(--mimi-input-focus-ring-width,3px\)\])/;
 
-describe('Profundidad A al hacer clic', () => {
-  it('los campos de escribir no se hunden; les crece el halo', () => {
-    for (const name of ['fieldBoxStyles', 'fieldNativeStyles']) {
-      const classes = depthConstant(name);
-      expect(classes, name).not.toMatch(/active:scale/);
-      expect(classes, name).toMatch(DEPTH_HALO);
-    }
-  });
+const FIELD_PIECES = [
+  'fieldBoxStyles',
+  'fieldNativeStyles',
+  'fieldTriggerStyles',
+  'fieldTriggerBoxStyles',
+  'choicePressStyles',
+];
 
-  it('los que funcionan como botón se hunden y les crece el halo', () => {
-    for (const name of ['fieldTriggerStyles', 'fieldTriggerBoxStyles', 'choicePressStyles']) {
+describe('Profundidad B al hacer clic', () => {
+  it('todas las piezas de campo se hunden y les crece el halo, también las de escribir', () => {
+    for (const name of FIELD_PIECES) {
       const classes = depthConstant(name);
       expect(classes, name).toMatch(DEPTH_SINK);
       expect(classes, name).toMatch(DEPTH_HALO);
+    }
+    // Las de escribir llevan la escala de Button (no la pequeña de Checkbox y Switch).
+    for (const name of ['fieldBoxStyles', 'fieldNativeStyles']) {
+      expect(depthConstant(name), name).toContain('active:scale-(--mimi-press-scale)');
+      // La transición anima `scale` (spec 6.6): sin ella, el hundimiento sería un salto.
+      expect(depthConstant(name), name).toContain('mimi-transition');
     }
     // La zona de File Upload y los ítems de Toggle Group, con sus propias clases.
     for (const file of [
@@ -52,10 +59,19 @@ describe('Profundidad A al hacer clic', () => {
     }
   });
 
+  it('Number Input: la caja se hunde entera (número, − y +) y los botones no se hunden aparte', () => {
+    const code = depthRead('components/number-input/number-input.ts');
+    expect(code).toContain('fieldBoxStyles');
+    expect(code).not.toMatch(/active:scale/);
+  });
+
   it('en solo lectura y deshabilitado no hay clic', () => {
     expect(depthConstant('fieldTriggerStyles')).toContain('not-disabled:not-aria-readonly:active:');
     expect(depthConstant('fieldBoxStyles')).toContain(
-      'not-data-[disabled]:not-data-[readonly]:active:',
+      'not-data-[disabled]:not-data-[readonly]:active:scale',
+    );
+    expect(depthConstant('fieldNativeStyles')).toContain(
+      'not-disabled:not-[[readonly]]:active:scale',
     );
     expect(depthConstant('choicePressStyles')).toContain('not-disabled:not-aria-readonly:active:');
   });
@@ -72,6 +88,7 @@ describe('Profundidad A al hacer clic', () => {
       'components/file-upload/file-upload.ts',
       'components/toggle-group/toggle-group.ts',
       'components/button/button.variants.ts',
+      'components/number-input/number-input.ts',
     ]) {
       expect(depthRead(file), file).not.toMatch(/active:scale-\[\d|active:scale-\d/);
     }

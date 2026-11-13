@@ -121,7 +121,7 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
   // Pista: 36×20 (--mimi-switch-width/-height), 2px de padding. Encendida: primary con su sombra.
   protected readonly trackClasses = cn(
     'peer group inline-flex h-[var(--mimi-switch-h,var(--mimi-switch-height,1.25rem))] w-[var(--mimi-switch-w,var(--mimi-switch-width,2.25rem))] shrink-0 items-center rounded-full bg-[color:var(--mimi-switch-track-off,var(--mimi-switch-off))] p-0.5',
-    // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad A).
+    // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad B).
     'mimi-transition',
     choicePressStyles,
     'data-[state=checked]:bg-[color:var(--mimi-switch-track-on,var(--mimi-primary))] data-[state=checked]:shadow-primary disabled:shadow-none',
