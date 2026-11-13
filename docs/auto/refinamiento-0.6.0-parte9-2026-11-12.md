@@ -76,3 +76,31 @@ Al ver la primera captura se arregló Password con «Clic»: el input de dentro 
 - **JS inicial:** **335,83 kB / 106,59 kB gzip**, sin cambio (antes, 335,84 / 106,59).
 - **CSS global:** **122,30 kB / 18,14 kB gzip** (antes, 115,59 / 17,66): **+6,7 kB crudo, +0,48 kB gzip**, por las variantes de estado nuevas de los componentes que van en el CSS global (Input, Textarea, Select, Checkbox, Switch y Button).
 - Presupuestos: `styles` avisa en 180 kB; el inicial (JS + CSS, 458 kB), en 525 kB. **No hace falta subir ninguno.**
+
+## 2. Profundidad A
+
+El clic va en el juego común del paso 1, porque es uno de sus estados. En este paso se cierra y se prueba:
+
+- **Todos:** les crece el halo (`ring-soft`, 3 px), como a Button.
+- **Se hunden** (`--mimi-press-scale`; `-sm` en Checkbox, Switch y Toggle Group) **solo los que funcionan como botón**: Select, Date Picker, Date Range, Color Picker, File Upload, Checkbox, Switch, Toggle Group y Button.
+- **Los de escribir no se hunden:** Input, Textarea, Combobox, Tags Input, Number Input, Password, Input Mask e Input OTP. **El Slider tampoco:** al pulgar le crece el halo y crece al arrastrar.
+- **En solo lectura y deshabilitado no hay clic.**
+- **`controlPressStyles`** (el helper de `control-styles.ts`, que ya no usa ningún campo) también suma el halo, para los botones propios.
+- **«Reducir movimiento»:**
+  - el tema ya ponía `--mimi-press-scale` y `-sm` a 1, así que nada se hunde;
+  - el halo se queda, porque no es movimiento;
+  - las dos escalas fijas que quedan (el pulgar del Slider al arrastrar y la zona de File Upload con archivos encima) ya tenían `motion-reduce`.
+
+**Prueba: `field-depth.spec.ts`** (nuevo, 4 casos):
+
+- los de escribir no tienen `active:scale` y sí el halo;
+- los de botón tienen los dos (también File Upload, Toggle Group y la caja del Select, con `has-[…:active]`);
+- en solo lectura y deshabilitado no hay clic;
+- en «reducir movimiento», las escalas son tokens que el tema pone a 1 y ningún hundimiento usa una escala fija.
+
+En verde.
+
+**Playwright** (`/docs/states`, columna «Clic», claro y oscuro, con y sin «reducir movimiento»): **68 de 68 OK**.
+
+- Los de escribir quedan con `scale: none` y el halo.
+- Los de botón quedan con `scale: 0.975` y el halo; **con «reducir movimiento», `scale: 1`** y el halo.
