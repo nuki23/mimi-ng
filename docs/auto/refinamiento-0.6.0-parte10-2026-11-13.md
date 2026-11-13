@@ -190,4 +190,40 @@ Captura: `docs/auto/capturas/2026-11-13/otp-tab-*.png`.
 
 Lo cubren las pruebas de `input-otp.spec.ts` (los estados de la casilla) y `field-states.spec.ts`: no hizo falta una prueba nueva.
 
+## 11. Grises: capturas lado a lado (el tema no cambia)
+
+El usuario no nota el cambio a malva suave. **El tema se queda en malva suave hasta que el usuario elija.**
+
+**Cómo se hicieron** (`grays-compare.mjs` y `grays-swatches.mjs`, fuera del repo): sobre el sitio servido, Playwright inyecta una hoja que reescribe solo los 15 grises (fondo, texto, tarjeta, popover, secondary, muted, accent y sus textos, `border`, `input` e `input-background`). Mantiene la luminosidad y la transparencia del tema y cambia solo el croma, con tono 292: **0** (neutro), **0,006** (malva suave, el actual) o **0,014** (malva medio). Los casi blancos y casi negros llevan la mitad. Es la misma regla de la comparación del 12/11/2026. Nada del repo cambia.
+
+**Las capturas** (`docs/auto/capturas/2026-11-13/grises/`):
+
+| Archivo                                  | Qué muestra                                                                           |
+| ---------------------------------------- | ------------------------------------------------------------------------------------- |
+| `grises-estados-dark.png`, `-light.png`  | `/docs/states` (menú, texto, campos), las tres opciones juntas                        |
+| `grises-portada-dark.png`, `-light.png`  | la portada (tarjetas, botones, bloque de código)                                      |
+| `grises-muestras-dark.png`, `-light.png` | muestras grandes de fondo, tarjeta, muted, borde, campo y texto apagado, con su valor |
+
+**Los valores:**
+
+| Token              | Oscuro: neutro / malva suave / malva medio      | Claro: neutro / malva suave / malva medio |
+| ------------------ | ----------------------------------------------- | ----------------------------------------- |
+| `background`       | `0.205 0` / `0.205 0.006` / `0.205 0.014`       | `0.985 0` / `0.985 0.003` / `0.985 0.007` |
+| `card`             | `0.235 0` / `0.235 0.006` / `0.235 0.014`       | `1 0` / `1 0.003` / `1 0.007`             |
+| `muted`            | `0.27 0` / `0.27 0.006` / `0.27 0.014`          | `0.97 0` / `0.97 0.003` / `0.97 0.007`    |
+| `muted-foreground` | `0.74 0` / `0.74 0.006` / `0.74 0.014`          | `0.54 0` / `0.54 0.006` / `0.54 0.014`    |
+| `border`           | `1 0 / 10%` / `1 0.003 / 10%` / `1 0.007 / 10%` | `0.922 0` / `0.922 0.006` / `0.922 0.014` |
+| `input`            | `1 0 / 15%` / `1 0.003 / 15%` / `1 0.007 / 15%` | `0.88 0` / `0.88 0.006` / `0.88 0.014`    |
+
+Todo en `oklch(L C 292)`. El resto (`foreground`, `popover`, `secondary`, `accent` y sus textos, `input-background`) sigue la misma regla.
+
+**Lo que se ve:**
+
+- Con croma 0,006, la diferencia con el neutro casi no se nota, en claro sobre todo. Por eso el usuario no la ve.
+- En oscuro se distingue en `muted` y en el texto apagado; con 0,014 (malva medio), también en el fondo y las tarjetas.
+- La luminosidad es la misma en las tres, así que el contraste no cambia.
+- El «neutro» de estas capturas tiene la misma luminosidad que el tema actual. `MIMI_THEME_NEUTRAL` en oscuro es más oscuro (fondo 0,145).
+
+**Pendiente del usuario:** elegir entre neutro, malva suave y malva medio.
+
 **Bundle** (después de los puntos 2 a 5): JS inicial **334,89 kB / 106,23 kB gzip** (sin cambio: `overlay.ts` ahora importa el CDK en ejecución, pero solo lo usan componentes que ya lo cargaban); CSS global **124,86 kB / 18,39 kB gzip** (desde el punto 1, +2,16 kB crudo, +0,22 kB gzip). Pruebas: ui-core 1058, docs 253, CLI 202.
