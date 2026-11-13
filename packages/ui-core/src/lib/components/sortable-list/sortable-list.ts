@@ -327,17 +327,19 @@ export class MimiSortableList<T = unknown> {
     this.itemShape,
     'transition-shadow duration-150',
     '[&.cdk-drag-animating]:transition-transform [&.cdk-drag-animating]:duration-[180ms] [&.cdk-drag-animating]:ease-[var(--mimi-sortable-easing,cubic-bezier(.2,.8,.2,1))]',
-    'data-[grabbed]:relative data-[grabbed]:z-10 data-[grabbed]:shadow-[shadow:var(--mimi-shadow-popover),0_0_0_2px_var(--mimi-sortable-drop,var(--mimi-info))]',
+    // El color de arrastrar y soltar es el de la marca (anillo del tema), no el azul de `info`
+    // (informe del usuario, 12/11/2026).
+    'data-[grabbed]:relative data-[grabbed]:z-10 data-[grabbed]:shadow-[shadow:var(--mimi-shadow-popover),0_0_0_2px_var(--mimi-sortable-drop,var(--mimi-ring))]',
   );
 
   /** La copia que sigue al puntero: girada y algo más grande, como el diseño. */
   protected readonly previewClasses = cn(
     this.itemShape,
-    'size-full [transform:var(--mimi-sortable-lift,rotate(-1.5deg)_scale(1.03))] shadow-[shadow:var(--mimi-shadow-popover),0_0_0_2px_var(--mimi-sortable-drop,var(--mimi-info))]',
+    'size-full [transform:var(--mimi-sortable-lift,rotate(-1.5deg)_scale(1.03))] shadow-[shadow:var(--mimi-shadow-popover),0_0_0_2px_var(--mimi-sortable-drop,var(--mimi-ring))]',
   );
 
   protected readonly placeholderClasses =
-    'box-border min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))] list-none rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border-2 border-dashed border-[color:var(--mimi-sortable-drop,var(--mimi-info))] bg-[color:var(--mimi-sortable-drop-bg,var(--mimi-info-soft))]';
+    'box-border min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))] list-none rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border-2 border-dashed border-[color:var(--mimi-sortable-drop,var(--mimi-ring))] bg-[color:var(--mimi-sortable-drop-bg,var(--mimi-primary-subtle))]';
 
   protected readonly handleClasses = cn(
     'inline-flex h-9 w-7 shrink-0 cursor-grab touch-none items-center justify-center rounded-sm border-0 bg-transparent p-0 text-muted-foreground',

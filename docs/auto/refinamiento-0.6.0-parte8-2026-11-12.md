@@ -118,3 +118,43 @@ Encargo del 12/11/2026. El usuario revisó los controles: «cada control de form
 | Ancho del borde y radio | 1 px y 12 px            | 1 px y 12 px            |
 
 Input muestra el hover y, con error, el hover deja el rojo.
+
+## 4. Sortable List y los colores fijos de ui-core
+
+**Sortable List.** No tenía un hex: usaba el token `--mimi-info`, el azul de los avisos «info», que viene del diseño. Con el tema violeta se veía azul, que no es el color de la marca. Lo usaba en:
+
+- el borde punteado del hueco;
+- el fondo del hueco (`info-soft`);
+- el anillo de 2 px del elemento levantado y de su copia.
+
+**Arreglo:**
+
+- `--mimi-sortable-drop` pasa a heredar de `--mimi-ring`, el anillo de la marca, y `--mimi-sortable-drop-bg` de `--mimi-primary-subtle`.
+- Se actualizaron la spec (sección 13) y `component-tokens.ts`.
+- Anotado en `correcciones-pendientes.md`.
+
+**Playwright** (arrastre real con el ratón, claro y oscuro, **2 de 2 OK**): el hueco tiene borde punteado del color del anillo y fondo `primary-subtle`, y el elemento levantado lleva el anillo del color de la marca, no el de `info`.
+
+| Tema   | Anillo de la marca     | `info` (antes)         | Hueco                                               |
+| ------ | ---------------------- | ---------------------- | --------------------------------------------------- |
+| Claro  | `oklch(0.64 0.2 292)`  | `oklch(0.44 0.17 255)` | borde `oklch(0.64 0.2 292)`, fondo violeta al 10 %  |
+| Oscuro | `oklch(0.72 0.16 292)` | `oklch(0.83 0.11 250)` | borde `oklch(0.72 0.16 292)`, fondo violeta al 10 % |
+
+**Búsqueda de colores fijos en ui-core.** Busqué hex, `rgb()`/`rgba()`, `oklch()` con números, clases de la paleta de Tailwind (`blue-*`, `sky-*`, `gray-*`…) y `white`/`black` en las clases, en los `.ts` de `components/`, sin pruebas y sin los presets del tema. **No hay ninguna clase de la paleta de Tailwind ni `bg-white`/`text-black`.** Quedan estos valores fijos, todos justificados y con su token:
+
+| Archivo                       | Qué                                                                                        | Por qué se queda                                                                                                                         |
+| ----------------------------- | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `color-picker.ts`             | Espectro de tonos y área de saturación (`rgb(…)`)                                          | Son los colores que se eligen: no pueden depender del tema.                                                                              |
+| `color-picker.ts`             | Pulgar blanco `oklch(1 0 0)` con sombra negra, y borde de las muestras `oklch(0 0 0 / .1)` | Tienen que verse sobre cualquier color. Cada uno tiene su token (`--mimi-color-picker-thumb-border`, `-thumb-shadow`, `-swatch-border`). |
+| `color-picker.ts`, `color.ts` | Hex de los comentarios (`#4f46e5`)                                                         | Documentan el formato.                                                                                                                   |
+| `data-table.ts`               | Sombra de las columnas fijas `oklch(0 0 0 / .25)`                                          | Negra como las sombras del tema (`--mimi-shadow-*`), con su token `--mimi-table-sticky-shadow`.                                          |
+
+**`info` (azul) en otros estados que no son informativos.** Son tokens del tema, no colores fijos, pero son el mismo problema que el Sortable: el anillo de hover y de la herramienta activa de Toolbar, la zona de File Upload con un archivo encima, la fila elegida, el filtro activo y la insignia de selección de Data Table, la fila «Crear» de Combobox y el contador de Tabs. **No se cambiaron.** Son decisiones del diseño que van con la elección de grises y de marca, así que quedan anotadas en `correcciones-pendientes.md` para la Parte 2. Propuesta: `ring` / `primary-subtle`. Los usos con significado (el tono `info` de Toast, Badge, Button, Progress y Command, el ícono de Confirm o los tipos de archivo de File Upload) se quedan.
+
+**Prueba nueva: `fixed-colors.spec.ts`** (3 casos):
+
+- falla si un componente usa un color fijo fuera de las excepciones, que van con su razón y su recuento;
+- falla si una excepción ya no hace falta y nadie actualizó su recuento;
+- comprueba que el Sortable usa `ring` y `primary-subtle`, no `info`.
+
+En verde.

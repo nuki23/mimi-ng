@@ -2316,17 +2316,17 @@ Contenedor con borde `--mimi-border`, radio `--mimi-radius-card` y sombra `--mim
 
 Diseño: `F4 Command Tree Sortable`, §3. **En ui-core desde la G3.2** (07/11/2026), con esta tabla tal cual (`MimiSortableTokens` lleva los cinco del preset).
 
-| Variable                       | Qué controla                          | Hereda de          | Valor por defecto             | Preset |
-| ------------------------------ | ------------------------------------- | ------------------ | ----------------------------- | ------ |
-| `--mimi-sortable-item-height`  | Alto mínimo de cada elemento          | —                  | `56px`                        | Sí     |
-| `--mimi-sortable-gap`          | Separación entre elementos            | —                  | `8px`                         | Sí     |
-| `--mimi-sortable-radius`       | Radio del elemento y del hueco        | `--mimi-radius`    | —                             | Sí     |
-| `--mimi-sortable-bg`           | Fondo del elemento                    | `--mimi-card`      | —                             | No     |
-| `--mimi-sortable-handle-hover` | Fondo del asa en hover y al arrastrar | `--mimi-accent`    | —                             | No     |
-| `--mimi-sortable-drop`         | Borde del hueco donde caerá           | `--mimi-info`      | —                             | No     |
-| `--mimi-sortable-drop-bg`      | Fondo del hueco                       | `--mimi-info-soft` | —                             | No     |
-| `--mimi-sortable-lift`         | Giro y escala del elemento levantado  | —                  | `rotate(-1.5deg) scale(1.03)` | Sí     |
-| `--mimi-sortable-easing`       | Curva del reacomodo                   | —                  | `cubic-bezier(.2, .8, .2, 1)` | Sí     |
+| Variable                       | Qué controla                                                                                                     | Hereda de               | Valor por defecto             | Preset |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------- | ----------------------- | ----------------------------- | ------ |
+| `--mimi-sortable-item-height`  | Alto mínimo de cada elemento                                                                                     | —                       | `56px`                        | Sí     |
+| `--mimi-sortable-gap`          | Separación entre elementos                                                                                       | —                       | `8px`                         | Sí     |
+| `--mimi-sortable-radius`       | Radio del elemento y del hueco                                                                                   | `--mimi-radius`         | —                             | Sí     |
+| `--mimi-sortable-bg`           | Fondo del elemento                                                                                               | `--mimi-card`           | —                             | No     |
+| `--mimi-sortable-handle-hover` | Fondo del asa en hover y al arrastrar                                                                            | `--mimi-accent`         | —                             | No     |
+| `--mimi-sortable-drop`         | Borde del hueco donde caerá y anillo del elemento levantado (desde el 12/11/2026, la marca; antes `--mimi-info`) | `--mimi-ring`           | —                             | No     |
+| `--mimi-sortable-drop-bg`      | Fondo del hueco (antes `--mimi-info-soft`)                                                                       | `--mimi-primary-subtle` | —                             | No     |
+| `--mimi-sortable-lift`         | Giro y escala del elemento levantado                                                                             | —                       | `rotate(-1.5deg) scale(1.03)` | Sí     |
+| `--mimi-sortable-easing`       | Curva del reacomodo                                                                                              | —                       | `cubic-bezier(.2, .8, .2, 1)` | Sí     |
 
 Elemento: borde `--mimi-border`, relleno `0 12px 0 6px`, separación interna 10px; asa de 28 × 36px (radio `--mimi-radius-sm`, ícono `grip-vertical` de 16px en `muted-foreground`; en hover, `foreground`). Hueco: borde de 2px discontinuo. Levantado: sombra `--mimi-shadow-popover` más `0 0 0 2px` del color del hueco. El reacomodo dura 0,18 s. Lo de dentro del elemento (número, título, etiqueta del diseño) es contenido del usuario.
 
