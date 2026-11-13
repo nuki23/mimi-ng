@@ -255,8 +255,9 @@
   --mimi-chip: var(--mimi-secondary);
   --mimi-chip-foreground: var(--mimi-secondary-foreground);
   --mimi-dropzone: color-mix(in oklab, var(--mimi-muted) 55%, var(--mimi-background));
-  --mimi-dropzone-active: var(--mimi-info-soft);
-  --mimi-dropzone-active-border: var(--mimi-info);
+  /* Con un archivo encima, la marca (decidido por el usuario, 12/11/2026; el diseño usa info). */
+  --mimi-dropzone-active: var(--mimi-primary-subtle);
+  --mimi-dropzone-active-border: var(--mimi-ring);
   --mimi-strength-weak: var(--mimi-destructive);
   --mimi-strength-medium: var(--mimi-warning);
   --mimi-strength-strong: var(--mimi-success);
@@ -629,8 +630,8 @@
   --mimi-chip: var(--mimi-secondary);
   --mimi-chip-foreground: var(--mimi-secondary-foreground);
   --mimi-dropzone: color-mix(in oklab, var(--mimi-muted) 50%, var(--mimi-background));
-  --mimi-dropzone-active: var(--mimi-info-soft);
-  --mimi-dropzone-active-border: var(--mimi-info);
+  --mimi-dropzone-active: var(--mimi-primary-subtle);
+  --mimi-dropzone-active-border: var(--mimi-ring);
   --mimi-strength-weak: var(--mimi-destructive);
   --mimi-strength-medium: var(--mimi-warning);
   --mimi-strength-strong: var(--mimi-success);

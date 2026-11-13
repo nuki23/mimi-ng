@@ -2032,7 +2032,7 @@ Implementado en la G1.9. En el preset (`MimiTabsTokens`): `height` y `spring`; l
 | `--mimi-toolbar-item-size`  | Tamaño de ítem         | —                           | `40px`            |
 | `--mimi-toolbar-active-bg`  | Disco activo           | `--mimi-primary`            | —                 |
 | `--mimi-toolbar-active-fg`  | Ícono activo           | `--mimi-primary-foreground` | —                 |
-| `--mimi-toolbar-ring`       | Anillo de selección    | `--mimi-info`               | —                 |
+| `--mimi-toolbar-ring`       | Anillo de selección    | `--mimi-ring`               | —                 |
 | `--mimi-toolbar-pressed-bg` | Interruptor presionado | `--mimi-accent`             | —                 |
 
 Implementado en la G1.10. En el preset (`MimiToolbarTokens`): `itemSize` y `blur`; los colores y la sombra van en el CSS. Medidas del diseño: píldora con 6px de relleno y de separación, botones de 40px con íconos de 18px, separador de 22×1px con 2px de margen, contador de 18px a −3px (10,5px/700, `info`, anillo de 2px del fondo); transiciones del diseño (fondo y color 0,2 s, anillo 0,35 s, escala 0,15 s; con movimiento reducido solo los colores). **Distinto del diseño o fuera de él** (plan, D6): la presión usa `--mimi-press-scale-sm` (0,9; el diseño, 0,88); el foco de teclado es el contorno `ring` a 4px (el diseño solo muestra el anillo del hover, que no basta como foco visible); el contador va dentro del botón (en el diseño es hermano y no escala al pulsar); el tooltip queda a 10px del botón (el diseño, 14px: 10px desde el anillo); el deshabilitado y los grupos con nombre no están en el diseño.
@@ -2253,7 +2253,7 @@ Diseño: `F3 Archivos Tags Toggle Color`, §9.
 
 Zona: borde de 2px (discontinuo; continuo con archivo encima), relleno 16px, separación 8px, hover `--mimi-input-hover`, presión 0,985; con archivo encima, `--mimi-glow-info`, escala 1,01 y el ícono (22px, círculo `--mimi-info` / `info-foreground`; en reposo `--mimi-muted` / `foreground`) con `mimi-bob 1s ease-in-out infinite`. Título 14px/600 y texto 12,5px. Fila: `--mimi-card`, borde `--mimi-border` (error: `color-mix(in oklab, var(--mimi-destructive) 45%, var(--mimi-border))`), `--mimi-shadow-neutral`, relleno 10px, separación 12px; filas separadas 8px. Progreso de 5px (el de Progress con otro grosor). Botones de 30px: quitar (hover `destructive-soft-bg`) y reintentar (borde, hover `accent`).
 
-**Implementada en la G2.11 (05/11/2026), sin cambios en la tabla.** En el preset (`MimiFileUploadTokens`): `radius`, `height`, `iconSize`, `itemRadius` y `thumbSize`. Los globales del Grupo 2 con respaldo (`var(--mimi-dropzone,var(--mimi-muted))`, `var(--mimi-dropzone-active,var(--mimi-accent))`, `var(--mimi-dropzone-active-border,var(--mimi-info))`). El error de una fila usa `destructive-soft-foreground` (no es un error de campo).
+**Implementada en la G2.11 (05/11/2026), sin cambios en la tabla.** En el preset (`MimiFileUploadTokens`): `radius`, `height`, `iconSize`, `itemRadius` y `thumbSize`. Los globales del Grupo 2 con respaldo (`var(--mimi-dropzone,var(--mimi-muted))`, `var(--mimi-dropzone-active,var(--mimi-primary-subtle))`, `var(--mimi-dropzone-active-border,var(--mimi-ring))`). El error de una fila usa `destructive-soft-foreground` (no es un error de campo).
 
 ##### Color Picker (`color-picker`)
 
@@ -2302,17 +2302,17 @@ Tablas escritas en la G3.0 (07/11/2026, modo autónomo) a partir del diseño, co
 
 Diseño: `F4 Command Tree Sortable`, §2. **En ui-core desde la G3.1** (07/11/2026), con esta tabla tal cual (`MimiTreeTokens` lleva los cinco del preset).
 
-| Variable                  | Qué controla                    | Hereda de                   | Valor por defecto | Preset |
-| ------------------------- | ------------------------------- | --------------------------- | ----------------- | ------ |
-| `--mimi-tree-padding`     | Relleno del contenedor          | —                           | `6px`             | Sí     |
-| `--mimi-tree-row-height`  | Alto de cada nodo               | —                           | `32px`            | Sí     |
-| `--mimi-tree-row-radius`  | Radio del nodo                  | `--mimi-radius-sm`          | —                 | Sí     |
-| `--mimi-tree-indent`      | Sangría por nivel               | —                           | `18px`            | Sí     |
-| `--mimi-tree-font-size`   | Tamaño de texto                 | —                           | `13.5px`          | Sí     |
-| `--mimi-tree-bg`          | Fondo del contenedor            | `--mimi-card`               | —                 | No     |
-| `--mimi-tree-hover`       | Fondo del nodo en hover         | `--mimi-accent`             | —                 | No     |
-| `--mimi-tree-selected`    | Fondo del nodo elegido (simple) | `--mimi-primary`            | —                 | No     |
-| `--mimi-tree-selected-fg` | Texto e ícono del nodo elegido  | `--mimi-primary-foreground` | —                 | No     |
+| Variable                  | Qué controla                    | Hereda de               | Valor por defecto | Preset |
+| ------------------------- | ------------------------------- | ----------------------- | ----------------- | ------ |
+| `--mimi-tree-padding`     | Relleno del contenedor          | —                       | `6px`             | Sí     |
+| `--mimi-tree-row-height`  | Alto de cada nodo               | —                       | `32px`            | Sí     |
+| `--mimi-tree-row-radius`  | Radio del nodo                  | `--mimi-radius-sm`      | —                 | Sí     |
+| `--mimi-tree-indent`      | Sangría por nivel               | —                       | `18px`            | Sí     |
+| `--mimi-tree-font-size`   | Tamaño de texto                 | —                       | `13.5px`          | Sí     |
+| `--mimi-tree-bg`          | Fondo del contenedor            | `--mimi-card`           | —                 | No     |
+| `--mimi-tree-hover`       | Fondo del nodo en hover         | `--mimi-accent`         | —                 | No     |
+| `--mimi-tree-selected`    | Fondo del nodo elegido (simple) | `--mimi-primary-subtle` | —                 | No     |
+| `--mimi-tree-selected-fg` | Texto e ícono del nodo elegido  | `--mimi-primary`        | —                 | No     |
 
 Contenedor con borde `--mimi-border`, radio `--mimi-radius-card` y sombra `--mimi-shadow-neutral`; separación de 1px entre nodos. Nodo: relleno izquierdo `6px + (nivel − 1) × sangría`, derecho 8px, separación interna 6px; chevrón de 14px en `muted-foreground` en una caja de 16px, que gira 90° en 0,2 s con `cubic-bezier(.2,.8,.2,1)` y no se ve en las hojas; ícono del usuario de 16px; dato a la derecha en `--mimi-font-mono` de 11px y `muted-foreground`; elegido con peso 600. Foco: anillo interior `inset 0 0 0 2px var(--mimi-ring)`. Cargando un nodo: el chevrón pasa a `loader-circle` con `mimi-spin` (0,8 s) y debajo una fila de 28px con una barra de 120 × 9px (radio 4px, `muted`, `mimi-pulse`) y «Cargando…» en 12,5px. Selección múltiple: Checkbox de Mimi (con el estado parcial) entre el chevrón y el ícono, separación de 8px, el nivel 1 con peso 600 y un contador a la derecha (11,5px, cifras tabulares, `muted-foreground`); sin fondo de elegido (el estado lo dice la casilla).
 
@@ -2369,7 +2369,7 @@ Diseño: `Data Table` (densidades `compact` y `comfortable`). **En ui-core desde
 | `--mimi-table-bg`                      | Fondo de la tabla y de las filas        | `--mimi-card`  | —                                                                    | No     |
 | `--mimi-table-head-bg`                 | Fondo del encabezado                    | `--mimi-muted` | —                                                                    | No     |
 | `--mimi-table-row-hover`               | Fila en hover (o con su menú abierto)   | —              | `color-mix(in oklab, var(--mimi-foreground) 3.5%, var(--mimi-card))` | No     |
-| `--mimi-table-row-selected`            | Fila elegida                            | —              | `color-mix(in oklab, var(--mimi-info) 8%, var(--mimi-card))`         | No     |
+| `--mimi-table-row-selected`            | Fila elegida                            | —              | `color-mix(in oklab, var(--mimi-primary) 8%, var(--mimi-card))`      | No     |
 | `--mimi-table-expanded-bg`             | Fondo del detalle de una fila expandida | `--mimi-muted` | —                                                                    | No     |
 | `--mimi-table-sticky-shadow`           | Sombra de la columna fija al desplazar  | —              | `6px 0 10px -6px oklch(0 0 0 / .25)`                                 | No     |
 

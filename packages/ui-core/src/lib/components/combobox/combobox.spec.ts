@@ -441,7 +441,7 @@ describe('MimiCombobox', { timeout: 20_000 }, () => {
     const create = option('Crear «Tokio»');
     expect(create.getAttribute('data-slot')).toBe('create');
     expect(options().at(-1)).toBe(create);
-    expect(create.classList).toContain('text-info-soft-foreground');
+    expect(create.classList).toContain('text-primary');
     const el = input('plain');
     await press(el, 'Enter');
     expect(h.created).toEqual(['Tokio']);

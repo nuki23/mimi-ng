@@ -320,7 +320,7 @@ const ICON = {
 const GROUP_LABEL_CLASSES =
   'px-2 pt-1.5 pb-1 text-[11px] font-semibold tracking-[.05em] text-muted-foreground uppercase';
 const CREATE_CLASSES =
-  'mt-[3px] border-t border-border text-info-soft-foreground data-[active=true]:bg-info-soft';
+  'mt-[3px] border-t border-border text-primary data-[active=true]:bg-primary-subtle';
 const BOX_CLASSES =
   'inline-flex size-4 shrink-0 items-center justify-center rounded-[var(--mimi-radius-sm)] border border-input text-primary-foreground [&_svg]:size-3';
 const BOX_CHECKED_CLASSES = cn(BOX_CLASSES, 'border-primary bg-primary');

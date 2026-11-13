@@ -283,7 +283,7 @@ const tabVariants = cva(
 );
 
 const COUNT_CLASSES =
-  'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-info-soft px-1.5 text-[11px] font-bold text-info-soft-foreground';
+  'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-primary-subtle px-1.5 text-[11px] font-bold text-primary';
 
 /**
  * Pestañas:

@@ -228,7 +228,7 @@ const TOOLBAR_CLASSES =
 const CELL_BG = cn(
   'bg-[color:var(--mimi-table-bg,var(--mimi-card))] transition-[background-color] duration-120 ease-[ease]',
   'group-hover/row:bg-[color:var(--mimi-table-row-hover,color-mix(in_oklab,var(--mimi-foreground)_3.5%,var(--mimi-card)))]',
-  'group-data-[selected]/row:bg-[color:var(--mimi-table-row-selected,color-mix(in_oklab,var(--mimi-info)_8%,var(--mimi-card)))]',
+  'group-data-[selected]/row:bg-[color:var(--mimi-table-row-selected,color-mix(in_oklab,var(--mimi-primary)_8%,var(--mimi-card)))]',
 );
 
 const CELL_CLASSES = cn(
@@ -287,7 +287,7 @@ const UI = {
   ),
   filter: cn(
     ICON_BUTTON_CLASSES,
-    'relative size-6 data-[active]:bg-info-soft data-[active]:text-info-soft-foreground [&_svg]:size-[13px]',
+    'relative size-6 data-[active]:bg-primary-subtle data-[active]:text-primary [&_svg]:size-[13px]',
   ),
   expand: cn(
     ICON_BUTTON_CLASSES,
@@ -360,7 +360,7 @@ interface ColumnView<T> {
         @if (selectable() && selection().length) {
           <div data-slot="selection" class="flex min-w-0 flex-1 items-center gap-2.5">
             <span
-              class="inline-flex h-[26px] items-center rounded-full bg-info-soft px-2.5 text-[13px] font-bold text-info-soft-foreground"
+              class="inline-flex h-[26px] items-center rounded-full bg-primary-subtle px-2.5 text-[13px] font-bold text-primary"
               >{{ texts.selected(selection().length) }}</span
             >
             <button
@@ -605,7 +605,7 @@ interface ColumnView<T> {
                         @if (col.filtered) {
                           <span
                             aria-hidden="true"
-                            class="absolute top-0.5 end-0.5 size-1.5 rounded-full bg-info"
+                            class="absolute top-0.5 end-0.5 size-1.5 rounded-full bg-primary"
                           ></span>
                         }
                       </button>

@@ -377,7 +377,7 @@ describe('MimiTabs', { timeout: 20_000 }, () => {
     const { fixture, h, tab } = await setup();
     const count = tab('b').querySelector('[data-slot="count"]')!;
     expect(count.textContent).toBe('3');
-    expect(count.classList).toContain('bg-info-soft');
+    expect(count.classList).toContain('bg-primary-subtle');
     h.iconLabel.set(true);
     await settle(fixture);
     expect(tab('b').querySelector('[data-test="icon"]')).not.toBeNull();

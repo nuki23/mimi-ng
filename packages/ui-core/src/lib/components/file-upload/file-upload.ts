@@ -108,7 +108,7 @@ const ZONE = {
   ),
   over: cn(
     ZONE_BASE,
-    'scale-[1.01] border-solid border-[color:var(--mimi-upload-active-border,var(--mimi-dropzone-active-border,var(--mimi-info)))] bg-[color:var(--mimi-upload-active-bg,var(--mimi-dropzone-active,var(--mimi-accent)))] shadow-[shadow:var(--mimi-glow-info)] motion-reduce:scale-100',
+    'scale-[1.01] border-solid border-[color:var(--mimi-upload-active-border,var(--mimi-dropzone-active-border,var(--mimi-ring)))] bg-[color:var(--mimi-upload-active-bg,var(--mimi-dropzone-active,var(--mimi-primary-subtle)))] shadow-[0_0_0_4px_var(--mimi-ring-soft)] motion-reduce:scale-100',
   ),
   invalid: cn(
     ZONE_BASE,
@@ -121,7 +121,7 @@ const ICON = {
   idle: cn(ICON_BASE, 'bg-muted text-foreground'),
   over: cn(
     ICON_BASE,
-    'bg-info text-info-foreground animate-[mimi-bob_1s_ease-in-out_infinite] motion-reduce:animate-none',
+    'bg-primary text-primary-foreground animate-[mimi-bob_1s_ease-in-out_infinite] motion-reduce:animate-none',
   ),
 } as const;
 

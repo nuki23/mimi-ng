@@ -376,7 +376,9 @@ export class MimiTree<T = unknown> implements FormValueControl<string | null | s
     'transition-[background-color,box-shadow] duration-150',
     'hover:bg-[color:var(--mimi-tree-hover,var(--mimi-accent))]',
     'focus-visible:shadow-[inset_0_0_0_2px_var(--mimi-ring)]',
-    'data-[selected]:bg-[color:var(--mimi-tree-selected,var(--mimi-primary))] data-[selected]:font-semibold data-[selected]:text-[color:var(--mimi-tree-selected-fg,var(--mimi-primary-foreground))]',
+    // Elegido (decidido por el usuario, 12/11/2026): fondo suave de la marca y texto de la marca;
+    // el anillo queda solo para el foco de teclado (`focus-visible`).
+    'data-[selected]:bg-[color:var(--mimi-tree-selected,var(--mimi-primary-subtle))] data-[selected]:font-semibold data-[selected]:text-[color:var(--mimi-tree-selected-fg,var(--mimi-primary))]',
     'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)] data-[disabled]:hover:bg-transparent',
     'in-data-[multiple]:gap-2',
   );

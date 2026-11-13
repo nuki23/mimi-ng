@@ -122,3 +122,34 @@ En verde.
 **Playwright** (`/docs/states`, claro y oscuro): los 8 grises leídos del documento tienen el tono 292; el fondo de la página es `oklch(0.985 0.003 292)` en claro y `oklch(0.205 0.006 292)` en oscuro; sin errores de consola. **16 de 16 OK.** Captura: `docs/auto/capturas/2026-11-12/unificacion/paso3-*.png`.
 
 **Bundle:** JS inicial **335,83 kB / 106,59 kB gzip** (sin cambio); CSS global **122,45 kB / 18,18 kB gzip** (antes 122,30 / 18,14: los valores de color son más largos). Sin subir presupuestos.
+
+## 4. Tree y los usos de `info`
+
+**Tree:** el nodo elegido pasa de `primary` sólido a fondo `primary-subtle` con texto `primary` (`--mimi-tree-selected` y `-fg` cambian de valor por defecto). El anillo ya salía solo con `focus-visible`; queda así.
+
+**`info` → marca** (el azul se queda solo en los avisos):
+
+| Componente  | Antes                                                  | Ahora                                                                 |
+| ----------- | ------------------------------------------------------ | --------------------------------------------------------------------- |
+| Toolbar     | anillo de hover y de la activa `info`; contador `info` | `--mimi-toolbar-ring` → `ring`; contador `primary`                    |
+| File Upload | encima: borde `info`, fondo `info-soft`, `glow-info`   | borde `ring`, fondo `primary-subtle`, halo `ring-soft`, ícono primary |
+| Data Table  | fila elegida 8 % `info`; filtro, insignia y punto info | 8 % `primary`; `primary-subtle` con texto `primary`; punto `primary`  |
+| Combobox    | fila «Crear» `info-soft`                               | `primary-subtle` con texto `primary` (está en `option-list.ts`)       |
+| Tabs        | contador `info-soft`                                   | `primary-subtle` con texto `primary`                                  |
+
+`--mimi-dropzone-active` y `--mimi-dropzone-active-border` cambian en el tema (claro y oscuro). El tono del ícono de las imágenes en la lista de File Upload sigue en `info-soft`: es una categoría, no una selección.
+
+**Pruebas:**
+
+- `selection-colors.spec.ts` (nuevo, 8 casos): ninguno de los 6 archivos usa `info` salvo la categoría de File Upload; los tokens de soltar son de la marca en claro y oscuro; el Tree elegido usa `primary-subtle`/`primary` y su anillo es solo de `focus-visible`.
+- `group2-tokens.spec.ts`: los dos tokens de soltar se apartan del diseño a propósito (lista `G2_OVERRIDES`, con la razón).
+- Toolbar, Tabs y Combobox: la clase esperada del contador y de «Crear».
+- `component-tokens.ts` y las tablas de la spec: `toolbar-ring`, `table-row-selected`, `tree-selected(-fg)` y los respaldos de File Upload.
+- **ui-core 1046, docs 253, CLI 202**, en verde.
+
+**Playwright** (páginas de cada componente, claro y oscuro; el color pintado se pasa a sRGB con un canvas): **18 de 18 OK**, sin errores de consola.
+
+- Tree elegido violeta, contraste 4,89 (claro) y 5,43 (oscuro); sin anillo con el ratón, anillo `ring` inset con el teclado.
+- Contador de Tabs 4,70 / 5,90; contador de Toolbar 5,45 / 6,86; «Crear» 4,89 / 5,04: todos AA.
+- Fila elegida de Data Table con tinte violeta (texto 16,05 / 14,33); hover de Toolbar con anillo `oklch(… 292 / 0.6)`; zona de File Upload con un archivo encima con borde, fondo y halo de la marca.
+- No se midió en el navegador el filtro activo y la insignia de Data Table (las mismas clases que el contador de Tabs; lo cubre la prueba de archivos).

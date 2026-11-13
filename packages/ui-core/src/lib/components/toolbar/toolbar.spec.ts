@@ -356,7 +356,7 @@ describe('MimiToolbar', () => {
     await settle(fixture);
     const count = (fixture.nativeElement as HTMLElement).querySelector('[mimiToolbarCount]')!;
     expect(count.getAttribute('aria-hidden')).toBe('true');
-    expect(count.classList).toContain('bg-info');
+    expect(count.classList).toContain('bg-primary');
     expect(count.classList).toContain('-end-[3px]');
     expect(MimiToolbarCount).toBeDefined();
   });
