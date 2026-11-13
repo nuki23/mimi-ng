@@ -75,3 +75,34 @@ Nota sobre la prueba: al principio fallaban algunos, pero por la prueba misma. `
 | Oscuro | **6,7:1**               | 13,08:1              | 1,13:1                       |
 
 El borde es lo que lleva el contraste de 3:1 (el fondo solo aclara). La etiqueta normal sigue sin borde. Captura: `docs/auto/capturas/2026-11-13/tags-readonly-*.png`.
+
+## 5. Paneles flotantes dentro de un contenedor con scroll
+
+**Causa:** el CDK solo recoloca los paneles con el scroll de la ventana y de los contenedores marcados con `cdkScrollable`. En un `overflow: auto` cualquiera, el panel se quedaba fijo mientras el contenido se movía.
+
+**Arreglo, en un solo sitio** (`utils/overlay.ts`):
+
+- **`mimiInView(el)`:** recorta la caja del campo con la pantalla y con cada antepasado que recorta (`overflow` auto, scroll, hidden o clip). Un elemento sin caja cuenta como visible: sin maquetar no se sabe, y así jsdom no cierra los paneles en las pruebas.
+- **`mimiFollowScroll(origen, recolocar, cerrar)`:** escucha el scroll en la fase de captura de todo el documento (el evento `scroll` no sube), una vez por cuadro, solo si el scroll movió al campo. Así, el de la lista del propio panel no cuenta. Recoloca o, si el campo salió de la vista, cierra.
+- **Directiva `MimiOverlayFollow`** sobre el `<ng-template cdkConnectedOverlay>`, con la salida `(mimiOverlayOutOfView)`. Se engancha a `attach`/`detach` del CDK.
+
+**Quién la usa:**
+
+- **Select, Combobox, Popover y Dropdown Menu**, con la directiva. Date Picker, Date Range y Color Picker la tienen por Popover.
+- **Context Menu:** solo abierto con el teclado; abierto con el puntero, el origen es un punto y ya se cerraba con el scroll.
+- **Tooltip:** llama a la función directamente y se oculta.
+
+El registro de la CLI no cambia: todos ya pedían `utils/overlay`.
+
+**Ejemplo de prueba:** sección nueva «**Paneles en un contenedor con scroll**» en `/docs/states`: un recuadro de 256 px con scroll que contiene Select, Combobox, Date Picker, Date Range, Color Picker, un menú y un botón con Tooltip.
+
+**Prueba que falla antes:** `overlay-scroll.spec.ts` (nuevo, 3 casos: `mimiInView` con un contenedor que recorta, `mimiFollowScroll` que recoloca, ignora otros scrolls, cierra y deja de escuchar, y un Select dentro de un contenedor que se cierra cuando el campo sale). El caso del Select falló hasta enganchar la directiva.
+
+**Playwright** (`scroll.mjs`, la sección nueva de `/docs/states`, claro y oscuro): **32 de 32 OK**.
+
+- Los 7 (Select, Combobox, Date Picker, Date Range, Color Picker, menú y Tooltip) mantienen la misma distancia a su campo después de 40 px de scroll del recuadro. El campo sube 40 px y el panel también, por ejemplo Select: panel 669 → 629, campo 621 → 581.
+- Los 7 se cierran con el campo fuera de la vista del recuadro.
+- El scroll de la página sigue moviendo el panel con ella (669 → 609 con 60 px).
+- Sin errores de consola.
+
+**Bundle** (después de los puntos 2 a 5): JS inicial **334,89 kB / 106,23 kB gzip** (sin cambio: `overlay.ts` ahora importa el CDK en ejecución, pero solo lo usan componentes que ya lo cargaban); CSS global **124,86 kB / 18,39 kB gzip** (desde el punto 1, +2,16 kB crudo, +0,22 kB gzip). Pruebas: ui-core 1058, docs 253, CLI 202.

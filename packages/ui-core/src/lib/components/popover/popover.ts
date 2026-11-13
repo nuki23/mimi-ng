@@ -28,6 +28,7 @@ import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_OVERLAY_ANIMATION,
   MIMI_VIEWPORT_MARGIN,
+  MimiOverlayFollow,
   type MimiOverlayAlign,
   type MimiOverlaySide,
   mimiArrowOffset,
@@ -83,11 +84,13 @@ export class MimiPopoverOutlet {
 @Component({
   selector: 'mimi-popover',
   hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
-  imports: [CdkConnectedOverlay, MimiPopoverOutlet],
+  imports: [CdkConnectedOverlay, MimiOverlayFollow, MimiPopoverOutlet],
   template: `
     <ng-content />
     <ng-template
       cdkConnectedOverlay
+      mimiOverlayFollow
+      (mimiOverlayOutOfView)="close()"
       [cdkConnectedOverlayOrigin]="originElement()!"
       [cdkConnectedOverlayOpen]="rendered()"
       [cdkConnectedOverlayPositions]="positions()"

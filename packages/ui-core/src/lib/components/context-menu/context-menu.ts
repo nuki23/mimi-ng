@@ -33,6 +33,7 @@ import { MimiMenuPanel } from '@/components/ui/menu/menu';
 import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_VIEWPORT_MARGIN,
+  MimiOverlayFollow,
   mimiConnectedPositions,
   mimiPointPositions,
   mimiWaitForExit,
@@ -66,11 +67,13 @@ const handled = new WeakSet<Event>();
 @Component({
   selector: 'mimi-context-menu',
   hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
-  imports: [CdkConnectedOverlay, MimiMenuPanel],
+  imports: [CdkConnectedOverlay, MimiOverlayFollow, MimiMenuPanel],
   template: `
     <ng-content />
     <ng-template
       cdkConnectedOverlay
+      mimiOverlayFollow
+      (mimiOverlayOutOfView)="close(false)"
       [cdkConnectedOverlayOrigin]="origin()!"
       [cdkConnectedOverlayOpen]="rendered()"
       [cdkConnectedOverlayPositions]="positions()"

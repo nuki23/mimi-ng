@@ -276,6 +276,56 @@ Hola</textarea>
     teclado.
   </p>
 
+  <h2 id="scroll" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Paneles en un contenedor con scroll
+  </h2>
+  <p class="text-pretty">
+    Abre un panel y haz scroll dentro del recuadro: el panel sigue a su campo y se cierra cuando el
+    campo sale de la vista del recuadro.
+  </p>
+  <div
+    data-test="scroll-box"
+    class="h-64 overflow-y-auto rounded-card border bg-background p-4"
+    tabindex="0"
+    aria-label="Contenedor con scroll"
+  >
+    <div class="flex flex-col gap-4 pb-[28rem]">
+      <div class="flex flex-wrap items-start gap-3">
+        <mimi-select aria-label="Talla (scroll)" data-test="scroll-select" class="w-44">
+          <mimi-option value="s">Pequeño</mimi-option>
+          <mimi-option value="m">Mediano</mimi-option>
+          <mimi-option value="l">Grande</mimi-option>
+        </mimi-select>
+        <mimi-combobox aria-label="Ciudad (scroll)" data-test="scroll-combobox" class="w-44">
+          <mimi-option value="lima">Lima</mimi-option>
+          <mimi-option value="quito">Quito</mimi-option>
+        </mimi-combobox>
+        <mimi-date-picker aria-label="Fecha (scroll)" data-test="scroll-date" class="w-44" />
+        <mimi-date-range aria-label="Fechas (scroll)" data-test="scroll-range" class="w-56" />
+        <mimi-color-input aria-label="Color (scroll)" data-test="scroll-color" class="w-44" />
+      </div>
+      <div class="flex flex-wrap items-start gap-3">
+        <mimi-dropdown-menu>
+          <button mimiBtn variant="outline" mimiDropdownMenuTrigger data-test="scroll-menu">
+            Menú
+          </button>
+          <ng-template mimiDropdownMenuContent>
+            <mimi-menu-item>Editar</mimi-menu-item>
+            <mimi-menu-item>Duplicar</mimi-menu-item>
+          </ng-template>
+        </mimi-dropdown-menu>
+        <button
+          mimiBtn
+          variant="outline"
+          data-test="scroll-tooltip"
+          mimiTooltip="Sigue al botón con el scroll"
+        >
+          Tooltip
+        </button>
+      </div>
+    </div>
+  </div>
+
   @if (!forcedRules()) {
     <p data-test="forced-missing" class="text-sm text-destructive">
       No se pudieron copiar los estilos de hover y foco: la cuadrícula muestra solo los estados

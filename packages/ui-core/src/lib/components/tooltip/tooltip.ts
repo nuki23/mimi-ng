@@ -34,6 +34,7 @@ import {
   type MimiOverlaySide,
   mimiArrowOffset,
   mimiConnectedPositions,
+  mimiFollowScroll,
   mimiPlacedSide,
   mimiWaitForExit,
 } from '@/components/ui/utils/overlay';
@@ -250,9 +251,13 @@ export class MimiTooltip {
     inject(DestroyRef).onDestroy(() => {
       clearTimeout(this.openTimer);
       if (this.visible()) shared.lastHiddenAt = Date.now();
+      this.stopFollow?.();
       this.overlayRef?.dispose();
     });
   }
+
+  /** Deja de seguir el scroll de los contenedores (mientras está visible, lo sigue). */
+  private stopFollow: (() => void) | null = null;
 
   /** Muestra el tooltip después del retraso (o enseguida, si otro se cerró hace poco). */
   open(): void {
@@ -268,6 +273,8 @@ export class MimiTooltip {
   hide(): void {
     clearTimeout(this.openTimer);
     if (!this.visible()) return;
+    this.stopFollow?.();
+    this.stopFollow = null;
     this.visible.set(false);
     shared.lastHiddenAt = Date.now();
     const panelRef = this.panelRef;
@@ -336,6 +343,13 @@ export class MimiTooltip {
     }
     this.strategy?.withPositions(mimiConnectedPositions(this.side(), this.align(), OFFSET));
     overlayRef.updatePosition();
+    // Sigue a su elemento con el scroll de cualquier contenedor; si sale de la vista, se oculta.
+    this.stopFollow?.();
+    this.stopFollow = mimiFollowScroll(
+      this.element,
+      () => overlayRef.updatePosition(),
+      () => this.hide(),
+    );
     this.visible.set(true);
   }
 

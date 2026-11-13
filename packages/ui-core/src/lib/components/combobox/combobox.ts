@@ -58,6 +58,7 @@ import {
 import {
   MIMI_OVERLAY_ANIMATION,
   MIMI_VIEWPORT_MARGIN,
+  MimiOverlayFollow,
   type MimiOverlayAlign,
   type MimiOverlaySide,
   mimiConnectedPositions,
@@ -199,7 +200,14 @@ export class MimiComboboxOption {
 @Component({
   selector: 'mimi-combobox',
   hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
-  imports: [Combobox, ComboboxPopup, CdkConnectedOverlay, MimiOptionList, MimiChip],
+  imports: [
+    Combobox,
+    ComboboxPopup,
+    CdkConnectedOverlay,
+    MimiOverlayFollow,
+    MimiOptionList,
+    MimiChip,
+  ],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiCombobox }],
   template: `
     <div
@@ -324,6 +332,8 @@ export class MimiComboboxOption {
     <ng-template ngComboboxPopup [combobox]="combobox" popupType="listbox">
       <ng-template
         cdkConnectedOverlay
+        mimiOverlayFollow
+        (mimiOverlayOutOfView)="setOpen(false)"
         [cdkConnectedOverlayOrigin]="box"
         [cdkConnectedOverlayOpen]="rendered()"
         [cdkConnectedOverlayPositions]="positions()"

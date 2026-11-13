@@ -41,6 +41,7 @@ import {
 import {
   MIMI_OVERLAY_ANIMATION,
   MIMI_VIEWPORT_MARGIN,
+  MimiOverlayFollow,
   type MimiOverlayAlign,
   type MimiOverlaySide,
   mimiConnectedPositions,
@@ -533,6 +534,7 @@ const SEARCH_INPUT_CLASSES =
     ComboboxPopup,
     ComboboxWidget,
     CdkConnectedOverlay,
+    MimiOverlayFollow,
     MimiSelectList,
     MimiSelectOutlet,
   ],
@@ -656,6 +658,8 @@ const SEARCH_INPUT_CLASSES =
     >
       <ng-template
         cdkConnectedOverlay
+        mimiOverlayFollow
+        (mimiOverlayOutOfView)="setOpen(false)"
         [cdkConnectedOverlayOrigin]="box"
         [cdkConnectedOverlayOpen]="rendered()"
         [cdkConnectedOverlayPositions]="positions()"

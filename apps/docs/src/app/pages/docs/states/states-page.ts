@@ -13,6 +13,7 @@ import { MimiColorInput } from '@/components/ui/color-picker';
 import { MimiComboboxImports } from '@/components/ui/combobox';
 import { MimiDatePicker } from '@/components/ui/date-picker';
 import { MimiDateRangePicker } from '@/components/ui/date-range';
+import { MimiDropdownMenuImports } from '@/components/ui/dropdown-menu';
 import { MimiFileUpload } from '@/components/ui/file-upload';
 import { MimiInput } from '@/components/ui/input';
 import { MimiInputMask } from '@/components/ui/input-mask';
@@ -25,6 +26,7 @@ import { MimiSwitch } from '@/components/ui/switch';
 import { MimiTagsInput } from '@/components/ui/tags-input';
 import { MimiTextarea } from '@/components/ui/textarea';
 import { MimiToggleGroupImports } from '@/components/ui/toggle-group';
+import { MimiTooltip } from '@/components/ui/tooltip';
 import { MimiTree, type MimiTreeNode } from '@/components/ui/tree';
 import { ForceState, type ForcedState, installForcedCss } from './state-forcer';
 
@@ -140,6 +142,7 @@ const TREE: MimiTreeNode[] = [
     MimiComboboxImports,
     MimiDatePicker,
     MimiDateRangePicker,
+    MimiDropdownMenuImports,
     MimiFileUpload,
     MimiInput,
     MimiInputMask,
@@ -152,6 +155,7 @@ const TREE: MimiTreeNode[] = [
     MimiTagsInput,
     MimiTextarea,
     MimiToggleGroupImports,
+    MimiTooltip,
     MimiTree,
   ],
   templateUrl: './states-page.html',
