@@ -167,3 +167,84 @@ Fallo encontrado por Playwright y arreglado antes del commit: con `width: '100%'
   - No se subió ningún presupuesto.
 - **Pruebas en verde:** docs **249** (antes, 246), ui-core **1019** (antes, 1007), CLI **202**.
 - **`pnpm format:check`** en verde.
+- **CHANGELOG** («0.6.0 (por publicar)», «Formularios»): se añadieron la X de limpiar con Supr/Retroceso, el aviso de `compareWith` y el separador propio de Input OTP. Son añadidos, no rupturas. Se anotó en el commit de la Parte B.
+
+## Parte B: plan de una plantilla común para las páginas (solo plan)
+
+**No se cambió ninguna página.** Archivos nuevos en `docs/plan/docs-paginas/`:
+
+- **`plan.md`:**
+  - el resumen de lo encontrado;
+  - **PD-4, PENDIENTE DE DECIDIR (usuario)**, con 12 reglas comunes:
+    - orden y nombres fijos (h2 `Instalación`, `Uso`, `Ejemplos`, `Accesibilidad y teclado`, `API`);
+    - una frase de cabecera de 12 a 25 palabras y una demo principal antes de Instalación;
+    - «Qué instala» en un desplegable;
+    - Uso de 12 líneas como máximo;
+    - una frase por ejemplo, de 25 palabras como máximo;
+    - los ejemplos en orden fijo: Tamaños → Variantes → Estados → Formularios → Casos avanzados → `class` → Alternativas;
+    - sin ejemplos vivos que repitan las pestañas de formularios;
+    - ejemplos de 80 líneas como máximo;
+    - tablas de API con columnas fijas;
+    - qué sale de la página (spec o CHANGELOG) y qué va a un desplegable.
+  - Dos variantes:
+    - **A, completa (recomendada):** hasta 8 ejemplos y 400 palabras visibles, con una tabla de Entradas, Salidas, Piezas, Textos y Variables CSS.
+    - **B, corta:** hasta 4 ejemplos y 200 palabras, una sola tabla y los avanzados en una página «Recetas».
+  - **Prioridad y tandas** (DP.0 a DP.P):
+    - primero, las piezas comunes y una prueba de estructura;
+    - después, tandas de 5 a 9 páginas: las más pesadas (Select, Combobox, Dialog, Form Field y Toolbar), formularios con ejemplos repetidos, capas flotantes, datos y fechas, simples, y Blocks y portada.
+- **`auditoria.md`:**
+  - una tabla de las **38 páginas** contra la plantilla: qué falta, qué sobra, orden distinto, repetidos o código engorroso, y nombres inconsistentes;
+  - 13 inconsistencias entre páginas, con su lista de páginas;
+  - las 5 más pesadas y los 12 ejemplos de más de 80 líneas;
+  - los **7 Blocks** (`block-doc.ts`: 250 palabras fijas repetidas y código sin plegar);
+  - la **vitrina de la portada** (9 de 38 componentes, Reactive Forms frente a Signal Forms en los Blocks, y un enlace a Blocks incompleto).
+- **`ejemplos.md`:** Button y Select con cada variante: el esqueleto de secciones, de dónde sale cada ejemplo y qué sale de la página.
+  - **Button:** A queda en 6 ejemplos y unas 160 palabras; B, en 3 ejemplos y unas 90 (hoy, 8 y 240).
+  - **Select:** A queda en 7 ejemplos y unas 420 palabras con la API; B, en 4 y unas 220 (hoy, 11 y unas 970).
+
+Registrado en el índice (`docs/plan.md`, bloque «Páginas de la documentación», tareas DP.0 a DP.P bloqueadas por PD-4) y en `docs/plan/decisiones.md`, sección (a). La línea de R.15 en el índice se actualizó con lo hecho hoy (la X de limpiar).
+
+**Cómo se hizo la auditoría:** un subagente de solo lectura recorrió el código de las 38 páginas, los Blocks y la portada. Se comprobaron a mano el número de páginas (38) y el orden de Button (8 ejemplos, en el orden indicado). Las filas de Dialog, Input OTP y Toast se corrigieron con lo cambiado hoy. Los recuentos de palabras son aproximados.
+
+## Alertas para el revisor
+
+1. **El primer commit de la tanda dejó `dev-warnings.spec.ts` en rojo:** el formato del aviso de `compareWith`. Lo arregla el commit siguiente; la rama terminó en verde.
+2. **El CSS global crece 0,88 kB crudo (0,14 kB gzip)** por las variantes de la X de limpiar (también en Combobox, que va en `components.css`) y la tarjeta de avisos de la portada. Es lejos del presupuesto y no se subió nada.
+3. **`CodePreview` gana `files`** (varios archivos por ejemplo). Es del sitio, no de la librería. Lo usa la demo de Dialog, y la plantilla (DP) lo propone para los ejemplos largos.
+4. **Input OTP**:
+   - mantiene un ejemplo vivo de Signal Forms y otro de Reactive Forms **además** de las pestañas, como pidió el encargo;
+   - la variante A de la plantilla dejaría uno solo (de validación);
+   - lo decide PD-4.
+5. **Supr/Retroceso en el Combobox simple** quitan el valor solo si el campo muestra la opción elegida. Si se está escribiendo, Retroceso borra letras, como en cualquier campo.
+6. **Nada comprobado con NVDA ni en teléfonos reales:** la X en táctil se comprobó con la emulación de Chromium (`hover: none`).
+
+## Archivos
+
+- **ui-core:**
+  - `option-list/option-list.ts`
+  - `select/select.ts`
+  - `combobox/combobox.ts`
+  - `input-otp/input-otp.ts` e `input-otp/index.ts`
+  - pruebas: `clear-button.spec.ts` (nuevo), `compare-with.spec.ts` e `input-otp/input-otp.spec.ts`
+- **Sitio:**
+  - `code/code-preview.ts`, `code/code-preview.html` y `code/code-preview.spec.ts`
+  - Select y Combobox: `select-page.html`, `combobox-page.html`
+  - Input OTP: `input-otp-page.*` y los ejemplos `input-otp-playground`, `-separator`, `-signal-forms` y `-reactive-forms` (nuevos); se quitó `-forms`
+  - Toast: `toast-page.*` y `toast-sizes.example.ts` (nuevo)
+  - portada: `home-page.*` y `home/showcase-toasts.ts` (nuevo)
+  - Dialog: `dialog-page.*` y los ejemplos `dialog-edit-user.example.ts`, `edit-user-dialog.ts` y `dialog-options.example.ts` (nuevos); se quitó `dialog-service.example.ts`
+- **Docs:**
+  - `CHANGELOG.md`
+  - `docs/design/correcciones-pendientes.md`
+  - `docs/plan.md` y `docs/plan/decisiones.md`
+  - `docs/plan/docs-paginas/plan.md`, `auditoria.md` y `ejemplos.md` (nuevos)
+  - este informe
+
+## Limpieza
+
+- **Servidor de desarrollo (puerto 4280):**
+  - lanzado con `timeout`;
+  - reiniciado una vez, porque se quedó en una compilación intermedia;
+  - al final, detenido (la tarea y el proceso `node`, por PID);
+  - se comprobó con `netstat` que el puerto quedó libre.
+- **Playwright** (scripts, `playwright-core` y capturas) vivió en el directorio temporal de la sesión, fuera del repo, y se borró al terminar.

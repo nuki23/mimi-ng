@@ -15,7 +15,9 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
 
-Ninguna abierta. Las tres de gusto del plan de refinamiento (PD-1, PD-2 y PD-3) las **decidió el usuario el 09/11/2026** y salieron de este índice: PD-1 Card, opción B; PD-2 Table y Data Table, opción C; PD-3 mensajes de error de Form Field, opciones A + B. Quedan como «Decidido por el usuario» en [refinamiento/decisiones-usuario.md](refinamiento/decisiones-usuario.md), en las tareas R.14, R.19 y R.20 y en `docs/auto/decisiones-por-defecto.md`.
+- **PD-4 (usuario, 12/11/2026): la plantilla de las páginas de componentes.** Variante A, completa (recomendada), o B, corta. Bloquea DP.0 a DP.P. No se decide por defecto, ni en modo autónomo. Opciones, reglas comunes y ejemplos (Button y Select): [docs-paginas/plan.md](docs-paginas/plan.md) y [docs-paginas/ejemplos.md](docs-paginas/ejemplos.md).
+
+Las tres de gusto del plan de refinamiento (PD-1, PD-2 y PD-3) las **decidió el usuario el 09/11/2026** y salieron de este índice: PD-1 Card, opción B; PD-2 Table y Data Table, opción C; PD-3 mensajes de error de Form Field, opciones A + B. Quedan como «Decidido por el usuario» en [refinamiento/decisiones-usuario.md](refinamiento/decisiones-usuario.md), en las tareas R.14, R.19 y R.20 y en `docs/auto/decisiones-por-defecto.md`.
 
 **(b) Se deciden al empezar su tarea.**
 

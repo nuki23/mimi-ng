@@ -145,7 +145,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [~] R.12 (hecha en parte, 09/11/2026: Checkbox, Switch, Select, Combobox, Date Picker, Date Range, Slider, Color Picker, File Upload, Toggle Group y Password; faltan el aspecto de solo lectura (`data-readonly`), los ejemplos de los seis primeros y revisar Number Input, Input Mask, Tags Input e Input OTP) `readonly` en todos los componentes de formulario · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [x] R.13 (10/11/2026: pestañas de código en 17 páginas con un componente compartido; no son ejemplos en vivo) Ejemplos de formularios (Signal Forms, Reactive, Template y Form Field) · v0.6.0 · M · depende: R.14, R.15 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [~] R.14 (hecha en parte, 09/11/2026: PD-3 A + B y los atajos `hint`, `required` y `description`; faltan más ejemplos y el diagrama) Form Field: atajos y mensajes de error (PD-3, decidido por el usuario el 09/11/2026: opciones A + B) · v0.6.0 · M · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [~] R.15 (hecha en parte, 09/11/2026: `<mimi-option>`, `<mimi-optgroup>`, un solo icono al final y el ejemplo; falta revelar la X solo al pasar el ratón con `@media (hover: none)` y M.9 completa) Select: `mimi-option` e íconos de limpiar y carga sobre el chevron · v0.6.0 · L · depende: M.9 (conviene) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [~] R.15 (hecha en parte, 09/11/2026: `<mimi-option>`, `<mimi-optgroup>`, un solo icono al final y el ejemplo; 12/11/2026: todos los ejemplos con `<mimi-option>`, `searchMode`, `compareWith="id"` y la X solo con hover, foco o panel abierto (siempre en táctil); falta M.9 completa) Select: `mimi-option` e íconos de limpiar y carga sobre el chevron · v0.6.0 · L · depende: M.9 (conviene) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [x] R.16 (09/11/2026; la plantilla de opción propia sigue siendo `MimiComboboxOption`, distinta de `MimiSelectOption`) Combobox con la misma API que Select · v0.6.0 · M · depende: R.15, M.9 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [x] R.17 (09/11/2026) Tabs: atajo `<mimi-tab label>` · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 - [x] R.18 (09/11/2026) Input OTP: cantidad de dígitos que quepa y ejemplos · v0.6.0 · S · depende: R.2 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
@@ -160,6 +160,19 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [ ] R.22 Block `kanban-01` · v0.7.0 · M · depende: R.21, R.19 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.23 Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.P7 Puerta de la 0.7.0 · v0.7.0 · — · depende: R.19 a R.23 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+
+## Páginas de la documentación: una plantilla común (plan del 12/11/2026, sin empezar)
+
+Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También están la [auditoría](plan/docs-paginas/auditoria.md) de las 38 páginas, los 7 Blocks y la portada, y los [ejemplos](plan/docs-paginas/ejemplos.md) de Button y Select con cada variante. Lo pidió el usuario tras revisar el sitio: «las páginas no tienen una estructura común y presentan demasiada información». **Bloqueado por PD-4 (PENDIENTE DE DECIDIR, usuario):** variante A, completa (recomendada), o B, corta. Solo cambia el sitio; ningún componente ni su API.
+
+- [ ] DP.0 Piezas comunes (`app-api-table`, `app-more`, «Qué instala» desde el registro) y prueba de estructura de las páginas · sin versión · M · depende: PD-4 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.1 Tanda 1, las más pesadas: Select, Combobox, Dialog, Form Field y Toolbar · sin versión · L · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.2 Tanda 2, formularios con ejemplos repetidos (8 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.3 Tanda 3, capas flotantes (7 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.4 Tanda 4, datos y fechas (9 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.5 Tanda 5, simples (9 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.6 Tanda 6, Blocks (`block-doc.ts`) y vitrina de la portada · sin versión · M · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.P Puerta: prueba de estructura sin excepciones y Playwright de todas las páginas · sin versión · — · depende: DP.1 a DP.6 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 
 ## Grupo 4 → v0.8.0: estructura
 
