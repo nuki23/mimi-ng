@@ -146,4 +146,16 @@ Sin tokens nuevos.
 - En deshabilitado y solo lectura, nada cambia.
 - Sin errores de consola.
 
+## 8. `/docs/states`: Password oculto, con una fila «mostrar»
+
+En el navegador, al cargar, la fila Password ya salía oculta (`type=password`) en las 7 columnas. Lo que faltaba era una fila aparte para ver el campo con el texto a la vista.
+
+- **«Password (mostrar)»**, fila nueva: el mismo campo, con el ojo pulsado al cargar. Se pulsa con `click()` desde el código: no mueve el foco (punto 9), y el botón queda `aria-pressed="true"` (el `type` no se cambia por fuera del componente).
+- **En deshabilitado, «No aplica»:** el componente no deja mostrar una contraseña deshabilitada (el botón del ojo se deshabilita).
+- La nota de la fila lo explica. La prueba de cobertura no cambia (la fila nueva apunta a la misma carpeta).
+
+**Prueba que falla antes:** `states-page.spec.ts`, caso nuevo: la fila Password con `type=password` en las 7 columnas; la fila «mostrar» con `type=text` salvo en deshabilitado; el ojo pulsado. Falló antes de la fila nueva. El caso de la cuadrícula pasa a 20 filas (140 celdas).
+
+**Playwright** (`password.mjs`, claro y oscuro): **30 de 30 OK**. Password oculto en las 7 columnas; «mostrar» con `type=text` y el ojo pulsado en 6, sin campo en deshabilitado. Sin errores.
+
 **Bundle** (después de los puntos 2 a 5): JS inicial **334,89 kB / 106,23 kB gzip** (sin cambio: `overlay.ts` ahora importa el CDK en ejecución, pero solo lo usan componentes que ya lo cargaban); CSS global **124,86 kB / 18,39 kB gzip** (desde el punto 1, +2,16 kB crudo, +0,22 kB gzip). Pruebas: ui-core 1058, docs 253, CLI 202.

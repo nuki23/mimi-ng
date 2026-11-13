@@ -74,6 +74,14 @@ export const ROWS: ControlRow[] = [
   { id: 'tags', name: 'Tags Input', source: 'tags-input', kind: 'write', target: 'input' },
   { id: 'number', name: 'Number Input', source: 'number-input', kind: 'write', target: 'input' },
   { id: 'password', name: 'Password', source: 'password', kind: 'write', target: 'input' },
+  {
+    id: 'password-show',
+    name: 'Password (mostrar)',
+    source: 'password',
+    kind: 'write',
+    target: 'input',
+    note: 'la fila «mostrar» pulsa el ojo al cargar; deshabilitado no deja mostrarla.',
+  },
   { id: 'mask', name: 'Input Mask', source: 'input-mask', kind: 'write', target: 'input' },
   {
     id: 'otp',
@@ -174,7 +182,16 @@ export class StatesPage {
   protected readonly notes = ROWS.filter((row) => row.note);
 
   constructor() {
-    afterNextRender(() => this.forcedRules.set(installForcedCss(this.document)));
+    afterNextRender(() => {
+      this.forcedRules.set(installForcedCss(this.document));
+      // La fila «Password (mostrar)»: pulsa el ojo de cada celda. `click()` desde el código no
+      // mueve el foco (la página no enfoca nada al cargar) y el botón queda `aria-pressed`.
+      for (const toggle of this.document.querySelectorAll<HTMLButtonElement>(
+        'tr[data-row="password-show"] [data-slot="toggle"]:not([disabled])',
+      )) {
+        toggle.click();
+      }
+    });
     inject(DestroyRef).onDestroy(() =>
       this.document.getElementById('mimi-states-forced')?.remove(),
     );

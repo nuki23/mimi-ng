@@ -4,7 +4,7 @@ import { settle } from '../../../code/code-preview.testing';
 import { forcedSelector } from './state-forcer';
 import { ROWS, STATES, StatesPage } from './states-page';
 
-/** La página pinta 133 celdas (19 × 7): con toda la suite, unos 25 s. */
+/** La página pinta 140 celdas (20 × 7): con toda la suite, unos 25 s. */
 const STATES_PAGE_TIMEOUT = 60_000;
 
 const statesNode = (
@@ -74,14 +74,14 @@ describe('Página «Estados»', () => {
   });
 
   it(
-    'pinta los 19 controles en los 7 estados, solo con lo elegido (sin selectores)',
+    'pinta las 20 filas (19 controles y Password a la vista) en los 7 estados, solo con lo elegido',
     async () => {
       TestBed.configureTestingModule({ providers: [provideRouter([])] });
       const fixture = TestBed.createComponent(StatesPage);
       document.body.appendChild(fixture.nativeElement);
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
-      expect(ROWS.length).toBe(19);
+      expect(ROWS.length).toBe(20);
       expect(STATES.map((s) => s.id)).toEqual([
         'normal',
         'hover',
@@ -92,8 +92,8 @@ describe('Página «Estados»', () => {
         'error',
       ]);
       const grid = el.querySelector<HTMLElement>('[data-test="states-grid"]')!;
-      expect(grid.querySelectorAll('tbody tr').length).toBe(19);
-      expect(grid.querySelectorAll('[data-cell]').length).toBe(19 * 7);
+      expect(grid.querySelectorAll('tbody tr').length).toBe(20);
+      expect(grid.querySelectorAll('[data-cell]').length).toBe(20 * 7);
       // Estados forzados: el elemento interactivo de cada celda lleva su data-force.
       const cell = (row: string, state: string) =>
         grid.querySelector<HTMLElement>(`tr[data-row="${row}"] [data-cell="${state}"]`)!;
@@ -125,6 +125,38 @@ describe('Página «Estados»', () => {
       expect(tree.querySelector('[data-force="hover"]')!.textContent).toContain('README.md');
       expect(cell('tree', 'readonly').querySelector('mimi-tree')).toBeNull();
       expect(el.querySelectorAll('mimi-tree').length).toBe(5);
+      fixture.destroy();
+    },
+    STATES_PAGE_TIMEOUT,
+  );
+
+  it(
+    'Password: oculto en todas las columnas; la fila «mostrar», con el texto a la vista',
+    async () => {
+      TestBed.configureTestingModule({ providers: [provideRouter([])] });
+      const fixture = TestBed.createComponent(StatesPage);
+      document.body.appendChild(fixture.nativeElement);
+      await settle(fixture);
+      const grid = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>(
+        '[data-test="states-grid"]',
+      )!;
+      const types = (row: string) =>
+        STATES.map((s) => {
+          const input = grid.querySelector<HTMLInputElement>(
+            `tr[data-row="${row}"] [data-cell="${s.id}"] input`,
+          );
+          return input?.type ?? 'no aplica';
+        });
+      expect(types('password')).toEqual(STATES.map(() => 'password'));
+      // Deshabilitado no deja mostrarla (el botón del ojo está deshabilitado): «No aplica».
+      expect(types('password-show')).toEqual(
+        STATES.map((s) => (s.id === 'disabled' ? 'no aplica' : 'text')),
+      );
+      // El botón del ojo dice que está pulsado (no se cambió el type por fuera).
+      const toggle = grid.querySelector(
+        'tr[data-row="password-show"] [data-cell="normal"] [data-slot="toggle"]',
+      )!;
+      expect(toggle.getAttribute('aria-pressed')).toBe('true');
       fixture.destroy();
     },
     STATES_PAGE_TIMEOUT,

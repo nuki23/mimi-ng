@@ -137,6 +137,22 @@ Hola</textarea>
                         />
                       </mimi-password>
                     }
+                    @case ('password-show') {
+                      @if (d) {
+                        <span class="text-xs text-muted-foreground">No aplica</span>
+                      } @else {
+                        <mimi-password>
+                          <input
+                            mimiInput
+                            type="password"
+                            aria-label="Contraseña a la vista"
+                            value="secreto"
+                            [readOnly]="r"
+                            [showError]="e ? true : undefined"
+                          />
+                        </mimi-password>
+                      }
+                    }
                     @case ('mask') {
                       <mimi-input-mask
                         aria-label="Teléfono"
