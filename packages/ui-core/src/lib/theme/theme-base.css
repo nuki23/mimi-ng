@@ -463,7 +463,9 @@
   --mimi-border: oklch(1 0 0 / 10%);
   --mimi-input: oklch(1 0 0 / 15%);
   --mimi-input-background: oklch(1 0 0 / 4.5%);
-  --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 30%, var(--mimi-input));
+  /* En oscuro, el 30 % del diseño dejaba el borde casi blanco al pasar el ratón (informe del
+     usuario, 12/11/2026): el 14 % sube de 15 % a ~27 % de blanco, un paso visible sin destacar. */
+  --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 14%, var(--mimi-input));
   --mimi-ring: var(--mimi-brand-400);
 
   --mimi-success: oklch(0.72 0.15 150);

@@ -256,7 +256,12 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/field-state", "utils/size"]
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/size"
+      ]
     },
     "password": {
       "type": "component",
