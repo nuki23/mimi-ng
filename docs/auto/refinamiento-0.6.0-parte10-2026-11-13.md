@@ -124,4 +124,26 @@ Como se hizo con Switch y Checkbox:
 - Settings 01 enlaza a Textarea.
 - Sin errores de consola.
 
+## 7. Checkbox, Switch y Toggle Group: hover sutil
+
+**Antes:** Checkbox oscurecía el borde solo sin marcar y solo con el ratón sobre la casilla, no sobre la etiqueta. Switch y Toggle Group no tenían hover de color; en Toggle Group solo cambiaba el texto.
+
+**Ahora** (nunca en deshabilitado ni en solo lectura):
+
+- **Checkbox:** con el ratón sobre todo el control (`group/checkbox`, también la etiqueta), sin marcar, el borde de hover de los campos (`--mimi-input-border-hover`). Marcada o mixta, el relleno y el borde se intensifican: el color de la casilla al 88 % con `foreground`.
+- **Switch:** con el ratón sobre todo el control (`group/switch`), la pista se intensifica. Apagada, su color al 82 % con `foreground`; encendida, al 88 %. Sigue al color de la pista si lo cambiaste.
+- **Toggle Group:** la opción no elegida toma un fondo suave (`foreground` al 6 %); la elegida ya tiene el indicador.
+
+Sin tokens nuevos.
+
+**Prueba que falla antes:** `choice-hover.spec.ts` (nuevo, 3 casos). Falló en los 3.
+
+**Playwright** (`hover.mjs`, ratón de verdad, claro y oscuro): **24 de 24 OK**.
+
+- Con el ratón en la etiqueta cambian el borde y el relleno de la casilla marcada y la pista del Switch.
+- La opción no elegida de Toggle Group pasa de transparente a `foreground / 0.06`.
+- La casilla sin marcar de la página de Checkbox: borde `oklch(0.88 …)` → `oklab(0.68 …)` en claro.
+- En deshabilitado y solo lectura, nada cambia.
+- Sin errores de consola.
+
 **Bundle** (después de los puntos 2 a 5): JS inicial **334,89 kB / 106,23 kB gzip** (sin cambio: `overlay.ts` ahora importa el CDK en ejecución, pero solo lo usan componentes que ya lo cargaban); CSS global **124,86 kB / 18,39 kB gzip** (desde el punto 1, +2,16 kB crudo, +0,22 kB gzip). Pruebas: ui-core 1058, docs 253, CLI 202.

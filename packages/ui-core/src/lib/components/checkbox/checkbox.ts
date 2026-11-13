@@ -166,7 +166,7 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
 
   protected readonly classes = computed(() =>
     cn(
-      'inline-flex items-center gap-2.5 text-[length:var(--mimi-size-text,0.875rem)]',
+      'group/checkbox inline-flex items-center gap-2.5 text-[length:var(--mimi-size-text,0.875rem)]',
       this.userClass(),
     ),
   );
@@ -175,8 +175,12 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
     'peer',
     MIMI_CHECKBOX_BOX_STYLES,
     'data-[state=unchecked]:focus-visible:border-ring',
-    // Hover como los campos, sin marcar: el borde de hover (no en deshabilitado ni solo lectura).
-    'data-[state=unchecked]:not-disabled:not-aria-readonly:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+    // Hover como los campos, sin marcar: el borde de hover (no en deshabilitado ni solo lectura),
+    // con el ratón sobre todo el control, también la etiqueta (13/11/2026).
+    'group-hover/checkbox:not-disabled:not-aria-readonly:data-[state=unchecked]:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+    // Marcada o mixta: el relleno se intensifica un poco hacia `foreground`, como la pista del Switch.
+    'group-hover/checkbox:not-disabled:not-aria-readonly:data-[state=checked]:bg-[color:color-mix(in_oklab,var(--mimi-checkbox-checked-bg,var(--mimi-primary))_88%,var(--mimi-foreground))] group-hover/checkbox:not-disabled:not-aria-readonly:not-aria-invalid:data-[state=checked]:border-[color:color-mix(in_oklab,var(--mimi-checkbox-checked-bg,var(--mimi-primary))_88%,var(--mimi-foreground))]',
+    'group-hover/checkbox:not-disabled:not-aria-readonly:data-[state=indeterminate]:bg-[color:color-mix(in_oklab,var(--mimi-checkbox-checked-bg,var(--mimi-primary))_88%,var(--mimi-foreground))] group-hover/checkbox:not-disabled:not-aria-readonly:not-aria-invalid:data-[state=indeterminate]:border-[color:color-mix(in_oklab,var(--mimi-checkbox-checked-bg,var(--mimi-primary))_88%,var(--mimi-foreground))]',
     // Error, la forma de todos los campos: borde rojo, también marcada o mixta.
     'aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[state=checked]:aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[state=indeterminate]:aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
     'disabled:shadow-none',

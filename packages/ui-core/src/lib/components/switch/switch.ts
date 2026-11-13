@@ -113,7 +113,7 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
 
   protected readonly classes = computed(() =>
     cn(
-      'inline-flex items-center gap-2.5 text-[length:var(--mimi-size-text,0.875rem)]',
+      'group/switch inline-flex items-center gap-2.5 text-[length:var(--mimi-size-text,0.875rem)]',
       this.userClass(),
     ),
   );
@@ -125,6 +125,10 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
     'mimi-transition',
     choicePressStyles,
     'data-[state=checked]:bg-[color:var(--mimi-switch-track-on,var(--mimi-primary))] data-[state=checked]:shadow-primary disabled:shadow-none',
+    // Hover sutil (13/11/2026), con el ratón sobre todo el control: la pista se intensifica un poco
+    // hacia `foreground`, apagada y encendida (sigue al color de la pista si lo cambiaste).
+    'group-hover/switch:not-disabled:not-aria-readonly:data-[state=unchecked]:bg-[color:color-mix(in_oklab,var(--mimi-switch-track-off,var(--mimi-switch-off))_82%,var(--mimi-foreground))]',
+    'group-hover/switch:not-disabled:not-aria-readonly:data-[state=checked]:bg-[color:color-mix(in_oklab,var(--mimi-switch-track-on,var(--mimi-primary))_88%,var(--mimi-foreground))]',
     // Error: la pista no tiene borde, así que lleva un filo rojo de 1px (como Toggle Group).
     'aria-invalid:ring-1 aria-invalid:ring-[color:var(--mimi-input-error,var(--mimi-destructive))]',
     buttonFocusStyles,
