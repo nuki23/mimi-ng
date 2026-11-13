@@ -16,6 +16,11 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 **(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
 
 - **PD-4 (usuario, 12/11/2026): la plantilla de las páginas de componentes.** Variante A, completa (recomendada), o B, corta. Bloquea DP.0 a DP.P. No se decide por defecto, ni en modo autónomo. Opciones, reglas comunes y ejemplos (Button y Select): [docs-paginas/plan.md](docs-paginas/plan.md) y [docs-paginas/ejemplos.md](docs-paginas/ejemplos.md).
+  - **PD-4c (usuario, con PD-4):** cómo se impone la plantilla ([docs-paginas/parte-c.md](docs-paginas/parte-c.md)). Son cuatro preguntas:
+    1. Un componente común con configuración (recomendado) o una plantilla con huecos.
+    2. La prueba falla desde DP.0 con la lista `PENDING`, que solo encoge (recomendado), o solo para las páginas nuevas.
+    3. Aplicar como están los textos propuestos para `CLAUDE.md`, `componente.md` y `cerrar-grupo.md` (recomendado: sí, en DP.0).
+    4. Que las excepciones las apruebe el usuario una a una (recomendado).
 
 Las tres de gusto del plan de refinamiento (PD-1, PD-2 y PD-3) las **decidió el usuario el 09/11/2026** y salieron de este índice: PD-1 Card, opción B; PD-2 Table y Data Table, opción C; PD-3 mensajes de error de Form Field, opciones A + B. Quedan como «Decidido por el usuario» en [refinamiento/decisiones-usuario.md](refinamiento/decisiones-usuario.md), en las tareas R.14, R.19 y R.20 y en `docs/auto/decisiones-por-defecto.md`.
 

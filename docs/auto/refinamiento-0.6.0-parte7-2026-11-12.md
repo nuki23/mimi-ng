@@ -206,6 +206,34 @@ Registrado en el índice (`docs/plan.md`, bloque «Páginas de la documentación
 
 **Cómo se hizo la auditoría:** un subagente de solo lectura recorrió el código de las 38 páginas, los Blocks y la portada. Se comprobaron a mano el número de páginas (38) y el orden de Button (8 ejemplos, en el orden indicado). Las filas de Dialog, Input OTP y Toast se corrigieron con lo cambiado hoy. Los recuentos de palabras son aproximados.
 
+## Parte C: que la plantilla se cumpla sola (solo plan, encargo posterior del 12/11/2026)
+
+Archivo nuevo: **`docs/plan/docs-paginas/parte-c.md`**. **No se aplicó nada**: ni `CLAUDE.md`, ni `.claude/commands/`, ni el sitio. Todo queda **PENDIENTE DE DECIDIR (usuario), junto con PD-4**, como **PD-4c** (cuatro preguntas, con su recomendación).
+
+- **C.1 `app-doc-page`:**
+  - cada página es una configuración tipada `DocPage` (nombre, frase, demo, `install`, `usage`, ejemplos por categoría con su frase, accesibilidad, API, textos y variables CSS);
+  - el componente pinta las secciones con su orden, nombres e `id` fijos, y no hay campo de HTML libre;
+  - las dos variantes son una constante del sitio (qué pinta cada una, en una tabla);
+  - incluye la migración paso a paso, lo que añade B (la página «Recetas») y Button como piloto en DP.0;
+  - los Blocks se quedan con su `block-doc.ts`.
+- **C.2 `doc-pages.spec.ts`:** falla si una página (cada carpeta de componentes y cada ítem `ready` del menú, así que también cubre las futuras):
+  - no usa el componente;
+  - le falta una sección obligatoria (`texts`, `forms` y `tokens` se exigen cuando el componente los tiene);
+  - cambia el orden de los h2 o los h3;
+  - pasa de un límite de la variante;
+  - tiene un ejemplo sin frase;
+  - muestra nombres internos.
+  - Durante la migración, con `PENDING`, que solo encoge. Después, las excepciones con la aprobación del usuario. Sustituye a la prueba de R.24.
+- **C.3 Textos propuestos** (en el plan, citados, sin aplicar), para:
+  - `CLAUDE.md`: reemplazar «Cada componente nuevo tiene su página…» por la regla que apunta a `docs/spec/plantilla-pagina.md` (se crea en DP.0), y una regla de Angular 11 para las páginas;
+  - `.claude/commands/componente.md`: el apartado «3. La página» con la configuración y la prueba como paso obligatorio;
+  - `.claude/commands/cerrar-grupo.md`: «Páginas con la plantilla» en «Comprobar» y en «Comprobado».
+- **Plan e índice:**
+  - `plan.md` gana la sección «Parte C» y el enlace;
+  - DP.0 incluye `app-doc-page`, la prueba, `plantilla-pagina.md`, los textos y Button como piloto;
+  - la tanda 5 queda en 8 páginas;
+  - `docs/plan.md` y `docs/plan/decisiones.md` (PD-4c) se actualizaron.
+
 ## Alertas para el revisor
 
 1. **El primer commit de la tanda dejó `dev-warnings.spec.ts` en rojo:** el formato del aviso de `compareWith`. Lo arregla el commit siguiente; la rama terminó en verde.
