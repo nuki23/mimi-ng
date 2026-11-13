@@ -28,6 +28,11 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./sizes-page').then((m) => m.SizesPage),
   },
   {
+    path: 'states',
+    title: 'Estados · Mimi',
+    loadComponent: () => import('./states/states-page').then((m) => m.StatesPage),
+  },
+  {
     path: 'theme',
     title: 'Tema · Mimi',
     loadComponent: () => import('./theme/theme-page').then((m) => m.ThemePage),

@@ -14,8 +14,8 @@ export const COMPONENTS_STYLES_WAIT_MS = new InjectionToken<number>('COMPONENTS_
   factory: () => 3000,
 });
 
-/** Páginas que necesitan la hoja. */
-const COMPONENTS_PREFIX = '/docs/components';
+/** Páginas que necesitan la hoja: las de componentes y «Estados» (todos los controles juntos). */
+const COMPONENTS_PREFIXES = ['/docs/components', '/docs/states'];
 
 /**
  * Pide `components.css` la primera vez que se entra en una página de componentes y espera a que
@@ -23,7 +23,7 @@ const COMPONENTS_PREFIX = '/docs/components';
  * `canActivateChild` de /docs (app.routes.ts); el resto de /docs no la pide.
  */
 export const loadComponentsStyles: CanActivateChildFn = (_route, state) => {
-  if (!state.url.startsWith(COMPONENTS_PREFIX)) return true;
+  if (!COMPONENTS_PREFIXES.some((prefix) => state.url.startsWith(prefix))) return true;
   const document = inject(DOCUMENT);
   const existing = document.head.querySelector<HTMLLinkElement>('link[data-mimi-components]');
   if (existing) return true;

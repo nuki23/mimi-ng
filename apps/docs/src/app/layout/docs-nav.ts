@@ -29,6 +29,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Personalización', path: '/docs/customization', status: 'pending' },
       { title: 'Tema', path: '/docs/theme', status: 'ready' },
       { title: 'Tamaños', path: '/docs/sizes', status: 'ready' },
+      { title: 'Estados', path: '/docs/states', status: 'ready' },
       { title: 'Iconos', path: '/docs/icons', status: 'pending' },
       { title: 'Migrar desde PrimeNG / NG-ZORRO', path: '/docs/migration', status: 'pending' },
     ],

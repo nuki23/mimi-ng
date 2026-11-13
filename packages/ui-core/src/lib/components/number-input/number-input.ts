@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
-import { fieldBoxStyles, fieldButtonHoverStyles } from '@/components/ui/utils/control-styles';
+import { fieldBoxStyles, fieldButtonHoverStyles } from '@/components/ui/utils/field-styles';
 import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,

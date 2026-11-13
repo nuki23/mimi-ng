@@ -1,0 +1,372 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Estados</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Todos los controles con cada estado forzado a la vista, para comparar cómo dibujan el hover, el
+    foco, el clic, el deshabilitado, la solo lectura y el error.
+  </p>
+  <p class="text-pretty">
+    Es una página para elegir: las opciones de profundidad, de grises y del Tree son
+    <strong>propuestas simuladas aquí</strong>; ningún componente cambia hasta que se elija. Cambia
+    el tema del sitio (arriba a la derecha) para verlas en claro y en oscuro.
+  </p>
+
+  <h2 id="options" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Opciones</h2>
+  <div class="flex flex-col gap-5">
+    <div class="flex flex-col gap-2">
+      <span id="depth-label" class="text-sm font-semibold">(a) Profundidad al hacer clic</span>
+      <mimi-toggle-group
+        aria-labelledby="depth-label"
+        data-test="depth"
+        class="flex-wrap"
+        [(value)]="depth"
+      >
+        @for (option of depthOptions; track option.id) {
+          <button [mimiToggleGroupItem]="option.id">{{ option.label }}</button>
+        }
+      </mimi-toggle-group>
+      <ul class="flex list-disc flex-col gap-1 pl-5 text-sm text-pretty text-muted-foreground">
+        <li>
+          <strong>A:</strong> a todos les crece un anillo al hacer clic, como a Button; se hunden
+          solo los que funcionan como botón (Select, Date Picker, Color Picker, File Upload,
+          Checkbox, Switch, Toggle Group, Button). Los campos de escribir no se hunden.
+        </li>
+        <li><strong>B:</strong> todos se hunden y a todos les crece el anillo.</li>
+        <li><strong>Actual:</strong> lo que hace hoy cada componente (columna «Clic»).</li>
+      </ul>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <span id="gray-label" class="text-sm font-semibold">(b) Grises</span>
+      <mimi-toggle-group aria-labelledby="gray-label" data-test="gray" [(value)]="gray">
+        @for (option of grayOptions; track option.id) {
+          <button [mimiToggleGroupItem]="option.id">{{ option.label }}</button>
+        }
+      </mimi-toggle-group>
+      <p class="text-sm text-pretty text-muted-foreground">
+        Malva: los grises del tema teñidos con el tono 292 del violeta, con croma baja (0,006 y
+        0,014) y la misma luminosidad. Contraste con la opción elegida y el tema actual:
+      </p>
+      <ul data-test="contrasts" class="flex flex-col gap-1 text-sm">
+        @for (pair of contrasts(); track pair.label) {
+          <li class="flex items-center gap-2">
+            <span
+              class="inline-flex h-5 min-w-12 items-center justify-center rounded-full px-1.5 font-mono text-xs font-semibold"
+              [class]="
+                pair.ok
+                  ? 'bg-success-soft text-success-soft-foreground'
+                  : 'bg-muted text-destructive'
+              "
+              >{{ pair.ok ? 'AA' : 'NO' }}</span
+            >
+            <span class="font-mono text-[13px]">{{ pair.ratio }}:1</span>
+            <span class="text-muted-foreground">{{ pair.label }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+
+  <h2 id="grid" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Controles por estado
+  </h2>
+  <p class="text-pretty text-sm text-muted-foreground">
+    Radio no está en la lista: Mimi no lo tiene (lo más parecido es Toggle Group).
+    @for (row of notes; track row.id) {
+      {{ row.name }}: {{ row.note }}
+    }
+  </p>
+  <div
+    data-test="states-grid"
+    class="states-grid -mx-4 overflow-x-auto rounded-card border bg-background px-4 py-3 sm:mx-0"
+    [attr.data-depth]="depth() ?? 'current'"
+    [attr.data-gray]="gray() ?? 'neutral'"
+    [style]="gridStyle()"
+  >
+    <table class="w-max border-separate border-spacing-x-3 border-spacing-y-2 text-left text-sm">
+      <thead>
+        <tr>
+          <th scope="col" class="px-1 text-xs font-semibold text-muted-foreground">Control</th>
+          @for (state of states; track state.id) {
+            <th scope="col" class="px-1 text-xs font-semibold text-muted-foreground">
+              {{ state.label }}
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows; track row.id) {
+          <tr [attr.data-row]="row.id">
+            <th scope="row" class="pr-2 align-middle text-[13px] font-semibold whitespace-nowrap">
+              {{ row.name }}
+            </th>
+            @for (state of states; track state.id) {
+              @let d = state.id === 'disabled';
+              @let r = state.id === 'readonly';
+              @let e = state.id === 'error';
+              <td class="align-middle">
+                <div
+                  class="w-44"
+                  [attr.data-cell]="state.id"
+                  [appForceState]="state.id"
+                  [kind]="row.kind"
+                  [target]="row.target"
+                  [focusAttr]="row.focusAttr ?? null"
+                >
+                  @switch (row.id) {
+                    @case ('input') {
+                      <input
+                        mimiInput
+                        aria-label="Nombre"
+                        value="Ana"
+                        [disabled]="d"
+                        [readOnly]="r"
+                        [showError]="e ? true : undefined"
+                      />
+                    }
+                    @case ('textarea') {
+                      <textarea
+                        mimiTextarea
+                        aria-label="Nota"
+                        rows="1"
+                        [disabled]="d"
+                        [readOnly]="r"
+                        [showError]="e ? true : undefined"
+                      >
+Hola</textarea>
+                    }
+                    @case ('select') {
+                      <mimi-select
+                        aria-label="Talla"
+                        value="m"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      >
+                        <mimi-option value="m">Mediano</mimi-option>
+                        <mimi-option value="l">Grande</mimi-option>
+                      </mimi-select>
+                    }
+                    @case ('combobox') {
+                      <mimi-combobox
+                        aria-label="Ciudad"
+                        value="lima"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      >
+                        <mimi-option value="lima">Lima</mimi-option>
+                      </mimi-combobox>
+                    }
+                    @case ('tags') {
+                      <mimi-tags-input
+                        aria-label="Etiquetas"
+                        hint=""
+                        [value]="tags"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('number') {
+                      <mimi-number-input
+                        aria-label="Cantidad"
+                        [value]="3"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('password') {
+                      <mimi-password>
+                        <input
+                          mimiInput
+                          type="password"
+                          aria-label="Contraseña"
+                          value="secreto"
+                          [disabled]="d"
+                          [readOnly]="r"
+                          [showError]="e ? true : undefined"
+                        />
+                      </mimi-password>
+                    }
+                    @case ('mask') {
+                      <mimi-input-mask
+                        aria-label="Teléfono"
+                        mask="000 000 0000"
+                        value="3001234567"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('otp') {
+                      <mimi-input-otp
+                        aria-label="Código"
+                        value="12"
+                        class="gap-1"
+                        [length]="4"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('date') {
+                      <mimi-date-picker
+                        aria-label="Fecha"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('range') {
+                      <mimi-date-range
+                        aria-label="Fechas"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('color') {
+                      <mimi-color-input
+                        aria-label="Color"
+                        value="#793eea"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('upload') {
+                      <mimi-file-upload
+                        aria-label="Archivo"
+                        heading="Subir archivo"
+                        class="[--mimi-upload-height:88px]"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('slider') {
+                      <mimi-slider
+                        aria-label="Volumen"
+                        [value]="40"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('checkbox') {
+                      <mimi-checkbox
+                        [checked]="true"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                        >Acepto</mimi-checkbox
+                      >
+                    }
+                    @case ('switch') {
+                      <mimi-switch
+                        [checked]="true"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                        >Avisos</mimi-switch
+                      >
+                    }
+                    @case ('toggle') {
+                      <mimi-toggle-group
+                        aria-label="Vista"
+                        value="list"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      >
+                        <button mimiToggleGroupItem="list">Lista</button>
+                        <button mimiToggleGroupItem="table">Tabla</button>
+                      </mimi-toggle-group>
+                    }
+                    @case ('button') {
+                      @if (r || e) {
+                        <span class="text-xs text-muted-foreground">No aplica</span>
+                      } @else {
+                        <button mimiBtn [disabled]="d">Guardar</button>
+                      }
+                    }
+                  }
+                </div>
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="tree" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Tree: la selección
+  </h2>
+  <p class="text-pretty">
+    El mismo árbol con «app.ts» elegido y el foco de teclado (forzado) en «styles.css».
+  </p>
+  <div class="states-grid grid gap-4 sm:grid-cols-2" [style]="gridStyle()">
+    <div class="flex flex-col gap-2 rounded-card border bg-background p-3">
+      <span class="text-sm font-semibold">Actual: fondo primary y texto blanco</span>
+      <div
+        appForceState="focus"
+        target='[role="treeitem"]:not([data-selected]):not([aria-expanded])'
+      >
+        <mimi-tree aria-label="Archivos (actual)" value="app" [expanded]="['src']" [nodes]="tree" />
+      </div>
+    </div>
+    <div
+      class="flex flex-col gap-2 rounded-card border bg-background p-3"
+      style="
+        --mimi-tree-selected: var(--mimi-primary-subtle);
+        --mimi-tree-selected-fg: var(--mimi-primary);
+      "
+      data-test="tree-proposal"
+    >
+      <span class="text-sm font-semibold"
+        >Propuesta (recomendada): fondo primary-subtle, texto primary y anillo solo con el
+        teclado</span
+      >
+      <div
+        appForceState="focus"
+        target='[role="treeitem"]:not([data-selected]):not([aria-expanded])'
+      >
+        <mimi-tree
+          aria-label="Archivos (propuesta)"
+          value="app"
+          [expanded]="['src']"
+          [nodes]="tree"
+        />
+      </div>
+    </div>
+  </div>
+  <p class="text-sm text-pretty text-muted-foreground">
+    El anillo de foco del Tree ya solo sale con el teclado (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >:focus-visible</code
+    >); lo que cambia la propuesta es la fila elegida: deja de ser un bloque de color sólido.
+  </p>
+
+  @if (!forcedRules()) {
+    <p data-test="forced-missing" class="text-sm text-destructive">
+      No se pudieron copiar los estilos de hover y foco: la cuadrícula muestra solo los estados
+      fijos.
+    </p>
+  }
+</article>

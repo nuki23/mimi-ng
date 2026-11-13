@@ -179,3 +179,149 @@ Lo más importante:
 3. **Ningún control pinta la solo lectura.** En seis, el hover y el hundimiento siguen activos.
 4. **El error se dibuja de cinco maneras.** Switch no tiene.
 5. **La opacidad 50 está fija** en `controlDisabledStyles`, sin el token.
+
+## 6. Página «Estados» (Fundamentos › Estados, `/docs/states`)
+
+**Qué es.** Una página nueva del sitio, en el menú después de «Tamaños», para que **el usuario elija**. Muestra los 18 controles en una cuadrícula con **cada estado forzado a la vista**:
+
+- normal, hover, foco (teclado), clic;
+- deshabilitado, solo lectura y error.
+
+Para verla en claro y en oscuro se cambia el tema del sitio. Tiene **dos selectores** y una comparación del Tree. Las opciones son **propuestas simuladas en la página: ningún componente cambia**.
+
+**Cómo fuerza los estados** (`states/state-forcer.ts`). Al entrar, la página copia de las hojas reales del sitio (el CSS global y `components.css`) todas las reglas con `:hover`, `:focus-visible`, `:focus-within`, `:focus` o `:active`. En cada copia, la seudoclase pasa a ser el atributo `data-force`, conservando sus envoltorios (`@media`, `@layer`, `@scope`, anidamiento). Son 281 reglas.
+
+- Cada celda marca con `data-force` el elemento que recibiría el puntero o el foco. Así se ven **los estilos de verdad** de cada componente, no una imitación.
+- El hover y el clic valen también para los padres (`:has()`), como con el ratón.
+- El foco del Select, que ahora es un atributo propio (punto 1), lo pone la celda.
+- **No se puede forzar** el foco de las casillas de Input OTP ni la burbuja del Slider, porque salen del evento `focus`. La página lo dice.
+
+**Selectores:**
+
+- **(a) Profundidad al hacer clic** (columna «Clic»):
+  - **Actual**: lo que hace hoy cada componente.
+  - **A (recomendada)**: a todos les crece el anillo de 3 px `ring-soft`, como a Button. Se hunden (`--mimi-press-scale`) solo los que funcionan como botón: Select, Date Picker, Date Range, Color Picker, File Upload, Slider, Checkbox, Switch, Toggle Group y Button. Los de escribir no se hunden.
+  - **B**: todos se hunden y a todos les crece el anillo.
+- **(b) Grises**: neutro puro (actual), malva suave (croma 0,006) y malva medio (croma 0,014), con tono 292 y la misma luminosidad. En los casi blancos y casi negros va la mitad del croma. La página calcula en vivo el contraste WCAG de cinco pares de texto con la opción y el tema elegidos.
+- **Tree**: el actual (fila elegida con fondo `primary` y texto blanco) al lado de la propuesta recomendada (fondo `primary-subtle`, texto `primary` y anillo solo con el teclado), con «app.ts» elegido y el foco de teclado forzado en «styles.css».
+
+**Contraste** (Playwright, calculado en la página; AA es 4,5):
+
+| Par                        | Claro: neutro / malva suave / malva medio | Oscuro: neutro / malva suave / malva medio |
+| -------------------------- | ----------------------------------------- | ------------------------------------------ |
+| Texto sobre el fondo       | 17,16 / 17,16 / 17,17                     | 17,16 / 17,16 / 17,17                      |
+| Atenuado sobre el fondo    | 4,85 / 4,85 / 4,86                        | 7,77 / 7,76 / 7,76                         |
+| Atenuado sobre `muted`     | 4,64 / 4,64 / 4,65                        | 6,53 / 6,53 / 6,53                         |
+| Atenuado sobre una tarjeta | 5,06 / 5,06 / 5,06                        | 7,23 / 7,23 / 7,22                         |
+| Texto sobre `secondary`    | 16,42 / 16,43 / 16,44                     | 13,06 / 13,07 / 13,09                      |
+
+Todos en AA con las tres opciones. El tinte no mueve el contraste, porque la luminosidad es la misma.
+
+**Playwright** (claro y oscuro, **34 de 34 OK, sin errores de consola**):
+
+- se copiaron 281 reglas;
+- Input con hover, foco y error forzados, distintos del normal;
+- el Select con el foco de teclado forzado;
+- el contorno de foco del Checkbox;
+- la opacidad del deshabilitado;
+- **A:**
+  - el de escribir queda con `scale: none` y el anillo;
+  - el de botón queda con `scale: 0.975` y el anillo;
+- **B:** los dos quedan con `scale: 0.975`;
+- los tres grises con sus contrastes en AA;
+- **Tree:** la propuesta cambia el fondo y el texto de la fila elegida (claro: `oklch(0.54 0.239 292)` al 10 % con texto `oklch(0.54 0.239 292)`, en vez de violeta sólido con texto blanco), y el foco forzado pinta el anillo.
+
+Al ver las primeras capturas se arreglaron dos cosas de la página:
+
+- la máscara de Input Mask (`999` → `000`) salía vacía;
+- la ayuda de Tags Input, en inglés, alargaba las filas: ahora va con `hint=""`.
+
+**Capturas** (`docs/auto/capturas/2026-11-12/estados/`, la cuadrícula entera, en claro y oscuro):
+
+- profundidad: `profundidad-actual-*.png`, `profundidad-a-*.png` y `profundidad-b-*.png`;
+- grises (con la profundidad A): `grises-neutro-*.png`, `grises-malva-suave-*.png` y `grises-malva-medio-*.png`;
+- Tree: `tree-*.png` (actual frente a la propuesta).
+
+**Otros cambios del sitio:** el guardián de estilos (`core/components-styles.ts`) pide `components.css` también para `/docs/states`, porque tiene todos los controles. Tiene su prueba en `components-styles.spec.ts`.
+
+**Pruebas** (`states/states-page.spec.ts`, 3 casos):
+
+- **El cambio de seudoclases:** hover, foco, `focus-within`, clic, grupos de Tailwind y las clases escapadas, que no se tocan.
+- **Los grises:**
+  - el tono 292 y la mitad de croma en los extremos;
+  - la transparencia se conserva y la marca no se toca;
+  - el contraste de malva medio sigue en AA y a menos de 0,2 del neutro.
+- **La página:**
+  - 18 filas y 126 celdas, con `data-force` en el elemento correcto;
+  - el foco del Select y `data-surface` según el tipo;
+  - deshabilitado y error de verdad;
+  - las opciones por defecto (A y neutro), los tres botones de cada selector y los dos árboles.
+  - Se le da un tope de 60 s: con toda la suite tarda unos 25 s.
+
+**No se hizo la Parte 2** (unificar los controles): espera a que el usuario elija la profundidad, los grises y el Tree en esta página.
+
+## Arreglos durante la verificación final
+
+1. **La suite de ui-core no compilaba desde el commit del punto 4.**
+   - **Causa:** `fixed-colors.spec.ts` declaraba `ALLOWED`, `PATTERNS` y `PALETTE`, y esos nombres chocan con otra prueba (estos archivos de prueba son scripts globales).
+   - **Por qué no se vio:** las pruebas del punto 4 se pasaron solo con ese archivo y compilaban.
+   - **Arreglo:** los nombres llevan el prefijo `FIXED_`. Va en el commit de este punto. Desde entonces, ui-core: 1028 de 1028.
+2. **El JS inicial crecía 2 kB desde el commit del punto 2.**
+   - **Causa:** `fieldBoxStyles` vivía en `control-styles.ts`, que Button importa y va en el JS inicial del sitio. El empaquetador no quita las constantes que no usa de un módulo compartido con rutas diferidas.
+   - **Arreglo:** los estilos de los campos compuestos pasan a un archivo propio, **`utils/field-styles.ts`**. Es un ítem nuevo del registro de la CLI, que Number Input y Password piden. La spec (sección 4) está al día.
+   - **Medido** con `ng build --stats-json`: `control-styles.ts` vuelve a 678 bytes en el JS inicial.
+
+## Verificación final
+
+- **`pnpm build`** en verde.
+  - **JS inicial:** **335,84 kB crudo / 106,59 kB gzip** (antes de la tanda, 334,87 / 106,23): **+0,97 kB crudo, +0,36 kB gzip**, por debajo del umbral de 1 kB. Parte es la entrada «Estados» del menú y el guardián de estilos con dos prefijos; el resto no lo atribuí módulo por módulo.
+  - **CSS global:** **115,59 kB / 17,66 kB gzip** (antes, 112,44 / 17,27): **+3,15 kB crudo, +0,39 kB gzip**. Vienen de las clases de la página «Estados», que está fuera de las páginas de componentes y va al CSS global (la cuadrícula, los selectores y la tabla de contrastes), y del hover nuevo de Input y Textarea.
+  - No se subió ningún presupuesto (aviso en 345 kB).
+- **Pruebas en verde:** docs **253** (antes de la tanda, 249), ui-core **1028** (antes, 1019), CLI **202**.
+- **`pnpm format:check`** en verde.
+
+## Alertas para el revisor
+
+1. **Hubo dos commits de la tanda con problemas, ya arreglados en el último:**
+   - el del punto 2 hacía crecer el JS inicial 2 kB;
+   - el del punto 4 dejaba la suite de ui-core sin compilar.
+   - Ver «Arreglos durante la verificación final».
+2. **Cambios visibles para quien ya usa Mimi** (añadidos y arreglos, sin cambio de API):
+   - Input y Textarea tienen hover (el de la spec);
+   - el hover del borde en oscuro es más suave (el 14 % en vez del 30 %);
+   - el Sortable arrastra con el color de la marca;
+   - Number Input y Password usan los tokens de Input (`--mimi-input-border`, `-border-hover`…), y quien los sobrescribía en Input ahora los ve también ahí.
+   - Van al CHANGELOG «por publicar» cuando se cierre la Parte 2.
+3. **`info` (azul) en estados de interacción:** Toolbar, File Upload al arrastrar, Data Table, la fila «Crear» y el contador de Tabs. No se cambió; queda anotado para la Parte 2, con la propuesta `ring` / `primary-subtle`.
+4. **Página «Estados»:** las opciones están simuladas con CSS de la página (por ejemplo, `!important` en la columna «Clic»). Es para elegir, no la implementación. La Parte 2 la hará en los componentes.
+5. **Nada se comprobó con un lector de pantalla ni en teléfonos reales.**
+
+## Archivos
+
+- **ui-core:**
+  - `select/select.ts`
+  - `number-input/number-input.ts`
+  - `password/password.ts`
+  - `input/input.variants.ts`
+  - `textarea/textarea.variants.ts`
+  - `sortable-list/sortable-list.ts`
+  - `utils/control-styles.ts`, `utils/field-styles.ts` (nuevo) y `utils/index.ts`
+  - `theme/theme-base.css`
+  - pruebas: `select/select-focus-ring.spec.ts`, `field-borders.spec.ts` y `fixed-colors.spec.ts` (nuevas); `select.spec.ts`, `number-input.spec.ts`, `password.spec.ts` y `focus-styles.spec.ts`
+- **CLI:** `registry.json` (`utils/field-styles`, y las dependencias de Number Input y Password).
+- **Sitio:**
+  - `pages/docs/states/` (nuevo): la página, el forzador de estados, los grises y su prueba;
+  - `pages/docs/docs.routes.ts`, `layout/docs-nav.ts`;
+  - `core/components-styles.ts` y su prueba;
+  - `code/component-tokens.ts` y su prueba.
+- **Docs:**
+  - `docs/plan/controles/inventario.md` (nuevo)
+  - `docs/spec.md`
+  - `docs/design/correcciones-pendientes.md`
+  - este informe
+  - capturas en `docs/auto/capturas/2026-11-12/estados/`
+
+## Limpieza
+
+- **Servidor de desarrollo:** puerto 4280, lanzado con `timeout`, detenido al terminar. Se comprobó con `netstat` que el puerto quedó libre.
+- **Playwright y los scripts de medida** vivieron en el directorio temporal de la sesión, fuera del repo, y se borraron al terminar.

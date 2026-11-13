@@ -15,6 +15,10 @@
       "type": "util",
       "files": ["utils/control-styles.ts"]
     },
+    "utils/field-styles": {
+      "type": "util",
+      "files": ["utils/field-styles.ts"]
+    },
     "utils/field-state": {
       "type": "util",
       "files": ["utils/field-state.ts"],
@@ -256,12 +260,7 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": [
-        "utils/cn",
-        "utils/control-styles",
-        "utils/field-state",
-        "utils/size"
-      ]
+      "registryDependencies": ["utils/cn", "utils/field-state", "utils/field-styles", "utils/size"]
     },
     "password": {
       "type": "component",
@@ -273,7 +272,13 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["input", "utils/cn", "utils/control-styles", "utils/size"]
+      "registryDependencies": [
+        "input",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-styles",
+        "utils/size"
+      ]
     },
     "progress": {
       "type": "component",

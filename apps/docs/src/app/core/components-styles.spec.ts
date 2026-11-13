@@ -33,6 +33,14 @@ describe('hoja de las páginas de componentes (M.23)', () => {
     expect(document.head.querySelectorAll('link[data-mimi-components]').length).toBe(1);
   });
 
+  it('la página «Estados» también la pide (tiene todos los controles)', async () => {
+    const pending = run('/docs/states') as Promise<boolean>;
+    const link = document.head.querySelector<HTMLLinkElement>('link[data-mimi-components]')!;
+    expect(link).not.toBeNull();
+    link.dispatchEvent(new Event('load'));
+    await expect(pending).resolves.toBe(true);
+  });
+
   it('si la hoja se demora más que el tope, la página se pinta igual', async () => {
     TestBed.configureTestingModule({
       providers: [{ provide: COMPONENTS_STYLES_WAIT_MS, useValue: 20 }],

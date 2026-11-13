@@ -16,11 +16,8 @@ import {
 import { MimiInput } from '@/components/ui/input';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
-import {
-  buttonFocusStyles,
-  fieldBoxStyles,
-  fieldButtonHoverStyles,
-} from '@/components/ui/utils/control-styles';
+import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { fieldBoxStyles, fieldButtonHoverStyles } from '@/components/ui/utils/field-styles';
 import { MIMI_PASSWORD_TEXT } from './password-texts';
 
 /*

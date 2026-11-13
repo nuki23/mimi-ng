@@ -36,18 +36,18 @@ function fixedSources(dir: string): string[] {
   });
 }
 
-const PALETTE =
+const FIXED_PALETTE =
   'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose';
-const PATTERNS: [string, RegExp][] = [
+const FIXED_PATTERNS: [string, RegExp][] = [
   ['hex', /#[0-9a-fA-F]{3,8}\b(?![-\w])/g],
   ['rgb()', /\brgba?\(/g],
-  ['paleta de Tailwind', new RegExp(`\\b[a-z]+-(?:${PALETTE})-\\d{2,3}\\b`, 'g')],
+  ['paleta de Tailwind', new RegExp(`\\b[a-z]+-(?:${FIXED_PALETTE})-\\d{2,3}\\b`, 'g')],
   ['blanco o negro', /\b(?:bg|text|border|ring|fill|stroke)-(?:white|black)\b/g],
   ['oklch() fijo', /oklch\(\s*[\d.]+[\s_]+[\d.]+[\s_]+[\d.]+/g],
 ];
 
 /** Excepciones con su razón: archivo → cuántas coincidencias se permiten. */
-const ALLOWED: Record<string, { count: number; why: string }> = {
+const FIXED_ALLOWED: Record<string, { count: number; why: string }> = {
   'color-picker/color-picker.ts': {
     count: 16,
     why: 'El espectro de tonos y el área de saturación son colores reales (rgb), y el pulgar blanco con sombra negra tiene que verse sobre cualquier color; todos llevan su token de Color Picker. Los hex de los comentarios documentan el formato.',
@@ -65,7 +65,7 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
 describe('Colores fijos en los componentes', () => {
   const found = fixedSources(FIXED_ROOT).map((file) => {
     const text = fixedFs.readFileSync(file, 'utf8');
-    const hits = PATTERNS.flatMap(([kind, re]) =>
+    const hits = FIXED_PATTERNS.flatMap(([kind, re]) =>
       [...text.matchAll(re)].map((m) => `${kind}: ${m[0]}`),
     );
     return { file: fixedPath.relative(FIXED_ROOT, file).replaceAll('\\', '/'), hits };
@@ -73,13 +73,13 @@ describe('Colores fijos en los componentes', () => {
 
   it('ningún componente usa colores fijos fuera de las excepciones', () => {
     const wrong = found
-      .filter(({ file, hits }) => hits.length > (ALLOWED[file]?.count ?? 0))
+      .filter(({ file, hits }) => hits.length > (FIXED_ALLOWED[file]?.count ?? 0))
       .map(({ file, hits }) => `${file}: ${hits.join(', ')}`);
     expect(wrong).toEqual([]);
   });
 
   it('las excepciones siguen haciendo falta (si bajan, se actualiza el número)', () => {
-    for (const [file, { count }] of Object.entries(ALLOWED)) {
+    for (const [file, { count }] of Object.entries(FIXED_ALLOWED)) {
       expect(found.find((f) => f.file === file)?.hits.length, file).toBe(count);
     }
   });

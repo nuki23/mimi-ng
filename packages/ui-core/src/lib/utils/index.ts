@@ -3,4 +3,5 @@
 // arrastraría (imports.spec.ts lo comprueba).
 export * from './cn';
 export * from './control-styles';
+export * from './field-styles';
 export * from './size';
