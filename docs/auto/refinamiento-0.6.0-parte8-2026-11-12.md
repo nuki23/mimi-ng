@@ -158,3 +158,24 @@ Input muestra el hover y, con error, el hover deja el rojo.
 - comprueba que el Sortable usa `ring` y `primary-subtle`, no `info`.
 
 En verde.
+
+## 5. Inventario de los controles
+
+Archivo nuevo: **`docs/plan/controles/inventario.md`**. Tiene una tabla de los 18 controles: Input, Textarea, Select, Combobox, Tags Input, Number Input, Password, Input Mask, Input OTP, Date Picker, Date Range, Color Picker, File Upload, Slider, Checkbox, Switch, Toggle Group y Button. **Radio no existe en Mimi.** Para cada uno da borde, hover, foco, clic (hundimiento y sombra), deshabilitado, solo lectura, error y de dónde sale (helper de `utils/control-styles.ts` o local), más 9 inconsistencias para la Parte 2.
+
+Cómo se hizo:
+
+- Un subagente de solo lectura hizo la lectura del código.
+- Se comprobaron a mano el anillo al presionar de Button (`active:ring-3`), el `ring-1` de error de Toggle Group, la opacidad fija de las etiquetas de Checkbox y Switch, la burbuja del Slider y que no hay Radio.
+- Las filas de Select, Number Input, Password, Input y Textarea reflejan los arreglos 1 a 3.
+
+Lo más importante:
+
+1. **Hay dos familias de foco** (halo de campo y contorno de botón). Los tokens `--mimi-focus-*` del tema no los usa nadie.
+2. **El hundimiento al hacer clic es irregular:**
+   - se hunden Select, Date Picker, Date Range, Color Picker y File Upload;
+   - los campos de escribir, no;
+   - Button se hunde y además le crece un anillo.
+3. **Ningún control pinta la solo lectura.** En seis, el hover y el hundimiento siguen activos.
+4. **El error se dibuja de cinco maneras.** Switch no tiene.
+5. **La opacidad 50 está fija** en `controlDisabledStyles`, sin el token.
