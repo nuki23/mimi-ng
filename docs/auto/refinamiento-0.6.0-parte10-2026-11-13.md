@@ -171,4 +171,23 @@ En el navegador, al cargar, la fila Password ya salía oculta (`type=password`) 
 
 **Prueba que lo vigila** (`states-page.spec.ts`, caso nuevo): durante la carga no hay ningún `focusin` y el foco no queda dentro de la página. No hay error que reproducir, así que no hay prueba «que falle antes». **8 de 8 OK** en Playwright.
 
+## 10. Input OTP con Tab
+
+**Comprobado, sin cambios:** Input OTP tiene un solo `<input>` transparente y pinta el foco en la casilla activa, desde su evento `focus`.
+
+**Playwright** (`otp.mjs`, claro y oscuro): **12 de 12 OK**. Se entra con Tab (desde el elemento anterior en el orden de tabulación) en el primer Input de su página y en el primer OTP de la suya:
+
+| Tema   | Input con Tab                                     | Casilla de OTP con Tab                            |
+| ------ | ------------------------------------------------- | ------------------------------------------------- |
+| Claro  | borde `oklch(0.64 0.2 292)`, anillo 3 px al 32 %  | borde `oklch(0.64 0.2 292)`, anillo 3 px al 32 %  |
+| Oscuro | borde `oklch(0.72 0.16 292)`, anillo 3 px al 32 % | borde `oklch(0.72 0.16 292)`, anillo 3 px al 32 % |
+
+- Solo una casilla lleva el anillo (1 de 8).
+- Al salir con Tab, ninguna.
+- Sin errores de consola.
+
+Captura: `docs/auto/capturas/2026-11-13/otp-tab-*.png`.
+
+Lo cubren las pruebas de `input-otp.spec.ts` (los estados de la casilla) y `field-states.spec.ts`: no hizo falta una prueba nueva.
+
 **Bundle** (después de los puntos 2 a 5): JS inicial **334,89 kB / 106,23 kB gzip** (sin cambio: `overlay.ts` ahora importa el CDK en ejecución, pero solo lo usan componentes que ya lo cargaban); CSS global **124,86 kB / 18,39 kB gzip** (desde el punto 1, +2,16 kB crudo, +0,22 kB gzip). Pruebas: ui-core 1058, docs 253, CLI 202.
