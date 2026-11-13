@@ -64,6 +64,8 @@ const GLOBALS = new Set([
   '--mimi-input-background',
   // Global del tema (borde de los campos con hover): respaldo de --mimi-input-border-hover.
   '--mimi-input-hover',
+  // Global del tema (fondo de un campo de solo lectura, utils/field-styles.ts).
+  '--mimi-input-readonly',
   '--mimi-switch-off',
   '--mimi-card-foreground',
   // Global del Grupo 2 (G2.0b) que el chip lee como respaldo.
@@ -132,18 +134,28 @@ const GLOBALS = new Set([
   '--mimi-toggle-group-index',
 ]);
 
+/**
+ * Utilidades que llevan los tokens de un componente: los estados de los campos
+ * (`utils/field-styles.ts`, 12/11/2026) usan los de Input en todos los campos.
+ */
+const SHARED_SOURCES: Partial<Record<TokenComponent, readonly string[]>> = {
+  input: ['utils/field-styles.ts'],
+};
+
 /** Código del componente (sin pruebas). */
 function source(component: TokenComponent): string {
   const folders = FOLDER[component];
-  return (typeof folders === 'string' ? [folders] : folders)
-    .flatMap((folder) => {
-      const dir = `${LIB}/components/${folder}`;
-      return tokensFs
-        .readdirSync(dir)
-        .filter((f) => f.endsWith('.ts') && !f.endsWith('.spec.ts'))
-        .map((f) => tokensFs.readFileSync(`${dir}/${f}`, 'utf8'));
-    })
-    .join('\n');
+  const own = (typeof folders === 'string' ? [folders] : folders).flatMap((folder) => {
+    const dir = `${LIB}/components/${folder}`;
+    return tokensFs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith('.ts') && !f.endsWith('.spec.ts'))
+      .map((f) => tokensFs.readFileSync(`${dir}/${f}`, 'utf8'));
+  });
+  const shared = (SHARED_SOURCES[component] ?? []).map((file) =>
+    tokensFs.readFileSync(`${LIB}/${file}`, 'utf8'),
+  );
+  return [...own, ...shared].join('\n');
 }
 const themeBase = tokensFs.readFileSync(`${LIB}/theme/theme-base.css`, 'utf8');
 

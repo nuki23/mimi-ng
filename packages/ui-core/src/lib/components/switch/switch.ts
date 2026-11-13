@@ -13,6 +13,7 @@ import type { FormCheckboxControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles, controlDisabledStyles } from '@/components/ui/utils/control-styles';
+import { choicePressStyles } from '@/components/ui/utils/field-styles';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -59,7 +60,7 @@ let nextId = 0;
     </button>
     <label
       [for]="controlId()"
-      class="cursor-pointer empty:hidden peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+      class="cursor-pointer empty:hidden peer-disabled:cursor-not-allowed peer-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] peer-aria-readonly:cursor-default"
       ><ng-content
     /></label>
   `,
@@ -120,8 +121,12 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
   // Pista: 36×20 (--mimi-switch-width/-height), 2px de padding. Encendida: primary con su sombra.
   protected readonly trackClasses = cn(
     'peer group inline-flex h-[var(--mimi-switch-h,var(--mimi-switch-height,1.25rem))] w-[var(--mimi-switch-w,var(--mimi-switch-width,2.25rem))] shrink-0 items-center rounded-full bg-[color:var(--mimi-switch-track-off,var(--mimi-switch-off))] p-0.5',
-    'mimi-transition active:scale-(--mimi-press-scale-sm)',
+    // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad A).
+    'mimi-transition',
+    choicePressStyles,
     'data-[state=checked]:bg-[color:var(--mimi-switch-track-on,var(--mimi-primary))] data-[state=checked]:shadow-primary disabled:shadow-none',
+    // Error: la pista no tiene borde, así que lleva un filo rojo de 1px (como Toggle Group).
+    'aria-invalid:ring-1 aria-invalid:ring-[color:var(--mimi-input-error,var(--mimi-destructive))]',
     buttonFocusStyles,
     controlDisabledStyles,
   );

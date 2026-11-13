@@ -183,7 +183,10 @@ describe('MimiTagsInput', () => {
     await settle(fixture);
     expect(part('plain').querySelector('[data-slot="remove"]')).toBeNull();
     expect(box('plain').className).toContain('min-h-12');
-    expect(box('plain').className).toContain('focus-within:ring-3');
+    expect(box('plain').className).toContain(
+      'focus-within:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
+    );
+    expect(box('plain').hasAttribute('data-readonly')).toBe(true);
   });
 
   it('Reactive Forms, Signal Forms y ngModel', async () => {

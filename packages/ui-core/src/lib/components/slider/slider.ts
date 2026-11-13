@@ -52,8 +52,12 @@ const THUMB_BASE = cn(
   'shadow-[shadow:var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
   '[transition:box-shadow_.2s_ease,scale_.15s_cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none',
   // Hover y arrastre suman el halo a la sombra del pulgar (su token), con tipo (estilos 8).
-  'not-aria-disabled:hover:shadow-[shadow:0_0_0_6px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
-  'aria-disabled:cursor-not-allowed',
+  'not-aria-disabled:not-aria-readonly:hover:shadow-[shadow:0_0_0_6px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
+  // Clic: le crece el halo, como a Button (profundidad A); el pulgar no se hunde, crece al
+  // arrastrar (DRAGGING).
+  'not-aria-disabled:not-aria-readonly:active:shadow-[shadow:0_0_0_8px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
+  // Deshabilitado y solo lectura como los demás campos (utils/field-styles): sin hover.
+  'aria-disabled:cursor-not-allowed aria-readonly:cursor-default',
   buttonFocusStyles,
 );
 const DRAGGING =

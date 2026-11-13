@@ -23,7 +23,6 @@ import type { FormValueControl } from '@angular/forms/signals';
 import { MimiButton } from '@/components/ui/button';
 import { MimiProgress } from '@/components/ui/progress';
 import { cn } from '@/components/ui/utils/cn';
-import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -87,16 +86,25 @@ export function mimiFormatFileSize(bytes: number, locale: string): string {
   }).format(size);
 }
 
+/**
+ * La zona es un campo que funciona como botón (utils/field-styles, 12/11/2026): foco de campo (borde
+ * del anillo y halo, solo con el teclado), al hacer clic se hunde y le crece el halo, deshabilitado
+ * con el token y solo lectura (`aria-disabled`: un botón no admite `aria-readonly`) con el fondo
+ * de solo lectura, sin hover ni clic. Su borde punteado de 2px es el del diseño.
+ */
 const ZONE_BASE = cn(
   'flex w-full cursor-pointer flex-col items-center justify-center gap-2 p-4 text-center font-sans text-foreground',
   'min-h-[var(--mimi-upload-height,176px)] rounded-[var(--mimi-upload-radius,var(--mimi-radius-card,1rem))] border-2',
-  'mimi-transition active:scale-(--mimi-press-scale) disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)] disabled:active:scale-100',
-  buttonFocusStyles,
+  'mimi-transition outline-none',
+  'focus-visible:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))] focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)] focus-visible:ring-ring-soft',
+  'not-disabled:not-aria-disabled:active:scale-(--mimi-press-scale) not-disabled:not-aria-disabled:active:ring-[length:var(--mimi-input-focus-ring-width,3px)] not-disabled:not-aria-disabled:active:ring-ring-soft',
+  'disabled:cursor-not-allowed disabled:opacity-[var(--mimi-input-disabled-opacity,var(--mimi-disabled-opacity,0.5))]',
+  'aria-disabled:cursor-default aria-disabled:bg-[color:var(--mimi-input-readonly)]',
 );
 const ZONE = {
   idle: cn(
     ZONE_BASE,
-    'border-dashed border-[color:var(--mimi-upload-border,var(--mimi-input))] bg-[color:var(--mimi-upload-bg,var(--mimi-dropzone,var(--mimi-muted)))] not-disabled:hover:border-input-hover',
+    'border-dashed border-[color:var(--mimi-upload-border,var(--mimi-input-border,var(--mimi-input)))] bg-[color:var(--mimi-upload-bg,var(--mimi-dropzone,var(--mimi-muted)))] not-disabled:not-aria-disabled:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
   ),
   over: cn(
     ZONE_BASE,
@@ -104,7 +112,7 @@ const ZONE = {
   ),
   invalid: cn(
     ZONE_BASE,
-    'border-dashed border-destructive bg-[color:var(--mimi-upload-bg,var(--mimi-dropzone,var(--mimi-muted)))]',
+    'border-dashed border-[color:var(--mimi-input-error,var(--mimi-destructive))] bg-[color:var(--mimi-upload-bg,var(--mimi-dropzone,var(--mimi-muted)))] focus-visible:border-[color:var(--mimi-input-error,var(--mimi-destructive))] focus-visible:ring-destructive-ring',
   ),
 } as const;
 const ICON_BASE =
@@ -168,7 +176,7 @@ let nextId = 0;
         </svg>
       </span>
       <span [id]="headingId" data-slot="title" class="text-sm font-semibold">{{
-        over() ? texts.drop(dragCount()) : heading() || texts.title
+        over() ? texts.drop(dragCount()) : heading() || (readonly() ? readonlyTitle : texts.title)
       }}</span>
       @if (hint()) {
         <span [id]="hintId" data-slot="hint" class="text-[12.5px] text-muted-foreground">{{
@@ -275,6 +283,11 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   /** Profundidad de `dragenter`: `dragleave` salta también al pasar sobre un hijo. */
   private depth = 0;
 
+  /**
+   * Título en solo lectura: «Arrastra archivos o haz clic» invitaría a algo que no se puede hacer.
+   * Texto opcional (`readonly`): si un proveedor de textos propio no lo trae, el inglés.
+   */
+  protected readonly readonlyTitle = this.texts.readonly ?? 'Files (read-only)';
   protected readonly iconIdle = ICON.idle;
   protected readonly iconOver = ICON.over;
   protected readonly zoneClasses = computed(() =>

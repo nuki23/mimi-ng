@@ -282,7 +282,7 @@ describe('MimiNumberInput', () => {
     const { box } = await setup();
     for (const token of [
       'border-[color:var(--mimi-input-border,var(--mimi-input))]',
-      'not-data-[disabled]:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+      'not-data-[disabled]:not-data-[readonly]:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
       'focus-within:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))]',
       'data-[invalid]:hover:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
     ]) {

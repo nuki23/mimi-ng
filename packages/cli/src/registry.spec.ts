@@ -185,6 +185,7 @@ describe('registry.json', () => {
       'utils/cn',
       'utils/control-styles',
       'utils/field-state',
+      'utils/field-styles',
       'utils/size',
       'input',
     ]);

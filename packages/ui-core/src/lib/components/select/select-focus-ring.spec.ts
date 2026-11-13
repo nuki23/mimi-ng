@@ -91,7 +91,9 @@ describe('Select: anillo de foco solo con el teclado', () => {
 
   it('la caja pinta el anillo por data-focus-visible, no por :focus', async () => {
     const { box } = await setup();
-    expect(box.className).toContain('data-[focus-visible]:ring-3');
+    expect(box.className).toContain(
+      'data-[focus-visible]:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
+    );
     expect(box.className).not.toContain(':focus]:ring-3');
   });
 });

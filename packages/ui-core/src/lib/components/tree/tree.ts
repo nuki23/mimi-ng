@@ -377,7 +377,7 @@ export class MimiTree<T = unknown> implements FormValueControl<string | null | s
     'hover:bg-[color:var(--mimi-tree-hover,var(--mimi-accent))]',
     'focus-visible:shadow-[inset_0_0_0_2px_var(--mimi-ring)]',
     'data-[selected]:bg-[color:var(--mimi-tree-selected,var(--mimi-primary))] data-[selected]:font-semibold data-[selected]:text-[color:var(--mimi-tree-selected-fg,var(--mimi-primary-foreground))]',
-    'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50 data-[disabled]:hover:bg-transparent',
+    'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)] data-[disabled]:hover:bg-transparent',
     'in-data-[multiple]:gap-2',
   );
 

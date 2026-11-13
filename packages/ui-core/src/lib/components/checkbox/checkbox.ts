@@ -13,6 +13,7 @@ import type { FormCheckboxControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles, controlDisabledStyles } from '@/components/ui/utils/control-styles';
+import { choicePressStyles } from '@/components/ui/utils/field-styles';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -28,7 +29,9 @@ let nextId = 0;
  */
 export const MIMI_CHECKBOX_BOX_STYLES = cn(
   'inline-flex size-[var(--mimi-checkbox-s,var(--mimi-checkbox-size,1rem))] shrink-0 items-center justify-center rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))] border border-[color:var(--mimi-checkbox-border,var(--mimi-input))] bg-input-background text-[color:var(--mimi-checkbox-check,var(--mimi-primary-foreground))]',
-  'mimi-transition active:scale-(--mimi-press-scale-sm)',
+  // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad A).
+  'mimi-transition',
+  choicePressStyles,
   'data-[state=checked]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:shadow-primary',
   'data-[state=indeterminate]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:shadow-primary',
 );
@@ -106,7 +109,7 @@ export const MIMI_CHECKBOX_BOX_STYLES = cn(
     </button>
     <label
       [for]="controlId()"
-      class="cursor-pointer empty:hidden peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+      class="cursor-pointer empty:hidden peer-disabled:cursor-not-allowed peer-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] peer-aria-readonly:cursor-default"
       ><ng-content
     /></label>
   `,
@@ -171,7 +174,11 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
   protected readonly boxClasses = cn(
     'peer',
     MIMI_CHECKBOX_BOX_STYLES,
-    'data-[state=unchecked]:focus-visible:border-ring data-[state=unchecked]:aria-invalid:border-destructive',
+    'data-[state=unchecked]:focus-visible:border-ring',
+    // Hover como los campos, sin marcar: el borde de hover (no en deshabilitado ni solo lectura).
+    'data-[state=unchecked]:not-disabled:not-aria-readonly:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+    // Error, la forma de todos los campos: borde rojo, también marcada o mixta.
+    'aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[state=checked]:aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[state=indeterminate]:aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
     'disabled:shadow-none',
     buttonFocusStyles,
     controlDisabledStyles,

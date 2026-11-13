@@ -51,6 +51,9 @@
   --mimi-input-background: oklch(1 0 0);
   /* Borde de un campo con el puntero encima (tokens-mimi.css; lo usa Pagination desde la G1.11). */
   --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 30%, var(--mimi-input));
+  /* Fondo de un campo de solo lectura (utils/field-styles.ts, 12/11/2026): entre el del campo y
+     muted, para que se distinga del editable sin parecer deshabilitado. */
+  --mimi-input-readonly: color-mix(in oklab, var(--mimi-muted) 70%, var(--mimi-input-background));
   --mimi-ring: var(--mimi-brand-500);
 
   /* Tonos (contraste AA verificado en el diseño) */
@@ -466,6 +469,7 @@
   /* En oscuro, el 30 % del diseño dejaba el borde casi blanco al pasar el ratón (informe del
      usuario, 12/11/2026): el 14 % sube de 15 % a ~27 % de blanco, un paso visible sin destacar. */
   --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 14%, var(--mimi-input));
+  --mimi-input-readonly: color-mix(in oklab, var(--mimi-muted) 70%, var(--mimi-input-background));
   --mimi-ring: var(--mimi-brand-400);
 
   --mimi-success: oklch(0.72 0.15 150);

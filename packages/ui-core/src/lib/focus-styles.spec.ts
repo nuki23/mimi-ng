@@ -38,6 +38,14 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
     count: 1,
     why: 'Input y Textarea: el foco es el borde y el halo ring (box-shadow), no el contorno.',
   },
+  'utils/field-styles.ts': {
+    count: 1,
+    why: 'Disparadores con aspecto de campo (Date Picker, Date Range, Color Picker): el foco es el borde y el halo ring con focus-visible, como Input.',
+  },
+  'components/file-upload/file-upload.ts': {
+    count: 1,
+    why: 'La zona es un campo: el foco es el borde y el halo ring con focus-visible (antes, el contorno de botón).',
+  },
   'components/menu/menu.ts': {
     count: 2,
     why: 'Panel (el foco va a las opciones) y opción: la activa se marca con el fondo.',

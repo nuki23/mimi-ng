@@ -46,6 +46,18 @@ function wrapperOf(rule: CSSRule): string | null {
 /** Recorre las reglas (también las anidadas) y devuelve las copias forzadas. */
 function walk(rules: CSSRuleList, wrappers: string[], parent: string | null, out: string[]): void {
   for (const rule of Array.from(rules)) {
+    // Declaraciones sueltas dentro de un `@media` anidado en una regla (Tailwind 4:
+    // `&:hover { @media (hover: hover) { … } }`): son del selector del padre.
+    if (rule.constructor.name === 'CSSNestedDeclarations' && parent) {
+      const body = (rule as CSSRule & { style: CSSStyleDeclaration }).style.cssText;
+      PSEUDO.lastIndex = 0;
+      if (body && PSEUDO.test(parent)) {
+        const text = `${forcedSelector(parent)} { ${body} }`;
+        out.push(wrappers.reduceRight((inner, wrapper) => `${wrapper} { ${inner} }`, text));
+      }
+      PSEUDO.lastIndex = 0;
+      continue;
+    }
     if (rule instanceof CSSStyleRule) {
       // Anidamiento de CSS: `&` es el selector del padre.
       const selector = parent

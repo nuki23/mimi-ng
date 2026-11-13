@@ -143,7 +143,13 @@ describe('MimiInputOtp', () => {
     const reactive = part('reactive');
     expect(reactive.hasAttribute('data-invalid')).toBe(true);
     expect(input('reactive').getAttribute('aria-invalid')).toBe('true');
-    expect(boxes('reactive').every((b) => b.className.includes('border-destructive'))).toBe(true);
+    // El error de todos los campos: borde rojo en todas; el halo, solo con el foco.
+    expect(boxes('reactive').every((b) => b.className.includes('var(--mimi-input-error'))).toBe(
+      true,
+    );
+    expect(boxes('reactive').some((b) => b.className.includes('ring-destructive-ring'))).toBe(
+      false,
+    );
     expect(reactive.className).toContain('data-[invalid]:animate-[mimi-shake_.4s]');
     expect(reactive.className).toContain('motion-reduce:data-[invalid]:animate-none');
   });

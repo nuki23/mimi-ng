@@ -133,6 +133,7 @@
         "utils/cn",
         "utils/control-styles",
         "utils/field-state",
+        "utils/field-styles",
         "utils/size"
       ]
     },
@@ -240,7 +241,7 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/field-state", "utils/size"]
+      "registryDependencies": ["utils/cn", "utils/field-state", "utils/field-styles", "utils/size"]
     },
     "input-otp": {
       "type": "component",
@@ -334,6 +335,7 @@
         "utils/cn",
         "utils/control-styles",
         "utils/field-state",
+        "utils/field-styles",
         "utils/overlay",
         "utils/size"
       ]
@@ -373,8 +375,8 @@
         "calendar",
         "popover",
         "utils/cn",
-        "utils/control-styles",
         "utils/field-state",
+        "utils/field-styles",
         "utils/size"
       ]
     },
@@ -405,13 +407,7 @@
         "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": [
-        "button",
-        "progress",
-        "utils/cn",
-        "utils/control-styles",
-        "utils/field-state"
-      ]
+      "registryDependencies": ["button", "progress", "utils/cn", "utils/field-state"]
     },
     "color-picker": {
       "type": "component",
@@ -430,6 +426,7 @@
         "utils/cn",
         "utils/control-styles",
         "utils/field-state",
+        "utils/field-styles",
         "utils/size"
       ]
     },
@@ -443,7 +440,13 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["chip", "utils/cn", "utils/field-state", "utils/size"]
+      "registryDependencies": [
+        "chip",
+        "utils/cn",
+        "utils/field-state",
+        "utils/field-styles",
+        "utils/size"
+      ]
     },
     "toggle-group": {
       "type": "component",
@@ -501,6 +504,7 @@
         "utils/cn",
         "utils/control-styles",
         "utils/field-state",
+        "utils/field-styles",
         "utils/size"
       ]
     },
@@ -531,6 +535,7 @@
         "utils/cn",
         "utils/control-styles",
         "utils/field-state",
+        "utils/field-styles",
         "utils/overlay",
         "utils/size"
       ]
@@ -562,6 +567,7 @@
         "utils/cn",
         "utils/control-styles",
         "utils/field-state",
+        "utils/field-styles",
         "utils/size"
       ]
     },
@@ -601,6 +607,7 @@
         "utils/cn",
         "utils/control-styles",
         "utils/field-state",
+        "utils/field-styles",
         "utils/size"
       ]
     },

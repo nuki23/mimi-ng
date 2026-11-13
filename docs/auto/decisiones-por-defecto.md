@@ -153,6 +153,15 @@ Pendientes de revisión del usuario. Detalle en `docs/auto/refinamiento-0.6.0-20
 - **R.18 OTP:** `separatorAfter` pasa de `number` a `number | number[]`. **RUPTURA de tipo** para quien lo lea por código (en plantilla, `separatorAfter="3"` sigue igual).
 - **Búsqueda en servidor (12/11/2026, sexta tanda; `docs/auto/refinamiento-0.6.0-parte6-2026-11-12.md`):** la entrada se llama **`searchMode`**, `'client' | 'server'`, por defecto `'client'`, igual en Select y Combobox (tipo `MimiSearchMode` en `option-list`). Base: «Más simple» (el plan no traía Recomendación; es el nombre que proponía el usuario). Con `'server'` no se filtra nada, ni con `filterWith`. Alternativas: `serverSide` (booleano), `filter="none"`. No es ruptura (añadido).
 
+## Decididas por el usuario: estados de los controles (12/11/2026)
+
+Elegidas por el usuario en la página `/docs/states` (octava tanda; inventario en `docs/plan/controles/inventario.md`, informe en `docs/auto/refinamiento-0.6.0-parte9-2026-11-12.md`). Base: «Decidido por el usuario». Ninguna es una RUPTURA de API; todas son cambios visibles.
+
+- **Profundidad al hacer clic: A.** A todos los controles les crece el halo (`ring-soft`), como a Button. Se hunden (`--mimi-press-scale`, que es 1 con «reducir movimiento») solo los que funcionan como botón: Select, Date Picker, Date Range, Color Picker, File Upload, Checkbox, Switch, Toggle Group y Button. Los de escribir no se hunden. Alternativa descartada: B, todos se hunden.
+- **Grises: malva suave.** Los neutros del tema llevan el tono 292 del violeta con croma 0,006 (la mitad en los casi blancos y casi negros), la misma luminosidad y los contrastes AA. Alternativas descartadas: neutro puro (el de antes) y malva medio (croma 0,014).
+- **Tree: fondo `primary-subtle`, texto `primary` y anillo solo para el foco de teclado.** Alternativa descartada: el actual, con fondo `primary` sólido y texto blanco.
+- **`info` (azul) pasa al violeta de la marca donde significa selección, arrastre o acento:** Toolbar (hover y herramienta activa), File Upload al arrastrar, Data Table (fila elegida, filtro activo e insignia de selección), la fila «Crear» y el contador de Tabs. Se queda solo en los avisos informativos (el tono `info` de Toast, Badge, Button, Progress y Command, y el ícono de Confirm).
+
 ## Decididas por el usuario: refinamiento (09/11/2026)
 
 No son decisiones por defecto: el usuario eligió las opciones de `docs/plan/refinamiento/decisiones-usuario.md` en el prompt de la rama `auto/refinamiento-0.6.0-2026-11-09`.

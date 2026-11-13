@@ -232,11 +232,14 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
     for (const cls of [
       'h-[var(--mimi-select-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))]',
       'rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
-      'border-[color:var(--mimi-select-border,var(--mimi-input))]',
-      'bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-background))]',
-      'data-[focus-visible]:border-ring',
+      // Sus tokens, con respaldo en los de Input; los estados de todos los campos (field-styles).
+      'border-[color:var(--mimi-select-border,var(--mimi-input-border,var(--mimi-input)))]',
+      'bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-bg,var(--mimi-input-background)))]',
+      'data-[focus-visible]:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))]',
       'data-[focus-visible]:ring-ring-soft',
-      'data-[invalid]:border-destructive',
+      'data-[invalid]:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
+      'not-data-[disabled]:not-data-[readonly]:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+      'data-[readonly]:bg-[color:var(--mimi-input-readonly)]',
     ]) {
       expect(box('plain').classList).toContain(cls);
     }
@@ -401,7 +404,7 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
     expect(trigger('plain').disabled).toBe(true);
     expect(box('plain').hasAttribute('data-disabled')).toBe(true);
     expect(box('plain').classList).toContain(
-      'data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
+      'data-[disabled]:opacity-[var(--mimi-input-disabled-opacity,var(--mimi-disabled-opacity,0.5))]',
     );
     trigger('plain').click();
     key(trigger('plain'), 'ArrowDown');

@@ -28,6 +28,8 @@ export interface MimiColorTokens {
   inputBackground?: string;
   /** Borde de un campo con el puntero encima (por defecto, mezcla de foreground e input). */
   inputHover?: string;
+  /** Fondo de un campo de solo lectura (por defecto, mezcla de muted y el fondo del campo). */
+  inputReadonly?: string;
   ring?: string;
   /**
    * Texto de énfasis de la marca (R.0): la única forma de texto violeta. En claro, `brand-600`

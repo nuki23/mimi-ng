@@ -34,14 +34,28 @@ import {
  * Las casillas son `aria-hidden`.
  */
 
+/**
+ * Cada casilla, con los estados de todos los campos (utils/field-styles; 12/11/2026): borde y hover
+ * de Input (el hover, con el puntero sobre la fila), solo lectura con el fondo propio y deshabilitado
+ * en la fila. Es un campo de escribir: no se hunde.
+ */
 const BOX_BASE =
-  'relative flex min-w-0 shrink items-center justify-center border font-semibold tabular-nums text-foreground mimi-transition w-[var(--mimi-otp-width,46px)] h-[var(--mimi-otp-height,54px)] rounded-[var(--mimi-otp-radius,var(--mimi-radius,0.75rem))] text-[length:var(--mimi-otp-font-size,22px)] bg-[color:var(--mimi-otp-bg,var(--mimi-input-background))]';
-/** Borde y anillo de cada casilla según el estado (elegidos en TypeScript: menos CSS global). */
+  'relative flex min-w-0 shrink items-center justify-center border-[length:var(--mimi-input-border-width,1px)] font-semibold tabular-nums text-foreground mimi-transition w-[var(--mimi-otp-width,46px)] h-[var(--mimi-otp-height,54px)] rounded-[var(--mimi-otp-radius,var(--mimi-radius,0.75rem))] text-[length:var(--mimi-otp-font-size,22px)] bg-[color:var(--mimi-otp-bg,var(--mimi-input-bg,var(--mimi-input-background)))] group-data-[readonly]/otp:bg-[color:var(--mimi-input-readonly)]';
+/**
+ * Borde y anillo de cada casilla según el estado (elegidos en TypeScript: menos CSS global). El
+ * error es el de todos los campos: borde rojo siempre y el halo de error solo con el foco.
+ */
 const BOX_STATE = {
-  idle: 'border-[color:var(--mimi-otp-border,var(--mimi-input))]',
-  active: 'border-ring ring-3 ring-ring-soft',
+  idle: 'border-[color:var(--mimi-otp-border,var(--mimi-input-border,var(--mimi-input)))]',
+  /** En reposo y editable: el borde de hover con el puntero sobre la fila. */
+  idleHover:
+    'border-[color:var(--mimi-otp-border,var(--mimi-input-border,var(--mimi-input)))] group-hover/otp:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+  active:
+    'border-[color:var(--mimi-input-border-focus,var(--mimi-ring))] ring-[length:var(--mimi-input-focus-ring-width,3px)] ring-ring-soft',
   success: 'border-success ring-3 ring-success-ring',
-  error: 'border-destructive ring-3 ring-destructive-ring',
+  error: 'border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
+  errorActive:
+    'border-[color:var(--mimi-input-error,var(--mimi-destructive))] ring-[length:var(--mimi-input-focus-ring-width,3px)] ring-destructive-ring',
 } as const;
 
 /**
@@ -158,6 +172,7 @@ const SEPARATOR_CLASSES =
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
     '[attr.data-success]': 'success() ? "" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-readonly]': 'readonly() ? "" : null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
     '[attr.aria-describedby]': 'null',
@@ -245,13 +260,21 @@ export class MimiInputOtp implements FormValueControl<string>, MimiFieldControl 
     const activeIndex = Math.min(chars.length, length - 1);
     const status = this.showInvalid() ? 'error' : this.success() ? 'success' : null;
     return Array.from({ length }, (_, i) => {
-      const active = this.focused() && !this.disabled() && i === activeIndex && !status;
+      const focusedHere = this.focused() && !this.disabled() && i === activeIndex;
+      const active = focusedHere && !status;
+      const state =
+        status === 'error'
+          ? focusedHere
+            ? 'errorActive'
+            : 'error'
+          : (status ??
+            (active ? 'active' : this.disabled() || this.readonly() ? 'idle' : 'idleHover'));
       return {
         char: chars[i] ?? '',
         separator: !!after && i > 0 && i < length && after.includes(i),
         active,
         caret: active && !chars[i],
-        classes: cn(BOX_BASE, BOX_STATE[status ?? (active ? 'active' : 'idle')]),
+        classes: cn(BOX_BASE, BOX_STATE[state]),
       };
     });
   });
@@ -259,7 +282,7 @@ export class MimiInputOtp implements FormValueControl<string>, MimiFieldControl 
   protected readonly classes = computed(() =>
     cn(
       // max-w-full: con muchas casillas (length 10) las casillas se encogen en vez de desbordar.
-      'relative inline-flex max-w-full items-center gap-[var(--mimi-otp-gap,8px)] align-middle font-sans',
+      'group/otp relative inline-flex max-w-full items-center gap-[var(--mimi-otp-gap,8px)] align-middle font-sans',
       'data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
       // Error: la fila se sacude una vez (sin movimiento con «reducir movimiento»).
       'data-[invalid]:animate-[mimi-shake_.4s] motion-reduce:data-[invalid]:animate-none',

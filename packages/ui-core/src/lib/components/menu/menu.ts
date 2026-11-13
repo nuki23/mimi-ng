@@ -240,7 +240,7 @@ const MENU_ITEM_BASE = [
   'relative flex h-[var(--mimi-menu-item-h,var(--mimi-menu-item-height,32px))] cursor-pointer items-center gap-2 px-2 text-[length:var(--mimi-menu-text,14px)] outline-none select-none',
   'rounded-[var(--mimi-menu-item-radius,var(--mimi-radius-sm))]',
   'transition-[background-color] duration-120 ease-[ease] active:scale-(--mimi-press-scale)',
-  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:active:scale-100',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:active:scale-100',
 ];
 
 /**

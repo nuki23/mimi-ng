@@ -46,6 +46,7 @@ import {
 } from '@/components/ui/option-list/option-list';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { fieldBoxStyles } from '@/components/ui/utils/field-styles';
 import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
@@ -104,12 +105,8 @@ const ICON = {
 const BOX_CLASSES = cn(
   'group/combobox relative flex w-full min-w-0 cursor-text items-center pr-2.5 font-sans text-sm text-foreground mimi-transition',
   'rounded-[var(--mimi-combobox-radius,var(--mimi-radius,0.75rem))]',
-  // Los estados de Input (spec 13, «Campos»), como Tags Input: el foco está en el <input> de dentro.
-  'border border-input bg-input-background',
-  'not-data-[disabled]:hover:border-input-hover',
-  'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft',
-  'data-[invalid]:border-destructive data-[invalid]:focus-within:border-destructive data-[invalid]:focus-within:ring-destructive-ring',
-  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
+  // Los estados de todos los campos (utils/field-styles): el foco está en el <input> de dentro.
+  fieldBoxStyles,
 );
 
 /** Simple: el alto de los controles. Múltiple: la caja de Tags Input, que crece con los chips. */
@@ -138,7 +135,7 @@ const OPTION_CLASSES = cn(
   'rounded-[var(--mimi-combobox-option-radius,var(--mimi-radius-sm))]',
   'transition-[background-color] duration-120 ease-[ease] active:scale-(--mimi-press-scale)',
   'data-[active=true]:bg-[color:var(--mimi-combobox-option-hover,var(--mimi-accent))]',
-  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:active:scale-100',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:active:scale-100',
 );
 /** En el múltiple, la casilla va a 10px del texto (diseño). */
 const OPTION_MULTIPLE_CLASSES = cn(OPTION_CLASSES, 'gap-2.5');
@@ -209,6 +206,7 @@ export class MimiComboboxOption {
       [attr.data-state]="open() ? 'open' : 'closed'"
       [attr.data-invalid]="showInvalid() ? '' : null"
       [attr.data-disabled]="disabled() ? '' : null"
+      [attr.data-readonly]="readonly() ? '' : null"
       (mousedown)="onBoxMousedown($event)"
     >
       <ng-content select="[mimiComboboxStart]" />

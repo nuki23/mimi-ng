@@ -79,7 +79,12 @@ describe('MimiSwitch', () => {
     ]) {
       expect(btn.classList).toContain(cls);
     }
-    expect(btn.classList).toContain('active:scale-(--mimi-press-scale-sm)');
+    expect(btn.classList).toContain(
+      'not-disabled:not-aria-readonly:active:scale-(--mimi-press-scale-sm)',
+    );
+    expect(btn.classList).toContain('not-disabled:not-aria-readonly:active:ring-3');
+    // Error: la pista no tiene borde; un filo rojo de 1px, como Toggle Group.
+    expect(btn.classList).toContain('aria-invalid:ring-1');
     expect(btn.classList).toContain('focus-visible:outline-ring');
     expect(btn.classList).toContain(
       'data-[state=checked]:bg-[color:var(--mimi-switch-track-on,var(--mimi-primary))]',
@@ -137,7 +142,9 @@ describe('MimiSwitch', () => {
     await settle(fixture);
     expect(control('plain').disabled).toBe(true);
     expect(host('plain').hasAttribute('data-disabled')).toBe(true);
-    expect(control('plain').classList).toContain('disabled:opacity-50');
+    expect(control('plain').classList).toContain(
+      'disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
+    );
     expect(control('plain').classList).toContain('disabled:cursor-not-allowed');
     (fixture.componentInstance as Host).on.set(false);
     control('plain').click();

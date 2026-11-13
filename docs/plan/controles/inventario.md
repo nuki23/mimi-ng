@@ -11,6 +11,57 @@ Estado **después** de los arreglos 1 a 4 de la Parte 1 (12/11/2026):
 - Input y Textarea tienen hover;
 - el Sortable usa la marca.
 
+## Parte 2: unificados (12/11/2026)
+
+Elecciones del usuario en `/docs/states` (12/11/2026): **profundidad A**, **grises malva suave**, **Tree con fondo `primary-subtle`** y el **azul de `info` pasa al violeta de la marca** donde significa selección, arrastre o acento.
+
+El juego común vive en `utils/field-styles.ts`:
+
+- `fieldBoxStyles`: la caja de un campo compuesto;
+- `fieldNativeStyles`: lo que suman Input y Textarea;
+- `fieldTriggerStyles`: el `<button>` con aspecto de campo;
+- `fieldTriggerBoxStyles`: la caja del Select;
+- `choicePressStyles`: el clic de Checkbox y Switch.
+
+Más el global `--mimi-input-readonly` (fondo de solo lectura) y `controlDisabledStyles` con el token `--mimi-disabled-opacity`.
+
+Cada control comprobado en `/docs/states`, en claro y oscuro, con Playwright: 206 comprobaciones (borde, hover, foco, clic, deshabilitado, solo lectura y error).
+
+**Estados comunes a todos los campos:**
+
+- **Clic:** les crece el halo; solo los que funcionan como botón se hunden.
+- **Deshabilitado:** con el token de opacidad.
+- **Solo lectura:** el fondo propio, sin hover ni clic.
+- **Error:** borde rojo, con el halo de error solo con el foco.
+
+| ✓   | Control      | Pieza común                            | Qué cambió                                                                                                                                                             |
+| --- | ------------ | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ✓   | Input        | `fieldNativeStyles`                    | halo al hacer clic; solo lectura con su fondo                                                                                                                          |
+| ✓   | Textarea     | `fieldNativeStyles`                    | ídem                                                                                                                                                                   |
+| ✓   | Select       | `fieldTriggerBoxStyles`                | hover (no tenía); se hunde con halo; `data-readonly`; tokens de Input con respaldo en los del Select                                                                   |
+| ✓   | Combobox     | `fieldBoxStyles`                       | tokens de Input (antes `border-input`, `ring-3` fijos); `data-readonly`; opciones deshabilitadas con el token                                                          |
+| ✓   | Tags Input   | `fieldBoxStyles`                       | ídem; el borde de «límite lleno» encima                                                                                                                                |
+| ✓   | Number Input | `fieldBoxStyles`                       | solo lectura y halo al hacer clic                                                                                                                                      |
+| ✓   | Password     | `fieldBoxStyles`                       | ídem; detecta `readonly` en el input de dentro (como `disabled`); el input de dentro no pinta halo ni fondo                                                            |
+| ✓   | Input Mask   | `fieldBoxStyles`                       | tokens de Input; `data-readonly`                                                                                                                                       |
+| ✓   | Input OTP    | tokens de Input en cada casilla        | hover de la fila; solo lectura; error de campo (el halo solo en la casilla con el foco; antes, siempre en todas)                                                       |
+| ✓   | Date Picker  | `fieldTriggerStyles`                   | tokens de Input y su radio; solo lectura con su fondo y sin hundirse                                                                                                   |
+| ✓   | Date Range   | `fieldTriggerStyles` (vía Date Picker) | ídem                                                                                                                                                                   |
+| ✓   | Color Picker | `fieldTriggerStyles`                   | ídem (era una copia de la caja de Date Picker)                                                                                                                         |
+| ✓   | File Upload  | estados de campo en la zona            | foco de campo (antes, contorno de botón); se hunde con halo; solo lectura con su fondo, sin hover ni clic y con el título «Archivos (solo lectura)» (texto `readonly`) |
+| ✓   | Slider       | sin hover ni clic en solo lectura      | halo al hacer clic (`:active`); cursor normal en solo lectura                                                                                                          |
+| ✓   | Checkbox     | `choicePressStyles`                    | hover del borde; halo al hacer clic; error también marcada; deshabilitado y etiqueta con el token                                                                      |
+| ✓   | Switch       | `choicePressStyles`                    | **error** (no tenía): filo rojo de 1px; halo al hacer clic; deshabilitado y etiqueta con el token                                                                      |
+| ✓   | Toggle Group | halo al hacer clic, en los ítems       | sin hover ni clic en solo lectura; deshabilitado con respaldo del token; filo de error con el token de error                                                           |
+| ✓   | Button       | `controlDisabledStyles`                | deshabilitado con el token (antes, 50 fijo); ya se hundía y le crecía el anillo                                                                                        |
+
+**Lo que queda distinto, a propósito:**
+
+- **El foco de los controles de elegir** (Checkbox, Switch, Slider, Toggle Group) y de **Button** sigue siendo el contorno de 2px, no el halo de campo: no son campos.
+- **El pulgar del Slider** no se hunde: le crece el halo y crece al arrastrar.
+- **Switch y Toggle Group** no tienen borde: su error es un filo de 1px del mismo color.
+- **File Upload** conserva el borde punteado de 2px del diseño.
+
 Hecho leyendo el código; las cifras de color se comprobaron con Playwright en los cuatro campos de texto (punto 3 del informe).
 
 **Helpers** de `packages/ui-core/src/lib/utils/control-styles.ts`:

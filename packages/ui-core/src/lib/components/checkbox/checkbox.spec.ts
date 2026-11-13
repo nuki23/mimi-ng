@@ -89,7 +89,10 @@ describe('MimiCheckbox', () => {
     ]) {
       expect(btn.classList).toContain(cls);
     }
-    expect(btn.classList).toContain('active:scale-(--mimi-press-scale-sm)');
+    expect(btn.classList).toContain(
+      'not-disabled:not-aria-readonly:active:scale-(--mimi-press-scale-sm)',
+    );
+    expect(btn.classList).toContain('not-disabled:not-aria-readonly:active:ring-3');
     expect(btn.classList).toContain('focus-visible:outline-ring');
     expect(btn.classList).toContain('data-[state=unchecked]:focus-visible:border-ring');
     expect(btn.classList).toContain(
@@ -164,7 +167,9 @@ describe('MimiCheckbox', () => {
     await settle(fixture);
     expect(control('plain').disabled).toBe(true);
     expect(host('plain').hasAttribute('data-disabled')).toBe(true);
-    expect(control('plain').classList).toContain('disabled:opacity-50');
+    expect(control('plain').classList).toContain(
+      'disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
+    );
     control('plain').click();
     await settle(fixture);
     expect(h.on()).toBe(false);
@@ -185,7 +190,13 @@ describe('MimiCheckbox', () => {
   it('Reactive Forms: valor, touch, aria-invalid (borde destructive) y disabled', async () => {
     const { fixture, h, control } = await setup();
     const btn = control('reactive');
-    expect(btn.classList).toContain('data-[state=unchecked]:aria-invalid:border-destructive');
+    expect(btn.classList).toContain(
+      'aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
+    );
+    // También marcada: la misma forma del error que los campos.
+    expect(btn.classList).toContain(
+      'data-[state=checked]:aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
+    );
     expect(btn.hasAttribute('aria-invalid')).toBe(false);
     btn.dispatchEvent(new Event('blur'));
     await settle(fixture);

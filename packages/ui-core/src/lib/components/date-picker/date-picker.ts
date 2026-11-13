@@ -19,11 +19,7 @@ import { type MimiDate, mimiFormatDate, mimiIsDate } from '@/components/ui/calen
 import { MimiPopover, MimiPopoverContent, MimiPopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
-import {
-  controlInvalidStyles,
-  controlPressStyles,
-  fieldFocusStyles,
-} from '@/components/ui/utils/control-styles';
+import { fieldTriggerStyles } from '@/components/ui/utils/field-styles';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -40,11 +36,10 @@ import {
 /** El disparador: la caja de Input con un botón (los estados de Input, spec 13, «Campos»). */
 export const MIMI_DATE_TRIGGER_CLASSES = cn(
   'flex h-[var(--mimi-size-height,var(--mimi-control-height,2.5rem))] w-full min-w-0 cursor-pointer items-center gap-2 px-3 text-left font-sans text-sm text-foreground',
-  'rounded-[var(--mimi-radius,0.75rem)] border border-input bg-input-background not-disabled:hover:border-input-hover',
-  'disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)] [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground',
-  fieldFocusStyles,
-  controlInvalidStyles,
-  controlPressStyles,
+  'rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))] [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground',
+  // Borde, hover, foco (solo con el teclado), clic (se hunde y crece el halo), error,
+  // deshabilitado y solo lectura: los de todos los campos (utils/field-styles).
+  fieldTriggerStyles,
 );
 
 /** El panel del Popover con los tokens del calendario. */

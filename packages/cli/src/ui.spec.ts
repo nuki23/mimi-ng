@@ -87,6 +87,7 @@ describe('mimi (alias ui)', () => {
         'utils/cn.ts',
         'utils/control-styles.ts',
         'utils/field-state.ts',
+        'utils/field-styles.ts',
         'utils/size.ts',
       ].sort(),
     );

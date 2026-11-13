@@ -17,7 +17,7 @@ export const fieldFocusStyles =
  * que además necesita pointer-events-none para no navegar.
  */
 export const controlDisabledStyles =
-  'disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50';
+  'disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:pointer-events-none aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]';
 
 /** Inválido: borde destructive fijo y halo destructive-ring solo al enfocar. */
 export const controlInvalidStyles =

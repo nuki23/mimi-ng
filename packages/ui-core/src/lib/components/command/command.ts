@@ -185,7 +185,7 @@ const OPTION_CLASSES = cn(
   'rounded-[var(--mimi-command-item-radius,var(--mimi-radius-sm))]',
   'transition-[background-color] duration-100 ease-[ease] active:scale-(--mimi-press-scale)',
   'data-[active=true]:bg-[color:var(--mimi-command-active,var(--mimi-accent))]',
-  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
 );
 
 const ICON_BOX_CLASSES =

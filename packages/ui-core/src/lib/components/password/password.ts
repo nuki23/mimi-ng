@@ -63,6 +63,9 @@ const BOX_CLASSES = cn(
   // El input del usuario (mimiInput) va sin su caja: la caja es esta. Sin el ojo de Edge.
   '[&_input]:h-full [&_input]:min-w-0 [&_input]:flex-1 [&_input]:rounded-none [&_input]:border-0 [&_input]:bg-transparent [&_input]:p-0 [&_input]:shadow-none',
   '[&_input]:focus-visible:ring-0 [&_input]:disabled:opacity-100 [&_input::-ms-reveal]:hidden',
+  // El halo (foco y clic) lo dibuja la caja: el input de dentro nunca lleva el suyo, ni su fondo
+  // de solo lectura.
+  '[&_input]:ring-0! [&_input]:bg-transparent!',
 );
 
 const TOGGLE_CLASSES = cn(
@@ -110,7 +113,7 @@ let nextId = 0;
       [class]="boxClasses()"
       [attr.data-invalid]="invalid() ? '' : null"
       [attr.data-disabled]="isDisabled() ? '' : null"
-      [attr.data-readonly]="readonly() ? '' : null"
+      [attr.data-readonly]="readonly() || nativeReadonly() ? '' : null"
     >
       <ng-content />
       <button
@@ -285,6 +288,8 @@ export class MimiPassword {
   protected readonly value = signal('');
   /** `disabled` escrito en el input (sin formulario). */
   private readonly nativeDisabled = signal(false);
+  /** `readonly` escrito en el input (como `disabled`): la caja se ve de solo lectura igual. */
+  protected readonly nativeReadonly = signal(false);
   protected readonly isDisabled = computed(
     () => this.nativeDisabled() || (this.field()?.fieldState.disabled() ?? false),
   );
@@ -342,6 +347,7 @@ export class MimiPassword {
       this.value.set(el.value);
       this.announced = this.level();
       this.nativeDisabled.set(el.disabled);
+      this.nativeReadonly.set(el.readOnly);
     });
     // El medidor describe el input (sin borrar el aria-describedby del usuario ni el de
     // mimi-form-field).
@@ -379,6 +385,7 @@ export class MimiPassword {
     this.typed = true;
     this.value.set(el.value);
     this.nativeDisabled.set(el.disabled);
+    this.nativeReadonly.set(el.readOnly);
     const level = this.level();
     if (this.meter() && this.typed && level !== this.announced) {
       this.announced = level;

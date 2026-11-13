@@ -32,6 +32,7 @@ import type { FormValueControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { fieldTriggerBoxStyles } from '@/components/ui/utils/field-styles';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -210,7 +211,7 @@ const OPTION_CLASSES = cn(
   'rounded-[var(--mimi-select-option-radius,var(--mimi-radius-sm))]',
   'transition-[background-color] duration-120 ease-[ease] active:scale-(--mimi-press-scale)',
   'data-[active=true]:bg-[color:var(--mimi-select-option-hover,var(--mimi-accent))]',
-  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:active:scale-100',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:active:scale-100',
 );
 const SKELETON_CLASSES =
   'mx-2 h-7 rounded-[var(--mimi-radius-sm)] bg-muted animate-mimi-pulse motion-reduce:animate-none';
@@ -474,15 +475,11 @@ export class MimiSelectList {
 const TRIGGER_CLASSES = cn(
   'group/select relative flex w-full min-w-0 items-center gap-2 pr-2.5 pl-3 font-sans text-sm text-foreground mimi-transition',
   'h-[var(--mimi-select-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
-  'border border-[color:var(--mimi-select-border,var(--mimi-input))] bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-background))]',
-  // Foco, error y deshabilitado como en Input (utils/control-styles.ts). El foco está en el botón
-  // de dentro: la caja lleva `data-focus-visible` solo cuando se llegó con el teclado (o desde el
-  // código), con el origen del FocusMonitor del cdk. Antes era `:focus` y el anillo se quedaba
-  // al elegir con el ratón (informe del usuario, 12/11/2026).
-  'data-[focus-visible]:border-ring data-[focus-visible]:ring-3 data-[focus-visible]:ring-ring-soft',
-  'data-[invalid]:border-destructive data-[invalid]:data-[focus-visible]:border-destructive data-[invalid]:data-[focus-visible]:ring-destructive-ring',
-  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
-  'has-[[role=combobox]:active]:scale-(--mimi-press-scale)',
+  // Borde, hover, foco (solo con el teclado: `data-focus-visible`, origen del FocusMonitor),
+  // clic (se hunde y crece el halo), error, deshabilitado y solo lectura: los de todos los campos
+  // (utils/field-styles). El borde y el fondo en reposo siguen leyendo los tokens del Select.
+  fieldTriggerBoxStyles,
+  'border-[color:var(--mimi-select-border,var(--mimi-input-border,var(--mimi-input)))] bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-bg,var(--mimi-input-background)))]',
 );
 
 // El ::after cubre toda la caja: un clic en cualquier parte (también en el chevron) es del botón.
@@ -548,6 +545,7 @@ const SEARCH_INPUT_CLASSES =
       [attr.data-invalid]="showInvalid() ? '' : null"
       [attr.data-disabled]="disabled() ? '' : null"
       [attr.data-focus-visible]="focusVisible() ? '' : null"
+      [attr.data-readonly]="readonly() ? '' : null"
       [attr.data-placeholder]="selectedOption() ? null : ''"
     >
       <!-- preserveContent: el panel sigue montado mientras dura la animación de salida. -->

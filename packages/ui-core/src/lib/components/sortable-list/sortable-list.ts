@@ -346,7 +346,7 @@ export class MimiSortableList<T = unknown> {
     'mimi-transition hover:bg-[color:var(--mimi-sortable-handle-hover,var(--mimi-accent))] hover:text-foreground',
     'aria-pressed:bg-[color:var(--mimi-sortable-handle-hover,var(--mimi-accent))] aria-pressed:text-foreground data-[dragging]:bg-[color:var(--mimi-sortable-handle-hover,var(--mimi-accent))] data-[dragging]:text-foreground',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-    'disabled:cursor-not-allowed disabled:opacity-50',
+    'disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
   );
 
   protected labelOf(item: T): string {

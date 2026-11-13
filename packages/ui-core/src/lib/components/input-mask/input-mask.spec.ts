@@ -188,7 +188,9 @@ describe('MimiInputMask', () => {
     expect(input('plain').readOnly).toBe(true);
     expect(box.className).toContain('h-12');
     expect(box.className).not.toContain('h-[var(--mimi-input-height');
-    expect(box.className).toContain('focus-within:ring-3');
+    expect(box.className).toContain(
+      'focus-within:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
+    );
   });
 
   it('G2.4b: el marcador sigue a lo escrito y es aria-hidden; prefijo e ícono en su lugar', async () => {
