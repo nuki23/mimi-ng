@@ -367,6 +367,8 @@ export class MimiTree<T = unknown> implements FormValueControl<string | null | s
   protected readonly classes = computed(() =>
     cn(
       'flex flex-col rounded-card border border-border bg-[color:var(--mimi-tree-bg,var(--mimi-card))] p-[var(--mimi-tree-padding,6px)] text-[length:var(--mimi-tree-text,var(--mimi-tree-font-size,13.5px))] text-card-foreground shadow-neutral',
+      // Deshabilitado entero: la misma opacidad que los demás controles (field-styles, 12/11/2026).
+      'data-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
       this.userClass(),
     ),
   );
@@ -374,7 +376,7 @@ export class MimiTree<T = unknown> implements FormValueControl<string | null | s
   protected readonly rowClasses = cn(
     'flex h-[var(--mimi-tree-row-h,var(--mimi-tree-row-height,32px))] cursor-pointer items-center gap-1.5 rounded-[var(--mimi-tree-row-radius,var(--mimi-radius-sm))] pe-2 text-foreground outline-none select-none',
     'transition-[background-color,box-shadow] duration-150',
-    'hover:bg-[color:var(--mimi-tree-hover,var(--mimi-accent))]',
+    'not-in-data-disabled:hover:bg-[color:var(--mimi-tree-hover,var(--mimi-accent))] in-data-disabled:cursor-not-allowed',
     'focus-visible:shadow-[inset_0_0_0_2px_var(--mimi-ring)]',
     // Elegido (decidido por el usuario, 12/11/2026): fondo suave de la marca y texto de la marca;
     // el anillo queda solo para el foco de teclado (`focus-visible`).

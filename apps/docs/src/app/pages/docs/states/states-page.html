@@ -1,70 +1,16 @@
 <article class="flex flex-col gap-5">
   <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Estados</h1>
   <p class="text-lg text-pretty text-muted-foreground">
-    Todos los controles con cada estado forzado a la vista, para comparar cómo dibujan el hover, el
-    foco, el clic, el deshabilitado, la solo lectura y el error.
+    Todos los controles de formulario con cada estado forzado a la vista: el hover, el foco, el
+    clic, el deshabilitado, la solo lectura y el error.
   </p>
   <p class="text-pretty">
-    Es una página para elegir: las opciones de profundidad, de grises y del Tree son
-    <strong>propuestas simuladas aquí</strong>; ningún componente cambia hasta que se elija. Cambia
-    el tema del sitio (arriba a la derecha) para verlas en claro y en oscuro.
+    Todos usan el mismo juego de estados (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >utils/field-styles.ts</code
+    >). Al hacer clic, a todos les crece el halo; solo se hunden los que funcionan como botón.
+    Cambia el tema del sitio (arriba a la derecha) para verlos en claro y en oscuro.
   </p>
-
-  <h2 id="options" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Opciones</h2>
-  <div class="flex flex-col gap-5">
-    <div class="flex flex-col gap-2">
-      <span id="depth-label" class="text-sm font-semibold">(a) Profundidad al hacer clic</span>
-      <mimi-toggle-group
-        aria-labelledby="depth-label"
-        data-test="depth"
-        class="flex-wrap"
-        [(value)]="depth"
-      >
-        @for (option of depthOptions; track option.id) {
-          <button [mimiToggleGroupItem]="option.id">{{ option.label }}</button>
-        }
-      </mimi-toggle-group>
-      <ul class="flex list-disc flex-col gap-1 pl-5 text-sm text-pretty text-muted-foreground">
-        <li>
-          <strong>A:</strong> a todos les crece un anillo al hacer clic, como a Button; se hunden
-          solo los que funcionan como botón (Select, Date Picker, Color Picker, File Upload,
-          Checkbox, Switch, Toggle Group, Button). Los campos de escribir no se hunden.
-        </li>
-        <li><strong>B:</strong> todos se hunden y a todos les crece el anillo.</li>
-        <li><strong>Actual:</strong> lo que hace hoy cada componente (columna «Clic»).</li>
-      </ul>
-    </div>
-
-    <div class="flex flex-col gap-2">
-      <span id="gray-label" class="text-sm font-semibold">(b) Grises</span>
-      <mimi-toggle-group aria-labelledby="gray-label" data-test="gray" [(value)]="gray">
-        @for (option of grayOptions; track option.id) {
-          <button [mimiToggleGroupItem]="option.id">{{ option.label }}</button>
-        }
-      </mimi-toggle-group>
-      <p class="text-sm text-pretty text-muted-foreground">
-        Malva: los grises del tema teñidos con el tono 292 del violeta, con croma baja (0,006 y
-        0,014) y la misma luminosidad. Contraste con la opción elegida y el tema actual:
-      </p>
-      <ul data-test="contrasts" class="flex flex-col gap-1 text-sm">
-        @for (pair of contrasts(); track pair.label) {
-          <li class="flex items-center gap-2">
-            <span
-              class="inline-flex h-5 min-w-12 items-center justify-center rounded-full px-1.5 font-mono text-xs font-semibold"
-              [class]="
-                pair.ok
-                  ? 'bg-success-soft text-success-soft-foreground'
-                  : 'bg-muted text-destructive'
-              "
-              >{{ pair.ok ? 'AA' : 'NO' }}</span
-            >
-            <span class="font-mono text-[13px]">{{ pair.ratio }}:1</span>
-            <span class="text-muted-foreground">{{ pair.label }}</span>
-          </li>
-        }
-      </ul>
-    </div>
-  </div>
 
   <h2 id="grid" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
     Controles por estado
@@ -77,10 +23,7 @@
   </p>
   <div
     data-test="states-grid"
-    class="states-grid -mx-4 overflow-x-auto rounded-card border bg-background px-4 py-3 sm:mx-0"
-    [attr.data-depth]="depth() ?? 'current'"
-    [attr.data-gray]="gray() ?? 'neutral'"
-    [style]="gridStyle()"
+    class="-mx-4 overflow-x-auto rounded-card border bg-background px-4 py-3 sm:mx-0"
   >
     <table class="w-max border-separate border-spacing-x-3 border-spacing-y-2 text-left text-sm">
       <thead>
@@ -298,6 +241,18 @@ Hola</textarea>
                         <button mimiToggleGroupItem="table">Tabla</button>
                       </mimi-toggle-group>
                     }
+                    @case ('tree') {
+                      @if (r || e) {
+                        <span class="text-xs text-muted-foreground">No aplica</span>
+                      } @else {
+                        <mimi-tree
+                          aria-label="Archivos"
+                          value="app"
+                          [nodes]="tree"
+                          [disabled]="d"
+                        />
+                      }
+                    }
                     @case ('button') {
                       @if (r || e) {
                         <span class="text-xs text-muted-foreground">No aplica</span>
@@ -315,52 +270,9 @@ Hola</textarea>
     </table>
   </div>
 
-  <h2 id="tree" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
-    Tree: la selección
-  </h2>
-  <p class="text-pretty">
-    El mismo árbol con «app.ts» elegido y el foco de teclado (forzado) en «styles.css».
-  </p>
-  <div class="states-grid grid gap-4 sm:grid-cols-2" [style]="gridStyle()">
-    <div class="flex flex-col gap-2 rounded-card border bg-background p-3">
-      <span class="text-sm font-semibold">Actual: fondo primary y texto blanco</span>
-      <div
-        appForceState="focus"
-        target='[role="treeitem"]:not([data-selected]):not([aria-expanded])'
-      >
-        <mimi-tree aria-label="Archivos (actual)" value="app" [expanded]="['src']" [nodes]="tree" />
-      </div>
-    </div>
-    <div
-      class="flex flex-col gap-2 rounded-card border bg-background p-3"
-      style="
-        --mimi-tree-selected: var(--mimi-primary-subtle);
-        --mimi-tree-selected-fg: var(--mimi-primary);
-      "
-      data-test="tree-proposal"
-    >
-      <span class="text-sm font-semibold"
-        >Propuesta (recomendada): fondo primary-subtle, texto primary y anillo solo con el
-        teclado</span
-      >
-      <div
-        appForceState="focus"
-        target='[role="treeitem"]:not([data-selected]):not([aria-expanded])'
-      >
-        <mimi-tree
-          aria-label="Archivos (propuesta)"
-          value="app"
-          [expanded]="['src']"
-          [nodes]="tree"
-        />
-      </div>
-    </div>
-  </div>
   <p class="text-sm text-pretty text-muted-foreground">
-    El anillo de foco del Tree ya solo sale con el teclado (<code
-      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-      >:focus-visible</code
-    >); lo que cambia la propuesta es la fila elegida: deja de ser un bloque de color sólido.
+    El Tree elige con el fondo suave de la marca y su texto; el anillo sale solo con el foco de
+    teclado.
   </p>
 
   @if (!forcedRules()) {

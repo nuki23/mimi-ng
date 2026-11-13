@@ -1,12 +1,45 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { settle } from '../../../code/code-preview.testing';
-import { contrast, parseOklch, tintedVars } from './gray-tints';
 import { forcedSelector } from './state-forcer';
 import { ROWS, STATES, StatesPage } from './states-page';
 
-/** La página pinta 126 controles (18 × 7) más dos árboles: con toda la suite, unos 25 s. */
+/** La página pinta 133 celdas (19 × 7): con toda la suite, unos 25 s. */
 const STATES_PAGE_TIMEOUT = 60_000;
+
+const statesNode = (
+  globalThis as unknown as { process: { cwd(): string; getBuiltinModule(id: string): unknown } }
+).process;
+const statesFs = statesNode.getBuiltinModule('node:fs') as {
+  readFileSync(path: string, encoding: 'utf8'): string;
+  readdirSync(path: string): string[];
+  existsSync(path: string): boolean;
+};
+const STATES_COMPONENTS = `${statesNode.cwd()}/packages/ui-core/src/lib/components`;
+
+/**
+ * Los controles de formulario de ui-core: los que implementan `FormValueControl` o
+ * `FormCheckboxControl`, y los que leen el estado del formulario con `injectFieldState()` (Input y
+ * Textarea, que son nativos, y los demás) o con `NgControl`. Form Field no cuenta: es el
+ * envoltorio de la etiqueta y el error, no un control.
+ */
+function formControlFolders(): string[] {
+  return statesFs
+    .readdirSync(STATES_COMPONENTS)
+    .filter((folder) => folder !== 'form-field')
+    .filter((folder) => {
+      const dir = `${STATES_COMPONENTS}/${folder}`;
+      if (!statesFs.existsSync(`${dir}/${folder}.ts`)) return false;
+      const files = statesFs
+        .readdirSync(dir)
+        .filter((f) => f.endsWith('.ts') && !f.endsWith('.spec.ts'));
+      return files.some((f) =>
+        /implements[^{]*\b(FormValueControl|FormCheckboxControl)\b|\bNgControl\b|injectFieldState\(/.test(
+          statesFs.readFileSync(`${dir}/${f}`, 'utf8'),
+        ),
+      );
+    });
+}
 
 describe('Página «Estados»', () => {
   it('fuerza las seudoclases con data-force, sin tocar las escapadas de las clases', () => {
@@ -27,44 +60,28 @@ describe('Página «Estados»', () => {
     expect(forcedSelector('.focus-visible\\:ring')).toBe('.focus-visible\\:ring');
   });
 
-  it('los grises malva tiñen los neutros con el tono 292 y mantienen el contraste AA', () => {
-    const theme: Record<string, string> = {
-      '--mimi-background': 'oklch(1 0 0)',
-      '--mimi-foreground': 'oklch(0.145 0 0)',
-      '--mimi-muted': 'oklch(0.97 0 0)',
-      '--mimi-muted-foreground': 'oklch(0.54 0 0)',
-      '--mimi-input': 'oklch(1 0 0 / 15%)',
-      '--mimi-primary': 'oklch(0.54 0.239 292)',
-    };
-    const read = (token: string) => theme[token] ?? '';
-    expect(tintedVars(0, read, false)).toEqual({});
-    const vars = tintedVars(0.014, read, false);
-    expect(vars['--mimi-muted-foreground']).toBe('oklch(0.54 0.014 292)');
-    // Casi blancos con la mitad del croma, y la transparencia se conserva.
-    expect(vars['--mimi-muted']).toBe('oklch(0.97 0.007 292)');
-    expect(vars['--mimi-input']).toBe('oklch(1 0.007 292 / 0.15)');
-    // Los colores con croma (la marca) no se tocan.
-    expect(vars['--mimi-primary']).toBeUndefined();
-    expect(vars['--mimi-input-hover']).toContain('30%');
-    const ratio = contrast(
-      parseOklch(vars['--mimi-muted-foreground'])!,
-      parseOklch(vars['--mimi-background'])!,
-    );
-    expect(ratio).toBeGreaterThanOrEqual(4.5);
-    // El mismo par en neutro puro da prácticamente lo mismo.
-    const neutral = contrast(parseOklch('oklch(0.54 0 0)')!, parseOklch('oklch(1 0 0)')!);
-    expect(Math.abs(ratio - neutral)).toBeLessThan(0.2);
+  it('cada control de formulario de ui-core tiene su fila en la cuadrícula', () => {
+    const folders = formControlFolders();
+    // Si la detección se rompe y no encuentra nada, la prueba no debe pasar sola.
+    expect(folders.length).toBeGreaterThanOrEqual(17);
+    const sources = new Set(ROWS.map((row) => row.source));
+    const missing = folders.filter((folder) => !sources.has(folder));
+    expect(missing, 'controles sin fila en /docs/states (states-page.ts, ROWS)').toEqual([]);
+    // Y cada fila apunta a una carpeta que existe.
+    for (const row of ROWS) {
+      expect(statesFs.existsSync(`${STATES_COMPONENTS}/${row.source}`), row.source).toBe(true);
+    }
   });
 
   it(
-    'pinta los 18 controles en los 7 estados, con los selectores de profundidad y grises',
+    'pinta los 19 controles en los 7 estados, solo con lo elegido (sin selectores)',
     async () => {
       TestBed.configureTestingModule({ providers: [provideRouter([])] });
       const fixture = TestBed.createComponent(StatesPage);
       document.body.appendChild(fixture.nativeElement);
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
-      expect(ROWS.length).toBe(18);
+      expect(ROWS.length).toBe(19);
       expect(STATES.map((s) => s.id)).toEqual([
         'normal',
         'hover',
@@ -75,8 +92,8 @@ describe('Página «Estados»', () => {
         'error',
       ]);
       const grid = el.querySelector<HTMLElement>('[data-test="states-grid"]')!;
-      expect(grid.querySelectorAll('tbody tr').length).toBe(18);
-      expect(grid.querySelectorAll('[data-cell]').length).toBe(18 * 7);
+      expect(grid.querySelectorAll('tbody tr').length).toBe(19);
+      expect(grid.querySelectorAll('[data-cell]').length).toBe(19 * 7);
       // Estados forzados: el elemento interactivo de cada celda lleva su data-force.
       const cell = (row: string, state: string) =>
         grid.querySelector<HTMLElement>(`tr[data-row="${row}"] [data-cell="${state}"]`)!;
@@ -98,18 +115,16 @@ describe('Página «Estados»', () => {
       expect(
         cell('select', 'error').querySelector('mimi-select > div')!.hasAttribute('data-invalid'),
       ).toBe(true);
-      // Opciones: A recomendada por defecto y el neutro actual.
-      expect(grid.getAttribute('data-depth')).toBe('a');
-      expect(grid.getAttribute('data-gray')).toBe('neutral');
-      expect(el.querySelector('[data-test="depth"]')!.querySelectorAll('button').length).toBe(3);
-      expect(el.querySelector('[data-test="gray"]')!.querySelectorAll('button').length).toBe(3);
-      // Tree: actual y propuesta, con la selección y el foco forzado.
-      expect(el.querySelectorAll('mimi-tree').length).toBe(2);
-      expect(
-        el
-          .querySelector<HTMLElement>('[data-test="tree-proposal"]')!
-          .style.getPropertyValue('--mimi-tree-selected'),
-      ).toContain('--mimi-primary-subtle');
+      // Sin selectores de comparación: solo la opción elegida, la del tema.
+      expect(el.querySelector('[data-test="depth"], [data-test="gray"]')).toBeNull();
+      expect(grid.hasAttribute('data-depth')).toBe(false);
+      expect(grid.getAttribute('style') ?? '').toBe('');
+      // Tree: en la cuadrícula, con el nodo elegido y el hover en el otro; sin solo lectura ni error.
+      const tree = cell('tree', 'hover').querySelector('mimi-tree')!;
+      expect(tree.querySelector('[data-selected]')!.textContent).toContain('app.ts');
+      expect(tree.querySelector('[data-force="hover"]')!.textContent).toContain('README.md');
+      expect(cell('tree', 'readonly').querySelector('mimi-tree')).toBeNull();
+      expect(el.querySelectorAll('mimi-tree').length).toBe(5);
       fixture.destroy();
     },
     STATES_PAGE_TIMEOUT,

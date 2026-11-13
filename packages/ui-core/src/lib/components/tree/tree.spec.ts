@@ -510,3 +510,18 @@ describe('MimiTree con formularios', () => {
     expect(host.model).toBe('pkg');
   });
 });
+
+describe('MimiTree deshabilitado entero', () => {
+  it('se atenúa con el token de los controles y sus filas no responden al hover', async () => {
+    const fixture = TestBed.createComponent(MimiTree);
+    fixture.componentRef.setInput('nodes', FILES);
+    fixture.componentRef.setInput('disabled', true);
+    await settle(fixture);
+    const host = fixture.nativeElement as HTMLElement;
+    expect(host.hasAttribute('data-disabled')).toBe(true);
+    expect(host.className).toContain('data-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]');
+    const row = host.querySelector<HTMLElement>('[role="treeitem"]')!;
+    expect(row.className).toContain('not-in-data-disabled:hover:');
+    expect(row.className).toContain('in-data-disabled:cursor-not-allowed');
+  });
+});

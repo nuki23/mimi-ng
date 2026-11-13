@@ -153,3 +153,33 @@ En verde.
 - Contador de Tabs 4,70 / 5,90; contador de Toolbar 5,45 / 6,86; «Crear» 4,89 / 5,04: todos AA.
 - Fila elegida de Data Table con tinte violeta (texto 16,05 / 14,33); hover de Toolbar con anillo `oklch(… 292 / 0.6)`; zona de File Upload con un archivo encima con borde, fondo y halo de la marca.
 - No se midió en el navegador el filtro activo y la insignia de Data Table (las mismas clases que el contador de Tabs; lo cubre la prueba de archivos).
+
+**Bundle:** JS inicial **335,83 kB / 106,59 kB gzip** (sin cambio); CSS global **122,53 kB / 18,19 kB gzip** (+0,08 kB crudo).
+
+## 5. `/docs/states` con lo elegido
+
+**La página se queda en el sitio**, sin los selectores de comparación:
+
+- fuera la profundidad (A, B, Actual) y su simulación (`DEPTH_CSS`), los grises (Neutro, Malva suave, Malva medio) con su lista de contrastes, y los dos árboles lado a lado;
+- **se borra `gray-tints.ts`**: solo lo usaba la comparación (los grises ya están en el tema y su contraste lo prueba `contrast.spec.ts`);
+- el texto de arriba explica que todos usan `utils/field-styles.ts`.
+
+**Tree entra en la cuadrícula** (fila 19): implementa `FormValueControl`. Un nodo elegido y el otro con el hover, el foco o el clic; «No aplica» en solo lectura y error (no los tiene).
+
+**Arreglo de Tree, visto al meterlo en la cuadrícula:** deshabilitado entero no se veía distinto (solo llevaba `aria-disabled`). Ahora se atenúa con `--mimi-disabled-opacity` y sus filas no responden al hover (`not-in-data-disabled:hover:`) y muestran el cursor de prohibido. Prueba nueva en `tree.spec.ts`. Anotado en el inventario.
+
+**Prueba de cobertura** (`states-page.spec.ts`): cada fila lleva `source`, la carpeta del componente. La prueba busca en `packages/ui-core/src/lib/components` los que implementan `FormValueControl` o `FormCheckboxControl` o leen el formulario (`injectFieldState()`, `NgControl`), salvo Form Field (el envoltorio), y **falla si alguno no tiene fila**. También comprueba que cada `source` existe y que encuentra al menos 17 (para que no pase sola si la detección se rompe). Hoy encuentra 17 y todos tienen fila (Password y Button no los detecta: Password envuelve un Input y Button no es de formulario; tienen fila igual). La prueba de la página comprueba además: 19 × 7 celdas, sin selectores ni `data-depth`, sin estilos en línea en la cuadrícula, y la fila del Tree.
+
+**Revisor:** `.claude/commands/cerrar-grupo.md`, punto nuevo en «2. Comprobar»: **controles nuevos en `/docs/states`** (su fila, las piezas de `field-styles.ts` y una mirada en claro y oscuro).
+
+**Playwright** (claro y oscuro):
+
+- `page.mjs`, la página: **24 de 24 OK**. Sin selectores, 19 filas, estados forzados copiados; Tree elegido `oklch(0.54 0.239 292 / 0.1)` con texto `oklch(0.54 0.239 292)` en claro (`0.72 0.16 292` en oscuro), hover con `accent`, foco con anillo inset de la marca, elegido sin anillo, deshabilitado a 0,5, sin errores de consola.
+- Se repitieron `fields.mjs` (**206 de 206**), `depth.mjs` (**68 de 68**) y `selection.mjs` (**18 de 18**) sobre la página nueva.
+- **Nota:** el servidor de desarrollo dejó de recompilar después de un error intermedio (entre el cambio del `.ts` y el del `.html`). Se reinició y se repitieron todas las comprobaciones contra el código nuevo; los números de arriba son de esa segunda pasada.
+
+Captura: `docs/auto/capturas/2026-11-12/unificacion/paso5-*.png`.
+
+**Pruebas:** ui-core 1047, docs 253, CLI 202, en verde.
+
+**Bundle:** JS inicial **334,89 kB / 106,23 kB gzip** (antes 335,83 / 106,59: **−0,94 kB**; se fue el código de la comparación, que compartía un trozo con el inicial); CSS global **122,39 kB / 18,15 kB gzip** (antes 122,53 / 18,19).

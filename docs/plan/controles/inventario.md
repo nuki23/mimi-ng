@@ -55,6 +55,8 @@ Cada control comprobado en `/docs/states`, en claro y oscuro, con Playwright: 20
 | ✓   | Toggle Group | halo al hacer clic, en los ítems       | sin hover ni clic en solo lectura; deshabilitado con respaldo del token; filo de error con el token de error                                                           |
 | ✓   | Button       | `controlDisabledStyles`                | deshabilitado con el token (antes, 50 fijo); ya se hundía y le crecía el anillo                                                                                        |
 
+**Tree (paso 5, 12/11/2026):** implementa `FormValueControl`, así que también entra en la cuadrícula de `/docs/states` (fila 19). Elegido con `primary-subtle` y texto `primary` (paso 4). Deshabilitado entero no se veía distinto (solo `aria-disabled`): ahora se atenúa con `--mimi-disabled-opacity` y sus filas no responden al hover. No tiene solo lectura ni error.
+
 **Lo que queda distinto, a propósito:**
 
 - **El foco de los controles de elegir** (Checkbox, Switch, Slider, Toggle Group) y de **Button** sigue siendo el contorno de 2px, no el halo de campo: no son campos.
