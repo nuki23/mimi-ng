@@ -28,6 +28,7 @@ import {
 import { cva } from 'class-variance-authority';
 import { MimiButton } from '@/components/ui/button';
 import { cn } from '@/components/ui/utils/cn';
+import type { MimiSize } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import { mimiWaitForExit } from '@/components/ui/utils/overlay';
 import { MIMI_TOAST_CONFIG, type MimiToastPosition } from './toast-config';
@@ -46,7 +47,12 @@ import { MIMI_TOAST_TEXT } from './toast-texts';
  */
 
 /** Cómo se ve: tarjeta con borde (por defecto) o del color del tono. */
-export type MimiToastVariant = 'outline' | 'solid';
+/**
+ * `outline` (por defecto): contorno y fondo suave con el color del tono; `neutral`: la tarjeta
+ * neutra con solo el ícono de color (el `outline` de la 0.5.0); `solid`: fondo del color del tono.
+ * Sin tono, las tres se ven como la tarjeta neutra.
+ */
+export type MimiToastVariant = 'neutral' | 'outline' | 'solid';
 
 /** Botón de acción del toast. Al pulsarlo, el toast se cierra. */
 export interface MimiToastAction {
@@ -65,6 +71,11 @@ export interface MimiToastOptions {
   icon?: TemplateRef<unknown> | false;
   /** Por defecto, `outline`. */
   variant?: MimiToastVariant;
+  /**
+   * Tamaño de este aviso (R.4): relleno, texto y ícono (`sm`, `md`, `lg`). Por defecto, el de
+   * `provideMimiToast({ size })` y, sin él, `md`. El ancho de la pila es el de la configuración.
+   */
+  size?: MimiSize;
   /** Con el id de un toast abierto, lo reemplaza. */
   id?: string;
   /** Clases del toast, mezcladas con `cn()` (gana la del usuario). */
@@ -117,6 +128,7 @@ interface ToastRecord {
   action?: MimiToastAction;
   icon?: TemplateRef<unknown> | false;
   variant: MimiToastVariant;
+  size: MimiSize;
   /** Sin tono: `toast()` y el «cargando» de `promise()`. */
   tone: ToastTone | undefined;
   loading: boolean;
@@ -149,12 +161,26 @@ const OUTLINE =
   'border border-[color:var(--mimi-toast-border,var(--mimi-border))] bg-[color:var(--mimi-toast-bg,var(--mimi-popover))] text-popover-foreground shadow-[shadow:var(--mimi-toast-shadow,var(--mimi-shadow-popover))]';
 
 /** Colores de cada tono en cada variante (spec 4, «Variante y tono»). */
+const TONAL_SHADOW = 'shadow-[shadow:var(--mimi-toast-shadow,var(--mimi-shadow-popover))]';
 const TONE_CLASSES = {
-  success: { outline: OUTLINE, solid: 'bg-success text-success-foreground shadow-success-hover' },
-  warning: { outline: OUTLINE, solid: 'bg-warning text-warning-foreground shadow-warning-hover' },
-  info: { outline: OUTLINE, solid: 'bg-info text-info-foreground shadow-info-hover' },
+  success: {
+    neutral: OUTLINE,
+    outline: `border border-success-border bg-success-soft text-popover-foreground ${TONAL_SHADOW}`,
+    solid: 'bg-success text-success-foreground shadow-success-hover',
+  },
+  warning: {
+    neutral: OUTLINE,
+    outline: `border border-warning-border bg-warning-soft text-popover-foreground ${TONAL_SHADOW}`,
+    solid: 'bg-warning text-warning-foreground shadow-warning-hover',
+  },
+  info: {
+    neutral: OUTLINE,
+    outline: `border border-info-border bg-info-soft text-popover-foreground ${TONAL_SHADOW}`,
+    solid: 'bg-info text-info-foreground shadow-info-hover',
+  },
   danger: {
-    outline: OUTLINE,
+    neutral: OUTLINE,
+    outline: `border border-destructive-border bg-destructive-soft-bg text-popover-foreground ${TONAL_SHADOW}`,
     solid: 'bg-destructive text-destructive-foreground shadow-destructive-hover',
   },
 } as const satisfies Record<ToastTone, Record<MimiToastVariant, string>>;
@@ -171,12 +197,13 @@ const ICON_TONE_CLASSES = {
 const toastVariants = cva(
   [
     // 12px arriba y abajo: con una línea de descripción mide los 68px de la pila del diseño.
-    'relative flex min-h-[68px] items-center gap-3 py-3 pr-10 pl-3.5 text-left font-sans [overflow-wrap:anywhere]',
+    // Alto mínimo, relleno y texto salen de la escala del tema por `data-size` (R.4).
+    'relative flex min-h-[var(--mimi-toast-min-h,68px)] items-center gap-3 py-[var(--mimi-toast-py,0.75rem)] pr-10 pl-[var(--mimi-toast-pl,0.875rem)] text-left font-sans [overflow-wrap:anywhere]',
     'rounded-[var(--mimi-toast-radius,var(--mimi-radius))]',
   ],
   {
     variants: {
-      variant: { outline: '', solid: '' },
+      variant: { neutral: '', outline: '', solid: '' },
       tone: { success: '', warning: '', info: '', danger: '' },
     },
     compoundVariants: Object.entries(TONE_CLASSES).flatMap(([tone, byVariant]) =>
@@ -205,7 +232,7 @@ const POSITION_CLASSES = {
  * recibe clics; los toasts sí. 340px, sin pasarse del ancho de la pantalla menos los márgenes.
  */
 const HOST_CLASSES =
-  'pointer-events-none fixed inset-auto z-[2147483647] m-0 h-auto w-[min(var(--mimi-toast-width,340px),calc(100vw_-_2*var(--mimi-toast-offset,16px)))] overflow-visible border-0 bg-transparent p-0 text-popover-foreground';
+  'pointer-events-none fixed inset-auto z-[2147483647] m-0 h-auto w-[min(var(--mimi-toast-w,var(--mimi-toast-width,340px)),calc(100vw_-_2*var(--mimi-toast-offset,16px)))] overflow-visible border-0 bg-transparent p-0 text-popover-foreground';
 
 const CLOSE_CLASSES = cn(
   'absolute top-2 right-2 inline-flex size-6 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] bg-transparent',
@@ -385,6 +412,7 @@ class MimiToastIcon {
     '[attr.inert]': 'layout().hidden || toast().state === "closed" ? "" : null',
     '[attr.data-state]': 'toast().state',
     '[attr.data-variant]': 'variant()',
+    '[attr.data-size]': 'toast().size',
     '[attr.data-tone]': 'toast().tone ?? null',
     '[attr.data-front]': 'layout().front ? "" : null',
     '[attr.data-entered]': 'entered() ? "" : null',
@@ -403,9 +431,11 @@ class MimiToastItem {
   protected readonly entered = signal(false);
 
   /** El sólido sin tono se ve como la tarjeta (el diseño no lo muestra). */
-  protected readonly variant = computed<MimiToastVariant>(() =>
-    this.toast().variant === 'solid' && this.toast().tone ? 'solid' : 'outline',
-  );
+  protected readonly variant = computed<MimiToastVariant>(() => {
+    const { variant, tone } = this.toast();
+    if (!tone) return 'outline';
+    return variant === 'solid' || variant === 'neutral' ? variant : 'outline';
+  });
   private readonly solid = computed(() => this.variant() === 'solid');
 
   protected readonly hostClasses = computed(() =>
@@ -426,19 +456,23 @@ class MimiToastItem {
   );
   protected readonly iconClasses = computed(() => {
     if (this.solid()) {
-      return 'inline-flex size-[34px] shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklch,currentColor_16%,transparent)] [&_svg]:size-[18px]';
+      return 'inline-flex size-[var(--mimi-toast-circle,34px)] shrink-0 items-center justify-center rounded-full bg-[color-mix(in_oklch,currentColor_16%,transparent)] [&_svg]:size-[var(--mimi-toast-icon,18px)]';
     }
     const tone = this.toast().tone;
     return cn(
-      'inline-flex shrink-0 [&_svg]:size-[18px]',
+      'inline-flex shrink-0 [&_svg]:size-[var(--mimi-toast-icon,18px)]',
       tone ? ICON_TONE_CLASSES[tone] : ICON_NO_TONE,
     );
   });
   protected readonly titleClasses = computed(() =>
-    this.solid() ? 'text-sm font-bold' : 'text-sm font-semibold',
+    this.solid()
+      ? 'text-[length:var(--mimi-toast-title,0.875rem)] font-bold'
+      : 'text-[length:var(--mimi-toast-title,0.875rem)] font-semibold',
   );
   protected readonly descriptionClasses = computed(() =>
-    this.solid() ? 'text-[13px] leading-[1.4]' : 'text-[12.5px] text-muted-foreground',
+    this.solid()
+      ? 'text-[length:calc(var(--mimi-toast-desc,12.5px)_+_0.5px)] leading-[1.4]'
+      : 'text-[length:var(--mimi-toast-desc,12.5px)] text-muted-foreground',
   );
   /** Acción del diseño: 28px, 10px a los lados, radio sm, 12.5px/600. */
   protected readonly actionClasses = computed(() =>
@@ -532,6 +566,8 @@ class MimiToastItem {
     popover: 'manual',
     '[class]': 'classes',
     '[attr.data-position]': 'position',
+    // El ancho de la pila sigue el tamaño de la configuración (`--mimi-toast-w` por `data-size`).
+    '[attr.data-size]': 'store.config.size',
     '[attr.data-expanded]': 'expanded() ? "" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -708,6 +744,7 @@ class MimiToastStore {
       action: options.action,
       icon: options.icon,
       variant: options.variant ?? 'outline',
+      size: options.size ?? this.config.size,
       tone,
       loading: extra.loading ?? false,
       class: options.class,

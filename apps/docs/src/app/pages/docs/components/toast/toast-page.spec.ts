@@ -22,7 +22,17 @@ describe('ToastPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(7);
+      expect(previews.length).toBe(8);
+      // Tamaños: un botón por tamaño, y cada uno pide el aviso de su tamaño.
+      const sizes = el.querySelector('app-toast-sizes-example')!;
+      expect(
+        Array.from(sizes.querySelectorAll('button')).map((b) => b.textContent!.trim()),
+      ).toEqual(['Aviso sm', 'Aviso md', 'Aviso lg']);
+      expect(
+        previews.some(
+          ({ code }) => code.includes('class ToastSizesExample') && code.includes('size });'),
+        ),
+      ).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('button')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/toast';");

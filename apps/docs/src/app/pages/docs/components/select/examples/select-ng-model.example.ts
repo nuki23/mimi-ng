@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MimiFormField } from '@/components/ui/form-field';
-import { type MimiOption, MimiSelect } from '@/components/ui/select';
+import { MimiSelectImports } from '@/components/ui/select';
 
 @Component({
   selector: 'app-select-ng-model-example',
-  imports: [FormsModule, MimiFormField, MimiSelect],
+  imports: [FormsModule, MimiFormField, MimiSelectImports],
   template: `
     <div class="flex w-full max-w-xs flex-col gap-3">
       <mimi-form-field label="Moneda">
@@ -15,8 +15,12 @@ import { type MimiOption, MimiSelect } from '@/components/ui/select';
           placeholder="Selecciona una moneda"
           clearable
           [(ngModel)]="currency"
-          [options]="currencies"
-        />
+        >
+          <mimi-option value="COP">Peso colombiano</mimi-option>
+          <mimi-option value="MXN">Peso mexicano</mimi-option>
+          <mimi-option value="USD">Dólar estadounidense</mimi-option>
+          <mimi-option value="EUR">Euro</mimi-option>
+        </mimi-select>
       </mimi-form-field>
       <p class="font-mono text-[13px] text-muted-foreground">
         currency: {{ currency() ?? 'null' }}
@@ -27,10 +31,4 @@ import { type MimiOption, MimiSelect } from '@/components/ui/select';
 })
 export class SelectNgModelExample {
   protected readonly currency = signal<string | null>('COP');
-  protected readonly currencies: MimiOption<string>[] = [
-    { label: 'Peso colombiano', value: 'COP' },
-    { label: 'Peso mexicano', value: 'MXN' },
-    { label: 'Dólar estadounidense', value: 'USD' },
-    { label: 'Euro', value: 'EUR' },
-  ];
 }

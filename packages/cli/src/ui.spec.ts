@@ -80,12 +80,15 @@ describe('mimi (alias ui)', () => {
         'input/input.ts',
         'input/input.variants.ts',
         'theme/index.ts',
+        'theme/neutral.ts',
         'theme/provider.ts',
         'theme/theme-base.css',
         'theme/types.ts',
         'utils/cn.ts',
         'utils/control-styles.ts',
         'utils/field-state.ts',
+        'utils/field-styles.ts',
+        'utils/size.ts',
       ].sort(),
     );
     expect(result.readContent(`/${UI}/utils/field-state.ts`)).toBe(
@@ -795,7 +798,13 @@ function makeOld(tree: UnitTestTree, files: string[], modified: string[] = []) {
   tree.overwrite('/mimi.json', JSON.stringify(config, null, 2));
 }
 
-const THEME = ['theme/theme-base.css', 'theme/types.ts', 'theme/provider.ts', 'theme/index.ts'];
+const THEME = [
+  'theme/theme-base.css',
+  'theme/types.ts',
+  'theme/provider.ts',
+  'theme/neutral.ts',
+  'theme/index.ts',
+];
 const CONFIRM = ['confirm/confirm.ts', 'confirm/confirm-texts.ts', 'confirm/index.ts'];
 const DIALOG = ['dialog/dialog.ts', 'dialog/dialog-texts.ts', 'dialog/index.ts'];
 const BUTTON_FILES = BUTTON.map((name) => `button/${name}`);

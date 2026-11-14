@@ -243,7 +243,7 @@ describe('MimiSlider', () => {
     // Sombras con tipo (estilos 8) y el token del pulgar también en hover.
     const classes = t.className.split(' ');
     expect(classes).toContain(
-      'not-aria-disabled:hover:shadow-[shadow:0_0_0_6px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
+      'not-aria-disabled:not-aria-readonly:hover:shadow-[shadow:0_0_0_6px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
     );
     expect(classes.filter((c) => /shadow-\[(?!shadow:)/.test(c))).toEqual([]);
     const track = part('single').querySelector('[data-slot="track"]')!;

@@ -1,0 +1,103 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Checkbox</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Marca una opción que se confirma después, por ejemplo al enviar un formulario. Para un ajuste
+    que se aplica al instante, usa el
+    <a class="font-medium underline underline-offset-4" href="/docs/components/switch">Switch</a>.
+  </p>
+
+  <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Instalación
+  </h2>
+  <app-install-command name="checkbox" />
+
+  <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
+  <app-code-block [code]="usage" lang="angular-ts" />
+  <p class="text-pretty">
+    El texto de adentro es la etiqueta: al hacer clic en él, la casilla se alterna. Por dentro es un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;button type="button"&gt;</code
+    >
+    con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">role="checkbox"</code>,
+    así que nunca envía el formulario que lo contiene. Con formularios (Signal Forms, Reactive Forms
+    y ngModel) funciona igual que el Switch: mira los ejemplos de
+    <a class="font-medium underline underline-offset-4" href="/docs/components/switch#signal-forms"
+      >la página del Switch</a
+    >, que usan los dos controles.
+  </p>
+
+  <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
+
+  <h3 id="states" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Estados</h3>
+  <p class="text-pretty">
+    Sin marcar, marcada, mixta y deshabilitada. Se alterna con Espacio; Enter no hace nada, como
+    pide el patrón de accesibilidad para casillas.
+  </p>
+  <app-code-preview [code]="source.states">
+    <app-checkbox-states-example />
+  </app-code-preview>
+
+  <h3 id="sizes" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Tamaños</h3>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">sm</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">md</code> (por defecto)
+    y <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">lg</code>. Para dar
+    el mismo tamaño a todo un formulario, ponlo una vez en su contenedor con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiSize</code>.
+  </p>
+  <app-code-preview [code]="source.sizes">
+    <app-checkbox-sizes-example />
+  </app-code-preview>
+
+  <h3 id="select-all" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Seleccionar todo</h3>
+  <p class="text-pretty">
+    Con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">indeterminate</code>,
+    la casilla principal muestra un guion cuando solo algunas están marcadas.
+  </p>
+  <app-code-preview [code]="source.selectAll">
+    <app-checkbox-select-all-example />
+  </app-code-preview>
+
+  <h3 id="forms-tabs" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con formularios: Signal Forms, Reactive y plantilla
+  </h3>
+  <p class="text-pretty">
+    El mismo campo con los tres formularios de Angular. El control implementa la interfaz de
+    Angular: no hace falta un adaptador.
+  </p>
+  <app-forms-tabs component="checkbox" />
+
+  <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
+  <div class="overflow-x-auto rounded-card border">
+    <table class="w-full text-left text-sm">
+      <thead class="bg-muted text-muted-foreground">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Input</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Tipo</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Por defecto</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Descripción</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of api; track row.name) {
+          <tr class="border-t align-top">
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.name }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px] text-muted-foreground">{{ row.type }}</td>
+            <td class="px-4 py-2.5 font-mono text-[13px]">{{ row.default }}</td>
+            <td class="px-4 py-2.5 text-pretty">{{ row.description }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty">
+    Emite
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">touch</code> al perder
+    el foco (marca el campo como tocado).
+  </p>
+
+  <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
+  <app-css-variables component="checkbox" />
+</article>

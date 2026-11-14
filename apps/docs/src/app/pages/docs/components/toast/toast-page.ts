@@ -9,6 +9,7 @@ import { ToastBasicExample } from './examples/toast-basic.example';
 import { ToastCustomClassExample } from './examples/toast-custom-class.example';
 import { ToastInDialogExample } from './examples/toast-in-dialog.example';
 import { ToastPromiseExample } from './examples/toast-promise.example';
+import { ToastSizesExample } from './examples/toast-sizes.example';
 import { ToastSolidExample } from './examples/toast-solid.example';
 import { ToastTonesExample } from './examples/toast-tones.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
@@ -23,6 +24,8 @@ import customClassSource from './examples/toast-custom-class.example' with { loa
 import inDialogSource from './examples/toast-in-dialog.example' with { loader: 'text' };
 // @ts-expect-error
 import promiseSource from './examples/toast-promise.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/toast-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import solidSource from './examples/toast-solid.example' with { loader: 'text' };
 // @ts-expect-error
@@ -41,6 +44,7 @@ import tonesSource from './examples/toast-tones.example' with { loader: 'text' }
     ToastCustomClassExample,
     ToastInDialogExample,
     ToastPromiseExample,
+    ToastSizesExample,
     ToastSolidExample,
     ToastTonesExample,
   ],
@@ -56,6 +60,7 @@ export class ToastPage {
     customClass: customClassSource as string,
     inDialog: inDialogSource as string,
     promise: promiseSource as string,
+    sizes: sizesSource as string,
     solid: solidSource as string,
     tones: tonesSource as string,
   };
@@ -125,6 +130,13 @@ export class ToastPage {
       description: 'Milisegundos hasta cerrarse. Infinity: no se cierra solo.',
     },
     {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "el de provideMimiToast, o 'md'",
+      description:
+        'Tamaño de este aviso (relleno, texto e ícono): sm, md o lg. El ancho de la pila es el de provideMimiToast({ size }), así que un aviso lg en una pila sm solo crece por dentro.',
+    },
+    {
       name: 'icon',
       type: 'TemplateRef | false',
       default: 'el del tono',
@@ -132,10 +144,10 @@ export class ToastPage {
     },
     {
       name: 'variant',
-      type: "'outline' | 'solid'",
+      type: "'neutral' | 'outline' | 'solid'",
       default: "'outline'",
       description:
-        'Tarjeta con borde, o del color del tono (solid sin tono se ve como la tarjeta).',
+        'outline: contorno y fondo suave del color del tono. neutral: la tarjeta con solo el ícono de color (el outline de la 0.5.0). solid: fondo del color del tono. Sin tono, las tres se ven como la tarjeta.',
     },
     {
       name: 'id',
@@ -169,5 +181,12 @@ export class ToastPage {
     { name: 'position', type: 'MimiToastPosition', default: "'bottom-right'" },
     { name: 'duration', type: 'number', default: '6000' },
     { name: 'hotkey', type: 'string', default: "'F8'" },
+    {
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description:
+        'Tamaño de todos los avisos y ancho de la pila: sm 288px, md 340px (el de siempre), lg 400px.',
+    },
   ];
 }

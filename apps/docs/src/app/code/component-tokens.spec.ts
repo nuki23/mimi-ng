@@ -62,6 +62,10 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
  */
 const GLOBALS = new Set([
   '--mimi-input-background',
+  // Global del tema (borde de los campos con hover): respaldo de --mimi-input-border-hover.
+  '--mimi-input-hover',
+  // Global del tema (fondo de un campo de solo lectura, utils/field-styles.ts).
+  '--mimi-input-readonly',
   '--mimi-switch-off',
   '--mimi-card-foreground',
   // Global del Grupo 2 (G2.0b) que el chip lee como respaldo.
@@ -75,23 +79,83 @@ const GLOBALS = new Set([
   // Cuántas pestañas hay y cuál se pinta: las escribe Tabs para colocar el indicador.
   '--mimi-tabs-count',
   '--mimi-tabs-index',
+  // Derivadas de la escala de tamaños (theme-base.css, `[data-size]`): las resuelve el tema por
+  // tamaño a partir de los tokens públicos (`--mimi-btn-height`, `-sm`, `-lg`…).
+  // R.8: derivadas por tamaño de Chip, Slider, Toolbar, Menú, Command, Tree, Sortable List, Data
+  // Table, Tooltip y Popover.
+  '--mimi-chip-h',
+  '--mimi-chip-text',
+  '--mimi-slider-h',
+  '--mimi-slider-thumb-s',
+  '--mimi-toolbar-item-s',
+  '--mimi-toolbar-icon',
+  '--mimi-menu-item-h',
+  '--mimi-menu-text',
+  '--mimi-command-input-h',
+  '--mimi-command-item-h',
+  '--mimi-command-text',
+  '--mimi-tree-row-h',
+  '--mimi-tree-text',
+  '--mimi-sortable-item-h',
+  '--mimi-sortable-gap-s',
+  '--mimi-table-row-h',
+  '--mimi-table-head-h',
+  '--mimi-tooltip-text',
+  '--mimi-tooltip-px',
+  '--mimi-popover-w',
+  '--mimi-btn-h',
+  '--mimi-btn-text',
+  '--mimi-btn-gap-s',
+  '--mimi-btn-px-s',
+  '--mimi-input-h',
+  '--mimi-input-text',
+  '--mimi-avatar-s',
+  '--mimi-avatar-text',
+  '--mimi-switch-w',
+  '--mimi-switch-h',
+  '--mimi-checkbox-s',
+  '--mimi-toast-min-h',
+  '--mimi-toast-py',
+  '--mimi-toast-pl',
+  '--mimi-toast-title',
+  '--mimi-toast-desc',
+  '--mimi-toast-icon',
+  '--mimi-toast-circle',
+  '--mimi-toast-w',
+  '--mimi-tabs-h-u',
+  '--mimi-tabs-h-p',
+  '--mimi-tabs-text-p',
+  '--mimi-toggle-h',
+  '--mimi-toggle-px',
+  '--mimi-badge-h',
+  '--mimi-badge-px-s',
   // Lo mismo en Toggle Group (G2.1).
   '--mimi-toggle-group-count',
   '--mimi-toggle-group-index',
 ]);
 
+/**
+ * Utilidades que llevan los tokens de un componente: los estados de los campos
+ * (`utils/field-styles.ts`, 12/11/2026) usan los de Input en todos los campos.
+ */
+const SHARED_SOURCES: Partial<Record<TokenComponent, readonly string[]>> = {
+  input: ['utils/field-styles.ts'],
+};
+
 /** Código del componente (sin pruebas). */
 function source(component: TokenComponent): string {
   const folders = FOLDER[component];
-  return (typeof folders === 'string' ? [folders] : folders)
-    .flatMap((folder) => {
-      const dir = `${LIB}/components/${folder}`;
-      return tokensFs
-        .readdirSync(dir)
-        .filter((f) => f.endsWith('.ts') && !f.endsWith('.spec.ts'))
-        .map((f) => tokensFs.readFileSync(`${dir}/${f}`, 'utf8'));
-    })
-    .join('\n');
+  const own = (typeof folders === 'string' ? [folders] : folders).flatMap((folder) => {
+    const dir = `${LIB}/components/${folder}`;
+    return tokensFs
+      .readdirSync(dir)
+      .filter((f) => f.endsWith('.ts') && !f.endsWith('.spec.ts'))
+      .map((f) => tokensFs.readFileSync(`${dir}/${f}`, 'utf8'));
+  });
+  const shared = (SHARED_SOURCES[component] ?? []).map((file) =>
+    tokensFs.readFileSync(`${LIB}/${file}`, 'utf8'),
+  );
+  return [...own, ...shared].join('\n');
 }
 const themeBase = tokensFs.readFileSync(`${LIB}/theme/theme-base.css`, 'utf8');
 
@@ -108,10 +172,16 @@ describe('Variables CSS de cada componente (component-tokens.ts)', () => {
       const listed = COMPONENT_TOKENS[component].map((t) => t.name);
       // Todo lo que usa el código está en la tabla.
       expect([...inCode].filter((name) => !listed.includes(name))).toEqual([]);
-      // Todo lo de la tabla existe (en el componente o, como --mimi-badge-radius, en el tema).
-      expect(listed.filter((name) => !inCode.has(name) && !themeBase.includes(`${name}:`))).toEqual(
-        [],
-      );
+      // Todo lo de la tabla existe: en el componente, declarado en el tema (--mimi-badge-radius) o
+      // leído por la escala de tamaños del tema (--mimi-btn-height-sm: `var(--mimi-btn-height-sm, …)`).
+      expect(
+        listed.filter(
+          (name) =>
+            !inCode.has(name) &&
+            !themeBase.includes(`${name}:`) &&
+            !themeBase.includes(`var(${name},`),
+        ),
+      ).toEqual([]);
     });
   }
 

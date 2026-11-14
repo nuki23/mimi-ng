@@ -31,6 +31,7 @@ import {
   viewChildren,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { MIMI_SORTABLE_TEXT } from './sortable-list-texts';
 
 /*
@@ -140,6 +141,7 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-sortable-list',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [
     CdkDropList,
     CdkDrag,
@@ -310,7 +312,7 @@ export class MimiSortableList<T = unknown> {
   protected readonly classes = computed(() => cn('flex flex-col gap-2', this.userClass()));
 
   protected readonly listClasses = cn(
-    'relative m-0 flex list-none flex-col gap-[var(--mimi-sortable-gap,8px)] p-0',
+    'relative m-0 flex list-none flex-col gap-[var(--mimi-sortable-gap-s,var(--mimi-sortable-gap,8px))] p-0',
     // Mientras se arrastra, los demás se apartan con la curva del diseño (0,18 s).
     '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:transition-transform',
     '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:duration-[180ms]',
@@ -318,31 +320,33 @@ export class MimiSortableList<T = unknown> {
   );
 
   private readonly itemShape =
-    'flex min-h-[var(--mimi-sortable-item-height,56px)] items-center gap-2.5 rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border border-border bg-[color:var(--mimi-sortable-bg,var(--mimi-card))] ps-1.5 pe-3 text-card-foreground select-none';
+    'flex min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))] items-center gap-2.5 rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border border-border bg-[color:var(--mimi-sortable-bg,var(--mimi-card))] ps-1.5 pe-3 text-card-foreground select-none';
 
   /** El elemento, y agarrado con el teclado: levantado (sombra y anillo del hueco). */
   protected readonly itemClasses = cn(
     this.itemShape,
     'transition-shadow duration-150',
     '[&.cdk-drag-animating]:transition-transform [&.cdk-drag-animating]:duration-[180ms] [&.cdk-drag-animating]:ease-[var(--mimi-sortable-easing,cubic-bezier(.2,.8,.2,1))]',
-    'data-[grabbed]:relative data-[grabbed]:z-10 data-[grabbed]:shadow-[shadow:var(--mimi-shadow-popover),0_0_0_2px_var(--mimi-sortable-drop,var(--mimi-info))]',
+    // El color de arrastrar y soltar es el de la marca (anillo del tema), no el azul de `info`
+    // (informe del usuario, 12/11/2026).
+    'data-[grabbed]:relative data-[grabbed]:z-10 data-[grabbed]:shadow-[shadow:var(--mimi-shadow-popover),0_0_0_2px_var(--mimi-sortable-drop,var(--mimi-ring))]',
   );
 
   /** La copia que sigue al puntero: girada y algo más grande, como el diseño. */
   protected readonly previewClasses = cn(
     this.itemShape,
-    'size-full [transform:var(--mimi-sortable-lift,rotate(-1.5deg)_scale(1.03))] shadow-[shadow:var(--mimi-shadow-popover),0_0_0_2px_var(--mimi-sortable-drop,var(--mimi-info))]',
+    'size-full [transform:var(--mimi-sortable-lift,rotate(-1.5deg)_scale(1.03))] shadow-[shadow:var(--mimi-shadow-popover),0_0_0_2px_var(--mimi-sortable-drop,var(--mimi-ring))]',
   );
 
   protected readonly placeholderClasses =
-    'box-border min-h-[var(--mimi-sortable-item-height,56px)] list-none rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border-2 border-dashed border-[color:var(--mimi-sortable-drop,var(--mimi-info))] bg-[color:var(--mimi-sortable-drop-bg,var(--mimi-info-soft))]';
+    'box-border min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))] list-none rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border-2 border-dashed border-[color:var(--mimi-sortable-drop,var(--mimi-ring))] bg-[color:var(--mimi-sortable-drop-bg,var(--mimi-primary-subtle))]';
 
   protected readonly handleClasses = cn(
     'inline-flex h-9 w-7 shrink-0 cursor-grab touch-none items-center justify-center rounded-sm border-0 bg-transparent p-0 text-muted-foreground',
     'mimi-transition hover:bg-[color:var(--mimi-sortable-handle-hover,var(--mimi-accent))] hover:text-foreground',
     'aria-pressed:bg-[color:var(--mimi-sortable-handle-hover,var(--mimi-accent))] aria-pressed:text-foreground data-[dragging]:bg-[color:var(--mimi-sortable-handle-hover,var(--mimi-accent))] data-[dragging]:text-foreground',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-    'disabled:cursor-not-allowed disabled:opacity-50',
+    'disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
   );
 
   protected labelOf(item: T): string {

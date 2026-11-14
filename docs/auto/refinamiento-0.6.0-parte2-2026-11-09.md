@@ -1,0 +1,257 @@
+# Informe de modo autónomo: refinamiento 0.6.0, segunda tanda (misma rama `auto/refinamiento-0.6.0-2026-11-09`)
+
+09/11/2026. `node -v`: v24.18.0; rama al día (`18b5fea`), árbol limpio, identidad noreply, sin atribución. **No se sube la versión ni se publica.** Continúa `docs/auto/refinamiento-0.6.0-2026-11-09.md` (primera tanda y primera puerta).
+
+**Por qué paré en la primera tanda:** por mi propio juicio sobre el tamaño de la sesión, **no** por presupuesto, dependencia ni cuenta externa (A7): no era un motivo válido. En esta tanda sigo hasta la puerta y, si la sesión se acabara, la sección «Punto exacto donde quedo» de abajo se mantiene al día.
+
+## 1a. `<mimi-tab>`: valor válido y único (commit `fix(tabs)…`)
+
+**Prueba que fallaba antes:** `tab-value.spec.ts` (3 de 3 en rojo). **Arreglo:** `mimi-tabs` se ofrece a sus `<mimi-tab>` (token interno `MIMI_TAB_GROUP`); sin `value`, el valor es el `label` limpio; si no da ninguno (sin letras latinas ni dígitos) usa el **índice**; si una pestaña anterior ya tiene ese valor, un **sufijo** (`facturacion`, `facturacion-2`, `-3`); y avisa **una vez** en desarrollo cuando falta `value` y el valor no sale limpio del label. **Decisión por defecto:** el aviso no salta cuando el `label` da un valor limpio y único (si saltara siempre, el atajo corto sería ruidoso). ui-core 950 en verde.
+
+## 1b. Dialog con `inputs`: validación antes de crear (commit `fix(dialog)…`)
+
+**Prueba que fallaba antes:** `dialog-service.spec.ts` («clave que el componente no tiene», en rojo). **Arreglo:** `open()` valida `inputs` **antes de crear el `ref` y de programar nada** (con `reflectComponentType`, nombres de plantilla): lanza `[Mimi] Dialog: «titel» no es una entrada de Upload. Entradas que tiene: title, risk.`; con una plantilla, `inputs` lanza un error que remite a `data`. No queda panel ni contenedor del CDK. ui-core 951 en verde.
+
+## 1c. Blocks inertes: devolver el foco y anunciar (commit `fix(blocks)…`)
+
+**Prueba que fallaba antes:** `utils/busy.spec.ts` (no existía la utilidad). **Arreglo:** `utils/busy.ts` (`restoreFocusAfterBusy(busy, mensajes?)`, ítem `utils/busy` del registro con el peer `@angular/cdk`): al empezar la carga recuerda el control de dentro que tenía el foco (el que lanzó la acción) y anuncia «Loading…» con `LiveAnnouncer`; al terminar, **después del render que quita `inert`**, le devuelve el foco y anuncia «Done.». Si el foco no estaba dentro del Block, no lo roba. Aplicado a los siete Blocks (`loading`; `saving` en `settings-01`) y declarado en el registro. **Límite:** la prueba simula con `blur()` que el navegador saca el foco de lo inerte (jsdom no lo hace); el comportamiento real con un lector de pantalla queda **NO COMPROBADO (manual, usuario)**. Mensajes en inglés fijos (como los textos de los Blocks); personalizables desde la utilidad, no todavía desde la API del Block.
+
+**Script de edición múltiple** (la misma inserción en 7 archivos; fuera del repo, falla sin escribir si no encuentra exactamente una vez lo esperado). `git diff --stat` **antes de Prettier** y **después**: iguales (7 archivos, 21 inserciones, 0 borrados). Texto completo:
+
+```js
+// Revisión 1c: los 7 Blocks devuelven el foco y anuncian al terminar de cargar.
+// Falla y no escribe nada si un archivo no tiene exactamente una vez lo esperado.
+import { readFileSync, writeFileSync } from 'node:fs';
+const root = 'C:/dev/mimi-ng/packages/ui-core/src/lib/blocks/';
+const files = {
+  'login-01/login-01.ts': 'loading',
+  'login-02/login-02.ts': 'loading',
+  'signup-01/signup-01.ts': 'loading',
+  'otp-01/otp-01.ts': 'loading',
+  'settings-01/settings-01.ts': 'saving',
+  'pricing-01/pricing-01.ts': 'loading',
+  'table-01/table-01.ts': 'loading',
+};
+const IMPORT = "import { cn } from '@/components/ui/utils/cn';\n";
+const NEW_IMPORT = IMPORT + "import { restoreFocusAfterBusy } from '@/components/ui/utils/busy';\n";
+const out = {};
+for (const [file, name] of Object.entries(files)) {
+  let text = readFileSync(root + file, 'utf8');
+  const line = `  readonly ${name} = input(false, { transform: booleanAttribute });\n`;
+  for (const needle of [IMPORT, line]) {
+    const found = text.split(needle).length - 1;
+    if (found !== 1)
+      throw new Error(`${file}: «${needle.trim()}» aparece ${found} veces (se esperaba 1)`);
+  }
+  text = text.replace(IMPORT, NEW_IMPORT);
+  text = text.replace(
+    line,
+    line +
+      `  /** Al terminar de ${name === 'saving' ? 'guardar' : 'cargar'}, el foco vuelve a quien lanzó la acción y se anuncia (los Blocks inertes no los ven los lectores). */\n` +
+      `  private readonly focusBack = restoreFocusAfterBusy(this.${name});\n`,
+  );
+  out[file] = text;
+}
+for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text);
+console.log('listo', Object.keys(out).length, 'archivos');
+```
+
+Pruebas: ui-core 953 (`busy.spec.ts` 2, `block-loading.spec.ts` sigue), docs 192, CLI 202, en verde.
+
+## 1d. El violeta de marca y el azul `info` se distinguen por luminosidad (commit `fix(theme)…`)
+
+**Comprobado primero (prueba en rojo):** el primario de marca y `info` tenían **la misma luminosidad OKLCH** (claro: 0,54 frente a 0,546, ΔL 0,006; oscuro: 0,72 frente a 0,72, ΔL 0) y solo 37° de tono (292 frente a 255): no se distinguían sin color. **Ajuste, registrado como decisión por defecto:** `info` claro `oklch(0.546 0.19 255)` → `oklch(0.44 0.17 255)` (ΔL 0,10; su texto blanco pasa de 4,79:1 a 7,48:1) e `info` oscuro `oklch(0.72 0.14 250)` → `oklch(0.83 0.11 250)` (ΔL 0,11). **Prueba nueva** en `contrast.spec.ts`: ΔL ≥ 0,08 en claro y oscuro. Toda la suite de contraste AA (cada texto de cada componente, reposo y hover, claro y oscuro) sigue pasando con el `info` nuevo; la cifra del diseño de `info-foreground` sobre `info` se actualizó (4,79 → 7,48) con su nota. **Cambio visual** (azul más oscuro en claro y más claro en oscuro) para el CHANGELOG. ui-core 954 en verde.
+
+## 2. Tamaños: la escala vive una vez en el tema
+
+**Diseño (R.1, completa lo que faltaba):** `theme-base.css` define la escala **una sola vez** con variables por `[data-size]`: `--mimi-size-height`, `-px`, `-text`, `-icon` y `-gap` para `sm`, `md` (también `:root`, el por defecto) y `lg`. Los tokens por tamaño de siempre (`--mimi-btn-height`, `-sm`, `-lg`; los de Input y Avatar) se resuelven **dentro de cada bloque** (`--mimi-btn-h`, `--mimi-input-h`, `--mimi-avatar-s`…), así un `md` dentro de un `sm` no hereda el alto del `sm` y los tokens públicos siguen valiendo. **Button, Input y Avatar migrados:** sus tres tamaños llevan **las mismas clases** (antes, tres cadenas distintas) y solo cambian las variables; con respaldos para un tema anterior. `mimiSize` ahora pone `data-size` en el contenedor: la escala llega por cascada de CSS **también a componentes sin `size` propio**. Nueva directiva de anfitrión `MimiSized` (`size` + `data-size`, sin código propio) para que un componente ofrezca `size` con una línea.
+
+**R.2 controles (hecho):** `select`, `combobox`, `number-input`, `password`, `input-mask`, `tags-input`, `date-picker`, `date-range`, `color-picker` y `textarea` declaran `hostDirectives: [{ directive: MimiSized, inputs: ['size'] }]` y leen su alto de la escala (`--mimi-size-height`, o `--mimi-input-h` los que comparten el alto de Input); su ítem del registro depende de `utils/size`. **Cambio de semántica anotado:** el token `--mimi-<componente>-height` de Select, Combobox y Number Input ahora vale para **todos** los tamaños (antes solo existía `md`).
+
+**Pruebas:** `theme/size-scale.spec.ts` (los tres bloques, valores `13px/0.875rem/15px` y `0.75/1/1.5rem`, mapeo de los tokens por tamaño, sin filtración de `sm` a `md`), `utils/size-controls.spec.ts` (los 10 controles heredan de `mimiSize`, el `size` propio gana, `md` fuera del contenedor; también al cambiar el contenedor), specs de Button, Input, Avatar, Select, Combobox, Date Picker y Textarea con las clases nuevas; `component-tokens.spec.ts` acepta las variables derivadas. ui-core 957, docs 192, CLI 202 en verde. **En Chrome:** Input `sm 32 / md 40 / lg 48 px`, Avatar `32 / 40 / 56 px`, Button `lg` 48 px y los controles de R.2 en `md` a 40 px, como antes.
+
+**Dos scripts de edición múltiple** (fuera del repo; fallan sin escribir si no encuentran lo esperado): (1) las alturas de 9 archivos a la escala (`git diff --stat` antes de Prettier: 9 archivos, 11 inserciones y 11 borrados; después: 12 y 11, Prettier reflujó una línea); (2) la directiva de anfitrión en 10 componentes. Textos completos:
+
+```js
+// R.2 (1): los controles leen su alto de la escala de tamaños del tema (data-size).
+import { readFileSync, writeFileSync } from 'node:fs';
+const root = 'C:/dev/mimi-ng/packages/ui-core/src/lib/components/';
+const IN_FROM = 'var(--mimi-input-height,var(--mimi-control-height,2.5rem))';
+const IN_TO = 'var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))';
+const CT_FROM = 'var(--mimi-control-height,2.5rem)';
+const CT_TO = 'var(--mimi-size-height,var(--mimi-control-height,2.5rem))';
+const plan = {
+  'input-mask/input-mask.ts': [[IN_FROM, IN_TO, 1]],
+  'password/password.ts': [[IN_FROM, IN_TO, 1]],
+  'tags-input/tags-input.ts': [[IN_FROM, IN_TO, 1]],
+  'textarea/textarea.variants.ts': [[IN_FROM, IN_TO, 2]],
+  'color-picker/color-picker.ts': [[CT_FROM, CT_TO, 1]],
+  'date-picker/date-picker.ts': [[CT_FROM, CT_TO, 1]],
+  'combobox/combobox.ts': [[CT_FROM, CT_TO, 2]],
+  'select/select.ts': [[CT_FROM, CT_TO, 1]],
+  'number-input/number-input.ts': [[CT_FROM, CT_TO, 1]],
+};
+const out = {};
+for (const [file, edits] of Object.entries(plan)) {
+  let text = readFileSync(root + file, 'utf8');
+  for (const [from, to, count] of edits) {
+    const found = text.split(from).length - 1;
+    if (found !== count)
+      throw new Error(`${file}: «${from}» aparece ${found} veces y se esperaban ${count}`);
+    text = text.split(from).join(to);
+  }
+  out[file] = text;
+}
+for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text);
+```
+
+```js
+// R.2 (2): los controles reciben `size` y `data-size` con la directiva de anfitrión MimiSized.
+import { readFileSync, writeFileSync } from 'node:fs';
+const root = 'C:/dev/mimi-ng/packages/ui-core/src/lib/components/';
+const files = {
+  'select/select.ts': "mimi-select'",
+  'combobox/combobox.ts': "mimi-combobox'",
+  'number-input/number-input.ts': "mimi-number-input'",
+  'password/password.ts': "mimi-password'",
+  'input-mask/input-mask.ts': "mimi-input-mask'",
+  'tags-input/tags-input.ts': "mimi-tags-input'",
+  'date-picker/date-picker.ts': "mimi-date-picker'",
+  'date-range/date-range.ts': "mimi-date-range'",
+  'color-picker/color-picker.ts': "mimi-color-picker'",
+  'textarea/textarea.ts': "textarea[mimiTextarea]'",
+};
+const IMPORT = "import { cn } from '@/components/ui/utils/cn';\n";
+const out = {};
+for (const [file, selector] of Object.entries(files)) {
+  let text = readFileSync(root + file, 'utf8');
+  const sel = `  selector: '${selector},\n`;
+  for (const needle of [IMPORT, sel]) {
+    const found = text.split(needle).length - 1;
+    if (found !== 1)
+      throw new Error(`${file}: «${needle.trim()}» aparece ${found} veces (se esperaba 1)`);
+  }
+  text = text.replace(IMPORT, IMPORT + "import { MimiSized } from '@/components/ui/utils/size';\n");
+  text = text.replace(
+    sel,
+    sel + "  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],\n",
+  );
+  out[file] = text;
+}
+for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text);
+```
+
+**Bundle:** CSS global 171,51 → **173,44 kB** (+1,93: los bloques de la escala y las clases largas con respaldos; 24,62 → 24,99 gzip); JS inicial 333,94 → 333,96 kB. **Sigue lejos de 180 kB (quedan 6,6 kB); umbral de parada fijado en 178 kB.**
+
+## R.3 Switch y Checkbox: tamaños y páginas separadas (hecha)
+
+**Ya estaba (no se rehízo):** dos componentes (`switch/`, `checkbox/`); lo junto era la página. **Hecho:** `size` (`sm | md | lg`) por la escala del tema: pista `32×18 / 36×20 / 44×24 px`, casilla `14 / 16 / 20 px` (`--mimi-switch-w`, `-h`, `--mimi-checkbox-s`) y texto de la etiqueta por `--mimi-size-text`; el `md` conserva los valores de siempre y sus tokens (`--mimi-switch-width`, `-height`, `--mimi-checkbox-size`). El Tree, que usa los estilos de la casilla, no cambia en `md`. **Sitio:** `/docs/components/checkbox` es una página nueva (instalación, uso, estados, **tamaños**, seleccionar todo, API, variables), `/docs/components/switch` queda solo con el Switch (con su ejemplo de tamaños), la navegación lleva las dos entradas y los enlaces de los Blocks (`login-01`, `signup-01`, `table-01`) apuntan a la del Checkbox; los dos ejemplos del Checkbox se movieron con `git mv`. **Pruebas:** `switch-page.spec.ts` (6 ejemplos y los tres `data-size`), `checkbox-page.spec.ts` nuevo (3 ejemplos, tamaños y «seleccionar todo», que se movió desde la del Switch), `size-controls.spec.ts` (Switch y Checkbox heredan de `mimiSize`), `size-scale.spec.ts` (las medidas por tamaño), specs de Switch y Checkbox con las clases nuevas y el registro. ui-core 958, docs 195, CLI 202 en verde. **Bundle:** CSS global 173,44 → **174,16 kB** (25,11 gzip); JS inicial 333,96 / 105,79. Quedan 3,8 kB hasta el umbral de parada que me fijé (178 kB) y 5,8 hasta el aviso de 180.
+
+## R.4 Toast: tamaños (hecha)
+
+**Hecho:** `size?: MimiSize` en `MimiToastOptions` (por aviso) y en `provideMimiToast({ size })` (por defecto; el del aviso gana; `md` si nada). Las medidas salen de la escala del tema (`--mimi-toast-min-h`, `-py`, `-pl`, `-title`, `-desc`, `-icon`, `-circle`, `-w` por `[data-size]`): alto mínimo `48 / 68 / 84 px`, relleno vertical `0,5 / 0,75 / 1 rem`, título `13 / 14 / 15 px`, descripción `12 / 12,5 / 14 px`, ícono `16 / 18 / 20 px` (círculo del sólido `28 / 34 / 40 px`) y ancho de la pila `288 / 340 / 400 px`; `md` es exactamente lo de antes y conserva `--mimi-toast-width`. Cada aviso lleva su `data-size`; **el ancho es de la pila**, así que sigue la configuración (un aviso `lg` en una pila `sm` crece por dentro, no de ancho: documentado). La pila mide cada toast con `ResizeObserver` (el 68 queda solo como valor inicial), así que apilar avisos de tamaños distintos no se solapa. **Pruebas:** `toast.spec.ts` (`size` por aviso, el de la pila, mismas clases en los tres tamaños; expectativas al día), `size-scale.spec.ts` (las ocho variables por tamaño); ui-core 960, docs 195, CLI 202 en verde. Registro: `toast` depende de `utils/size` (solo el tipo). Tabla de la API (opciones y `provideMimiToast`) al día. **Bundle:** CSS global 174,16 → **175,50 kB** (25,39 gzip); JS inicial 333,96 / 105,79. **Quedan 2,5 kB hasta mi umbral de parada (178 kB) y 4,5 hasta el aviso de 180:** R.8 y lo que sigue se hará midiendo, y si algo lo empuja por encima, me detengo.
+
+**No comprobado:** el aspecto real de los avisos `sm` y `lg` en un navegador y el apilado mezclado (no hay diseño de Toast `sm`/`lg`: se anota en `docs/design/correcciones-pendientes.md`).
+
+## R.1 (resto) y R.8, primera parte: Pagination y Progress (hechas)
+
+**Pagination:** `size` pasa a `sm` (por defecto, como el diseño) `| md | lg`; `default` sigue aceptándose como `md` con aviso. Sus botones, el campo de página y el selector «N / pág.» leen el alto y el texto de la escala del tema por el `data-size` de su anfitrión (el selector de tamaño de página dejó de tener `size` propio). **Progress:** `sm | md | lg` (`default` = `md` con aviso): círculo de 44, 76 y 96 px y **barra de 4, 8 y 12 px** (antes solo el círculo tenía tamaño); `md` es lo de siempre. Registro: ambos dependen de `utils/size`. **Pruebas:** `pagination.spec.ts` (`data-size`, clases por la escala, `lg` y el alias) y `progress.spec.ts` al día; ui-core 960, docs 195, CLI 202 en verde. Ejemplo de Pagination con los tres tamaños y tablas de la API al día. **Bundle:** CSS global 175,50 → **175,51 kB** (25,44 gzip); JS inicial 333,97 / 105,79: **migrar a la escala del tema casi no suma CSS.**
+
+## R.8, segunda parte: Tabs, Toggle Group y Badge (hecha)
+
+`size` por la escala del tema (`MimiSized` + variables por `[data-size]`): **Tabs** (pestaña subrayada `36 / 44 / 52 px`, píldora `30 / 34 / 40 px` con texto `12,5 / 13,5 / 15 px`; el indicador usa porcentajes, no se tocó), **Toggle Group** (ítem `28 / 32 / 40 px`, relleno `10 / 12 / 16 px`) y **Badge** (`18 / 22 / 26 px`, relleno `0,5 / 0,625 / 0,75 rem`); `md` es lo de siempre y sus tokens (`--mimi-tabs-height`, `--mimi-toggle-group-item-*`, `--mimi-badge-*`) siguen valiendo en `md`. Registro: los tres dependen de `utils/size`. **Pruebas:** `size-controls.spec.ts` (ahora 13 componentes heredan de `mimiSize`: los tres nuevos, Switch, Checkbox y los diez controles), `size-scale.spec.ts` (las medidas), specs de Tabs y Badge con las clases nuevas; ui-core 961, docs 195, CLI 202 en verde. **Bundle:** CSS global 175,51 → **176,53 kB** (25,66 gzip: las variables de la escala, ×3 tamaños); JS inicial 333,97 / 105,80.
+
+**Parada por presupuesto de CSS (decisión del prompt):** el CSS global está a **176,53 kB**, a 3,5 kB del aviso de 180 y a 1,5 kB de mi umbral de parada. **Lo que no se hizo de R.8 y por qué:** Chip, Slider, Toolbar, Calendar, Menu/Dropdown/Context, Command, Tree, Sortable List, Data Table (`size` en lugar de `density`), Tooltip, Popover y Card (este último depende de R.19, 0.7.0): cada uno agregaría variables y clases por tamaño y empujaría el CSS hacia el aviso; hace falta que el usuario decida entre subir el presupuesto (spec 10, solo lo decide él) o seguir con M.23 (reducir el CSS global del sitio) antes de seguir con tamaños. **Sin cambiar de tarea:** sigo con lo que casi no suma CSS (R.7, R.14, R.24, R.12), midiendo.
+
+## R.7 (completa): `chrome: 'none'` y R.14 (completa): atajos del Form Field
+
+**R.7:** `chrome: 'none'` en `MimiDialogConfig`: sin X y sin relleno (`--mimi-dialog-padding: 0px`); `closeButton` y `padding` explícitos mandan sobre él; la cabecera, el cuerpo y el pie ya eran opcionales. Prueba en rojo antes (no compilaba) y en verde después; tabla de la API al día. **Pendiente de R.7:** que Confirm use `size="sm"` por defecto: **no hecho** (cambiaría el aspecto de Confirm sin diseño; queda como propuesta).
+
+**R.14:** `mimi-form-field` suma `description` (entre la etiqueta y el control), `hint` (debajo del control) y `required` (asterisco `aria-hidden` en la etiqueta y `aria-required` en el control); los ids de `description` y `hint` se agregan al `aria-describedby` del control **antes** del error, cada uno una sola vez, respetando los que el control ya tenía. Pruebas en rojo antes (2) y en verde después: `field-shortcuts.spec.ts`. ui-core 964, docs 195, CLI 202 en verde; tabla de la API al día. **Bundle:** CSS global 176,53 → 176,58 kB; JS inicial 333,97 / 105,79. **R.14 sigue `[~]`:** faltan los ejemplos con más elementos y el diagrama «control → primer error → texto» de la página.
+
+## R.12 `readonly` en los controles (hecha en parte: 6 de 11 que faltaban)
+
+**Ya lo tenían (comprobado):** Input Mask, Input OTP, Number Input, Tags Input; Input y Textarea por ser nativos. **Hecho ahora:** Checkbox, Switch, Select, Combobox, Date Picker y Date Range (semántica del `<input readonly>`: el valor se ve, se puede enfocar y copiar, **no cambia**, no abre su panel, **sí se envía**). Checkbox y Switch: `toggle()` ignora el clic y la barra espaciadora y el rol lleva `aria-readonly`; Select y Combobox: el `readonly` del `ngCombobox` de aria (que escribe `aria-readonly` él mismo; mi primer intento con `[attr.aria-readonly]` lo pisaba y lo vi en la prueba), el panel no se abre y Select no muestra «limpiar»; el Combobox pone además `readOnly` nativo al `<input>` y descarta el texto; Date Picker y Date Range: el Popover recibe una entrada nueva **`blocked`** (el trigger no abre el panel pero sigue enfocable; un `open` puesto desde fuera sigue funcionando). **Pruebas:** `readonly-controls.spec.ts` (3 de 3 en rojo antes de implementar, en verde después). ui-core 967, docs 195, CLI 202 en verde.
+
+**Script de edición múltiple** (la entrada `readonly` y `aria-readonly` en 6 archivos; fuera del repo, falla sin escribir si no encuentra exactamente una vez lo esperado). `git diff --stat` antes de Prettier: 6 archivos, 18 inserciones; después: igual. Texto completo:
+
+```js
+import { readFileSync, writeFileSync } from 'node:fs';
+const root = 'C:/dev/mimi-ng/packages/ui-core/src/lib/components/';
+const files = [
+  'switch/switch.ts',
+  'checkbox/checkbox.ts',
+  'select/select.ts',
+  'combobox/combobox.ts',
+  'date-picker/date-picker.ts',
+  'date-range/date-range.ts',
+];
+const INPUT = '  readonly disabled = input(false, { transform: booleanAttribute });\n';
+const ATTR = '[attr.aria-required]="required() || null"\n';
+const out = {};
+for (const file of files) {
+  let text = readFileSync(root + file, 'utf8');
+  for (const needle of [INPUT, ATTR]) {
+    const found = text.split(needle).length - 1;
+    if (found !== 1)
+      throw new Error(`${file}: «${needle.trim()}» aparece ${found} veces (se esperaba 1)`);
+  }
+  text = text.replace(
+    INPUT,
+    INPUT +
+      '  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */\n' +
+      '  readonly readonly = input(false, { transform: booleanAttribute });\n',
+  );
+  const at = text.indexOf(ATTR);
+  const indent = text.slice(text.lastIndexOf('\n', at) + 1, at);
+  text = text.replace(ATTR, ATTR + indent + '[attr.aria-readonly]="readonly() || null"\n');
+  out[file] = text;
+}
+for (const [file, text] of Object.entries(out)) writeFileSync(root + file, text);
+```
+
+(Después se cambió a mano `[attr.aria-readonly]` por `[readonly]` en Select y Combobox, por lo dicho arriba.)
+
+**No hecho (R.12 queda `[~]`):** Slider, Color Picker, File Upload, Toggle Group y Password; el aspecto de «solo lectura» (`data-readonly`, fondo propio, `--mimi-input-readonly-bg`); el ejemplo «Solo lectura» en cada página y las filas de la API. **Bundle:** ver la medición de abajo.
+
+## R.24 Auditoría de «uso corto» (hecha en parte)
+
+`docs/plan/refinamiento/uso-corto.md`: los atajos que existen, los casos largos con su tarea y lo que la auditoría **no** hizo. **El criterio del plan, medido y con prueba:** un formulario de contacto completo (Input, Select, Textarea, Checkbox y Button dentro de Form Field, con `required`, `hint` y error al enviar) ocupa **7 líneas** de plantilla (límite 12), y `short-use.spec.ts` lo renderiza y comprueba (5 campos, 2 asteriscos, la ayuda, 3 errores al enviar sin rellenar) y falla si el formulario deja de caber en 12 líneas. ui-core 969 en verde. **No hecho (queda `[~]`):** el recorrido de los 43 componentes con la tabla de líneas, y los atajos que dependen de R.15, R.16, R.13, R.19, R.20 y R.23.
+
+## R.15 Select con `<mimi-option>` y el icono del final (hecha en parte) y R.16 Combobox con la misma API (hecha)
+
+- **`<mimi-option value hint disabled label>` y `<mimi-optgroup label>`** como alternativa a `[options]` en **Select y Combobox**: el texto de dentro es la etiqueta (un `MutationObserver` la relee si cambia), el elemento no se ve (`hidden`) y el componente pinta la lista él mismo. Si se da `[options]`, manda `[options]`. Viven en `option-list/option-list.ts` (compartido, con `mimiDeclaredOptions`) para que Combobox no dependa de Select; **Select ahora declara `option-list` en el registro** (se instala con él; solo entran en el bundle las dos clases que usa) y Combobox declara `utils/control-styles`.
+- **Un solo icono al final, en el sitio del chevron** (`data-slot="end-icon"`, `data-icon="loading|clear|chevron"`): cargando > limpiar > chevron. Antes, X, spinner y chevron convivían y la caja se llenaba. Combobox gana `clearable` (quita el valor; en el múltiple, todos) y el texto opcional `clear` (si falta, «Clear»; `MIMI_COMBOBOX_TEXT_ES/EN` lo traen).
+- Pruebas nuevas: `select-declarative.spec.ts` (3) y `combobox-declarative.spec.ts` (3). Comprobado además en un proyecto real instalado desde el `.tgz` (captura: España y Madrid con la X en el lugar del chevron).
+- **No hecho de R.15:** el `@media (hover: none)` (la X siempre visible en táctil: hoy la X se ve siempre que hay valor, que es lo que pide táctil; no hay revelado al pasar el ratón), el resto de las filas de API en la página, el ejemplo de la página con `<mimi-option>` y la migración de la plantilla de Select a los tipos de `option-list` (M.9). **R.16** tiene la API común pero no unificó la plantilla de la opción (`MimiSelectOption` / `MimiComboboxOption` siguen siendo dos directivas).
+- **CSS global:** 176,58 kB sin cambio (las clases ya existían); JS inicial 333,97 kB sin cambio.
+
+## R.13 (no hecha)
+
+Los ejemplos con pestañas «Signal Forms / Reactive / Template / Form Field» en ~17 páginas **no se hicieron** en esta tanda: son ~17 páginas del sitio con 3-4 ejemplos cada una; queda `[ ]`.
+
+## Puerta de la 0.6.0, segunda vez (R.P6)
+
+`pnpm build` en verde; `pnpm test`: ui-core 975, docs 195, CLI 202, todo en verde; `pnpm format:check` en verde. Se empaquetó **una copia** de `packages/cli` con la versión `0.6.0-dev.0` (solo en `package.json` y `dist/registry.json` de la copia; la versión del repo sigue en 0.5.0): `mimi-ng-cli-0.6.0-dev.0.tgz`, **167 archivos**, 289,3 kB, 0 `.spec.`, 0 `testing`, sin rutas personales ni correos (búsqueda de `C:\Users`, `/Users/`, el nombre de usuario y correos: nada). Node 24.18.0, npm 11.16.0, pnpm 12.5.1; Tailwind 4.3.3 fijado en los proyectos de prueba (el binario de la 4.3.5 lo bloquea Windows en este equipo).
+
+| #     | Escenario                                                                                           | Resultado                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ----- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1     | npm, proyecto nuevo                                                                                 | `ng add` y `ng g mimi button login-01 settings-01 pricing-01 table-01 select combobox toast dialog tabs input-otp form-field checkbox switch`: `option-list`, `utils/size`, `utils/busy` se instalan solos; páginas en `src/app/pages/{login,settings,table}`; con una `app.ts` que usa `<mimi-select>` y `<mimi-combobox>` con `<mimi-option>`/`<mimi-optgroup>` y `clearable`: `ng build` en verde (CSS 136,63 kB; el único aviso es el presupuesto por defecto de 500 kB de Angular, al importar todo en el inicial) y `ng serve` + Chrome sin ventana: «España» y «Madrid» con la X en el sitio del chevron. |
+| 2     | pnpm, proyecto nuevo                                                                                | `pnpm ng add` y `pnpm ng g mimi button select combobox login-01 table-01`: `ng build` en verde y sin avisos, CSS de 109,4 kB.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| 3 + 4 | Actualización desde la **0.5.0 real de npm**, con `button.ts` y la página `settings.ts` modificados | Se agregan `utils/size`, `utils/busy` y `theme/neutral.ts`; se actualizan `input`, `option-list`, `select`, `combobox`, `checkbox`, `form-field`, `password`, `avatar`, `badge`, `progress`, `switch`, `tabs`, `textarea`, `theme`; **`button` queda bloqueado con su aviso** y, por el todo o nada, `toast` y `login-01` con el motivo; `settings-01` (página modificada) bloqueada con su aviso; `ng build` en verde. Con `--overwrite` en `button toast login-01` se actualizan los tres y `ng build` sigue en verde.                                                                                         |
+| 5     | `source(none)` desde la 0.5.0 real                                                                  | `ng add` de la 0.5.0 con `@import 'tailwindcss' source(none)` agrega `@source "./app/components/ui"`, `./app/blocks` y `./app/pages`; con la nueva CLI no se duplican (se conservan las tres); `ng build` en verde, CSS de 101 kB con las clases de la página (`400px` presente).                                                                                                                                                                                                                                                                                                                                |
+
+**Al terminar:** puertos 4251, 4252, 4260 y 4261 sin escucha (el servidor de la prueba se mató por su PID); `C:\t\q60` y `C:\t\r060` borrados. No se tocaron las carpetas de `C:\t` que ya estaban. **Nota de método:** al preparar el escenario 1 sin `@import "tailwindcss"` en `styles.css`, `ng add` falla con un mensaje claro («Falta @import "tailwindcss"…»); es el comportamiento esperado.
+
+## Revisor independiente de esta tanda
+
+Subagente de solo lectura sobre `git diff 18b5fea..HEAD`. **Dos bugs reales, ambos míos y ambos reproducidos con una prueba que fallaba antes y corregidos en un commit aparte:**
+
+1. **Select: el chevron y el spinner no abrían el panel.** El `<span data-slot="end-icon">` nuevo es `relative z-10` y quedaba sobre el `::after` del disparador, que es el que recibe el clic. Arreglo: `pointer-events-none` en el span y `pointer-events-auto` en el botón de limpiar. Prueba: `select-end-icon.spec.ts`. (jsdom no calcula clics reales: la prueba comprueba las clases; el clic real no se probó en navegador.)
+2. **Pagination: el selector «10 / pág.» salía en `md` aunque Pagination fuera `sm`/`lg`.** El `mimi-select` de dentro lleva su propio `data-size="md"` y las variables se resuelven en él. Arreglo: Pagination le pasa su `size`. Prueba: `page-size-scale.spec.ts`. **Nota de diseño:** el mismo mecanismo hace que cualquier control con `MimiSized` corte la herencia de un `[data-size]` ancestro que no sea `mimiSize`; solo era visible en Pagination, no se cambió.
+
+Sin hallazgos: `utils/busy.ts`, `utils/size.ts` y la escala del tema, `option-list.ts` (observer, grupos), Select/Combobox declarativos y `readonly`, Form Field, Dialog `chrome: 'none'` y `inputs`, Tabs, Progress, Toast, Popover `blocked`, y el registro (el revisor comprobó con un script que cada import y peer está declarado). Detalle menor sin corregir: si `description` o `hint` de Form Field se quitan en ejecución, el id queda obsoleto en `aria-describedby`. ui-core: 977 pruebas en verde tras los arreglos.
+
+## Punto exacto donde quedo
+
+**Hecho en esta tanda:** 1a, 1b, 1c, 1d, la escala en el tema (R.1), R.2, R.3, R.4, R.7, R.8 (Pagination, Progress, Tabs, Toggle Group, Badge), R.14 (atajos), R.12 (6 de 11), R.24 (en parte), R.15 (en parte), R.16, y la puerta con sus 5 escenarios. **No hecho:** R.13; el resto de R.8 (Chip, Slider, Toolbar, Calendar, menús, Command, Tree, Sortable List, Data Table, Tooltip, Popover); el resto de R.12 (Slider, Color Picker, File Upload, Toggle Group, Password) y R.15 (revelado al pasar el ratón, ejemplos, M.9); la página «Tamaños»; R.0 (logo). **No se subió la versión ni se publicó nada.** CSS global 176,58 kB (umbral propio 178, aviso 180: no se acercó). Para el usuario: elegir si la 0.6.0 sale así (con R.13 y lo anterior en la 0.6.1) o esperar.

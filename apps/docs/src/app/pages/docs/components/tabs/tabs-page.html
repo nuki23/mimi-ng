@@ -41,6 +41,20 @@
     <app-tabs-basic-example />
   </app-code-preview>
 
+  <h3 id="shortcut" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Atajo <code class="font-mono text-[0.9em]">&lt;mimi-tab label&gt;</code>
+  </h3>
+  <p class="text-pretty">
+    El contenido va dentro de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&lt;mimi-tab&gt;</code
+    >, sin plantilla. Sin
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">value</code>, el valor
+    sale del texto.
+  </p>
+  <app-code-preview [code]="source.shortcut">
+    <app-tabs-shortcut-example />
+  </app-code-preview>
+
   <h3 id="pill" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Píldora con íconos</h3>
   <p class="text-pretty">
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">variant="pill"</code>.

@@ -119,9 +119,10 @@ export class PaginationPage {
     },
     {
       name: 'size',
-      type: "'sm' | 'default'",
+      type: "'sm' | 'md' | 'lg'",
       default: "'sm'",
-      description: '40px o 50px de alto (con los nombres de tamaño de Button e Input).',
+      description:
+        '40, 50 o 60px de alto (la escala de Button e Input). `default` es el nombre viejo de `md`.',
     },
     {
       name: 'variant',

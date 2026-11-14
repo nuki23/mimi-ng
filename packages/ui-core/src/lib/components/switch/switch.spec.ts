@@ -71,15 +71,20 @@ describe('MimiSwitch', () => {
     expect(btn.getAttribute('role')).toBe('switch');
     expect(btn.getAttribute('aria-checked')).toBe('false');
     for (const cls of [
-      'h-[var(--mimi-switch-height,1.25rem)]',
-      'w-[var(--mimi-switch-width,2.25rem)]',
+      'h-[var(--mimi-switch-h,var(--mimi-switch-height,1.25rem))]',
+      'w-[var(--mimi-switch-w,var(--mimi-switch-width,2.25rem))]',
       'p-0.5',
       'rounded-full',
       'bg-[color:var(--mimi-switch-track-off,var(--mimi-switch-off))]',
     ]) {
       expect(btn.classList).toContain(cls);
     }
-    expect(btn.classList).toContain('active:scale-(--mimi-press-scale-sm)');
+    expect(btn.classList).toContain(
+      'not-disabled:not-aria-readonly:active:scale-(--mimi-press-scale-sm)',
+    );
+    expect(btn.classList).toContain('not-disabled:not-aria-readonly:active:ring-3');
+    // Error: la pista no tiene borde; un filo rojo de 1px, como Toggle Group.
+    expect(btn.classList).toContain('aria-invalid:ring-1');
     expect(btn.classList).toContain('focus-visible:outline-ring');
     expect(btn.classList).toContain(
       'data-[state=checked]:bg-[color:var(--mimi-switch-track-on,var(--mimi-primary))]',
@@ -87,7 +92,7 @@ describe('MimiSwitch', () => {
     expect(btn.classList).toContain('data-[state=checked]:shadow-primary');
     const thumb = btn.querySelector('span')!;
     for (const cls of [
-      'size-[calc(var(--mimi-switch-height,1.25rem)_-_0.25rem)]',
+      'size-[calc(var(--mimi-switch-h,var(--mimi-switch-height,1.25rem))_-_0.25rem)]',
       'rounded-full',
       'bg-[color:var(--mimi-switch-thumb,var(--mimi-background))]',
       'shadow-thumb',
@@ -96,7 +101,7 @@ describe('MimiSwitch', () => {
       expect(thumb.classList).toContain(cls);
     }
     expect(thumb.classList).toContain(
-      'group-data-[state=checked]:translate-x-[calc(var(--mimi-switch-width,2.25rem)_-_var(--mimi-switch-height,1.25rem))]',
+      'group-data-[state=checked]:translate-x-[calc(var(--mimi-switch-w,var(--mimi-switch-width,2.25rem))_-_var(--mimi-switch-h,var(--mimi-switch-height,1.25rem)))]',
     );
     expect(host('plain').classList).toContain('gap-2.5');
   });
@@ -137,7 +142,9 @@ describe('MimiSwitch', () => {
     await settle(fixture);
     expect(control('plain').disabled).toBe(true);
     expect(host('plain').hasAttribute('data-disabled')).toBe(true);
-    expect(control('plain').classList).toContain('disabled:opacity-50');
+    expect(control('plain').classList).toContain(
+      'disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
+    );
     expect(control('plain').classList).toContain('disabled:cursor-not-allowed');
     (fixture.componentInstance as Host).on.set(false);
     control('plain').click();

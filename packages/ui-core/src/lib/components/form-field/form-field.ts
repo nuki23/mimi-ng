@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   afterRenderEffect,
+  booleanAttribute,
   computed,
   contentChild,
   inject,
@@ -11,7 +12,7 @@ import {
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { MIMI_FIELD_CONTROL } from '@/components/ui/utils/field-state';
-import { MIMI_ERROR_MESSAGES, mimiErrorText } from './error-messages';
+import { MIMI_ERROR_MESSAGES, type MimiErrorMessages, mimiErrorText } from './error-messages';
 import { MIMI_FORM_FIELD_CONTEXT, type MimiFormFieldContext, MimiFormError } from './form-error';
 
 let nextId = 0;
@@ -38,9 +39,20 @@ let nextId = 0;
   imports: [MimiFormError],
   template: `
     @if (label()) {
-      <label [attr.for]="controlId()" [class]="labelClasses">{{ label() }}</label>
+      <label [attr.for]="controlId()" [class]="labelClasses"
+        >{{ label() }}
+        @if (required()) {
+          <span data-slot="required" aria-hidden="true" class="text-destructive"> *</span>
+        }
+      </label>
+    }
+    @if (description()) {
+      <p data-slot="description" [id]="descriptionId" [class]="helpClasses">{{ description() }}</p>
     }
     <ng-content />
+    @if (hint()) {
+      <p data-slot="hint" [id]="hintId" [class]="helpClasses">{{ hint() }}</p>
+    }
     @if (!ownError()) {
       <mimi-form-error />
     }
@@ -56,6 +68,22 @@ let nextId = 0;
 export class MimiFormField implements MimiFormFieldContext {
   /** Texto de la etiqueta. También puedes proyectar tu propio `<label>`. */
   readonly label = input<string>();
+  /**
+   * Mensajes de error de este campo, por clave (`required`, `email`, `minlength`…): un texto o una
+   * función con los datos del error. Lo que no esté sigue en `provideMimiErrorMessages`. Sirve en
+   * los tres sistemas de formularios; en Signal Forms y Reactive, el `message` del propio
+   * validador gana (`withMessage`).
+   */
+  readonly errors = input<MimiErrorMessages>();
+  /** Texto de ayuda entre la etiqueta y el control (qué se pide). Va en el `aria-describedby`. */
+  readonly description = input<string>();
+  /** Texto de ayuda debajo del control (formato, límites). Va en el `aria-describedby`. */
+  readonly hint = input<string>();
+  /**
+   * Campo obligatorio: asterisco en la etiqueta (los lectores no lo leen) y `aria-required` en el
+   * control. La validación sigue siendo la de tu formulario.
+   */
+  readonly required = input(false, { transform: booleanAttribute });
   readonly userClass = input('', { alias: 'class' });
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
@@ -65,6 +93,9 @@ export class MimiFormField implements MimiFormFieldContext {
 
   private readonly baseId = `mimi-form-field-${nextId++}`;
   readonly errorId = `${this.baseId}-error`;
+  protected readonly descriptionId = `${this.baseId}-description`;
+  protected readonly hintId = `${this.baseId}-hint`;
+  protected readonly helpClasses = 'text-[13px] text-muted-foreground';
   /** id del control (el suyo o el que le asigna el form-field). */
   protected readonly controlId = signal<string | null>(null);
 
@@ -72,9 +103,16 @@ export class MimiFormField implements MimiFormFieldContext {
   protected readonly disabled = computed(() => this.control()?.fieldState.disabled() ?? false);
   readonly message = computed(() => {
     const error = this.control()?.fieldState.errors()[0];
-    return error
-      ? mimiErrorText(error, this.messages)
-      : mimiErrorText({ kind: 'default', params: {} }, this.messages);
+    if (!error) return mimiErrorText({ kind: 'default', params: {} }, this.messages);
+    // Orden (PD-3): <mimi-form-error> explícito > `message` del validador > `errors` del campo >
+    // provideMimiErrorMessages > predeterminado.
+    if (error.message) return error.message;
+    const local = this.errors();
+    if (local) {
+      const entry = Object.entries(local).find(([key]) => key.toLowerCase() === error.kind)?.[1];
+      if (entry !== undefined) return typeof entry === 'function' ? entry(error.params) : entry;
+    }
+    return mimiErrorText(error, this.messages);
   });
 
   protected readonly classes = computed(() =>
@@ -104,8 +142,21 @@ export class MimiFormField implements MimiFormFieldContext {
       const describedBy = (element.getAttribute('aria-describedby') ?? '')
         .split(/\s+/)
         .filter(Boolean);
-      if (!describedBy.includes(this.errorId)) {
-        element.setAttribute('aria-describedby', [...describedBy, this.errorId].join(' '));
+      // La descripción y la ayuda, antes del error; cada id una sola vez.
+      const wanted = [
+        this.description() ? this.descriptionId : null,
+        this.hint() ? this.hintId : null,
+        this.errorId,
+      ].filter((id): id is string => !!id);
+      // Los ids de la descripción y la ayuda que ya no existen se quitan (no quedan colgando).
+      const ours = [this.descriptionId, this.hintId];
+      const kept = describedBy.filter((id) => !ours.includes(id) || wanted.includes(id));
+      const missing = wanted.filter((id) => !kept.includes(id));
+      if (missing.length || kept.length !== describedBy.length) {
+        element.setAttribute('aria-describedby', [...kept, ...missing].join(' '));
+      }
+      if (this.required() && !element.hasAttribute('aria-required')) {
+        element.setAttribute('aria-required', 'true');
       }
     });
   }

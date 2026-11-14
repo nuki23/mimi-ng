@@ -28,18 +28,39 @@
   <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
   <app-code-block [code]="usage" lang="angular-ts" />
   <p class="text-pretty">
-    Las opciones son datos:
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">label</code> es lo que
-    se ve y <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">value</code>,
-    lo que recibe tu signal o tu formulario. Sin valor,
+    Cada opción es un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;mimi-option&gt;</code
+    >: el texto de dentro es lo que se ve y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">value</code>, lo que
+    recibe tu signal o tu formulario. Sin valor,
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">value</code> es
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">null</code>.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">null</code>. Si los
+    datos vienen de una señal, repite la opción con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;for</code> y
+    enlaza <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[value]</code>.
   </p>
-  <app-code-block [code]="optionType" lang="typescript" />
 
   <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
 
-  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Básico</h3>
+  <h3 id="declarative" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con <code class="font-mono text-[0.9em]">&lt;mimi-option&gt;</code>
+  </h3>
+  <p class="text-pretty">
+    Las opciones, escritas en la plantilla. El texto de dentro es la etiqueta;
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">value</code>,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">hint</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">disabled</code> son
+    entradas (también enlazadas, dentro de un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;for</code>), y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-optgroup</code>
+    agrupa. El Combobox acepta las mismas.
+  </p>
+  <app-code-preview [code]="source.declarative">
+    <app-select-declarative-example />
+  </app-code-preview>
+
+  <h3 id="basic" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Con etiqueta</h3>
   <p class="text-pretty">
     Un
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
@@ -69,10 +90,12 @@
     Grupos y opciones deshabilitadas
   </h3>
   <p class="text-pretty">
-    Un grupo es
+    Un grupo es un
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-      >{{ '{' }} label, options {{ '}' }}</code
-    >. Las opciones deshabilitadas se saltan al navegar con las flechas;
+      >&lt;mimi-optgroup label&gt;</code
+    >, también dentro de un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;for</code>. Las
+    opciones deshabilitadas se saltan al navegar con las flechas;
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">hint</code> explica por
     qué.
   </p>
@@ -82,12 +105,18 @@
 
   <h3 id="server" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Búsqueda en el servidor</h3>
   <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >searchMode="server"</code
+    >
+    deja el filtro a tu servidor: el Select muestra las opciones que llegan, sin volver a
+    filtrarlas.
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(searchChange)</code>
     avisa de cada cambio del buscador y
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">loading</code> muestra
     el estado de carga mientras llegan las opciones. Los valores son objetos, así que
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">compareWith</code> los
-    compara por id. Si la opción elegida ya no está en la lista, el disparador conserva su texto.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">compareWith="id"</code>
+    los compara por ese campo (también acepta una función). Si la opción elegida ya no está en la
+    lista, el disparador conserva su texto.
   </p>
   <app-code-preview [code]="source.server">
     <app-select-server-example />
@@ -142,6 +171,42 @@
     <app-select-custom-class-example />
   </app-code-preview>
 
+  <h3 id="forms-tabs" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con formularios: Signal Forms, Reactive y plantilla
+  </h3>
+  <p class="text-pretty">
+    El mismo campo con los tres formularios de Angular. El control implementa la interfaz de
+    Angular: no hace falta un adaptador.
+  </p>
+  <app-forms-tabs component="select" />
+
+  <h3 id="options" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Alternativa: <code class="font-mono text-[0.9em]">[options]</code> para listas generadas por
+    código
+  </h3>
+  <p class="text-pretty">
+    Si la lista ya la arma tu código (meses, una respuesta de una API que no quieres recorrer en la
+    plantilla), pásala entera con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[options]</code>: cada
+    opción es
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >{{ '{' }} label, value {{ '}' }}</code
+    >
+    y un grupo,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >{{ '{' }} label, options {{ '}' }}</code
+    >. Si das
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[options]</code>, gana
+    sobre las
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;mimi-option&gt;</code
+    >.
+  </p>
+  <app-code-block [code]="optionType" lang="typescript" />
+  <app-code-preview [code]="source.options">
+    <app-select-options-example />
+  </app-code-preview>
+
   <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Teclado</h3>
   <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
     <li>En el disparador: Enter, Espacio, ↓, ↑ o Alt+↓ abren el panel en la opción elegida.</li>
@@ -155,6 +220,11 @@
       los dos casos el foco vuelve al disparador.
     </li>
     <li>Tab cierra sin elegir y sigue al siguiente campo.</li>
+    <li>
+      Con <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">clearable</code>,
+      Supr o Retroceso en el disparador quitan el valor. La X se ve con el ratón encima, con el foco
+      dentro o con el panel abierto (en pantallas táctiles, siempre que haya valor).
+    </li>
     <li>
       Con buscador, el foco queda en el campo de búsqueda y las flechas, Enter y Escape funcionan
       desde ahí; la opción activa se anuncia con

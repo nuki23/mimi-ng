@@ -11,7 +11,9 @@ import {
 } from '@angular/core';
 import type { FormCheckboxControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles, controlDisabledStyles } from '@/components/ui/utils/control-styles';
+import { choicePressStyles } from '@/components/ui/utils/field-styles';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -33,6 +35,7 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-switch',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   // mimi-form-field lo encuentra por este token para mostrar el mensaje de error.
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiSwitch }],
   template: `
@@ -46,6 +49,7 @@ let nextId = 0;
       [attr.aria-checked]="checked()"
       [attr.aria-invalid]="showInvalid() || null"
       [attr.aria-required]="required() || null"
+      [attr.aria-readonly]="readonly() || null"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabelledby() || null"
       [attr.data-state]="state()"
@@ -56,7 +60,7 @@ let nextId = 0;
     </button>
     <label
       [for]="controlId()"
-      class="cursor-pointer empty:hidden peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+      class="cursor-pointer empty:hidden peer-disabled:cursor-not-allowed peer-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] peer-aria-readonly:cursor-default"
       ><ng-content
     /></label>
   `,
@@ -75,6 +79,8 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
   /** Encendido o apagado. Con `[(checked)]` o un formulario. */
   readonly checked = model(false);
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -106,28 +112,39 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly classes = computed(() =>
-    cn('inline-flex items-center gap-2.5 text-sm', this.userClass()),
+    cn(
+      'group/switch inline-flex items-center gap-2.5 text-[length:var(--mimi-size-text,0.875rem)]',
+      this.userClass(),
+    ),
   );
 
   // Pista: 36×20 (--mimi-switch-width/-height), 2px de padding. Encendida: primary con su sombra.
   protected readonly trackClasses = cn(
-    'peer group inline-flex h-[var(--mimi-switch-height,1.25rem)] w-[var(--mimi-switch-width,2.25rem)] shrink-0 items-center rounded-full bg-[color:var(--mimi-switch-track-off,var(--mimi-switch-off))] p-0.5',
-    'mimi-transition active:scale-(--mimi-press-scale-sm)',
+    'peer group inline-flex h-[var(--mimi-switch-h,var(--mimi-switch-height,1.25rem))] w-[var(--mimi-switch-w,var(--mimi-switch-width,2.25rem))] shrink-0 items-center rounded-full bg-[color:var(--mimi-switch-track-off,var(--mimi-switch-off))] p-0.5',
+    // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad B).
+    'mimi-transition',
+    choicePressStyles,
     'data-[state=checked]:bg-[color:var(--mimi-switch-track-on,var(--mimi-primary))] data-[state=checked]:shadow-primary disabled:shadow-none',
+    // Hover sutil (13/11/2026), con el ratón sobre todo el control: la pista se intensifica un poco
+    // hacia `foreground`, apagada y encendida (sigue al color de la pista si lo cambiaste).
+    'group-hover/switch:not-disabled:not-aria-readonly:data-[state=unchecked]:bg-[color:color-mix(in_oklab,var(--mimi-switch-track-off,var(--mimi-switch-off))_82%,var(--mimi-foreground))]',
+    'group-hover/switch:not-disabled:not-aria-readonly:data-[state=checked]:bg-[color:color-mix(in_oklab,var(--mimi-switch-track-on,var(--mimi-primary))_88%,var(--mimi-foreground))]',
+    // Error: la pista no tiene borde, así que lleva un filo rojo de 1px (como Toggle Group).
+    'aria-invalid:ring-1 aria-invalid:ring-[color:var(--mimi-input-error,var(--mimi-destructive))]',
     buttonFocusStyles,
     controlDisabledStyles,
   );
 
   // Pulgar: alto de la pista menos el padding (16px); al encender se desplaza ancho − alto (16px).
   protected readonly thumbClasses = cn(
-    'pointer-events-none block size-[calc(var(--mimi-switch-height,1.25rem)_-_0.25rem)] rounded-full bg-[color:var(--mimi-switch-thumb,var(--mimi-background))] shadow-thumb mimi-transition',
-    'group-data-[state=checked]:translate-x-[calc(var(--mimi-switch-width,2.25rem)_-_var(--mimi-switch-height,1.25rem))] group-data-[state=checked]:bg-primary-foreground',
+    'pointer-events-none block size-[calc(var(--mimi-switch-h,var(--mimi-switch-height,1.25rem))_-_0.25rem)] rounded-full bg-[color:var(--mimi-switch-thumb,var(--mimi-background))] shadow-thumb mimi-transition',
+    'group-data-[state=checked]:translate-x-[calc(var(--mimi-switch-w,var(--mimi-switch-width,2.25rem))_-_var(--mimi-switch-h,var(--mimi-switch-height,1.25rem)))] group-data-[state=checked]:bg-primary-foreground',
     'group-disabled:shadow-none',
   );
 
   /** Alterna el estado (no hace nada si está deshabilitado). */
   toggle(): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     this.checked.update((value) => !value);
   }
 

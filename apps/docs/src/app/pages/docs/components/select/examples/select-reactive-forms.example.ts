@@ -3,11 +3,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MimiButton } from '@/components/ui/button';
 import { MimiFormField } from '@/components/ui/form-field';
 import { MimiInput } from '@/components/ui/input';
-import { type MimiOption, MimiSelect } from '@/components/ui/select';
+import { MimiSelectImports } from '@/components/ui/select';
 
 @Component({
   selector: 'app-select-reactive-forms-example',
-  imports: [ReactiveFormsModule, MimiButton, MimiFormField, MimiInput, MimiSelect],
+  imports: [ReactiveFormsModule, MimiButton, MimiFormField, MimiInput, MimiSelectImports],
   template: `
     <form
       class="flex w-full max-w-md flex-col gap-4"
@@ -20,7 +20,11 @@ import { type MimiOption, MimiSelect } from '@/components/ui/select';
         </mimi-form-field>
         <!-- La etiqueta, el error y aria-describedby los pone mimi-form-field. -->
         <mimi-form-field label="Rol">
-          <mimi-select formControlName="role" placeholder="Selecciona un rol" [options]="roles" />
+          <mimi-select formControlName="role" placeholder="Selecciona un rol">
+            <mimi-option value="admin">Administrador</mimi-option>
+            <mimi-option value="editor">Editor</mimi-option>
+            <mimi-option value="viewer">Lector</mimi-option>
+          </mimi-select>
         </mimi-form-field>
       </div>
       <button mimiBtn type="submit" class="self-start">Invitar</button>
@@ -33,9 +37,4 @@ export class SelectReactiveFormsExample {
     name: new FormControl('', { nonNullable: true, validators: Validators.required }),
     role: new FormControl<string | null>(null, Validators.required),
   });
-  protected readonly roles: MimiOption<string>[] = [
-    { label: 'Administrador', value: 'admin' },
-    { label: 'Editor', value: 'editor' },
-    { label: 'Lector', value: 'viewer' },
-  ];
 }

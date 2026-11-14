@@ -2,6 +2,83 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
+## 0.6.0 (por publicar): tema de marca, tamaños y formularios
+
+> **Borrador.** La versión y la fecha las pone quien publica (`docs/proceso/release.md`). Falta decidir si sale con lo que dice «No incluido». Detalle y evidencia: `docs/auto/refinamiento-0.6.0-*.md`.
+
+### Rupturas (qué cambia en algo que ya tenías y qué hacer)
+
+- **El tema por defecto es violeta.** El primario es `#793EEA` en claro y `#A88FFF` en oscuro, con una escala `--mimi-brand-50…950` en OKLCH; `info` se ajusta para distinguirse del violeta. El neutro anterior sigue disponible: `provideMimiTheme(MIMI_THEME_NEUTRAL)`. **Si ya tienes tu tema, no cambia nada; si usabas el predeterminado, verás el violeta.**
+- **`size="default"` se llama ahora `md`** (Button, Input, Avatar, Progress, Pagination…). `default` se sigue aceptando con un aviso en desarrollo y **se quita en la 0.7.0**. También cambia `data-size="default"` → `data-size="md"` para quien lo use en CSS o en pruebas.
+- **Sin `size`, un control no escribe `data-size`.** El `md` vive en el tema (`:root`) y cada control hereda el del contenedor `[data-size]` más cercano (un `mimiSize` o cualquier contenedor con el atributo). Si leías `data-size="md"` de un control sin `size`, ya no está.
+- **Toast `outline` es de color** (por defecto): el borde y el ícono toman el tono. La tarjeta neutra de la 0.5.0 es `variant="neutral"`.
+- **Los Blocks quedan inertes mientras cargan** (`[loading]`): el anfitrión lleva `inert` y `aria-busy`, el foco vuelve al control que lanzó la acción y se anuncia «Loading…» / «Done.» (en inglés, fijo). Instala `utils/busy` con ellos.
+- **`separatorAfter` de Input OTP** pasa de `number` a `number | number[]` (varias separaciones). En plantilla, `separatorAfter="3"` sigue igual; cambia solo el tipo si lo lees por código.
+- **Select instala también `option-list`** (para `<mimi-option>`): un archivo más en `components/ui/`. No cambia su API.
+- **El texto `clear` del Combobox** (`MimiComboboxText`) es **opcional** (si falta, «Clear»); el Combobox gana `clearable`.
+- **Las medidas de los componentes salen de la escala** (`--mimi-size-*` y derivadas por `[data-size]`): si sobrescribes un token de medida (`--mimi-btn-height`, `--mimi-input-height`…) **en un contenedor** y no en `:root`, el cambio ya no llega a los controles de dentro (las medidas vienen calculadas desde `:root`). **Cómo cambiarlo:** pon el token en `:root` (todo) o en un contenedor **con `data-size`** (o `mimiSize`), que vuelve a calcular las medidas con el valor de la zona: `<section data-size="md" style="--mimi-btn-height: 2.25rem">`. En `sm` y `lg`, el token con su sufijo (`--mimi-btn-height-sm`). Explicado en la página «Tamaños». Arreglarlo sin `data-size` exigiría declarar las ~60 variables derivadas en cada elemento (`*`): no se hizo.
+- **Cambian los estados visuales de los controles** (hover, clic, solo lectura, error, deshabilitado), los grises del tema, la selección del Tree y los colores de selección (`info` → marca). La API no cambia; el aspecto sí. Detalle en «Estados de los controles», abajo.
+- **Dialog:** `padding` es un solo valor lateral. **Data Table:** conserva `density` y gana `size` (alto de fila y de cabecera); `comfortable` mantiene su alto fijo.
+
+### Tamaños `sm / md / lg` en todos los componentes (R.1, R.2, R.3, R.4, R.8)
+
+- Una escala común en el tema (`[data-size]`), `size` en cada control y `mimiSize="sm"` en un contenedor (un formulario entero, sin repetirlo). Página nueva: **Tamaños**, con la escala y qué cambia en cada componente.
+- Hechos: Button, Input, Avatar, Select, Combobox, Number Input, Password, Input Mask, Tags Input, Date Picker, Date Range, Color Picker, Textarea, Switch, Checkbox (con su página), Toast (`size` por aviso y `provideMimiToast({ size })`), Pagination, Progress, Tabs, Toggle Group, Badge, Dialog, Chip, Slider, Toolbar, Calendar, Dropdown y Context Menu, Command, Tree, Sortable List, Data Table, Tooltip y Popover. **Card** llega con `mimiCard` en la 0.7.0.
+- Lo que se pinta en un panel flotante (menús, Popover, Tooltip, el Calendar de un Date Picker) toma el tamaño de su disparador.
+
+### Formularios
+
+- **`readonly`** en Checkbox, Switch, Select, Combobox, Date Picker, Date Range, Slider, Color Picker, File Upload, Toggle Group y Password: el valor se ve y se enfoca, no se cambia (`aria-readonly` donde el rol lo admite; File Upload usa `aria-disabled` porque su zona es un botón).
+- **Select y Combobox: `<mimi-option>` es la forma normal.** Todos los ejemplos del sitio, los fragmentos «Con formularios» y el bloque «Uso» usan `<mimi-option>` / `<mimi-optgroup>` (con `@for` y `[value]` enlazado cuando los datos vienen de una señal); `[options]` queda como alternativa para listas generadas por código y sigue ganando si se da. Añadidos, sin rupturas, la misma API en los dos:
+  - **`searchMode="client" | "server"`** (por defecto `client`): con `server` el componente muestra las opciones que llegan, sin volver a filtrar; ya no hace falta `[filterWith]="() => true"`. `filterWith` sigue para filtros propios en `client`.
+  - **`compareWith="id"`**: además de una función, el nombre de un campo para comparar valores que son objetos (tipo `MimiCompareWith`). En desarrollo avisa si el valor no tiene ese campo.
+  - **La X de limpiar** se ve solo con el ratón encima, con el foco dentro o con el panel abierto (en pantallas táctiles, siempre que haya valor); si no, el chevron. Con `clearable`, **Supr y Retroceso** quitan el valor con el foco en el campo.
+- **Form Field:** `label`, `description`, `hint` y `required` como atajos (con sus ids en `aria-describedby` y el asterisco oculto a los lectores); `[errors]` en el campo y mensajes que viajan con el validador (`withMessage` en Reactive Forms, `message` en Signal Forms). Prioridad: `<mimi-form-error>` > `message` del validador > `[errors]` > `provideMimiErrorMessages` > predeterminado.
+- **`<mimi-option>` y `<mimi-optgroup>`** en Select y Combobox (ver arriba); un solo icono al final (cargando, limpiar o chevron). Combobox con `clearable`.
+- **Dialog como servicio:** `size`, `inputs` (validadas contra el componente antes de crear el diálogo), `padding`, `panelClass`, `ref.closed`, `ref.result` y `chrome: 'none'`.
+- **Tabs:** atajo `<mimi-tab label>`; sin `value`, el valor sale del texto, del índice o con un sufijo, con un aviso en desarrollo.
+- **Input OTP:** la cantidad de dígitos que quepa, `separatorAfter` en lista (grupos: `[3]`, `[4, 8]`) y **separador propio**: un carácter (`separator="·"`) o contenido (`<ng-template mimiInputOtpSeparator>`, con `MimiInputOtpImports`).
+
+### Estados de los controles: un solo juego para todos
+
+Los 18 controles de formulario (y Tree) dibujan igual el hover, el foco, el clic, el deshabilitado, la solo lectura y el error, con un archivo nuevo compartido. **Son cambios visibles: si tienes capturas o pruebas visuales, se moverán.**
+
+- **Hover en Input y Textarea** (no tenían) y en Select; el borde se oscurece al pasar el ratón.
+- **Hover más suave en oscuro:** `--mimi-input-hover` mezcla el 14 % de `foreground` (antes, 30 %; el borde quedaba casi blanco). En claro no cambia.
+- **Grises «malva medio»:** fondo, texto, tarjeta, popover, `secondary`, `muted`, `accent`, bordes y campos llevan el tono 292 de la marca con croma 0,014 (0,007 en los casi blancos y casi negros), con la misma luminosidad: el contraste no cambia (AA en claro y oscuro). `MIMI_THEME_NEUTRAL` vuelve al neutro puro.
+- **Profundidad al hacer clic: todos se hunden** y les crece el halo (`ring-soft`), como a Button, también los de escribir (Input, Textarea, Combobox, Tags Input, Number Input, Password, Input Mask). En un campo compuesto se hunde la caja entera, también al hacer clic en el texto (Number Input, en la zona del número y no solo en − y +); los botones pequeños de dentro (− y +, el ojo de Password, la X del Combobox) ya no se hunden aparte. Con «reducir movimiento», nada se hunde.
+- **Abiertos, con el borde y el anillo de la marca:** Select, Date Picker, Date Range y Color Picker los mantienen mientras su panel está abierto, aunque se haya abierto con el ratón, como Combobox. El botón que abre un Dropdown Menu muestra el contorno del foco mientras el menú está abierto.
+- **La X de limpiar de Select y Combobox** ya no se queda visible después de elegir con el ratón: se ve con el ratón encima, con el foco que llegó por teclado o con el panel abierto (en pantallas táctiles, mientras haya valor).
+- **Tags Input en solo lectura:** las etiquetas toman el fondo del campo y un borde con contraste de 3:1 o más (token nuevo `--mimi-tags-chip-readonly-border`); antes casi no se distinguían del fondo.
+- **Hover en Checkbox, Switch y Toggle Group**, con el ratón sobre todo el control (también la etiqueta): el borde de la casilla se oscurece (marcada, el relleno se intensifica), la pista del interruptor se intensifica y la opción no elegida del grupo toma un fondo suave.
+- **Solo lectura con aspecto propio y común:** fondo `--mimi-input-readonly` (nuevo; `inputReadonly` en el preset), sin hover ni clic, y la caja marcada con `data-readonly` o `aria-readonly`. File Upload en solo lectura se titula «Archivos (solo lectura)» (texto nuevo opcional `readonly` de `MimiFileUploadText`; en inglés, «Files (read-only)»).
+- **Error unificado:** borde `--mimi-input-error` con el halo solo con el foco. **Switch gana el error** (un filo rojo de 1 px); Checkbox lo marca también cuando está marcada; Input OTP pone el halo solo en la casilla con el foco (antes, en todas).
+- **Deshabilitado con el token** `--mimi-disabled-opacity` en todos (antes, `opacity-50` fijo en Button, Checkbox, Switch, Input, Textarea y las opciones de las listas). **Tree deshabilitado entero** ahora se atenúa (antes no se veía distinto).
+- **Tree:** el nodo elegido es fondo `primary-subtle` con texto `primary` (antes, `primary` sólido con texto blanco); el anillo, solo con el teclado. `--mimi-tree-selected` y `--mimi-tree-selected-fg` cambian de valor por defecto.
+- **Colores de selección con la marca, no con `info`:** el azul queda solo para los avisos. Toolbar (anillo de hover y de la herramienta activa: `--mimi-toolbar-ring` → `ring`; contador `primary`), File Upload con un archivo encima (borde `ring`, fondo `primary-subtle`, halo `ring-soft`; `--mimi-dropzone-active` y `--mimi-dropzone-active-border` cambian de valor), Data Table (fila elegida, filtro activo e insignia de selección), la fila «Crear» del Combobox y el contador de Tabs.
+- **CLI:** ítem nuevo **`utils/field-styles`** (`utils/field-styles.ts`) en el registro; lo instalan con ellos Input, Textarea, Select, Combobox, Tags Input, Number Input, Password, Input Mask, Date Picker, Color Picker, Checkbox y Switch. Date Picker y File Upload ya no piden `utils/control-styles`.
+- **Si personalizaste** `--mimi-tree-selected(-fg)`, `--mimi-toolbar-ring`, `--mimi-dropzone-active(-border)` o `--mimi-table-row-selected`, tu valor sigue ganando. Si copiaste a mano clases de estado de un componente, vuelve a generarlo con `ng g mimi <componente> --overwrite` o compáralo con el nuevo.
+
+### Arreglos
+
+- **Paneles dentro de un contenedor con scroll propio** (un `overflow: auto` cualquiera): el panel de Select, Combobox, Date Picker, Date Range, Color Picker, Dropdown Menu, Context Menu (abierto con el teclado), Popover y Tooltip sigue a su campo con el scroll y se cierra si el campo sale de la vista. Antes se quedaba fijo mientras el contenido se movía. Lo hace `utils/overlay` (la directiva `MimiOverlayFollow`), que ya instalaban.
+- Tabs y Toggle Group en oscuro, y Skeleton; efecto de clic uniforme (`--mimi-press-scale`).
+- Los Blocks con `[loading]` devuelven el foco al terminar.
+- Select: el chevron y el spinner abren el panel; Combobox `readonly` no deja quitar chips ni vaciar con Escape; Password vuelve a ser editable al quitar `readonly`; Form Field quita de `aria-describedby` lo que ya no existe; el Combobox múltiple mide lo mismo que los demás controles en `sm`.
+
+### Documentación
+
+- Páginas nuevas o ampliadas: **Tamaños**, **Estados** (Fundamentos: cada control de formulario en los siete estados, en claro y oscuro, con Password a la vista en una fila aparte y un ejemplo de paneles en un contenedor con scroll), **Checkbox** (separada de Switch), **Textarea** (separada de Input), pestañas «Con formularios» (Signal Forms, Reactive y plantilla) en 18 páginas, ejemplos de solo lectura y de `<mimi-option>`.
+- **Requisito del sitio (no de la librería):** el sitio de documentación usa `@scope` de CSS (Chrome 118, Safari 17.4, Firefox 128). Los componentes que copia la CLI no lo usan.
+
+### No incluido en esta versión
+
+R.0 (el logo y el favicon, a la espera de los archivos), M.9 completa (la lista de Select sobre `option-list`), los ejemplos de solo lectura de los seis primeros controles (el aspecto de solo lectura ya está: ver «Estados de los controles») y R.14 (más ejemplos y el diagrama).
+
+### Cómo actualizar desde la 0.5.0
+
+`npm i -D @mimi-ng/cli@0.6.0` y `ng g mimi <los componentes que usas>`. Lo que modificaste no se sobrescribe (con `--overwrite` sí). Revisa «Rupturas», arriba.
+
 ## 0.5.0 (09/11/2026): datos y páginas
 
 Cuatro componentes de datos nuevos, la pantalla de clientes (`table-01`) y un cambio en cómo `ng g mimi` genera las pantallas (**RUPTURA**, abajo: «Los Blocks de pantalla se generan como páginas tuyas»).

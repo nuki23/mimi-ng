@@ -149,4 +149,17 @@ describe('HomePage', () => {
     expect(text(card.querySelector('mimi-card-description'))).toBe('4 personas con acceso.');
     expect(invite.disabled).toBe(true);
   });
+
+  it('avisos: un botón por tamaño de Toast, y cada uno muestra un aviso de su tamaño', async () => {
+    const { fixture, el, text } = await setup();
+    const card = el.querySelector('app-showcase-toasts')!;
+    const buttons = Array.from(card.querySelectorAll<HTMLButtonElement>('button[mimiBtn]'));
+    expect(buttons.map((b) => text(b))).toEqual(['Aviso sm', 'Aviso md', 'Aviso lg']);
+    for (const button of buttons) button.click();
+    await settle(fixture);
+    const sizes = Array.from(document.querySelectorAll('li[mimiToastItem]')).map((t) =>
+      t.getAttribute('data-size'),
+    );
+    expect(sizes).toEqual(expect.arrayContaining(['sm', 'md', 'lg']));
+  });
 });

@@ -89,12 +89,23 @@ describe('theme-base.css: globales del Grupo 2 (G2.0b)', () => {
   const designLight = g2Vars(G2_DESIGN, ':root');
   const designDark = new Map([...designLight, ...g2Vars(G2_DESIGN, '.dark')]);
 
+  /**
+   * Lo que Mimi hace distinto del diseño a propósito (anotado en correcciones-pendientes.md): la
+   * zona de File Upload con un archivo encima usa la marca, no `info` (decidido por el usuario,
+   * 12/11/2026). El diseño tiene que seguir teniendo la variable.
+   */
+  const G2_OVERRIDES: Record<string, string> = {
+    'dropzone-active': 'var(--mimi-primary-subtle)',
+    'dropzone-active-border': 'var(--mimi-ring)',
+  };
+
   it.each(G2_GLOBALS)(
     '--mimi-%s vale lo mismo que en tokens-mimi.css, en claro y oscuro',
     (name) => {
       expect(designLight.get(name), 'falta en el diseño').toBeDefined();
-      expect(themeLight.get(name)).toBe(designLight.get(name));
-      expect(themeDark.get(name)).toBe(designDark.get(name));
+      const override = G2_OVERRIDES[name];
+      expect(themeLight.get(name)).toBe(override ?? designLight.get(name));
+      expect(themeDark.get(name)).toBe(override ?? designDark.get(name));
     },
   );
 

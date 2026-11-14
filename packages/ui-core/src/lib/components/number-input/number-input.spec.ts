@@ -272,8 +272,32 @@ describe('MimiNumberInput', () => {
     expect(box.className).toContain('h-12');
     expect(box.className).not.toContain('h-[var(--mimi-number-height');
     expect(box.className).not.toContain('rounded-[var(--mimi-number-radius');
-    expect(box.className).toContain('focus-within:ring-3');
+    expect(box.className).toContain(
+      'focus-within:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
+    );
     expect(input.className).toContain('outline-none');
+  });
+
+  it('la caja usa los tokens de Input (borde, hover, foco y error) y los botones tienen hover visible', async () => {
+    const { box } = await setup();
+    for (const token of [
+      'border-[color:var(--mimi-input-border,var(--mimi-input))]',
+      'not-data-[disabled]:not-data-[readonly]:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+      'focus-within:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))]',
+      'data-[invalid]:hover:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
+    ]) {
+      expect(box.className, token).toContain(token);
+    }
+    // Sin el borde fijo de antes.
+    expect(box.className.split(' ')).not.toContain('border-input');
+    for (const button of Array.from(box.querySelectorAll('button'))) {
+      // Ícono atenuado que pasa a foreground, sobre el fondo accent.
+      expect(button.className).toContain('text-muted-foreground');
+      expect(button.className).toContain('not-aria-disabled:hover:text-foreground');
+      expect(button.className).toContain(
+        'not-aria-disabled:hover:bg-[color:var(--mimi-number-button-hover,var(--mimi-accent))]',
+      );
+    }
   });
 
   it('idioma: el LOCALE_ID de Angular por defecto', async () => {

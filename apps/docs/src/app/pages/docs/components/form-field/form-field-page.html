@@ -120,7 +120,30 @@
     </li>
     <li>
       <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">message</code> en el
-      validador (Signal Forms).
+      validador: en Signal Forms,
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >required(path.user, &#123; message: '…' &#125;)</code
+      >; en Reactive Forms,
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >withMessage(Validators.required, '…')</code
+      >
+      o un error propio
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >&#123; taken: &#123; message: '…' &#125; &#125;</code
+      >.
+    </li>
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[errors]</code> en el
+      campo: un texto (o una función) por clave de error, para los tres sistemas de formularios,
+      también
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">ngModel</code>
+      con
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">required</code> como
+      atributo. Ejemplo:
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+        >[errors]="&#123; required: 'Escribe tu correo.', email: 'Ese correo no es válido.'
+        &#125;"</code
+      >.
     </li>
     <li>
       <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"

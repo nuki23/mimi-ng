@@ -26,12 +26,17 @@ describe('ComboboxPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(6);
+      expect(previews.length).toBe(8);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-combobox input[role="combobox"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/combobox';");
         expect(code).toMatch(/export class Combobox\w+Example/);
       }
+      // <mimi-option> es la forma normal: solo el último ejemplo (la alternativa) usa [options].
+      const usesOptions = previews.map(({ code }) => /\[options\]="/.test(code));
+      expect(usesOptions.filter(Boolean)).toHaveLength(1);
+      expect(usesOptions.at(-1)).toBe(true);
+      for (const { code } of previews.slice(0, -1)) expect(code).toContain('<mimi-option');
       // Cada campo tiene nombre: aria-label o una etiqueta.
       for (const input of Array.from(
         el.querySelectorAll<HTMLInputElement>('mimi-combobox input'),
@@ -47,6 +52,8 @@ describe('ComboboxPage', () => {
       );
       expect(values).toContain('Diseño');
       expect(values).toContain('Python');
+      // compareWith="email": el valor guardado (otro objeto) se reconoce y muestra su texto.
+      expect(values).toContain('Sol Díaz');
       // El múltiple: chips con el texto de quitar en español.
       expect(
         el

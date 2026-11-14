@@ -183,7 +183,10 @@ describe('MimiTagsInput', () => {
     await settle(fixture);
     expect(part('plain').querySelector('[data-slot="remove"]')).toBeNull();
     expect(box('plain').className).toContain('min-h-12');
-    expect(box('plain').className).toContain('focus-within:ring-3');
+    expect(box('plain').className).toContain(
+      'focus-within:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
+    );
+    expect(box('plain').hasAttribute('data-readonly')).toBe(true);
   });
 
   it('Reactive Forms, Signal Forms y ngModel', async () => {
@@ -214,5 +217,26 @@ describe('MimiTagsInput', () => {
     });
     const { message } = await setup();
     expect(message('plain')).toBe('Enter o coma para agregar · Backspace quita la última');
+  });
+
+  it('solo lectura: las etiquetas se distinguen del fondo (fondo del campo y borde)', async () => {
+    const fixture = TestBed.createComponent(Host);
+    document.body.appendChild(fixture.nativeElement);
+    await settle(fixture);
+    const root = fixture.nativeElement as HTMLElement;
+    const chip = () => root.querySelector<HTMLElement>('[data-test="plain"] mimi-chip')!;
+    // Sin solo lectura, el chip de siempre (sin borde).
+    expect(chip().className).not.toContain('--mimi-tags-chip-readonly-border');
+    fixture.componentInstance.ro.set(true);
+    await settle(fixture);
+    // El fondo de solo lectura (70 % de muted) es casi el del chip (secondary): el chip toma el
+    // fondo del campo y un borde con contraste de 3:1 (lo mide Playwright).
+    expect(chip().className).toContain(
+      'border-[color:var(--mimi-tags-chip-readonly-border,var(--mimi-muted-foreground))]',
+    );
+    expect(chip().className).toContain(
+      'bg-[color:var(--mimi-input-bg,var(--mimi-input-background))]',
+    );
+    fixture.destroy();
   });
 });

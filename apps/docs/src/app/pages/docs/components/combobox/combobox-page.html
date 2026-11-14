@@ -23,6 +23,19 @@
 
   <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
 
+  <h3 id="declarative" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con <code class="font-mono text-[0.9em]">&lt;mimi-option&gt;</code>
+  </h3>
+  <p class="text-pretty">
+    La misma API que Select: opciones y grupos escritos en la plantilla (también dentro de un
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">&#64;for</code>), con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">clearable</code> para
+    quitar el valor desde el sitio del chevron.
+  </p>
+  <app-code-preview [code]="source.declarative">
+    <app-combobox-declarative-example />
+  </app-code-preview>
+
   <h3 id="city" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
     Con ícono y texto secundario
   </h3>
@@ -48,7 +61,15 @@
   </app-code-preview>
 
   <h3 id="async" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Búsqueda en el servidor</h3>
-  <p class="text-pretty">Prueba «sa» (carga) y «Tokio» (sin resultados).</p>
+  <p class="text-pretty">
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >searchMode="server"</code
+    >
+    deja el filtro a tu servidor: el Combobox muestra las opciones que llegan, sin volver a
+    filtrarlas, y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">(searchChange)</code>
+    avisa de lo que se escribe. Prueba «sa» (carga) y «Tokio» (sin resultados).
+  </p>
   <app-code-preview [code]="source.async">
     <app-combobox-async-example />
   </app-code-preview>
@@ -63,6 +84,40 @@
   </h3>
   <app-code-preview [code]="source.custom">
     <app-combobox-custom-example />
+  </app-code-preview>
+
+  <h3 id="forms-tabs" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con formularios: Signal Forms, Reactive y plantilla
+  </h3>
+  <p class="text-pretty">
+    El mismo campo con los tres formularios de Angular. El control implementa la interfaz de
+    Angular: no hace falta un adaptador.
+  </p>
+  <app-forms-tabs component="combobox" />
+
+  <h3 id="options" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Alternativa: <code class="font-mono text-[0.9em]">[options]</code> para listas generadas por
+    código
+  </h3>
+  <p class="text-pretty">
+    Si la lista ya la arma tu código, pásala entera con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[options]</code>:
+    opciones
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >{{ '{' }} label, value {{ '}' }}</code
+    >
+    y grupos
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >{{ '{' }} label, options {{ '}' }}</code
+    >, la misma forma que en Select. Si das
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[options]</code>, gana
+    sobre las
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;mimi-option&gt;</code
+    >.
+  </p>
+  <app-code-preview [code]="source.options">
+    <app-combobox-options-example />
   </app-code-preview>
 
   <h3 id="texts" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textos</h3>
@@ -85,6 +140,12 @@
     <li>
       Al salir, lo escrito sin elegir se descarta y vuelve el texto de la opción elegida; con el
       campo vacío, se quita el valor.
+    </li>
+    <li>
+      Con <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">clearable</code>,
+      Supr o Retroceso quitan el valor elegido (escribiendo, borran letras); en el múltiple, Supr
+      con el campo vacío quita todos los chips. La X se ve con el ratón encima, con el foco dentro o
+      con el panel abierto (en pantallas táctiles, siempre que haya valor).
     </li>
     <li>
       Múltiple: la lista es

@@ -230,13 +230,16 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
     expect(btn.textContent?.trim()).toBe('Selecciona un país');
     expect(panel()).toBeNull();
     for (const cls of [
-      'h-[var(--mimi-select-height,var(--mimi-control-height,2.5rem))]',
+      'h-[var(--mimi-select-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))]',
       'rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
-      'border-[color:var(--mimi-select-border,var(--mimi-input))]',
-      'bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-background))]',
-      'has-[[role=combobox]:focus]:border-ring',
-      'has-[[role=combobox]:focus]:ring-ring-soft',
-      'data-[invalid]:border-destructive',
+      // Sus tokens, con respaldo en los de Input; los estados de todos los campos (field-styles).
+      'border-[color:var(--mimi-select-border,var(--mimi-input-border,var(--mimi-input)))]',
+      'bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-bg,var(--mimi-input-background)))]',
+      'data-[focus-visible]:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))]',
+      'data-[focus-visible]:ring-ring-soft',
+      'data-[invalid]:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
+      'not-data-[disabled]:not-data-[readonly]:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+      'data-[readonly]:bg-[color:var(--mimi-input-readonly)]',
     ]) {
       expect(box('plain').classList).toContain(cls);
     }
@@ -401,7 +404,7 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
     expect(trigger('plain').disabled).toBe(true);
     expect(box('plain').hasAttribute('data-disabled')).toBe(true);
     expect(box('plain').classList).toContain(
-      'data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
+      'data-[disabled]:opacity-[var(--mimi-input-disabled-opacity,var(--mimi-disabled-opacity,0.5))]',
     );
     trigger('plain').click();
     key(trigger('plain'), 'ArrowDown');
@@ -692,7 +695,7 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
       expect(box('plain').classList).toContain(cls);
     expect(box('plain').classList).not.toContain('w-full');
     expect(box('plain').classList).not.toContain(
-      'h-[var(--mimi-select-height,var(--mimi-control-height,2.5rem))]',
+      'h-[var(--mimi-select-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))]',
     );
     expect(box('plain').classList).not.toContain(
       'rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
@@ -720,8 +723,23 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
       ['bottom', 'end'],
       ['bottom', 'center'],
     ]);
+    // jsdom no mide: el disparador «mide» 200px. El panel mide al menos eso (min-width) y puede
+    // crecer con una opción larga: no se le fija el ancho (informe del usuario, 12/11/2026).
+    const rect = vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      width: 200,
+      height: 40,
+      top: 0,
+      left: 0,
+      right: 200,
+      bottom: 40,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect);
     await open('plain');
-    expect(pane().style.width).not.toBe('');
+    expect(pane().style.minWidth).toBe('200px');
+    expect(pane().style.width).toBe('');
+    rect.mockRestore();
     await press(trigger('plain'), 'Escape');
     h.side.set('top');
     h.align.set('end');
@@ -736,8 +754,9 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
       ['top', 'center'],
     ]);
     await open('plain');
-    // Sin matchWidth, el CDK no le fija el ancho del disparador.
+    // Sin matchWidth, ni ancho ni mínimo: lo que pida el contenido.
     expect(pane().style.width).toBe('');
+    expect(pane().style.minWidth).toBe('');
     // El atributo HTML `align` (antiguo) alinearía el texto: no queda en el anfitrión.
     expect(
       fixture.nativeElement.querySelector('mimi-select[data-test="plain"]').hasAttribute('align'),

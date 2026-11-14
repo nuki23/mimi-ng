@@ -15,12 +15,27 @@
       "type": "util",
       "files": ["utils/control-styles.ts"]
     },
+    "utils/field-styles": {
+      "type": "util",
+      "files": ["utils/field-styles.ts"]
+    },
     "utils/field-state": {
       "type": "util",
       "files": ["utils/field-state.ts"],
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       }
+    },
+    "utils/busy": {
+      "type": "util",
+      "files": ["utils/busy.ts"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4"
+      }
+    },
+    "utils/size": {
+      "type": "util",
+      "files": ["utils/size.ts"]
     },
     "utils/overlay": {
       "type": "util",
@@ -47,7 +62,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "option-list": {
       "type": "util",
@@ -59,7 +74,13 @@
     },
     "theme": {
       "type": "theme",
-      "files": ["theme/theme-base.css", "theme/types.ts", "theme/provider.ts", "theme/index.ts"]
+      "files": [
+        "theme/theme-base.css",
+        "theme/types.ts",
+        "theme/provider.ts",
+        "theme/neutral.ts",
+        "theme/index.ts"
+      ]
     },
     "avatar": {
       "type": "component",
@@ -71,7 +92,7 @@
       "dependencies": {
         "class-variance-authority": "^0.7.1"
       },
-      "registryDependencies": ["utils/cn"]
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "badge": {
       "type": "component",
@@ -83,7 +104,7 @@
       "dependencies": {
         "class-variance-authority": "^0.7.1"
       },
-      "registryDependencies": ["utils/cn"]
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "button": {
       "type": "component",
@@ -95,7 +116,7 @@
       "dependencies": {
         "class-variance-authority": "^0.7.1"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "card": {
       "type": "component",
@@ -108,7 +129,13 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/field-styles",
+        "utils/size"
+      ]
     },
     "confirm": {
       "type": "component",
@@ -126,7 +153,7 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["menu", "utils/overlay"]
+      "registryDependencies": ["menu", "utils/overlay", "utils/size"]
     },
     "dialog": {
       "type": "component",
@@ -139,7 +166,7 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/overlay"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/overlay", "utils/size"]
     },
     "tabs": {
       "type": "component",
@@ -150,7 +177,7 @@
       "peerDependencies": {
         "@angular/aria": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "toast": {
       "type": "component",
@@ -166,7 +193,13 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["button", "utils/cn", "utils/control-styles", "utils/overlay"]
+      "registryDependencies": [
+        "button",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/overlay",
+        "utils/size"
+      ]
     },
     "pagination": {
       "type": "component",
@@ -182,7 +215,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["button", "input", "select", "utils/cn"]
+      "registryDependencies": ["button", "input", "select", "utils/cn", "utils/size"]
     },
     "data-table": {
       "type": "component",
@@ -198,7 +231,8 @@
         "input",
         "pagination",
         "toggle-group",
-        "utils/cn"
+        "utils/cn",
+        "utils/size"
       ]
     },
     "input-mask": {
@@ -207,7 +241,7 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/field-state"]
+      "registryDependencies": ["utils/cn", "utils/field-state", "utils/field-styles", "utils/size"]
     },
     "input-otp": {
       "type": "component",
@@ -227,7 +261,7 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/field-state"]
+      "registryDependencies": ["utils/cn", "utils/field-state", "utils/field-styles", "utils/size"]
     },
     "password": {
       "type": "component",
@@ -239,12 +273,18 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["input", "utils/cn", "utils/control-styles"]
+      "registryDependencies": [
+        "input",
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-styles",
+        "utils/size"
+      ]
     },
     "progress": {
       "type": "component",
       "files": ["components/progress/progress.ts", "components/progress/index.ts"],
-      "registryDependencies": ["utils/cn"]
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "sortable-list": {
       "type": "component",
@@ -256,7 +296,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn"]
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "slider": {
       "type": "component",
@@ -269,7 +309,12 @@
         "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/size"
+      ]
     },
     "combobox": {
       "type": "component",
@@ -288,8 +333,11 @@
         "chip",
         "option-list",
         "utils/cn",
+        "utils/control-styles",
         "utils/field-state",
-        "utils/overlay"
+        "utils/field-styles",
+        "utils/overlay",
+        "utils/size"
       ]
     },
     "command": {
@@ -302,7 +350,7 @@
       "peerDependencies": {
         "@angular/aria": "^22.2.4"
       },
-      "registryDependencies": ["dialog", "option-list", "utils/cn"]
+      "registryDependencies": ["dialog", "option-list", "utils/cn", "utils/size"]
     },
     "calendar": {
       "type": "component",
@@ -315,7 +363,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "date-picker": {
       "type": "component",
@@ -327,8 +375,9 @@
         "calendar",
         "popover",
         "utils/cn",
-        "utils/control-styles",
-        "utils/field-state"
+        "utils/field-state",
+        "utils/field-styles",
+        "utils/size"
       ]
     },
     "date-range": {
@@ -343,7 +392,8 @@
         "popover",
         "utils/cn",
         "utils/control-styles",
-        "utils/field-state"
+        "utils/field-state",
+        "utils/size"
       ]
     },
     "file-upload": {
@@ -357,13 +407,7 @@
         "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": [
-        "button",
-        "progress",
-        "utils/cn",
-        "utils/control-styles",
-        "utils/field-state"
-      ]
+      "registryDependencies": ["button", "progress", "utils/cn", "utils/field-state"]
     },
     "color-picker": {
       "type": "component",
@@ -381,7 +425,9 @@
         "popover",
         "utils/cn",
         "utils/control-styles",
-        "utils/field-state"
+        "utils/field-state",
+        "utils/field-styles",
+        "utils/size"
       ]
     },
     "tags-input": {
@@ -394,7 +440,13 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["chip", "utils/cn", "utils/field-state"]
+      "registryDependencies": [
+        "chip",
+        "utils/cn",
+        "utils/field-state",
+        "utils/field-styles",
+        "utils/size"
+      ]
     },
     "toggle-group": {
       "type": "component",
@@ -406,7 +458,7 @@
         "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "toolbar": {
       "type": "component",
@@ -417,7 +469,7 @@
       "peerDependencies": {
         "@angular/cdk": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles"]
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "dropdown-menu": {
       "type": "component",
@@ -426,7 +478,7 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["menu", "utils/overlay"]
+      "registryDependencies": ["menu", "utils/overlay", "utils/size"]
     },
     "form-field": {
       "type": "component",
@@ -448,7 +500,13 @@
       "dependencies": {
         "class-variance-authority": "^0.7.1"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/field-styles",
+        "utils/size"
+      ]
     },
     "popover": {
       "type": "component",
@@ -457,7 +515,7 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["utils/cn", "utils/overlay"]
+      "registryDependencies": ["utils/cn", "utils/overlay", "utils/size"]
     },
     "select": {
       "type": "component",
@@ -473,10 +531,13 @@
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
       "registryDependencies": [
+        "option-list",
         "utils/cn",
         "utils/control-styles",
         "utils/field-state",
-        "utils/overlay"
+        "utils/field-styles",
+        "utils/overlay",
+        "utils/size"
       ]
     },
     "separator": {
@@ -502,7 +563,13 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/field-styles",
+        "utils/size"
+      ]
     },
     "tooltip": {
       "type": "component",
@@ -511,7 +578,7 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["utils/cn", "utils/overlay"]
+      "registryDependencies": ["utils/cn", "utils/overlay", "utils/size"]
     },
     "tree": {
       "type": "component",
@@ -524,7 +591,7 @@
         "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["checkbox", "utils/cn"]
+      "registryDependencies": ["checkbox", "utils/cn", "utils/size"]
     },
     "textarea": {
       "type": "component",
@@ -536,7 +603,13 @@
       "dependencies": {
         "class-variance-authority": "^0.7.1"
       },
-      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/field-state"]
+      "registryDependencies": [
+        "utils/cn",
+        "utils/control-styles",
+        "utils/field-state",
+        "utils/field-styles",
+        "utils/size"
+      ]
     },
     "login-01": {
       "type": "block",
@@ -557,6 +630,7 @@
         "input",
         "password",
         "separator",
+        "utils/busy",
         "utils/cn"
       ]
     },
@@ -571,7 +645,7 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["avatar", "button", "form-field", "input", "utils/cn"]
+      "registryDependencies": ["avatar", "button", "form-field", "input", "utils/busy", "utils/cn"]
     },
     "signup-01": {
       "type": "block",
@@ -584,13 +658,21 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["button", "checkbox", "form-field", "input", "password", "utils/cn"]
+      "registryDependencies": [
+        "button",
+        "checkbox",
+        "form-field",
+        "input",
+        "password",
+        "utils/busy",
+        "utils/cn"
+      ]
     },
     "otp-01": {
       "type": "block",
       "kind": "page",
       "files": ["blocks/otp-01/otp-01.ts", "blocks/otp-01/otp-01.html", "blocks/otp-01/index.ts"],
-      "registryDependencies": ["button", "card", "input-otp", "utils/cn"]
+      "registryDependencies": ["button", "card", "input-otp", "utils/busy", "utils/cn"]
     },
     "settings-01": {
       "type": "block",
@@ -615,6 +697,7 @@
         "switch",
         "tabs",
         "textarea",
+        "utils/busy",
         "utils/cn"
       ]
     },
@@ -626,7 +709,15 @@
         "blocks/table-01/table-01.html",
         "blocks/table-01/index.ts"
       ],
-      "registryDependencies": ["badge", "button", "checkbox", "data-table", "input", "utils/cn"]
+      "registryDependencies": [
+        "badge",
+        "button",
+        "checkbox",
+        "data-table",
+        "input",
+        "utils/busy",
+        "utils/cn"
+      ]
     },
     "pricing-01": {
       "type": "block",
@@ -636,7 +727,7 @@
         "blocks/pricing-01/pricing-01.html",
         "blocks/pricing-01/index.ts"
       ],
-      "registryDependencies": ["badge", "button", "toggle-group", "utils/cn"]
+      "registryDependencies": ["badge", "button", "toggle-group", "utils/busy", "utils/cn"]
     }
   }
 }

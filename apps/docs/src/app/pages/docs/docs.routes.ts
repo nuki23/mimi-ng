@@ -23,6 +23,16 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./foundations-page').then((m) => m.FoundationsPage),
   },
   {
+    path: 'sizes',
+    title: 'Tamaños · Mimi',
+    loadComponent: () => import('./sizes-page').then((m) => m.SizesPage),
+  },
+  {
+    path: 'states',
+    title: 'Estados · Mimi',
+    loadComponent: () => import('./states/states-page').then((m) => m.StatesPage),
+  },
+  {
     path: 'theme',
     title: 'Tema · Mimi',
     loadComponent: () => import('./theme/theme-page').then((m) => m.ThemePage),
@@ -34,8 +44,13 @@ export const DOCS_ROUTES: Routes = [
   },
   {
     path: 'components/input',
-    title: 'Input y Textarea · Mimi',
+    title: 'Input · Mimi',
     loadComponent: () => import('./components/input/input-page').then((m) => m.InputPage),
+  },
+  {
+    path: 'components/textarea',
+    title: 'Textarea · Mimi',
+    loadComponent: () => import('./components/textarea/textarea-page').then((m) => m.TextareaPage),
   },
   {
     path: 'components/badge',
@@ -219,8 +234,13 @@ export const DOCS_ROUTES: Routes = [
   },
   {
     path: 'components/switch',
-    title: 'Switch y Checkbox · Mimi',
+    title: 'Switch · Mimi',
     loadComponent: () => import('./components/switch/switch-page').then((m) => m.SwitchPage),
+  },
+  {
+    path: 'components/checkbox',
+    title: 'Checkbox · Mimi',
+    loadComponent: () => import('./components/checkbox/checkbox-page').then((m) => m.CheckboxPage),
   },
   {
     path: 'components/form-field',

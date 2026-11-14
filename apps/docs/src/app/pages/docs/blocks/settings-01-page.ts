@@ -106,7 +106,7 @@ export class Settings01Page {
   protected readonly components: BlockComponent[] = [
     { name: 'tabs', path: '/docs/components/tabs' },
     { name: 'input', path: '/docs/components/input' },
-    { name: 'textarea', path: '/docs/components/input' },
+    { name: 'textarea', path: '/docs/components/textarea' },
     { name: 'switch', path: '/docs/components/switch' },
     { name: 'avatar', path: '/docs/components/avatar' },
     { name: 'badge', path: '/docs/components/badge' },
@@ -128,6 +128,7 @@ export class Settings01Page {
     { id: 'notifications', label: 'Notificaciones' },
     { id: 'security', label: 'Seguridad' },
     { id: 'billing', label: 'Facturación' },
+    { id: 'saving', label: 'Guardando' },
   ];
 
   protected readonly inputs: BlockApiRow[] = [

@@ -136,6 +136,51 @@ Rama `auto/blocks-paginas-2026-11-07`. El diseño lo dio el usuario en el prompt
 | B.11-h | `ng g mimi login-01` en un proyecto sin la pantalla | Crea la página en `aliases.pages` (antes, `src/app/blocks/login-01/` con `Login01` y `mimi-login-01`)                                                           | El prompt                                                | **Sí**  |          |
 | B.11-i | `source(none)`                                      | `init` y `ng g mimi` agregan el `@source` de la carpeta de páginas                                                                                              | Más simple (la regla G1)                                 | No      |          |
 
+## Decididas por defecto: refinamiento 0.6.0 (09/11/2026)
+
+Pendientes de revisión del usuario. Detalle en `docs/auto/refinamiento-0.6.0-2026-11-09.md`.
+
+- **R.11 Blocks en carga:** el anfitrión queda `inert` y con `aria-busy` en vez de la directiva `mimiDisabled` del plan (más simple; cubre todo lo de dentro). Contra: los lectores de pantalla no ven el Block inerte y el foco vuelve al `body`.
+- **R.9 clic uniforme:** `scale-90` → token pequeño; `0.985`, `0.99`, `0.96` y `0.94` → `--mimi-press-scale` (0,975).
+- **R.5 Toast:** `outline` (por defecto) es de color; `neutral` conserva la tarjeta de la 0.5.0. **RUPTURA visual.**
+- **R.1 tamaños:** `default` es alias de `md` con aviso hasta la 0.7.0. **RUPTURA:** también `data-size="default"` → `data-size="md"`.
+- **R.7 Dialog:** `padding` de un solo valor lateral.
+- **R.14 Form Field:** prioridad `<mimi-form-error>` > `message` del validador > `[errors]` > `provideMimiErrorMessages` > predeterminado.
+- **R.0 tema:** el violeta es el tema por defecto y el neutro anterior es `MIMI_THEME_NEUTRAL`; hover del primario en claro hacia `foreground`.
+- **1d `info`:** el azul `info` se ajusta (claro `oklch(0.44 0.17 255)`, oscuro `oklch(0.83 0.11 250)`) porque tenía la misma luminosidad que el violeta de marca; ΔL ≥ 0,08 con prueba. **Cambio visual.**
+- **1a `<mimi-tab>`:** sin `value`, el índice si el label no da valor y un sufijo si se repite; el aviso en desarrollo solo salta cuando el valor no sale limpio del label.
+- **1c Blocks:** al terminar de cargar devuelven el foco al control que lanzó la acción y anuncian «Loading…»/«Done.» (en inglés, fijos).
+- **R.18 OTP:** `separatorAfter` pasa de `number` a `number | number[]`. **RUPTURA de tipo** para quien lo lea por código (en plantilla, `separatorAfter="3"` sigue igual).
+- **Búsqueda en servidor (12/11/2026, sexta tanda; `docs/auto/refinamiento-0.6.0-parte6-2026-11-12.md`):** la entrada se llama **`searchMode`**, `'client' | 'server'`, por defecto `'client'`, igual en Select y Combobox (tipo `MimiSearchMode` en `option-list`). Base: «Más simple» (el plan no traía Recomendación; es el nombre que proponía el usuario). Con `'server'` no se filtra nada, ni con `filterWith`. Alternativas: `serverSide` (booleano), `filter="none"`. No es ruptura (añadido).
+
+## Decididas por el usuario: estados de los controles (12/11/2026)
+
+Elegidas por el usuario en la página `/docs/states` (octava tanda; inventario en `docs/plan/controles/inventario.md`, informe en `docs/auto/refinamiento-0.6.0-parte9-2026-11-12.md`). Base: «Decidido por el usuario». Ninguna es una RUPTURA de API; todas son cambios visibles.
+
+- **Profundidad al hacer clic: A** (sustituida por la B el 13/11/2026, ver arriba). A todos los controles les crece el halo (`ring-soft`), como a Button. Se hunden (`--mimi-press-scale`, que es 1 con «reducir movimiento») solo los que funcionan como botón: Select, Date Picker, Date Range, Color Picker, File Upload, Checkbox, Switch, Toggle Group y Button. Los de escribir no se hunden. Alternativa descartada: B, todos se hunden.
+- **Grises: malva suave** (sustituida por malva medio el 14/11/2026, ver abajo). Los neutros del tema llevan el tono 292 del violeta con croma 0,006 (la mitad en los casi blancos y casi negros), la misma luminosidad y los contrastes AA. Alternativas descartadas: neutro puro (el de antes) y malva medio (croma 0,014).
+- **Tree: fondo `primary-subtle`, texto `primary` y anillo solo para el foco de teclado.** Alternativa descartada: el actual, con fondo `primary` sólido y texto blanco.
+- **`info` (azul) pasa al violeta de la marca donde significa selección, arrastre o acento:** Toolbar (hover y herramienta activa), File Upload al arrastrar, Data Table (fila elegida, filtro activo e insignia de selección), la fila «Crear» y el contador de Tabs. Se queda solo en los avisos informativos (el tono `info` de Toast, Badge, Button, Progress y Command, y el ícono de Confirm).
+
+## Decididas por el usuario: revisión del sitio (13/11/2026)
+
+El usuario revisó el sitio y `/docs/states` después de la unificación (informe en `docs/auto/refinamiento-0.6.0-parte10-2026-11-13.md`). Base: «Decidido por el usuario».
+
+- **Profundidad al hacer clic: B (cambia la A del 12/11/2026).** Todos los controles se hunden al hacer clic, también los de escribir (Input, Textarea, Combobox, Tags Input, Number Input, Password, Input Mask), con el mismo efecto que Button: hundimiento (`--mimi-press-scale`) y halo que crece. Con «reducir movimiento», nada se hunde y el halo se queda.
+- **Grises:** el tema se queda en malva suave hasta que el usuario elija; se le dejan capturas lado a lado (neutro, malva suave y malva medio) en el informe.
+
+## Decidida por el usuario: grises (14/11/2026)
+
+- **Grises: malva medio** (sustituye a malva suave). Los 15 grises del tema, en claro y oscuro, llevan el tono 292 con croma **0,014** (0,007 en los casi blancos y casi negros), con la misma luminosidad: el contraste AA no cambia. `MIMI_THEME_NEUTRAL` sigue en croma 0. Base: «Decidido por el usuario», después de ver las capturas del 13/11/2026 (`docs/auto/capturas/2026-11-13/grises/`). Informe: `docs/auto/refinamiento-0.6.0-parte11-2026-11-14.md`.
+
+## Decididas por el usuario: refinamiento (09/11/2026)
+
+No son decisiones por defecto: el usuario eligió las opciones de `docs/plan/refinamiento/decisiones-usuario.md` en el prompt de la rama `auto/refinamiento-0.6.0-2026-11-09`.
+
+- **PD-1 Card (R.19, 0.7.0): opción B.** Superficie `mimiCard` (sobre cualquier elemento) más piezas opcionales como directivas (`mimiCardHeader`, `mimiCardTitle`, `mimiCardDescription`, `mimiCardContent`, `mimiCardFooter`) con un solo padding. Base: «Decidido por el usuario».
+- **PD-2 Table y Data Table (R.20, 0.7.0): opción C.** Estado «headless» (`mimiTableState`) más directivas de estilo (`mimiTable`…); la Data Table por datos queda como atajo. Base: «Decidido por el usuario».
+- **PD-3 Mensajes de error de Form Field (R.14, 0.6.0): opciones A + B.** `[errors]` en el campo (mapa clave → texto o función) y el mensaje que viaja con el validador (`withMessage` en Reactive Forms; en Signal Forms ya funciona). Prioridad: `<mimi-form-error>` explícito > `message` del validador > `[errors]` del campo > `provideMimiErrorMessages` > predeterminado. Base: «Decidido por el usuario».
+
 ## Decididas por el usuario: Blocks 0.4.0 (07/11/2026)
 
 No son decisiones por defecto: el usuario adoptó las 20 recomendaciones de «Blocks 0.4.0» (`docs/plan/decisiones.md`) al aprobar el plan de la 0.4.0, en el prompt de la rama `auto/blocks-0.4.0-2026-11-06`. Se registran aquí para que estén todas en un lugar; cada una está en su tarea como «Decidido por el usuario (07/11/2026…)». Ninguna es RUPTURA (la B.10 es una entrada nueva con el valor de antes por defecto).
@@ -172,6 +217,13 @@ Los diseños que faltan (estados de error de `login-01`, imagen de `login-02`, e
 - **Aceptadas** (no estaban en la tabla porque no eran PENDIENTE DE DECIDIR, sino alertas de los informes): las versiones exactas de Angular en el `package.json` raíz (M.2) y `minDate`/`maxDate` en el Date Range (G2.9b).
 - **G2.9, una sola tabla de tokens para las fechas: se aparta de la recomendación de la tarea.** La recomendación era «decidirlo junto con ¿Date Range aparte?: si es aparte, dos tablas». Se eligió una (`--mimi-date-*`) aunque el Date Range es un componente aparte, **por qué:** los dos usan el mismo `mimi-calendar`, que pinta los días, el elegido, hoy y la banda del rango; con dos prefijos, el calendario tendría que leer los tokens de los dos componentes (o duplicarlos) y la prueba de la tabla (`component-tokens.spec.ts`) tomaría `--mimi-date-range-*` como tokens de `date`; el único token propio del rango es `--mimi-date-presets-width`. **Qué se pierde:** no se puede dar un aspecto distinto al calendario del Date Picker y al del Date Range con tokens (por ejemplo, días más grandes solo en el rango): cambiar `--mimi-date-*` cambia los dos, salvo que la app lo acote con una clase propia (`class="[--mimi-date-cell-size:40px]"` en uno de ellos); en el Theme Studio, los dos componentes comparten un grupo de variables; y el nombre `--mimi-date-range` es la banda (no un prefijo), así que no queda libre un prefijo `date-range` para el futuro sin renombrar.
 
+## Decididas por el usuario (10/11/2026), tercera tanda de la 0.6.0
+
+- **`@scope` en el sitio:** el sitio de documentación puede exigir un navegador con `@scope` (Chrome 118, Safari 17.4, Firefox 128). Se anota en la página de Instalación como requisito **del sitio, no de la librería** (los componentes que copia la CLI no usan `@scope`).
+- **Data Table conserva `density` y `size`**, cada uno documentado; el solape va a la lista de nombres de la 0.9.9 (abajo).
+- **M.9 queda como tarea propia** (cambiar `MimiSelectList` por `MimiOptionList`); no se hace en la 0.6.0.
+- **`MimiSized` no escribe `data-size` sin `size` propio:** el `md` vive por defecto en el tema (`:root`) y cada control hereda el del contenedor `[data-size]` más cercano.
+
 ## Para la revisión de la 0.9.9: nombres incoherentes
 
 Anotados a pedido del usuario (05/11/2026), tras la revisión independiente de la rama. No se cambian ahora; se deciden en la revisión de la API antes de la 1.0, junto con las RUPTURAS de la tabla.
@@ -179,6 +231,7 @@ Anotados a pedido del usuario (05/11/2026), tras la revisión independiente de l
 - **`success` en Input OTP frente a `tone`:** Input OTP marca el código correcto con un booleano `success` (`input-otp.ts`); Badge, Button, Menu y Progress expresan el color con `tone`.
 - **`min`/`max` frente a `minDate`/`maxDate`:** el Date Picker usa `min`/`max` (con el tipo del valor, `FormValueControl`); el Date Range usa `minDate`/`maxDate`, porque `FormValueControl` daría a `min`/`max` el tipo del periodo (aceptado por el usuario el 05/11/2026, pero los dos nombres conviven).
 - **Selector `mimi-date-range` y clase `MimiDateRangePicker`:** el selector no dice «picker» y la clase sí (el Date Picker es `mimi-date-picker` / `MimiDatePicker`).
+- **Data Table: `density` y `size` se solapan (decidido por el usuario el 10/11/2026):** las dos entradas se conservan y cada una se documenta en la página (`size` escala el alto de fila y de cabecera con la escala del tema; `density` elige entre compacta y cómoda, y `comfortable` mantiene su alto fijo). Si el solape molesta, se resuelve aquí, en la revisión de la API de la 0.9.9.
 - **`MIMI_DATE_PICKER_TEXT` en `calendar/`:** el token de textos lleva el nombre del Date Picker, pero vive en `calendar/calendar-texts.ts` y lo usan también el calendario suelto y el Date Range.
 
 ## Arreglos tras la puerta del Grupo 3 (08/11/2026)

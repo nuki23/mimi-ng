@@ -320,7 +320,7 @@ describe('MimiToolbar', () => {
       expect(toolbar.classList).toContain(cls);
     }
     for (const cls of [
-      'size-[var(--mimi-toolbar-item-size,40px)]',
+      'size-[var(--mimi-toolbar-item-s,var(--mimi-toolbar-item-size,40px))]',
       'data-[state=active]:bg-[color:var(--mimi-toolbar-active-bg,var(--mimi-primary))]',
       'data-[state=active]:text-[color:var(--mimi-toolbar-active-fg,var(--mimi-primary-foreground))]',
       'data-[state=pressed]:bg-[color:var(--mimi-toolbar-pressed-bg,var(--mimi-accent))]',
@@ -337,7 +337,9 @@ describe('MimiToolbar', () => {
     expect(toolbar.classList).toContain('p-2');
     expect(toolbar.classList).not.toContain('p-[6px]');
     expect(item('left').classList).toContain('size-9');
-    expect(item('left').classList).not.toContain('size-[var(--mimi-toolbar-item-size,40px)]');
+    expect(item('left').classList).not.toContain(
+      'size-[var(--mimi-toolbar-item-s,var(--mimi-toolbar-item-size,40px))]',
+    );
   });
 
   it('el contador es decorativo', async () => {
@@ -354,7 +356,7 @@ describe('MimiToolbar', () => {
     await settle(fixture);
     const count = (fixture.nativeElement as HTMLElement).querySelector('[mimiToolbarCount]')!;
     expect(count.getAttribute('aria-hidden')).toBe('true');
-    expect(count.classList).toContain('bg-info');
+    expect(count.classList).toContain('bg-primary');
     expect(count.classList).toContain('-end-[3px]');
     expect(MimiToolbarCount).toBeDefined();
   });

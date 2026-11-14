@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   LOCALE_ID,
+  booleanAttribute,
   computed,
   inject,
   input,
@@ -12,6 +13,7 @@ import { MimiBadge } from '@/components/ui/badge';
 import { MimiButton } from '@/components/ui/button';
 import { MimiToggleGroupImports } from '@/components/ui/toggle-group';
 import { cn } from '@/components/ui/utils/cn';
+import { restoreFocusAfterBusy } from '@/components/ui/utils/busy';
 
 export type Pricing01Period = 'monthly' | 'yearly';
 
@@ -108,6 +110,10 @@ let nextId = 0;
   host: {
     '[class]': 'classes()',
     '[attr.data-period]': 'period()',
+    // Cargando (por ejemplo, mientras tu app crea la suscripción): nada se puede pulsar ni enfocar.
+    '[attr.data-state]': 'loading() ? "loading" : null',
+    '[attr.inert]': 'loading() ? "" : null',
+    '[attr.aria-busy]': 'loading() ? "true" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -120,6 +126,10 @@ export class Pricing01 {
   /** Idioma de los números. Por defecto, el `LOCALE_ID` de la app. */
   readonly locale = input<string | undefined>(undefined);
   readonly faqHref = input('#');
+  /** Mientras tu app procesa la elección de un plan: todo queda inerte (sin foco ni clic). */
+  readonly loading = input(false, { transform: booleanAttribute });
+  /** Al terminar de cargar, el foco vuelve a quien lanzó la acción y se anuncia (los Blocks inertes no los ven los lectores). */
+  private readonly focusBack = restoreFocusAfterBusy(this.loading);
   readonly userClass = input('', { alias: 'class' });
 
   /** El botón de un plan. */

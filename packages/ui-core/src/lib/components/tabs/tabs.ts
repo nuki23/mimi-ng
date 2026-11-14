@@ -5,6 +5,8 @@ import {
   DOCUMENT,
   Directive,
   ElementRef,
+  InjectionToken,
+  type Signal,
   TemplateRef,
   ViewContainerRef,
   afterRenderEffect,
@@ -12,6 +14,7 @@ import {
   computed,
   contentChildren,
   effect,
+  forwardRef,
   inject,
   input,
   isDevMode,
@@ -22,6 +25,7 @@ import {
 } from '@angular/core';
 import { cva } from 'class-variance-authority';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 
 /*
@@ -43,11 +47,39 @@ import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 export type MimiTabsVariant = 'underline' | 'pill';
 
 /**
+ * Lo que `mimi-tabs` necesita de una pestaña: la da `ng-template[mimiTab]` (el contenido se crea
+ * al elegirla) o el elemento `mimi-tab` (el contenido se crea con la página; R.17).
+ * @internal
+ */
+export interface MimiTabLike {
+  readonly value: Signal<string>;
+  readonly label: Signal<string>;
+  readonly count: Signal<number | string | null | undefined>;
+  readonly disabled: Signal<boolean>;
+  readonly template: TemplateRef<unknown>;
+}
+
+/** @internal */
+export const MIMI_TAB = new InjectionToken<MimiTabLike>('MIMI_TAB');
+
+/** Lo que un `<mimi-tab>` le pide a su `mimi-tabs`: las pestañas, para el índice y los repetidos. @internal */
+export interface MimiTabGroup {
+  readonly tabs: Signal<readonly MimiTabLike[]>;
+  warnMissingValue(label: string, value: string): void;
+}
+
+/** @internal */
+export const MIMI_TAB_GROUP = new InjectionToken<MimiTabGroup>('MIMI_TAB_GROUP');
+
+/**
  * Una pestaña: `<ng-template mimiTab="cuenta" label="Cuenta">contenido del panel</ng-template>`.
  * El contenido no se crea hasta que la pestaña se elige.
  */
-@Directive({ selector: 'ng-template[mimiTab]' })
-export class MimiTab {
+@Directive({
+  selector: 'ng-template[mimiTab]',
+  providers: [{ provide: MIMI_TAB, useExisting: forwardRef(() => MimiTab) }],
+})
+export class MimiTab implements MimiTabLike {
   /**
    * El valor de la pestaña (único y no vacío). No es `input.required`: las pestañas declaradas en
    * un `@for` se ven antes de recibir su valor, y vacío significa «todavía no» (NG0950).
@@ -61,6 +93,62 @@ export class MimiTab {
   readonly disabled = input(false, { transform: booleanAttribute });
   /** Uso interno: el contenido del panel. */
   readonly template = inject<TemplateRef<unknown>>(TemplateRef);
+}
+
+/**
+ * La pestaña como elemento, más corta (R.17): `<mimi-tab label="Cuenta">contenido</mimi-tab>`.
+ * Convive con `ng-template[mimiTab]` (se pueden mezclar; el orden es el del DOM).
+ *
+ * **El contenido se crea con la página**, esté o no elegida la pestaña (un elemento proyecta su
+ * contenido al declararlo): para un panel costoso o con datos, usa `ng-template[mimiTab]`, que
+ * lo crea al elegirla, o pon un `<ng-template>` con `@defer` dentro. Sin `value`, el valor es el
+ * `label` en minúsculas y con guiones (`Facturación` → `facturacion`).
+ */
+@Component({
+  selector: 'mimi-tab',
+  template: '<ng-template><ng-content /></ng-template>',
+  providers: [{ provide: MIMI_TAB, useExisting: forwardRef(() => MimiTabElement) }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class MimiTabElement implements MimiTabLike {
+  readonly valueInput = input('', { alias: 'value' });
+  readonly label = input('');
+  readonly count = input<number | string | null | undefined>(undefined);
+  readonly disabled = input(false, { transform: booleanAttribute });
+  private readonly group = inject(MIMI_TAB_GROUP, { optional: true });
+  /** El `label` en minúsculas, sin tildes y con guiones; vacío si no tiene letras latinas ni dígitos. */
+  private readonly slug = computed(() =>
+    this.label()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, ''),
+  );
+  /**
+   * El valor: el dado o, sin él, el `label` en minúsculas y con guiones. Si el label no da un valor
+   * (sin letras latinas ni dígitos), el índice de la pestaña; si el valor ya lo tiene una pestaña
+   * anterior, un sufijo (`facturacion`, `facturacion-2`). Sin `value` y con uno de esos dos casos,
+   * avisa en desarrollo (una vez por grupo de pestañas).
+   */
+  readonly value = computed(() => {
+    const given = this.valueInput();
+    if (given) return given;
+    const tabs = this.group?.tabs() ?? [];
+    const index = Math.max(0, tabs.indexOf(this));
+    const base = this.slug() || String(index);
+    const taken = new Set(tabs.slice(0, index).map((tab) => tab.value()));
+    let value = base;
+    for (let n = 2; taken.has(value); n++) value = `${base}-${n}`;
+    if (value !== this.slug()) this.group?.warnMissingValue(this.label(), value);
+    return value;
+  });
+  private readonly content = viewChild.required(TemplateRef);
+  /** Uso interno: el contenido del panel. */
+  get template(): TemplateRef<unknown> {
+    return this.content();
+  }
 }
 
 /**
@@ -134,7 +222,7 @@ const indicatorVariants = cva(
     variants: {
       variant: {
         underline: 'rounded-[2px] bg-[color:var(--mimi-tabs-indicator,var(--mimi-foreground))]',
-        pill: 'rounded-[var(--mimi-radius)] bg-[color:var(--mimi-tabs-pill-active,var(--mimi-card))] shadow-neutral',
+        pill: 'rounded-[var(--mimi-radius)] bg-[color:var(--mimi-tabs-pill-active,var(--mimi-card))] shadow-[shadow:var(--mimi-tabs-pill-shadow,var(--mimi-shadow-neutral))]',
       },
       orientation: {
         horizontal:
@@ -182,9 +270,10 @@ const tabVariants = cva(
   {
     variants: {
       variant: {
-        underline: 'h-[var(--mimi-tabs-height,44px)] gap-2 text-sm',
+        underline:
+          'h-[var(--mimi-tabs-h-u,var(--mimi-tabs-height,44px))] gap-2 text-[length:var(--mimi-size-text,0.875rem)]',
         // 34px sin token (el token de alto es el de la subrayada): plan D6.
-        pill: 'h-[34px] gap-1.5 rounded-[var(--mimi-radius)] text-[13.5px] [&_svg]:size-[15px] [&_svg]:shrink-0',
+        pill: 'h-[var(--mimi-tabs-h-p,34px)] gap-1.5 rounded-[var(--mimi-radius)] text-[length:var(--mimi-tabs-text-p,13.5px)] [&_svg]:size-[15px] [&_svg]:shrink-0',
       },
       // En vertical, el texto al inicio, como una navegación lateral.
       orientation: { horizontal: '', vertical: 'justify-start px-3 text-start' },
@@ -194,7 +283,7 @@ const tabVariants = cva(
 );
 
 const COUNT_CLASSES =
-  'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-info-soft px-1.5 text-[11px] font-bold text-info-soft-foreground';
+  'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-primary-subtle px-1.5 text-[11px] font-bold text-primary';
 
 /**
  * Pestañas:
@@ -211,6 +300,8 @@ const COUNT_CLASSES =
  */
 @Component({
   selector: 'mimi-tabs',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
+  providers: [{ provide: MIMI_TAB_GROUP, useExisting: forwardRef(() => MimiTabs) }],
   imports: [Tabs, TabList, Tab, TabPanel, TabContent, MimiTabsOutlet],
   template: `
     <div ngTabs class="contents">
@@ -305,7 +396,7 @@ const COUNT_CLASSES =
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MimiTabs {
+export class MimiTabs implements MimiTabGroup {
   private readonly document = inject(DOCUMENT);
 
   /** La pestaña elegida. Admite `[(value)]`. */
@@ -324,14 +415,26 @@ export class MimiTabs {
   /** Clases de los paneles. */
   readonly panelClass = input('');
 
-  protected readonly tabs = contentChildren(MimiTab);
+  /** Uso interno (lo lee `<mimi-tab>` para su índice y los valores repetidos). */
+  readonly tabs = contentChildren(MIMI_TAB);
+
+  private warnedMissing = false;
+  /** Uso interno: aviso en desarrollo de un `<mimi-tab>` sin `value` cuyo valor no sale limpio del label. */
+  warnMissingValue(label: string, value: string): void {
+    if (!isDevMode() || this.warnedMissing) return;
+    this.warnedMissing = true;
+    console.warn(
+      `[Mimi] Tabs: <mimi-tab label="${label}"> no tiene value y su label no da un valor único: ` +
+        `usa «${value}». Pon value="…" en la pestaña.`,
+    );
+  }
   private readonly labels = contentChildren(MimiTabLabel);
   private readonly list = viewChild<ElementRef<HTMLElement>>('list');
 
   /** Sube para recrear el `ngTabList` (choque 2). */
   protected readonly generation = signal(0);
   /** Pestañas con etiqueta propia sin texto visible: `label` es su nombre accesible. */
-  protected readonly iconOnly = signal<ReadonlySet<MimiTab>>(new Set());
+  protected readonly iconOnly = signal<ReadonlySet<MimiTabLike>>(new Set());
 
   private readonly firstEnabled = computed(() =>
     this.tabs().find((tab) => tab.value() && !tab.disabled()),
@@ -410,7 +513,7 @@ export class MimiTabs {
       if (!this.focusInside(tabs)) this.generation.update((n) => n + 1);
     });
   });
-  private lastTabs: readonly MimiTab[] | null = null;
+  private lastTabs: readonly MimiTabLike[] | null = null;
 
   constructor() {
     afterRenderEffect({
@@ -419,7 +522,7 @@ export class MimiTabs {
         const tabs = this.tabs();
         if (!list) return;
         // Etiquetas propias sin texto visible (solo ícono): label pasa a ser el nombre.
-        const iconOnly = new Set<MimiTab>();
+        const iconOnly = new Set<MimiTabLike>();
         const buttons = Array.from(list.querySelectorAll<HTMLElement>('[role="tab"]'));
         for (const tab of tabs) {
           if (!this.labelFor(tab)) continue;
@@ -436,7 +539,7 @@ export class MimiTabs {
     });
   }
 
-  protected labelFor(tab: MimiTab): TemplateRef<unknown> | undefined {
+  protected labelFor(tab: MimiTabLike): TemplateRef<unknown> | undefined {
     return this.labels().find((label) => label.value() === tab.value())?.template;
   }
 
@@ -463,7 +566,7 @@ export class MimiTabs {
   }
 
   /** El foco está en una pestaña que sigue existiendo. */
-  private focusInside(tabs: readonly MimiTab[]): boolean {
+  private focusInside(tabs: readonly MimiTabLike[]): boolean {
     const active = this.document.activeElement;
     const list = this.list()?.nativeElement;
     if (!active || !list?.contains(active)) return false;
@@ -472,7 +575,7 @@ export class MimiTabs {
   }
 
   private warned = false;
-  private warn(tabs: readonly MimiTab[], iconOnly: ReadonlySet<MimiTab>): void {
+  private warn(tabs: readonly MimiTabLike[], iconOnly: ReadonlySet<MimiTabLike>): void {
     if (this.warned) return;
     const values = tabs.map((tab) => tab.value());
     const problems = [
@@ -488,4 +591,4 @@ export class MimiTabs {
 }
 
 /** Todas las piezas de Tabs, para importarlas juntas. */
-export const MimiTabsImports = [MimiTabs, MimiTab, MimiTabLabel] as const;
+export const MimiTabsImports = [MimiTabs, MimiTab, MimiTabElement, MimiTabLabel] as const;

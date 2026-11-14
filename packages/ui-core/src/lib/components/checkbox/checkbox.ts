@@ -11,7 +11,9 @@ import {
 } from '@angular/core';
 import type { FormCheckboxControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles, controlDisabledStyles } from '@/components/ui/utils/control-styles';
+import { choicePressStyles } from '@/components/ui/utils/field-styles';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -26,8 +28,10 @@ let nextId = 0;
  * casillas sin un control enfocable dentro del nodo (plan, G3.1-d).
  */
 export const MIMI_CHECKBOX_BOX_STYLES = cn(
-  'inline-flex size-[var(--mimi-checkbox-size,1rem)] shrink-0 items-center justify-center rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))] border border-[color:var(--mimi-checkbox-border,var(--mimi-input))] bg-input-background text-[color:var(--mimi-checkbox-check,var(--mimi-primary-foreground))]',
-  'mimi-transition active:scale-(--mimi-press-scale-sm)',
+  'inline-flex size-[var(--mimi-checkbox-s,var(--mimi-checkbox-size,1rem))] shrink-0 items-center justify-center rounded-[var(--mimi-checkbox-radius,var(--mimi-radius-sm))] border border-[color:var(--mimi-checkbox-border,var(--mimi-input))] bg-input-background text-[color:var(--mimi-checkbox-check,var(--mimi-primary-foreground))]',
+  // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad B).
+  'mimi-transition',
+  choicePressStyles,
   'data-[state=checked]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=checked]:shadow-primary',
   'data-[state=indeterminate]:border-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:bg-[color:var(--mimi-checkbox-checked-bg,var(--mimi-primary))] data-[state=indeterminate]:shadow-primary',
 );
@@ -46,6 +50,7 @@ export const MIMI_CHECKBOX_BOX_STYLES = cn(
  */
 @Component({
   selector: 'mimi-checkbox',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   // mimi-form-field lo encuentra por este token para mostrar el mensaje de error.
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiCheckbox }],
   template: `
@@ -59,6 +64,7 @@ export const MIMI_CHECKBOX_BOX_STYLES = cn(
       [attr.aria-checked]="indeterminate() ? 'mixed' : checked()"
       [attr.aria-invalid]="showInvalid() || null"
       [attr.aria-required]="required() || null"
+      [attr.aria-readonly]="readonly() || null"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabelledby() || null"
       [attr.data-state]="state()"
@@ -103,7 +109,7 @@ export const MIMI_CHECKBOX_BOX_STYLES = cn(
     </button>
     <label
       [for]="controlId()"
-      class="cursor-pointer empty:hidden peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
+      class="cursor-pointer empty:hidden peer-disabled:cursor-not-allowed peer-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] peer-aria-readonly:cursor-default"
       ><ng-content
     /></label>
   `,
@@ -124,6 +130,8 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
   /** Estado mixto ("algunos"): gana a `checked`. Al hacer clic se marca y deja de ser mixto. */
   readonly indeterminate = model(false);
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -157,13 +165,24 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly classes = computed(() =>
-    cn('inline-flex items-center gap-2.5 text-sm', this.userClass()),
+    cn(
+      'group/checkbox inline-flex items-center gap-2.5 text-[length:var(--mimi-size-text,0.875rem)]',
+      this.userClass(),
+    ),
   );
 
   protected readonly boxClasses = cn(
     'peer',
     MIMI_CHECKBOX_BOX_STYLES,
-    'data-[state=unchecked]:focus-visible:border-ring data-[state=unchecked]:aria-invalid:border-destructive',
+    'data-[state=unchecked]:focus-visible:border-ring',
+    // Hover como los campos, sin marcar: el borde de hover (no en deshabilitado ni solo lectura),
+    // con el ratón sobre todo el control, también la etiqueta (13/11/2026).
+    'group-hover/checkbox:not-disabled:not-aria-readonly:data-[state=unchecked]:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
+    // Marcada o mixta: el relleno se intensifica un poco hacia `foreground`, como la pista del Switch.
+    'group-hover/checkbox:not-disabled:not-aria-readonly:data-[state=checked]:bg-[color:color-mix(in_oklab,var(--mimi-checkbox-checked-bg,var(--mimi-primary))_88%,var(--mimi-foreground))] group-hover/checkbox:not-disabled:not-aria-readonly:not-aria-invalid:data-[state=checked]:border-[color:color-mix(in_oklab,var(--mimi-checkbox-checked-bg,var(--mimi-primary))_88%,var(--mimi-foreground))]',
+    'group-hover/checkbox:not-disabled:not-aria-readonly:data-[state=indeterminate]:bg-[color:color-mix(in_oklab,var(--mimi-checkbox-checked-bg,var(--mimi-primary))_88%,var(--mimi-foreground))] group-hover/checkbox:not-disabled:not-aria-readonly:not-aria-invalid:data-[state=indeterminate]:border-[color:color-mix(in_oklab,var(--mimi-checkbox-checked-bg,var(--mimi-primary))_88%,var(--mimi-foreground))]',
+    // Error, la forma de todos los campos: borde rojo, también marcada o mixta.
+    'aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[state=checked]:aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))] data-[state=indeterminate]:aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
     'disabled:shadow-none',
     buttonFocusStyles,
     controlDisabledStyles,
@@ -171,7 +190,7 @@ export class MimiCheckbox implements FormCheckboxControl, MimiFieldControl {
 
   /** Alterna el estado (no hace nada si está deshabilitada). Desde mixta, pasa a marcada. */
   toggle(): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     if (this.indeterminate()) {
       this.indeterminate.set(false);
       this.checked.set(true);

@@ -1,9 +1,11 @@
+import { FocusMonitor, InputModalityDetector } from '@angular/cdk/a11y';
 import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
 import { CdkConnectedOverlay, type ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
   ElementRef,
   type EmbeddedViewRef,
@@ -15,6 +17,7 @@ import {
   booleanAttribute,
   computed,
   contentChild,
+  contentChildren,
   effect,
   inject,
   input,
@@ -27,7 +30,9 @@ import {
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { fieldTriggerBoxStyles } from '@/components/ui/utils/field-styles';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -36,12 +41,23 @@ import {
 import {
   MIMI_OVERLAY_ANIMATION,
   MIMI_VIEWPORT_MARGIN,
+  MimiOverlayFollow,
   type MimiOverlayAlign,
   type MimiOverlaySide,
   mimiConnectedPositions,
   mimiPlacedSide,
   mimiWaitForExit,
 } from '@/components/ui/utils/overlay';
+import {
+  MimiHighlight,
+  MimiOptgroup,
+  MimiOptionItem,
+  type MimiCompareWith,
+  type MimiSearchMode,
+  mimiCompareFn,
+  mimiDeclaredOptions,
+  mimiNormalizeText,
+} from '@/components/ui/option-list/option-list';
 import { MIMI_SELECT_TEXT } from './select-texts';
 
 /*
@@ -88,14 +104,9 @@ const TYPEAHEAD_DELAY = 500;
 
 let nextId = 0;
 
-/** Minúsculas y sin tildes, para comparar textos. */
-function normalize(text: string): string {
-  return text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-}
-
 /** Filtro predeterminado: la etiqueta contiene la búsqueda, sin tildes ni mayúsculas. */
 const defaultFilter: MimiSelectFilter = (option, query) =>
-  normalize(option.label).includes(normalize(query));
+  mimiNormalizeText(option.label).includes(mimiNormalizeText(query));
 
 interface Row {
   /** Clave interna: posición en la lista completa (estable aunque se filtre). */
@@ -132,22 +143,9 @@ const ICON = {
   host: { '[class]': 'classes()' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MimiSelectHighlight {
-  readonly text = input.required<string>();
-  readonly query = input('');
-  readonly userClass = input('', { alias: 'class' });
-
-  protected readonly classes = computed(() => cn('min-w-0 truncate', this.userClass()));
-
-  protected readonly parts = computed(() => {
-    const text = this.text();
-    const query = normalize(this.query());
-    const start = query ? normalize(text).indexOf(query) : -1;
-    if (start < 0) return { before: text, match: '', after: '' };
-    const end = start + query.length;
-    return { before: text.slice(0, start), match: text.slice(start, end), after: text.slice(end) };
-  });
-}
+// M.9: la lógica (entradas, comparar sin tildes, partir el texto) es la de `MimiHighlight` de
+// option-list; aquí solo queda el selector propio y la plantilla.
+export class MimiSelectHighlight extends MimiHighlight {}
 
 /**
  * Contenido propio de cada opción, en la lista y en el disparador:
@@ -212,9 +210,9 @@ const GROUP_LABEL_CLASSES =
 const OPTION_CLASSES = cn(
   'flex h-[var(--mimi-select-option-height,34px)] shrink-0 cursor-pointer items-center gap-2 px-2 text-sm select-none',
   'rounded-[var(--mimi-select-option-radius,var(--mimi-radius-sm))]',
-  'transition-[background-color] duration-120 ease-[ease] active:scale-[0.985]',
+  'transition-[background-color] duration-120 ease-[ease] active:scale-(--mimi-press-scale)',
   'data-[active=true]:bg-[color:var(--mimi-select-option-hover,var(--mimi-accent))]',
-  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:active:scale-100',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:active:scale-100',
 );
 const SKELETON_CLASSES =
   'mx-2 h-7 rounded-[var(--mimi-radius-sm)] bg-muted animate-mimi-pulse motion-reduce:animate-none';
@@ -477,14 +475,12 @@ export class MimiSelectList {
 
 const TRIGGER_CLASSES = cn(
   'group/select relative flex w-full min-w-0 items-center gap-2 pr-2.5 pl-3 font-sans text-sm text-foreground mimi-transition',
-  'h-[var(--mimi-select-height,var(--mimi-control-height,2.5rem))] rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
-  'border border-[color:var(--mimi-select-border,var(--mimi-input))] bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-background))]',
-  // Foco, error y deshabilitado como en Input (utils/control-styles.ts). Aquí el foco y
-  // aria-invalid están en el botón de dentro, así que la caja los lee con has-[] y data-*.
-  'has-[[role=combobox]:focus]:border-ring has-[[role=combobox]:focus]:ring-3 has-[[role=combobox]:focus]:ring-ring-soft',
-  'data-[invalid]:border-destructive data-[invalid]:has-[[role=combobox]:focus]:border-destructive data-[invalid]:has-[[role=combobox]:focus]:ring-destructive-ring',
-  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
-  'has-[[role=combobox]:active]:scale-(--mimi-press-scale)',
+  'h-[var(--mimi-select-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))]',
+  // Borde, hover, foco (solo con el teclado: `data-focus-visible`, origen del FocusMonitor),
+  // clic (se hunde y crece el halo), error, deshabilitado y solo lectura: los de todos los campos
+  // (utils/field-styles). El borde y el fondo en reposo siguen leyendo los tokens del Select.
+  fieldTriggerBoxStyles,
+  'border-[color:var(--mimi-select-border,var(--mimi-input-border,var(--mimi-input)))] bg-[color:var(--mimi-select-trigger-bg,var(--mimi-input-bg,var(--mimi-input-background)))]',
 );
 
 // El ::after cubre toda la caja: un clic en cualquier parte (también en el chevron) es del botón.
@@ -492,13 +488,24 @@ const BUTTON_CLASSES =
   'flex h-full min-w-0 flex-1 cursor-pointer items-center gap-2 bg-transparent text-left outline-none after:absolute after:inset-0 disabled:cursor-not-allowed';
 
 const CLEAR_CLASSES = cn(
-  'relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
-  'mimi-transition hover:bg-accent hover:text-foreground active:scale-90',
+  'pointer-events-auto relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
+  'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
+  // La X solo se ve con el ratón encima, el foco que llegó por teclado o el panel abierto; en
+  // pantallas sin ratón, mientras haya valor (informes del usuario, 12 y 13/11/2026). Si no, el
+  // chevron. Con `focus-within` se quedaba después de elegir con el ratón.
+  'hidden group-hover/select:inline-flex group-data-[focus-keyboard]/select:inline-flex group-data-[state=open]/select:inline-flex [@media(hover:none)]:inline-flex',
+);
+const CHEVRON_CLASSES =
+  'size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/select:rotate-180';
+/** El chevron cuando hay X: se esconde cuando la X se ve. */
+const CHEVRON_WITH_CLEAR_CLASSES = cn(
+  CHEVRON_CLASSES,
+  'group-hover/select:hidden group-data-[focus-keyboard]/select:hidden group-data-[state=open]/select:hidden [@media(hover:none)]:hidden',
 );
 
 const PANEL_CLASSES =
-  'w-full overflow-hidden rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))] border border-border bg-[color:var(--mimi-select-menu-bg,var(--mimi-popover))] font-sans text-sm text-popover-foreground shadow-[shadow:var(--mimi-select-menu-shadow,var(--mimi-shadow-popover))] outline-none';
+  'w-full max-w-[calc(100vw_-_16px)] overflow-hidden rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))] border border-border bg-[color:var(--mimi-select-menu-bg,var(--mimi-popover))] font-sans text-sm text-popover-foreground shadow-[shadow:var(--mimi-select-menu-shadow,var(--mimi-shadow-popover))] outline-none';
 
 const SEARCH_INPUT_CLASSES =
   'h-full min-w-0 flex-1 border-0 bg-transparent font-sans text-sm text-foreground outline-none placeholder:text-muted-foreground';
@@ -507,19 +514,27 @@ const SEARCH_INPUT_CLASSES =
  * Lista desplegable de una sola opción:
  *
  * ```html
- * <mimi-select [(value)]="pais" [options]="paises" placeholder="Selecciona un país" search clearable />
+ * <mimi-select [(value)]="pais" placeholder="Selecciona un país" search clearable>
+ *   @for (p of paises(); track p.code) {
+ *     <mimi-option [value]="p.code">{{ p.nombre }}</mimi-option>
+ *   }
+ * </mimi-select>
  * ```
+ *
+ * Para una lista armada por código, `[options]` es la alternativa (gana sobre las `<mimi-option>`).
  *
  * Implementa `FormValueControl`: funciona con `[formField]`, `formControlName` y `[(ngModel)]`
  * sin adaptador (spec, sección 8). `class` va al disparador y `panelClass` al panel.
  */
 @Component({
   selector: 'mimi-select',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [
     Combobox,
     ComboboxPopup,
     ComboboxWidget,
     CdkConnectedOverlay,
+    MimiOverlayFollow,
     MimiSelectList,
     MimiSelectOutlet,
   ],
@@ -532,6 +547,9 @@ const SEARCH_INPUT_CLASSES =
       [attr.data-state]="open() ? 'open' : 'closed'"
       [attr.data-invalid]="showInvalid() ? '' : null"
       [attr.data-disabled]="disabled() ? '' : null"
+      [attr.data-focus-visible]="focusVisible() ? '' : null"
+      [attr.data-focus-keyboard]="focusKeyboard() ? '' : null"
+      [attr.data-readonly]="readonly() ? '' : null"
       [attr.data-placeholder]="selectedOption() ? null : ''"
     >
       <!-- preserveContent: el panel sigue montado mientras dura la animación de salida. -->
@@ -548,6 +566,7 @@ const SEARCH_INPUT_CLASSES =
         [preserveContent]="true"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.aria-required]="required() || null"
+        [readonly]="readonly()"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
         (expandedChange)="setOpen($event)"
@@ -570,16 +589,17 @@ const SEARCH_INPUT_CLASSES =
           <span class="min-w-0 flex-1 truncate text-muted-foreground">{{ placeholder() }}</span>
         }
       </button>
-      @if (showClear()) {
-        <button
-          type="button"
-          [class]="clearClasses"
-          [attr.aria-label]="text.clear"
-          (click)="clear()"
-        >
+      <!-- Un solo icono al final, en el sitio del chevron: cargando > limpiar > chevron. -->
+      <span
+        data-slot="end-icon"
+        class="pointer-events-none relative z-10 inline-flex size-6 shrink-0 items-center justify-center"
+        [attr.data-icon]="endIcon()"
+      >
+        @if (endIcon() === 'loading') {
           <svg
             aria-hidden="true"
-            class="size-3.5"
+            data-slot="spinner"
+            class="size-4 shrink-0 animate-[mimi-spin_0.8s_linear_infinite] text-muted-foreground"
             fill="none"
             stroke="currentColor"
             stroke-width="2"
@@ -587,38 +607,47 @@ const SEARCH_INPUT_CLASSES =
             stroke-linejoin="round"
             [attr.viewBox]="icon.viewBox"
           >
-            <path d="M18 6 6 18" />
-            <path d="m6 6 12 12" />
+            <path [attr.d]="icon.spinner" />
           </svg>
-        </button>
-      }
-      @if (loading()) {
-        <svg
-          aria-hidden="true"
-          data-slot="spinner"
-          class="size-4 shrink-0 animate-[mimi-spin_0.8s_linear_infinite] text-muted-foreground"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          [attr.viewBox]="icon.viewBox"
-        >
-          <path [attr.d]="icon.spinner" />
-        </svg>
-      }
-      <svg
-        aria-hidden="true"
-        class="size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/select:rotate-180"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        [attr.viewBox]="icon.viewBox"
-      >
-        <path [attr.d]="icon.chevron" />
-      </svg>
+        } @else {
+          @if (endIcon() === 'clear') {
+            <button
+              type="button"
+              data-slot="clear"
+              [class]="clearClasses"
+              [attr.aria-label]="text.clear"
+              (click)="clear()"
+            >
+              <svg
+                aria-hidden="true"
+                class="size-3.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                [attr.viewBox]="icon.viewBox"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          }
+          <svg
+            aria-hidden="true"
+            data-slot="chevron"
+            [class]="endIcon() === 'clear' ? chevronWithClearClasses : chevronClasses"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            [attr.viewBox]="icon.viewBox"
+          >
+            <path [attr.d]="icon.chevron" />
+          </svg>
+        }
+      </span>
     </div>
 
     <!-- El popup de aria va por fuera del overlay: así el disparador tiene aria-haspopup cerrado. -->
@@ -629,12 +658,14 @@ const SEARCH_INPUT_CLASSES =
     >
       <ng-template
         cdkConnectedOverlay
+        mimiOverlayFollow
+        (mimiOverlayOutOfView)="setOpen(false)"
         [cdkConnectedOverlayOrigin]="box"
         [cdkConnectedOverlayOpen]="rendered()"
         [cdkConnectedOverlayPositions]="positions()"
         [cdkConnectedOverlayViewportMargin]="viewportMargin"
         [cdkConnectedOverlayDisableClose]="true"
-        [cdkConnectedOverlayMatchWidth]="matchWidth()"
+        [cdkConnectedOverlayMinWidth]="matchWidth() ? (boxWidth() ?? '') : ''"
         cdkConnectedOverlayUsePopover="inline"
         cdkConnectedOverlayTransformOriginOn="[data-mimi-overlay-panel]"
         (detach)="onDetach()"
@@ -749,13 +780,55 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly injector = inject(Injector);
   protected readonly text = inject(MIMI_SELECT_TEXT);
+  private readonly focusMonitor = inject(FocusMonitor);
+  private readonly modality = inject(InputModalityDetector);
+  /**
+   * El disparador tiene el foco y se llegó con el teclado o desde el código (Signal Forms lleva el
+   * foco al campo con error): solo entonces se pinta el anillo, como `:focus-visible`.
+   */
+  protected readonly focusVisible = signal(false);
+  /**
+   * El foco está en la caja (el disparador o la X) y llegó con el teclado: muestra la X. El foco
+   * que vuelve desde el código después de elegir con el ratón no cuenta (13/11/2026).
+   */
+  protected readonly focusKeyboard = signal(false);
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly watchFocus = afterNextRender(() => {
+    const trigger = this.trigger().nativeElement;
+    const box = this.box().nativeElement;
+    this.focusMonitor
+      .monitor(trigger)
+      .subscribe((origin) => this.focusVisible.set(origin === 'keyboard' || origin === 'program'));
+    this.focusMonitor
+      .monitor(box, true)
+      .subscribe((origin) =>
+        this.focusKeyboard.set(
+          origin === 'keyboard' ||
+            (origin === 'program' && this.modality.mostRecentModality === 'keyboard'),
+        ),
+      );
+    // Con el ratón o el dedo, la X deja de verse aunque el foco no salga.
+    const modality = this.modality.modalityDetected.subscribe((m) => {
+      if (m !== 'keyboard') this.focusKeyboard.set(false);
+    });
+    this.destroyRef.onDestroy(() => {
+      modality.unsubscribe();
+      this.focusMonitor.stopMonitoring(trigger);
+      this.focusMonitor.stopMonitoring(box);
+    });
+  });
 
   /** Opciones sueltas o en grupos (`{ label, options }`). */
   readonly options = input<readonly (MimiOption<T> | MimiOptionGroup<T>)[]>([]);
   /** Valor de la opción elegida, o `null`. Con `[(value)]` o un formulario. */
   readonly value = model<T | null>(null);
-  /** Compara el valor con el de cada opción (para objetos). Por defecto, `Object.is`. */
-  readonly compareWith = input<(a: T, b: T) => boolean>(Object.is);
+  /**
+   * Compara el valor con el de cada opción (para objetos): una función o el nombre de un campo
+   * (`compareWith="id"`). Por defecto, `Object.is`.
+   */
+  readonly compareWith = input<MimiCompareWith<T>>(Object.is);
+  private readonly compare = computed(() => mimiCompareFn(this.compareWith()));
   readonly placeholder = input('');
   /** Muestra el buscador dentro del panel. */
   readonly search = input(false, { transform: booleanAttribute });
@@ -763,11 +836,18 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   readonly searchPlaceholder = input('');
   /** Filtro propio. Por defecto: la etiqueta contiene la búsqueda, sin tildes ni mayúsculas. */
   readonly filterWith = input<MimiSelectFilter<T>>();
+  /**
+   * Dónde se filtra: `'client'` (aquí, con `filterWith` o el predeterminado) o `'server'` (la app
+   * filtra al recibir `(searchChange)` y el Select muestra lo que llega, sin volver a filtrar).
+   */
+  readonly searchMode = input<MimiSearchMode>('client');
   /** Muestra el botón de limpiar cuando hay un valor. */
   readonly clearable = input(false, { transform: booleanAttribute });
   /** Cargando: spinner en el disparador y, en el panel, el estado de carga en vez de la lista. */
   readonly loading = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -785,7 +865,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   readonly side = input<MimiOverlaySide>('bottom');
   /** Alineación del panel con el disparador (como Popover). */
   readonly align = input<MimiOverlayAlign>('start');
-  /** El panel mide lo mismo que el disparador. Con `false`, lo que pida su contenido. */
+  /** El panel mide al menos lo que el disparador (más si una opción lo pide). Con `false`, lo que pida su contenido. */
   readonly matchWidth = input(true, { transform: booleanAttribute });
 
   /** Se emite cuando el foco sale del Select (disparador y panel): marca el control como tocado. */
@@ -795,6 +875,13 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
 
   protected readonly optionTemplate = contentChild(MimiSelectOption);
   private readonly trigger = viewChild.required<ElementRef<HTMLButtonElement>>('trigger');
+  private readonly box = viewChild.required<ElementRef<HTMLElement>>('box');
+  /**
+   * Ancho del disparador al abrir: con `matchWidth`, el panel mide **al menos** eso y crece si una
+   * opción lo pide. Antes medía exactamente eso: con un valor corto («Pro») el disparador, y con él
+   * el panel, quedaban de 78px y las etiquetas no se veían (informe del usuario, 12/11/2026).
+   */
+  protected readonly boxWidth = signal<number | null>(null);
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
   private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
   private readonly list = viewChild(MimiSelectList);
@@ -816,6 +903,8 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly icon = ICON;
   protected readonly buttonClasses = BUTTON_CLASSES;
   protected readonly clearClasses = CLEAR_CLASSES;
+  protected readonly chevronClasses = CHEVRON_CLASSES;
+  protected readonly chevronWithClearClasses = CHEVRON_WITH_CLEAR_CLASSES;
   protected readonly searchInputClasses = SEARCH_INPUT_CLASSES;
   protected readonly viewportMargin = MIMI_VIEWPORT_MARGIN;
   /** En el lado pedido (debajo, por defecto); si no cabe, en el opuesto. Con las tres
@@ -827,13 +916,21 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly classes = computed(() => cn(TRIGGER_CLASSES, this.userClass()));
   protected readonly panelClasses = computed(() => cn(PANEL_CLASSES, this.panelClass()));
 
+  private readonly declared = contentChildren(MimiOptionItem, { descendants: true });
+
+  /** `[options]` si se dio; si no, las `<mimi-option>` (las de un mismo `<mimi-optgroup>` juntas). */
+  private readonly items = computed<readonly (MimiOption<T> | MimiOptionGroup<T>)[]>(() => {
+    const given = this.options();
+    return given.length > 0 ? given : mimiDeclaredOptions<T>(this.declared());
+  });
+
   /** Todas las opciones, con su clave interna, en secciones (sueltas o de un grupo). */
   private readonly sections = computed<Section[]>(() => {
     const sections: Section[] = [];
     let loose: Section | null = null;
     let index = 0;
     const row = (option: MimiOption<T>): Row => ({ key: String(index++), option });
-    for (const item of this.options()) {
+    for (const item of this.items()) {
       const id = `${this.listId}-group-${sections.length}`;
       if ('options' in item) {
         loose = null;
@@ -854,7 +951,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly visibleSections = computed<Section[]>(() => {
     if (this.loading()) return [];
     const query = this.search() ? this.query() : '';
-    if (!query) return this.sections();
+    if (!query || this.searchMode() === 'server') return this.sections();
     const filter = (this.filterWith() ?? defaultFilter) as MimiSelectFilter;
     return this.sections()
       .map((section) => ({ ...section, rows: section.rows.filter((r) => filter(r.option, query)) }))
@@ -865,7 +962,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   );
 
   private matches(option: MimiOption, value: T | null): boolean {
-    return value != null && this.compareWith()(option.value as T, value);
+    return value != null && this.compare()(option.value as T, value);
   }
 
   /** Rodeo: aria compara por identidad, así que cada opción lleva una clave interna. */
@@ -892,7 +989,13 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   });
 
   protected readonly showClear = computed(
-    () => this.clearable() && !this.disabled() && this.selectedOption() !== null,
+    () =>
+      this.clearable() && !this.disabled() && !this.readonly() && this.selectedOption() !== null,
+  );
+
+  /** Qué icono ocupa el sitio del chevron. */
+  protected readonly endIcon = computed(() =>
+    this.loading() ? 'loading' : this.showClear() ? 'clear' : 'chevron',
   );
 
   /** Abierto (aria-expanded). */
@@ -931,28 +1034,38 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
     this.trigger().nativeElement.focus(options);
   }
 
+  /**
+   * Devuelve el foco al disparador con el origen de la última interacción (ratón o teclado): así
+   * el anillo solo sale si se usó el teclado.
+   */
+  private refocus(options?: FocusOptions): void {
+    const origin = this.modality.mostRecentModality === 'keyboard' ? 'keyboard' : 'mouse';
+    this.focusMonitor.focusVia(this.trigger().nativeElement, origin, options);
+  }
+
   /** Abre o cierra. Lo llama aria (clic, ↓, Enter, Espacio, Escape, foco fuera) y Mimi. */
   protected setOpen(open: boolean): void {
-    if (open && this.disabled()) return;
+    if (open && (this.disabled() || this.readonly())) return;
     this.open.set(open);
   }
 
   /** Cierra y, con `refocus`, devuelve el foco al disparador (al elegir o con Escape). */
   private close(refocus: boolean): void {
-    if (refocus) this.focus();
+    if (refocus) this.refocus();
     this.open.set(false);
   }
 
   private show(): void {
     this.closing++;
     const trigger = this.trigger().nativeElement;
+    this.boxWidth.set(this.box().nativeElement.getBoundingClientRect().width || null);
     this.panelLabel.set(
       this.ariaLabel() || trigger.labels?.[0]?.textContent?.trim() || this.placeholder(),
     );
     this.state.set('open');
     this.rendered.set(true);
     // Safari no enfoca un botón al hacer clic: sin foco no habría teclado.
-    if (!this.search()) this.focus({ preventScroll: true });
+    if (!this.search()) this.refocus({ preventScroll: true });
   }
 
   private hide(): void {
@@ -1007,7 +1120,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   /** Quita el valor (botón de limpiar). */
   protected clear(): void {
     this.value.set(null);
-    this.focus();
+    this.refocus();
   }
 
   /**
@@ -1018,6 +1131,12 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
     if (this.disabled() || event.ctrlKey || event.metaKey) return;
     const { key, altKey } = event;
     if (this.state() !== 'open') {
+      // Supr o Retroceso en el disparador quitan el valor, si se puede limpiar.
+      if ((key === 'Delete' || key === 'Backspace') && this.showClear()) {
+        event.preventDefault();
+        this.clear();
+        return;
+      }
       // Rodeo: aria solo abre con ↓, Enter y Espacio (sin modificadores).
       if (key === 'ArrowUp' || (key === 'ArrowDown' && altKey)) {
         event.preventDefault();
@@ -1083,4 +1202,10 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
 }
 
 /** Todas las piezas de Select, para importarlas juntas. */
-export const MimiSelectImports = [MimiSelect, MimiSelectOption, MimiSelectHighlight] as const;
+export const MimiSelectImports = [
+  MimiSelect,
+  MimiSelectOption,
+  MimiSelectHighlight,
+  MimiOptionItem,
+  MimiOptgroup,
+] as const;

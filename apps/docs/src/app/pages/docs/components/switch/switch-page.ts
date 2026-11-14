@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CodeBlock } from '../../../../code/code-block';
+import { FormsTabs } from '../../../../code/forms-tabs';
 import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
-import { CheckboxSelectAllExample } from './examples/checkbox-select-all.example';
-import { CheckboxStatesExample } from './examples/checkbox-states.example';
+import { SwitchSizesExample } from './examples/switch-sizes.example';
 import { SwitchCustomClassExample } from './examples/switch-custom-class.example';
 import { SwitchLabelsExample } from './examples/switch-labels.example';
 import { SwitchReactiveFormsExample } from './examples/switch-reactive-forms.example';
@@ -13,11 +13,7 @@ import { SwitchStatesExample } from './examples/switch-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
-import checkboxSelectAllSource from './examples/checkbox-select-all.example' with {
-  loader: 'text',
-};
-// @ts-expect-error
-import checkboxStatesSource from './examples/checkbox-states.example' with { loader: 'text' };
+import switchSizesSource from './examples/switch-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import switchCustomClassSource from './examples/switch-custom-class.example' with {
   loader: 'text',
@@ -82,28 +78,16 @@ const COMMON_API: ApiRow[] = [
   },
 ];
 
-const CHECKBOX_API: ApiRow[] = [
-  COMMON_API[0],
-  {
-    name: 'indeterminate',
-    type: 'boolean (model)',
-    default: 'false',
-    description:
-      'Estado mixto (aria-checked="mixed"): gana a checked. Al hacer clic se marca y deja de ser mixto.',
-  },
-  ...COMMON_API.slice(1),
-];
-
-/** Documentación de Switch y Checkbox (tareas 2.9 y 2.10). */
+/** Documentación de Switch (tarea 2.9; el Checkbox tiene su página desde la R.3). */
 @Component({
   selector: 'app-switch-page',
   imports: [
     CodeBlock,
+    FormsTabs,
     CssVariables,
     CodePreview,
     InstallCommand,
-    CheckboxSelectAllExample,
-    CheckboxStatesExample,
+    SwitchSizesExample,
     SwitchCustomClassExample,
     SwitchLabelsExample,
     SwitchReactiveFormsExample,
@@ -115,8 +99,7 @@ const CHECKBOX_API: ApiRow[] = [
 })
 export class SwitchPage {
   protected readonly source = {
-    checkboxSelectAll: checkboxSelectAllSource as string,
-    checkboxStates: checkboxStatesSource as string,
+    sizes: switchSizesSource as string,
     customClass: switchCustomClassSource as string,
     labels: switchLabelsSource as string,
     reactiveForms: switchReactiveFormsSource as string,
@@ -125,25 +108,36 @@ export class SwitchPage {
   };
 
   protected readonly usage = [
-    "import { MimiCheckbox } from '@/components/ui/checkbox';",
     "import { MimiSwitch } from '@/components/ui/switch';",
     '',
     '@Component({',
     "  selector: 'app-ajustes',",
-    '  imports: [MimiSwitch, MimiCheckbox],',
+    '  imports: [MimiSwitch],',
     '  template: `',
     '    <mimi-switch [(checked)]="avion">Modo avión</mimi-switch>',
-    '    <mimi-checkbox [(checked)]="recordarme">Recordarme</mimi-checkbox>',
+    '    <mimi-switch size="sm" [(checked)]="sonido">Sonido</mimi-switch>',
     '  `,',
     '})',
     'export class AjustesComponent {',
     '  readonly avion = signal(false);',
-    '  readonly recordarme = signal(true);',
+    '  readonly sonido = signal(true);',
     '}',
   ].join('\n');
 
   protected readonly apiTables = [
-    { id: 'api-switch', title: 'mimi-switch', rows: COMMON_API },
-    { id: 'api-checkbox', title: 'mimi-checkbox', rows: CHECKBOX_API },
+    {
+      id: 'api-switch',
+      title: 'mimi-switch',
+      rows: [
+        COMMON_API[0],
+        {
+          name: 'size',
+          type: "'sm' | 'md' | 'lg'",
+          default: "'md' (o el del contenedor con mimiSize)",
+          description: 'Pista de 32×18, 36×20 o 44×24 px, con el texto al tamaño de la escala.',
+        },
+        ...COMMON_API.slice(1),
+      ],
+    },
   ];
 }

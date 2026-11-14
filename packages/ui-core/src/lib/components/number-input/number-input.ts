@@ -15,6 +15,8 @@ import {
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { fieldBoxStyles, fieldButtonHoverStyles } from '@/components/ui/utils/field-styles';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   injectFieldState,
@@ -47,23 +49,21 @@ const decimals = (n: number): number => {
 
 const BOX_CLASSES = cn(
   'relative flex w-full min-w-0 items-center gap-0.5 font-sans text-foreground mimi-transition',
-  'h-[var(--mimi-number-height,var(--mimi-control-height,2.5rem))] rounded-[var(--mimi-number-radius,var(--mimi-radius,0.75rem))] px-[var(--mimi-number-px,4px)]',
-  'border border-input bg-input-background',
-  // Hover, foco, error y deshabilitado como Input; el foco está en el input de dentro.
-  'not-data-[disabled]:hover:border-input-hover',
-  'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft',
-  'data-[invalid]:border-destructive data-[invalid]:focus-within:border-destructive data-[invalid]:focus-within:ring-destructive-ring',
-  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
+  'h-[var(--mimi-number-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-number-radius,var(--mimi-radius,0.75rem))] px-[var(--mimi-number-px,4px)]',
+  // Borde, hover, foco, error y deshabilitado: los de Input, con sus tokens (utils/control-styles).
+  fieldBoxStyles,
 );
 
 const INPUT_CLASSES =
   'h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-center text-sm font-medium tabular-nums text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed';
 
 const BUTTON_CLASSES = cn(
-  'inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-foreground mimi-transition',
+  'inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 mimi-transition',
+  fieldButtonHoverStyles,
   'size-[var(--mimi-number-button-size,30px)] rounded-[var(--mimi-number-button-radius,var(--mimi-radius-sm))]',
   '[&_svg]:size-[15px] [&_svg]:shrink-0',
-  'not-aria-disabled:hover:bg-[color:var(--mimi-number-button-hover,var(--mimi-accent))] not-aria-disabled:active:scale-(--mimi-press-scale-sm)',
+  // Al hacer clic se hunde la caja entera (field-styles, profundidad B), no el botón aparte.
+  'not-aria-disabled:hover:bg-[color:var(--mimi-number-button-hover,var(--mimi-accent))]',
   'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
 );
 
@@ -86,6 +86,7 @@ const REPEAT_EVERY = 80;
  */
 @Component({
   selector: 'mimi-number-input',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <button
       type="button"

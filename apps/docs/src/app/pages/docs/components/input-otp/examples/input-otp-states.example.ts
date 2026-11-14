@@ -25,6 +25,11 @@ import { MimiInputOtp } from '@/components/ui/input-otp';
         <span class="text-xs text-muted-foreground">4 casillas, sin guion</span>
         <mimi-input-otp aria-label="PIN" [length]="4" />
       </div>
+      <div class="flex min-w-0 flex-col gap-2 sm:col-span-2">
+        <!-- length no tiene tope: con 10 casillas se encogen para caber en una pantalla de teléfono. -->
+        <span class="text-xs text-muted-foreground">10 casillas, con dos guiones</span>
+        <mimi-input-otp aria-label="Código de 10 dígitos" [length]="10" [separatorAfter]="[3, 6]" />
+      </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

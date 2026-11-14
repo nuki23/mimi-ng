@@ -34,6 +34,15 @@ describe('MimiSkeleton', () => {
     }
   });
 
+  it('`rounded-card` del usuario gana al radio por defecto (ejemplo «Personalizar con class», R.10)', async () => {
+    const { host, skeleton, update } = await setup();
+    await update(() => host.extra.set('h-32 w-full rounded-card'));
+    expect(skeleton.classList).toContain('rounded-card');
+    expect(skeleton.classList).not.toContain(
+      'rounded-[var(--mimi-skeleton-radius,var(--mimi-radius-sm))]',
+    );
+  });
+
   it('con movimiento reducido queda quieto', async () => {
     const { skeleton } = await setup();
     expect(skeleton.classList).toContain('motion-reduce:animate-none');

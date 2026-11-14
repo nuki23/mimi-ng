@@ -81,7 +81,7 @@ export class Signup01Page {
   protected readonly components: BlockComponent[] = [
     { name: 'input', path: '/docs/components/input' },
     { name: 'password', path: '/docs/components/password' },
-    { name: 'checkbox', path: '/docs/components/switch' },
+    { name: 'checkbox', path: '/docs/components/checkbox' },
     { name: 'button', path: '/docs/components/button' },
     { name: 'form-field', path: '/docs/components/form-field' },
   ];

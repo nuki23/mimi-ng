@@ -59,9 +59,10 @@ export class AvatarPage {
     {
       part: 'mimi-avatar',
       name: 'size',
-      type: "'sm' | 'default' | 'lg'",
-      default: "'default'",
-      description: '32, 40 o 56px. El tamaño de letra de las iniciales va con él.',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md' (o el del contenedor con mimiSize)",
+      description:
+        '32, 40 o 56px. El tamaño de letra de las iniciales va con él. `default` es el nombre viejo de `md`.',
     },
     {
       part: 'img[mimiAvatarImage]',

@@ -81,7 +81,7 @@ export class Table01Page {
     { name: 'data-table', path: '/docs/components/data-table' },
     { name: 'badge', path: '/docs/components/badge' },
     { name: 'button', path: '/docs/components/button' },
-    { name: 'checkbox', path: '/docs/components/switch' },
+    { name: 'checkbox', path: '/docs/components/checkbox' },
     { name: 'input', path: '/docs/components/input' },
   ];
 
@@ -92,7 +92,10 @@ export class Table01Page {
     htmlSource as string,
   );
 
-  protected readonly states: BlockState[] = [{ id: 'selected', label: 'Con filas elegidas' }];
+  protected readonly states: BlockState[] = [
+    { id: 'selected', label: 'Con filas elegidas' },
+    { id: 'loading', label: 'Cargando' },
+  ];
 
   protected readonly inputs: BlockApiRow[] = [
     {

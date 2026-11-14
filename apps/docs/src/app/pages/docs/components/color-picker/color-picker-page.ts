@@ -5,12 +5,14 @@ import {
 } from '@/components/ui/color-picker';
 import { MIMI_ERROR_MESSAGES_ES, provideMimiErrorMessages } from '@/components/ui/form-field';
 import { CodeBlock } from '../../../../code/code-block';
+import { FormsTabs } from '../../../../code/forms-tabs';
 import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { ColorPickerFormsExample } from './examples/color-picker-forms.example';
 import { ColorPickerInputExample } from './examples/color-picker-input.example';
 import { ColorPickerPanelExample } from './examples/color-picker-panel.example';
+import { ColorPickerReadonlyExample } from './examples/color-picker-readonly.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -19,6 +21,8 @@ import formsSource from './examples/color-picker-forms.example' with { loader: '
 import inputSource from './examples/color-picker-input.example' with { loader: 'text' };
 // @ts-expect-error
 import panelSource from './examples/color-picker-panel.example' with { loader: 'text' };
+// @ts-expect-error
+import readonlySource from './examples/color-picker-readonly.example' with { loader: 'text' };
 
 interface ApiRow {
   name: string;
@@ -32,12 +36,14 @@ interface ApiRow {
   selector: 'app-color-picker-page',
   imports: [
     CodeBlock,
+    FormsTabs,
     CodePreview,
     CssVariables,
     InstallCommand,
     ColorPickerPanelExample,
     ColorPickerInputExample,
     ColorPickerFormsExample,
+    ColorPickerReadonlyExample,
   ],
   providers: [
     provideMimiColorPickerText(MIMI_COLOR_PICKER_TEXT_ES),
@@ -51,6 +57,7 @@ export class ColorPickerPage {
     panel: panelSource as string,
     input: inputSource as string,
     forms: formsSource as string,
+    readonly: readonlySource as string,
   };
 
   protected readonly usage = [
@@ -102,6 +109,13 @@ export class ColorPickerPage {
       type: '—',
       default: '—',
       description: 'Del disparador (mimi-color-input); disabled también en el panel.',
+    },
+    {
+      name: 'readonly',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Solo lectura (panel y disparador): se ve el color; el panel no se abre, y el área, el tono, la paleta y el campo no lo cambian.',
     },
     {
       name: 'class / panelClass',

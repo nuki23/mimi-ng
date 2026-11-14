@@ -14,6 +14,8 @@ import {
 import type { FormValueControl } from '@angular/forms/signals';
 import { MimiChip, injectMimiChipAnnouncer } from '@/components/ui/chip';
 import { cn } from '@/components/ui/utils/cn';
+import { fieldBoxStyles } from '@/components/ui/utils/field-styles';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   injectFieldState,
@@ -31,14 +33,11 @@ import { MIMI_TAGS_INPUT_TEXT } from './tags-input-texts';
 
 const BOX_CLASSES = cn(
   'relative flex w-full min-w-0 cursor-text flex-wrap items-center font-sans text-foreground mimi-transition',
-  'min-h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))]',
+  'min-h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))]',
   'gap-[var(--mimi-tags-gap,6px)] p-[var(--mimi-tags-padding,5px_10px_5px_6px)]',
-  'border border-input bg-input-background',
-  'not-data-[disabled]:hover:border-input-hover',
+  // Los estados de todos los campos (utils/field-styles); el límite lleno, encima.
+  fieldBoxStyles,
   'data-[full]:border-[color:var(--mimi-tags-full-border,color-mix(in_oklab,var(--mimi-warning)_70%,var(--mimi-input)))]',
-  'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft',
-  'data-[invalid]:border-destructive data-[invalid]:focus-within:border-destructive data-[invalid]:focus-within:ring-destructive-ring',
-  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
 );
 
 const INPUT_CLASSES =
@@ -58,6 +57,7 @@ const trim = (tag: string): string => tag.trim();
  */
 @Component({
   selector: 'mimi-tags-input',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [MimiChip],
   template: `
     <div
@@ -66,6 +66,7 @@ const trim = (tag: string): string => tag.trim();
       [attr.data-invalid]="invalidShown() ? '' : null"
       [attr.data-full]="full() ? '' : null"
       [attr.data-disabled]="disabled() ? '' : null"
+      [attr.data-readonly]="readonly() ? '' : null"
       (click)="focusField($event)"
     >
       @for (tag of tags(); track $index) {
@@ -73,6 +74,7 @@ const trim = (tag: string): string => tag.trim();
           [label]="tag"
           [removable]="!disabled() && !readonly()"
           [invalid]="tag === conflict()"
+          [class]="readonly() ? readonlyChipClasses : ''"
           (remove)="removeAt($index)"
           >{{ tag }}</mimi-chip
         >
@@ -173,6 +175,13 @@ export class MimiTagsInput implements FormValueControl<string[]>, MimiFieldContr
 
   private static nextId = 0;
   private readonly baseId = `mimi-tags-input-${MimiTagsInput.nextId++}`;
+  /**
+   * Las etiquetas en solo lectura (13/11/2026): el fondo de solo lectura (70 % de `muted`) es casi
+   * el del chip (`secondary`), así que el chip toma el fondo del campo y un borde con contraste de
+   * al menos 3:1 con el fondo de solo lectura, en claro y oscuro.
+   */
+  protected readonly readonlyChipClasses =
+    'border border-[color:var(--mimi-tags-chip-readonly-border,var(--mimi-muted-foreground))] bg-[color:var(--mimi-input-bg,var(--mimi-input-background))]';
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly messageId = `${this.baseId}-message`;
   protected readonly countId = `${this.baseId}-count`;

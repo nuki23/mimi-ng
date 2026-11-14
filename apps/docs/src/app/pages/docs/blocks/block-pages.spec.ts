@@ -69,21 +69,21 @@ const CASES: Case[] = [
       'separator',
       'form-field',
     ],
-    states: ['notifications', 'security', 'billing'],
+    states: ['notifications', 'security', 'billing', 'saving'],
   },
   {
     name: 'table-01',
     kind: 'page',
     page: Table01Page,
     components: ['data-table', 'badge', 'button', 'checkbox', 'input'],
-    states: ['selected'],
+    states: ['selected', 'loading'],
   },
   {
     name: 'pricing-01',
     kind: 'section',
     page: Pricing01Page,
     components: ['toggle-group', 'badge', 'button'],
-    states: ['yearly'],
+    states: ['yearly', 'loading'],
   },
 ];
 

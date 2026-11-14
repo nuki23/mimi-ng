@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MIMI_DIALOG_TEXT_ES, provideMimiDialogText } from '@/components/ui/dialog';
 import { MIMI_SELECT_TEXT_ES, provideMimiSelectText } from '@/components/ui/select';
 import { CodeBlock } from '../../../../code/code-block';
-import { CodePreview } from '../../../../code/code-preview';
+import { type CodeFile, CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { DialogBasicExample } from './examples/dialog-basic.example';
@@ -11,7 +11,8 @@ import { DialogFormExample } from './examples/dialog-form.example';
 import { DialogFromMenuExample } from './examples/dialog-from-menu.example';
 import { DialogLongContentExample } from './examples/dialog-long-content.example';
 import { DialogNoDismissExample } from './examples/dialog-no-dismiss.example';
-import { DialogServiceExample } from './examples/dialog-service.example';
+import { DialogEditUserExample } from './examples/dialog-edit-user.example';
+import { DialogOptionsExample } from './examples/dialog-options.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -27,7 +28,11 @@ import longContentSource from './examples/dialog-long-content.example' with { lo
 // @ts-expect-error
 import noDismissSource from './examples/dialog-no-dismiss.example' with { loader: 'text' };
 // @ts-expect-error
-import serviceSource from './examples/dialog-service.example' with { loader: 'text' };
+import editUserSource from './examples/dialog-edit-user.example' with { loader: 'text' };
+// @ts-expect-error
+import editUserDialogSource from './examples/edit-user-dialog' with { loader: 'text' };
+// @ts-expect-error
+import optionsSource from './examples/dialog-options.example' with { loader: 'text' };
 
 /** Documentación de Dialog (tarea G1.6). */
 @Component({
@@ -43,7 +48,8 @@ import serviceSource from './examples/dialog-service.example' with { loader: 'te
     DialogFromMenuExample,
     DialogLongContentExample,
     DialogNoDismissExample,
-    DialogServiceExample,
+    DialogEditUserExample,
+    DialogOptionsExample,
   ],
   // Los textos de Dialog y de Select están en inglés por defecto; este sitio usa el español.
   // Aquí y no en app.config.ts, para no sumar nada al JS inicial.
@@ -62,8 +68,15 @@ export class DialogPage {
     fromMenu: fromMenuSource as string,
     longContent: longContentSource as string,
     noDismiss: noDismissSource as string,
-    service: serviceSource as string,
+    editUser: editUserSource as string,
+    options: optionsSource as string,
   };
+
+  /** El ejemplo principal, en dos archivos: quien abre y el componente que se abre. */
+  protected readonly editUserFiles: CodeFile[] = [
+    { name: 'dialog-edit-user.example.ts', code: editUserSource as string },
+    { name: 'edit-user-dialog.ts', code: editUserDialogSource as string },
+  ];
 
   protected readonly usageTemplate = [
     "import { MimiDialogImports } from '@/components/ui/dialog';",
@@ -94,16 +107,16 @@ export class DialogPage {
   ].join('\n');
 
   protected readonly usageService = [
-    "import { MIMI_DIALOG_DATA, MimiDialogRef, MimiDialogService } from '@/components/ui/dialog';",
+    '// Quien abre: tu componente, con los valores de sus entradas.',
+    'const ref = inject(MimiDialogService).open<User>(EditUserDialog, {',
+    '  inputs: { user },',
+    '});',
+    'ref.afterClosed().subscribe((edited) => { /* undefined si se canceló */ });',
     '',
-    '// Quien abre:',
-    'const ref = inject(MimiDialogService).open<string>(RenameProjectDialog, { data: project });',
-    'ref.afterClosed().subscribe((name) => { /* undefined si se canceló */ });',
-    '',
-    '// Dentro de RenameProjectDialog:',
-    'project = inject<Project>(MIMI_DIALOG_DATA);',
-    'ref = inject<MimiDialogRef<string>>(MimiDialogRef);',
-    "save() { this.ref.close('Nombre nuevo'); }",
+    '// Dentro de EditUserDialog: entradas normales y ref.close(resultado).',
+    'user = input.required<User>();',
+    'private ref = inject<MimiDialogRef<User>>(MimiDialogRef);',
+    'save() { this.ref.close(editedUser); }',
   ].join('\n');
 
   protected readonly depsCss = [
@@ -172,10 +185,39 @@ export class DialogPage {
       description: 'Ancho máximo. Nunca supera el ancho de la pantalla menos 32px.',
     },
     {
-      name: 'class',
+      name: 'size',
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md'",
+      description:
+        'Ancho del panel: sm 360px, md 420px (el de siempre) o lg 560px; baja a la pantalla menos 32px. width y maxWidth mandan sobre él.',
+    },
+    {
+      name: 'padding',
+      type: 'string',
+      default: '24px (16px en sm)',
+      description:
+        'Relleno lateral de la cabecera, el cuerpo y el pie (un valor CSS, la variable --mimi-dialog-padding).',
+    },
+    {
+      name: 'chrome',
+      type: "'default' | 'none'",
+      default: "'default'",
+      description:
+        'none: el contenido es todo el panel, sin X ni relleno (Mimi no te amarra a un diseño). closeButton y padding explícitos mandan sobre él; la cabecera, el cuerpo y el pie siguen siendo opcionales.',
+    },
+    {
+      name: 'inputs',
+      type: 'Record<string, unknown>',
+      default: '—',
+      description:
+        'Solo con un componente: los valores de sus entradas (input()), asignados antes de pintarse. Alternativa a data con inject(MIMI_DIALOG_DATA).',
+    },
+    {
+      name: 'class / panelClass',
       type: 'string',
       default: "''",
-      description: 'Clases del panel, mezcladas con cn(): tus clases ganan.',
+      description:
+        'Clases del panel, mezcladas con cn(): tus clases ganan. panelClass es el nombre de cdk Dialog; si das las dos, gana class.',
     },
     {
       name: 'closeOnEscape',
@@ -240,9 +282,14 @@ export class DialogPage {
       description: 'Cierra el diálogo, con un resultado opcional.',
     },
     {
-      name: 'MimiDialogRef.afterClosed()',
+      name: 'MimiDialogRef.closed / afterClosed()',
       description:
-        'Observable que emite una vez, con el resultado, cuando el diálogo ya se cerró (undefined si se canceló).',
+        'Observable que emite una vez, con el resultado, cuando el diálogo ya se cerró (undefined si se canceló). `closed` es el nombre de cdk Dialog y `afterClosed()` el de siempre: son lo mismo.',
+    },
+    {
+      name: 'MimiDialogRef.result',
+      description:
+        'El resultado como señal: undefined hasta que el diálogo se cierra con close(resultado).',
     },
     {
       name: '<mimi-dialog> [(open)] y (closed)',

@@ -185,6 +185,8 @@ describe('registry.json', () => {
       'utils/cn',
       'utils/control-styles',
       'utils/field-state',
+      'utils/field-styles',
+      'utils/size',
       'input',
     ]);
     expect(() => resolveItems('nope', registry)).toThrow('"nope" no existe');

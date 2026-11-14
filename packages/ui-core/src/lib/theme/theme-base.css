@@ -6,29 +6,59 @@
 
 /* ── Claro ─────────────────────────────────────── */
 :root {
-  /* Colores */
-  --mimi-background: oklch(1 0 0);
-  --mimi-foreground: oklch(0.145 0 0);
-  --mimi-card: oklch(1 0 0);
-  --mimi-card-foreground: oklch(0.145 0 0);
-  --mimi-popover: oklch(1 0 0);
-  --mimi-popover-foreground: oklch(0.145 0 0);
-  --mimi-primary: oklch(0.205 0 0);
+  /*
+   * Marca de Mimi (R.0): escala de violeta en OKLCH, tono 292. Las dos anclas son los colores de
+   * la marca: 600 = #793EEA y 400 = #A88FFF; el resto sale de la curva de luminosidad y croma
+   * (algunos pasos claros salen del gamut sRGB y el navegador los recorta).
+   * Contrastes (WCAG, calculados): #793EEA sobre #FAFAFA 5,45:1 (texto y botón en claro);
+   * #A88FFF sobre #171717 6,86:1 (texto y botón en oscuro); #793EEA sobre #171717 solo 3,15:1 y
+   * #A88FFF sobre #FAFAFA 2,50:1: no van nunca como texto en esos fondos (`--mimi-brand-text`).
+   */
+  --mimi-brand-50: oklch(0.975 0.016 292);
+  --mimi-brand-100: oklch(0.953 0.032 292);
+  --mimi-brand-200: oklch(0.91 0.062 292);
+  --mimi-brand-300: oklch(0.84 0.115 292);
+  --mimi-brand-400: oklch(0.72 0.16 292);
+  --mimi-brand-500: oklch(0.64 0.2 292);
+  --mimi-brand-600: oklch(0.54 0.239 292);
+  --mimi-brand-700: oklch(0.49 0.24 292);
+  --mimi-brand-800: oklch(0.43 0.2 292);
+  --mimi-brand-900: oklch(0.36 0.15 292);
+  --mimi-brand-950: oklch(0.27 0.1 292);
+  --mimi-brand-gradient: linear-gradient(135deg, var(--mimi-brand-600), var(--mimi-brand-400));
+  /* Texto de énfasis de marca: la única forma permitida de texto violeta. */
+  --mimi-brand-text: var(--mimi-brand-600);
+
+  /* Colores: neutros de la marca, #FAFAFA y #171717, en «malva medio» (decidido por el usuario el
+     14/11/2026; antes, «malva suave», croma 0,006, que no se notaba): el tono 292 del violeta con
+     croma 0,014 (0,007 en los casi blancos y casi negros) y la misma luminosidad que los neutros
+     puros, así que los contrastes no cambian (theme/contrast.spec.ts). El neutro puro sigue en
+     MIMI_THEME_NEUTRAL. */
+  --mimi-background: oklch(0.985 0.007 292);
+  --mimi-foreground: oklch(0.205 0.014 292);
+  --mimi-card: oklch(1 0.007 292);
+  --mimi-card-foreground: oklch(0.205 0.014 292);
+  --mimi-popover: oklch(1 0.007 292);
+  --mimi-popover-foreground: oklch(0.205 0.014 292);
+  --mimi-primary: var(--mimi-brand-600);
   --mimi-primary-foreground: oklch(0.985 0 0);
-  --mimi-secondary: oklch(0.97 0 0);
-  --mimi-secondary-foreground: oklch(0.205 0 0);
-  --mimi-muted: oklch(0.97 0 0);
-  --mimi-muted-foreground: oklch(0.54 0 0);
-  --mimi-accent: oklch(0.97 0 0);
-  --mimi-accent-foreground: oklch(0.205 0 0);
+  --mimi-secondary: oklch(0.97 0.007 292);
+  --mimi-secondary-foreground: oklch(0.205 0.014 292);
+  --mimi-muted: oklch(0.97 0.007 292);
+  --mimi-muted-foreground: oklch(0.54 0.014 292);
+  --mimi-accent: oklch(0.97 0.007 292);
+  --mimi-accent-foreground: oklch(0.205 0.014 292);
   --mimi-destructive: oklch(0.577 0.245 27.325);
   --mimi-destructive-foreground: oklch(0.985 0 0);
-  --mimi-border: oklch(0.922 0 0);
-  --mimi-input: oklch(0.88 0 0);
-  --mimi-input-background: oklch(1 0 0);
+  --mimi-border: oklch(0.922 0.014 292);
+  --mimi-input: oklch(0.88 0.014 292);
+  --mimi-input-background: oklch(1 0.007 292);
   /* Borde de un campo con el puntero encima (tokens-mimi.css; lo usa Pagination desde la G1.11). */
   --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 30%, var(--mimi-input));
-  --mimi-ring: oklch(0.708 0 0);
+  /* Fondo de un campo de solo lectura (utils/field-styles.ts, 12/11/2026): entre el del campo y
+     muted, para que se distinga del editable sin parecer deshabilitado. */
+  --mimi-input-readonly: color-mix(in oklab, var(--mimi-muted) 70%, var(--mimi-input-background));
+  --mimi-ring: var(--mimi-brand-500);
 
   /* Tonos (contraste AA verificado en el diseño) */
   --mimi-success: oklch(0.527 0.137 150);
@@ -37,7 +67,8 @@
   --mimi-warning: oklch(0.795 0.162 75);
   --mimi-warning-foreground: oklch(0.28 0.07 55);
   --mimi-warning-soft-foreground: oklch(0.45 0.11 60);
-  --mimi-info: oklch(0.546 0.19 255);
+  /* Más oscuro que el violeta de marca (0,54): se distingue por luminosidad (ΔL ≥ 0,08, 1d). */
+  --mimi-info: oklch(0.44 0.17 255);
   --mimi-info-foreground: oklch(0.985 0 0);
   --mimi-info-soft-foreground: oklch(0.45 0.17 255);
   --mimi-destructive-soft-foreground: oklch(0.5 0.2 27);
@@ -151,7 +182,9 @@
   --mimi-glow: var(--mimi-glow-primary);
 
   /* Derivados */
-  --mimi-primary-hover: color-mix(in oklch, var(--mimi-primary) 88%, var(--mimi-background));
+  /* En claro el texto del botón es casi blanco: el hover se oscurece hacia foreground (5,9:1 con
+     el violeta de la marca; con `background` quedaba en 4,24:1, R.0). En oscuro, ver `.dark`. */
+  --mimi-primary-hover: color-mix(in oklch, var(--mimi-primary) 88%, var(--mimi-foreground));
   --mimi-secondary-hover: color-mix(in oklch, var(--mimi-secondary) 80%, var(--mimi-foreground) 6%);
   /* Hover de los sólidos con texto blanco: se aleja del texto, hacia foreground (AA, V.1). En
      oscuro el texto es oscuro y el hover sigue yendo hacia el fondo. */
@@ -223,8 +256,9 @@
   --mimi-chip: var(--mimi-secondary);
   --mimi-chip-foreground: var(--mimi-secondary-foreground);
   --mimi-dropzone: color-mix(in oklab, var(--mimi-muted) 55%, var(--mimi-background));
-  --mimi-dropzone-active: var(--mimi-info-soft);
-  --mimi-dropzone-active-border: var(--mimi-info);
+  /* Con un archivo encima, la marca (decidido por el usuario, 12/11/2026; el diseño usa info). */
+  --mimi-dropzone-active: var(--mimi-primary-subtle);
+  --mimi-dropzone-active-border: var(--mimi-ring);
   --mimi-strength-weak: var(--mimi-destructive);
   --mimi-strength-medium: var(--mimi-warning);
   --mimi-strength-strong: var(--mimi-success);
@@ -234,28 +268,215 @@
 }
 
 /* ── Oscuro ────────────────────────────────────── */
+/*
+ * Escala de tamaños (R.1, R.8): UNA sola vez, aquí. Cada componente pone `data-size="sm|md|lg"`
+ * (o lo hereda de un contenedor `mimiSize`) y lee estas variables, sin clases propias por tamaño:
+ * alto, relleno lateral, texto, ícono y hueco. `md` es el de `:root` (por defecto).
+ *
+ * Las variables `--mimi-btn-h`, `--mimi-input-h` y `--mimi-avatar-s` llevan además los tokens por
+ * tamaño de siempre (`--mimi-btn-height`, `-sm` y `-lg`…): se resuelven en cada bloque, así un
+ * `md` dentro de un `sm` no hereda el alto del `sm`.
+ */
+:root,
+[data-size='md'] {
+  --mimi-size-height: var(--mimi-control-height, 2.5rem);
+  --mimi-size-px: 1rem;
+  --mimi-size-text: 0.875rem;
+  --mimi-size-icon: var(--mimi-icon-size, 1rem);
+  --mimi-size-gap: 0.5rem;
+  --mimi-btn-h: var(--mimi-btn-height, var(--mimi-size-height));
+  --mimi-btn-text: var(--mimi-btn-font-size, var(--mimi-size-text));
+  --mimi-btn-gap-s: var(--mimi-btn-gap, var(--mimi-size-gap));
+  --mimi-btn-px-s: var(--mimi-btn-px, var(--mimi-btn-padding-x, var(--mimi-size-px)));
+  --mimi-input-h: var(--mimi-input-height, var(--mimi-size-height));
+  --mimi-input-text: var(--mimi-input-font-size, var(--mimi-size-text));
+  --mimi-avatar-s: var(--mimi-avatar-size, 2.5rem);
+  --mimi-avatar-text: 0.875rem;
+  --mimi-switch-w: var(--mimi-switch-width, 2.25rem);
+  --mimi-switch-h: var(--mimi-switch-height, 1.25rem);
+  --mimi-checkbox-s: var(--mimi-checkbox-size, 1rem);
+  /* Toast (R.4): alto mínimo, relleno, título, descripción, ícono, círculo del ícono y ancho. */
+  --mimi-toast-min-h: 68px;
+  --mimi-toast-py: 0.75rem;
+  --mimi-toast-pl: 0.875rem;
+  --mimi-toast-title: 0.875rem;
+  --mimi-toast-desc: 12.5px;
+  --mimi-toast-icon: 18px;
+  --mimi-toast-circle: 34px;
+  --mimi-toast-w: var(--mimi-toast-width, 340px);
+  /* Tabs (alto de la pestaña subrayada y de la píldora, y texto de la píldora), Toggle Group, Badge. */
+  --mimi-tabs-h-u: var(--mimi-tabs-height, 44px);
+  --mimi-tabs-h-p: 34px;
+  --mimi-tabs-text-p: 13.5px;
+  --mimi-toggle-h: var(--mimi-toggle-group-item-height, 32px);
+  --mimi-toggle-px: var(--mimi-toggle-group-item-px, 12px);
+  --mimi-badge-h: var(--mimi-badge-height, 22px);
+  --mimi-badge-px-s: var(--mimi-badge-px, 0.625rem);
+  --mimi-chip-h: var(--mimi-chip-height, 26px);
+  --mimi-chip-text: var(--mimi-chip-font-size, 13px);
+  --mimi-slider-h: var(--mimi-slider-height, 6px);
+  --mimi-slider-thumb-s: var(--mimi-slider-thumb-size, 20px);
+  --mimi-toolbar-item-s: var(--mimi-toolbar-item-size, 40px);
+  --mimi-toolbar-icon: 18px;
+  --mimi-cal-cell: var(--mimi-date-cell-size, 36px);
+  --mimi-cal-nav: 30px;
+  --mimi-menu-item-h: var(--mimi-menu-item-height, 32px);
+  --mimi-menu-text: 14px;
+  --mimi-command-input-h: var(--mimi-command-input-height, 52px);
+  --mimi-command-item-h: var(--mimi-command-item-height, 40px);
+  --mimi-command-text: var(--mimi-command-input-font-size, 15px);
+  --mimi-tree-row-h: var(--mimi-tree-row-height, 32px);
+  --mimi-tree-text: var(--mimi-tree-font-size, 13.5px);
+  --mimi-sortable-item-h: var(--mimi-sortable-item-height, 56px);
+  --mimi-sortable-gap-s: var(--mimi-sortable-gap, 8px);
+  --mimi-table-row-h: var(--mimi-table-row-height, 42px);
+  --mimi-table-head-h: var(--mimi-table-head-height, 38px);
+  --mimi-tooltip-text: var(--mimi-tooltip-font-size, 12.5px);
+  --mimi-tooltip-px: 10px;
+  --mimi-popover-w: 300px;
+}
+
+[data-size='sm'] {
+  --mimi-size-height: var(--mimi-control-height-sm, 2rem);
+  --mimi-size-px: 0.75rem;
+  --mimi-size-text: 13px;
+  --mimi-size-icon: var(--mimi-icon-size-sm, 0.875rem);
+  --mimi-size-gap: 0.375rem;
+  --mimi-btn-h: var(--mimi-btn-height-sm, var(--mimi-size-height));
+  --mimi-btn-text: var(--mimi-size-text);
+  --mimi-btn-gap-s: var(--mimi-size-gap);
+  --mimi-btn-px-s: var(--mimi-size-px);
+  --mimi-input-h: var(--mimi-input-height-sm, var(--mimi-size-height));
+  --mimi-input-text: var(--mimi-size-text);
+  --mimi-avatar-s: var(--mimi-avatar-size-sm, 2rem);
+  --mimi-avatar-text: 0.75rem;
+  --mimi-switch-w: 2rem;
+  --mimi-switch-h: 1.125rem;
+  --mimi-checkbox-s: 0.875rem;
+  --mimi-toast-min-h: 48px;
+  --mimi-toast-py: 0.5rem;
+  --mimi-toast-pl: 0.75rem;
+  --mimi-toast-title: 13px;
+  --mimi-toast-desc: 12px;
+  --mimi-toast-icon: 16px;
+  --mimi-toast-circle: 28px;
+  --mimi-toast-w: 288px;
+  --mimi-tabs-h-u: 36px;
+  --mimi-tabs-h-p: 30px;
+  --mimi-tabs-text-p: 12.5px;
+  --mimi-toggle-h: 28px;
+  --mimi-toggle-px: 10px;
+  --mimi-badge-h: 18px;
+  --mimi-badge-px-s: 0.5rem;
+  --mimi-chip-h: 22px;
+  --mimi-chip-text: 12px;
+  --mimi-slider-h: 4px;
+  --mimi-slider-thumb-s: 16px;
+  --mimi-toolbar-item-s: 32px;
+  --mimi-toolbar-icon: 16px;
+  --mimi-cal-cell: 32px;
+  --mimi-cal-nav: 28px;
+  --mimi-menu-item-h: 28px;
+  --mimi-menu-text: 13px;
+  --mimi-command-input-h: 44px;
+  --mimi-command-item-h: 34px;
+  --mimi-command-text: 14px;
+  --mimi-tree-row-h: 28px;
+  --mimi-tree-text: 12.5px;
+  --mimi-sortable-item-h: 44px;
+  --mimi-sortable-gap-s: 6px;
+  --mimi-table-row-h: 34px;
+  --mimi-table-head-h: 32px;
+  --mimi-tooltip-text: 11.5px;
+  --mimi-tooltip-px: 8px;
+  --mimi-popover-w: 260px;
+}
+
+[data-size='lg'] {
+  --mimi-size-height: var(--mimi-control-height-lg, 3rem);
+  --mimi-size-px: 1.5rem;
+  --mimi-size-text: 15px;
+  --mimi-size-icon: 1.125rem;
+  --mimi-size-gap: 0.5rem;
+  --mimi-btn-h: var(--mimi-btn-height-lg, var(--mimi-size-height));
+  --mimi-btn-text: var(--mimi-size-text);
+  --mimi-btn-gap-s: var(--mimi-size-gap);
+  --mimi-btn-px-s: var(--mimi-size-px);
+  --mimi-input-h: var(--mimi-input-height-lg, var(--mimi-size-height));
+  --mimi-input-text: var(--mimi-size-text);
+  --mimi-avatar-s: var(--mimi-avatar-size-lg, 3.5rem);
+  --mimi-avatar-text: 1.125rem;
+  --mimi-switch-w: 2.75rem;
+  --mimi-switch-h: 1.5rem;
+  --mimi-checkbox-s: 1.25rem;
+  --mimi-toast-min-h: 84px;
+  --mimi-toast-py: 1rem;
+  --mimi-toast-pl: 1.125rem;
+  --mimi-toast-title: 15px;
+  --mimi-toast-desc: 14px;
+  --mimi-toast-icon: 20px;
+  --mimi-toast-circle: 40px;
+  --mimi-toast-w: 400px;
+  --mimi-tabs-h-u: 52px;
+  --mimi-tabs-h-p: 40px;
+  --mimi-tabs-text-p: 15px;
+  --mimi-toggle-h: 40px;
+  --mimi-toggle-px: 16px;
+  --mimi-badge-h: 26px;
+  --mimi-badge-px-s: 0.75rem;
+  --mimi-chip-h: 30px;
+  --mimi-chip-text: 14px;
+  --mimi-slider-h: 8px;
+  --mimi-slider-thumb-s: 24px;
+  --mimi-toolbar-item-s: 48px;
+  --mimi-toolbar-icon: 20px;
+  --mimi-cal-cell: 40px;
+  --mimi-cal-nav: 34px;
+  --mimi-menu-item-h: 36px;
+  --mimi-menu-text: 15px;
+  --mimi-command-input-h: 60px;
+  --mimi-command-item-h: 46px;
+  --mimi-command-text: 16px;
+  --mimi-tree-row-h: 36px;
+  --mimi-tree-text: 14.5px;
+  --mimi-sortable-item-h: 68px;
+  --mimi-sortable-gap-s: 10px;
+  --mimi-table-row-h: 50px;
+  --mimi-table-head-h: 44px;
+  --mimi-tooltip-text: 13.5px;
+  --mimi-tooltip-px: 12px;
+  --mimi-popover-w: 360px;
+}
+
 .dark {
-  --mimi-background: oklch(0.145 0 0);
-  --mimi-foreground: oklch(0.985 0 0);
-  --mimi-card: oklch(0.175 0 0);
-  --mimi-card-foreground: oklch(0.985 0 0);
-  --mimi-popover: oklch(0.205 0 0);
-  --mimi-popover-foreground: oklch(0.985 0 0);
-  --mimi-primary: oklch(0.922 0 0);
+  /* Neutros de la marca en oscuro: fondo #171717, texto #FAFAFA; las superficies suben (R.0).
+     En «malva medio», como en claro: tono 292, croma 0,014 (0,007 en los casi blancos). */
+  --mimi-background: oklch(0.205 0.014 292);
+  --mimi-foreground: oklch(0.985 0.007 292);
+  --mimi-card: oklch(0.235 0.014 292);
+  --mimi-card-foreground: oklch(0.985 0.007 292);
+  --mimi-popover: oklch(0.26 0.014 292);
+  --mimi-popover-foreground: oklch(0.985 0.007 292);
+  /* #A88FFF con texto #171717 (6,86:1); #793EEA sobre #171717 daría 3,15:1: no sirve para texto. */
+  --mimi-primary: var(--mimi-brand-400);
   --mimi-primary-foreground: oklch(0.205 0 0);
-  --mimi-secondary: oklch(0.269 0 0);
-  --mimi-secondary-foreground: oklch(0.985 0 0);
-  --mimi-muted: oklch(0.225 0 0);
-  --mimi-muted-foreground: oklch(0.708 0 0);
-  --mimi-accent: oklch(0.269 0 0);
-  --mimi-accent-foreground: oklch(0.985 0 0);
+  --mimi-brand-text: var(--mimi-brand-400);
+  --mimi-secondary: oklch(0.3 0.014 292);
+  --mimi-secondary-foreground: oklch(0.985 0.007 292);
+  --mimi-muted: oklch(0.27 0.014 292);
+  --mimi-muted-foreground: oklch(0.74 0.014 292);
+  --mimi-accent: oklch(0.3 0.014 292);
+  --mimi-accent-foreground: oklch(0.985 0.007 292);
   --mimi-destructive: oklch(0.704 0.191 22.216);
   --mimi-destructive-foreground: oklch(0.2 0.04 25);
-  --mimi-border: oklch(1 0 0 / 10%);
-  --mimi-input: oklch(1 0 0 / 15%);
-  --mimi-input-background: oklch(1 0 0 / 4.5%);
-  --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 30%, var(--mimi-input));
-  --mimi-ring: oklch(0.556 0 0);
+  --mimi-border: oklch(1 0.007 292 / 10%);
+  --mimi-input: oklch(1 0.007 292 / 15%);
+  --mimi-input-background: oklch(1 0.007 292 / 4.5%);
+  /* En oscuro, el 30 % del diseño dejaba el borde casi blanco al pasar el ratón (informe del
+     usuario, 12/11/2026): el 14 % sube de 15 % a ~27 % de blanco, un paso visible sin destacar. */
+  --mimi-input-hover: color-mix(in oklab, var(--mimi-foreground) 14%, var(--mimi-input));
+  --mimi-input-readonly: color-mix(in oklab, var(--mimi-muted) 70%, var(--mimi-input-background));
+  --mimi-ring: var(--mimi-brand-400);
 
   --mimi-success: oklch(0.72 0.15 150);
   --mimi-success-foreground: oklch(0.2 0.05 150);
@@ -263,7 +484,8 @@
   --mimi-warning: oklch(0.81 0.15 78);
   --mimi-warning-foreground: oklch(0.22 0.05 60);
   --mimi-warning-soft-foreground: oklch(0.87 0.12 80);
-  --mimi-info: oklch(0.72 0.14 250);
+  /* Más claro que el violeta de marca (0,72): se distingue por luminosidad (ΔL ≥ 0,08, 1d). */
+  --mimi-info: oklch(0.83 0.11 250);
   --mimi-info-foreground: oklch(0.2 0.05 250);
   --mimi-info-soft-foreground: oklch(0.84 0.1 250);
   --mimi-destructive-soft-foreground: oklch(0.82 0.12 22);
@@ -409,12 +631,22 @@
   --mimi-chip: var(--mimi-secondary);
   --mimi-chip-foreground: var(--mimi-secondary-foreground);
   --mimi-dropzone: color-mix(in oklab, var(--mimi-muted) 50%, var(--mimi-background));
-  --mimi-dropzone-active: var(--mimi-info-soft);
-  --mimi-dropzone-active-border: var(--mimi-info);
+  --mimi-dropzone-active: var(--mimi-primary-subtle);
+  --mimi-dropzone-active-border: var(--mimi-ring);
   --mimi-strength-weak: var(--mimi-destructive);
   --mimi-strength-medium: var(--mimi-warning);
   --mimi-strength-strong: var(--mimi-success);
   --mimi-selection: var(--mimi-info);
+
+  /*
+   * Indicador de Tabs (píldora) y de Toggle Group en oscuro (R.10): más claro que su contenedor
+   * (antes era `card`, más oscuro que `muted`, y parecía hundido) y con una sombra corta que no
+   * sale de los 3 a 4 px de margen (la de `shadow-neutral` llegaba hasta el borde del contenedor).
+   */
+  --mimi-tabs-pill-active: color-mix(in oklab, var(--mimi-foreground) 12%, var(--mimi-muted));
+  --mimi-tabs-pill-shadow: inset 0 1px 0 oklch(1 0 0 / 0.07), 0 1px 1px oklch(0 0 0 / 0.4);
+  --mimi-toggle-group-indicator: var(--mimi-tabs-pill-active);
+  --mimi-toggle-group-indicator-shadow: var(--mimi-tabs-pill-shadow);
 
   color-scheme: dark;
 }
@@ -433,6 +665,18 @@
 @theme inline {
   --color-background: var(--mimi-background);
   --color-foreground: var(--mimi-foreground);
+  --color-brand-50: var(--mimi-brand-50);
+  --color-brand-100: var(--mimi-brand-100);
+  --color-brand-200: var(--mimi-brand-200);
+  --color-brand-300: var(--mimi-brand-300);
+  --color-brand-400: var(--mimi-brand-400);
+  --color-brand-500: var(--mimi-brand-500);
+  --color-brand-600: var(--mimi-brand-600);
+  --color-brand-700: var(--mimi-brand-700);
+  --color-brand-800: var(--mimi-brand-800);
+  --color-brand-900: var(--mimi-brand-900);
+  --color-brand-950: var(--mimi-brand-950);
+  --color-brand-text: var(--mimi-brand-text);
   --color-card: var(--mimi-card);
   --color-card-foreground: var(--mimi-card-foreground);
   --color-popover: var(--mimi-popover);

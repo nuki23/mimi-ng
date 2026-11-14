@@ -21,8 +21,10 @@ import {
 } from '@angular/core';
 import { MimiMenuItemsImports } from '@/components/ui/menu';
 import { MimiMenuPanel } from '@/components/ui/menu/menu';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_VIEWPORT_MARGIN,
+  MimiOverlayFollow,
   type MimiOverlayAlign,
   type MimiOverlaySide,
   mimiConnectedPositions,
@@ -55,11 +57,14 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-dropdown-menu',
-  imports: [CdkConnectedOverlay, MimiMenuPanel],
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
+  imports: [CdkConnectedOverlay, MimiOverlayFollow, MimiMenuPanel],
   template: `
     <ng-content />
     <ng-template
       cdkConnectedOverlay
+      mimiOverlayFollow
+      (mimiOverlayOutOfView)="close(false)"
       [cdkConnectedOverlayOrigin]="originElement()!"
       [cdkConnectedOverlayOpen]="rendered()"
       [cdkConnectedOverlayPositions]="positions()"
@@ -82,6 +87,7 @@ let nextId = 0;
           [align]="align()"
           [initialFocus]="focusTarget"
           [focusExempt]="trigger()?.element"
+          [size]="sized.effective()"
           [class]="userClass()"
           (closeRequest)="close($event)"
         />
@@ -114,6 +120,7 @@ export class MimiDropdownMenu {
 
   protected readonly trigger = contentChild(MimiDropdownMenuTrigger);
   protected readonly content = contentChild(MimiDropdownMenuContent);
+  protected readonly sized = inject(MimiSized);
   private readonly panel = viewChild(MimiMenuPanel);
 
   /** id del menú (aria-controls del trigger). */
@@ -211,6 +218,9 @@ export class MimiDropdownMenu {
 @Directive({
   selector: '[mimiDropdownMenuTrigger]',
   host: {
+    // Con el menú abierto, el contorno del foco de Button, aunque se haya abierto con el ratón
+    // (como los campos con panel, 13/11/2026). Se suma a las clases del botón, no las reemplaza.
+    class: 'aria-expanded:outline-2 aria-expanded:outline-offset-2 aria-expanded:outline-ring',
     'aria-haspopup': 'menu',
     '[id]': 'id',
     '[attr.aria-expanded]': 'menu.open()',

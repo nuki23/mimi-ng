@@ -455,6 +455,14 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       description: 'Color del borde.',
     },
     {
+      name: '--mimi-input-border-hover',
+      default: 'input-hover',
+      inherits: '--mimi-input-hover',
+      preset: false,
+      description:
+        'Color del borde al pasar el ratón. Lo usan también Textarea y la caja de Number Input y Password.',
+    },
+    {
       name: '--mimi-input-border-focus',
       default: 'ring',
       inherits: '--mimi-ring',
@@ -981,7 +989,16 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       default: 'card',
       inherits: '--mimi-card',
       preset: false,
-      description: 'Fondo de la pestaña elegida en la píldora.',
+      description:
+        'Fondo de la pestaña elegida en la píldora (en oscuro, más claro que el contenedor).',
+    },
+    {
+      name: '--mimi-tabs-pill-shadow',
+      default: 'shadow-neutral',
+      inherits: '--mimi-shadow-neutral',
+      preset: false,
+      description:
+        'Sombra de la pestaña elegida en la píldora (en oscuro, corta: no sale del margen del contenedor).',
     },
   ],
   toolbar: [
@@ -1035,8 +1052,8 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
     },
     {
       name: '--mimi-toolbar-ring',
-      default: 'info',
-      inherits: '--mimi-info',
+      default: 'ring',
+      inherits: '--mimi-ring',
       preset: false,
       description: 'Anillo de la herramienta activa y del hover (al 60 %).',
     },
@@ -1458,6 +1475,13 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       preset: false,
       description: 'Borde con el límite alcanzado.',
     },
+    {
+      name: '--mimi-tags-chip-readonly-border',
+      default: 'muted-foreground',
+      inherits: '--mimi-muted-foreground',
+      preset: false,
+      description: 'Borde de las etiquetas en solo lectura (contraste de 3:1 con el fondo).',
+    },
   ],
   slider: [
     {
@@ -1821,15 +1845,15 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
     },
     {
       name: '--mimi-tree-selected',
-      default: 'primary',
-      inherits: '--mimi-primary',
+      default: 'primary-subtle',
+      inherits: '--mimi-primary-subtle',
       preset: false,
       description: 'Fondo del nodo elegido (simple).',
     },
     {
       name: '--mimi-tree-selected-fg',
-      default: 'primary-foreground',
-      inherits: '--mimi-primary-foreground',
+      default: 'primary',
+      inherits: '--mimi-primary',
       preset: false,
       description: 'Texto del nodo elegido.',
     },
@@ -1882,15 +1906,15 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
     },
     {
       name: '--mimi-sortable-drop',
-      default: 'info',
-      inherits: '--mimi-info',
+      default: 'ring',
+      inherits: '--mimi-ring',
       preset: false,
-      description: 'Borde del hueco y anillo del elemento levantado.',
+      description: 'Borde del hueco y anillo del elemento levantado (el color de la marca).',
     },
     {
       name: '--mimi-sortable-drop-bg',
-      default: 'info-soft',
-      inherits: '--mimi-info-soft',
+      default: 'primary-subtle',
+      inherits: '--mimi-primary-subtle',
       preset: false,
       description: 'Fondo del hueco donde caerá.',
     },
@@ -2024,7 +2048,7 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
     },
     {
       name: '--mimi-table-row-selected',
-      default: 'color-mix(in oklab, var(--mimi-info) 8%, var(--mimi-card))',
+      default: 'color-mix(in oklab, var(--mimi-primary) 8%, var(--mimi-card))',
       preset: false,
       description: 'Fila elegida.',
     },

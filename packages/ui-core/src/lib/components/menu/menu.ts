@@ -104,6 +104,7 @@ export const MIMI_MENU_PANEL_CLASSES =
       [attr.data-state]="state()"
       [attr.data-side]="side()"
       [attr.data-align]="align()"
+      [attr.data-size]="size() ?? null"
       [attr.inert]="state() === 'closed' ? '' : null"
       (itemSelected)="onItemSelected($event)"
       (keydown)="onKeydown($event)"
@@ -135,6 +136,8 @@ export class MimiMenuPanel implements MimiMenuHost {
   readonly initialFocus = input<'first' | 'last'>('first');
   /** Un elemento al que el foco puede ir sin cerrar el menú (el trigger del Dropdown). */
   readonly focusExempt = input<Element | null | undefined>(null);
+  /** El panel va en un overlay: el tamaño del disparador (`sm | md | lg`) llega por aquí. */
+  readonly size = input<'sm' | 'md' | 'lg' | null>(null);
   readonly userClass = input('', { alias: 'class' });
   /** Pide cerrar: `true` devuelve el foco (ítem elegido, Escape), `false` no (Tab). */
   readonly closeRequest = output<boolean>();
@@ -234,10 +237,10 @@ const DANGER = [
 ];
 
 const MENU_ITEM_BASE = [
-  'relative flex h-[var(--mimi-menu-item-height,32px)] cursor-pointer items-center gap-2 px-2 text-sm outline-none select-none',
+  'relative flex h-[var(--mimi-menu-item-h,var(--mimi-menu-item-height,32px))] cursor-pointer items-center gap-2 px-2 text-[length:var(--mimi-menu-text,14px)] outline-none select-none',
   'rounded-[var(--mimi-menu-item-radius,var(--mimi-radius-sm))]',
-  'transition-[background-color] duration-120 ease-[ease] active:scale-[0.985]',
-  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:active:scale-100',
+  'transition-[background-color] duration-120 ease-[ease] active:scale-(--mimi-press-scale)',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:active:scale-100',
 ];
 
 /**

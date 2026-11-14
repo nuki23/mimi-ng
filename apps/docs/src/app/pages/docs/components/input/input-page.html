@@ -1,21 +1,19 @@
 <article class="flex flex-col gap-5">
-  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Input y Textarea</h1>
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Input</h1>
   <p class="text-lg text-pretty text-muted-foreground">
-    Campos de texto de una y de varias líneas. Son directivas sobre los elementos nativos,
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">input[mimiInput]</code>
-    y
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-      >textarea[mimiTextarea]</code
-    >: funcionan con cualquier sistema de formularios y se ponen en rojo solos cuando hay un error.
+    Campo de texto de una línea. Es una directiva sobre el elemento nativo,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">input[mimiInput]</code
+    >: funciona con cualquier sistema de formularios y se pone en rojo solo cuando hay un error.
+    Para varias líneas, usa
+    <a routerLink="/docs/components/textarea" class="font-medium underline underline-offset-4"
+      >Textarea</a
+    >.
   </p>
 
   <h2 id="installation" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
     Instalación
   </h2>
-  <h3 id="installation-input" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Input</h3>
   <app-install-command name="input" />
-  <h3 id="installation-textarea" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textarea</h3>
-  <app-install-command name="textarea" />
 
   <h2 id="usage" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Uso</h2>
   <app-code-block [code]="usage" lang="angular-ts" />
@@ -51,18 +49,6 @@
     <app-input-show-error-example />
   </app-code-preview>
 
-  <h3 id="textarea" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Textarea</h3>
-  <app-code-preview [code]="source.textareaBasic">
-    <app-textarea-basic-example />
-  </app-code-preview>
-
-  <h3 id="textarea-states" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
-    Textarea deshabilitado y con error
-  </h3>
-  <app-code-preview [code]="source.textareaStates">
-    <app-textarea-states-example />
-  </app-code-preview>
-
   <h3 id="field-row" class="mt-2 text-lg font-semibold tracking-[-0.01em]">En fila</h3>
   <p class="text-pretty">
     Input, Textarea con
@@ -82,7 +68,7 @@
 
   <h2 id="forms" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Formularios</h2>
   <p class="text-pretty">
-    Funcionan con Signal Forms, Reactive Forms y ngModel sin configurar nada. El campo se pone en
+    Funciona con Signal Forms, Reactive Forms y ngModel sin configurar nada. El campo se pone en
     rojo cuando es inválido y ya se tocó o modificó. Envuélvelo en
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimi-form-field</code>
     y la etiqueta y el mensaje de error salen solos (ver FormField).
@@ -104,11 +90,17 @@
     <app-input-ng-model-example />
   </app-code-preview>
 
+  <h3 id="forms-tabs" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con formularios: Signal Forms, Reactive y plantilla
+  </h3>
+  <p class="text-pretty">
+    El mismo campo con los tres formularios de Angular. El control implementa la interfaz de
+    Angular: no hace falta un adaptador.
+  </p>
+  <app-forms-tabs component="input" />
+
   <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
   @for (table of apiTables; track table.id) {
-    <h3 [id]="table.id" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
-      {{ table.title }}
-    </h3>
     <div class="overflow-x-auto rounded-card border">
       <table class="w-full text-left text-sm">
         <thead class="bg-muted text-muted-foreground">
@@ -135,7 +127,7 @@
     </div>
   }
   <p class="text-pretty">
-    Las dos directivas exportan
+    Exporta
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">fieldState</code>
     (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">invalid</code>,
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">touched</code>,
@@ -144,13 +136,9 @@
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">showError</code>, como
     signals) con
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">exportAs</code>
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiInput</code> y
-    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiTextarea</code>.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiInput</code>.
   </p>
 
   <h3 id="tokens" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Variables CSS</h3>
-  <p class="font-semibold">Input</p>
   <app-css-variables component="input" />
-  <p class="font-semibold">Textarea: si no defines sus variables, usa las de Input</p>
-  <app-css-variables component="textarea" />
 </article>

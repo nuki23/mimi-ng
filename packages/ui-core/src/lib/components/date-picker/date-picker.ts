@@ -18,11 +18,8 @@ import { MIMI_DATE_PICKER_TEXT } from '@/components/ui/calendar/calendar-texts';
 import { type MimiDate, mimiFormatDate, mimiIsDate } from '@/components/ui/calendar/dates';
 import { MimiPopover, MimiPopoverContent, MimiPopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils/cn';
-import {
-  controlInvalidStyles,
-  controlPressStyles,
-  fieldFocusStyles,
-} from '@/components/ui/utils/control-styles';
+import { MimiSized } from '@/components/ui/utils/size';
+import { fieldTriggerStyles } from '@/components/ui/utils/field-styles';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -38,12 +35,11 @@ import {
 
 /** El disparador: la caja de Input con un botón (los estados de Input, spec 13, «Campos»). */
 export const MIMI_DATE_TRIGGER_CLASSES = cn(
-  'flex h-[var(--mimi-control-height,2.5rem)] w-full min-w-0 cursor-pointer items-center gap-2 px-3 text-left font-sans text-sm text-foreground',
-  'rounded-[var(--mimi-radius,0.75rem)] border border-input bg-input-background not-disabled:hover:border-input-hover',
-  'disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)] [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground',
-  fieldFocusStyles,
-  controlInvalidStyles,
-  controlPressStyles,
+  'flex h-[var(--mimi-size-height,var(--mimi-control-height,2.5rem))] w-full min-w-0 cursor-pointer items-center gap-2 px-3 text-left font-sans text-sm text-foreground',
+  'rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))] [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:text-muted-foreground',
+  // Borde, hover, foco (solo con el teclado), clic (se hunde y crece el halo), error,
+  // deshabilitado y solo lectura: los de todos los campos (utils/field-styles).
+  fieldTriggerStyles,
 );
 
 /** El panel del Popover con los tokens del calendario. */
@@ -76,6 +72,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
  */
 @Component({
   selector: 'mimi-date-picker',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [MimiPopover, MimiPopoverTrigger, MimiPopoverContent, MimiCalendar],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiDatePicker }],
   template: `
@@ -84,6 +81,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
       [arrow]="false"
       [class]="panelClasses()"
       [(open)]="open"
+      [blocked]="readonly()"
       (openChange)="onOpenChange($event)"
       aria-label="{{ texts.pickDate }}"
     >
@@ -99,6 +97,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
         [attr.aria-describedby]="valueId"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.aria-required]="required() || null"
+        [attr.aria-readonly]="readonly() || null"
         [attr.data-placeholder]="label() ? null : ''"
       >
         <svg
@@ -125,6 +124,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
       </button>
       <ng-template mimiPopoverContent>
         <mimi-calendar
+          [size]="sized.effective()"
           [value]="calendarValue()"
           [min]="min() ?? null"
           [max]="max() ?? null"
@@ -151,6 +151,8 @@ const toDate = (value: unknown): MimiDate | undefined =>
 export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFieldControl {
   private readonly defaultLocale = inject(LOCALE_ID);
   protected readonly texts = inject(MIMI_DATE_PICKER_TEXT);
+  /** El panel va en un overlay, fuera del anfitrión: el calendario recibe el tamaño. */
+  protected readonly sized = inject(MimiSized);
 
   /** La fecha elegida (`'2026-09-30'`), o `null`. Con `[(value)]` o un formulario. */
   readonly value = model<MimiDate | null>(null);
@@ -171,6 +173,8 @@ export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFi
   readonly format = input<Intl.DateTimeFormatOptions>(DEFAULT_FORMAT);
   readonly placeholder = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });

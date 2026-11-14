@@ -23,7 +23,6 @@ import type { FormValueControl } from '@angular/forms/signals';
 import { MimiButton } from '@/components/ui/button';
 import { MimiProgress } from '@/components/ui/progress';
 import { cn } from '@/components/ui/utils/cn';
-import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -87,24 +86,33 @@ export function mimiFormatFileSize(bytes: number, locale: string): string {
   }).format(size);
 }
 
+/**
+ * La zona es un campo que funciona como botón (utils/field-styles, 12/11/2026): foco de campo (borde
+ * del anillo y halo, solo con el teclado), al hacer clic se hunde y le crece el halo, deshabilitado
+ * con el token y solo lectura (`aria-disabled`: un botón no admite `aria-readonly`) con el fondo
+ * de solo lectura, sin hover ni clic. Su borde punteado de 2px es el del diseño.
+ */
 const ZONE_BASE = cn(
   'flex w-full cursor-pointer flex-col items-center justify-center gap-2 p-4 text-center font-sans text-foreground',
   'min-h-[var(--mimi-upload-height,176px)] rounded-[var(--mimi-upload-radius,var(--mimi-radius-card,1rem))] border-2',
-  'mimi-transition active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-[var(--mimi-disabled-opacity,0.5)] disabled:active:scale-100',
-  buttonFocusStyles,
+  'mimi-transition outline-none',
+  'focus-visible:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))] focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)] focus-visible:ring-ring-soft',
+  'not-disabled:not-aria-disabled:active:scale-(--mimi-press-scale) not-disabled:not-aria-disabled:active:ring-[length:var(--mimi-input-focus-ring-width,3px)] not-disabled:not-aria-disabled:active:ring-ring-soft',
+  'disabled:cursor-not-allowed disabled:opacity-[var(--mimi-input-disabled-opacity,var(--mimi-disabled-opacity,0.5))]',
+  'aria-disabled:cursor-default aria-disabled:bg-[color:var(--mimi-input-readonly)]',
 );
 const ZONE = {
   idle: cn(
     ZONE_BASE,
-    'border-dashed border-[color:var(--mimi-upload-border,var(--mimi-input))] bg-[color:var(--mimi-upload-bg,var(--mimi-dropzone,var(--mimi-muted)))] not-disabled:hover:border-input-hover',
+    'border-dashed border-[color:var(--mimi-upload-border,var(--mimi-input-border,var(--mimi-input)))] bg-[color:var(--mimi-upload-bg,var(--mimi-dropzone,var(--mimi-muted)))] not-disabled:not-aria-disabled:hover:border-[color:var(--mimi-input-border-hover,var(--mimi-input-hover))]',
   ),
   over: cn(
     ZONE_BASE,
-    'scale-[1.01] border-solid border-[color:var(--mimi-upload-active-border,var(--mimi-dropzone-active-border,var(--mimi-info)))] bg-[color:var(--mimi-upload-active-bg,var(--mimi-dropzone-active,var(--mimi-accent)))] shadow-[shadow:var(--mimi-glow-info)] motion-reduce:scale-100',
+    'scale-[1.01] border-solid border-[color:var(--mimi-upload-active-border,var(--mimi-dropzone-active-border,var(--mimi-ring)))] bg-[color:var(--mimi-upload-active-bg,var(--mimi-dropzone-active,var(--mimi-primary-subtle)))] shadow-[0_0_0_4px_var(--mimi-ring-soft)] motion-reduce:scale-100',
   ),
   invalid: cn(
     ZONE_BASE,
-    'border-dashed border-destructive bg-[color:var(--mimi-upload-bg,var(--mimi-dropzone,var(--mimi-muted)))]',
+    'border-dashed border-[color:var(--mimi-input-error,var(--mimi-destructive))] bg-[color:var(--mimi-upload-bg,var(--mimi-dropzone,var(--mimi-muted)))] focus-visible:border-[color:var(--mimi-input-error,var(--mimi-destructive))] focus-visible:ring-destructive-ring',
   ),
 } as const;
 const ICON_BASE =
@@ -113,7 +121,7 @@ const ICON = {
   idle: cn(ICON_BASE, 'bg-muted text-foreground'),
   over: cn(
     ICON_BASE,
-    'bg-info text-info-foreground animate-[mimi-bob_1s_ease-in-out_infinite] motion-reduce:animate-none',
+    'bg-primary text-primary-foreground animate-[mimi-bob_1s_ease-in-out_infinite] motion-reduce:animate-none',
   ),
 } as const;
 
@@ -140,6 +148,7 @@ let nextId = 0;
       [id]="controlId()"
       [class]="zoneClasses()"
       [disabled]="disabled()"
+      [attr.aria-disabled]="readonly() ? 'true' : null"
       [attr.aria-labelledby]="labelledBy()"
       [attr.aria-describedby]="hint() ? hintId : null"
       [attr.aria-invalid]="showInvalid() || null"
@@ -167,7 +176,7 @@ let nextId = 0;
         </svg>
       </span>
       <span [id]="headingId" data-slot="title" class="text-sm font-semibold">{{
-        over() ? texts.drop(dragCount()) : heading() || texts.title
+        over() ? texts.drop(dragCount()) : heading() || (readonly() ? readonlyTitle : texts.title)
       }}</span>
       @if (hint()) {
         <span [id]="hintId" data-slot="hint" class="text-[12.5px] text-muted-foreground">{{
@@ -195,6 +204,7 @@ let nextId = 0;
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-readonly]': 'readonly() ? "" : null',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -227,6 +237,11 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   /** Qué se acepta («PNG, JPG o PDF · hasta 10 MB»): describe la zona. */
   readonly hint = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /**
+   * Solo lectura (R.12): no abre el selector ni acepta archivos soltados. El botón es un `button`
+   * (no admite `aria-readonly`): queda con `aria-disabled` y se puede enfocar.
+   */
+  readonly readonly = input(false, { transform: booleanAttribute });
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
   readonly dirty = input(false, { transform: booleanAttribute });
@@ -268,6 +283,11 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   /** Profundidad de `dragenter`: `dragleave` salta también al pasar sobre un hijo. */
   private depth = 0;
 
+  /**
+   * Título en solo lectura: «Arrastra archivos o haz clic» invitaría a algo que no se puede hacer.
+   * Texto opcional (`readonly`): si un proveedor de textos propio no lo trae, el inglés.
+   */
+  protected readonly readonlyTitle = this.texts.readonly ?? 'Files (read-only)';
   protected readonly iconIdle = ICON.idle;
   protected readonly iconOver = ICON.over;
   protected readonly zoneClasses = computed(() =>
@@ -281,7 +301,7 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
 
   /** Abre el selector de archivos del sistema. */
   openPicker(): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     this.picker().nativeElement.click();
   }
 
@@ -294,7 +314,7 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   }
 
   protected onDragEnter(event: DragEvent): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     event.preventDefault();
     // Al entrar en la zona (no al pasar a un hijo) se cuentan los archivos que llegan.
     if (this.depth === 0) this.dragCount.set(event.dataTransfer?.items?.length ?? 0);
@@ -303,7 +323,7 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   }
 
   protected onDragOver(event: DragEvent): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     event.preventDefault();
     if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy';
   }
@@ -317,7 +337,7 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
     event.preventDefault();
     this.depth = 0;
     this.over.set(false);
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     this.add(Array.from(event.dataTransfer?.files ?? []));
     this.touch.emit();
   }

@@ -22,6 +22,7 @@ import {
   isDevMode,
   model,
   output,
+  reflectComponentType,
   signal,
   untracked,
   viewChild,
@@ -29,6 +30,7 @@ import {
 import { type Observable, Subject } from 'rxjs';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import type { MimiSize } from '@/components/ui/utils/size';
 import { MIMI_OVERLAY_ANIMATION, mimiWaitForExit } from '@/components/ui/utils/overlay';
 import { MIMI_DIALOG_TEXT } from './dialog-texts';
 
@@ -53,6 +55,29 @@ export interface MimiDialogConfig<D = unknown> {
   maxWidth?: string;
   /** Clases del panel, mezcladas con `cn()` (gana la del usuario). */
   class?: string;
+  /** Otro nombre de `class` (el de cdk Dialog y de `panelClass` de Select y Combobox). */
+  panelClass?: string;
+  /**
+   * Tamaño del panel (R.6): `sm` 360px, `md` 420px (por defecto, el de siempre) y `lg` 560px, con
+   * 16px de relleno en `sm`. `width` y `maxWidth` mandan sobre él; nunca pasa de la pantalla menos 32px.
+   */
+  size?: MimiSize;
+  /**
+   * Relleno lateral de las piezas (`mimi-dialog-header`, `-body` y `-footer`), un valor CSS
+   * (`'16px'`). Por defecto, 24px (16px en `sm`).
+   */
+  padding?: string;
+  /**
+   * `'none'`: el contenido es todo el panel, sin diseño impuesto: sin X y sin relleno (las piezas
+   * `mimi-dialog-header`, `-body` y `-footer` siguen siendo opcionales y llevan el suyo si las
+   * usas). `closeButton` y `padding` explícitos mandan sobre él. Por defecto, `'default'`.
+   */
+  chrome?: 'default' | 'none';
+  /**
+   * Valores de las entradas del componente que se abre (`open(Comp, { inputs: { title: 'Hola' } })`),
+   * en vez de `inject(MIMI_DIALOG_DATA)`. Solo con un componente (no con una plantilla).
+   */
+  inputs?: Record<string, unknown>;
   /** Escape cierra. Por defecto, `true`. */
   closeOnEscape?: boolean;
   /** Un clic en el fondo cierra. Por defecto, `true`. */
@@ -102,14 +127,14 @@ export class MimiDialogRef<R = unknown> {
   readonly state = signal<'open' | 'closed'>('open');
 
   private cdkRef: DialogRef<R> | null = null;
-  private result: R | undefined;
-  private readonly closed = new Subject<R | undefined>();
+  private pendingResult: R | undefined;
+  private readonly closedSubject = new Subject<R | undefined>();
   private onClosing: (() => void) | null = null;
 
   /** Cierra el diálogo, con un resultado opcional para `afterClosed()`. */
   close(result?: R): void {
     if (this.state() === 'closed') return;
-    this.result = result;
+    this.pendingResult = result;
     this.state.set('closed');
     this.onClosing?.();
     // El fondo se desvanece junto con el panel; el diálogo se cierra al terminar la animación.
@@ -122,8 +147,16 @@ export class MimiDialogRef<R = unknown> {
    * salida, o enseguida si lo cerró una navegación).
    */
   afterClosed(): Observable<R | undefined> {
-    return this.closed.asObservable();
+    return this.closedSubject.asObservable();
   }
+
+  /** Lo mismo que `afterClosed()`, con el nombre de cdk Dialog: `ref.closed.subscribe(…)`. */
+  get closed(): Observable<R | undefined> {
+    return this.closedSubject.asObservable();
+  }
+
+  /** El resultado, como señal: `undefined` hasta que el diálogo se cierra con `close(resultado)`. */
+  readonly result = signal<R | undefined>(undefined);
 
   /** Uso interno: lo conecta el servicio al abrir. `onClosing` corre al empezar a cerrarse. */
   connect(cdkRef: DialogRef<R>, onClosing: () => void): void {
@@ -135,18 +168,46 @@ export class MimiDialogRef<R = unknown> {
   /** Uso interno: cierra de verdad (terminó la animación de salida, o no hay que esperarla). */
   finish(): void {
     this.state.set('closed');
-    this.cdkRef?.close(this.result);
+    this.cdkRef?.close(this.pendingResult);
   }
 
   /** Uso interno: se cerró antes de abrirse. */
   discard(): void {
     this.state.set('closed');
-    this.emit(this.result);
+    this.emit(this.pendingResult);
   }
 
   private emit(result: R | undefined): void {
-    this.closed.next(result);
-    this.closed.complete();
+    this.result.set(result);
+    this.closedSubject.next(result);
+    this.closedSubject.complete();
+  }
+}
+
+/**
+ * Comprueba las claves de `inputs` contra las entradas del componente que se abre (con el nombre
+ * que se usa en la plantilla). Lanza un error que dice cuál sobra y cuáles hay.
+ */
+function validateInputs(
+  content: Type<unknown> | TemplateRef<unknown>,
+  inputs: Record<string, unknown> | undefined,
+): void {
+  const keys = Object.keys(inputs ?? {});
+  if (!keys.length) return;
+  if (content instanceof TemplateRef) {
+    throw new Error(
+      `[Mimi] Dialog: «inputs» solo vale con un componente; con una plantilla usa «data» (${keys.join(', ')}).`,
+    );
+  }
+  const mirror = reflectComponentType(content);
+  if (!mirror) return;
+  const valid = mirror.inputs.map((input) => input.templateName);
+  const unknown = keys.filter((key) => !valid.includes(key));
+  if (unknown.length) {
+    throw new Error(
+      `[Mimi] Dialog: «${unknown.join('», «')}» no es una entrada de ${content.name}. ` +
+        `Entradas que tiene: ${valid.length ? valid.join(', ') : '(ninguna)'}.`,
+    );
   }
 }
 
@@ -162,7 +223,7 @@ const PANEL_CLASSES = cn(
 const CLOSE_CLASSES = cn(
   'absolute top-3 right-3 inline-flex size-[var(--mimi-dialog-close-size,32px)] cursor-pointer items-center justify-center',
   'rounded-[var(--mimi-radius-sm)] bg-transparent text-muted-foreground',
-  'mimi-transition hover:bg-accent hover:text-foreground active:scale-90',
+  'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );
 
@@ -193,6 +254,7 @@ export class MimiDialogOutlet {
   private readonly viewContainer = inject(ViewContainerRef);
   private readonly injector = inject(Injector);
   private readonly data = inject(MIMI_DIALOG_DATA, { optional: true });
+  private readonly options = inject(MIMI_DIALOG_SHELL_OPTIONS, { optional: true });
 
   private readonly render = effect(() => {
     const content = this.content();
@@ -207,8 +269,12 @@ export class MimiDialogOutlet {
         );
         return;
       }
-      const host = this.viewContainer.createComponent(content, { injector: this.injector }).location
-        .nativeElement as HTMLElement;
+      const componentRef = this.viewContainer.createComponent(content, { injector: this.injector });
+      // `inputs` (R.7): los valores de las entradas del componente, antes de la primera detección.
+      for (const [name, value] of Object.entries(this.options?.config.inputs ?? {})) {
+        componentRef.setInput(name, value);
+      }
+      const host = componentRef.location.nativeElement as HTMLElement;
       // El host del componente no dibuja caja: así el encabezado, el cuerpo y el pie son hijos
       // directos del panel (la columna y el scroll del cuerpo dependen de eso).
       host.style.display = 'contents';
@@ -229,6 +295,8 @@ export class MimiDialogOutlet {
       #panel
       data-mimi-overlay-panel
       [class]="classes"
+      [style.--mimi-dialog-width]="sizeWidth"
+      [style.--mimi-dialog-padding]="padding"
       [style.width]="options.config.width ?? null"
       [style.max-width]="maxWidth"
       [attr.data-state]="ref.state()"
@@ -277,9 +345,30 @@ export class MimiDialogShell {
 
   private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
 
-  protected readonly closeButton = this.options.config.closeButton ?? true;
+  /** Con `chrome: 'none'`, sin X (a menos que se pida `closeButton: true`). */
+  protected readonly closeButton =
+    this.options.config.closeButton ?? this.options.config.chrome !== 'none';
   protected readonly closeClasses = CLOSE_CLASSES;
-  protected readonly classes = cn(PANEL_CLASSES, this.options.config.class);
+  protected readonly classes = cn(
+    PANEL_CLASSES,
+    this.options.config.panelClass,
+    this.options.config.class,
+  );
+  /** El ancho de `sm` y `lg` (`md` es el de siempre, `--mimi-dialog-width`, 420px). */
+  protected readonly sizeWidth =
+    this.options.config.size === 'sm'
+      ? '360px'
+      : this.options.config.size === 'lg'
+        ? '560px'
+        : null;
+  /** El relleno de las piezas: el dado o, en `sm`, 16px. */
+  protected readonly padding =
+    this.options.config.padding ??
+    (this.options.config.chrome === 'none'
+      ? '0px'
+      : this.options.config.size === 'sm'
+        ? '16px'
+        : null);
   /** El máximo del usuario, sin salirse de la pantalla (sin él, lo limita la clase del panel). */
   protected readonly maxWidth = this.options.config.maxWidth
     ? `min(${this.options.config.maxWidth}, calc(100vw - 32px))`
@@ -370,6 +459,8 @@ export class MimiDialogService {
     content: Type<unknown> | TemplateRef<unknown>,
     config: MimiDialogConfig<D> = {},
   ): MimiDialogRef<R> {
+    // Antes de crear nada: un error en `inputs` no deja un diálogo a medias.
+    validateInputs(content, config.inputs);
     const ref = new MimiDialogRef<R>();
     const tracked = ref as MimiDialogRef<unknown>;
     this.refs.add(tracked);
@@ -503,6 +594,10 @@ export class MimiDialog {
   readonly width = input<string>();
   /** Ancho máximo del panel (un valor CSS). */
   readonly maxWidth = input<string>();
+  /** `sm` 360px, `md` 420px (por defecto) o `lg` 560px (R.6). */
+  readonly size = input<MimiSize>();
+  /** Relleno lateral de las piezas (un valor CSS). */
+  readonly padding = input<string>();
   readonly closeOnEscape = input(true, { transform: booleanAttribute });
   readonly closeOnBackdropClick = input(true, { transform: booleanAttribute });
   /** Atajo: ni Escape ni el clic en el fondo cierran. */
@@ -537,6 +632,8 @@ export class MimiDialog {
       class: this.userClass(),
       width: this.width(),
       maxWidth: this.maxWidth(),
+      size: this.size(),
+      padding: this.padding(),
       closeOnEscape: this.closeOnEscape(),
       closeOnBackdropClick: this.closeOnBackdropClick(),
       disableClose: this.disableClose(),

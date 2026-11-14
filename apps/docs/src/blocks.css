@@ -9,4 +9,10 @@
 @reference '@mimi-ng/ui-core/theme.css';
 
 @source '../../../packages/ui-core/src/lib/blocks';
+/* Y los componentes que usan los Blocks: desde M.23 el CSS global no trae los que solo usan las
+   páginas de componentes (Password, Progress, Separator…), y la vista previa no carga
+   components.css (que además vale solo dentro de `article`). Sin esto, la caja de Password de
+   login-01 salía con el borde del input dentro (revisión con Playwright, 12/11/2026). Aquí no
+   hay menú ni cabecera del sitio, así que repetir utilidades del CSS global no las pisa. */
+@source '../../../packages/ui-core/src/lib/components';
 @source not '../../../packages/ui-core/src/**/*.spec.ts';

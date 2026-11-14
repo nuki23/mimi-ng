@@ -5,7 +5,6 @@ import {
   MimiComboboxImports,
   provideMimiComboboxText,
 } from '@/components/ui/combobox';
-import type { MimiListOption } from '@/components/ui/option-list';
 
 const ALL = [
   'Asunción',
@@ -38,17 +37,19 @@ const ALL = [
   template: `
     <div class="flex w-full max-w-xs flex-col gap-1.5">
       <label for="remote-city" class="text-sm font-medium">Ciudad (servidor simulado)</label>
-      <!-- El filtro lo hace el «servidor»: filterWith deja pasar todo lo que llega. -->
+      <!-- searchMode="server": filtra el «servidor»; el Combobox muestra lo que llega. -->
       <mimi-combobox
         id="remote-city"
         placeholder="Escribe al menos 2 letras"
-        [options]="results()"
+        searchMode="server"
         [loading]="loading()"
-        [filterWith]="all"
         [(value)]="city"
         (searchChange)="search($event)"
       >
         <svg mimiComboboxStart lucideMapPin></svg>
+        @for (name of results(); track name) {
+          <mimi-option [value]="name">{{ name }}</mimi-option>
+        }
       </mimi-combobox>
     </div>
   `,
@@ -56,9 +57,8 @@ const ALL = [
 })
 export class ComboboxAsyncExample {
   protected readonly city = signal<string | null>(null);
-  protected readonly results = signal<MimiListOption<string>[]>([]);
+  protected readonly results = signal<string[]>([]);
   protected readonly loading = signal(false);
-  protected readonly all = () => true;
   private timer?: ReturnType<typeof setTimeout>;
 
   constructor() {
@@ -77,12 +77,7 @@ export class ComboboxAsyncExample {
     this.loading.set(true);
     this.timer = setTimeout(() => {
       const plain = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-      this.results.set(
-        ALL.filter((name) => plain(name).includes(plain(query))).map((name) => ({
-          label: name,
-          value: name,
-        })),
-      );
+      this.results.set(ALL.filter((name) => plain(name).includes(plain(query))));
       this.loading.set(false);
     }, 600);
   }

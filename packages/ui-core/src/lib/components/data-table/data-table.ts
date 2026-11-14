@@ -29,6 +29,7 @@ import { MimiInput } from '@/components/ui/input';
 import { MimiPagination } from '@/components/ui/pagination';
 import { MimiToggleGroup, MimiToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { MIMI_DATA_TABLE_TEXT } from './data-table-texts';
 
 /*
@@ -227,17 +228,17 @@ const TOOLBAR_CLASSES =
 const CELL_BG = cn(
   'bg-[color:var(--mimi-table-bg,var(--mimi-card))] transition-[background-color] duration-120 ease-[ease]',
   'group-hover/row:bg-[color:var(--mimi-table-row-hover,color-mix(in_oklab,var(--mimi-foreground)_3.5%,var(--mimi-card)))]',
-  'group-data-[selected]/row:bg-[color:var(--mimi-table-row-selected,color-mix(in_oklab,var(--mimi-info)_8%,var(--mimi-card)))]',
+  'group-data-[selected]/row:bg-[color:var(--mimi-table-row-selected,color-mix(in_oklab,var(--mimi-primary)_8%,var(--mimi-card)))]',
 );
 
 const CELL_CLASSES = cn(
-  'h-[var(--mimi-table-row-height,42px)] border-b border-border px-[var(--mimi-table-cell-px,10px)]',
+  'h-[var(--mimi-table-row-h,var(--mimi-table-row-height,42px))] border-b border-border px-[var(--mimi-table-cell-px,10px)]',
   'group-data-[density=comfortable]/data-table:h-[var(--mimi-table-row-height-comfortable,60px)]',
   CELL_BG,
 );
 
 const HEAD_CLASSES = cn(
-  'h-[var(--mimi-table-head-height,38px)] border-b border-border px-[var(--mimi-table-cell-px,10px)] text-start whitespace-nowrap',
+  'h-[var(--mimi-table-head-h,var(--mimi-table-head-height,38px))] border-b border-border px-[var(--mimi-table-cell-px,10px)] text-start whitespace-nowrap',
   'group-data-[density=comfortable]/data-table:h-[var(--mimi-table-head-height-comfortable,44px)]',
   'bg-[color:var(--mimi-table-head-bg,var(--mimi-muted))] text-[12.5px] font-semibold text-muted-foreground',
 );
@@ -286,7 +287,7 @@ const UI = {
   ),
   filter: cn(
     ICON_BUTTON_CLASSES,
-    'relative size-6 data-[active]:bg-info-soft data-[active]:text-info-soft-foreground [&_svg]:size-[13px]',
+    'relative size-6 data-[active]:bg-primary-subtle data-[active]:text-primary [&_svg]:size-[13px]',
   ),
   expand: cn(
     ICON_BUTTON_CLASSES,
@@ -337,6 +338,7 @@ interface ColumnView<T> {
  */
 @Component({
   selector: 'mimi-data-table',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [
     MimiCheckbox,
     MimiChip,
@@ -358,7 +360,7 @@ interface ColumnView<T> {
         @if (selectable() && selection().length) {
           <div data-slot="selection" class="flex min-w-0 flex-1 items-center gap-2.5">
             <span
-              class="inline-flex h-[26px] items-center rounded-full bg-info-soft px-2.5 text-[13px] font-bold text-info-soft-foreground"
+              class="inline-flex h-[26px] items-center rounded-full bg-primary-subtle px-2.5 text-[13px] font-bold text-primary"
               >{{ texts.selected(selection().length) }}</span
             >
             <button
@@ -603,7 +605,7 @@ interface ColumnView<T> {
                         @if (col.filtered) {
                           <span
                             aria-hidden="true"
-                            class="absolute top-0.5 end-0.5 size-1.5 rounded-full bg-info"
+                            class="absolute top-0.5 end-0.5 size-1.5 rounded-full bg-primary"
                           ></span>
                         }
                       </button>

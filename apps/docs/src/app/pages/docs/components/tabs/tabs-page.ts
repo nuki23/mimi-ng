@@ -4,6 +4,7 @@ import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { TabsBasicExample } from './examples/tabs-basic.example';
+import { TabsShortcutExample } from './examples/tabs-shortcut.example';
 import { TabsControlledExample } from './examples/tabs-controlled.example';
 import { TabsCustomClassExample } from './examples/tabs-custom-class.example';
 import { TabsDisabledExample } from './examples/tabs-disabled.example';
@@ -15,6 +16,8 @@ import { TabsVerticalExample } from './examples/tabs-vertical.example';
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
 import basicSource from './examples/tabs-basic.example' with { loader: 'text' };
+// @ts-expect-error
+import shortcutSource from './examples/tabs-shortcut.example' with { loader: 'text' };
 // @ts-expect-error
 import controlledSource from './examples/tabs-controlled.example' with { loader: 'text' };
 // @ts-expect-error
@@ -39,6 +42,7 @@ import verticalSource from './examples/tabs-vertical.example' with { loader: 'te
     CssVariables,
     InstallCommand,
     TabsBasicExample,
+    TabsShortcutExample,
     TabsControlledExample,
     TabsCustomClassExample,
     TabsDisabledExample,
@@ -53,6 +57,7 @@ import verticalSource from './examples/tabs-vertical.example' with { loader: 'te
 export class TabsPage {
   protected readonly source = {
     basic: basicSource as string,
+    shortcut: shortcutSource as string,
     controlled: controlledSource as string,
     customClass: customClassSource as string,
     disabled: disabledSource as string,
@@ -68,9 +73,13 @@ export class TabsPage {
     '@Component({',
     '  imports: [MimiTabsImports],',
     '  template: `',
+    '    <!-- La forma corta: una pestaña es un elemento (su contenido se crea con la página). -->',
     '    <mimi-tabs [(value)]="section" aria-label="Secciones de la cuenta">',
-    '      <ng-template mimiTab="account" label="Cuenta">…</ng-template>',
-    '      <ng-template mimiTab="notifications" label="Avisos" [count]="3">…</ng-template>',
+    '      <mimi-tab label="Cuenta" value="account">…</mimi-tab>',
+    '      <mimi-tab label="Avisos" [count]="3">…</mimi-tab>',
+    '',
+    '      <!-- Un panel costoso: la plantilla se crea solo al elegir la pestaña. -->',
+    '      <ng-template mimiTab="billing" label="Facturación">…</ng-template>',
     '    </mimi-tabs>',
     '  `,',
     '})',
@@ -126,7 +135,8 @@ export class TabsPage {
       name: 'mimiTab',
       type: 'string',
       default: '—',
-      description: 'El valor de la pestaña (único y no vacío). Su contenido es el panel.',
+      description:
+        'El valor de la pestaña (único y no vacío), en `ng-template[mimiTab]`: su contenido se crea al elegirla. En el elemento `<mimi-tab>` (la forma corta) la entrada se llama `value` y es opcional: sin ella, el valor es el `label` en minúsculas y con guiones. El contenido de `<mimi-tab>` se crea con la página, no al elegirla.',
     },
     {
       name: 'label',

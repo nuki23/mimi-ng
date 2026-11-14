@@ -22,7 +22,7 @@ describe('PasswordPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(5);
+      expect(previews.length).toBe(6);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-password input[mimiInput]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/password';");

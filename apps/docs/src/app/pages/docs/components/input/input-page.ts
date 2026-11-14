@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { CodeBlock } from '../../../../code/code-block';
+import { FormsTabs } from '../../../../code/forms-tabs';
 import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
@@ -12,8 +14,6 @@ import { InputReactiveFormsExample } from './examples/input-reactive-forms.examp
 import { InputShowErrorExample } from './examples/input-show-error.example';
 import { InputSignalFormsExample } from './examples/input-signal-forms.example';
 import { InputSizesExample } from './examples/input-sizes.example';
-import { TextareaBasicExample } from './examples/textarea-basic.example';
-import { TextareaStatesExample } from './examples/textarea-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -36,10 +36,6 @@ import inputShowErrorSource from './examples/input-show-error.example' with { lo
 import inputSignalFormsSource from './examples/input-signal-forms.example' with { loader: 'text' };
 // @ts-expect-error
 import inputSizesSource from './examples/input-sizes.example' with { loader: 'text' };
-// @ts-expect-error
-import textareaBasicSource from './examples/textarea-basic.example' with { loader: 'text' };
-// @ts-expect-error
-import textareaStatesSource from './examples/textarea-states.example' with { loader: 'text' };
 
 interface ApiRow {
   name: string;
@@ -63,11 +59,17 @@ const CLASS: ApiRow = {
   description: 'Clases propias. Se mezclan con cn(): las tuyas ganan.',
 };
 
-/** Documentación de Input y Textarea (tareas 2.2 y 2.3). */
+/**
+ * Documentación de Input (tarea 2.2). Compartía página con Textarea hasta el 13/11/2026; ahora
+ * Textarea tiene la suya (`../textarea`). «En fila» se queda aquí: muestra Input con Textarea y
+ * Button alineados.
+ */
 @Component({
   selector: 'app-input-page',
   imports: [
+    RouterLink,
     CodeBlock,
+    FormsTabs,
     CssVariables,
     CodePreview,
     InstallCommand,
@@ -80,8 +82,6 @@ const CLASS: ApiRow = {
     InputShowErrorExample,
     InputSignalFormsExample,
     InputSizesExample,
-    TextareaBasicExample,
-    TextareaStatesExample,
   ],
   templateUrl: './input-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -97,21 +97,15 @@ export class InputPage {
     inputShowError: inputShowErrorSource as string,
     inputSignalForms: inputSignalFormsSource as string,
     inputSizes: inputSizesSource as string,
-    textareaBasic: textareaBasicSource as string,
-    textareaStates: textareaStatesSource as string,
   };
 
   protected readonly usage = [
     "import { MimiInput } from '@/components/ui/input';",
-    "import { MimiTextarea } from '@/components/ui/textarea';",
     '',
     '@Component({',
     "  selector: 'app-contact',",
-    '  imports: [MimiInput, MimiTextarea],',
-    '  template: `',
-    '    <input mimiInput type="email" placeholder="tu@correo.com" />',
-    '    <textarea mimiTextarea rows="3"></textarea>',
-    '  `,',
+    '  imports: [MimiInput],',
+    '  template: `<input mimiInput type="email" placeholder="tu@correo.com" />`,',
     '})',
     'export class ContactComponent {}',
   ].join('\n');
@@ -119,8 +113,8 @@ export class InputPage {
   protected readonly inputApi: ApiRow[] = [
     {
       name: 'size',
-      type: "'sm' | 'default' | 'lg'",
-      default: "'default'",
+      type: "'sm' | 'md' | 'lg'",
+      default: "'md' (o el del contenedor con mimiSize)",
       description:
         'Alto y tamaño de letra, iguales a los de Button. Reemplaza al atributo nativo size de <input> (el ancho en caracteres): para el ancho, usa class.',
     },
@@ -128,10 +122,5 @@ export class InputPage {
     CLASS,
   ];
 
-  protected readonly textareaApi: ApiRow[] = [SHOW_ERROR, CLASS];
-
-  protected readonly apiTables = [
-    { id: 'api-input', title: 'Input', rows: this.inputApi },
-    { id: 'api-textarea', title: 'Textarea', rows: this.textareaApi },
-  ];
+  protected readonly apiTables = [{ id: 'api-input', title: 'Input', rows: this.inputApi }];
 }

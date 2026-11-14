@@ -1,8 +1,10 @@
 import { Combobox, ComboboxPopup } from '@angular/aria/combobox';
+import { FocusMonitor, InputModalityDetector } from '@angular/cdk/a11y';
 import { CdkConnectedOverlay, type ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
   ElementRef,
   Injector,
@@ -12,6 +14,7 @@ import {
   booleanAttribute,
   computed,
   contentChild,
+  contentChildren,
   effect,
   inject,
   input,
@@ -32,12 +35,21 @@ import {
   type MimiListOptionContext,
   type MimiListOptionGroup,
   type MimiListRow,
+  MimiOptgroup,
+  MimiOptionItem,
   MimiOptionList,
+  type MimiCompareWith,
+  type MimiSearchMode,
+  mimiCompareFn,
+  mimiDeclaredOptions,
   mimiFilterSections,
   mimiListSections,
   mimiNormalizeText,
 } from '@/components/ui/option-list/option-list';
 import { cn } from '@/components/ui/utils/cn';
+import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { fieldBoxStyles } from '@/components/ui/utils/field-styles';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -46,6 +58,7 @@ import {
 import {
   MIMI_OVERLAY_ANIMATION,
   MIMI_VIEWPORT_MARGIN,
+  MimiOverlayFollow,
   type MimiOverlayAlign,
   type MimiOverlaySide,
   mimiConnectedPositions,
@@ -70,6 +83,23 @@ const OFFSET = 2;
 
 let nextId = 0;
 
+const CLEAR_CLASSES = cn(
+  'relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
+  // Al hacer clic se hunde la caja entera (field-styles, profundidad B), no la X aparte.
+  'mimi-transition hover:bg-accent hover:text-foreground',
+  buttonFocusStyles,
+  // La X solo se ve con el ratón encima, el foco que llegó por teclado o el panel abierto; en
+  // pantallas sin ratón, mientras haya valor (como en Select, 13/11/2026). Si no, el chevron.
+  'hidden group-hover/combobox:inline-flex group-data-[focus-keyboard]/combobox:inline-flex group-data-[state=open]/combobox:inline-flex [@media(hover:none)]:inline-flex',
+);
+const CHEVRON_CLASSES =
+  'size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/combobox:rotate-180';
+/** El chevron cuando hay X: se esconde cuando la X se ve. */
+const CHEVRON_WITH_CLEAR_CLASSES = cn(
+  CHEVRON_CLASSES,
+  'group-hover/combobox:hidden group-data-[focus-keyboard]/combobox:hidden group-data-[state=open]/combobox:hidden [@media(hover:none)]:hidden',
+);
+
 const ICON = {
   viewBox: '0 0 24 24',
   chevron: 'm6 9 6 6 6-6',
@@ -79,26 +109,24 @@ const ICON = {
 const BOX_CLASSES = cn(
   'group/combobox relative flex w-full min-w-0 cursor-text items-center pr-2.5 font-sans text-sm text-foreground mimi-transition',
   'rounded-[var(--mimi-combobox-radius,var(--mimi-radius,0.75rem))]',
-  // Los estados de Input (spec 13, «Campos»), como Tags Input: el foco está en el <input> de dentro.
-  'border border-input bg-input-background',
-  'not-data-[disabled]:hover:border-input-hover',
-  'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft',
-  'data-[invalid]:border-destructive data-[invalid]:focus-within:border-destructive data-[invalid]:focus-within:ring-destructive-ring',
-  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
+  // Los estados de todos los campos (utils/field-styles): el foco está en el <input> de dentro.
+  fieldBoxStyles,
 );
 
 /** Simple: el alto de los controles. Múltiple: la caja de Tags Input, que crece con los chips. */
 const BOX_MODE_CLASSES = {
-  single: 'h-[var(--mimi-combobox-height,var(--mimi-control-height,2.5rem))] gap-2 pl-3',
+  single:
+    'h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] gap-2 pl-3',
   multiple:
-    'min-h-[var(--mimi-combobox-height,var(--mimi-control-height,2.5rem))] flex-wrap gap-1.5 py-[5px] pl-1.5',
+    'min-h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))] flex-wrap gap-1.5 py-[5px] pl-1.5 in-data-[size=sm]:py-[3px]',
 } as const;
 
 const INPUT_BASE =
   'min-w-0 flex-1 border-0 bg-transparent font-sans text-sm text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed';
 const INPUT_MODE_CLASSES = {
   single: cn(INPUT_BASE, 'h-full p-0'),
-  multiple: cn(INPUT_BASE, 'h-7 min-w-20 px-1'),
+  // El alto del campo sigue al del chip (la escala del tema), para que la caja no crezca en `sm`.
+  multiple: cn(INPUT_BASE, 'h-[var(--mimi-chip-h,var(--mimi-chip-height,26px))] min-w-20 px-1'),
 } as const;
 
 const PANEL_CLASSES =
@@ -109,9 +137,9 @@ const LIST_CLASSES = 'max-h-[var(--mimi-combobox-menu-max-height,228px)]';
 const OPTION_CLASSES = cn(
   'flex min-h-[var(--mimi-combobox-option-height,34px)] shrink-0 cursor-pointer items-center gap-2 px-2 text-sm select-none',
   'rounded-[var(--mimi-combobox-option-radius,var(--mimi-radius-sm))]',
-  'transition-[background-color] duration-120 ease-[ease] active:scale-[0.985]',
+  'transition-[background-color] duration-120 ease-[ease] active:scale-(--mimi-press-scale)',
   'data-[active=true]:bg-[color:var(--mimi-combobox-option-hover,var(--mimi-accent))]',
-  'aria-disabled:cursor-not-allowed aria-disabled:opacity-50 aria-disabled:active:scale-100',
+  'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:active:scale-100',
 );
 /** En el múltiple, la casilla va a 10px del texto (diseño). */
 const OPTION_MULTIPLE_CLASSES = cn(OPTION_CLASSES, 'gap-2.5');
@@ -156,9 +184,14 @@ export class MimiComboboxOption {
  * Combobox: se escribe para filtrar y se elige una opción.
  *
  * ```html
- * <mimi-combobox aria-label="Ciudad" [(value)]="ciudad" [options]="ciudades" creatable
- *   (create)="agregar($event)" />
+ * <mimi-combobox aria-label="Ciudad" [(value)]="ciudad" creatable (create)="agregar($event)">
+ *   @for (c of ciudades(); track c.id) {
+ *     <mimi-option [value]="c.id">{{ c.nombre }}</mimi-option>
+ *   }
+ * </mimi-combobox>
  * ```
+ *
+ * Para una lista armada por código, `[options]` es la alternativa (gana sobre las `<mimi-option>`).
  *
  * Implementa `FormValueControl`: funciona con `[formField]`, `formControlName` y `[(ngModel)]`
  * sin adaptador (spec 8). Lo escrito no es el valor hasta que se elige o se crea una opción.
@@ -166,7 +199,15 @@ export class MimiComboboxOption {
  */
 @Component({
   selector: 'mimi-combobox',
-  imports: [Combobox, ComboboxPopup, CdkConnectedOverlay, MimiOptionList, MimiChip],
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
+  imports: [
+    Combobox,
+    ComboboxPopup,
+    CdkConnectedOverlay,
+    MimiOverlayFollow,
+    MimiOptionList,
+    MimiChip,
+  ],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiCombobox }],
   template: `
     <div
@@ -176,14 +217,19 @@ export class MimiComboboxOption {
       [attr.data-state]="open() ? 'open' : 'closed'"
       [attr.data-invalid]="showInvalid() ? '' : null"
       [attr.data-disabled]="disabled() ? '' : null"
+      [attr.data-readonly]="readonly() ? '' : null"
+      [attr.data-focus-keyboard]="focusKeyboard() ? '' : null"
       (mousedown)="onBoxMousedown($event)"
     >
       <ng-content select="[mimiComboboxStart]" />
       @if (multiple()) {
         @for (chip of shownChips(); track $index) {
-          <mimi-chip [label]="chip.label" [removable]="!disabled()" (remove)="removeAt($index)">{{
-            chip.label
-          }}</mimi-chip>
+          <mimi-chip
+            [label]="chip.label"
+            [removable]="!disabled() && !readonly()"
+            (remove)="removeAt($index)"
+            >{{ chip.label }}</mimi-chip
+          >
         }
         @if (hiddenCount(); as count) {
           <span data-slot="more" class="px-0.5 text-xs text-muted-foreground">{{
@@ -201,6 +247,7 @@ export class MimiComboboxOption {
         [id]="controlId()"
         [class]="inputClasses()"
         [value]="draft()"
+        [readOnly]="readonly()"
         [expanded]="open()"
         [disabled]="disabled()"
         [softDisabled]="false"
@@ -208,6 +255,7 @@ export class MimiComboboxOption {
         [attr.placeholder]="(chips().length ? '' : placeholder()) || null"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.aria-required]="required() || null"
+        [readonly]="readonly()"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
         [attr.aria-describedby]="help() ? helpId : null"
@@ -216,34 +264,65 @@ export class MimiComboboxOption {
         (keydown)="onKeydown($event)"
         (click)="setOpen(true)"
       />
-      @if (loading()) {
-        <svg
-          aria-hidden="true"
-          data-slot="spinner"
-          class="size-4 shrink-0 animate-[mimi-spin_0.8s_linear_infinite] text-muted-foreground"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          [attr.viewBox]="icon.viewBox"
-        >
-          <path [attr.d]="icon.spinner" />
-        </svg>
-      }
-      <svg
-        aria-hidden="true"
-        data-slot="chevron"
-        class="size-4 shrink-0 text-muted-foreground transition-transform duration-200 ease-[cubic-bezier(.2,.8,.2,1)] group-data-[state=open]/combobox:rotate-180"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        [attr.viewBox]="icon.viewBox"
+      <!-- Un solo icono al final, en el sitio del chevron: cargando > limpiar > chevron. -->
+      <span
+        data-slot="end-icon"
+        class="relative z-10 inline-flex size-6 shrink-0 items-center justify-center"
+        [attr.data-icon]="endIcon()"
       >
-        <path [attr.d]="icon.chevron" />
-      </svg>
+        @if (endIcon() === 'loading') {
+          <svg
+            aria-hidden="true"
+            data-slot="spinner"
+            class="size-4 shrink-0 animate-[mimi-spin_0.8s_linear_infinite] text-muted-foreground"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            [attr.viewBox]="icon.viewBox"
+          >
+            <path [attr.d]="icon.spinner" />
+          </svg>
+        } @else {
+          @if (endIcon() === 'clear') {
+            <button
+              type="button"
+              data-slot="clear"
+              [class]="clearClasses"
+              [attr.aria-label]="texts.clear ?? 'Clear'"
+              (click)="clearAll()"
+            >
+              <svg
+                aria-hidden="true"
+                class="size-3.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                [attr.viewBox]="icon.viewBox"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          }
+          <svg
+            aria-hidden="true"
+            data-slot="chevron"
+            [class]="endIcon() === 'clear' ? chevronWithClearClasses : chevronClasses"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            [attr.viewBox]="icon.viewBox"
+          >
+            <path [attr.d]="icon.chevron" />
+          </svg>
+        }
+      </span>
     </div>
     @if (help(); as help) {
       <span data-slot="help" class="text-xs text-muted-foreground" [id]="helpId">{{ help }}</span>
@@ -253,6 +332,8 @@ export class MimiComboboxOption {
     <ng-template ngComboboxPopup [combobox]="combobox" popupType="listbox">
       <ng-template
         cdkConnectedOverlay
+        mimiOverlayFollow
+        (mimiOverlayOutOfView)="setOpen(false)"
         [cdkConnectedOverlayOrigin]="box"
         [cdkConnectedOverlayOpen]="rendered()"
         [cdkConnectedOverlayPositions]="positions()"
@@ -333,10 +414,19 @@ export class MimiCombobox<T = unknown>
    * Backspace quita el último»); vacía, sin ayuda.
    */
   readonly hint = input<string | undefined>(undefined);
-  /** Compara el valor con el de cada opción (para objetos). Por defecto, `Object.is`. */
-  readonly compareWith = input<(a: T, b: T) => boolean>(Object.is);
+  /**
+   * Compara el valor con el de cada opción (para objetos): una función o el nombre de un campo
+   * (`compareWith="id"`). Por defecto, `Object.is`.
+   */
+  readonly compareWith = input<MimiCompareWith<T>>(Object.is);
+  private readonly compare = computed(() => mimiCompareFn(this.compareWith()));
   /** Filtro propio. Por defecto: la etiqueta contiene lo escrito, sin tildes ni mayúsculas. */
   readonly filterWith = input<MimiListFilter<T>>();
+  /**
+   * Dónde se filtra: `'client'` (aquí, con `filterWith` o el predeterminado) o `'server'` (la app
+   * filtra al recibir `(searchChange)` y el Combobox muestra lo que llega, sin volver a filtrar).
+   */
+  readonly searchMode = input<MimiSearchMode>('client');
   /**
    * Ofrece «Crear "<texto>"» cuando lo escrito no coincide con ninguna opción. Al elegirla se
    * emite `(create)`: la opción la agrega la app a `options`, y el Combobox la elige en cuanto
@@ -345,8 +435,12 @@ export class MimiCombobox<T = unknown>
   readonly creatable = input(false, { transform: booleanAttribute });
   /** Cargando: spinner en el campo y, en el panel, el estado de carga en vez de la lista. */
   readonly loading = input(false, { transform: booleanAttribute });
+  /** Botón para quitar el valor (en el múltiple, todos), en el sitio del chevron. */
+  readonly clearable = input(false, { transform: booleanAttribute });
   readonly placeholder = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -374,8 +468,37 @@ export class MimiCombobox<T = unknown>
 
   protected readonly optionTemplate = contentChild(MimiComboboxOption);
   private readonly field = viewChild.required<ElementRef<HTMLInputElement>>('field');
+  private readonly box = viewChild.required<ElementRef<HTMLElement>>('box');
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
   private readonly list = viewChild(MimiOptionList);
+
+  private readonly focusMonitor = inject(FocusMonitor);
+  private readonly modality = inject(InputModalityDetector);
+  /**
+   * El foco está en la caja (el input o la X) y llegó con el teclado: muestra la X (13/11/2026).
+   * Con el ratón o el dedo se borra, aunque el foco no salga (al elegir una opción con el ratón).
+   */
+  protected readonly focusKeyboard = signal(false);
+  private readonly watchFocus = afterNextRender(() => {
+    const box = this.box().nativeElement;
+    const destroyRef = this.injector.get(DestroyRef);
+    const focus = this.focusMonitor
+      .monitor(box, true)
+      .subscribe((origin) =>
+        this.focusKeyboard.set(
+          origin === 'keyboard' ||
+            (origin === 'program' && this.modality.mostRecentModality === 'keyboard'),
+        ),
+      );
+    const modality = this.modality.modalityDetected.subscribe((m) => {
+      if (m !== 'keyboard') this.focusKeyboard.set(false);
+    });
+    destroyRef.onDestroy(() => {
+      focus.unsubscribe();
+      modality.unsubscribe();
+      this.focusMonitor.stopMonitoring(box);
+    });
+  });
 
   /** Estado del formulario, con los errores, para el mensaje de mimi-form-field. */
   readonly fieldState = injectFieldState();
@@ -393,6 +516,27 @@ export class MimiCombobox<T = unknown>
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly icon = ICON;
+  protected readonly clearClasses = CLEAR_CLASSES;
+  protected readonly chevronClasses = CHEVRON_CLASSES;
+  protected readonly chevronWithClearClasses = CHEVRON_WITH_CLEAR_CLASSES;
+  private readonly declared = contentChildren(MimiOptionItem, { descendants: true });
+  /** `[options]` si se dio; si no, las `<mimi-option>` (como en Select). */
+  private readonly items = computed<readonly (MimiListOption<T> | MimiListOptionGroup<T>)[]>(() => {
+    const given = this.options();
+    return given.length > 0 ? given : mimiDeclaredOptions<T>(this.declared());
+  });
+  private readonly hasValue = computed(() => {
+    const value = this.value();
+    return Array.isArray(value) ? value.length > 0 : value != null;
+  });
+  /** Qué icono ocupa el sitio del chevron. */
+  protected readonly endIcon = computed(() =>
+    this.loading()
+      ? 'loading'
+      : this.clearable() && this.hasValue() && !this.disabled() && !this.readonly()
+        ? 'clear'
+        : 'chevron',
+  );
   protected readonly listClasses = LIST_CLASSES;
   protected readonly optionClasses = OPTION_CLASSES;
   protected readonly optionMultipleClasses = OPTION_MULTIPLE_CLASSES;
@@ -411,7 +555,7 @@ export class MimiCombobox<T = unknown>
   );
   protected readonly panelClasses = computed(() => cn(PANEL_CLASSES, this.panelClass()));
 
-  private readonly sections = computed(() => mimiListSections<T>(this.options(), this.listId));
+  private readonly sections = computed(() => mimiListSections<T>(this.items(), this.listId));
   private readonly rows = computed(() => this.sections().flatMap((section) => section.rows));
 
   /** El texto del campo. */
@@ -425,6 +569,7 @@ export class MimiCombobox<T = unknown>
 
   protected readonly visibleSections = computed(() => {
     if (this.loading()) return [];
+    if (this.searchMode() === 'server') return this.sections();
     return mimiFilterSections(this.sections(), this.query(), this.filterWith());
   });
   private readonly count = computed(() =>
@@ -432,7 +577,7 @@ export class MimiCombobox<T = unknown>
   );
 
   private matches(option: MimiListOption<T>, value: T | null | undefined): boolean {
-    return value != null && this.compareWith()(option.value, value);
+    return value != null && this.compare()(option.value, value);
   }
 
   /** Los valores elegidos como arreglo: uno (o ninguno) en simple, todos en el múltiple. */
@@ -587,7 +732,7 @@ export class MimiCombobox<T = unknown>
 
   /** Abre o cierra. Lo llama aria (↓, escribir, Escape, foco fuera) y Mimi (clic, Alt+↓/↑). */
   protected setOpen(open: boolean): void {
-    if (open && this.disabled()) return;
+    if (open && (this.disabled() || this.readonly())) return;
     this.open.set(open);
   }
 
@@ -645,7 +790,7 @@ export class MimiCombobox<T = unknown>
   }
 
   protected onText(text: string): void {
-    if (text === this.draft()) return;
+    if (this.readonly() || text === this.draft()) return;
     this.draft.set(text);
     this.typed.set(true);
     this.pendingCreate.set(null);
@@ -726,6 +871,13 @@ export class MimiCombobox<T = unknown>
    * Escape con el panel cerrado: vacía el campo y, en simple, quita el valor. En el múltiple los
    * chips se quedan (se quitan uno a uno).
    */
+  protected clearAll(): void {
+    this.pendingCreate.set(null);
+    this.resetDraft();
+    this.value.set(this.multiple() ? [] : null);
+    this.field().nativeElement.focus();
+  }
+
   private clear(): void {
     this.pendingCreate.set(null);
     this.resetDraft();
@@ -739,8 +891,25 @@ export class MimiCombobox<T = unknown>
   protected onKeydown(event: KeyboardEvent): void {
     if (this.disabled() || event.isComposing || event.ctrlKey || event.metaKey) return;
     const { key, altKey } = event;
+    // Con clearable, Supr o Retroceso quitan el valor si el campo muestra la opción elegida (no se
+    // está escribiendo); en el múltiple, Supr con el campo vacío quita todos los chips.
+    if (this.endIcon() === 'clear' && (key === 'Delete' || key === 'Backspace')) {
+      const single = !this.multiple() && !this.typed();
+      const all = this.multiple() && key === 'Delete' && !this.draft();
+      if (single || all) {
+        event.preventDefault();
+        this.clearAll();
+        return;
+      }
+    }
     // Múltiple: Backspace con el campo vacío quita el último chip (diseño).
-    if (key === 'Backspace' && this.multiple() && !this.draft() && this.chips().length) {
+    if (
+      key === 'Backspace' &&
+      this.multiple() &&
+      !this.readonly() &&
+      !this.draft() &&
+      this.chips().length
+    ) {
       event.preventDefault();
       this.removeAt(this.chips().length - 1);
       return;
@@ -752,7 +921,7 @@ export class MimiCombobox<T = unknown>
         // Rodeo: aria solo abre con ↓ sin modificadores.
         event.preventDefault();
         this.setOpen(true);
-      } else if (key === 'Escape' && (this.draft() || this.selectedOption())) {
+      } else if (key === 'Escape' && !this.readonly() && (this.draft() || this.selectedOption())) {
         // Como la APG: Escape con el panel cerrado vacía el campo.
         event.preventDefault();
         this.clear();
@@ -795,4 +964,10 @@ export class MimiCombobox<T = unknown>
 }
 
 /** Todas las piezas del Combobox, para importarlas juntas. */
-export const MimiComboboxImports = [MimiCombobox, MimiComboboxStart, MimiComboboxOption] as const;
+export const MimiComboboxImports = [
+  MimiCombobox,
+  MimiComboboxStart,
+  MimiComboboxOption,
+  MimiOptionItem,
+  MimiOptgroup,
+] as const;

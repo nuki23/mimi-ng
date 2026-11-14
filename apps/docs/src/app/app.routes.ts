@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { loadComponentsStyles } from './core/components-styles';
 import { DEV_ROUTES } from './dev/dev.routes';
 
 export const routes: Routes = [
@@ -11,6 +12,8 @@ export const routes: Routes = [
   {
     path: 'docs',
     loadComponent: () => import('./layout/docs-layout').then((m) => m.DocsLayout),
+    // Las páginas de componentes llevan sus clases en components.css (M.23), no en el CSS global.
+    canActivateChild: [loadComponentsStyles],
     // Las páginas de la documentación, en su propio archivo y diferidas: la tabla de rutas no
     // va en main (M.13). Una página nueva se agrega en pages/docs/docs.routes.ts.
     loadChildren: () => import('./pages/docs/docs.routes').then((m) => m.DOCS_ROUTES),

@@ -6,6 +6,7 @@ import {
   afterNextRender,
   afterRenderEffect,
   booleanAttribute,
+  effect,
   computed,
   contentChild,
   inject,
@@ -14,7 +15,9 @@ import {
 } from '@angular/core';
 import { MimiInput } from '@/components/ui/input';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { fieldBoxStyles, fieldButtonHoverStyles } from '@/components/ui/utils/field-styles';
 import { MIMI_PASSWORD_TEXT } from './password-texts';
 
 /*
@@ -54,22 +57,24 @@ export function mimiPasswordLevel(
 
 const BOX_CLASSES = cn(
   'relative flex w-full min-w-0 items-center gap-1.5 font-sans text-foreground mimi-transition',
-  'h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))] ps-3 pe-1',
-  'border border-input bg-input-background',
-  'not-data-[disabled]:hover:border-input-hover',
-  'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft',
-  'data-[invalid]:border-destructive data-[invalid]:focus-within:border-destructive data-[invalid]:focus-within:ring-destructive-ring',
-  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
+  'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))] ps-3 pe-1',
+  // Borde, hover, foco, error y deshabilitado: los de Input, con sus tokens (utils/control-styles).
+  fieldBoxStyles,
   // El input del usuario (mimiInput) va sin su caja: la caja es esta. Sin el ojo de Edge.
   '[&_input]:h-full [&_input]:min-w-0 [&_input]:flex-1 [&_input]:rounded-none [&_input]:border-0 [&_input]:bg-transparent [&_input]:p-0 [&_input]:shadow-none',
   '[&_input]:focus-visible:ring-0 [&_input]:disabled:opacity-100 [&_input::-ms-reveal]:hidden',
+  // El halo (foco y clic) lo dibuja la caja: el input de dentro nunca lleva el suyo, ni su fondo
+  // de solo lectura.
+  '[&_input]:ring-0! [&_input]:bg-transparent!',
 );
 
 const TOGGLE_CLASSES = cn(
-  'inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-muted-foreground mimi-transition',
+  'inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 mimi-transition',
+  fieldButtonHoverStyles,
   'size-[var(--mimi-password-toggle-size,32px)] rounded-[var(--mimi-password-toggle-radius,var(--mimi-radius-sm))]',
   '[&_svg]:size-4 [&_svg]:shrink-0',
-  'enabled:hover:bg-[color:var(--mimi-password-toggle-hover,var(--mimi-accent))] enabled:hover:text-foreground enabled:active:scale-(--mimi-press-scale-sm)',
+  // Al hacer clic se hunde la caja entera (field-styles, profundidad B), no el ojo aparte.
+  'enabled:hover:bg-[color:var(--mimi-password-toggle-hover,var(--mimi-accent))] enabled:hover:text-foreground',
   'disabled:cursor-not-allowed',
   buttonFocusStyles,
 );
@@ -102,12 +107,14 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-password',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <div
       data-slot="box"
       [class]="boxClasses()"
       [attr.data-invalid]="invalid() ? '' : null"
       [attr.data-disabled]="isDisabled() ? '' : null"
+      [attr.data-readonly]="readonly() || nativeReadonly() ? '' : null"
     >
       <ng-content />
       <button
@@ -247,8 +254,30 @@ export class MimiPassword {
   readonly rules = input<readonly MimiPasswordRule[] | undefined>(undefined);
   /** Nivel propio (0 a 3). Por defecto, la heurística de las reglas (orientativa). */
   readonly strength = input<((value: string) => MimiPasswordLevel) | undefined>(undefined);
+  /**
+   * Solo lectura (R.12): el `<input>` de dentro queda `readonly` (se ve y se enfoca, no se edita).
+   * El ojo sigue funcionando: mostrar el valor no lo cambia. Un `readonly` escrito en el propio
+   * `<input>` o puesto por Signal Forms también vale.
+   */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Clases de la caja, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
+
+  /** El componente puso `readOnly` (y lo puede quitar); si lo puso el usuario, no se toca. */
+  private setByUs = false;
+  private readonly syncReadonly = effect(() => {
+    const element = this.inputElement();
+    if (!element) return;
+    if (this.readonly()) {
+      if (!element.readOnly) {
+        element.readOnly = true;
+        this.setByUs = true;
+      }
+    } else if (this.setByUs) {
+      element.readOnly = false;
+      this.setByUs = false;
+    }
+  });
 
   private readonly field = contentChild(MimiInput);
   /** El input del usuario: el de mimiInput o, si no lo usa, el primero que haya. */
@@ -260,6 +289,8 @@ export class MimiPassword {
   protected readonly value = signal('');
   /** `disabled` escrito en el input (sin formulario). */
   private readonly nativeDisabled = signal(false);
+  /** `readonly` escrito en el input (como `disabled`): la caja se ve de solo lectura igual. */
+  protected readonly nativeReadonly = signal(false);
   protected readonly isDisabled = computed(
     () => this.nativeDisabled() || (this.field()?.fieldState.disabled() ?? false),
   );
@@ -317,6 +348,7 @@ export class MimiPassword {
       this.value.set(el.value);
       this.announced = this.level();
       this.nativeDisabled.set(el.disabled);
+      this.nativeReadonly.set(el.readOnly);
     });
     // El medidor describe el input (sin borrar el aria-describedby del usuario ni el de
     // mimi-form-field).
@@ -354,6 +386,7 @@ export class MimiPassword {
     this.typed = true;
     this.value.set(el.value);
     this.nativeDisabled.set(el.disabled);
+    this.nativeReadonly.set(el.readOnly);
     const level = this.level();
     if (this.meter() && this.typed && level !== this.announced) {
       this.announced = level;

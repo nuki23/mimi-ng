@@ -3,6 +3,7 @@ import { MIMI_CHIP_TEXT_ES, provideMimiChipText } from '@/components/ui/chip';
 import { MIMI_COMBOBOX_TEXT_ES, provideMimiComboboxText } from '@/components/ui/combobox';
 import { MIMI_ERROR_MESSAGES_ES, provideMimiErrorMessages } from '@/components/ui/form-field';
 import { CodeBlock } from '../../../../code/code-block';
+import { FormsTabs } from '../../../../code/forms-tabs';
 import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
@@ -10,14 +11,18 @@ import { ComboboxAsyncExample } from './examples/combobox-async.example';
 import { ComboboxCityExample } from './examples/combobox-city.example';
 import { ComboboxCreateExample } from './examples/combobox-create.example';
 import { ComboboxCustomExample } from './examples/combobox-custom.example';
+import { ComboboxDeclarativeExample } from './examples/combobox-declarative.example';
 import { ComboboxFormsExample } from './examples/combobox-forms.example';
 import { ComboboxMultipleExample } from './examples/combobox-multiple.example';
+import { ComboboxOptionsExample } from './examples/combobox-options.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
 import asyncSource from './examples/combobox-async.example' with { loader: 'text' };
 // @ts-expect-error
 import citySource from './examples/combobox-city.example' with { loader: 'text' };
+// @ts-expect-error
+import declarativeSource from './examples/combobox-declarative.example' with { loader: 'text' };
 // @ts-expect-error
 import createSource from './examples/combobox-create.example' with { loader: 'text' };
 // @ts-expect-error
@@ -26,6 +31,8 @@ import customSource from './examples/combobox-custom.example' with { loader: 'te
 import formsSource from './examples/combobox-forms.example' with { loader: 'text' };
 // @ts-expect-error
 import multipleSource from './examples/combobox-multiple.example' with { loader: 'text' };
+// @ts-expect-error
+import optionsSource from './examples/combobox-options.example' with { loader: 'text' };
 
 interface ApiRow {
   name: string;
@@ -39,6 +46,7 @@ interface ApiRow {
   selector: 'app-combobox-page',
   imports: [
     CodeBlock,
+    FormsTabs,
     CodePreview,
     CssVariables,
     InstallCommand,
@@ -48,6 +56,8 @@ interface ApiRow {
     ComboboxAsyncExample,
     ComboboxFormsExample,
     ComboboxCustomExample,
+    ComboboxDeclarativeExample,
+    ComboboxOptionsExample,
   ],
   providers: [
     provideMimiComboboxText(MIMI_COMBOBOX_TEXT_ES),
@@ -65,22 +75,29 @@ export class ComboboxPage {
     async: asyncSource as string,
     forms: formsSource as string,
     custom: customSource as string,
+    declarative: declarativeSource as string,
+    options: optionsSource as string,
   };
 
   protected readonly usage = [
     "import { MimiComboboxImports } from '@/components/ui/combobox';",
-    "import type { MimiListOption } from '@/components/ui/option-list';",
     '',
     '@Component({',
     '  imports: [MimiComboboxImports],',
-    '  template: `<mimi-combobox aria-label="Ciudad" [options]="cities" [(value)]="city" />`,',
+    '  template: `',
+    '    <mimi-combobox aria-label="Ciudad" [(value)]="city">',
+    '      @for (c of cities(); track c.id) {',
+    '        <mimi-option [value]="c.id">{{ c.name }}</mimi-option>',
+    '      }',
+    '    </mimi-combobox>',
+    '  `,',
     '})',
     'export class TripComponent {',
     '  city = signal<string | null>(null);',
-    '  cities: MimiListOption<string>[] = [',
-    "    { label: 'Bogotá', value: 'bog' },",
-    "    { label: 'Lima', value: 'lim' },",
-    '  ];',
+    '  cities = signal([',
+    "    { id: 'bog', name: 'Bogotá' },",
+    "    { id: 'lim', name: 'Lima' },",
+    '  ]);',
     '}',
   ].join('\n');
 
@@ -124,7 +141,7 @@ export class ComboboxPage {
       type: '(MimiListOption<T> | MimiListOptionGroup<T>)[]',
       default: '[]',
       description:
-        'Opciones sueltas o en grupos, con label, value, disabled y hint (la misma forma que las de Select).',
+        'Alternativa a <mimi-option> para listas armadas por código: opciones sueltas o en grupos, con label, value, disabled y hint (la misma forma que las de Select). Si se da, gana sobre las <mimi-option>.',
     },
     {
       name: 'creatable',
@@ -144,13 +161,21 @@ export class ComboboxPage {
       name: 'filterWith',
       type: '(option, text) => boolean',
       default: 'sin tildes ni mayúsculas',
-      description: 'Filtro propio. Con el filtro en el servidor, () => true.',
+      description: "Filtro propio. Solo cuenta con searchMode='client'.",
+    },
+    {
+      name: 'searchMode',
+      type: "'client' | 'server'",
+      default: "'client'",
+      description:
+        "Dónde se filtra lo que se escribe. Con 'server', tu app filtra al recibir (searchChange) y el Combobox muestra las opciones que llegan, sin volver a filtrarlas.",
     },
     {
       name: 'compareWith',
-      type: '(a, b) => boolean',
+      type: '((a, b) => boolean) | string',
       default: 'Object.is',
-      description: 'Compara el valor con el de cada opción (para objetos).',
+      description:
+        'Compara el valor con el de cada opción (para objetos): una función o el nombre de un campo (compareWith="id").',
     },
     {
       name: 'side / align',

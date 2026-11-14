@@ -16,6 +16,7 @@ import {
 import type { FormValueControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   injectFieldState,
@@ -47,12 +48,16 @@ export type MimiSliderValue = number | [number, number] | null;
 
 const THUMB_BASE = cn(
   'absolute top-1/2 box-border -translate-y-1/2 cursor-grab rounded-full border-2',
-  'size-[var(--mimi-slider-thumb-size,20px)] bg-[color:var(--mimi-slider-thumb,var(--mimi-thumb,var(--mimi-background)))]',
+  'size-[var(--mimi-slider-thumb-s,var(--mimi-slider-thumb-size,20px))] bg-[color:var(--mimi-slider-thumb,var(--mimi-thumb,var(--mimi-background)))]',
   'shadow-[shadow:var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
   '[transition:box-shadow_.2s_ease,scale_.15s_cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none',
   // Hover y arrastre suman el halo a la sombra del pulgar (su token), con tipo (estilos 8).
-  'not-aria-disabled:hover:shadow-[shadow:0_0_0_6px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
-  'aria-disabled:cursor-not-allowed',
+  'not-aria-disabled:not-aria-readonly:hover:shadow-[shadow:0_0_0_6px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
+  // Clic: le crece el halo, como a Button (profundidad B); el pulgar no se hunde, crece al
+  // arrastrar (DRAGGING).
+  'not-aria-disabled:not-aria-readonly:active:shadow-[shadow:0_0_0_8px_var(--mimi-ring-soft),var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
+  // Deshabilitado y solo lectura como los demás campos (utils/field-styles): sin hover.
+  'aria-disabled:cursor-not-allowed aria-readonly:cursor-default',
   buttonFocusStyles,
 );
 const DRAGGING =
@@ -77,16 +82,17 @@ const FILL = {
  */
 @Component({
   selector: 'mimi-slider',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <span
       aria-hidden="true"
       data-slot="track"
-      class="absolute inset-x-0 h-[var(--mimi-slider-height,6px)] rounded-full bg-[color:var(--mimi-slider-track,var(--mimi-track,var(--mimi-input)))]"
+      class="absolute inset-x-0 h-[var(--mimi-slider-h,var(--mimi-slider-height,6px))] rounded-full bg-[color:var(--mimi-slider-track,var(--mimi-track,var(--mimi-input)))]"
     ></span>
     <span
       aria-hidden="true"
       data-slot="fill"
-      class="absolute h-[var(--mimi-slider-height,6px)] rounded-full"
+      class="absolute h-[var(--mimi-slider-h,var(--mimi-slider-height,6px))] rounded-full"
       [class]="fillClass()"
       [style.inset-inline-start.%]="fillStart()"
       [style.width.%]="fillWidth()"
@@ -130,6 +136,7 @@ const FILL = {
         [attr.aria-valuetext]="thumb.text"
         [attr.aria-orientation]="'horizontal'"
         [attr.aria-disabled]="disabled() || null"
+        [attr.aria-readonly]="readonly() || null"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.data-dragging]="dragging() === $index ? '' : null"
         (keydown)="onKeydown($event, $index)"
@@ -154,6 +161,7 @@ const FILL = {
     '[class]': 'classes()',
     '[attr.data-range]': 'range() ? "" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-readonly]': 'readonly() ? "" : null',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
@@ -190,6 +198,8 @@ export class MimiSlider implements FormValueControl<MimiSliderValue>, MimiFieldC
   readonly format = input<(value: number) => string>((value) => String(value));
   readonly showValue = input<MimiSliderShowValue>('auto');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se enfoca, pero no se mueve ni con el puntero ni con el teclado. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -321,7 +331,7 @@ export class MimiSlider implements FormValueControl<MimiSliderValue>, MimiFieldC
   );
 
   protected onKeydown(event: KeyboardEvent, index: number): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     const step = this.step() > 0 ? this.step() : 1;
     const rtl = this.dir() === 'rtl';
     const current = this.values()[index];
@@ -342,7 +352,7 @@ export class MimiSlider implements FormValueControl<MimiSliderValue>, MimiFieldC
 
   /** Puntero en el contenedor: mueve el pulgar más cercano, le da el foco y lo arrastra. */
   protected onPointerDown(event: PointerEvent): void {
-    if (this.disabled() || event.button !== 0) return;
+    if (this.disabled() || this.readonly() || event.button !== 0) return;
     const value = this.valueAt(event.clientX);
     if (value === null) return;
     const values = this.values();

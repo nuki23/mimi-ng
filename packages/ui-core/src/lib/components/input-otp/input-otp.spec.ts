@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { disabled, form, FormField, required } from '@angular/forms/signals';
 import { MimiFormField } from '@/components/ui/form-field';
-import { MimiInputOtp } from './input-otp';
+import { MimiInputOtp, MimiInputOtpImports } from './input-otp';
 
 @Component({
   imports: [MimiInputOtp, MimiFormField, FormsModule, ReactiveFormsModule, FormField],
@@ -143,7 +143,13 @@ describe('MimiInputOtp', () => {
     const reactive = part('reactive');
     expect(reactive.hasAttribute('data-invalid')).toBe(true);
     expect(input('reactive').getAttribute('aria-invalid')).toBe('true');
-    expect(boxes('reactive').every((b) => b.className.includes('border-destructive'))).toBe(true);
+    // El error de todos los campos: borde rojo en todas; el halo, solo con el foco.
+    expect(boxes('reactive').every((b) => b.className.includes('var(--mimi-input-error'))).toBe(
+      true,
+    );
+    expect(boxes('reactive').some((b) => b.className.includes('ring-destructive-ring'))).toBe(
+      false,
+    );
     expect(reactive.className).toContain('data-[invalid]:animate-[mimi-shake_.4s]');
     expect(reactive.className).toContain('motion-reduce:data-[invalid]:animate-none');
   });
@@ -159,6 +165,94 @@ describe('MimiInputOtp', () => {
     expect(input('plain').getAttribute('inputmode')).toBe('text');
     await type('plain', 'ab-12x');
     expect(host.code()).toBe('ab12');
+  });
+
+  it('R.18: 10 casillas: maxlength, pegado largo, separadores en lista y casillas que se encogen', async () => {
+    const { host, fixture, boxes, part, input, type } = await setup();
+    host.length.set(10);
+    host.after.set([3, 6] as unknown as number);
+    await settle(fixture);
+    expect(boxes('plain').length).toBe(10);
+    expect(input('plain').getAttribute('maxlength')).toBe('10');
+    const separators = part('plain').querySelectorAll('[data-slot="separator"]');
+    expect(separators.length).toBe(2);
+    expect(separators[0].previousElementSibling).toBe(boxes('plain')[2]);
+    expect(separators[1].previousElementSibling).toBe(boxes('plain')[5]);
+    // Un código más largo que la longitud se recorta.
+    await type('plain', '12345678901234');
+    expect(host.code()).toBe('1234567890');
+    // Con muchas casillas no desborda: las casillas se encogen y la fila no pasa del ancho del padre.
+    expect(
+      boxes('plain').every(
+        (b) => b.classList.contains('min-w-0') && b.classList.contains('shrink'),
+      ),
+    ).toBe(true);
+    expect(part('plain').classList).toContain('max-w-full');
+  });
+
+  it('cualquier longitud razonable (1 a 12) y grupos en lista ([3], [4, 8])', async () => {
+    const { host, fixture, boxes, part, input } = await setup();
+    for (const [length, after, expected] of [
+      [1, undefined, 0],
+      [4, [2], 1],
+      [8, [4], 1],
+      [9, [3, 6], 2],
+      [12, [4, 8], 2],
+      // Las posiciones fuera de la fila no pintan nada.
+      [6, [0, 3, 6, 9], 1],
+    ] as const) {
+      host.length.set(length);
+      host.after.set(after as unknown as number);
+      await settle(fixture);
+      expect(boxes('plain').length, `length ${length}`).toBe(length);
+      expect(input('plain').getAttribute('maxlength')).toBe(String(length));
+      expect(part('plain').querySelectorAll('[data-slot="separator"]').length).toBe(expected);
+    }
+    // Decimales: se redondea hacia abajo; 0 o negativo vuelve a 6.
+    host.after.set(undefined);
+    host.length.set(4.7);
+    await settle(fixture);
+    expect(boxes('plain').length).toBe(4);
+    host.length.set(0);
+    await settle(fixture);
+    expect(boxes('plain').length).toBe(6);
+  });
+
+  it('separador propio: un carácter o contenido con mimiInputOtpSeparator', async () => {
+    @Component({
+      imports: [MimiInputOtpImports],
+      template: `
+        <mimi-input-otp
+          data-test="char"
+          aria-label="A"
+          [length]="6"
+          [separatorAfter]="[2, 4]"
+          separator="·"
+        />
+        <mimi-input-otp
+          data-test="tpl"
+          aria-label="B"
+          [length]="8"
+          [separatorAfter]="4"
+          separator="/"
+        >
+          <ng-template mimiInputOtpSeparator><b data-test="dot">•</b></ng-template>
+        </mimi-input-otp>
+      `,
+    })
+    class SeparatorHost {}
+    const fixture = TestBed.createComponent(SeparatorHost);
+    await settle(fixture);
+    const root = fixture.nativeElement as HTMLElement;
+    const chars = root.querySelectorAll<HTMLElement>('[data-test="char"] [data-slot="separator"]');
+    expect(chars.length).toBe(2);
+    expect([...chars].map((s) => s.textContent!.trim())).toEqual(['·', '·']);
+    expect(chars[0].getAttribute('aria-hidden')).toBe('true');
+    // La plantilla gana sobre separator="/" y se repite en cada separación.
+    const custom = root.querySelectorAll<HTMLElement>('[data-test="tpl"] [data-slot="separator"]');
+    expect(custom.length).toBe(1);
+    expect(custom[0].querySelector('[data-test="dot"]')).not.toBeNull();
+    expect(custom[0].textContent).not.toContain('/');
   });
 
   it('class del usuario en la fila', async () => {

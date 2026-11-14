@@ -15,6 +15,7 @@ import { CodeBlock } from '../code/code-block';
 import { SITE } from '../site';
 import { ShowcasePreferences } from './home/showcase-preferences';
 import { ShowcaseTeam } from './home/showcase-team';
+import { ShowcaseToasts } from './home/showcase-toasts';
 
 interface Feature {
   icon: 'git-merge' | 'layers' | 'arrow-left-right' | 'list-checks';
@@ -44,6 +45,7 @@ interface Feature {
     CodeBlock,
     ShowcasePreferences,
     ShowcaseTeam,
+    ShowcaseToasts,
   ],
   templateUrl: './home-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

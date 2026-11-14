@@ -145,6 +145,34 @@ export class FormFieldPage {
             'Texto de la etiqueta, enlazada al control. Sin label, puedes proyectar tu propio <label>.',
         },
         {
+          name: 'description',
+          type: 'string',
+          default: '—',
+          description:
+            'Texto de ayuda entre la etiqueta y el control (qué se pide). Va en el aria-describedby del control.',
+        },
+        {
+          name: 'hint',
+          type: 'string',
+          default: '—',
+          description:
+            'Texto de ayuda debajo del control (formato, límites). Va en el aria-describedby, antes del error.',
+        },
+        {
+          name: 'required',
+          type: 'boolean',
+          default: 'false',
+          description:
+            'Asterisco en la etiqueta (los lectores no lo leen) y aria-required en el control. La validación es la de tu formulario.',
+        },
+        {
+          name: 'errors',
+          type: 'Record<string, string | ((e) => string)>',
+          default: '—',
+          description:
+            'Mensajes de error de este campo, por clave (required, email, minlength…). El message del propio validador (Signal Forms, withMessage) gana; lo que no esté sigue en provideMimiErrorMessages.',
+        },
+        {
           name: 'class',
           type: 'string',
           default: "''",

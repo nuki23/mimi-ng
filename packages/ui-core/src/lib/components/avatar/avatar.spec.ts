@@ -23,7 +23,7 @@ import type { AvatarSize } from './avatar.variants';
   `,
 })
 class Host {
-  readonly size = signal<AvatarSize>('default');
+  readonly size = signal<AvatarSize>('md');
   readonly src = signal<string | null>('/avatars/avatar-1.svg');
   readonly extra = signal('');
   readonly imgExtra = signal('');
@@ -52,9 +52,22 @@ describe('MimiAvatar', () => {
   }
 
   it.each<[AvatarSize, string, string]>([
-    ['sm', 'size-[var(--mimi-avatar-size-sm,2rem)]', 'text-xs'],
-    ['default', 'size-[var(--mimi-avatar-size,2.5rem)]', 'text-sm'],
-    ['lg', 'size-[var(--mimi-avatar-size-lg,3.5rem)]', 'text-lg'],
+    // La escala vive en el tema (`[data-size]`): los tres tamaños llevan las mismas clases.
+    [
+      'sm',
+      'size-[var(--mimi-avatar-s,var(--mimi-avatar-size,2.5rem))]',
+      'text-[length:var(--mimi-avatar-text,0.875rem)]',
+    ],
+    [
+      'md',
+      'size-[var(--mimi-avatar-s,var(--mimi-avatar-size,2.5rem))]',
+      'text-[length:var(--mimi-avatar-text,0.875rem)]',
+    ],
+    [
+      'lg',
+      'size-[var(--mimi-avatar-s,var(--mimi-avatar-size,2.5rem))]',
+      'text-[length:var(--mimi-avatar-text,0.875rem)]',
+    ],
   ])('tamaño %s', async (size, box, text) => {
     const { host, avatar, update } = await setup();
     await update(() => host.size.set(size));

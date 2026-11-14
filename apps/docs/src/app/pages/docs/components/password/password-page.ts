@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MIMI_PASSWORD_TEXT_ES, provideMimiPasswordText } from '@/components/ui/password';
 import { CodeBlock } from '../../../../code/code-block';
+import { FormsTabs } from '../../../../code/forms-tabs';
 import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
@@ -8,6 +9,7 @@ import { PasswordCustomExample } from './examples/password-custom.example';
 import { PasswordLevelsExample } from './examples/password-levels.example';
 import { PasswordLoginExample } from './examples/password-login.example';
 import { PasswordNewExample } from './examples/password-new.example';
+import { PasswordReadonlyExample } from './examples/password-readonly.example';
 import { PasswordStatesExample } from './examples/password-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -21,6 +23,8 @@ import loginSource from './examples/password-login.example' with { loader: 'text
 import newSource from './examples/password-new.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/password-states.example' with { loader: 'text' };
+// @ts-expect-error
+import readonlySource from './examples/password-readonly.example' with { loader: 'text' };
 
 interface ApiRow {
   name: string;
@@ -34,6 +38,7 @@ interface ApiRow {
   selector: 'app-password-page',
   imports: [
     CodeBlock,
+    FormsTabs,
     CodePreview,
     CssVariables,
     InstallCommand,
@@ -41,6 +46,7 @@ interface ApiRow {
     PasswordLoginExample,
     PasswordLevelsExample,
     PasswordStatesExample,
+    PasswordReadonlyExample,
     PasswordCustomExample,
   ],
   providers: [provideMimiPasswordText(MIMI_PASSWORD_TEXT_ES)],
@@ -53,6 +59,7 @@ export class PasswordPage {
     login: loginSource as string,
     levels: levelsSource as string,
     states: statesSource as string,
+    readonly: readonlySource as string,
     custom: customSource as string,
   };
 
@@ -78,6 +85,13 @@ export class PasswordPage {
   ].join('\n');
 
   protected readonly api: ApiRow[] = [
+    {
+      name: 'readonly',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Solo lectura: el <input> de dentro queda readonly (se ve y se enfoca, no se edita). El ojo sigue funcionando.',
+    },
     {
       name: 'meter',
       type: 'boolean',

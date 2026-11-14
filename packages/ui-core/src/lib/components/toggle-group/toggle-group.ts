@@ -23,6 +23,7 @@ import {
 import type { FormValueControl } from '@angular/forms/signals';
 import { cva } from 'class-variance-authority';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 
 /*
@@ -48,9 +49,10 @@ const groupVariants = cva(
     'rounded-[calc(var(--mimi-toggle-group-radius,var(--mimi-radius))_+_var(--mimi-toggle-group-padding,3px))]',
     'bg-[color:var(--mimi-toggle-group-bg,var(--mimi-muted))] mimi-transition',
     // Deshabilitado: el grupo entero (el diseño no tiene ítems deshabilitados de a uno).
-    'data-disabled:cursor-not-allowed data-disabled:opacity-(--mimi-disabled-opacity)',
-    // Error del formulario (sin diseño, plan D6): un borde de 1px como el de Input.
-    'data-invalid:ring-1 data-invalid:ring-destructive',
+    'data-disabled:cursor-not-allowed data-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
+    // Error del formulario (sin diseño, plan D6): un filo de 1px como el borde de Input (el grupo
+    // no tiene borde; Switch hace lo mismo).
+    'data-invalid:ring-1 data-invalid:ring-[color:var(--mimi-input-error,var(--mimi-destructive))]',
   ],
   {
     variants: {
@@ -97,13 +99,17 @@ const INDICATOR_STYLE = {
 
 const ITEM_CLASSES = cn(
   'relative inline-flex min-w-[var(--mimi-toggle-group-icon-width,44px)] cursor-pointer items-center justify-center gap-1.5 border-0 bg-transparent whitespace-nowrap',
-  'h-[var(--mimi-toggle-group-item-height,32px)] px-[var(--mimi-toggle-group-item-px,12px)]',
+  'h-[var(--mimi-toggle-h,var(--mimi-toggle-group-item-height,32px))] px-[var(--mimi-toggle-px,var(--mimi-toggle-group-item-px,12px))]',
   'rounded-[var(--mimi-toggle-group-radius,var(--mimi-radius))]',
   'text-[length:var(--mimi-toggle-group-font-size,13.5px)] font-medium text-[color:var(--mimi-toggle-group-fg,var(--mimi-muted-foreground))]',
   '[&_svg]:size-4 [&_svg]:shrink-0',
-  'mimi-transition enabled:hover:text-[color:var(--mimi-toggle-group-active-fg,var(--mimi-foreground))]',
-  // 0,9 (con movimiento reducido, 1); el diseño usa 0,93 sin token: plan D6.
-  'enabled:active:scale-(--mimi-press-scale-sm) disabled:cursor-not-allowed',
+  // Hover y clic, no en solo lectura (el grupo lleva data-readonly).
+  'mimi-transition enabled:not-in-data-readonly:hover:text-[color:var(--mimi-toggle-group-active-fg,var(--mimi-foreground))]',
+  // La opción no elegida, además, un fondo suave (13/11/2026); la elegida ya tiene el indicador.
+  'enabled:not-in-data-readonly:data-[state=off]:hover:bg-[color:color-mix(in_oklab,var(--mimi-foreground)_6%,transparent)]',
+  // Clic: se hunde poco y le crece el halo, como Button (utils/field-styles, profundidad B).
+  'enabled:not-in-data-readonly:active:scale-(--mimi-press-scale-sm) enabled:not-in-data-readonly:active:ring-3 enabled:not-in-data-readonly:active:ring-ring-soft',
+  'disabled:cursor-not-allowed in-data-readonly:cursor-default',
   buttonFocusStyles,
 );
 
@@ -190,6 +196,7 @@ export class MimiToggleGroupItem implements FocusableOption {
  */
 @Component({
   selector: 'mimi-toggle-group',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     @if (!multiple()) {
       <span
@@ -213,6 +220,9 @@ export class MimiToggleGroupItem implements FocusableOption {
     '[attr.aria-label]': 'ariaLabel() || null',
     '[attr.aria-labelledby]': 'ariaLabelledby() || null',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
+    // aria-readonly vale en el radiogrupo (simple), no en el grupo de interruptores (múltiple).
+    '[attr.aria-readonly]': 'readonly() && !multiple() ? "true" : null',
+    '[attr.data-readonly]': 'readonly() ? "" : null',
     '[attr.aria-invalid]': 'showInvalid() ? "true" : null',
     '[attr.aria-required]': 'required() && !multiple() ? "true" : null',
     '[attr.data-variant]': 'variant()',
@@ -238,6 +248,8 @@ export class MimiToggleGroup<T = unknown> implements FormValueControl<T | null |
   /** `solid`: el elegido en `primary`. */
   readonly variant = input<MimiToggleGroupVariant>('default');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): se ve lo elegido y las flechas mueven el foco, pero no cambia. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
@@ -321,7 +333,7 @@ export class MimiToggleGroup<T = unknown> implements FormValueControl<T | null |
 
   /** Uso interno: el clic (y Espacio o Enter, que el navegador convierte en clic). */
   select(item: MimiToggleGroupItem): void {
-    if (this.disabled()) return;
+    if (this.disabled() || this.readonly()) return;
     const value = item.value() as T;
     if (this.multiple()) {
       const current = this.selected() as T[];

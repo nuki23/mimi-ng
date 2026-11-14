@@ -13,6 +13,8 @@ import {
 } from '@angular/core';
 import { type FormValueControl, transformedValue } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { fieldBoxStyles } from '@/components/ui/utils/field-styles';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   injectFieldState,
@@ -69,12 +71,9 @@ function caretAfterDigits(masked: string, count: number): number {
  */
 const BOX_CLASSES = cn(
   'relative flex w-full min-w-0 cursor-text items-center gap-[var(--mimi-mask-gap,8px)] px-3 font-sans text-foreground mimi-transition',
-  'h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))]',
-  'border border-input bg-input-background',
-  'not-data-[disabled]:hover:border-input-hover',
-  'focus-within:border-ring focus-within:ring-3 focus-within:ring-ring-soft',
-  'data-[invalid]:border-destructive data-[invalid]:focus-within:border-destructive data-[invalid]:focus-within:ring-destructive-ring',
-  'data-[disabled]:cursor-not-allowed data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
+  'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))] rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))]',
+  // Los estados de todos los campos (utils/field-styles).
+  fieldBoxStyles,
 );
 
 /** El texto: 14px, cifras tabulares y un poco de espacio, como el diseño (el marcador igual). */
@@ -139,6 +138,7 @@ export class MimiMaskEnd {
  */
 @Component({
   selector: 'mimi-input-mask',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <ng-content select="[mimiMaskPrefix], [mimiMaskStart]" />
     <span class="relative flex h-full min-w-0 flex-1 items-center">
@@ -183,6 +183,7 @@ export class MimiMaskEnd {
     '[attr.data-state]': 'complete() ? "complete" : digits() ? "partial" : "empty"',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-readonly]': 'readonly() ? "" : null',
     '(click)': 'focusField($event)',
     // El nombre y el id van al input de dentro.
     '[attr.aria-label]': 'null',

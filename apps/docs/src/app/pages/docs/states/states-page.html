@@ -1,0 +1,351 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Estados</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Todos los controles de formulario con cada estado forzado a la vista: el hover, el foco, el
+    clic, el deshabilitado, la solo lectura y el error.
+  </p>
+  <p class="text-pretty">
+    Todos usan el mismo juego de estados (<code
+      class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >utils/field-styles.ts</code
+    >). Al hacer clic, todos se hunden y les crece el halo, como a Button (también los de escribir);
+    con «reducir movimiento», no se hunden. Cambia el tema del sitio (arriba a la derecha) para
+    verlos en claro y en oscuro.
+  </p>
+
+  <h2 id="grid" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Controles por estado
+  </h2>
+  <p class="text-pretty text-sm text-muted-foreground">
+    Radio no está en la lista: Mimi no lo tiene (lo más parecido es Toggle Group).
+    @for (row of notes; track row.id) {
+      {{ row.name }}: {{ row.note }}
+    }
+  </p>
+  <div
+    data-test="states-grid"
+    class="-mx-4 overflow-x-auto rounded-card border bg-background px-4 py-3 sm:mx-0"
+  >
+    <table class="w-max border-separate border-spacing-x-3 border-spacing-y-2 text-left text-sm">
+      <thead>
+        <tr>
+          <th scope="col" class="px-1 text-xs font-semibold text-muted-foreground">Control</th>
+          @for (state of states; track state.id) {
+            <th scope="col" class="px-1 text-xs font-semibold text-muted-foreground">
+              {{ state.label }}
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of rows; track row.id) {
+          <tr [attr.data-row]="row.id">
+            <th scope="row" class="pr-2 align-middle text-[13px] font-semibold whitespace-nowrap">
+              {{ row.name }}
+            </th>
+            @for (state of states; track state.id) {
+              @let d = state.id === 'disabled';
+              @let r = state.id === 'readonly';
+              @let e = state.id === 'error';
+              <td class="align-middle">
+                <div
+                  class="w-44"
+                  [attr.data-cell]="state.id"
+                  [appForceState]="state.id"
+                  [kind]="row.kind"
+                  [target]="row.target"
+                  [focusAttr]="row.focusAttr ?? null"
+                >
+                  @switch (row.id) {
+                    @case ('input') {
+                      <input
+                        mimiInput
+                        aria-label="Nombre"
+                        value="Ana"
+                        [disabled]="d"
+                        [readOnly]="r"
+                        [showError]="e ? true : undefined"
+                      />
+                    }
+                    @case ('textarea') {
+                      <textarea
+                        mimiTextarea
+                        aria-label="Nota"
+                        rows="1"
+                        [disabled]="d"
+                        [readOnly]="r"
+                        [showError]="e ? true : undefined"
+                      >
+Hola</textarea>
+                    }
+                    @case ('select') {
+                      <mimi-select
+                        aria-label="Talla"
+                        value="m"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      >
+                        <mimi-option value="m">Mediano</mimi-option>
+                        <mimi-option value="l">Grande</mimi-option>
+                      </mimi-select>
+                    }
+                    @case ('combobox') {
+                      <mimi-combobox
+                        aria-label="Ciudad"
+                        value="lima"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      >
+                        <mimi-option value="lima">Lima</mimi-option>
+                      </mimi-combobox>
+                    }
+                    @case ('tags') {
+                      <mimi-tags-input
+                        aria-label="Etiquetas"
+                        hint=""
+                        [value]="tags"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('number') {
+                      <mimi-number-input
+                        aria-label="Cantidad"
+                        [value]="3"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('password') {
+                      <mimi-password>
+                        <input
+                          mimiInput
+                          type="password"
+                          aria-label="Contraseña"
+                          value="secreto"
+                          [disabled]="d"
+                          [readOnly]="r"
+                          [showError]="e ? true : undefined"
+                        />
+                      </mimi-password>
+                    }
+                    @case ('password-show') {
+                      @if (d) {
+                        <span class="text-xs text-muted-foreground">No aplica</span>
+                      } @else {
+                        <mimi-password>
+                          <input
+                            mimiInput
+                            type="password"
+                            aria-label="Contraseña a la vista"
+                            value="secreto"
+                            [readOnly]="r"
+                            [showError]="e ? true : undefined"
+                          />
+                        </mimi-password>
+                      }
+                    }
+                    @case ('mask') {
+                      <mimi-input-mask
+                        aria-label="Teléfono"
+                        mask="000 000 0000"
+                        value="3001234567"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('otp') {
+                      <mimi-input-otp
+                        aria-label="Código"
+                        value="12"
+                        class="gap-1"
+                        [length]="4"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('date') {
+                      <mimi-date-picker
+                        aria-label="Fecha"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('range') {
+                      <mimi-date-range
+                        aria-label="Fechas"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('color') {
+                      <mimi-color-input
+                        aria-label="Color"
+                        value="#793eea"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('upload') {
+                      <mimi-file-upload
+                        aria-label="Archivo"
+                        heading="Subir archivo"
+                        class="[--mimi-upload-height:88px]"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('slider') {
+                      <mimi-slider
+                        aria-label="Volumen"
+                        [value]="40"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      />
+                    }
+                    @case ('checkbox') {
+                      <mimi-checkbox
+                        [checked]="true"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                        >Acepto</mimi-checkbox
+                      >
+                    }
+                    @case ('switch') {
+                      <mimi-switch
+                        [checked]="true"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                        >Avisos</mimi-switch
+                      >
+                    }
+                    @case ('toggle') {
+                      <mimi-toggle-group
+                        aria-label="Vista"
+                        value="list"
+                        [disabled]="d"
+                        [readonly]="r"
+                        [invalid]="e"
+                        [touched]="e"
+                      >
+                        <button mimiToggleGroupItem="list">Lista</button>
+                        <button mimiToggleGroupItem="table">Tabla</button>
+                      </mimi-toggle-group>
+                    }
+                    @case ('tree') {
+                      @if (r || e) {
+                        <span class="text-xs text-muted-foreground">No aplica</span>
+                      } @else {
+                        <mimi-tree
+                          aria-label="Archivos"
+                          value="app"
+                          [nodes]="tree"
+                          [disabled]="d"
+                        />
+                      }
+                    }
+                    @case ('button') {
+                      @if (r || e) {
+                        <span class="text-xs text-muted-foreground">No aplica</span>
+                      } @else {
+                        <button mimiBtn [disabled]="d">Guardar</button>
+                      }
+                    }
+                  }
+                </div>
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <p class="text-sm text-pretty text-muted-foreground">
+    El Tree elige con el fondo suave de la marca y su texto; el anillo sale solo con el foco de
+    teclado.
+  </p>
+
+  <h2 id="scroll" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Paneles en un contenedor con scroll
+  </h2>
+  <p class="text-pretty">
+    Abre un panel y haz scroll dentro del recuadro: el panel sigue a su campo y se cierra cuando el
+    campo sale de la vista del recuadro.
+  </p>
+  <div
+    data-test="scroll-box"
+    class="h-64 overflow-y-auto rounded-card border bg-background p-4"
+    tabindex="0"
+    aria-label="Contenedor con scroll"
+  >
+    <div class="flex flex-col gap-4 pb-[28rem]">
+      <div class="flex flex-wrap items-start gap-3">
+        <mimi-select aria-label="Talla (scroll)" data-test="scroll-select" class="w-44">
+          <mimi-option value="s">Pequeño</mimi-option>
+          <mimi-option value="m">Mediano</mimi-option>
+          <mimi-option value="l">Grande</mimi-option>
+        </mimi-select>
+        <mimi-combobox aria-label="Ciudad (scroll)" data-test="scroll-combobox" class="w-44">
+          <mimi-option value="lima">Lima</mimi-option>
+          <mimi-option value="quito">Quito</mimi-option>
+        </mimi-combobox>
+        <mimi-date-picker aria-label="Fecha (scroll)" data-test="scroll-date" class="w-44" />
+        <mimi-date-range aria-label="Fechas (scroll)" data-test="scroll-range" class="w-56" />
+        <mimi-color-input aria-label="Color (scroll)" data-test="scroll-color" class="w-44" />
+      </div>
+      <div class="flex flex-wrap items-start gap-3">
+        <mimi-dropdown-menu>
+          <button mimiBtn variant="outline" mimiDropdownMenuTrigger data-test="scroll-menu">
+            Menú
+          </button>
+          <ng-template mimiDropdownMenuContent>
+            <mimi-menu-item>Editar</mimi-menu-item>
+            <mimi-menu-item>Duplicar</mimi-menu-item>
+          </ng-template>
+        </mimi-dropdown-menu>
+        <button
+          mimiBtn
+          variant="outline"
+          data-test="scroll-tooltip"
+          mimiTooltip="Sigue al botón con el scroll"
+        >
+          Tooltip
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if (!forcedRules()) {
+    <p data-test="forced-missing" class="text-sm text-destructive">
+      No se pudieron copiar los estilos de hover y foco: la cuadrícula muestra solo los estados
+      fijos.
+    </p>
+  }
+</article>

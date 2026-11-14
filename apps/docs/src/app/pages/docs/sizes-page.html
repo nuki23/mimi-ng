@@ -1,0 +1,146 @@
+<article class="flex flex-col gap-5">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">Tamaños</h1>
+  <p class="text-lg text-pretty text-muted-foreground">
+    Una sola escala,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">sm | md | lg</code>,
+    para todos los componentes. Vive una vez en el tema y cada componente lee sus medidas de ahí: no
+    hay clases por tamaño.
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">md</code>
+    es el de siempre.
+  </p>
+
+  <h2 id="use" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Cómo se pide</h2>
+  <app-code-block [code]="how" lang="angular-html" />
+  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
+    <li>
+      Sin <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">size</code> un
+      control <strong>no escribe</strong>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-size</code>: el
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">md</code> está en el
+      tema y el control hereda, por la cascada de CSS, el tamaño del contenedor más cercano.
+    </li>
+    <li>
+      El <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">size</code> propio
+      gana al del contenedor.
+    </li>
+    <li>
+      Lo que se pinta en un panel flotante (menús, Popover, Tooltip, el Calendar de un Date Picker)
+      toma el tamaño de su disparador, aunque el panel viva fuera de él.
+    </li>
+    <li>
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">default</code> es el
+      nombre viejo de
+      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">md</code>: se acepta
+      con un aviso en desarrollo y se quita en la 0.7.0.
+    </li>
+  </ul>
+
+  <h3 id="demo" class="mt-2 text-lg font-semibold tracking-[-0.01em]">En vivo</h3>
+  <div class="flex flex-col gap-4 rounded-card border bg-card p-5">
+    @for (size of demo; track size) {
+      <div
+        class="flex flex-wrap items-center gap-3"
+        [mimiSize]="size"
+        [attr.data-test]="'demo-' + size"
+      >
+        <span class="w-8 font-mono text-[13px] text-muted-foreground">{{ size }}</span>
+        <button mimiBtn>Guardar</button>
+        <input mimiInput class="w-40" aria-label="Nombre" placeholder="Nombre" />
+        <mimi-switch>Avisos</mimi-switch>
+        <span mimiBadge tone="primary">Nuevo</span>
+        <mimi-avatar>
+          <mimi-avatar-fallback label="Ana Torres">AT</mimi-avatar-fallback>
+        </mimi-avatar>
+      </div>
+    }
+  </div>
+
+  <h3 id="zone" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Cambiar una medida en una zona
+  </h3>
+  <p class="text-pretty" data-test="zone">
+    Un token de medida (<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-btn-height</code
+    >,
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-input-height</code
+    >…) cambiado en
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">:root</code> llega a
+    todo. Para cambiarlo solo en una zona, pon el token
+    <strong>en un contenedor con <code class="font-mono text-[0.9em]">data-size</code></strong>
+    (o <code class="font-mono text-[0.9em]">mimiSize</code>): ahí el tema vuelve a calcular las
+    medidas con el valor de la zona. Sin
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-size</code>, el
+    cambio no llega a los controles de dentro (las medidas ya vienen calculadas desde
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">:root</code>). En
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">sm</code> y
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">lg</code>, el token
+    lleva el sufijo:
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >--mimi-btn-height-sm</code
+    >.
+  </p>
+  <app-code-block [code]="zone" lang="angular-html" />
+
+  <h2 id="scale" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">La escala</h2>
+  <p class="text-pretty">
+    Son las variables
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">--mimi-size-*</code>
+    de
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">theme-base.css</code>,
+    declaradas por
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">[data-size]</code>.
+    Cada componente deriva de ellas las suyas.
+  </p>
+  <div class="overflow-x-auto rounded-card border bg-card">
+    <table class="w-full text-left text-sm" data-test="scale">
+      <thead class="bg-muted text-[12.5px] text-muted-foreground">
+        <tr>
+          <th class="px-3 py-2 font-semibold">Variable</th>
+          <th class="px-3 py-2 font-semibold">Qué es</th>
+          <th class="px-3 py-2 font-semibold">sm</th>
+          <th class="px-3 py-2 font-semibold">md</th>
+          <th class="px-3 py-2 font-semibold">lg</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of scale; track row.variable) {
+          <tr class="border-t">
+            <td class="px-3 py-2 font-mono text-[13px]">--mimi-{{ row.variable }}</td>
+            <td class="px-3 py-2">{{ row.what }}</td>
+            <td class="px-3 py-2 font-mono text-[13px]">{{ row.sm }}</td>
+            <td class="px-3 py-2 font-mono text-[13px]">{{ row.md }}</td>
+            <td class="px-3 py-2 font-mono text-[13px]">{{ row.lg }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="components" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">
+    Qué cambia en cada componente
+  </h2>
+  <div class="overflow-x-auto rounded-card border bg-card">
+    <table class="w-full text-left text-sm" data-test="components">
+      <thead class="bg-muted text-[12.5px] text-muted-foreground">
+        <tr>
+          <th class="px-3 py-2 font-semibold">Componente</th>
+          <th class="px-3 py-2 font-semibold">Qué cambia (sm / md / lg)</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of components; track row.component) {
+          <tr class="border-t align-top">
+            <td class="px-3 py-2 font-medium">{{ row.component }}</td>
+            <td class="px-3 py-2 text-pretty">{{ row.changes }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <p class="text-pretty text-muted-foreground">
+    Card no tiene tamaño todavía: llega con la superficie
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">mimiCard</code> en la
+    0.7.0.
+  </p>
+</article>

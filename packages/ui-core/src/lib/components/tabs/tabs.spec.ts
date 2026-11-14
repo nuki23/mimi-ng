@@ -317,8 +317,8 @@ describe('MimiTabs', { timeout: 20_000 }, () => {
     const { fixture, h, host, list, tab, indicator, visible } = await setup();
     for (const cls of ['border-b', 'border-border']) expect(list().classList).toContain(cls);
     for (const cls of [
-      'h-[var(--mimi-tabs-height,44px)]',
-      'text-sm',
+      'h-[var(--mimi-tabs-h-u,var(--mimi-tabs-height,44px))]',
+      'text-[length:var(--mimi-size-text,0.875rem)]',
       'text-[color:var(--mimi-tabs-fg,var(--mimi-muted-foreground))]',
       'aria-selected:text-[color:var(--mimi-tabs-active-fg,var(--mimi-foreground))]',
       'not-aria-disabled:active:scale-(--mimi-press-scale)',
@@ -350,11 +350,11 @@ describe('MimiTabs', { timeout: 20_000 }, () => {
       expect(list().classList).toContain(cls);
     }
     expect(list().classList).not.toContain('max-w-[520px]');
-    expect(tab('a').classList).toContain('h-[34px]');
+    expect(tab('a').classList).toContain('h-[var(--mimi-tabs-h-p,34px)]');
     for (const cls of [
       'w-[calc((100%_-_8px)_/_var(--mimi-tabs-count))]',
       'bg-[color:var(--mimi-tabs-pill-active,var(--mimi-card))]',
-      'shadow-neutral',
+      'shadow-[shadow:var(--mimi-tabs-pill-shadow,var(--mimi-shadow-neutral))]',
       'start-[4px]',
     ]) {
       expect(indicator().classList).toContain(cls);
@@ -377,7 +377,7 @@ describe('MimiTabs', { timeout: 20_000 }, () => {
     const { fixture, h, tab } = await setup();
     const count = tab('b').querySelector('[data-slot="count"]')!;
     expect(count.textContent).toBe('3');
-    expect(count.classList).toContain('bg-info-soft');
+    expect(count.classList).toContain('bg-primary-subtle');
     h.iconLabel.set(true);
     await settle(fixture);
     expect(tab('b').querySelector('[data-test="icon"]')).not.toBeNull();

@@ -25,11 +25,11 @@ export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {
   },
   'table-01': {
     load: () => import('@/blocks/table-01').then((m) => m.Table01),
-    states: { selected: { selection: [2, 8] } },
+    states: { selected: { selection: [2, 8] }, loading: { loading: true } },
   },
   'pricing-01': {
     load: () => import('@/blocks/pricing-01').then((m) => m.Pricing01),
-    states: { yearly: { period: 'yearly' } },
+    states: { yearly: { period: 'yearly' }, loading: { loading: true } },
   },
   'settings-01': {
     load: () => import('@/blocks/settings-01').then((m) => m.Settings01),
@@ -37,6 +37,7 @@ export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {
       notifications: { tab: 'notifications' },
       security: { tab: 'security' },
       billing: { tab: 'billing' },
+      saving: { saving: true },
     },
   },
   'signup-01': {

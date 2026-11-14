@@ -315,7 +315,7 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
   it('densidad: el grupo de la barra cambia el modelo, la plantilla y los tokens', async () => {
     const { table, host, fixture } = await setup();
     const td = table.querySelector('tbody td')!;
-    expect(td.className).toContain('h-[var(--mimi-table-row-height,42px)]');
+    expect(td.className).toContain('h-[var(--mimi-table-row-h,var(--mimi-table-row-height,42px))]');
     expect(td.className).toContain(
       'group-data-[density=comfortable]/data-table:h-[var(--mimi-table-row-height-comfortable,60px)]',
     );

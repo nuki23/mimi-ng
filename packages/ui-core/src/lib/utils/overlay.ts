@@ -1,10 +1,11 @@
-import type { ConnectedPosition } from '@angular/cdk/overlay';
+import { CdkConnectedOverlay, type ConnectedPosition } from '@angular/cdk/overlay';
+import { DestroyRef, Directive, ElementRef, inject, output } from '@angular/core';
 
 /*
- * Posición, flecha y animación compartidas por los overlays de Mimi (Popover, Tooltip…). Usa
- * tipos de @angular/cdk/overlay: impórtalo siempre con su archivo concreto
- * (`@/components/ui/utils/overlay`), nunca desde el índice de utils, que no lo reexporta para no
- * arrastrar el CDK a quien no lo usa.
+ * Posición, flecha, animación y seguimiento del scroll compartidos por los overlays de Mimi
+ * (Popover, Tooltip, Select…). Usa @angular/cdk/overlay: impórtalo siempre con su archivo
+ * concreto (`@/components/ui/utils/overlay`), nunca desde el índice de utils, que no lo reexporta
+ * para no arrastrar el CDK a quien no lo usa.
  */
 
 export type MimiOverlaySide = 'top' | 'right' | 'bottom' | 'left';
@@ -140,6 +141,113 @@ export const MIMI_OVERLAY_ANIMATION = `
     }
   }
 `;
+
+/**
+ * ¿Se ve algo del elemento? Recorta su caja con la pantalla y con cada antepasado que recorta su
+ * contenido (`overflow` distinto de `visible`): un campo dentro de un contenedor con scroll puede
+ * estar en la pantalla y fuera de la vista de su contenedor.
+ */
+export function mimiInView(element: HTMLElement): boolean {
+  const doc = element.ownerDocument;
+  const view = doc.defaultView;
+  const box = element.getBoundingClientRect();
+  // Sin caja (sin medir, o sin maquetar todavía) no se puede saber: no se cierra por eso.
+  if (box.width === 0 && box.height === 0) return true;
+  let top = Math.max(box.top, 0);
+  let left = Math.max(box.left, 0);
+  let bottom = Math.min(box.bottom, view?.innerHeight ?? box.bottom);
+  let right = Math.min(box.right, view?.innerWidth ?? box.right);
+  for (let node = element.parentElement; node && node !== doc.body; node = node.parentElement) {
+    const style = view?.getComputedStyle(node);
+    const overflow = style ? `${style.overflow} ${style.overflowX} ${style.overflowY}` : '';
+    if (!/auto|scroll|hidden|clip/.test(overflow)) continue;
+    const clip = node.getBoundingClientRect();
+    top = Math.max(top, clip.top);
+    left = Math.max(left, clip.left);
+    bottom = Math.min(bottom, clip.bottom);
+    right = Math.min(right, clip.right);
+  }
+  return bottom > top && right > left;
+}
+
+/**
+ * El panel sigue a su campo con el scroll de cualquier contenedor antepasado (13/11/2026). El CDK
+ * solo recoloca con el scroll de la ventana y de los contenedores marcados con `cdkScrollable`:
+ * con un `overflow: auto` cualquiera, el panel se quedaba fijo mientras el contenido se movía.
+ * Escucha el scroll en la fase de captura (el evento no sube), una vez por cuadro: si el scroll
+ * movió al campo, `update()` (recolocar) o, si el campo salió de la vista, `close()`. Devuelve la
+ * función que deja de escuchar.
+ */
+export function mimiFollowScroll(
+  origin: HTMLElement,
+  update: () => void,
+  close: () => void,
+): () => void {
+  const doc = origin.ownerDocument;
+  const view = doc.defaultView;
+  let frame = 0;
+  const onScroll = (event: Event) => {
+    const target = event.target;
+    // Solo los scrolls que mueven al campo (no el de la lista del propio panel).
+    if (!(target instanceof Node) || !target.contains(origin) || frame || !view) return;
+    frame = view.requestAnimationFrame(() => {
+      frame = 0;
+      if (mimiInView(origin)) update();
+      else close();
+    });
+  };
+  doc.addEventListener('scroll', onScroll, { capture: true, passive: true });
+  return () => {
+    doc.removeEventListener('scroll', onScroll, { capture: true });
+    if (frame) view?.cancelAnimationFrame(frame);
+    frame = 0;
+  };
+}
+
+/**
+ * En el `<ng-template cdkConnectedOverlay>` de un panel: lo hace seguir a su campo con el scroll
+ * de cualquier contenedor (`mimiFollowScroll`) mientras está abierto, y emite
+ * `(mimiOverlayOutOfView)` cuando el campo sale de la vista, para que el componente lo cierre.
+ * Con un origen que es un punto (Context Menu abierto con el puntero), no hace nada.
+ */
+@Directive({ selector: '[cdkConnectedOverlay][mimiOverlayFollow]' })
+export class MimiOverlayFollow {
+  private readonly connected = inject(CdkConnectedOverlay);
+  /** El campo salió de la vista: el componente cierra el panel. */
+  readonly outOfView = output<void>({ alias: 'mimiOverlayOutOfView' });
+
+  constructor() {
+    let stop: (() => void) | null = null;
+    const attach = this.connected.attach.subscribe(() => {
+      stop?.();
+      const origin = originElement(this.connected.origin);
+      stop = origin
+        ? mimiFollowScroll(
+            origin,
+            () => this.connected.overlayRef?.updatePosition(),
+            () => this.outOfView.emit(),
+          )
+        : null;
+    });
+    const detach = this.connected.detach.subscribe(() => {
+      stop?.();
+      stop = null;
+    });
+    inject(DestroyRef).onDestroy(() => {
+      attach.unsubscribe();
+      detach.unsubscribe();
+      stop?.();
+    });
+  }
+}
+
+/** El elemento del origen del CDK (un elemento, un `ElementRef` o un `CdkOverlayOrigin`). */
+function originElement(origin: CdkConnectedOverlay['origin']): HTMLElement | null {
+  if (origin instanceof HTMLElement) return origin;
+  if (origin instanceof ElementRef) return origin.nativeElement as HTMLElement;
+  if (origin && 'elementRef' in origin) return origin.elementRef.nativeElement as HTMLElement;
+  return null;
+}
 
 /**
  * Se resuelve cuando terminan las animaciones del elemento (la de salida). Sin animaciones

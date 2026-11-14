@@ -136,10 +136,10 @@ describe('injectMimiToast', { timeout: 20_000 }, () => {
     await settle();
     const li = items()[0];
     for (const cls of [
-      'min-h-[68px]',
-      'py-3',
+      'min-h-[var(--mimi-toast-min-h,68px)]',
+      'py-[var(--mimi-toast-py,0.75rem)]',
       'pr-10',
-      'pl-3.5',
+      'pl-[var(--mimi-toast-pl,0.875rem)]',
       'gap-3',
       'border',
       'bg-[color:var(--mimi-toast-bg,var(--mimi-popover))]',
@@ -192,7 +192,7 @@ describe('injectMimiToast', { timeout: 20_000 }, () => {
     for (const cls of ['bg-success', 'text-success-foreground', 'shadow-success-hover']) {
       expect(row(li).classList).toContain(cls);
     }
-    expect(slot(li, 'icon')!.classList).toContain('size-[34px]');
+    expect(slot(li, 'icon')!.classList).toContain('size-[var(--mimi-toast-circle,34px)]');
 
     toast('Sin tono', { variant: 'solid' });
     toast('Propio', { icon: icon() });
@@ -204,6 +204,51 @@ describe('injectMimiToast', { timeout: 20_000 }, () => {
     expect(slot(none, 'icon')).toBeNull();
     li = neutral;
     expect(row(li).classList).toContain('border');
+  });
+
+  it('outline lleva el color del tono (borde y fondo suave); neutral es la tarjeta de la 0.5.0 (R.5)', async () => {
+    const { toast, settle, items, row, slot } = await setup();
+    const TONES = [
+      ['success', 'success', 'bg-success-soft'],
+      ['warning', 'warning', 'bg-warning-soft'],
+      ['info', 'info', 'bg-info-soft'],
+      ['error', 'destructive', 'bg-destructive-soft-bg'],
+    ] as const;
+    for (const [method, token, soft] of TONES) {
+      (toast as unknown as Record<string, (t: string, o?: object) => void>)[method]('Con tono');
+      await settle();
+      const li = items()[0];
+      expect(li.dataset['variant'], method).toBe('outline');
+      expect(row(li).classList, method).toContain(`border-${token}-border`);
+      expect(row(li).classList, method).toContain(soft);
+      expect(slot(li, 'icon')!.classList, method).toContain(`text-${token}-soft-foreground`);
+    }
+
+    toast.success('Neutra', { variant: 'neutral' });
+    await settle();
+    const neutral = items()[0];
+    expect(neutral.dataset['variant']).toBe('neutral');
+    expect(row(neutral).classList).not.toContain('bg-success-soft');
+    expect(row(neutral).classList).toContain('border');
+    expect(slot(neutral, 'icon')!.classList).toContain('text-success-soft-foreground');
+  });
+
+  it('size (R.4): por aviso y por defecto en la configuración; el del aviso gana; la pila sigue la configuración', async () => {
+    const { toast, settle, items, toaster } = await setup();
+    toast('Sin tamaño');
+    toast('Chico', { size: 'sm' });
+    toast.success('Grande', { size: 'lg', variant: 'solid' });
+    await settle();
+    // El más nuevo va primero en la lista.
+    const sizes = items().map((li) => li.dataset['size']);
+    expect(sizes.sort()).toEqual(['lg', 'md', 'sm']);
+    // La pila toma el tamaño de la configuración (md por defecto): ahí vive el ancho.
+    expect(toaster()!.dataset['size']).toBe('md');
+    // Los tres usan las mismas clases: las medidas salen de la escala del tema.
+    for (const li of items()) {
+      const row = li.querySelector<HTMLElement>('[data-slot="toast"]')!;
+      expect(row.classList).toContain('min-h-[var(--mimi-toast-min-h,68px)]');
+    }
   });
 
   it('class va al toast y gana', async () => {

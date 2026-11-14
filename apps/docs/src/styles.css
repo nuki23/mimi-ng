@@ -12,6 +12,12 @@
 @source not '../../../packages/ui-core/src/**/*.spec.ts';
 /* Los Blocks van en su propia hoja (blocks.css), que solo carga su vista previa (B.1-h). */
 @source not '../../../packages/ui-core/src/lib/blocks';
+/* Las páginas de componentes y los componentes que solo usan ellas van en components.css (M.23),
+   que carga /docs/components/…; aquí quedan los que usa el resto del sitio (shell, inicio, Tema,
+   Instalación y los Blocks). Un componente nuevo que use el resto del sitio se agrega a la
+   lista de «ya incluidos» (no se excluye). */
+@source not './app/pages/docs/components';
+@source not '../../../packages/ui-core/src/lib/components/{calendar,chip,color-picker,combobox,command,context-menu,data-table,date-picker,date-range,dropdown-menu,file-upload,input-mask,input-otp,menu,number-input,pagination,password,progress,separator,skeleton,slider,sortable-list,tags-input,textarea,toolbar,tooltip,tree}';
 
 /* Shiki en modo dual: los colores del código vienen de los temas github-light / github-dark
    (variables --shiki-*); el fondo es bg-muted. Cambiar a .dark no vuelve a resaltar. */

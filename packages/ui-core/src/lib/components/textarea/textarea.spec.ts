@@ -56,11 +56,11 @@ describe('MimiTextarea', () => {
     // Alto mínimo = alto del control; interlineado 20px; padding = (alto − 20px − 2 bordes) / 2.
     // Con border-box: padding×2 + 20px + bordes×2 = alto del control.
     expect(el.classList).toContain(
-      'min-h-[var(--mimi-textarea-min-height,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))]',
+      'min-h-[var(--mimi-textarea-min-height,var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem))))]',
     );
     expect(el.classList).toContain('leading-[var(--mimi-textarea-line-height,1.25rem)]');
     expect(el.classList).toContain(
-      'py-[var(--mimi-textarea-py,calc((var(--mimi-textarea-min-height,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))_-_var(--mimi-textarea-line-height,1.25rem)_-_2*var(--mimi-input-border-width,1px))/2))]',
+      'py-[var(--mimi-textarea-py,calc((var(--mimi-textarea-min-height,var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem))))_-_var(--mimi-textarea-line-height,1.25rem)_-_2*var(--mimi-input-border-width,1px))/2))]',
     );
     expect(el.classList).toContain('border-[length:var(--mimi-input-border-width,1px)]');
     expect(el.classList).toContain('resize-y');

@@ -1,13 +1,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MIMI_SELECT_TEXT_ES, provideMimiSelectText } from '@/components/ui/select';
 import { CodeBlock } from '../../../../code/code-block';
+import { FormsTabs } from '../../../../code/forms-tabs';
 import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { SelectBasicExample } from './examples/select-basic.example';
 import { SelectCustomClassExample } from './examples/select-custom-class.example';
+import { SelectDeclarativeExample } from './examples/select-declarative.example';
 import { SelectGroupsExample } from './examples/select-groups.example';
 import { SelectNgModelExample } from './examples/select-ng-model.example';
+import { SelectOptionsExample } from './examples/select-options.example';
 import { SelectReactiveFormsExample } from './examples/select-reactive-forms.example';
 import { SelectSearchExample } from './examples/select-search.example';
 import { SelectServerExample } from './examples/select-server.example';
@@ -20,9 +23,13 @@ import basicSource from './examples/select-basic.example' with { loader: 'text' 
 // @ts-expect-error
 import customClassSource from './examples/select-custom-class.example' with { loader: 'text' };
 // @ts-expect-error
+import declarativeSource from './examples/select-declarative.example' with { loader: 'text' };
+// @ts-expect-error
 import groupsSource from './examples/select-groups.example' with { loader: 'text' };
 // @ts-expect-error
 import ngModelSource from './examples/select-ng-model.example' with { loader: 'text' };
+// @ts-expect-error
+import optionsSource from './examples/select-options.example' with { loader: 'text' };
 // @ts-expect-error
 import reactiveFormsSource from './examples/select-reactive-forms.example' with { loader: 'text' };
 // @ts-expect-error
@@ -39,13 +46,16 @@ import statesSource from './examples/select-states.example' with { loader: 'text
   selector: 'app-select-page',
   imports: [
     CodeBlock,
+    FormsTabs,
     CodePreview,
     CssVariables,
     InstallCommand,
     SelectBasicExample,
     SelectCustomClassExample,
+    SelectDeclarativeExample,
     SelectGroupsExample,
     SelectNgModelExample,
+    SelectOptionsExample,
     SelectReactiveFormsExample,
     SelectSearchExample,
     SelectServerExample,
@@ -62,8 +72,10 @@ export class SelectPage {
   protected readonly source = {
     basic: basicSource as string,
     customClass: customClassSource as string,
+    declarative: declarativeSource as string,
     groups: groupsSource as string,
     ngModel: ngModelSource as string,
+    options: optionsSource as string,
     reactiveForms: reactiveFormsSource as string,
     search: searchSource as string,
     server: serverSource as string,
@@ -72,30 +84,22 @@ export class SelectPage {
   };
 
   protected readonly usage = [
-    "import { type MimiOption, MimiSelect } from '@/components/ui/select';",
+    "import { MimiSelectImports } from '@/components/ui/select';",
     '',
     '@Component({',
     "  selector: 'app-country-field',",
-    '  imports: [MimiSelect],',
+    '  imports: [MimiSelectImports],',
     '  template: `',
     '    <label for="country">País</label>',
-    '    <mimi-select',
-    '      id="country"',
-    '      placeholder="Selecciona un país"',
-    '      search',
-    '      clearable',
-    '      [(value)]="country"',
-    '      [options]="countries"',
-    '    />',
+    '    <mimi-select id="country" placeholder="Selecciona un país" search clearable [(value)]="country">',
+    '      <mimi-option value="CO">Colombia</mimi-option>',
+    '      <mimi-option value="MX">México</mimi-option>',
+    '      <mimi-option value="PE" disabled hint="Sin cobertura">Perú</mimi-option>',
+    '    </mimi-select>',
     '  `,',
     '})',
     'export class CountryFieldComponent {',
     '  country = signal<string | null>(null);',
-    '  countries: MimiOption<string>[] = [',
-    "    { label: 'Colombia', value: 'CO' },",
-    "    { label: 'México', value: 'MX' },",
-    "    { label: 'Perú', value: 'PE', disabled: true, hint: 'Sin cobertura' },",
-    '  ];',
     '}',
   ].join('\n');
 
@@ -144,7 +148,8 @@ export class SelectPage {
       name: 'options',
       type: '(MimiOption<T> | MimiOptionGroup<T>)[]',
       default: '[]',
-      description: 'Opciones sueltas, grupos o las dos cosas.',
+      description:
+        'Alternativa a <mimi-option> para listas armadas por código: opciones sueltas, grupos o las dos cosas. Si se da, gana sobre las <mimi-option>.',
     },
     {
       name: 'placeholder',
@@ -169,13 +174,21 @@ export class SelectPage {
       type: '(option, query) => boolean',
       default: '—',
       description:
-        'Filtro propio. Por defecto, la etiqueta contiene la búsqueda, sin tildes ni mayúsculas.',
+        "Filtro propio. Por defecto, la etiqueta contiene la búsqueda, sin tildes ni mayúsculas. Solo cuenta con searchMode='client'.",
+    },
+    {
+      name: 'searchMode',
+      type: "'client' | 'server'",
+      default: "'client'",
+      description:
+        "Dónde se filtra lo que se busca. Con 'server', tu app filtra al recibir (searchChange) y el Select muestra las opciones que llegan, sin volver a filtrarlas.",
     },
     {
       name: 'compareWith',
-      type: '(a: T, b: T) => boolean',
+      type: '((a: T, b: T) => boolean) | string',
       default: 'Object.is',
-      description: 'Compara el valor con el de cada opción. Úsalo cuando los valores son objetos.',
+      description:
+        'Compara el valor con el de cada opción, cuando los valores son objetos: una función o el nombre de un campo (compareWith="id").',
     },
     {
       name: 'clearable',
@@ -243,7 +256,7 @@ export class SelectPage {
       type: 'boolean',
       default: 'true',
       description:
-        'El panel mide lo mismo que el disparador. Con false, lo que pida su contenido (por ejemplo, un min-w en panelClass).',
+        'El panel mide al menos lo que el disparador y crece si una opción es más larga. Con false, lo que pida su contenido (por ejemplo, un min-w en panelClass).',
     },
   ];
 

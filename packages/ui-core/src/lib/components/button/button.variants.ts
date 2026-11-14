@@ -92,6 +92,10 @@ const TONE_CLASSES = {
  * --mimi-btn-* → --mimi-control-* / --mimi-radius → valor del diseño. La variante da la forma
  * y el tono, los colores (TONE_CLASSES).
  */
+/** Alto, hueco, relleno y texto de un botón con texto: salen de la escala de tamaños del tema. */
+const SIZE_SCALE =
+  'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))] gap-[var(--mimi-btn-gap-s,var(--mimi-btn-gap,0.5rem))] px-[var(--mimi-btn-px-s,var(--mimi-btn-px,var(--mimi-btn-padding-x,1rem)))] text-[length:var(--mimi-btn-text,var(--mimi-btn-font-size,0.875rem))]';
+
 export const buttonVariants = cva(
   [
     'relative inline-flex shrink-0 cursor-pointer items-center justify-center whitespace-nowrap select-none',
@@ -125,11 +129,12 @@ export const buttonVariants = cva(
         danger: '',
       },
       size: {
-        default:
-          'h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))] gap-[var(--mimi-btn-gap,0.5rem)] px-[var(--mimi-btn-px,var(--mimi-btn-padding-x,1rem))] text-[length:var(--mimi-btn-font-size,0.875rem)]',
-        sm: 'h-[var(--mimi-btn-height-sm,var(--mimi-control-height-sm,2rem))] gap-1.5 px-3 text-[13px]',
-        lg: 'h-[var(--mimi-btn-height-lg,var(--mimi-control-height-lg,3rem))] gap-2 px-6 text-[15px]',
-        icon: 'size-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))] p-0',
+        // La escala vive en el tema (`[data-size]`, theme-base.css): los tres tamaños llevan las
+        // mismas clases y cambian solo las variables. Los respaldos son para un tema anterior.
+        md: SIZE_SCALE,
+        sm: SIZE_SCALE,
+        lg: SIZE_SCALE,
+        icon: 'size-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))] p-0',
       },
     },
     compoundVariants: [
@@ -142,9 +147,9 @@ export const buttonVariants = cva(
         })),
       ),
       // El enlace del diseño solo tiene 4px de padding horizontal.
-      { variant: 'link', size: ['default', 'sm', 'lg'], class: 'px-1' },
+      { variant: 'link', size: ['md', 'sm', 'lg'], class: 'px-1' },
     ],
-    defaultVariants: { variant: 'solid', tone: 'primary', size: 'default' },
+    defaultVariants: { variant: 'solid', tone: 'primary', size: 'md' },
   },
 );
 

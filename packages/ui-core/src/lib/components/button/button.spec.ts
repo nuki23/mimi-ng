@@ -41,7 +41,7 @@ const LEGACY_VARIANTS: ButtonVariant[] = ['default', 'secondary', 'destructive',
 class Host {
   readonly variant = signal<ButtonVariant>('solid');
   readonly tone = signal<ButtonTone | undefined>(undefined);
-  readonly size = signal<ButtonSize>('default');
+  readonly size = signal<ButtonSize>('md');
   readonly disabled = signal(false);
   readonly loading = signal(false);
   readonly extra = signal('');
@@ -105,11 +105,11 @@ describe('MimiButton', () => {
     expect(button.tagName).toBe('BUTTON');
     expect(button.dataset['variant']).toBe('solid');
     expect(button.dataset['tone']).toBe('primary');
-    expect(button.dataset['size']).toBe('default');
+    expect(button.dataset['size']).toBe('md');
     expect(button.classList).toContain('bg-primary');
     expect(button.classList).toContain('shadow-primary');
     expect(button.classList).toContain(
-      'h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))]',
+      'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]',
     );
     expect(button.classList).toContain('focus-visible:outline-ring');
     expect(button.classList).toContain(
@@ -271,10 +271,11 @@ describe('MimiButton', () => {
   });
 
   it.each<[ButtonSize, string]>([
-    ['sm', 'h-[var(--mimi-btn-height-sm,var(--mimi-control-height-sm,2rem))]'],
-    ['default', 'h-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))]'],
-    ['lg', 'h-[var(--mimi-btn-height-lg,var(--mimi-control-height-lg,3rem))]'],
-    ['icon', 'size-[var(--mimi-btn-height,var(--mimi-control-height,2.5rem))]'],
+    // La escala vive en el tema (`[data-size]`): los tres tamaños de texto llevan las mismas clases.
+    ['sm', 'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]'],
+    ['md', 'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]'],
+    ['lg', 'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]'],
+    ['icon', 'size-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]'],
   ])('tamaño %s con la cascada de alturas', async (size, expected) => {
     const { host, button, update } = await setup();
     await update(() => host.size.set(size));

@@ -13,6 +13,7 @@ import { MimiButton } from '@/components/ui/button';
 import { MimiFormField } from '@/components/ui/form-field';
 import { MimiInput } from '@/components/ui/input';
 import { cn } from '@/components/ui/utils/cn';
+import { restoreFocusAfterBusy } from '@/components/ui/utils/busy';
 
 /** Lo que sale al enviar un formulario válido. */
 export interface Login02Value {
@@ -50,12 +51,17 @@ let nextId = 0;
   host: {
     '[class]': 'classes()',
     '[attr.data-state]': 'loading() ? "loading" : null',
+    // Cargando: nada se puede editar, pulsar ni enfocar (campos, SSO, enlaces).
+    '[attr.inert]': 'loading() ? "" : null',
+    '[attr.aria-busy]': 'loading() ? "true" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Login02 {
   /** Mientras tu app comprueba las credenciales: el botón dice «Signing in…» y no reenvía. */
   readonly loading = input(false, { transform: booleanAttribute });
+  /** Al terminar de cargar, el foco vuelve a quien lanzó la acción y se anuncia (los Blocks inertes no los ven los lectores). */
+  private readonly focusBack = restoreFocusAfterBusy(this.loading);
   /** Error de tu servidor, encima del botón. `null`: ninguno. */
   readonly error = input<string | null>(null);
   /** Tu imagen. Sin ella, un degradado neutro (provisional, B.3-a). */

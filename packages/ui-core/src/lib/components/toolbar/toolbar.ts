@@ -24,6 +24,7 @@ import {
 import { cva } from 'class-variance-authority';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
+import { MimiSized } from '@/components/ui/utils/size';
 
 /*
  * mimi-toolbar (docs/design/Mimi F2 Toast Tabs Toolbar.dc.html, «4 · Toolbar»; prefijo de tokens
@@ -60,15 +61,16 @@ const toolbarVariants = cva(
 );
 
 const ITEM_CLASSES = cn(
-  'relative inline-flex size-[var(--mimi-toolbar-item-size,40px)] shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-foreground',
-  '[&_svg]:size-[18px] [&_svg]:shrink-0',
+  'relative inline-flex size-[var(--mimi-toolbar-item-s,var(--mimi-toolbar-item-size,40px))] shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-foreground',
+  '[&_svg]:size-[var(--mimi-toolbar-icon,18px)] [&_svg]:shrink-0',
   // Las transiciones del diseño; con movimiento reducido, solo los colores.
   '[transition:background-color_.2s_ease,color_.2s_ease,box-shadow_.35s_cubic-bezier(.2,.8,.2,1),scale_.15s_cubic-bezier(.2,.8,.2,1)]',
   'motion-reduce:[transition:background-color_.2s_ease,color_.2s_ease]',
-  // Hover: anillo de 2px (info al 60 %). Herramienta activa: disco y anillo doble.
-  'not-aria-disabled:not-data-[state=active]:hover:shadow-[0_0_0_2px_color-mix(in_oklch,var(--mimi-toolbar-ring,var(--mimi-info))_60%,transparent)]',
+  // Hover: anillo de 2px (`ring` al 60 %). Herramienta activa: disco y anillo doble. El diseño
+  // usa `info`; Mimi, el anillo de la marca (decidido por el usuario, 12/11/2026).
+  'not-aria-disabled:not-data-[state=active]:hover:shadow-[0_0_0_2px_color-mix(in_oklch,var(--mimi-toolbar-ring,var(--mimi-ring))_60%,transparent)]',
   'data-[state=active]:bg-[color:var(--mimi-toolbar-active-bg,var(--mimi-primary))] data-[state=active]:text-[color:var(--mimi-toolbar-active-fg,var(--mimi-primary-foreground))]',
-  'data-[state=active]:shadow-[0_0_0_2px_var(--mimi-background),0_0_0_4px_var(--mimi-toolbar-ring,var(--mimi-info))]',
+  'data-[state=active]:shadow-[0_0_0_2px_var(--mimi-background),0_0_0_4px_var(--mimi-toolbar-ring,var(--mimi-ring))]',
   'data-[state=pressed]:bg-[color:var(--mimi-toolbar-pressed-bg,var(--mimi-accent))]',
   // 0,9 (con movimiento reducido, 1); el diseño usa 0,88 sin token: plan D6.
   'not-aria-disabled:active:scale-(--mimi-press-scale-sm)',
@@ -81,7 +83,7 @@ const ITEM_CLASSES = cn(
 );
 
 const COUNT_CLASSES =
-  'pointer-events-none absolute -top-[3px] -end-[3px] inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-info px-[5px] text-[10.5px] font-bold text-info-foreground shadow-[0_0_0_2px_var(--mimi-background)]';
+  'pointer-events-none absolute -top-[3px] -end-[3px] inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-[5px] text-[10.5px] font-bold text-primary-foreground shadow-[0_0_0_2px_var(--mimi-background)]';
 
 /**
  * Un botón de la toolbar: `<button mimiToolbarItem="negrita" kind="toggle" aria-label="Negrita">`.
@@ -173,6 +175,7 @@ export class MimiToolbarItem implements FocusableOption {
  */
 @Component({
   selector: 'mimi-toolbar',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: '<ng-content />',
   host: {
     role: 'toolbar',

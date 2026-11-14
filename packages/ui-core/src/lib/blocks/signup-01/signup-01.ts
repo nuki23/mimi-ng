@@ -20,6 +20,7 @@ import {
   mimiPasswordLevel,
 } from '@/components/ui/password';
 import { cn } from '@/components/ui/utils/cn';
+import { restoreFocusAfterBusy } from '@/components/ui/utils/busy';
 
 /** Lo que sale al enviar un formulario completo. */
 export interface Signup01Value {
@@ -64,12 +65,17 @@ let nextId = 0;
   host: {
     '[class]': 'classes()',
     '[attr.data-state]': 'loading() ? "loading" : complete() ? "complete" : "incomplete"',
+    // Cargando: nada se puede editar, pulsar ni enfocar.
+    '[attr.inert]': 'loading() ? "" : null',
+    '[attr.aria-busy]': 'loading() ? "true" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Signup01 {
   /** Mientras tu app crea la cuenta: el botón dice «Creating account…» y no reenvía. */
   readonly loading = input(false, { transform: booleanAttribute });
+  /** Al terminar de cargar, el foco vuelve a quien lanzó la acción y se anuncia (los Blocks inertes no los ven los lectores). */
+  private readonly focusBack = restoreFocusAfterBusy(this.loading);
   /** Error de tu servidor (correo ya registrado…), encima del botón. `null`: ninguno. */
   readonly error = input<string | null>(null);
   readonly termsHref = input('#');

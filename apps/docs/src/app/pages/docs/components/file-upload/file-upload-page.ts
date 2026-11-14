@@ -2,12 +2,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MIMI_FILE_UPLOAD_TEXT_ES, provideMimiFileUploadText } from '@/components/ui/file-upload';
 import { MIMI_ERROR_MESSAGES_ES, provideMimiErrorMessages } from '@/components/ui/form-field';
 import { CodeBlock } from '../../../../code/code-block';
+import { FormsTabs } from '../../../../code/forms-tabs';
 import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
 import { FileUploadBasicExample } from './examples/file-upload-basic.example';
 import { FileUploadFormsExample } from './examples/file-upload-forms.example';
 import { FileUploadListExample } from './examples/file-upload-list.example';
+import { FileUploadReadonlyExample } from './examples/file-upload-readonly.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -16,6 +18,8 @@ import basicSource from './examples/file-upload-basic.example' with { loader: 't
 import formsSource from './examples/file-upload-forms.example' with { loader: 'text' };
 // @ts-expect-error
 import listSource from './examples/file-upload-list.example' with { loader: 'text' };
+// @ts-expect-error
+import readonlySource from './examples/file-upload-readonly.example' with { loader: 'text' };
 
 interface ApiRow {
   name: string;
@@ -29,12 +33,14 @@ interface ApiRow {
   selector: 'app-file-upload-page',
   imports: [
     CodeBlock,
+    FormsTabs,
     CodePreview,
     CssVariables,
     InstallCommand,
     FileUploadBasicExample,
     FileUploadListExample,
     FileUploadFormsExample,
+    FileUploadReadonlyExample,
   ],
   providers: [
     provideMimiFileUploadText(MIMI_FILE_UPLOAD_TEXT_ES),
@@ -48,6 +54,7 @@ export class FileUploadPage {
     basic: basicSource as string,
     list: listSource as string,
     forms: formsSource as string,
+    readonly: readonlySource as string,
   };
 
   protected readonly usage = [
@@ -125,6 +132,13 @@ export class FileUploadPage {
       type: '—',
       default: '—',
       description: 'De la zona de soltar.',
+    },
+    {
+      name: 'readonly',
+      type: 'boolean',
+      default: 'false',
+      description:
+        'Solo lectura: no abre el selector ni acepta archivos soltados. La zona es un botón (no admite aria-readonly): queda enfocable y con aria-disabled.',
     },
   ];
 }

@@ -150,6 +150,13 @@ const CONTRAST_PAIRS: [string, string, string][] = [
   ['outline/ghost neutros', 'foreground', 'card'],
   ['outline/ghost neutros hover', 'accent-foreground', 'accent'],
   ['badge outline', 'foreground', 'background'],
+  // Marca (R.0): el texto violeta solo es `brand-text` (600 en claro, 400 en oscuro), y el
+  // primario como texto solo sobre fondo y tarjeta.
+  ['marca: texto de énfasis', 'brand-text', 'background'],
+  ['marca: texto de énfasis sobre tarjeta', 'brand-text', 'card'],
+  ['marca: texto de énfasis sobre muted', 'brand-text', 'muted'],
+  ['marca: primario como texto', 'primary', 'background'],
+  ['marca: texto del botón primario', 'primary-foreground', 'primary'],
   // Globales del Grupo 2 (G2.0b): textos que el diseño pone sobre ellos.
   ['chip (Tags Input, Combobox)', 'chip-foreground', 'chip'],
   ['zona de arrastre (File Upload)', 'foreground', 'dropzone'],
@@ -202,8 +209,59 @@ describe('Contraste AA de los tokens (theme-base.css)', () => {
     };
     expect(ratio('success-foreground', 'success')).toBeCloseTo(4.81, 1);
     expect(ratio('warning-foreground', 'warning')).toBeCloseTo(7.64, 1);
-    expect(ratio('info-foreground', 'info')).toBeCloseTo(4.79, 1);
+    // 4,79 en el diseño; el info más oscuro (1d, para distinguirlo del violeta) da 7,48.
+    expect(ratio('info-foreground', 'info')).toBeCloseTo(7.48, 1);
     expect(ratio('destructive-foreground', 'destructive')).toBeCloseTo(4.56, 1);
-    expect(ratio('success-soft-foreground', 'success-soft')).toBeCloseTo(6.83, 1);
+    // 6,83 en el diseño (fondo blanco); con el fondo #FAFAFA de la marca (R.0), el suave se mezcla
+    // sobre él y da 6,57.
+    expect(ratio('success-soft-foreground', 'success-soft')).toBeCloseTo(6.57, 1);
+  });
+
+  it('marca frente a info: se distinguen por luminosidad, no solo por tono (claro y oscuro)', () => {
+    // Revisión de la 0.6.0, 1d: el violeta (tono 292) y el azul info (tono 255) estaban a solo 37°
+    // y con la misma luminosidad (0,54 en claro y 0,72 en oscuro): un daltónico o una pantalla
+    // sin color no los distinguía. Se pide una diferencia de luminosidad OKLCH de al menos 0,08.
+    for (const [modeName, mode] of [
+      ['claro', contrastBlock(':root')],
+      ['oscuro', new Map([...contrastBlock(':root'), ...contrastBlock('.dark')])],
+    ] as const) {
+      const { color } = contrastResolver(mode);
+      const delta = Math.abs(color('var(--mimi-info)').L - color('var(--mimi-primary)').L);
+      expect(delta, `${modeName}: ΔL ${delta.toFixed(3)}`).toBeGreaterThanOrEqual(0.08);
+    }
+  });
+
+  it('marca (R.0): las cifras de la paleta #793EEA / #A88FFF / #171717 / #FAFAFA', () => {
+    const lightMode = contrastResolver(contrastBlock(':root'));
+    const darkMode = contrastResolver(
+      new Map([...contrastBlock(':root'), ...contrastBlock('.dark')]),
+    );
+    const ratioIn = (r: ReturnType<typeof contrastResolver>, text: string, bg: string) => {
+      const page = r.color('var(--mimi-background)');
+      const a = luminance(r.color(text), page);
+      const b = luminance(r.color(bg), page);
+      const [hi, lo] = [a, b].sort((p, q) => q - p);
+      return (hi + 0.05) / (lo + 0.05);
+    };
+    // Con los valores OKLCH de las anclas (#793EEA = oklch(0.54 0.239 292), #A88FFF =
+    // oklch(0.72 0.16 292)); las cifras en hex del plan son 5,45 / 6,86 / 3,15 / 2,50.
+    expect(ratioIn(lightMode, 'var(--mimi-brand-600)', 'var(--mimi-background)')).toBeCloseTo(
+      5.4,
+      0,
+    );
+    expect(ratioIn(darkMode, 'var(--mimi-brand-400)', 'var(--mimi-background)')).toBeCloseTo(
+      6.9,
+      0,
+    );
+    // Prohibidos como texto: el violeta de la marca sobre el fondo oscuro y el claro sobre el claro.
+    expect(ratioIn(darkMode, 'var(--mimi-brand-600)', 'var(--mimi-background)')).toBeLessThan(4.5);
+    expect(ratioIn(lightMode, 'var(--mimi-brand-400)', 'var(--mimi-background)')).toBeLessThan(3);
+    // Los neutros de la marca.
+    expect(ratioIn(lightMode, 'var(--mimi-foreground)', 'var(--mimi-background)')).toBeGreaterThan(
+      15,
+    );
+    expect(ratioIn(darkMode, 'var(--mimi-foreground)', 'var(--mimi-background)')).toBeGreaterThan(
+      15,
+    );
   });
 });

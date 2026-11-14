@@ -37,6 +37,17 @@ describe('InstallationPage', () => {
     expect(el.textContent).not.toContain('disponible pronto');
   });
 
+  it('anota el requisito de @scope como del sitio, no de la librería', async () => {
+    const fixture = TestBed.createComponent(InstallationPage);
+    await fixture.whenStable();
+    const note = (fixture.nativeElement as HTMLElement).querySelector(
+      '[data-test="site-requirement"]',
+    )!;
+    expect(note.textContent).toContain('@scope');
+    expect(note.textContent).toContain('Este sitio');
+    expect(note.textContent).toContain('no usan');
+  });
+
   it('muestra los comandos que existen hoy', async () => {
     const { commands } = await setup();
     for (const command of [

@@ -256,12 +256,14 @@ describe('MimiCombobox', { timeout: 20_000 }, () => {
     expect(host('plain').hasAttribute('aria-label')).toBe(false);
     expect(panel()).toBeNull();
     for (const cls of [
-      'h-[var(--mimi-combobox-height,var(--mimi-control-height,2.5rem))]',
+      'h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))]',
       'rounded-[var(--mimi-combobox-radius,var(--mimi-radius,0.75rem))]',
-      'border-input',
-      'bg-input-background',
+      // Los estados de todos los campos (utils/field-styles).
+      'border-[color:var(--mimi-input-border,var(--mimi-input))]',
+      'bg-[color:var(--mimi-input-bg,var(--mimi-input-background))]',
       'focus-within:ring-ring-soft',
-      'data-[invalid]:border-destructive',
+      'data-[invalid]:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
+      'data-[readonly]:bg-[color:var(--mimi-input-readonly)]',
     ]) {
       expect(box('plain').classList).toContain(cls);
     }
@@ -439,7 +441,7 @@ describe('MimiCombobox', { timeout: 20_000 }, () => {
     const create = option('Crear «Tokio»');
     expect(create.getAttribute('data-slot')).toBe('create');
     expect(options().at(-1)).toBe(create);
-    expect(create.classList).toContain('text-info-soft-foreground');
+    expect(create.classList).toContain('text-primary');
     const el = input('plain');
     await press(el, 'Enter');
     expect(h.created).toEqual(['Tokio']);
@@ -576,7 +578,7 @@ describe('MimiCombobox', { timeout: 20_000 }, () => {
       expect(chipLabels(host('multi'))).toEqual(['Angular']);
       expect(box('multi').classList).toContain('flex-wrap');
       expect(box('multi').classList).toContain(
-        'min-h-[var(--mimi-combobox-height,var(--mimi-control-height,2.5rem))]',
+        'min-h-[var(--mimi-combobox-height,var(--mimi-size-height,var(--mimi-control-height,2.5rem)))]',
       );
       expect(input('multi').hasAttribute('placeholder')).toBe(false);
       const el = input('multi');

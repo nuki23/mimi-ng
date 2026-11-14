@@ -6,7 +6,7 @@ import { MimiSkeleton } from '@/components/ui/skeleton';
   selector: 'app-skeleton-card-example',
   imports: [MimiCardImports, MimiSkeleton],
   template: `
-    <mimi-card aria-busy="true" class="w-full max-w-sm">
+    <mimi-card aria-busy="true" class="w-80 max-w-full">
       <mimi-card-content class="flex flex-col gap-4 p-5 first:pt-5">
         <span class="sr-only">Cargando…</span>
         <div class="flex items-center gap-3">

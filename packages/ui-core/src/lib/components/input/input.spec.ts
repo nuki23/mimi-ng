@@ -23,7 +23,7 @@ import type { InputSize } from './input.variants';
   `,
 })
 class Host {
-  readonly size = signal<InputSize>('default');
+  readonly size = signal<InputSize>('md');
   readonly showError = signal<boolean | undefined>(undefined);
   readonly reactiveShowError = signal<boolean | undefined>(undefined);
   readonly extra = signal('');
@@ -64,9 +64,9 @@ describe('MimiInput', () => {
     const { get } = await setup();
     const el = get('plain');
     expect(el.tagName).toBe('INPUT');
-    expect(el.dataset['size']).toBe('default');
+    expect(el.dataset['size']).toBe('md');
     expect(el.classList).toContain(
-      'h-[var(--mimi-input-height,var(--mimi-control-height,2.5rem))]',
+      'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))]',
     );
     expect(el.classList).toContain('border-[color:var(--mimi-input-border,var(--mimi-input))]');
     expect(el.classList).toContain('bg-[color:var(--mimi-input-bg,var(--mimi-input-background))]');
@@ -79,8 +79,9 @@ describe('MimiInput', () => {
   });
 
   it.each<[InputSize, string]>([
-    ['sm', 'h-[var(--mimi-input-height-sm,var(--mimi-control-height-sm,2rem))]'],
-    ['lg', 'h-[var(--mimi-input-height-lg,var(--mimi-control-height-lg,3rem))]'],
+    // La escala vive en el tema (`[data-size]`): todos los tamaños llevan las mismas clases.
+    ['sm', 'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))]'],
+    ['lg', 'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))]'],
   ])('tamaño %s', async (size, expected) => {
     const { fixture, host, get } = await setup();
     host.size.set(size);
@@ -104,7 +105,7 @@ describe('MimiInput', () => {
     }
     for (const cls of [
       'border-[length:var(--mimi-input-border-width,1px)]',
-      'text-[length:var(--mimi-input-font-size,0.875rem)]',
+      'text-[length:var(--mimi-input-text,var(--mimi-input-font-size,0.875rem))]',
       'placeholder:text-[color:var(--mimi-input-placeholder,var(--mimi-input-placeholder-color,var(--mimi-muted-foreground)))]',
       'focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
     ]) {

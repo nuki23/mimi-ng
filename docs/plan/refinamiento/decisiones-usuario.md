@@ -1,5 +1,7 @@
 # Decisiones del usuario (de gusto): PD-1, PD-2 y PD-3
 
+> **Decidido por el usuario (09/11/2026):** **PD-1: opción B** (superficie `mimiCard` + piezas opcionales como directivas); **PD-2: opción C** (estado «headless» `mimiTableState` + directivas de estilo; la Data Table por datos queda como atajo); **PD-3: opciones A + B** (`[errors]` en el campo y el mensaje que viaja con el validador, `withMessage`; Signal Forms ya lo hace). Ya no están PENDIENTES. El texto de abajo se conserva tal como se presentó.
+
 [← Plan de refinamiento](plan.md)
 
 Tres decisiones son de **gusto del usuario** y **no se adoptan por defecto**, ni siquiera en modo autónomo (`CLAUDE.md`, «Modo autónomo», A3, y `docs/plan.md`, «Decidido por defecto»: aquí no aplica). Las tareas que dependen de ellas (R.14, R.19, R.20) no empiezan hasta que el usuario conteste. Cada decisión trae 2 o 3 opciones con **código de uso real** (como lo escribiría quien usa Mimi) y mi recomendación; el usuario puede elegir otra o una mezcla.

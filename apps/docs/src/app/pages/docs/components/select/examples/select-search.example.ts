@@ -1,5 +1,12 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { type MimiOptionGroup, MimiSelectImports } from '@/components/ui/select';
+import { MimiSelectImports } from '@/components/ui/select';
+
+interface Country {
+  code: string;
+  name: string;
+  /** Sin cobertura: se ve, pero no se elige. */
+  off?: boolean;
+}
 
 @Component({
   selector: 'app-select-search-example',
@@ -14,8 +21,17 @@ import { type MimiOptionGroup, MimiSelectImports } from '@/components/ui/select'
         searchPlaceholder="Buscar país…"
         clearable
         [(value)]="country"
-        [options]="countries"
       >
+        <mimi-optgroup label="Latinoamérica y España">
+          @for (c of countries(); track c.code) {
+            <mimi-option
+              [value]="c.code"
+              [disabled]="!!c.off"
+              [hint]="c.off ? 'Sin cobertura' : undefined"
+              >{{ c.name }}</mimi-option
+            >
+          }
+        </mimi-optgroup>
         <!-- Contenido propio de cada opción: en la lista y, con trigger, en el disparador. -->
         <ng-template mimiSelectOption let-option let-query="query" let-trigger="trigger">
           <span
@@ -35,19 +51,14 @@ import { type MimiOptionGroup, MimiSelectImports } from '@/components/ui/select'
 })
 export class SelectSearchExample {
   protected readonly country = signal<string | null>('MX');
-  protected readonly countries: MimiOptionGroup<string>[] = [
-    {
-      label: 'Latinoamérica y España',
-      options: [
-        { label: 'Argentina', value: 'AR' },
-        { label: 'Brasil', value: 'BR' },
-        { label: 'Chile', value: 'CL' },
-        { label: 'Colombia', value: 'CO' },
-        { label: 'España', value: 'ES' },
-        { label: 'México', value: 'MX' },
-        { label: 'Perú', value: 'PE', disabled: true, hint: 'Sin cobertura' },
-        { label: 'Uruguay', value: 'UY' },
-      ],
-    },
-  ];
+  protected readonly countries = signal<Country[]>([
+    { code: 'AR', name: 'Argentina' },
+    { code: 'BR', name: 'Brasil' },
+    { code: 'CL', name: 'Chile' },
+    { code: 'CO', name: 'Colombia' },
+    { code: 'ES', name: 'España' },
+    { code: 'MX', name: 'México' },
+    { code: 'PE', name: 'Perú', off: true },
+    { code: 'UY', name: 'Uruguay' },
+  ]);
 }

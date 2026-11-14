@@ -22,7 +22,7 @@ describe('ToggleGroupPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(7);
+      expect(previews.length).toBe(8);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-toggle-group [mimiToggleGroupItem]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/toggle-group';");

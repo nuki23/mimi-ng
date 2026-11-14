@@ -22,12 +22,17 @@ describe('SelectPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(9);
+      expect(previews.length).toBe(11);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-select button[role="combobox"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/select';");
         expect(code).toMatch(/export class Select\w+Example/);
       }
+      // <mimi-option> es la forma normal: solo el último ejemplo (la alternativa) usa [options].
+      const usesOptions = previews.map(({ code }) => /\[options\]="/.test(code));
+      expect(usesOptions.filter(Boolean)).toHaveLength(1);
+      expect(usesOptions.at(-1)).toBe(true);
+      for (const { code } of previews.slice(0, -1)) expect(code).toContain('<mimi-option');
       // Los textos de la página están en español (se proveen en la página, no en app.config).
       expect(el.querySelector('button[aria-label="Limpiar selección"]')).not.toBeNull();
       expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([

@@ -10,6 +10,8 @@ export interface MimiFileUploadText {
   title: string;
   /** Título con archivos encima. */
   drop: (count: number) => string;
+  /** Título en solo lectura (opcional: sin él, el inglés). */
+  readonly?: string;
   /** Nombre de la lista. */
   list: string;
   /** Nombre de la barra de un archivo. */
@@ -32,6 +34,7 @@ export const MIMI_FILE_UPLOAD_TEXT_EN: MimiFileUploadText = {
   title: 'Drag files here or click',
   drop: (count) =>
     count > 0 ? `Drop to upload ${count} ${count === 1 ? 'file' : 'files'}` : 'Drop to upload',
+  readonly: 'Files (read-only)',
   list: 'Files',
   uploading: (name) => `Uploading ${name}`,
   uploaded: 'Uploaded',
@@ -52,6 +55,7 @@ export const MIMI_FILE_UPLOAD_TEXT_ES: MimiFileUploadText = {
     count > 0
       ? `Suelta para subir ${count} ${count === 1 ? 'archivo' : 'archivos'}`
       : 'Suelta para subir',
+  readonly: 'Archivos (solo lectura)',
   list: 'Archivos',
   uploading: (name) => `Subiendo ${name}`,
   uploaded: 'Subido',

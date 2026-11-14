@@ -94,7 +94,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.6 Select: saltar a una opción con una letra estando cerrado · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.7 Íconos de Lucide en los chunks del showcase · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.8 La CLI y los bloqueos de «todo o nada» · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.9 Migrar Select a las utilidades de lista del Combobox · sin versión · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [~] M.9 (hecha en parte, 09/11/2026: Select usa `mimiNormalizeText` y el resaltado de option-list; falta cambiar su lista `MimiSelectList` por `MimiOptionList`) Migrar Select a las utilidades de lista del Combobox · sin versión · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.10 Script `check-plan` (casillas del índice y del detalle, enlaces, IDs) · sin versión · — · depende: la reorganización del plan (PASO 4) · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.11 La CLI y `--overwrite` con la misma versión (era un error; corregido) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.12 Pruebas deterministas con temporizadores y animaciones (Dialog, Toast, docs bajo carga; la parte de docs, hecha el 05/11/2026) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
@@ -108,7 +108,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9; la release de GitHub y la prueba desde npm de la 0.3.0, hechas; y lo manual de los Blocks de la 0.4.0 cuando se hagan; la hace el usuario) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.21 Switch con una entrada `aria-describedby` (y quitar el rodeo de `settings-01`) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.22 Hash de `blocks.css` en el sitio · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.23 Por qué el CSS global del sitio crece con cada componente (y una hoja aparte por componente o grupo, como `blocks.css`) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.23 (hecha el 09/11/2026: las páginas de componentes cargan `components.css` con `@scope`; el CSS global bajó de 180 a 111 kB; ver `docs/auto/refinamiento-0.6.0-parte3-2026-11-09.md`) Por qué el CSS global del sitio crece con cada componente (y una hoja aparte por componente o grupo, como `blocks.css`) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.24 Data Table: la barra, el pie y el botón de orden siguen con `pr-3`, `pl-4` y `-ml-1.5` físicos (no RTL) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
@@ -126,40 +126,53 @@ Cerrado (puerta G3.P, revisada por el usuario; **0.5.0 publicada el 09/11/2026**
 
 ## Refinamiento → v0.6.0 y v0.7.0 (plan del 09/11/2026, sin empezar)
 
-Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio «uso corto por defecto, composición cuando la necesites», reparto, orden y rupturas). Origen: las peticiones del usuario tras probar la 0.5.0 ([peticiones-usuario.md](plan/refinamiento/peticiones-usuario.md)). **Tres decisiones son del usuario y no se adoptan por defecto:** PD-1 Card, PD-2 API de Table/Data Table y PD-3 API de los mensajes de error de Form Field ([decisiones-usuario.md](plan/refinamiento/decisiones-usuario.md)). Combobox y Select: [combobox-vs-select.md](plan/refinamiento/combobox-vs-select.md).
+Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio «uso corto por defecto, composición cuando la necesites», reparto, orden y rupturas). Origen: las peticiones del usuario tras probar la 0.5.0 ([peticiones-usuario.md](plan/refinamiento/peticiones-usuario.md)). **Tres decisiones del usuario (09/11/2026, ya tomadas):** PD-1 Card, opción B; PD-2 API de Table/Data Table, opción C; PD-3 API de los mensajes de error de Form Field, opciones A + B ([decisiones-usuario.md](plan/refinamiento/decisiones-usuario.md)). Combobox y Select: [combobox-vs-select.md](plan/refinamiento/combobox-vs-select.md).
 
 **0.6.0** (detalle: [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)):
 
-- [ ] R.0 Tema de marca (escala de violeta en OKLCH desde `#793EEA`, primario `#793EEA` en claro y `#A88FFF` en oscuro, contrastes AA con prueba; logo y favicon del sitio) · v0.6.0 · L · depende: archivos del usuario (solo el sitio) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.1 Escala común de tamaños `sm/md/lg` (tema, tipo, herencia `mimiSize`; `default` → `md`, RUPTURA con alias) · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.2 Tamaños en los controles de formulario · v0.6.0 · L · depende: R.1, R.9 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.3 Switch y Checkbox: páginas separadas y tamaños · v0.6.0 · S · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.4 Toast: tamaños (por defecto y por aviso) · v0.6.0 · M · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.5 Toast: variante `outline` con el color del tono · v0.6.0 · S · depende: R.0 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.6 Dialog: tamaños `sm/md/lg` como anchos máximos · v0.6.0 · S · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.7 Dialog como servicio (lo que falta sobre el servicio existente) · v0.6.0 · M · depende: R.6 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.8 Tamaños en el resto de componentes; los Blocks los heredan · v0.6.0 · L · depende: R.1, R.2, R.3 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.9 Efecto de clic uniforme (con `prefers-reduced-motion`) · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.10 Errores visuales: Tabs y Toggle Group en oscuro, Skeleton · v0.6.0 · S · depende: R.0 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.11 Blocks en carga: todo deshabilitado · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.12 `readonly` en todos los componentes de formulario · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.13 Ejemplos de formularios (Signal Forms, Reactive, Template y Form Field) · v0.6.0 · M · depende: R.14, R.15 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.14 Form Field: atajos y mensajes de error (**PENDIENTE DE DECIDIR (usuario): PD-3**) · v0.6.0 · M · depende: PD-3, R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.15 Select: `mimi-option` e íconos de limpiar y carga sobre el chevron · v0.6.0 · L · depende: M.9 (conviene) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.16 Combobox con la misma API que Select · v0.6.0 · M · depende: R.15, M.9 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.17 Tabs: atajo `<mimi-tab label>` · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.18 Input OTP: cantidad de dígitos que quepa y ejemplos · v0.6.0 · S · depende: R.2 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.24 Auditoría de «uso corto» en todos los componentes · v0.6.0 · M · depende: R.1, R.14, R.15 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
-- [ ] R.P6 Puerta de la 0.6.0 · v0.6.0 · — · depende: R.0 a R.18, R.24 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [~] R.0 (color hecho el 09/11/2026; el logo y el favicon, a la espera de los archivos del logo) Tema de marca (escala de violeta en OKLCH desde `#793EEA`, primario `#793EEA` en claro y `#A88FFF` en oscuro, contrastes AA con prueba; logo y favicon del sitio) · v0.6.0 · L · depende: archivos del usuario (solo el sitio) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [~] R.1 (hecha en parte, 10/11/2026: la escala vive en el tema, `mimiSize`, alias `default`, `MimiSized` sin `data-size` propio, y la página «Tamaños» del sitio; falta la tabla de la escala en la spec) Escala común de tamaños `sm/md/lg` (tema, tipo, herencia `mimiSize`; `default` → `md`, RUPTURA con alias) · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.2 (09/11/2026) Tamaños en los controles de formulario · v0.6.0 · L · depende: R.1, R.9 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.3 (09/11/2026) Switch y Checkbox: páginas separadas y tamaños · v0.6.0 · S · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.4 (09/11/2026) Toast: tamaños (por defecto y por aviso) · v0.6.0 · M · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.5 (09/11/2026) Toast: variante `outline` con el color del tono · v0.6.0 · S · depende: R.0 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.6 (09/11/2026) Dialog: tamaños `sm/md/lg` como anchos máximos · v0.6.0 · S · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [~] R.7 (hecha en parte, 09/11/2026: `chrome: 'none'` hecho; falta que Confirm use `size="sm"`) Dialog como servicio (lo que falta sobre el servicio existente) · v0.6.0 · M · depende: R.6 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [~] R.8 (hecha en parte, 10/11/2026: todos menos Card, que va con R.19 en la 0.7.0, y con la página «Tamaños»; faltan ejemplos por componente y comprobar a ojo que los Blocks heredan) Tamaños en el resto de componentes; los Blocks los heredan · v0.6.0 · L · depende: R.1, R.2, R.3 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.9 Efecto de clic uniforme (con `prefers-reduced-motion`) (09/11/2026) · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.10 Errores visuales: Tabs y Toggle Group en oscuro, Skeleton (09/11/2026) · v0.6.0 · S · depende: R.0 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.11 Blocks en carga: todo deshabilitado (09/11/2026) · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [~] R.12 (hecha en parte, 09/11/2026: Checkbox, Switch, Select, Combobox, Date Picker, Date Range, Slider, Color Picker, File Upload, Toggle Group y Password; faltan el aspecto de solo lectura (`data-readonly`), los ejemplos de los seis primeros y revisar Number Input, Input Mask, Tags Input e Input OTP) `readonly` en todos los componentes de formulario · v0.6.0 · M · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.13 (10/11/2026: pestañas de código en 17 páginas con un componente compartido; no son ejemplos en vivo) Ejemplos de formularios (Signal Forms, Reactive, Template y Form Field) · v0.6.0 · M · depende: R.14, R.15 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [~] R.14 (hecha en parte, 09/11/2026: PD-3 A + B y los atajos `hint`, `required` y `description`; faltan más ejemplos y el diagrama) Form Field: atajos y mensajes de error (PD-3, decidido por el usuario el 09/11/2026: opciones A + B) · v0.6.0 · M · depende: R.1 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [~] R.15 (hecha en parte, 09/11/2026: `<mimi-option>`, `<mimi-optgroup>`, un solo icono al final y el ejemplo; 12/11/2026: todos los ejemplos con `<mimi-option>`, `searchMode`, `compareWith="id"` y la X solo con hover, foco o panel abierto (siempre en táctil); falta M.9 completa) Select: `mimi-option` e íconos de limpiar y carga sobre el chevron · v0.6.0 · L · depende: M.9 (conviene) · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.16 (09/11/2026; la plantilla de opción propia sigue siendo `MimiComboboxOption`, distinta de `MimiSelectOption`) Combobox con la misma API que Select · v0.6.0 · M · depende: R.15, M.9 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.17 (09/11/2026) Tabs: atajo `<mimi-tab label>` · v0.6.0 · S · depende: — · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.18 (09/11/2026) Input OTP: cantidad de dígitos que quepa y ejemplos · v0.6.0 · S · depende: R.2 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [x] R.24 (10/11/2026: el formulario de contacto en 7 líneas y las 38 páginas medidas, con una prueba que vigila el bloque «Uso») Auditoría de «uso corto» en todos los componentes · v0.6.0 · M · depende: R.1, R.14, R.15 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
+- [~] R.P6 (recorrida el 10/11/2026, escenarios del `.tgz` en verde y revisor independiente atendido; a falta del logo de R.0 y de la comprobación manual del usuario; ver `docs/auto/refinamiento-0.6.0-parte4-2026-11-10.md`) Puerta de la 0.6.0 · v0.6.0 · — · depende: R.0 a R.18, R.24 · [R-0.6.0.md](plan/refinamiento/R-0.6.0.md)
 
 **0.7.0** (detalle: [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)):
 
-- [ ] R.19 Card como superficie `mimiCard` (**PENDIENTE DE DECIDIR (usuario): PD-1**) · v0.7.0 · M · depende: PD-1, R.1, R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [ ] R.20 Table de directivas y Data Table fácil de llenar (**PENDIENTE DE DECIDIR (usuario): PD-2**) · v0.7.0 · L · depende: PD-2, R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.19 Card como superficie `mimiCard` (PD-1, decidido por el usuario el 09/11/2026: opción B) · v0.7.0 · M · depende: R.1, R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.20 Table de directivas y Data Table fácil de llenar (PD-2, decidido por el usuario el 09/11/2026: opción C) · v0.7.0 · L · depende: R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.21 Sortable List con listas conectadas · v0.7.0 · L · depende: R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.22 Block `kanban-01` · v0.7.0 · M · depende: R.21, R.19 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.23 Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.P7 Puerta de la 0.7.0 · v0.7.0 · — · depende: R.19 a R.23 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+
+## Páginas de la documentación: una plantilla común (plan del 12/11/2026, sin empezar)
+
+Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También están la [auditoría](plan/docs-paginas/auditoria.md) de las 38 páginas, los 7 Blocks y la portada, y los [ejemplos](plan/docs-paginas/ejemplos.md) de Button y Select con cada variante. Lo pidió el usuario tras revisar el sitio: «las páginas no tienen una estructura común y presentan demasiada información». **Bloqueado por PD-4 (PENDIENTE DE DECIDIR, usuario):** variante A, completa (recomendada), o B, corta, y con ella la [Parte C](plan/docs-paginas/parte-c.md) (PD-4c). La Parte C hace que la plantilla se cumpla sola: el componente `app-doc-page`, la prueba `doc-pages.spec.ts` y los textos propuestos para `CLAUDE.md` y los comandos, sin aplicar. Solo cambia el sitio; ningún componente ni su API.
+
+- [ ] DP.0 Piezas comunes (`app-doc-page` con la configuración `DocPage`, `app-api-table`, `app-more`, «Qué instala» desde el registro), la prueba `doc-pages.spec.ts`, `docs/spec/plantilla-pagina.md`, los textos de `CLAUDE.md` y de los comandos, y Button como piloto · sin versión · L · depende: PD-4 (con PD-4c) · [docs-paginas/parte-c.md](plan/docs-paginas/parte-c.md)
+- [ ] DP.1 Tanda 1, las más pesadas: Select, Combobox, Dialog, Form Field y Toolbar · sin versión · L · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.2 Tanda 2, formularios con ejemplos repetidos (8 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.3 Tanda 3, capas flotantes (7 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.4 Tanda 4, datos y fechas (9 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.5 Tanda 5, simples (9 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.6 Tanda 6, Blocks (`block-doc.ts`) y vitrina de la portada · sin versión · M · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.P Puerta: prueba de estructura sin excepciones y Playwright de todas las páginas · sin versión · — · depende: DP.1 a DP.6 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 
 ## Grupo 4 → v0.8.0: estructura
 

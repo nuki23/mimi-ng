@@ -3,8 +3,10 @@ import { Listbox, Option } from '@angular/aria/listbox';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
   type EmbeddedViewRef,
+  ElementRef,
   TemplateRef,
   ViewContainerRef,
   afterRenderEffect,
@@ -13,6 +15,7 @@ import {
   effect,
   inject,
   input,
+  isDevMode,
   output,
   signal,
   untracked,
@@ -48,11 +51,138 @@ export interface MimiListOptionGroup<T = unknown> {
 /** Decide si una opción coincide con lo escrito. */
 export type MimiListFilter<T = unknown> = (option: MimiListOption<T>, query: string) => boolean;
 
+/**
+ * Dónde se filtra lo que se busca en Select y Combobox: `'client'` (el componente, con `filterWith`
+ * o el filtro sin tildes) o `'server'` (la app, al recibir `(searchChange)`: se muestra tal cual lo
+ * que llega en las opciones).
+ */
+export type MimiSearchMode = 'client' | 'server';
+
+/**
+ * Cómo comparan Select y Combobox el valor con el de cada opción: una función o, como atajo, el
+ * nombre de un campo (`compareWith="id"`: dos objetos son iguales si tienen el mismo `id`).
+ */
+export type MimiCompareWith<T = unknown> = ((a: T, b: T) => boolean) | string;
+
+/**
+ * La función de `compareWith`. Con un nombre de campo compara ese campo de los dos objetos; si
+ * alguno no es un objeto (un valor suelto), compara con `Object.is`.
+ *
+ * En desarrollo avisa una vez si el valor (`b`, el elegido) es un objeto sin ese campo: casi
+ * siempre es un nombre mal escrito (`compareWith="ID"`) y no coincidiría ninguna opción.
+ */
+export function mimiCompareFn<T>(compare: MimiCompareWith<T>): (a: T, b: T) => boolean {
+  if (typeof compare === 'function') return compare;
+  let warned = !isDevMode();
+  return (a, b) => {
+    if (Object.is(a, b)) return true;
+    if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;
+    if (!warned && !(compare in b)) {
+      warned = true;
+      console.warn(
+        `[Mimi] Select o Combobox: compareWith="${compare}": el valor no tiene el campo «${compare}», así que no coincide con ninguna opción. Revisa el nombre del campo.`,
+      );
+    }
+    return Object.is(
+      (a as Record<string, unknown>)[compare],
+      (b as Record<string, unknown>)[compare],
+    );
+  };
+}
+
 /** Contexto de la plantilla propia de una opción: `let-option let-query="query"`. */
 export interface MimiListOptionContext<T = unknown> {
   $implicit: MimiListOption<T>;
   /** Lo escrito (para resaltar). */
   query: string;
+}
+
+/** Un grupo declarativo: `<mimi-optgroup label="Europa">…<mimi-option>…</mimi-optgroup>`. */
+@Component({
+  selector: 'mimi-optgroup',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { hidden: '' },
+  template: '<ng-content />',
+})
+export class MimiOptgroup {
+  /** Etiqueta del grupo. No es `input.required` por lo mismo que `value` de `mimi-option`. */
+  readonly label = input('');
+}
+
+/**
+ * Una opción declarativa, alternativa a `[options]` en Select y Combobox:
+ * `<mimi-option value="es" hint="UE">España</mimi-option>`. El texto es la etiqueta (o `label`).
+ * El componente las lee y pinta él mismo; el elemento no se ve.
+ */
+@Component({
+  selector: 'mimi-option',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { hidden: '' },
+  template: '<ng-content />',
+})
+export class MimiOptionItem<T = unknown> {
+  readonly value = input<T>();
+  readonly label = input<string>();
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly hint = input<string>();
+  readonly group = inject(MimiOptgroup, { optional: true });
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  /** Sube cuando cambia el texto de dentro, para que la lista relea la etiqueta. */
+  private readonly textVersion = signal(0);
+
+  constructor() {
+    if (typeof MutationObserver === 'undefined') return;
+    const observer = new MutationObserver(() => this.textVersion.update((v) => v + 1));
+    observer.observe(this.host.nativeElement, {
+      childList: true,
+      characterData: true,
+      subtree: true,
+    });
+    inject(DestroyRef).onDestroy(() => observer.disconnect());
+  }
+
+  /**
+   * Lo que la lista pinta, o `null` mientras `value` no llegó. Con `[value]` enlazado (dentro de
+   * un `@for`, por ejemplo) la lista puede leer la opción antes de que Angular le pase la entrada;
+   * por eso `value` no es `input.required`: leer una requerida sin valor lanza NG0950 y rompía la
+   * lista entera.
+   */
+  readonly option = computed<MimiListOption<T> | null>(() => {
+    this.textVersion();
+    const value = this.value();
+    if (value === undefined) return null;
+    return {
+      label: this.label() ?? (this.host.nativeElement.textContent ?? '').trim(),
+      value,
+      disabled: this.disabled(),
+      hint: this.hint(),
+    };
+  });
+}
+
+/** Las `<mimi-option>` en el orden del DOM, con las de un mismo `<mimi-optgroup>` juntas. */
+export function mimiDeclaredOptions<T>(
+  items: readonly MimiOptionItem<T>[],
+): (MimiListOption<T> | MimiListOptionGroup<T>)[] {
+  const result: (MimiListOption<T> | MimiListOptionGroup<T>)[] = [];
+  const groups = new Map<MimiOptgroup, MimiListOption<T>[]>();
+  for (const item of items) {
+    const option = item.option();
+    if (!option) continue;
+    if (!item.group) {
+      result.push(option);
+      continue;
+    }
+    const existing = groups.get(item.group);
+    if (existing) {
+      existing.push(option);
+    } else {
+      const options: MimiListOption<T>[] = [option];
+      groups.set(item.group, options);
+      result.push({ label: item.group.label(), options });
+    }
+  }
+  return result;
 }
 
 /** Minúsculas y sin tildes, para comparar textos. */
@@ -190,7 +320,7 @@ const ICON = {
 const GROUP_LABEL_CLASSES =
   'px-2 pt-1.5 pb-1 text-[11px] font-semibold tracking-[.05em] text-muted-foreground uppercase';
 const CREATE_CLASSES =
-  'mt-[3px] border-t border-border text-info-soft-foreground data-[active=true]:bg-info-soft';
+  'mt-[3px] border-t border-border text-primary data-[active=true]:bg-primary-subtle';
 const BOX_CLASSES =
   'inline-flex size-4 shrink-0 items-center justify-center rounded-[var(--mimi-radius-sm)] border border-input text-primary-foreground [&_svg]:size-3';
 const BOX_CHECKED_CLASSES = cn(BOX_CLASSES, 'border-primary bg-primary');

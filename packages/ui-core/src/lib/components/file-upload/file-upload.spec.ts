@@ -343,7 +343,9 @@ describe('MimiFileUpload', () => {
     await settle(fixture);
     expect(zone('reactive').getAttribute('aria-invalid')).toBe('true');
     expect(host('reactive').hasAttribute('data-invalid')).toBe(true);
-    expect(zone('reactive').className).toContain('border-destructive');
+    expect(zone('reactive').className).toContain(
+      'border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
+    );
     expect(zone('signal').getAttribute('aria-required')).toBe('true');
     await pick('signal', [file('b.txt', 'text/plain')]);
     expect(h.data().files.map((f) => f.name)).toEqual(['b.txt']);

@@ -3,6 +3,7 @@ import { MIMI_CHIP_TEXT_ES, provideMimiChipText } from '@/components/ui/chip';
 import { MIMI_ERROR_MESSAGES_ES, provideMimiErrorMessages } from '@/components/ui/form-field';
 import { MIMI_TAGS_INPUT_TEXT_ES, provideMimiTagsInputText } from '@/components/ui/tags-input';
 import { CodeBlock } from '../../../../code/code-block';
+import { FormsTabs } from '../../../../code/forms-tabs';
 import { CodePreview } from '../../../../code/code-preview';
 import { CssVariables } from '../../../../code/css-variables';
 import { InstallCommand } from '../../../../code/install-command';
@@ -30,6 +31,7 @@ interface ApiRow {
   selector: 'app-tags-input-page',
   imports: [
     CodeBlock,
+    FormsTabs,
     CodePreview,
     CssVariables,
     InstallCommand,

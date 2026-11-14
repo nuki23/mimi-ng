@@ -60,6 +60,40 @@ export function provideMimiErrorMessages(messages: MimiErrorMessages): Provider 
   return { provide: MIMI_ERROR_MESSAGES, useValue: { ...MIMI_ERROR_MESSAGES_EN, ...normalized } };
 }
 
+/**
+ * Un validador de Reactive Forms (`ValidatorFn`), sin importar `@angular/forms`: recibe el control
+ * y devuelve los errores o `null`.
+ */
+type MimiValidatorLike = (control: never) => Record<string, unknown> | null;
+
+/**
+ * El mensaje viaja con el validador (PD-3, opción B): `mimi-form-field` lo muestra sin escribir
+ * `mimi-form-error`. En Signal Forms ya funciona con `required(path.user, { message: '…' })`.
+ *
+ * ```ts
+ * user = new FormControl('', [
+ *   withMessage(Validators.required, 'Elige un nombre de usuario.'),
+ *   withMessage(Validators.minLength(3), (e) => `Mínimo ${e['requiredLength']} letras.`),
+ * ]);
+ * ```
+ */
+export function withMessage<V extends MimiValidatorLike>(
+  validator: V,
+  message: MimiErrorMessage,
+): V {
+  return ((control: never) => {
+    const errors = validator(control);
+    if (!errors) return errors;
+    return Object.fromEntries(
+      Object.entries(errors).map(([key, value]) => {
+        const params = value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
+        const text = typeof message === 'function' ? message(params) : message;
+        return [key, { ...params, message: text }];
+      }),
+    );
+  }) as V;
+}
+
 /** Texto de un error: el `message` que trae (Signal Forms), el del mapa o `default`. */
 export function mimiErrorText(error: MimiFieldError, messages: MimiErrorMessages): string {
   if (error.message) return error.message;

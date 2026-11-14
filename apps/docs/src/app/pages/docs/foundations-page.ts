@@ -304,7 +304,10 @@ export class FoundationsPage {
     '</mimi-form-field>',
     '',
     '<!-- ngModel -->',
-    '<mimi-select aria-label="País" [options]="countries" [(ngModel)]="country" />',
+    '<mimi-select aria-label="País" [(ngModel)]="country">',
+    '  <mimi-option value="CO">Colombia</mimi-option>',
+    '  <mimi-option value="MX">México</mimi-option>',
+    '</mimi-select>',
   ].join('\n');
 
   protected readonly packageRows = [

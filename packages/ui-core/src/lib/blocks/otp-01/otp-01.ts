@@ -19,6 +19,7 @@ import { MimiButton } from '@/components/ui/button';
 import { MimiCard } from '@/components/ui/card';
 import { MimiInputOtp } from '@/components/ui/input-otp';
 import { cn } from '@/components/ui/utils/cn';
+import { restoreFocusAfterBusy } from '@/components/ui/utils/busy';
 
 /** Lo que tu app sabe del último código enviado. */
 export type Otp01Status = 'idle' | 'error' | 'success';
@@ -54,6 +55,9 @@ let nextId = 0;
   host: {
     '[class]': 'classes()',
     '[attr.data-state]': 'shownStatus()',
+    // Cargando: nada se puede editar, pulsar ni enfocar (casillas, reenviar, cambiar correo).
+    '[attr.inert]': 'loading() ? "" : null',
+    '[attr.aria-busy]': 'loading() ? "true" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -65,6 +69,8 @@ export class Otp01 {
   readonly resendSeconds = input(60, { transform: numberAttribute });
   /** Mientras tu app comprueba el código: «Verifying…» y no reenvía. */
   readonly loading = input(false, { transform: booleanAttribute });
+  /** Al terminar de cargar, el foco vuelve a quien lanzó la acción y se anuncia (los Blocks inertes no los ven los lectores). */
+  private readonly focusBack = restoreFocusAfterBusy(this.loading);
   /** El resultado del último código enviado por `verify`. */
   readonly status = input<Otp01Status>('idle');
   /** Lleva el foco al código al aparecer (no lo hace si el foco ya está en otro lugar). */

@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/date-picker/date-picker';
 import { MimiPopover, MimiPopoverContent, MimiPopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import {
   MIMI_FIELD_CONTROL,
@@ -59,7 +60,7 @@ const DEFAULT_FORMAT: Intl.DateTimeFormatOptions = {
 };
 
 const PRESET_BASE = cn(
-  'h-8 cursor-pointer rounded-[var(--mimi-radius-sm)] border-0 px-2 text-left text-[13px] text-foreground mimi-transition hover:bg-accent active:scale-[0.96]',
+  'h-8 cursor-pointer rounded-[var(--mimi-radius-sm)] border-0 px-2 text-left text-[13px] text-foreground mimi-transition hover:bg-accent active:scale-(--mimi-press-scale)',
   buttonFocusStyles,
 );
 const PRESET = {
@@ -90,6 +91,7 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-date-range',
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [MimiPopover, MimiPopoverTrigger, MimiPopoverContent, MimiCalendar],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiDateRangePicker }],
   template: `
@@ -98,6 +100,7 @@ let nextId = 0;
       [arrow]="false"
       [class]="panelClasses()"
       [(open)]="open"
+      [blocked]="readonly()"
       (openChange)="onOpenChange($event)"
       aria-label="{{ texts.pickRange }}"
     >
@@ -113,6 +116,7 @@ let nextId = 0;
         [attr.aria-describedby]="valueId"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.aria-required]="required() || null"
+        [attr.aria-readonly]="readonly() || null"
         [attr.data-placeholder]="label() ? null : ''"
       >
         <svg
@@ -168,6 +172,7 @@ let nextId = 0;
         <div class="flex flex-col gap-2 p-[var(--mimi-date-padding,12px)]">
           <mimi-calendar
             mode="range"
+            [size]="sized.effective()"
             [rangeStart]="shownStart()"
             [rangeEnd]="shownEnd()"
             [min]="minDate() ?? null"
@@ -201,6 +206,8 @@ export class MimiDateRangePicker
 {
   private readonly defaultLocale = inject(LOCALE_ID);
   protected readonly texts = inject(MIMI_DATE_PICKER_TEXT);
+  /** El panel va en un overlay, fuera del anfitrión: el calendario recibe el tamaño. */
+  protected readonly sized = inject(MimiSized);
 
   /** El periodo (`{ start: '2026-09-24', end: '2026-09-30' }`), o `null`. */
   readonly value = model<MimiDateRange | null>(null);
@@ -220,6 +227,8 @@ export class MimiDateRangePicker
   readonly format = input<Intl.DateTimeFormatOptions>(DEFAULT_FORMAT);
   readonly placeholder = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
+  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  readonly readonly = input(false, { transform: booleanAttribute });
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });
   readonly dirty = input(false, { transform: booleanAttribute });

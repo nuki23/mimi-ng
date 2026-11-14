@@ -27,7 +27,7 @@ class Host {
   readonly max = signal(100);
   readonly tone = signal<MimiProgressTone>('primary');
   readonly shape = signal<MimiProgressShape>('bar');
-  readonly size = signal<MimiProgressSize>('default');
+  readonly size = signal<MimiProgressSize>('md');
   readonly extra = signal('');
 }
 
@@ -111,7 +111,7 @@ describe('MimiProgress', () => {
     const { el, fill, host, update } = await setup();
     await update(() => host.shape.set('circle'));
     expect(el().getAttribute('data-shape')).toBe('circle');
-    expect(el().getAttribute('data-size')).toBe('default');
+    expect(el().getAttribute('data-size')).toBe('md');
     expect(el().getAttribute('role')).toBe('progressbar');
     expect(fill().getAttribute('stroke-dasharray')).toBe('64 100');
     expect(el().querySelector('svg')!.getAttribute('aria-hidden')).toBe('true');

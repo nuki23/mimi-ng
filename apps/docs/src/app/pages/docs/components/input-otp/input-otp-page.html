@@ -22,9 +22,30 @@
 
   <h2 id="examples" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Ejemplos</h2>
 
+  <h3 id="playground" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Casillas y grupos</h3>
+  <p class="text-pretty">
+    Cambia la cantidad de casillas, los grupos y el separador; debajo, el código que lo hace.
+  </p>
+  <app-code-preview [code]="source.playground">
+    <app-input-otp-playground-example />
+  </app-code-preview>
+
   <h3 id="verify" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Verificación</h3>
   <app-code-preview [code]="source.verify">
     <app-input-otp-verify-example />
+  </app-code-preview>
+
+  <h3 id="separator" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Separador propio</h3>
+  <p class="text-pretty">
+    Un carácter con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">separator</code>, o
+    cualquier contenido con
+    <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
+      >&lt;ng-template mimiInputOtpSeparator&gt;</code
+    >.
+  </p>
+  <app-code-preview [code]="source.separator">
+    <app-input-otp-separator-example />
   </app-code-preview>
 
   <h3 id="states" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Estados y longitud</h3>
@@ -32,10 +53,25 @@
     <app-input-otp-states-example />
   </app-code-preview>
 
-  <h3 id="forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Formularios</h3>
-  <app-code-preview [code]="source.forms">
-    <app-input-otp-forms-example />
+  <h3 id="signal-forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Signal Forms</h3>
+  <p class="text-pretty">Pulsa «Verificar» con el código incompleto para ver el error.</p>
+  <app-code-preview [code]="source.signalForms">
+    <app-input-otp-signal-forms-example />
   </app-code-preview>
+
+  <h3 id="reactive-forms" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Reactive Forms</h3>
+  <app-code-preview [code]="source.reactiveForms">
+    <app-input-otp-reactive-forms-example />
+  </app-code-preview>
+
+  <h3 id="forms-tabs" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
+    Con formularios: Signal Forms, Reactive y plantilla
+  </h3>
+  <p class="text-pretty">
+    El mismo campo con los tres formularios de Angular. El control implementa la interfaz de
+    Angular: no hace falta un adaptador.
+  </p>
+  <app-forms-tabs component="input-otp" />
 
   <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">Accesibilidad</h3>
   <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
