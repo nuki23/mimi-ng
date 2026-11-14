@@ -168,3 +168,21 @@ Búsqueda de `0.5.0` en el repo (`git grep`, sin `CHANGELOG.md`, `docs/historial
 Lo que la comparación del registro mostró y **no** es un cambio: `file-upload` y `tags-input` solo cambiaron de formato (siguen pidiendo `progress` y `chip`).
 
 Commit: `chore(release): versión 0.6.0 y CHANGELOG 0.6.0 (13/11/2026) con lo que faltaba (CLI, Sortable List, Number Input y Password, contraste del primario propio)`.
+
+## 4. Build, pruebas y formato
+
+- `pnpm build` (con `NG_CLI_ANALYTICS=false`): en verde, **sin avisos de presupuesto** ni de compilación (salida guardada fuera del repo; la búsqueda de `warning`, `error`, `budget` y `exceeded` no encontró nada, aparte de los `ExperimentalWarning` de Node).
+- `pnpm test`: **docs 260 (74 archivos), ui-core 1061 (97 archivos), CLI 202 (6 archivos)**, todas en verde (0.5.0: 192 / 904 / 202).
+- `pnpm format:check`: «All matched files use Prettier code style!».
+
+| Medida                             | Crudo (0.5.0) | Crudo (0.6.0) | gzip (0.5.0) | gzip (0.6.0) | Aviso  | Error  |
+| ---------------------------------- | ------------- | ------------- | ------------ | ------------ | ------ | ------ |
+| JS inicial                         | 333,31 kB     | 334,89 kB     | 106,25 kB    | 106,23 kB    | 345 kB | 360 kB |
+| CSS global (`styles`)              | 170,44 kB     | 130,77 kB     | 24,45 kB     | 18,70 kB     | 180 kB | 195 kB |
+| `main`                             | 135,90 kB     | 137,83 kB     | —            | —            | 140 kB | 145 kB |
+| `initial` (JS + CSS)               | 503,75 kB     | 465,66 kB     | —            | —            | 525 kB | 555 kB |
+| `components.css` (diferida, nueva) | —             | 140,94 kB     | —            | 19,81 kB     | —      | —      |
+
+Cifras de `apps/docs/scripts/check-initial-js.mjs` (gzip) y de `ng build` (crudo); brotli del JS inicial: 93,75 kB. `check-initial-js.mjs` no mide `components.css`: su gzip es `gzip -c` del archivo (19 811 bytes; la columna de `ng build`, 16,07 kB, es brotli). **Antes y después de esta tarea son iguales:** solo cambió la versión en dos textos del sitio (las mismas cifras que el informe de la parte 11). Frente a la 0.5.0, el JS inicial crece 1,58 kB crudo (más de 1 kB): es la suma de las tandas del refinamiento, que lo midieron una por una en sus informes (la escala de tamaños y los estilos de campo comunes que entran con los controles del sitio inicial); esta tarea no lo investigó de nuevo. En gzip baja 0,02 kB; `main`, +1,93 kB (a 2,17 kB del aviso de 140 kB: **atención** para la 0.7.0); el CSS global baja 39,67 kB porque las páginas de componentes pasaron a `components.css` (M.23). Ningún presupuesto se subió.
+
+Commit: `docs(auto): build, pruebas y bundle de la 0.6.0`.
