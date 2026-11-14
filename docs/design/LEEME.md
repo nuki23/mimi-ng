@@ -4,7 +4,7 @@ Diseños de Mimi exportados de Claude Design. Claude Code toma colores, radios y
 
 ## Tokens
 
-- `tokens-mimi.css`: tokens globales y compartidos del tema Mimi, en claro y oscuro, con los nombres `--mimi-*` de la spec (sección 6.1). Es la fuente de `packages/ui-core/src/lib/theme/theme-base.css`.
+- `tokens-mimi.css`: tokens globales y compartidos del tema Mimi, en claro y oscuro, con los nombres `--mimi-*` de la spec (sección 6.1). Es la fuente de `packages/ui-core/src/lib/theme/theme-base.css`. **Desde la 0.6.0, los colores del tema ya no coinciden con este archivo** (R.0: violeta de marca y grises malva medio, decididos por el usuario). Este archivo sigue siendo el diseño original y no se sincroniza a mano: la tabla con todos los colores finales, claro y oscuro, en hex y OKLCH, para pasar al sistema de diseño, está en `docs/auto/release-0.6.0-2026-11-13.md` (paso 2), y las diferencias, en `correcciones-pendientes.md`.
 - `mimi-variables-componentes.css`: tokens compartidos y **por componente** (21 componentes: los de la 0.1.0 y los del Grupo 1). Catálogo en la spec, sección 13.
 - `mimi-tokens-data.js`: los mismos tokens como datos (lo usan `Mimi Tokens.dc.html` y `Mimi Theme Studio.dc.html`).
 - `mimi-variables.css`, `mimi-variables-fase2.css`, `mimi-variables-fase3.css` y `mimi-effects.css`: las variables tal como las usan los diseños (selector `[data-mimi-style]`).
