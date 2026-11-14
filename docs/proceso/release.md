@@ -2,11 +2,11 @@
 
 Lo ejecuta **el usuario** (el dueño del proyecto). Claude prepara la versión, comprueba lo que puede (`/cerrar-grupo`) y da estos comandos, pero no publica nada (`CLAUDE.md`, «Forma de trabajar», «Commit y push»). Aquí no hay tokens ni claves: cada servicio usa su propio inicio de sesión.
 
-En los comandos, `X.Y.Z` es la versión (por ejemplo, `0.5.0`) y `X.Y.W` la anterior (por ejemplo, `0.4.0`).
+En los comandos, `X.Y.Z` es la versión (por ejemplo, `0.6.0`) y `X.Y.W` la anterior (por ejemplo, `0.5.0`).
 
 ## Antes de publicar
 
-1. La puerta del grupo (`G<n>.P`; en la 0.4.0, la de los Blocks, `B.P`; en la 0.5.0, la `G3.P`) recorrida, con `/cerrar-grupo`, y todo lo suyo hecho: spec, CHANGELOG, conteos, `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
+1. La puerta del grupo (`G<n>.P`; en la 0.4.0, la de los Blocks, `B.P`; en la 0.5.0, la `G3.P`; en la 0.6.0, la del refinamiento, `R.P6`) recorrida, con `/cerrar-grupo`, y todo lo suyo hecho: spec, CHANGELOG, conteos, `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
 2. La versión en `packages/cli/package.json` (`"version": "X.Y.Z"`) y la sección `## X.Y.Z (DD/MM/AAAA): …` en `CHANGELOG.md`.
 3. El commit de la versión hecho y subido (`git status --short` sin cambios pendientes). La etiqueta va sobre ese commit.
 
@@ -120,7 +120,7 @@ En cada uno: `ng build` sin avisos y `ng serve` abre la página.
 
 ## Dónde se anota el resultado
 
-En el historial del grupo, `docs/historial/plan-grupo-<n>.md` (la 0.4.0, en `docs/historial/plan-blocks.md`; la 0.5.0, en `docs/historial/plan-grupo-3.md`, que se crea sin esa sección: agrégala al registrar), en una sección «Publicación de la X.Y.Z (registro)» como la de la 0.2.0 en `plan-grupo-1.md`: fecha y hora de `npm publish`, que es `latest`, la etiqueta y su commit, si hubo release en GitHub, el despliegue y los escenarios con su resultado. Lo escribe Claude con los datos que dé el usuario, al cerrar la puerta.
+En el historial del grupo, `docs/historial/plan-grupo-<n>.md` (la 0.4.0, en `docs/historial/plan-blocks.md`; la 0.5.0, en `docs/historial/plan-grupo-3.md`, que se crea sin esa sección: agrégala al registrar; la 0.6.0, en `docs/historial/plan-refinamiento-0.6.0.md`, que ya tiene la sección vacía), en una sección «Publicación de la X.Y.Z (registro)» como la de la 0.2.0 en `plan-grupo-1.md`: fecha y hora de `npm publish`, que es `latest`, la etiqueta y su commit, si hubo release en GitHub, el despliegue y los escenarios con su resultado. Lo escribe Claude con los datos que dé el usuario, al cerrar la puerta.
 
 ## Si algo sale mal
 

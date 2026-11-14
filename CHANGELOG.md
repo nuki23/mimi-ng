@@ -2,13 +2,13 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
-## 0.6.0 (por publicar): tema de marca, tamaños y formularios
+## 0.6.0 (13/11/2026): tema de marca, tamaños y formularios
 
-> **Borrador.** La versión y la fecha las pone quien publica (`docs/proceso/release.md`). Falta decidir si sale con lo que dice «No incluido». Detalle y evidencia: `docs/auto/refinamiento-0.6.0-*.md`.
+Detalle y evidencia: `docs/auto/refinamiento-0.6.0-*.md` y `docs/auto/release-0.6.0-2026-11-13.md`.
 
 ### Rupturas (qué cambia en algo que ya tenías y qué hacer)
 
-- **El tema por defecto es violeta.** El primario es `#793EEA` en claro y `#A88FFF` en oscuro, con una escala `--mimi-brand-50…950` en OKLCH; `info` se ajusta para distinguirse del violeta. El neutro anterior sigue disponible: `provideMimiTheme(MIMI_THEME_NEUTRAL)`. **Si ya tienes tu tema, no cambia nada; si usabas el predeterminado, verás el violeta.**
+- **El tema por defecto es violeta.** El primario es `#793EEA` en claro y `#A88FFF` en oscuro, con una escala `--mimi-brand-50…950` en OKLCH, `--mimi-brand-text` (el violeta que se puede usar como texto) y `--mimi-brand-gradient`; el anillo de foco (`--mimi-ring`) es violeta; `info` se ajusta (más oscuro en claro, más claro en oscuro) para distinguirse del violeta; en oscuro, las superficies suben (fondo 0,205, tarjeta 0,235, popover 0,26). El neutro anterior sigue disponible: `provideMimiTheme(MIMI_THEME_NEUTRAL)` (archivo nuevo `theme/neutral.ts`). **Si ya tienes tu tema, no cambia nada; si usabas el predeterminado, verás el violeta.** La CLI actualiza `theme-base.css` solo si no lo modificaste; si lo modificaste, lo bloquea con su aviso y no lo toca (compáralo con el nuevo o usa `--overwrite`).
 - **`size="default"` se llama ahora `md`** (Button, Input, Avatar, Progress, Pagination…). `default` se sigue aceptando con un aviso en desarrollo y **se quita en la 0.7.0**. También cambia `data-size="default"` → `data-size="md"` para quien lo use en CSS o en pruebas.
 - **Sin `size`, un control no escribe `data-size`.** El `md` vive en el tema (`:root`) y cada control hereda el del contenedor `[data-size]` más cercano (un `mimiSize` o cualquier contenedor con el atributo). Si leías `data-size="md"` de un control sin `size`, ya no está.
 - **Toast `outline` es de color** (por defecto): el borde y el ícono toman el tono. La tarjeta neutra de la 0.5.0 es `variant="neutral"`.
@@ -43,7 +43,7 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 
 Los 18 controles de formulario (y Tree) dibujan igual el hover, el foco, el clic, el deshabilitado, la solo lectura y el error, con un archivo nuevo compartido. **Son cambios visibles: si tienes capturas o pruebas visuales, se moverán.**
 
-- **Hover en Input y Textarea** (no tenían) y en Select; el borde se oscurece al pasar el ratón.
+- **Hover en Input y Textarea** (no tenían) y en Select; el borde se oscurece al pasar el ratón. **Number Input y Password** usan los mismos bordes y el mismo hover que Input (antes, Password pintaba su caja con clases propias y el borde de Number Input con hover quedaba casi blanco en oscuro); los − y + de Number Input tienen un hover suave.
 - **Hover más suave en oscuro:** `--mimi-input-hover` mezcla el 14 % de `foreground` (antes, 30 %; el borde quedaba casi blanco). En claro no cambia.
 - **Grises «malva medio»:** fondo, texto, tarjeta, popover, `secondary`, `muted`, `accent`, bordes y campos llevan el tono 292 de la marca con croma 0,014 (0,007 en los casi blancos y casi negros), con la misma luminosidad: el contraste no cambia (AA en claro y oscuro). `MIMI_THEME_NEUTRAL` vuelve al neutro puro.
 - **Profundidad al hacer clic: todos se hunden** y les crece el halo (`ring-soft`), como a Button, también los de escribir (Input, Textarea, Combobox, Tags Input, Number Input, Password, Input Mask). En un campo compuesto se hunde la caja entera, también al hacer clic en el texto (Number Input, en la zona del número y no solo en − y +); los botones pequeños de dentro (− y +, el ojo de Password, la X del Combobox) ya no se hunden aparte. Con «reducir movimiento», nada se hunde.
@@ -55,12 +55,18 @@ Los 18 controles de formulario (y Tree) dibujan igual el hover, el foco, el clic
 - **Error unificado:** borde `--mimi-input-error` con el halo solo con el foco. **Switch gana el error** (un filo rojo de 1 px); Checkbox lo marca también cuando está marcada; Input OTP pone el halo solo en la casilla con el foco (antes, en todas).
 - **Deshabilitado con el token** `--mimi-disabled-opacity` en todos (antes, `opacity-50` fijo en Button, Checkbox, Switch, Input, Textarea y las opciones de las listas). **Tree deshabilitado entero** ahora se atenúa (antes no se veía distinto).
 - **Tree:** el nodo elegido es fondo `primary-subtle` con texto `primary` (antes, `primary` sólido con texto blanco); el anillo, solo con el teclado. `--mimi-tree-selected` y `--mimi-tree-selected-fg` cambian de valor por defecto.
-- **Colores de selección con la marca, no con `info`:** el azul queda solo para los avisos. Toolbar (anillo de hover y de la herramienta activa: `--mimi-toolbar-ring` → `ring`; contador `primary`), File Upload con un archivo encima (borde `ring`, fondo `primary-subtle`, halo `ring-soft`; `--mimi-dropzone-active` y `--mimi-dropzone-active-border` cambian de valor), Data Table (fila elegida, filtro activo e insignia de selección), la fila «Crear» del Combobox y el contador de Tabs.
-- **CLI:** ítem nuevo **`utils/field-styles`** (`utils/field-styles.ts`) en el registro; lo instalan con ellos Input, Textarea, Select, Combobox, Tags Input, Number Input, Password, Input Mask, Date Picker, Color Picker, Checkbox y Switch. Date Picker y File Upload ya no piden `utils/control-styles`.
+- **Colores de selección con la marca, no con `info`:** el azul queda solo para los avisos. Toolbar (anillo de hover y de la herramienta activa: `--mimi-toolbar-ring` → `ring`; contador `primary`), File Upload con un archivo encima (borde `ring`, fondo `primary-subtle`, halo `ring-soft`; `--mimi-dropzone-active` y `--mimi-dropzone-active-border` cambian de valor), Data Table (fila elegida, filtro activo e insignia de selección), la fila «Crear» del Combobox, el contador de Tabs y **Sortable List** (el hueco donde se suelta y el anillo del elemento levantado: `--mimi-sortable-drop` → `ring`, `--mimi-sortable-drop-bg` → `primary-subtle`). Esos textos violeta usan `text-primary`: con el violeta de fábrica pasan AA (4,70 lo más bajo), pero **con un primario propio claro** (un amarillo, por ejemplo) pueden quedar por debajo de 4,5:1 sobre el fondo; en ese caso, usa en claro un primario más oscuro.
+- **CLI:** ítem nuevo **`utils/field-styles`** (`utils/field-styles.ts`) en el registro; lo instalan con ellos Input, Textarea, Select, Combobox, Tags Input, Number Input, Password, Input Mask, Date Picker, Color Picker, Checkbox y Switch. Date Picker y File Upload ya no piden `utils/control-styles`. Los otros ítems internos nuevos están en «CLI», abajo.
 - **Si personalizaste** `--mimi-tree-selected(-fg)`, `--mimi-toolbar-ring`, `--mimi-dropzone-active(-border)` o `--mimi-table-row-selected`, tu valor sigue ganando. Si copiaste a mano clases de estado de un componente, vuelve a generarlo con `ng g mimi <componente> --overwrite` o compáralo con el nuevo.
+
+### CLI
+
+- **Ítems internos nuevos** (la CLI los instala sola con quien los usa): **`utils/size`** (`MimiSize`, `mimiSize`, `MIMI_SIZE` e `injectMimiSize`; casi todos los componentes), **`utils/field-styles`** (los estados de los campos, arriba) y **`utils/busy`** (los Blocks con `[loading]`, con `@angular/cdk`). El ítem `theme` gana `theme/neutral.ts`. Select pide también `option-list`.
+- Los siete Blocks (`login-01`, `login-02`, `signup-01`, `otp-01`, `settings-01`, `table-01` y `pricing-01`) instalan `utils/busy` con ellos.
 
 ### Arreglos
 
+- **Select: el anillo de foco ya no se queda** después de elegir con el ratón (sigue con el teclado).
 - **Paneles dentro de un contenedor con scroll propio** (un `overflow: auto` cualquiera): el panel de Select, Combobox, Date Picker, Date Range, Color Picker, Dropdown Menu, Context Menu (abierto con el teclado), Popover y Tooltip sigue a su campo con el scroll y se cierra si el campo sale de la vista. Antes se quedaba fijo mientras el contenido se movía. Lo hace `utils/overlay` (la directiva `MimiOverlayFollow`), que ya instalaban.
 - Tabs y Toggle Group en oscuro, y Skeleton; efecto de clic uniforme (`--mimi-press-scale`).
 - Los Blocks con `[loading]` devuelven el foco al terminar.
@@ -73,11 +79,11 @@ Los 18 controles de formulario (y Tree) dibujan igual el hover, el foco, el clic
 
 ### No incluido en esta versión
 
-R.0 (el logo y el favicon, a la espera de los archivos), M.9 completa (la lista de Select sobre `option-list`), los ejemplos de solo lectura de los seis primeros controles (el aspecto de solo lectura ya está: ver «Estados de los controles») y R.14 (más ejemplos y el diagrama).
+Pasa a la 0.7.0 (`docs/plan/refinamiento/R-0.7.0.md`): el logo y el favicon del sitio (R.25, a la espera de los archivos); la tabla de la escala de tamaños en la spec (R.26; la página «Tamaños» ya la muestra); Confirm con `size` (R.27); ejemplos de tamaño en la página de cada componente (R.28); ejemplos de solo lectura en las páginas que faltan (R.29; el aspecto de solo lectura ya está: ver «Estados de los controles»); más ejemplos de Form Field y su diagrama (R.30); la nota de contraste con un primario propio en la spec y en la página «Tema» (R.31; resumida arriba, en «Colores de selección»); quitar el alias `default` de `size` (R.32, la ruptura anunciada arriba); y M.9 completa (la lista de Select sobre `option-list`; no cambia la API).
 
 ### Cómo actualizar desde la 0.5.0
 
-`npm i -D @mimi-ng/cli@0.6.0` y `ng g mimi <los componentes que usas>`. Lo que modificaste no se sobrescribe (con `--overwrite` sí). Revisa «Rupturas», arriba.
+`npm i -D @mimi-ng/cli@0.6.0` y `ng g mimi <los componentes que usas>` (con pnpm, `pnpm add -D @mimi-ng/cli@0.6.0` y `pnpm ng g mimi …`). La CLI dice «actualizado de 0.5.0 a 0.6.0» en cada uno, instala los ítems internos nuevos (`utils/size`, `utils/field-styles`, `utils/busy`) y actualiza `theme-base.css`. Lo que modificaste no se sobrescribe: se bloquea con su aviso (con `--overwrite` sí). Revisa «Rupturas», arriba; en particular, cambia `size="default"` por `size="md"` antes de la 0.7.0.
 
 ## 0.5.0 (09/11/2026): datos y páginas
 

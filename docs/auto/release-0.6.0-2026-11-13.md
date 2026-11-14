@@ -140,3 +140,31 @@ Commit: `docs(plan): cierra la puerta R.P6 y pasa la 0.6.0 al historial; lo que 
 | `--mimi-toggle-group-indicator`      | —                                | —                   | `oklch(0.356 0.013 292)`         | `#3C3B43`           | = `--mimi-tabs-pill-active` (solo oscuro)                 |
 
 La tabla tiene todo lo que declaran `:root` y `.dark` en `theme-base.css`, también los tokens de componente que viven ahí (Tabs, Toggle Group, Password, File Upload…). Los demás tokens de componente (spec 13) no los declara el tema: usan su valor de respaldo en la clase (que es uno de los de arriba) o el que ponga el usuario con `provideMimiTheme`. `MIMI_THEME_NEUTRAL` (el tema anterior, en `theme/neutral.ts`) tampoco: es el gris de croma 0 del diseño original.
+
+Commit: `docs(design): tabla de todos los tokens de color finales (violeta y grises malva medio, claro y oscuro, hex y OKLCH); tokens-mimi.css sigue siendo el diseño original`.
+
+## 3. Versión 0.6.0 y CHANGELOG
+
+Búsqueda de `0.5.0` en el repo (`git grep`, sin `CHANGELOG.md`, `docs/historial/`, `docs/auto/` ni `pnpm-lock.yaml`). **Cambiadas (la versión actual):**
+
+- `packages/cli/package.json:3`: `"version": "0.6.0"` (la única fuente: el build la escribe en `dist/registry.json` y el sitio la lee de ahí).
+- `apps/docs/src/app/pages/docs/installation-page.ts:89`: el `mimi.json` de ejemplo, `"button": { "version": "0.6.0" }`.
+- `apps/docs/src/app/pages/docs/installation-page.html:203`: «button actualizado de 0.5.0 a 0.6.0».
+- `docs/proceso/release.md`: los ejemplos de versión (0.6.0 y 0.5.0), la puerta de la 0.6.0 (`R.P6`) y dónde va el registro de la publicación (`docs/historial/plan-refinamiento-0.6.0.md`).
+
+**Sin cambiar (históricas o que nombran la 0.5.0 a propósito):** `toast-page.ts:150`, `toast.ts:52` y `toast.spec.ts:209` («el `outline` de la 0.5.0»); `theme/neutral.ts:4` («el tema que tenía Mimi hasta la 0.5.0»); `docs/spec.md:669` y `:674` (el `mimi.json` de ejemplo con `login-01` instalado con la 0.5.0, y la nota que lo explica); `spec.md:18`, `:162`, `:495`, `:504` (historia de los grupos); `docs/plan.md`, `docs/plan/*` y `docs/plan/refinamiento/*` (historia).
+
+**CHANGELOG** («0.6.0 (por publicar)» → `## 0.6.0 (13/11/2026): tema de marca, tamaños y formularios`, sin la nota de «Borrador»). Revisado contra los encabezados de los once informes del refinamiento (`docs/auto/refinamiento-0.6.0-*.md`) y contra `git diff v0.5.0 HEAD -- packages/cli/src/registry.json`. **Ya estaban:** las rupturas (violeta, `default` → `md`, `data-size`, Toast `outline`, Blocks inertes, `separatorAfter`, `option-list`, `clear` opcional, tokens de medida en un contenedor, estados visuales, Dialog `padding`, Data Table `size`), los tamaños, los formularios, los estados (con la **profundidad B**, los **grises malva medio**, los paneles abiertos con el borde de la marca, la X, Tags Input en solo lectura y el hover de los de elegir), los **paneles que siguen el scroll de su contenedor y se cierran al salir de la vista**, y la documentación (con **Input y Textarea en páginas separadas**). **Faltaban, y se agregaron:**
+
+- en la ruptura del violeta: `--mimi-brand-text`, `--mimi-brand-gradient`, el anillo violeta, las superficies del oscuro, el archivo `theme/neutral.ts` y qué hace la CLI con `theme-base.css` (lo actualiza si no lo tocaste; si no, lo bloquea);
+- Number Input y Password con los bordes y el hover de Input (parte 8, puntos 2 y 3);
+- **Sortable List** con los colores de la marca en lugar de `info` (parte 8, punto 4: `--mimi-sortable-drop` y `-drop-bg` cambian de valor por defecto);
+- la nota de contraste del texto `text-primary` con un primario propio claro (alerta de la parte 9; su lugar en la spec y en el sitio es la R.31);
+- una sección **«CLI»**: `utils/size` (no se nombraba, y lo instalan casi todos los componentes), `utils/field-styles`, `utils/busy`, `theme/neutral.ts`, `option-list` con Select y `utils/busy` en los siete Blocks (comprobado en `registry.json`, uno por uno);
+- en «Arreglos»: el anillo de foco de Select que se quedaba tras elegir con el ratón (parte 8, punto 1);
+- «No incluido» dice ahora a qué tarea de la 0.7.0 va cada cosa (R.25 a R.32 y M.9);
+- «Cómo actualizar»: el comando de pnpm, el aviso «actualizado de 0.5.0 a 0.6.0», los ítems nuevos, el bloqueo de lo modificado y cambiar `default` por `md` antes de la 0.7.0 (comprobado en el paso 6, escenario 3).
+
+Lo que la comparación del registro mostró y **no** es un cambio: `file-upload` y `tags-input` solo cambiaron de formato (siguen pidiendo `progress` y `chip`).
+
+Commit: `chore(release): versión 0.6.0 y CHANGELOG 0.6.0 (13/11/2026) con lo que faltaba (CLI, Sortable List, Number Input y Password, contraste del primario propio)`.
