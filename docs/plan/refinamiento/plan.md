@@ -4,8 +4,8 @@
 
 Origen: las peticiones del usuario tras probar la 0.5.0 desde npm (09/11/2026), en [`peticiones-usuario.md`](peticiones-usuario.md). Este plan es solo **planificación**: ninguna tarea `R.x` está hecha ni empezada. Cada una cita el código actual (archivo y línea, comprobado el 09/11/2026 en `main` = `e4e967f`).
 
-- Tareas de la **0.6.0**: [`R-0.6.0.md`](R-0.6.0.md) (R.0 a R.18 y R.24).
-- Tareas de la **0.7.0**: [`R-0.7.0.md`](R-0.7.0.md) (R.19 a R.23).
+- Tareas de la **0.6.0**: cerradas el 13/11/2026; el texto está en el historial, [`docs/historial/refinamiento/R-0.6.0.md`](../../historial/refinamiento/R-0.6.0.md) (R.0 a R.18 y R.24; índice en `docs/historial/plan-refinamiento-0.6.0.md`).
+- Tareas de la **0.7.0**: [`R-0.7.0.md`](R-0.7.0.md) (R.19 a R.23 y, desde el cierre de la 0.6.0, R.25 a R.32 y M.9: lo que faltaba de la 0.6.0).
 - **Tres decisiones de gusto del usuario, sin adoptar por defecto:** [`decisiones-usuario.md`](decisiones-usuario.md) (Card, API de Table/Data Table, API de los mensajes de error de Form Field).
 - **Combobox y Select** (por qué son dos y qué cambiar para que tengan la misma API): [`combobox-vs-select.md`](combobox-vs-select.md).
 - El **Grupo 4** (Accordion, Sheet/Drawer, Stepper y `dashboard-01`) pasa de la 0.6.0 a la **0.8.0**.
