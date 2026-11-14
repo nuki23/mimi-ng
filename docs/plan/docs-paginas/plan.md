@@ -111,6 +111,8 @@ Las dos variantes comparten las reglas comunes (abajo). Se diferencian en cuánt
 
 ## Prioridad y tandas (después de PD-4)
 
+**Estado (14/11/2026, rama `auto/docs-paginas-2026-11-14`):** DP.0 `[~]`: piezas comunes, prueba, `docs/spec/plantilla-pagina.md` y los textos de C.3, hechos; el piloto migra **Button y Select** (Select adelantada de DP.1, a pedido del usuario), en el paso siguiente. Hasta que el usuario las revise, no se migra ninguna otra página. Informe: `docs/auto/docs-paginas-2026-11-14.md`.
+
 Un commit por página. Al final de cada tanda: Playwright en claro y oscuro (que cada ejemplo corra, que el orden de las secciones sea el de la plantilla y que no haya errores de consola) y la prueba de estructura (DP.0).
 
 | Tarea | Tanda                                      | Páginas                                                                                                 | Por qué este orden                                                                                                                                                                                                                                                                                                                 |

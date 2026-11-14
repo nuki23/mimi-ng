@@ -34,7 +34,7 @@ Revisión hecha el 09/11/2026 **sobre el código y las páginas de la rama** (no
 
 Medido sobre el código de las **38 páginas** de componentes del sitio (los componentes sin página propia —Textarea, que va en la de Input, Menu, Calendar, Chip, Option List— se cubren con la del componente que los usa). Dos medidas por página, ambas **líneas de plantilla** sin contar las vacías:
 
-- **Uso:** la plantilla del bloque «Uso» de la página (lo primero que ve quien llega). Lo vigila `apps/docs/src/app/code/short-use-pages.spec.ts` con un tope de **12 líneas** (Dialog en plantilla, 14, es la única excepción: un formulario completo; con el servicio son 1).
+- **Uso:** la plantilla del bloque «Uso» de la página (lo primero que ve quien llega). Lo vigilaba `apps/docs/src/app/code/short-use-pages.spec.ts`; desde el 14/11/2026 (DP.0), `apps/docs/src/app/doc-page/doc-pages.spec.ts` (en las páginas con la plantilla, `usage.code`; en las que faltan migrar, la misma medida), con un tope de **12 líneas** (Dialog en plantilla, 14, es la única excepción: un formulario completo; con el servicio son 1).
 - **Primer ejemplo:** la plantilla del primer ejemplo de la página (a menudo un «mostrador» con varias variantes, no el uso mínimo).
 
 | Página        |          Uso | Primer ejemplo |

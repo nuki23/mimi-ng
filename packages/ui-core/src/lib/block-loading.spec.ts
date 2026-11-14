@@ -23,7 +23,15 @@ const BLOCKS: { name: string; type: Type<unknown>; input: 'loading' | 'saving' }
   { name: 'table-01', type: Table01, input: 'loading' },
 ];
 
-describe('Blocks en carga (R.11)', () => {
+/**
+ * Tiempo máximo de cada caso (M.12). Cada uno pinta un Block entero; `table-01` lleva la Data
+ * Table completa y, con `pnpm test:ui-core` y todos los workers ocupados, pasó de los 5 s de
+ * Vitest tres veces seguidas el 14/11/2026 (aislado, los 7 casos tardan 2,6 s). 20 s, como las
+ * pruebas de páginas de docs y el bloque «M1» de la CLI.
+ */
+const BLOCK_TIMEOUT = 20_000;
+
+describe('Blocks en carga (R.11)', { timeout: BLOCK_TIMEOUT }, () => {
   for (const block of BLOCKS) {
     it(`${block.name}: con ${block.input} queda inerte y con aria-busy; sin él, normal`, async () => {
       const fixture = TestBed.createComponent(block.type);

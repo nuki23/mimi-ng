@@ -5,7 +5,7 @@ argument-hint: <ID o nombre del componente, ej. G2.1 o toggle-group>
 
 Crea el componente **$ARGUMENTS** de Mimi. Sigue el protocolo de `CLAUDE.md`, «Forma de trabajar» (al empezar: pasos a–d; al terminar: pasos e–h; «Commit y push»), y estos pasos propios de un componente.
 
-**Reglas de `CLAUDE.md` que se cumplen:** Angular 1–10, estilos 1–11, «Forma de trabajar» (con «Bundle» y «Privacidad»). Su texto está solo en `CLAUDE.md`; aquí se citan por número y nombre.
+**Reglas de `CLAUDE.md` que se cumplen:** Angular 1–11, estilos 1–11, «Forma de trabajar» (con «Bundle» y «Privacidad»). Su texto está solo en `CLAUDE.md`; aquí se citan por número y nombre.
 
 ## 1. Antes de escribir código
 
@@ -35,12 +35,14 @@ Crea el componente **$ARGUMENTS** de Mimi. Sigue el protocolo de `CLAUDE.md`, «
 - `index.ts` que exporte todo; si tiene subcomponentes, también `Mimi<Nombre>Imports`. Expórtalo desde `packages/ui-core/src/index.ts`.
 - Pruebas con TestBed junto al código (`*.spec.ts`): variantes, tamaños, estados, `class` del usuario, `data-*`, accesibilidad y teclado. Durante el desarrollo usa `pnpm test:ui-core`.
 
-## 3. La página, en `apps/docs/src/app/pages/docs/components/$ARGUMENTS/`
+## 3. La página (obligatorio: con la plantilla)
 
-- `$ARGUMENTS-page.ts` y `$ARGUMENTS-page.html`, con la tipografía de las páginas existentes (`pages/docs/introduction-page.html`).
-- Ruta `/docs/components/$ARGUMENTS`: en `apps/docs/src/app/pages/docs/docs.routes.ts` (las rutas de docs, diferidas con `loadChildren` desde la M.13; no en `app.routes.ts`), lazy, con `title: '<Nombre> · Mimi'`.
-- En `apps/docs/src/app/layout/docs-nav.ts` (`DOCS_NAV`), cambia el ítem de $ARGUMENTS a `status: 'ready'` (una prueba falla si un ítem `ready` no tiene ruta).
-- Contenido: título, descripción, instalación con `<app-install-command name="$ARGUMENTS" />`, un ejemplo por variante y estado (los de «Ejemplos del showcase» de la tarea), un ejemplo personalizando con `class` y la tabla de API (input, tipo, valor por defecto, descripción).
+Lee `docs/spec/plantilla-pagina.md` antes de escribirla.
+
+- `$ARGUMENTS.page.ts`: la configuración `DocPage` (nombre, frase de cabecera, demo principal, `install`, `usage`, ejemplos por categoría con su frase, `accessibility`, `api`, `texts` y `tokens`). `$ARGUMENTS-page.ts` solo pinta `<app-doc-page [page]="page" />`. No hay `$ARGUMENTS-page.html`.
+- Ruta `/docs/components/$ARGUMENTS` en `apps/docs/src/app/pages/docs/docs.routes.ts`, lazy, con `title: '<Nombre> · Mimi'`, y el ítem de `docs-nav.ts` en `status: 'ready'`. El nombre de `DocPage.name` es el mismo que el del menú.
+- Ejemplos: los de «Ejemplos del showcase» de la tarea, cada uno en su categoría (tamaños, variantes, estados, formularios, avanzados, `class`, alternativas). Los de formularios son las pestañas de R.13 (`FORMS_SPECS`); un ejemplo vivo de formularios solo si el control valida algo propio.
+- **Paso obligatorio, antes del informe:** `pnpm ng test docs --include='**/doc-page/doc-pages.spec.ts'` en verde, sin añadir la página a ninguna lista de excepciones. En el informe, la salida de esa prueba es la evidencia del criterio «página con la plantilla».
 - Cada ejemplo es un componente propio en `examples/$ARGUMENTS-<caso>.example.ts` y se muestra con `CodePreview`, importado **también como texto**, así el código mostrado es el real:
 
   ```ts
@@ -56,8 +58,6 @@ Crea el componente **$ARGUMENTS** de Mimi. Sigue el protocolo de `CLAUDE.md`, «
   ```
 
   Nunca escribas el código de un ejemplo dos veces. Para fragmentos sueltos (comandos, `mimi.json`, CSS) usa `CodeBlock`.
-
-- Encabezados `h2`/`h3` con `id` para la TOC; no pongas etiquetas ni badges dentro del encabezado (la TOC lee su texto).
 
 ## 4. Al terminar (además del protocolo, pasos e–h)
 
