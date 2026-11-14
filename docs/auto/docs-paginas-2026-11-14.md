@@ -20,3 +20,10 @@
 - `docs/plan/mantenimiento.md`: M.25 con origen, alcance propuesto (medir módulo por módulo contra la M.13; probar la cabecera sin `cn()`; diferir lo que se pueda del shell), criterios de hecho (5 kB de margen o una recomendación para el usuario, sin subir presupuestos) y «Bloquea: R.19 a R.23, como aviso».
 - `docs/plan.md`: la línea en «Mantenimiento» y en el bloque de la 0.7.0; R.P7 depende también de M.25 (aquí y en `docs/plan/refinamiento/R-0.7.0.md`).
 - No se midió ni se cambió nada del sitio.
+
+## 3. Decisiones del usuario: PD-4 y PD-4c (14/11/2026)
+
+**Plan breve:** registrar lo que eligió el usuario en el prompt (no son decisiones por defecto) donde estaba cada pregunta, quitarlas del índice de `docs/plan/decisiones.md` y anotarlas en `docs/auto/decisiones-por-defecto.md` con la base «Decidido por el usuario».
+
+- PD-4: **variante A**. PD-4c: (1) componente común con configuración; (2) la prueba falla desde DP.0 con la lista de pendientes que solo encoge; (3) los textos de C.3 se aplican tal como están en `parte-c.md`; (4) cada excepción la aprueba el usuario. Todas coinciden con la recomendación.
+- Archivos: `docs/plan/decisiones.md` (sección (a): «Ninguna abierta», con la nota de la decisión), `docs/plan/docs-paginas/plan.md` (PD-4 y la Parte C), `docs/plan/docs-paginas/parte-c.md` (estado y PD-4c), `docs/plan/docs-paginas/ejemplos.md` (cabecera), `docs/plan.md` (sección de las páginas y la línea de DP.0), `docs/auto/decisiones-por-defecto.md` (sección nueva).

@@ -4,7 +4,7 @@
 
 Encargo del 12/11/2026: **solo plan.** Que las páginas actuales y las futuras sigan la plantilla (PD-4) porque el código lo impone, no porque alguien se acuerde. Hoy cada página es su propio HTML: la auditoría encontró seis nombres para la accesibilidad y cinco formas de mostrar las salidas, y la única prueba de estructura que existe es la del bloque «Uso» (`code/short-use-pages.spec.ts`, R.24).
 
-**PENDIENTE DE DECIDIR (usuario), junto con PD-4.** Las tres piezas (C.1 componente, C.2 prueba y C.3 reglas) dependen de la variante que se elija y se deciden con ella; las preguntas concretas están al final (PD-4c). No se aplica nada de esta parte hasta entonces: ni `CLAUDE.md`, ni `.claude/commands/`, ni el sitio.
+**Decidido por el usuario (14/11/2026), junto con PD-4 (variante A).** Las cuatro preguntas de PD-4c, al final, con la recomendación. Se aplica en DP.0 (rama `auto/docs-paginas-2026-11-14`).
 
 ## C.1 Un componente de página común: `app-doc-page`
 
@@ -216,7 +216,14 @@ La plantilla elegida se escribe en **`docs/spec/plantilla-pagina.md`**, un archi
 
 ## PD-4c: lo que decide el usuario de esta parte
 
-Va junto con PD-4 (variante A o B). La recomendación es la de cada pregunta:
+**Decidido por el usuario (14/11/2026):** variante A (PD-4) y, en las cuatro preguntas, la recomendación:
+
+1. **Un componente común con configuración** (`app-doc-page` con `DocPage`).
+2. **La prueba falla desde la primera tarea (DP.0)**, con la lista de pendientes que solo encoge.
+3. **Se aplican los textos de C.3 tal como están** en este archivo.
+4. **Cada excepción a los límites la aprueba el usuario.**
+
+Texto con el que se decidió. Va junto con PD-4 (variante A o B). La recomendación es la de cada pregunta:
 
 1. **¿Un componente común con configuración** (C.1, recomendado) **o una plantilla con huecos** (`<app-doc-page>` con `<ng-template docSection="…">` y HTML libre dentro de cada sección)?
    - **Configuración (recomendado):** impone el orden y los nombres; la prueba es sencilla.

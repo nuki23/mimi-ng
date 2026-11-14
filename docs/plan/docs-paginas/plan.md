@@ -2,7 +2,7 @@
 
 [← Índice del plan](../../plan.md) · [Auditoría](auditoria.md) · [Ejemplos: Button y Select](ejemplos.md) · [Parte C: que se cumpla sola](parte-c.md)
 
-Origen: la revisión del sitio que hizo el usuario el 12/11/2026. Dijo: «Las páginas de componentes no tienen una estructura común y presentan demasiada información». **Solo plan:** todavía no se cambió ninguna página. El informe de la tanda está en `docs/auto/refinamiento-0.6.0-parte7-2026-11-12.md`.
+Origen: la revisión del sitio que hizo el usuario el 12/11/2026. Dijo: «Las páginas de componentes no tienen una estructura común y presentan demasiada información». **Decidido el 14/11/2026** (PD-4 variante A y PD-4c); DP.0 empieza en la rama `auto/docs-paginas-2026-11-14`. El informe de la tanda está en `docs/auto/refinamiento-0.6.0-parte7-2026-11-12.md`.
 
 ## Qué se encontró (resumen de la [auditoría](auditoria.md))
 
@@ -33,9 +33,9 @@ Origen: la revisión del sitio que hizo el usuario el 12/11/2026. Dijo: «Las p�
 - **Doce ejemplos pasan de 80 líneas.** El más largo es `data-table-full` (187).
 - **Ninguna página usa un desplegable.** Todo está siempre abierto.
 
-## PENDIENTE DE DECIDIR (usuario) — PD-4: la plantilla de página
+## PD-4: la plantilla de página — decidido por el usuario (14/11/2026): variante A
 
-> **Decide el usuario.** En modo autónomo no se adopta por defecto (lo pidió el encargo del 12/11/2026). Hasta que decida, las tareas DP.1 en adelante no empiezan; DP.0 tampoco, porque depende de la variante.
+> **Decidido por el usuario (14/11/2026): variante A, completa** (la recomendación), en el prompt de la rama `auto/docs-paginas-2026-11-14`. También PD-4c (ver [parte-c.md](parte-c.md)). La plantilla vigente está en `docs/spec/plantilla-pagina.md` (DP.0); lo que sigue es el texto con el que se decidió.
 
 Las dos variantes comparten las reglas comunes (abajo). Se diferencian en cuánto se ve sin abrir nada. En [ejemplos.md](ejemplos.md) están Button y Select con cada una.
 
@@ -128,7 +128,7 @@ Un commit por página. Al final de cada tanda: Playwright en claro y oscuro (que
 
 ## Parte C: que la plantilla se cumpla sola (solo plan)
 
-Detalle: [parte-c.md](parte-c.md). **PENDIENTE DE DECIDIR (usuario), junto con PD-4** (preguntas PD-4c).
+Detalle: [parte-c.md](parte-c.md). **PD-4c decidido por el usuario (14/11/2026):** las cuatro recomendaciones (configuración, la prueba falla desde DP.0 con la lista de pendientes, los textos de C.3 tal como están, excepciones aprobadas por el usuario).
 
 - **C.1 Un componente de página común, `app-doc-page`.**
   - Cada página es una configuración tipada (`DocPage`: nombre, frase, demo, instalación, uso, ejemplos por categoría con su frase, accesibilidad, API, textos y variables).

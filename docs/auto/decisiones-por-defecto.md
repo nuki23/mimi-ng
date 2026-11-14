@@ -169,6 +169,16 @@ El usuario revisó el sitio y `/docs/states` después de la unificación (inform
 - **Profundidad al hacer clic: B (cambia la A del 12/11/2026).** Todos los controles se hunden al hacer clic, también los de escribir (Input, Textarea, Combobox, Tags Input, Number Input, Password, Input Mask), con el mismo efecto que Button: hundimiento (`--mimi-press-scale`) y halo que crece. Con «reducir movimiento», nada se hunde y el halo se queda.
 - **Grises:** el tema se queda en malva suave hasta que el usuario elija; se le dejan capturas lado a lado (neutro, malva suave y malva medio) en el informe.
 
+## Decididas por el usuario: plantilla de las páginas (14/11/2026)
+
+No son decisiones por defecto: el usuario las eligió en el prompt de la rama `auto/docs-paginas-2026-11-14`. Están también en `docs/plan/docs-paginas/plan.md` (PD-4) y `docs/plan/docs-paginas/parte-c.md` (PD-4c). Ninguna es RUPTURA: solo cambia el sitio.
+
+- **PD-4: variante A, completa** (la recomendación). Límites: 8 ejemplos vivos, 6 viñetas de accesibilidad, 20 palabras por descripción de la API, 400 palabras de prosa visible fuera de la API. Base: «Decidido por el usuario».
+- **PD-4c.1: un componente común con configuración** (`app-doc-page` con `DocPage`), no una plantilla con huecos (la recomendación). Base: «Decidido por el usuario».
+- **PD-4c.2: la prueba falla desde la primera tarea (DP.0)**, con la lista de pendientes que solo encoge (la recomendación). Base: «Decidido por el usuario».
+- **PD-4c.3: los textos de C.3 se aplican tal como están en `parte-c.md`** (`CLAUDE.md`, `.claude/commands/componente.md` y `.claude/commands/cerrar-grupo.md`), en DP.0 (la recomendación). Base: «Decidido por el usuario».
+- **PD-4c.4: cada excepción a los límites la aprueba el usuario**, una a una, y queda en `docs/spec/plantilla-pagina.md` (la recomendación). Base: «Decidido por el usuario».
+
 ## Decidida por el usuario: grises (14/11/2026)
 
 - **Grises: malva medio** (sustituye a malva suave). Los 15 grises del tema, en claro y oscuro, llevan el tono 292 con croma **0,014** (0,007 en los casi blancos y casi negros), con la misma luminosidad: el contraste AA no cambia. `MIMI_THEME_NEUTRAL` sigue en croma 0. Base: «Decidido por el usuario», después de ver las capturas del 13/11/2026 (`docs/auto/capturas/2026-11-13/grises/`). Informe: `docs/auto/refinamiento-0.6.0-parte11-2026-11-14.md`.
