@@ -528,7 +528,7 @@ Cada grupo es una versión menor y va precedido por su tarea de diseño en Claud
 
 En mimi-ng hay una página de tema sencilla (sección 11, «Página "Tema"»; plan, 5.2), sin edición por componente. El Theme Studio completo es un proyecto aparte, construido con Mimi como lo usaría cualquier usuario cuando el catálogo esté completo: `docs/futuro/theme-studio.md`. **Los tokens siguen siendo obligatorios** en cada componente (sección 13, «Reglas»): son el contrato que usará el Studio.
 
-**Tema de marca (R.0, 0.6.0; sustituye al tema neutro).** Escala de violeta `--mimi-brand-50…950` en OKLCH con tono 292 (anclas: `600` = `#793EEA` = `oklch(0.54 0.239 292)` y `400` = `#A88FFF` = `oklch(0.72 0.16 292)`), `--mimi-brand-gradient` (`#793EEA → #A88FFF`, solo fondos y acentos) y `--mimi-brand-text`. Primario: `brand-600` en claro (texto del botón `#FAFAFA`, 5,45:1) y `brand-400` en oscuro (texto `#171717`, 6,86:1). Neutros: claro, fondo `#FAFAFA` y texto `#171717`; oscuro, fondo `#171717` y texto `#FAFAFA`, con las superficies más arriba (tarjeta 0,235, popover 0,26, muted 0,27). **Reglas de contraste (WCAG, calculadas):** `#793EEA` sobre `#171717` da 3,15:1 y `#A88FFF` sobre `#FAFAFA` 2,50:1, así que **el violeta de marca nunca es texto sobre esos fondos**: el único texto violeta es `brand-text` (`600` en claro, `400` en oscuro). `contrast.spec.ts` lo comprueba (AA en claro y oscuro, y las cifras de la paleta). **Grises «malva suave»** (decidido por el usuario, 12/11/2026): los 15 grises del tema (fondo, texto, tarjeta, popover, secondary, muted, accent, bordes y campos) llevan el tono 292 de la marca con croma 0,006 (0,003 en los casi blancos y casi negros) y la misma luminosidad que el neutro; lo comprueba `gray-tint.spec.ts`, y el contraste AA, `contrast.spec.ts`. El tema anterior sigue disponible: `provideMimiTheme(MIMI_THEME_NEUTRAL)`, que también vuelve a poner los grises en croma 0. Fuentes sin cambio (Outfit y Geist Mono). **Falta (R.0 `[~]`):** el logo y el favicon del sitio, a la espera de los archivos del usuario.
+**Tema de marca (R.0, 0.6.0; sustituye al tema neutro).** Escala de violeta `--mimi-brand-50…950` en OKLCH con tono 292 (anclas: `600` = `#793EEA` = `oklch(0.54 0.239 292)` y `400` = `#A88FFF` = `oklch(0.72 0.16 292)`), `--mimi-brand-gradient` (`#793EEA → #A88FFF`, solo fondos y acentos) y `--mimi-brand-text`. Primario: `brand-600` en claro (texto del botón `#FAFAFA`, 5,45:1) y `brand-400` en oscuro (texto `#171717`, 6,86:1). Neutros: claro, fondo `#FAFAFA` y texto `#171717`; oscuro, fondo `#171717` y texto `#FAFAFA`, con las superficies más arriba (tarjeta 0,235, popover 0,26, muted 0,27). **Reglas de contraste (WCAG, calculadas):** `#793EEA` sobre `#171717` da 3,15:1 y `#A88FFF` sobre `#FAFAFA` 2,50:1, así que **el violeta de marca nunca es texto sobre esos fondos**: el único texto violeta es `brand-text` (`600` en claro, `400` en oscuro). `contrast.spec.ts` lo comprueba (AA en claro y oscuro, y las cifras de la paleta). **Grises «malva medio»** (decidido por el usuario el 14/11/2026; del 12/11 al 14/11 fue «malva suave», croma 0,006, que no se notaba): los 15 grises del tema (fondo, texto, tarjeta, popover, secondary, muted, accent, bordes y campos) llevan el tono 292 de la marca con croma 0,014 (0,007 en los casi blancos y casi negros) y la misma luminosidad que el neutro; lo comprueba `gray-tint.spec.ts`, y el contraste AA, `contrast.spec.ts`. El tema anterior sigue disponible: `provideMimiTheme(MIMI_THEME_NEUTRAL)`, que también vuelve a poner los grises en croma 0. Fuentes sin cambio (Outfit y Geist Mono). **Falta (R.0 `[~]`):** el logo y el favicon del sitio, a la espera de los archivos del usuario.
 
 **El color es global en Mimi:** el preset cambia los colores del tema (`colors` y `darkColors`) para todos los componentes; el color de un solo componente se pone en el CSS, con su versión clara y oscura (sección 6.2). Los tamaños SM, MD y LG de control también son globales: los comparten todos los controles (Button, Input, Select…).
 
@@ -1708,20 +1708,20 @@ Cada color de superficie o de acción tiene su pareja de texto (`-foreground`): 
 
 | Variable                        | Qué controla             | Claro                       | Oscuro                      | Texto encima                    |
 | ------------------------------- | ------------------------ | --------------------------- | --------------------------- | ------------------------------- |
-| `--mimi-background`             | Fondo de la página       | `oklch(0.985 0.003 292)`    | `oklch(0.205 0.006 292)`    | `--mimi-foreground`             |
-| `--mimi-foreground`             | Texto principal          | `oklch(0.205 0.006 292)`    | `oklch(0.985 0.003 292)`    | —                               |
-| `--mimi-card`                   | Superficie de tarjetas   | `oklch(1 0.003 292)`        | `oklch(0.235 0.006 292)`    | `--mimi-card-foreground`        |
-| `--mimi-card-foreground`        | Texto sobre tarjetas     | `oklch(0.205 0.006 292)`    | `oklch(0.985 0.003 292)`    | —                               |
-| `--mimi-popover`                | Menús, diálogos y toasts | `oklch(1 0.003 292)`        | `oklch(0.26 0.006 292)`     | `--mimi-popover-foreground`     |
-| `--mimi-popover-foreground`     | Texto sobre popover      | `oklch(0.205 0.006 292)`    | `oklch(0.985 0.003 292)`    | —                               |
+| `--mimi-background`             | Fondo de la página       | `oklch(0.985 0.007 292)`    | `oklch(0.205 0.014 292)`    | `--mimi-foreground`             |
+| `--mimi-foreground`             | Texto principal          | `oklch(0.205 0.014 292)`    | `oklch(0.985 0.007 292)`    | —                               |
+| `--mimi-card`                   | Superficie de tarjetas   | `oklch(1 0.007 292)`        | `oklch(0.235 0.014 292)`    | `--mimi-card-foreground`        |
+| `--mimi-card-foreground`        | Texto sobre tarjetas     | `oklch(0.205 0.014 292)`    | `oklch(0.985 0.007 292)`    | —                               |
+| `--mimi-popover`                | Menús, diálogos y toasts | `oklch(1 0.007 292)`        | `oklch(0.26 0.014 292)`     | `--mimi-popover-foreground`     |
+| `--mimi-popover-foreground`     | Texto sobre popover      | `oklch(0.205 0.014 292)`    | `oklch(0.985 0.007 292)`    | —                               |
 | `--mimi-primary`                | Acción principal         | `brand-600`                 | `brand-400`                 | `--mimi-primary-foreground`     |
 | `--mimi-primary-foreground`     | Texto sobre primary      | `oklch(0.985 0 0)`          | `oklch(0.205 0 0)`          | —                               |
-| `--mimi-secondary`              | Acción secundaria        | `oklch(0.97 0.003 292)`     | `oklch(0.3 0.006 292)`      | `--mimi-secondary-foreground`   |
-| `--mimi-secondary-foreground`   | Texto sobre secondary    | `oklch(0.205 0.006 292)`    | `oklch(0.985 0.003 292)`    | —                               |
-| `--mimi-muted`                  | Fondos apagados          | `oklch(0.97 0.003 292)`     | `oklch(0.27 0.006 292)`     | `--mimi-muted-foreground`       |
-| `--mimi-muted-foreground`       | Texto secundario         | `oklch(0.54 0.006 292)`     | `oklch(0.74 0.006 292)`     | —                               |
-| `--mimi-accent`                 | Hover de ítems           | `oklch(0.97 0.003 292)`     | `oklch(0.3 0.006 292)`      | `--mimi-accent-foreground`      |
-| `--mimi-accent-foreground`      | Texto sobre accent       | `oklch(0.205 0.006 292)`    | `oklch(0.985 0.003 292)`    | —                               |
+| `--mimi-secondary`              | Acción secundaria        | `oklch(0.97 0.007 292)`     | `oklch(0.3 0.014 292)`      | `--mimi-secondary-foreground`   |
+| `--mimi-secondary-foreground`   | Texto sobre secondary    | `oklch(0.205 0.014 292)`    | `oklch(0.985 0.007 292)`    | —                               |
+| `--mimi-muted`                  | Fondos apagados          | `oklch(0.97 0.007 292)`     | `oklch(0.27 0.014 292)`     | `--mimi-muted-foreground`       |
+| `--mimi-muted-foreground`       | Texto secundario         | `oklch(0.54 0.014 292)`     | `oklch(0.74 0.014 292)`     | —                               |
+| `--mimi-accent`                 | Hover de ítems           | `oklch(0.97 0.007 292)`     | `oklch(0.3 0.014 292)`      | `--mimi-accent-foreground`      |
+| `--mimi-accent-foreground`      | Texto sobre accent       | `oklch(0.205 0.014 292)`    | `oklch(0.985 0.007 292)`    | —                               |
 | `--mimi-destructive`            | Acciones peligrosas      | `oklch(0.577 0.245 27.325)` | `oklch(0.704 0.191 22.216)` | `--mimi-destructive-foreground` |
 | `--mimi-destructive-foreground` | Texto sobre destructive  | `oklch(0.985 0 0)`          | `oklch(0.2 0.04 25)`        | —                               |
 | `--mimi-success`                | Éxito                    | `oklch(0.527 0.137 150)`    | `oklch(0.72 0.15 150)`      | `--mimi-success-foreground`     |
@@ -1730,13 +1730,13 @@ Cada color de superficie o de acción tiene su pareja de texto (`-foreground`): 
 | `--mimi-warning-foreground`     | Texto sobre warning      | `oklch(0.28 0.07 55)`       | `oklch(0.22 0.05 60)`       | —                               |
 | `--mimi-info`                   | Información              | `oklch(0.44 0.17 255)`      | `oklch(0.83 0.11 250)`      | `--mimi-info-foreground`        |
 | `--mimi-info-foreground`        | Texto sobre info         | `oklch(0.985 0 0)`          | `oklch(0.2 0.05 250)`       | —                               |
-| `--mimi-border`                 | Bordes y separadores     | `oklch(0.922 0.006 292)`    | `oklch(1 0.003 292 / 10%)`  | —                               |
-| `--mimi-input`                  | Borde de campos          | `oklch(0.88 0.006 292)`     | `oklch(1 0.003 292 / 15%)`  | —                               |
-| `--mimi-input-background`       | Fondo de campos          | `oklch(1 0.003 292)`        | `oklch(1 0.003 292 / 4.5%)` | —                               |
+| `--mimi-border`                 | Bordes y separadores     | `oklch(0.922 0.014 292)`    | `oklch(1 0.007 292 / 10%)`  | —                               |
+| `--mimi-input`                  | Borde de campos          | `oklch(0.88 0.014 292)`     | `oklch(1 0.007 292 / 15%)`  | —                               |
+| `--mimi-input-background`       | Fondo de campos          | `oklch(1 0.007 292)`        | `oklch(1 0.007 292 / 4.5%)` | —                               |
 | `--mimi-input-readonly`         | Fondo de solo lectura    | 70 % `muted` + fondo campo  | 70 % `muted` + fondo campo  | —                               |
 | `--mimi-ring`                   | Anillo de foco           | `brand-500`                 | `brand-400`                 | —                               |
 
-Los grises llevan el tono 292 de la marca con croma 0,006 («malva suave», 12/11/2026); `brand-600`, `brand-500` y `brand-400` son la escala de la sección 6.1. `MIMI_THEME_NEUTRAL` los vuelve a poner en croma 0.
+Los grises llevan el tono 292 de la marca con croma 0,014, 0,007 en los casi blancos y casi negros («malva medio», decidido por el usuario el 14/11/2026; antes, «malva suave», 0,006); `brand-600`, `brand-500` y `brand-400` son la escala de la sección 6.1. `MIMI_THEME_NEUTRAL` los vuelve a poner en croma 0.
 
 #### Derivados
 

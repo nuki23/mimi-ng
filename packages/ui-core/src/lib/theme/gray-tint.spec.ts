@@ -1,9 +1,9 @@
 import { MIMI_THEME_NEUTRAL } from './neutral';
 
 /**
- * Grises «malva suave» (decidido por el usuario el 12/11/2026): los neutros del tema llevan el
- * tono 292 del violeta con croma baja (0,006; 0,003 en los casi blancos y casi negros) y la misma
- * luminosidad que el neutro puro. El contraste AA lo comprueba contrast.spec.ts con estos mismos
+ * Grises «malva medio» (decidido por el usuario el 14/11/2026; antes, «malva suave», croma 0,006):
+ * los neutros del tema llevan el tono 292 del violeta con croma baja (0,014; 0,007 en los casi
+ * blancos y casi negros) y la misma luminosidad que el neutro puro. El contraste AA lo comprueba contrast.spec.ts con estos mismos
  * valores. `MIMI_THEME_NEUTRAL` vuelve a poner todos los grises en croma 0.
  */
 const grayNode = (
@@ -42,9 +42,9 @@ function grayValue(selector: ':root' | '.dark', token: string): string {
 
 const GRAY_OKLCH = /^oklch\(([\d.]+) ([\d.]+) ([\d.]+)/;
 
-describe('Grises malva suave', () => {
+describe('Grises malva medio', () => {
   for (const selector of [':root', '.dark'] as const) {
-    it(`${selector}: los 15 grises con tono 292 y croma 0,006 (0,003 en los extremos)`, () => {
+    it(`${selector}: los 15 grises con tono 292 y croma 0,014 (0,007 en los extremos)`, () => {
       for (const token of GRAY_TOKENS) {
         const value = grayValue(selector, token);
         const match = GRAY_OKLCH.exec(value);
@@ -52,7 +52,7 @@ describe('Grises malva suave', () => {
         const [, l, c, h] = match!.map(Number);
         expect(h, token).toBe(292);
         const edge = l > 0.96 || l < 0.2;
-        expect(c, `${token}: ${value}`).toBe(edge ? 0.003 : 0.006);
+        expect(c, `${token}: ${value}`).toBe(edge ? 0.007 : 0.014);
       }
     });
   }
