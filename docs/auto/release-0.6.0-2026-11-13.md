@@ -186,3 +186,16 @@ Commit: `chore(release): versión 0.6.0 y CHANGELOG 0.6.0 (13/11/2026) con lo qu
 Cifras de `apps/docs/scripts/check-initial-js.mjs` (gzip) y de `ng build` (crudo); brotli del JS inicial: 93,75 kB. `check-initial-js.mjs` no mide `components.css`: su gzip es `gzip -c` del archivo (19 811 bytes; la columna de `ng build`, 16,07 kB, es brotli). **Antes y después de esta tarea son iguales:** solo cambió la versión en dos textos del sitio (las mismas cifras que el informe de la parte 11). Frente a la 0.5.0, el JS inicial crece 1,58 kB crudo (más de 1 kB): es la suma de las tandas del refinamiento, que lo midieron una por una en sus informes (la escala de tamaños y los estilos de campo comunes que entran con los controles del sitio inicial); esta tarea no lo investigó de nuevo. En gzip baja 0,02 kB; `main`, +1,93 kB (a 2,17 kB del aviso de 140 kB: **atención** para la 0.7.0); el CSS global baja 39,67 kB porque las páginas de componentes pasaron a `components.css` (M.23). Ningún presupuesto se subió.
 
 Commit: `docs(auto): build, pruebas y bundle de la 0.6.0`.
+
+## 5. `npm pack --dry-run` (`packages/cli`)
+
+`@mimi-ng/cli@0.6.0`, `mimi-ng-cli-0.6.0.tgz`: **169 archivos**, **306,6 kB** empaquetado, **1,2 MB** sin empaquetar, shasum `e1edce4e3c189038bcd3f0a89eebf6ed43ae8f5e` (0.5.0: 165 archivos, 279,0 kB). Fuera de `dist/` solo entran `package.json`, `README.md`, `LICENSE` y `THIRD_PARTY_NOTICES.md`. Los cuatro archivos nuevos son los ítems nuevos: **`dist/templates/utils/field-styles.ts` (8,8 kB, dentro)**, `utils/size.ts` (4,3 kB), `utils/busy.ts` (2,0 kB) y `theme/neutral.ts` (2,1 kB).
+
+**El `.tgz` real** (`npm pack --pack-destination C:\t\r060`, fuera del repo; el mismo shasum que el dry-run; el de `npm publish` puede variar, porque `prepublishOnly` recompila), revisado con `tar -tzf` y extraído en `C:\t\r060\x`:
+
+- **0 archivos `.spec.`**, **0 rutas con `testing`**.
+- **Rutas personales:** la búsqueda de `C:\\`, `C:/Users`, `/Users/`, `/home/`, `AppData` y los nombres de usuario solo encontró el comentario de `dist/init/paths.js:28` que pone `C:\x` como ejemplo de ruta absoluta que se rechaza.
+- **Correos:** solo `name@example.com`, el ejemplo de `login-02.html` y de los mensajes de `signup-01.ts`. El `author` publicado es «Ariel O (https://github.com/nuki23)», sin correo.
+- **Respaldos:** «respaldo» aparece solo como palabra («valor de reserva») en comentarios de seis plantillas y en el README (el respaldo WASI de Tailwind); ningún `.bundle` ni `mimi-ng-respaldo`.
+
+Commit: `docs(auto): npm pack de la 0.6.0 (169 archivos, sin pruebas ni datos personales, con utils/field-styles)`.
