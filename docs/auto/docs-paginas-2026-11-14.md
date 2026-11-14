@@ -12,3 +12,11 @@
 - La release de GitHub y la prueba desde npm: dato del usuario (el encargo). No se consultó GitHub (`gh` no se usó).
 - `docs/plan.md`: la sección del refinamiento y su bloque de «Terminado» dicen «publicada el 14/11/2026».
 - `prettier --check` de los dos archivos: en verde. Sin código: no se corrieron build ni pruebas en este paso (van en los pasos 4 y 5).
+
+## 2. Tarea M.25 registrada (sin hacerla): `main` del sitio
+
+**Plan breve:** una tarea nueva en `docs/plan/mantenimiento.md` con el siguiente número libre (M.25), versión 0.7.0, con el dato del informe de la 0.6.0 (`main` 137,83 kB, aviso 140, error 145) y el punto (3) de la M.13 que quedó sin hacer (`cn()` en la cabecera trae `tailwind-merge`, 39 kB).
+
+- `docs/plan/mantenimiento.md`: M.25 con origen, alcance propuesto (medir módulo por módulo contra la M.13; probar la cabecera sin `cn()`; diferir lo que se pueda del shell), criterios de hecho (5 kB de margen o una recomendación para el usuario, sin subir presupuestos) y «Bloquea: R.19 a R.23, como aviso».
+- `docs/plan.md`: la línea en «Mantenimiento» y en el bloque de la 0.7.0; R.P7 depende también de M.25 (aquí y en `docs/plan/refinamiento/R-0.7.0.md`).
+- No se midió ni se cambió nada del sitio.
