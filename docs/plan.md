@@ -128,7 +128,7 @@ Cerrado (puerta G3.P, revisada por el usuario; **0.5.0 publicada el 09/11/2026**
 
 Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio «uso corto por defecto, composición cuando la necesites», reparto, orden y rupturas). Origen: las peticiones del usuario tras probar la 0.5.0 ([peticiones-usuario.md](plan/refinamiento/peticiones-usuario.md)). **Tres decisiones del usuario (09/11/2026, ya tomadas):** PD-1 Card, opción B; PD-2 API de Table/Data Table, opción C; PD-3 API de los mensajes de error de Form Field, opciones A + B ([decisiones-usuario.md](plan/refinamiento/decisiones-usuario.md)). Combobox y Select: [combobox-vs-select.md](plan/refinamiento/combobox-vs-select.md).
 
-**0.6.0:** cerrada el 13/11/2026 (puerta R.P6, revisada por el usuario con la fusión del PR #15; versión preparada en `docs/auto/release-0.6.0-2026-11-13.md`, **por publicar**). Las tareas están en «Terminado» y su texto en `docs/historial/refinamiento/R-0.6.0.md` (índice: `docs/historial/plan-refinamiento-0.6.0.md`). Lo que faltaba de R.0, R.1, R.7, R.8, R.12, R.14 y R.15 pasó a la 0.7.0 (R.25 a R.32 y M.9); lo manual, a la M.20 (puntos 14 a 18).
+**0.6.0:** cerrada el 13/11/2026 (puerta R.P6, revisada por el usuario con la fusión del PR #15; versión preparada en `docs/auto/release-0.6.0-2026-11-13.md`; **publicada el 14/11/2026**, `2026-11-14T23:00Z` en npm, registro en `docs/historial/plan-refinamiento-0.6.0.md`). Las tareas están en «Terminado» y su texto en `docs/historial/refinamiento/R-0.6.0.md` (índice: `docs/historial/plan-refinamiento-0.6.0.md`). Lo que faltaba de R.0, R.1, R.7, R.8, R.12, R.14 y R.15 pasó a la 0.7.0 (R.25 a R.32 y M.9); lo manual, a la M.20 (puntos 14 a 18).
 
 **0.7.0** (detalle: [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)):
 
@@ -356,7 +356,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] B.9 `table-01` (07/11/2026; pendiente de comprobación manual: teléfono real y NVDA).
 - [x] G3.P Puerta del Grupo 3 (07/11/2026, con ocho arreglos el 08/11/2026; revisada por el usuario; pendiente de comprobación manual en la M.20, puntos 10 a 13).
 
-**Refinamiento, v0.6.0** (`docs/historial/plan-refinamiento-0.6.0.md`, con el texto en `docs/historial/refinamiento/R-0.6.0.md`; puerta revisada por el usuario y cerrada el 13/11/2026; por publicar). Lo que faltaba de las tareas a medias pasó a la 0.7.0 (R.25 a R.32 y M.9); lo manual, a la M.20 (puntos 14 a 18).
+**Refinamiento, v0.6.0** (`docs/historial/plan-refinamiento-0.6.0.md`, con el texto en `docs/historial/refinamiento/R-0.6.0.md`; puerta revisada por el usuario y cerrada el 13/11/2026; publicada el 14/11/2026, `2026-11-14T23:00Z` en npm). Lo que faltaba de las tareas a medias pasó a la 0.7.0 (R.25 a R.32 y M.9); lo manual, a la M.20 (puntos 14 a 18).
 
 - [x] R.0 Tema de marca: escala de violeta en OKLCH, primario `#793EEA`/`#A88FFF`, `MIMI_THEME_NEUTRAL`, contrastes AA con prueba, grises malva medio (09/11/2026 y 13/11/2026; el logo y el favicon, en la R.25).
 - [x] R.1 Escala común de tamaños `sm/md/lg` (`mimiSize`, alias `default` con aviso, página «Tamaños»; 10/11/2026; la tabla de la spec, en la R.26; quitar el alias, en la R.32).
