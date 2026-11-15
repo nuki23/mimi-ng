@@ -27,9 +27,8 @@ import { pageFiles, pageInfo } from './page-code';
       <p class="text-pretty">
         Es tu página: pega la línea en tus rutas y da tu imagen con
         <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">imageSrc</code>.
-        Sin imagen se ve un degradado neutro, provisional hasta que el diseño tenga una. El
-        testimonio está escrito en la plantilla: cámbialo ahí. El Block no trae archivos de imagen
-        (la CLI solo copia texto).
+        Sin imagen se ve un degradado neutro. El testimonio está escrito en la plantilla: cámbialo
+        ahí. El Block no trae archivos de imagen (la CLI solo copia texto).
       </p>
       <app-code-block [code]="usage" lang="angular-ts" />
       <h3 id="accessibility" class="mt-2 text-lg font-semibold tracking-[-0.01em]">
@@ -96,7 +95,7 @@ export class Login02Page {
       name: 'imageSrc',
       type: 'string | null',
       default: 'null',
-      description: 'Tu imagen. Sin ella, un degradado neutro (provisional).',
+      description: 'Tu imagen. Sin ella, un degradado neutro.',
     },
     {
       name: 'imageAlt',

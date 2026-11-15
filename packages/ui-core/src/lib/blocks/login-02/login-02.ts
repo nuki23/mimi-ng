@@ -64,7 +64,7 @@ export class Login02 {
   private readonly focusBack = restoreFocusAfterBusy(this.loading);
   /** Error de tu servidor, encima del botón. `null`: ninguno. */
   readonly error = input<string | null>(null);
-  /** Tu imagen. Sin ella, un degradado neutro (provisional, B.3-a). */
+  /** Tu imagen. Sin ella, un degradado neutro (B.3-a). */
   readonly imageSrc = input<string | null>(null);
   /** Texto alternativo. Vacío por defecto: la imagen es decorativa. */
   readonly imageAlt = input('');

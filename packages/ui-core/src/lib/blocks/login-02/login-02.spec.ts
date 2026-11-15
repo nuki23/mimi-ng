@@ -88,7 +88,7 @@ describe('Login02', () => {
     expect(host.sso).toBe(1);
   });
 
-  it('sin imageSrc: el degradado provisional; con imageSrc: la imagen, alt vacío por defecto', async () => {
+  it('sin imageSrc: el degradado neutro; con imageSrc: la imagen, alt vacío por defecto', async () => {
     const { host, q, el, fixture } = await setup();
     expect(q('[data-slot="placeholder"]').getAttribute('aria-hidden')).toBe('true');
     expect(el.querySelector('img')).toBeNull();

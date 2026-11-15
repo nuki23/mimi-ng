@@ -15,14 +15,9 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
 
-De la limpieza «sin rediseño» (14/11/2026; decidido por el usuario: no habrá rediseño global y el código es la fuente de verdad del diseño). No se decide por defecto: lo pidió el usuario.
+Ninguna abierta.
 
-- **PD-6 (usuario, 14/11/2026): la imagen de `login-02`.** Sin `imageSrc`, el Block muestra un degradado neutro marcado «provisional» (B.3-a, decidido por el usuario el 07/11/2026, «hasta que el diseño tenga una»). Sin rediseño, no llegará una imagen de Claude Design.
-  - **(a) Recomendado:** el degradado neutro es el definitivo: se quita «provisional» del código (`login-02.ts`), de la página del Block y del historial de D6 (con la M.26).
-  - (b) Una ilustración propia en SVG en línea (tarea nueva, de aspecto).
-  - (c) Dejarlo como provisional hasta tener una imagen del usuario.
-
-**PD-5 la decidió el usuario el 14/11/2026** (opción (a), la recomendada): `group2-tokens.spec.ts` compara con los valores de hoy escritos en la prueba, sin leer `docs/design/`. Hecha en la rama `auto/docs-paginas-2026-11-14`; el texto de la pregunta está en `docs/auto/decisiones-por-defecto.md`.
+**PD-5 y PD-6 (de la limpieza «sin rediseño») las decidió el usuario el 14/11/2026**, las dos con la opción recomendada: PD-5, `group2-tokens.spec.ts` compara con los valores de hoy escritos en la prueba, sin leer `docs/design/`; PD-6, el degradado neutro de `login-02` es el definitivo. Hechas en la rama `auto/docs-paginas-2026-11-14`; el texto de las preguntas está en `docs/auto/decisiones-por-defecto.md`.
 
 **PD-4 y PD-4c (la plantilla de las páginas) las decidió el usuario el 14/11/2026** y salieron de este índice: variante A; un componente común con configuración; la prueba falla desde DP.0 con la lista de pendientes que solo encoge; los textos de C.3 se aplican como están; cada excepción la aprueba el usuario. Quedan como «Decidido por el usuario» en [docs-paginas/plan.md](docs-paginas/plan.md), [docs-paginas/parte-c.md](docs-paginas/parte-c.md) y `docs/auto/decisiones-por-defecto.md`.
 

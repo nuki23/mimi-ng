@@ -184,6 +184,7 @@ No son decisiones por defecto: el usuario las eligió en el prompt de la rama `a
 No son decisiones por defecto. Salieron de la limpieza «sin rediseño» (el código es la fuente de verdad del diseño; `docs/auto/docs-paginas-2026-11-14.md`, paso 7).
 
 - **PD-5: la prueba que comparaba el tema con el diseño original, opción (a).** `packages/ui-core/src/lib/theme/group2-tokens.spec.ts` comprobaba que los 13 globales del Grupo 2 de `theme-base.css` valían lo mismo que en `docs/design/tokens-mimi.css` (con dos excepciones de File Upload) y que los `@keyframes` `mimi-caret`, `mimi-bob`, `mimi-shake` y `mimi-indet` tenían el cuerpo del diseño. Ahora compara con los valores de hoy escritos en la prueba (`G2_EXPECTED`, `G2_KEYFRAMES`), sin leer `docs/design/`; las partes de `@theme inline` y de compatibilidad no cambian. Alternativas que no se eligieron: quitar solo las comparaciones (sin aviso de cambios por accidente) o dejarla como estaba. Base: «Decidido por el usuario».
+- **PD-6: la imagen de `login-02`, opción (a).** Sin `imageSrc`, el Block muestra un degradado neutro que estaba marcado «provisional» (B.3-a, decidido por el usuario el 07/11/2026, «hasta que el diseño tenga una»). Sin rediseño, el degradado es el definitivo: se quitó «provisional» de `login-02.html`, `login-02.ts`, su prueba y la página del Block. Alternativas que no se eligieron: una ilustración propia en SVG o dejarlo provisional hasta tener una imagen. Base: «Decidido por el usuario».
 
 ## Decidida por el usuario: grises (14/11/2026)
 

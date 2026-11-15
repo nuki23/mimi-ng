@@ -272,7 +272,7 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Trama de puntos:** la máscara usa `var(--mimi-foreground)` en lugar de `#000` (solo cuenta el canal alfa; así no hay un color fijo).
 
   login-02 (B.3, 07/11/2026):
-  - **Imagen (provisional):** el diseño tiene un hueco de la herramienta (`image-slot`), no una imagen. Sin `imageSrc`, el Block muestra un **degradado neutro** (`from-secondary via-muted to-accent`), marcado como provisional en el código (decidido por el usuario). Pedir la imagen o una ilustración libre (SVG en línea) para el ejemplo.
+  - **Imagen (provisional):** el diseño tiene un hueco de la herramienta (`image-slot`), no una imagen. Sin `imageSrc`, el Block muestra un **degradado neutro** (`from-secondary via-muted to-accent`), marcado como provisional en el código (decidido por el usuario). Pedir la imagen o una ilustración libre (SVG en línea) para el ejemplo. **Decidido por el usuario el 14/11/2026 (PD-6): el degradado neutro es el definitivo**; ya no se marca como provisional.
   - **Error de credenciales y campos inválidos:** sin diseño, como en login-01 (`role="alert"` con los colores de error suave).
   - **Iniciales del testimonio:** `mimi-avatar` pequeño (32px) con `bg-info-soft` y `text-info-soft-foreground`, como el `span` del diseño.
   - **Vidrio:** con «reducir transparencia» (`prefers-reduced-transparency`), fondo `card` sólido y sin desenfoque (no está en el diseño).
