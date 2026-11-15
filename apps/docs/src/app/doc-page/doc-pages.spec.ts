@@ -80,6 +80,8 @@ import { PROGRESS_PAGE } from '../pages/docs/components/progress/progress.page';
 import { ProgressPage } from '../pages/docs/components/progress/progress-page';
 import { TABS_PAGE } from '../pages/docs/components/tabs/tabs.page';
 import { TabsPage } from '../pages/docs/components/tabs/tabs-page';
+import { TOGGLE_GROUP_PAGE } from '../pages/docs/components/toggle-group/toggle-group.page';
+import { ToggleGroupPage } from '../pages/docs/components/toggle-group/toggle-group-page';
 import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
 import { textLinks } from './doc-text';
 import {
@@ -106,6 +108,7 @@ import {
 
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
 const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+  'toggle-group': { page: TOGGLE_GROUP_PAGE, component: ToggleGroupPage },
   tabs: { page: TABS_PAGE, component: TabsPage },
   progress: { page: PROGRESS_PAGE, component: ProgressPage },
   skeleton: { page: SKELETON_PAGE, component: SkeletonPage },
@@ -152,7 +155,7 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
  * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
  * con la lista de pendientes.
  */
-const PENDING_COUNT = 1;
+const PENDING_COUNT = 0;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
