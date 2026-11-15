@@ -210,5 +210,5 @@ export const FILE_UPLOAD_PAGE: DocPage = {
       path: 'file-upload/file-upload-texts',
     },
   ],
-  tokens: 'fileUpload',
+  tokens: ['fileUpload', 'progress'],
 };

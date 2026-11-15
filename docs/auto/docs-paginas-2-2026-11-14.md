@@ -163,6 +163,12 @@ Ningún presupuesto se acerca ni se sube (`main` sigue a 2,12 kB de su aviso: la
 - Los informes anteriores citan rutas `docs/auto/capturas/…` que ya no existen: son historial y no se editan.
 - **Desde aquí**, las capturas de esta rama van a `C:\t\capturas\2026-11-14\`.
 
+### 6.2 PD-9: varias tablas de «Variables CSS»
+
+- `DocPage.tokens` acepta una tabla o una lista (`tokenTables()` lo normaliza): la primera es la del componente (la regla lo exige) y las demás se pintan debajo con «También las de `x`, que usa por dentro:». La regla rechaza una tabla repetida.
+- Usada en **Tags Input** y **Combobox** (`chip`, que no tiene página propia) y en **File Upload** (`progress`, las barras de cada archivo).
+- Pruebas: `doc-page.spec.ts` (lista válida, la del componente no primero, repetida), Tags Input (dos tablas y `--mimi-chip-*` en la página) y las de Combobox, File Upload y `doc-pages`: **257 de 257**.
+
 ## Alertas para el revisor
 
 1. **Base de la rama:** sale de `auto/docs-paginas-2026-11-14`, no de `main` (que no tenía su fusión). Fusiona primero aquella.

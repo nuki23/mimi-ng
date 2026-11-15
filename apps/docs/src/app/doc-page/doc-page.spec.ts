@@ -100,6 +100,16 @@ describe('validateDocPage (variante A)', () => {
     }
   });
 
+  it('«Variables CSS» admite varias tablas: la primera, la del componente (PD-9)', () => {
+    expect(validateDocPage({ ...PAGE, tokens: ['button', 'chip'] })).toEqual([]);
+    expect(validateDocPage({ ...PAGE, tokens: ['chip', 'button'] }).join()).toContain(
+      "falta «tokens: 'button'» (la primera)",
+    );
+    expect(validateDocPage({ ...PAGE, tokens: ['button', 'button'] }).join()).toContain(
+      'repite una tabla',
+    );
+  });
+
   it('pide «Variables CSS» también cuando la tabla tiene otro nombre (date, menu, sortable)', () => {
     const errors = validateDocPage({ ...PAGE, install: 'dropdown-menu', tokens: undefined });
     expect(errors.join()).toContain("falta «tokens: 'menu'»");

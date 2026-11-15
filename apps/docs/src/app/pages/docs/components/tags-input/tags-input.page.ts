@@ -187,5 +187,5 @@ export const TAGS_INPUT_PAGE: DocPage = {
       note: '«Quitar …» y los anuncios',
     },
   ],
-  tokens: 'tagsInput',
+  tokens: ['tagsInput', 'chip'],
 };

@@ -21,6 +21,7 @@ import {
   DOC_SECTION_TITLES,
   type DocExample,
   type DocPage,
+  tokenTables,
 } from './doc-page.types';
 import { InstallExtrasView } from './install-extras';
 import { More } from './more';
@@ -73,6 +74,9 @@ export class DocPageView {
   });
 
   /** La frase de «Textos»: «… `MIMI_A_TEXT_ES` y `MIMI_B_TEXT_ES` traen el español; …». */
+  /** Las tablas de «Variables CSS»: la del componente y, si hay, las de lo que usa por dentro. */
+  protected readonly tables = computed(() => tokenTables(this.page()));
+
   protected readonly textsSentence = computed(() => {
     const names = (this.page().texts ?? []).map((t) => `\`${t.constant}\``);
     const list =

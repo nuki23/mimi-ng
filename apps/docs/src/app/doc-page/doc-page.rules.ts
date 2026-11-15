@@ -7,6 +7,7 @@ import {
   DOC_PAGE_LIMITS as L,
   type DocExample,
   type DocPage,
+  tokenTables,
 } from './doc-page.types';
 
 /** Palabras de un texto visible (las comillas invertidas no cuentan). */
@@ -186,8 +187,10 @@ export function validateDocPage(page: DocPage): string[] {
 
   // Variables CSS: obligatorias si el componente tiene tabla.
   const key = tokensKey(page.install);
-  if (key in COMPONENT_TOKENS && page.tokens !== key)
-    err(`tiene tabla en component-tokens.ts: falta «tokens: '${key}'»`);
+  const tables = tokenTables(page);
+  if (key in COMPONENT_TOKENS && tables[0] !== key)
+    err(`tiene tabla en component-tokens.ts: falta «tokens: '${key}'» (la primera)`);
+  if (new Set(tables).size !== tables.length) err('«tokens» repite una tabla');
 
   // Prosa y nombres internos
   const visible = prose(page);

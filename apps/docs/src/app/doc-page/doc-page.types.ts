@@ -133,6 +133,12 @@ export interface ServiceRow {
   description: string;
 }
 
+/** Las tablas de «Variables CSS» de una página, siempre como lista (la primera, la del componente). */
+export function tokenTables(page: Pick<DocPage, 'tokens'>): readonly TokenComponent[] {
+  const tokens = page.tokens;
+  return tokens === undefined ? [] : typeof tokens === 'string' ? [tokens] : tokens;
+}
+
 /** Un proveedor de textos: `provideMimiSelectText(MIMI_SELECT_TEXT_ES)`. */
 export interface DocTexts {
   constant: string;
@@ -183,6 +189,10 @@ export interface DocPage {
    * la página. Varios si el componente usa los textos de otro (Combobox múltiple, los del chip).
    */
   texts?: readonly DocTexts[];
-  /** La tabla de `component-tokens.ts`. */
-  tokens?: TokenComponent;
+  /**
+   * La tabla de `component-tokens.ts`, o varias (PD-9, decidido por el usuario el 14/11/2026): la
+   * primera es la del componente; las demás, las de las piezas que usa (por ejemplo, el chip en
+   * Tags Input) y se pintan debajo con su nombre.
+   */
+  tokens?: TokenComponent | readonly TokenComponent[];
 }

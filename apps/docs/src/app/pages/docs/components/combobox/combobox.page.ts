@@ -298,5 +298,5 @@ export const COMBOBOX_PAGE: DocPage = {
       note: 'múltiple: «Quitar …» y los anuncios',
     },
   ],
-  tokens: 'combobox',
+  tokens: ['combobox', 'chip'],
 };

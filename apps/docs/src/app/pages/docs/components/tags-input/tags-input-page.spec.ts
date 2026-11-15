@@ -53,6 +53,10 @@ describe('TagsInputPage', () => {
       );
       expect(el.querySelector('h1')!.textContent!.trim()).toBe('Tags Input');
       expect(el.querySelector('app-forms-tabs')).not.toBeNull();
+      // Variables CSS: la tabla de Tags Input y, debajo, la del chip (PD-9).
+      expect(el.querySelectorAll('app-css-variables').length).toBe(2);
+      expect(el.querySelector('[data-slot="tokens-of"]')?.textContent).toContain('chip');
+      expect(el.textContent).toContain('--mimi-chip-');
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

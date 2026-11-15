@@ -101,8 +101,15 @@
     <p data-slot="texts-sentence" class="text-pretty"><app-doc-text [text]="textsSentence()" /></p>
     <app-code-block [code]="textsCode()" lang="typescript" />
   }
-  @if (p.tokens; as tokens) {
+  @if (tables().length) {
     <h3 id="tokens" [class]="h3">{{ apiTitles.tokens }}</h3>
-    <app-css-variables [component]="tokens" />
+    @for (table of tables(); track table; let first = $first) {
+      @if (!first) {
+        <p data-slot="tokens-of" class="mt-2 font-medium">
+          <app-doc-text [text]="'También las de `' + table + '`, que usa por dentro:'" />
+        </p>
+      }
+      <app-css-variables [component]="table" />
+    }
   }
 </article>
