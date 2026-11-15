@@ -4,6 +4,7 @@ import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-p
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { SelectPage } from './select-page';
 
+// El orden de las secciones y los límites de la plantilla los prueba doc-page/doc-pages.spec.ts.
 describe('SelectPage', () => {
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
@@ -22,7 +23,8 @@ describe('SelectPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(11);
+      // La demo y seis ejemplos; los formularios van en las pestañas, sin ejemplos vivos.
+      expect(previews.length).toBe(7);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-select button[role="combobox"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/select';");
@@ -35,12 +37,11 @@ describe('SelectPage', () => {
       for (const { code } of previews.slice(0, -1)) expect(code).toContain('<mimi-option');
       // Los textos de la página están en español (se proveen en la página, no en app.config).
       expect(el.querySelector('button[aria-label="Limpiar selección"]')).not.toBeNull();
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      // Las pestañas de formularios (R.13) y «Qué instala» con lo que trae Select.
+      expect(el.querySelector('app-forms-tabs')).not.toBeNull();
+      const extras = el.querySelector('app-install-extras')?.textContent ?? '';
+      expect(extras).toContain('option-list');
+      expect(extras).toContain('@angular/cdk/overlay-prebuilt.css');
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

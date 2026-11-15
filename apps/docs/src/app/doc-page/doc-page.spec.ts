@@ -205,6 +205,10 @@ describe('DocPageView', () => {
     ]);
     expect(details.every((d) => !d.open)).toBe(true);
     expect(el.querySelector('[data-slot="usage-note"] code')?.textContent).toBe('código');
+    // Sin espacios de la plantilla entre el código y la puntuación.
+    expect(el.querySelector('[data-slot="usage-note"]')?.textContent?.trim()).toBe(
+      'Una nota corta con código.',
+    );
     expect(el.querySelector('[data-slot="data-attributes"]')?.textContent).toContain('data-size');
     expect(el.querySelector('table[data-kind="outputs"] th')?.textContent?.trim()).toBe('Salida');
   });

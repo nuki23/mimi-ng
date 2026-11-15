@@ -6,10 +6,7 @@
     <app-doc-text [text]="p.lead" />
   </p>
 
-  <ng-container
-    [ngTemplateOutlet]="preview"
-    [ngTemplateOutletContext]="{ $implicit: p.demo, demo: true }"
-  />
+  <app-doc-example [example]="p.demo" [demo]="true" />
 
   <h2 id="installation" [class]="h2">{{ sections.installation }}</h2>
   <app-install-command [name]="p.install" />
@@ -33,16 +30,10 @@
         <app-forms-tabs [component]="block.spec" />
       } @else {
         <h3 [id]="block.example.id" [class]="h3">{{ block.example.title }}</h3>
-        <ng-container
-          [ngTemplateOutlet]="preview"
-          [ngTemplateOutletContext]="{ $implicit: block.example, demo: false }"
-        />
+        <app-doc-example [example]="block.example" />
         @if (block.example.more; as more) {
           <app-more [summary]="more.title">
-            <ng-container
-              [ngTemplateOutlet]="preview"
-              [ngTemplateOutletContext]="{ $implicit: more, demo: false }"
-            />
+            <app-doc-example [example]="more" />
           </app-more>
         }
       }
@@ -98,18 +89,3 @@
     <app-css-variables [component]="tokens" />
   }
 </article>
-
-<!-- Un ejemplo: su frase y el ejemplo con Vista y Código. -->
-<ng-template #preview let-example let-demo="demo">
-  <p
-    data-slot="example-sentence"
-    class="text-pretty"
-    [class.text-sm]="demo"
-    [class.text-muted-foreground]="demo"
-  >
-    <app-doc-text [text]="example.sentence" />
-  </p>
-  <app-code-preview [code]="example.source" [files]="example.files ?? []">
-    <ng-container [ngComponentOutlet]="example.component" />
-  </app-code-preview>
-</ng-template>

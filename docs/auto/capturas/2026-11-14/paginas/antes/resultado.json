@@ -1,0 +1,293 @@
+[
+  {
+    "name": "button · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "button · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "button · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "button · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "button · claro: datos",
+    "ok": true,
+    "detail": {
+      "dark": false,
+      "h2": ["installation", "usage", "examples", "api"],
+      "h3": [
+        "tones",
+        "variants",
+        "matrix",
+        "sizes",
+        "with-icon",
+        "states",
+        "as-link",
+        "custom-class",
+        "tokens"
+      ],
+      "previews": 8,
+      "emptyPreviews": 0,
+      "sentences": 0,
+      "details": [],
+      "overflow": 0,
+      "words": 696
+    }
+  },
+  {
+    "name": "button · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "button · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "button · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "button · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "button · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "dark": true,
+      "h2": ["installation", "usage", "examples", "api"],
+      "h3": [
+        "tones",
+        "variants",
+        "matrix",
+        "sizes",
+        "with-icon",
+        "states",
+        "as-link",
+        "custom-class",
+        "tokens"
+      ],
+      "previews": 8,
+      "emptyPreviews": 0,
+      "sentences": 0,
+      "details": [],
+      "overflow": 0,
+      "words": 696
+    }
+  },
+  {
+    "name": "button · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "button · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "button · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "button · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "button · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "dark": false,
+      "h2": ["installation", "usage", "examples", "api"],
+      "h3": [
+        "tones",
+        "variants",
+        "matrix",
+        "sizes",
+        "with-icon",
+        "states",
+        "as-link",
+        "custom-class",
+        "tokens"
+      ],
+      "previews": 8,
+      "emptyPreviews": 0,
+      "sentences": 0,
+      "details": [],
+      "overflow": 0,
+      "words": 696
+    }
+  },
+  {
+    "name": "select · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "select · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "select · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "select · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "11 ejemplos"
+  },
+  {
+    "name": "select · claro: datos",
+    "ok": true,
+    "detail": {
+      "dark": false,
+      "h2": ["installation", "usage", "examples", "api"],
+      "h3": [
+        "declarative",
+        "basic",
+        "search",
+        "groups",
+        "server",
+        "states",
+        "reactive-forms",
+        "signal-forms",
+        "ng-model",
+        "custom-class",
+        "forms-tabs",
+        "options",
+        "accessibility",
+        "outputs",
+        "texts",
+        "tokens"
+      ],
+      "previews": 11,
+      "emptyPreviews": 0,
+      "sentences": 0,
+      "details": [],
+      "overflow": 0,
+      "words": 1543
+    }
+  },
+  {
+    "name": "select · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "select · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "select · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "select · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "11 ejemplos"
+  },
+  {
+    "name": "select · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "dark": true,
+      "h2": ["installation", "usage", "examples", "api"],
+      "h3": [
+        "declarative",
+        "basic",
+        "search",
+        "groups",
+        "server",
+        "states",
+        "reactive-forms",
+        "signal-forms",
+        "ng-model",
+        "custom-class",
+        "forms-tabs",
+        "options",
+        "accessibility",
+        "outputs",
+        "texts",
+        "tokens"
+      ],
+      "previews": 11,
+      "emptyPreviews": 0,
+      "sentences": 0,
+      "details": [],
+      "overflow": 0,
+      "words": 1543
+    }
+  },
+  {
+    "name": "select · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "select · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "select · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "select · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "11 ejemplos"
+  },
+  {
+    "name": "select · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "dark": false,
+      "h2": ["installation", "usage", "examples", "api"],
+      "h3": [
+        "declarative",
+        "basic",
+        "search",
+        "groups",
+        "server",
+        "states",
+        "reactive-forms",
+        "signal-forms",
+        "ng-model",
+        "custom-class",
+        "forms-tabs",
+        "options",
+        "accessibility",
+        "outputs",
+        "texts",
+        "tokens"
+      ],
+      "previews": 11,
+      "emptyPreviews": 0,
+      "sentences": 0,
+      "details": [],
+      "overflow": 0,
+      "words": 1543
+    }
+  }
+]

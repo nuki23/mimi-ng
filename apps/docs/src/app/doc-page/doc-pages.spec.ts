@@ -4,6 +4,10 @@ import { provideRouter } from '@angular/router';
 import { PAGE_EXAMPLES_TIMEOUT, settle } from '../code/code-preview.testing';
 import { HighlighterService } from '../code/highlighter.service';
 import { DOCS_NAV } from '../layout/docs-nav';
+import { BUTTON_PAGE } from '../pages/docs/components/button/button.page';
+import { ButtonPage } from '../pages/docs/components/button/button-page';
+import { SELECT_PAGE } from '../pages/docs/components/select/select.page';
+import { SelectPage } from '../pages/docs/components/select/select-page';
 import { liveExamples, validateDocPage } from './doc-page.rules';
 import {
   DOC_API_SECTIONS,
@@ -28,7 +32,10 @@ import {
 // --- Las páginas migradas: su configuración y su componente de ruta ---------------------------
 
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
-const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {};
+const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+  button: { page: BUTTON_PAGE, component: ButtonPage },
+  select: { page: SELECT_PAGE, component: SelectPage },
+};
 
 /**
  * Las páginas que faltan migrar (DP.1 a DP.5). **Solo encoge:** al migrar una, se quita de aquí y
@@ -37,7 +44,6 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {}
 const PENDING = [
   'avatar',
   'badge',
-  'button',
   'card',
   'checkbox',
   'color-picker',
@@ -60,7 +66,6 @@ const PENDING = [
   'password',
   'popover',
   'progress',
-  'select',
   'separator',
   'skeleton',
   'slider',
@@ -75,8 +80,8 @@ const PENDING = [
   'tooltip',
   'tree',
 ];
-/** El tamaño de `PENDING` en esta tanda: un número fijo que solo baja (DP.0: 39). */
-const PENDING_COUNT = 39;
+/** El tamaño de `PENDING` en esta tanda: un número fijo que solo baja (DP.0: 39; piloto: 37). */
+const PENDING_COUNT = 37;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};

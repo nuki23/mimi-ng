@@ -67,3 +67,86 @@
 | `components.css` | 140,94 / 19,63 kB    | 141,25 / 19,70 kB (+0,31 kB: las clases de `doc-page/`) |
 
 El JS de `doc-page/` no entra todavía en ningún chunk (ninguna página lo usa); se mide en el paso 5.
+
+## 5. Piloto: Button y Select con `app-doc-page`
+
+**Plan breve:** migrar solo Button (DP.0) y Select (adelantada de DP.1), con los esqueletos de la variante A de `docs/plan/docs-paginas/ejemplos.md`; capturas antes y después con Playwright en el sitio servido (`pnpm ng serve docs --port 4280`), en claro, oscuro y 360 px; y parar para la revisión del usuario.
+
+**Button** (`button.page.ts`; `button-page.ts` de una línea de plantilla; sin `button-page.html`):
+
+- Cabecera de 18 palabras y **demo nueva** (`button-demo.example.ts`, 23 líneas: Cancelar, Eliminar y Guardar con carga).
+- Ejemplos: Tamaños; **Variantes** (las cinco variantes y los seis tonos en un ejemplo: `button-tones.example.ts` se borra) con la **matriz variante × tono en un desplegable**; Estados; Con ícono y Como enlace (avanzados); Personalizar con `class`. 7 ejemplos vivos (antes 8).
+- **Accesibilidad y teclado** (antes no había sección): 4 viñetas y 2 en el desplegable (el párrafo de 70 palabras de «Como enlace»).
+- API: sin los atajos de la 0.1.0 ni el alias `default` de `size` (están en el CHANGELOG, 0.2.0 y 0.6.0); `data-*` debajo de Entradas. La prueba de la página comprueba que no vuelvan.
+- **Corrección frente a `ejemplos.md`:** decía «con `loading`, `aria-busy` y sigue enfocable»; en un `<button>`, `loading` pone el `disabled` nativo (`isDisabled()` en `button.ts`), así que no sigue enfocable. La página dice lo que hace el código.
+
+**Select** (`select.page.ts`; el proveedor de textos en español sigue en `select-page.ts`, en `providers`; sin `select-page.html`):
+
+- Cabecera de 16 palabras y **demo nueva** (`select-demo.example.ts`, 58 líneas: «País de envío» con dos `<mimi-optgroup>` en `@for`, buscador, limpiar y una opción deshabilitada con `hint`). La primera versión tenía 62 líneas y **la prueba de la plantilla la rechazó** («la demo tiene 62 líneas (60 como máximo)»); se recortó.
+- Ejemplos: **Tamaños** (nuevo, `select-sizes.example.ts`); **Estados** con **solo lectura** (nuevo en `select-states.example.ts`); Formularios (solo las pestañas de R.13); Búsqueda en el servidor y **Contenido propio de la opción** (`select-search.example.ts` pasa a `select-option-template.example.ts`, con monedas, porque el buscador ya está en la demo); Personalizar con `class`; Alternativa `[options]` (el bloque de código del tipo `MimiOption` se quita: la forma está en la frase y en la API). 6 ejemplos vivos (antes 11).
+- **Fuera:** «Con etiqueta» y «Grupos y opciones deshabilitadas» (en la demo), «Con `<mimi-option>`» (en la demo y en Uso), y los tres vivos de Reactive Forms, Signal Forms y ngModel (las pestañas los cubren). Se borran sus archivos. El texto de Instalación sobre aria y cdk pasa a «Qué instala», generado del registro.
+- Accesibilidad: 6 viñetas y 4 en el desplegable (Alt+flechas, vuelta al principio, la X de limpiar, popover nativo y movimiento reducido).
+- API: Entradas con `size` y `readonly`, **que faltaban**; descripciones recortadas a 20 palabras; Salidas; **Piezas** (nuevo: `mimi-option`, `mimi-optgroup`, `ng-template[mimiSelectOption]`, `mimi-select-highlight`); Textos; Variables CSS.
+
+**Dos arreglos de las piezas comunes que salieron del piloto:**
+
+1. **Espacio antes de la puntuación** detrás del código en línea («`sm` , `md`»), visto en las capturas: la plantilla de `app-doc-text` dejaba un espacio entre bloques. Ahora va en una línea, con `prettier-ignore`; prueba nueva en `doc-page.spec.ts` (el texto de la nota sin el espacio) y una comprobación en Playwright. La prueba nueva se escribió junto con el arreglo: no se vio fallar antes.
+2. **JS inicial +3,71 kB** con la primera versión (334,89 → 338,60 kB): `NgComponentOutlet` y `NgTemplateOutlet` traen `_common_module-chunk.mjs` de `@angular/common` (4,5 kB), que esbuild pasó al chunk inicial compartido (comparado módulo por módulo con `ng build docs --stats-json`, antes y después). Es la misma trampa que la spec 10 ya documenta para la vista previa de los Blocks. Ahora cada ejemplo lo pinta `app-doc-example` con `ViewContainerRef.createComponent`: **+0,21 kB**.
+
+**Criterios:**
+
+| Criterio                             | Evidencia                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Las dos páginas cumplen la plantilla | `doc-pages.spec.ts`: Button y Select en `MIGRATED`, fuera de `PENDING` (`PENDING_COUNT` 39 → 37); sus pruebas (`*-page.ts` de una línea, sin HTML, `validateDocPage` sin errores, «Textos» en Select, h1 igual al menú, orden de h2 y h3, frase delante de cada ejemplo y cada ejemplo corriendo) en verde. Sin excepciones.                                                                                                                                                                                                      |
+| Pruebas de las páginas               | `button-page.spec.ts` (8 vistas previas; sin los atajos) y `select-page.spec.ts` (7 vistas previas, `[options]` solo en la última, textos en español, pestañas de formularios y «Qué instala» con `option-list` y el CSS del overlay), en verde.                                                                                                                                                                                                                                                                                  |
+| Playwright en el sitio servido       | `pages.mjs` (fuera del repo; `playwright-core` 1.56.1 y el Chrome instalado) contra `ng serve` en el puerto 4280, Button y Select en claro 1280, oscuro 1280 y claro 360: **antes 24 de 24, después 54 de 54** (modo, sin errores de consola, sin desborde horizontal, cada ejemplo corre; después, además: secciones en orden, cada ejemplo con su frase, desplegables cerrados, «Qué instala» se abre con Enter, sin espacio antes de la puntuación). Resultados: `capturas/2026-11-14/paginas/{antes,despues}/resultado.json`. |
+| Capturas antes y después             | `docs/auto/capturas/2026-11-14/paginas/antes/` y `despues/`: `button-claro.jpg`, `button-oscuro.jpg`, `button-claro-360.jpg` y lo mismo de `select` (página entera, JPEG al 60 %). En la página entera, la cabecera fija y la barra lateral salen pintadas encima del contenido a la altura del primer pantallazo: es la captura, no la página.                                                                                                                                                                                   |
+| Texto de la página                   | Palabras del `<article>` (con la API y el código visible): Button 696 → 582; Select 1543 → 1143.                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `pnpm build`                         | En verde, sin avisos de presupuesto.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `pnpm test`                          | docs **283** y ui-core **1061** en verde. CLI: **NO en verde dentro de `pnpm test`**: la primera prueba de `ui.spec.ts`, `blocks.spec.ts` y `pages.spec.ts` pasa de los 5 s (dos veces). `pnpm test:cli` solo: una vez las mismas 3, otra **202 de 202**; con `--testTimeout=60000` tardan 1–3 s. La rama no toca `packages/cli` (`git diff main -- packages/cli` vacío). Anotado en la M.12; no se cambió la prueba.                                                                                                             |
+| `pnpm format` y `pnpm format:check`  | En verde (antes del commit).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| Servidor cerrado                     | El `ng serve` del puerto 4280 (PID 8024, mío) se cerró y `netstat` lo da libre. `playwright-core`, los registros y las estadísticas, en el directorio temporal de la sesión, fuera del repo.                                                                                                                                                                                                                                                                                                                                      |
+
+**Bundle** (`check-initial-js.mjs`; chunks y `main` con `gzip -9`):
+
+| Qué                                  | Antes (crudo / gzip) | Después (crudo / gzip)        |
+| ------------------------------------ | -------------------- | ----------------------------- |
+| JS inicial                           | 334,89 / 106,23 kB   | 335,10 / 106,27 kB (+0,21 kB) |
+| `main`                               | 137,83 / 40,51 kB    | 137,83 / 40,51 kB             |
+| CSS global                           | 130,77 / 18,70 kB    | 130,77 / 18,70 kB             |
+| `components.css`                     | 140,94 / 19,63 kB    | 141,27 / 19,70 kB             |
+| Página de Button (chunk propio)      | 19,75 / 5,30 kB      | 16,23 / 4,23 kB               |
+| Página de Select (chunk propio)      | 48,52 / 12,82 kB     | 28,92 / 8,12 kB               |
+| `doc-page` (chunk compartido, nuevo) | —                    | 32,25 / 8,22 kB               |
+
+El chunk de `doc-page` lo comparten todas las páginas migradas; la mayor parte es el registro de la CLI entero (`registry.json`, 20 kB crudo), que usa «Qué instala». Primera visita a Button: 19,75 → 48,48 kB crudos (16,23 + 32,25); a Select: 48,52 → 61,17 kB. Con más páginas migradas, el chunk compartido se paga una vez.
+
+## Revisión crítica antes de cerrar
+
+- **¿La evidencia prueba cada criterio?** La estructura y los límites, sí (la prueba rechazó una demo de 62 líneas). Lo visual lo prueban las capturas y Playwright; el criterio de «gusto» (si las páginas se leen mejor) es del usuario: por eso el piloto para aquí.
+- **Alcance:** solo Button y Select. Se tocó `block-loading.spec.ts` de ui-core (tiempo de espera, M.12), fuera de las páginas; ninguna API de componentes cambió.
+- **Bundle:** el JS inicial sube 0,21 kB (no 1 kB); el chunk compartido de 32 kB es diferido. Si pesa, «Qué instala» puede leer un JSON reducido generado en el build (ver alertas).
+- **Accesibilidad:** los desplegables son `<details>` nativos (teclado y lector de pantalla del navegador; Enter comprobado en Playwright). La demo y los ejemplos son los mismos componentes. Lectura con NVDA: NO COMPROBADO (manual, usuario).
+- **Privacidad:** sin correos ni rutas personales en los archivos nuevos; los resultados de Playwright guardan solo `localhost:4280`.
+
+## Alertas para el revisor
+
+1. **Revisa Button y Select** en el sitio (o en las capturas) antes de migrar las demás: frases, qué quedó fuera, el desplegable de la matriz y el orden de los ejemplos.
+2. **Pruebas de la CLI en `pnpm test`:** 3 tiempos de espera del primer caso de cada archivo (arriba). No cambié esas pruebas: es la M.12; la propuesta es `{ timeout: 20_000 }` en esos `describe`.
+3. **`registry.json` entero en el chunk de `doc-page`** (unos 20 kB crudos). Alternativa: generar en el build un mapa reducido (nombre → ítems, paquetes, CSS) y probar que coincide con el registro.
+4. **`ejemplos.md` decía que un Button cargando «sigue enfocable»**: no es así; la página dice lo que hace el código.
+5. **Select no tenía `size` ni `readonly` en la API** de la página; ahora sí.
+6. **Lo que no comprueba la prueba:** la regla «sin `as` ni funciones de ayuda» de los ejemplos (regla 9) y que una frase esté «en presente o imperativo»; quedan para la revisión.
+7. Un proceso `node` (PID 21528) y varios de Chrome abiertos desde el 12/11/2026 no son de esta sesión: no los toqué.
+
+## Pendiente del usuario
+
+- Revisar Button y Select (el piloto) y decidir si se sigue con DP.1 (Combobox, Dialog, Form Field y Toolbar).
+- NVDA en las dos páginas (desplegables y frases): manual.
+- Decidir sobre las alertas 2 y 3.
+
+## Archivos de esta rama
+
+- **Pasos 1 a 3:** `docs/historial/plan-refinamiento-0.6.0.md`, `docs/plan.md`, `docs/plan/mantenimiento.md`, `docs/plan/refinamiento/R-0.7.0.md`, `docs/plan/decisiones.md`, `docs/plan/docs-paginas/{plan,parte-c,ejemplos}.md`, `docs/auto/decisiones-por-defecto.md`, este informe.
+- **Paso 4 (nuevos):** `apps/docs/src/app/doc-page/{doc-page.ts,doc-page.html,doc-page.types.ts,doc-page.rules.ts,doc-text.ts,api-table.ts,more.ts,install-extras.ts,doc-page.spec.ts,doc-pages.spec.ts}`, `docs/spec/plantilla-pagina.md`. **Modificados:** `CLAUDE.md`, `.claude/commands/componente.md`, `.claude/commands/cerrar-grupo.md`, `apps/docs/src/styles.css`, `apps/docs/src/components.css`, `tsconfig.base.json`, `docs/spec.md`, `docs/plan/refinamiento/uso-corto.md`, `packages/ui-core/src/lib/block-loading.spec.ts`. **Borrado:** `apps/docs/src/app/code/short-use-pages.spec.ts`.
+- **Paso 5 (nuevos):** `doc-page/doc-example.ts`, `button/button.page.ts`, `button/examples/button-demo.example.ts`, `select/select.page.ts`, `select/examples/{select-demo,select-sizes}.example.ts`, `docs/auto/capturas/2026-11-14/paginas/`. **Renombrado:** `select-search.example.ts` → `select-option-template.example.ts`. **Modificados:** `doc-page/{doc-page.ts,doc-page.html,doc-text.ts,doc-page.spec.ts,doc-pages.spec.ts}`, `button/{button-page.ts,button-page.spec.ts}`, `button/examples/button-variants.example.ts`, `select/{select-page.ts,select-page.spec.ts}`, `select/examples/select-states.example.ts`, `docs/spec/plantilla-pagina.md`, `docs/design/correcciones-pendientes.md`, `docs/plan.md`, `docs/plan/docs-paginas/plan.md`, `docs/plan/mantenimiento.md`. **Borrados:** `button/button-page.html`, `button/examples/button-tones.example.ts`, `select/select-page.html`, `select/examples/select-{basic,declarative,groups,ng-model,reactive-forms,signal-forms}.example.ts`.

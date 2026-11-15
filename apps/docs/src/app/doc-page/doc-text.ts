@@ -20,17 +20,10 @@ export function textParts(text: string): TextPart[] {
  */
 @Component({
   selector: 'app-doc-text',
-  template: `
-    @for (part of parts(); track $index) {
-      @if (part.code) {
-        <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">{{
-          part.text
-        }}</code>
-      } @else {
-        {{ part.text }}
-      }
-    }
-  `,
+  // En una sola línea y sin espacios entre bloques: el espacio de la plantilla se pintaría
+  // delante de la puntuación («`sm` , `md`»). El texto lleva sus propios espacios.
+  // prettier-ignore
+  template: `@for (part of parts(); track $index) {@if (part.code) {<code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">{{ part.text }}</code>} @else {<ng-container>{{ part.text }}</ng-container>}}`,
   host: { class: 'contents' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

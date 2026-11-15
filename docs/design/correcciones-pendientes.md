@@ -336,3 +336,9 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
 - **La X de limpiar** (completa la nota del 12/11/2026): no solo con el foco dentro, sino con el foco que llegó por teclado. Después de elegir con el ratón, no se queda.
 - **Tags Input en solo lectura:** sin diseño. Las etiquetas toman el fondo del campo y un borde `--mimi-tags-chip-readonly-border` (por defecto, `muted-foreground`; 4,79:1 en claro y 6,7:1 en oscuro con el fondo de solo lectura).
 - **Hover de Checkbox, Switch y Toggle Group:** el diseño no lo muestra. Mimi usa el borde de hover de los campos (casilla sin marcar), el color al 88 % u 82 % con `foreground` (casilla marcada y pista del interruptor) y `foreground` al 6 % (opción no elegida del grupo), con el ratón sobre todo el control.
+
+## Plantilla de página (DP.0, 14/11/2026): sin diseño de Claude Design
+
+- **Desplegable `app-more`** («Qué instala», la matriz variante × tono, «Más detalles de teclado y accesibilidad»): sin diseño. Mimi usa una tarjeta con `border`, `bg-card` y `rounded-card`, un resumen de `text-sm font-medium` con un chevrón de Lucide que gira 90° al abrir (sin animación con movimiento reducido), `hover:bg-muted` y el foco con `outline-ring`.
+- **Frase de cada ejemplo y de la demo:** el diseño de la página de Input no tiene una frase delante de cada ejemplo ni una demo sin título bajo la cabecera. La frase del ejemplo es texto normal; la de la demo, `text-sm text-muted-foreground`.
+- **Línea de atributos de estado** debajo de Entradas: `text-sm text-muted-foreground`, sin diseño.

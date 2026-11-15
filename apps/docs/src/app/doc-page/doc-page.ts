@@ -1,4 +1,3 @@
-import { NgComponentOutlet, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,11 +7,11 @@ import {
   isDevMode,
 } from '@angular/core';
 import { CodeBlock } from '../code/code-block';
-import { CodePreview } from '../code/code-preview';
 import { CssVariables } from '../code/css-variables';
 import { FormsTabs } from '../code/forms-tabs';
 import { InstallCommand } from '../code/install-command';
 import { ApiTable } from './api-table';
+import { DocExampleView } from './doc-example';
 import { DocText } from './doc-text';
 import { validateDocPage } from './doc-page.rules';
 import {
@@ -39,15 +38,13 @@ type ExampleBlock = { kind: 'example'; example: DocExample } | { kind: 'forms'; 
   imports: [
     ApiTable,
     CodeBlock,
-    CodePreview,
     CssVariables,
+    DocExampleView,
     DocText,
     FormsTabs,
     InstallCommand,
     InstallExtrasView,
     More,
-    NgComponentOutlet,
-    NgTemplateOutlet,
   ],
   templateUrl: './doc-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
