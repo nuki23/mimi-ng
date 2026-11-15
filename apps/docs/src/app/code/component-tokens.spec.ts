@@ -154,6 +154,8 @@ const GLOBALS = new Set([
  */
 const SHARED_SOURCES: Partial<Record<TokenComponent, readonly string[]>> = {
   input: ['utils/field-styles.ts'],
+  // Las celdas y encabezados de la Data Table son los de la capa base (R.20).
+  dataTable: ['components/table/table.ts'],
 };
 
 /** Código del componente (sin pruebas). */
