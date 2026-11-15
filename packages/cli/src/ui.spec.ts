@@ -4,6 +4,7 @@ import type { UnitTestTree } from '@angular-devkit/schematics/testing';
 import { describe, expect, it } from 'vitest';
 import cliPackage from '../package.json';
 import {
+  COLD_START_TIMEOUT,
   UI_CORE_LIB,
   createWorkspace,
   harness,
@@ -33,31 +34,35 @@ const filesUnder = (tree: UnitTestTree, dir: string) =>
     .sort();
 
 describe('mimi (alias ui)', () => {
-  it('agrega un componente con sus registryDependencies, idéntico a ui-core, y su base', async () => {
-    const { run, tree } = await initialized();
-    const result = await run('mimi', { components: ['button'] }, tree);
+  it(
+    'agrega un componente con sus registryDependencies, idéntico a ui-core, y su base',
+    async () => {
+      const { run, tree } = await initialized();
+      const result = await run('mimi', { components: ['button'] }, tree);
 
-    for (const file of [
-      'components/button/button.ts',
-      'components/button/button.variants.ts',
-      'components/button/index.ts',
-    ]) {
-      // En el proyecto, los componentes van sin "components/": @/components/ui/button.
-      expect(result.readContent(`/${UI}/${file.replace('components/', '')}`), file).toBe(
-        template(file),
-      );
-      // Copia original en .mimi/base, sin "components/".
-      expect(result.readContent(`/.mimi/base/${file.replace('components/', '')}`), file).toBe(
-        template(file),
-      );
-    }
-    expect(result.exists(`/${UI}/components`)).toBe(false);
-    // Button no arrastra field-state (ni @angular/forms).
-    expect(result.exists(`/${UI}/utils/field-state.ts`)).toBe(false);
-    expect(json(result, '/mimi.json').components).toEqual({
-      button: { version: registry.version },
-    });
-  });
+      for (const file of [
+        'components/button/button.ts',
+        'components/button/button.variants.ts',
+        'components/button/index.ts',
+      ]) {
+        // En el proyecto, los componentes van sin "components/": @/components/ui/button.
+        expect(result.readContent(`/${UI}/${file.replace('components/', '')}`), file).toBe(
+          template(file),
+        );
+        // Copia original en .mimi/base, sin "components/".
+        expect(result.readContent(`/.mimi/base/${file.replace('components/', '')}`), file).toBe(
+          template(file),
+        );
+      }
+      expect(result.exists(`/${UI}/components`)).toBe(false);
+      // Button no arrastra field-state (ni @angular/forms).
+      expect(result.exists(`/${UI}/utils/field-state.ts`)).toBe(false);
+      expect(json(result, '/mimi.json').components).toEqual({
+        button: { version: registry.version },
+      });
+    },
+    COLD_START_TIMEOUT,
+  );
 
   it('varios a la vez, con dependencias transitivas y sin duplicados', async () => {
     const { run, tree, logs } = await initialized();

@@ -52,6 +52,15 @@ export async function createWorkspace(
   return tree;
 }
 
+/**
+ * Tiempo máximo de la **primera** prueba de `ui.spec.ts`, `blocks.spec.ts` y `pages.spec.ts`
+ * (decidido por el usuario el 14/11/2026, M.12). Es la primera que crea un workspace y corre
+ * `init` en su worker: dentro de `pnpm test` completo pasó de los 5 s de Vitest (arranque en
+ * frío), aunque sola tarda 1–3 s. El resto de esos archivos sigue con 5 s. Por qué el arranque
+ * tarda tanto queda para investigar en la M.12.
+ */
+export const COLD_START_TIMEOUT = 20_000;
+
 export const snapshot = (tree: UnitTestTree) =>
   Object.fromEntries(tree.files.map((file) => [file, tree.readContent(file)]));
 

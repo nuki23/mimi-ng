@@ -3,7 +3,14 @@ import { join } from 'node:path';
 import type { UnitTestTree } from '@angular-devkit/schematics/testing';
 import { beforeAll, describe, expect, it } from 'vitest';
 import cliPackage from '../package.json';
-import { UI_CORE_LIB, createWorkspace, harness, json, snapshot } from './testing/harness';
+import {
+  COLD_START_TIMEOUT,
+  UI_CORE_LIB,
+  createWorkspace,
+  harness,
+  json,
+  snapshot,
+} from './testing/harness';
 import {
   TEST_BLOCK,
   TEST_BLOCK_FILES,
@@ -66,36 +73,40 @@ function makeOld(
 }
 
 describe('ng g mimi <block> (B.1)', () => {
-  it('copia el Block a src/app/blocks y sus componentes a components/ui, con sus bases', async () => {
-    const { run, tree, logs, warnings } = await initialized();
-    const result = await run('mimi', { components: [TEST_BLOCK] }, tree);
+  it(
+    'copia el Block a src/app/blocks y sus componentes a components/ui, con sus bases',
+    async () => {
+      const { run, tree, logs, warnings } = await initialized();
+      const result = await run('mimi', { components: [TEST_BLOCK] }, tree);
 
-    for (const file of TEST_BLOCK_FILES) {
-      expect(result.readContent(`/${inProject(file)}`), file).toBe(TEST_BLOCK_SOURCE[file]);
-      // La base conserva blocks/, y es también la clave del manifiesto.
-      expect(result.readContent(`/.mimi/base/${file}`), file).toBe(TEST_BLOCK_SOURCE[file]);
-      expect(json(result, '/.mimi/manifest.json').files[file], file).toBe(VERSION);
-    }
-    expect(result.exists(`/${UI}/test-block/test-block.ts`)).toBe(false);
-    expect(result.exists(`/${UI}/blocks/test-block/test-block.ts`)).toBe(false);
-    expect(result.readContent(`/${UI}/button/button.ts`)).toBe(
-      readFileSync(join(UI_CORE_LIB, 'components/button/button.ts'), 'utf8'),
-    );
+      for (const file of TEST_BLOCK_FILES) {
+        expect(result.readContent(`/${inProject(file)}`), file).toBe(TEST_BLOCK_SOURCE[file]);
+        // La base conserva blocks/, y es también la clave del manifiesto.
+        expect(result.readContent(`/.mimi/base/${file}`), file).toBe(TEST_BLOCK_SOURCE[file]);
+        expect(json(result, '/.mimi/manifest.json').files[file], file).toBe(VERSION);
+      }
+      expect(result.exists(`/${UI}/test-block/test-block.ts`)).toBe(false);
+      expect(result.exists(`/${UI}/blocks/test-block/test-block.ts`)).toBe(false);
+      expect(result.readContent(`/${UI}/button/button.ts`)).toBe(
+        readFileSync(join(UI_CORE_LIB, 'components/button/button.ts'), 'utf8'),
+      );
 
-    const config = json(result, '/mimi.json');
-    expect(config.blocks).toEqual({ [TEST_BLOCK]: { version: VERSION } });
-    expect(config.components).toEqual({ button: { version: VERSION } });
-    expect(config.aliases.blocks).toBe(BLOCKS);
+      const config = json(result, '/mimi.json');
+      expect(config.blocks).toEqual({ [TEST_BLOCK]: { version: VERSION } });
+      expect(config.components).toEqual({ button: { version: VERSION } });
+      expect(config.aliases.blocks).toBe(BLOCKS);
 
-    const messages = logs.map((l) => l.message);
-    expect(messages).toContain(`  + ${BLOCKS}/test-block/test-block.ts`);
-    // test-block es una sección (B.11-a): va dentro de una página, no en las rutas.
-    expect(messages).toContain(
-      'test-block es una sección (una parte de una página): ponla en una de tus páginas con ' +
-        `<mimi-test-block />, importando TestBlock de ${BLOCKS}/test-block.`,
-    );
-    expect(warnings()).toEqual([]);
-  });
+      const messages = logs.map((l) => l.message);
+      expect(messages).toContain(`  + ${BLOCKS}/test-block/test-block.ts`);
+      // test-block es una sección (B.11-a): va dentro de una página, no en las rutas.
+      expect(messages).toContain(
+        'test-block es una sección (una parte de una página): ponla en una de tus páginas con ' +
+          `<mimi-test-block />, importando TestBlock de ${BLOCKS}/test-block.`,
+      );
+      expect(warnings()).toEqual([]);
+    },
+    COLD_START_TIMEOUT,
+  );
 
   it('usa aliases.blocks de mimi.json', async () => {
     const { run, tree } = await initialized();

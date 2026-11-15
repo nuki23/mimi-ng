@@ -121,6 +121,14 @@ El JS de `doc-page/` no entra todavía en ningún chunk (ninguna página lo usa)
 
 El chunk de `doc-page` lo comparten todas las páginas migradas; la mayor parte es el registro de la CLI entero (`registry.json`, 20 kB crudo), que usa «Qué instala». Primera visita a Button: 19,75 → 48,48 kB crudos (16,23 + 32,25); a Select: 48,52 → 61,17 kB. Con más páginas migradas, el chunk compartido se paga una vez.
 
+## 6. Decisiones del usuario sobre las alertas (14/11/2026)
+
+### 6.1 CLI: 20 s solo para la primera prueba de tres archivos
+
+- `COLD_START_TIMEOUT = 20_000` en `packages/cli/src/testing/harness.ts`, usado como tercer argumento **solo** en «agrega un componente con sus registryDependencies…» (`ui.spec.ts`), «copia el Block a src/app/blocks…» (`blocks.spec.ts`) y «genera la página en aliases.pages…» (`pages.spec.ts`), las tres que fallaban. El resto sigue con 5 s.
+- M.12: anotado investigar por qué ese arranque pasa de 5 s.
+- Evidencia: `pnpm test:cli` **202 de 202**; `pnpm test` completo en verde (docs 283, ui-core 1061, CLI 202).
+
 ## Revisión crítica antes de cerrar
 
 - **¿La evidencia prueba cada criterio?** La estructura y los límites, sí (la prueba rechazó una demo de 62 líneas). Lo visual lo prueban las capturas y Playwright; el criterio de «gusto» (si las páginas se leen mejor) es del usuario: por eso el piloto para aquí.
