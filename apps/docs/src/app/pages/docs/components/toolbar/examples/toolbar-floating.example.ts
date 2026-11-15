@@ -1,26 +1,20 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import {
   LucideBold,
-  LucideHand,
   LucideItalic,
-  LucideMessageCircle,
-  LucideMousePointer2,
-  LucideSquare,
   LucideTextAlignCenter,
   LucideTextAlignStart,
 } from '@lucide/angular';
 import { MimiToolbarImports } from '@/components/ui/toolbar';
 import { MimiTooltip } from '@/components/ui/tooltip';
+import { CanvasTools } from './canvas-tools';
 
 @Component({
   selector: 'app-toolbar-floating-example',
   imports: [
     MimiToolbarImports,
     MimiTooltip,
-    LucideMousePointer2,
-    LucideHand,
-    LucideSquare,
-    LucideMessageCircle,
+    CanvasTools,
     LucideBold,
     LucideItalic,
     LucideTextAlignStart,
@@ -41,54 +35,7 @@ import { MimiTooltip } from '@/components/ui/tooltip';
         class="absolute top-14 right-10 h-32 w-48 rounded-card border-2 border-info bg-card shadow-card"
       ></div>
 
-      <mimi-toolbar
-        orientation="vertical"
-        aria-label="Herramientas"
-        class="absolute top-4 left-4"
-        [(value)]="tool"
-      >
-        <button
-          mimiToolbarItem="select"
-          kind="tool"
-          aria-label="Seleccionar"
-          mimiTooltip="Seleccionar"
-          mimiTooltipShortcut="V"
-          mimiTooltipSide="right"
-        >
-          <svg lucideMousePointer2></svg>
-        </button>
-        <button
-          mimiToolbarItem="hand"
-          kind="tool"
-          aria-label="Mover lienzo"
-          mimiTooltip="Mover lienzo"
-          mimiTooltipShortcut="H"
-          mimiTooltipSide="right"
-        >
-          <svg lucideHand></svg>
-        </button>
-        <button
-          mimiToolbarItem="rect"
-          kind="tool"
-          aria-label="Rectángulo"
-          mimiTooltip="Rectángulo"
-          mimiTooltipShortcut="R"
-          mimiTooltipSide="right"
-        >
-          <svg lucideSquare></svg>
-        </button>
-        <mimi-toolbar-separator />
-        <button
-          mimiToolbarItem="comments"
-          aria-label="Comentarios, 3 sin leer"
-          mimiTooltip="Comentarios"
-          mimiTooltipShortcut="C"
-          mimiTooltipSide="right"
-        >
-          <svg lucideMessageCircle></svg>
-          <span mimiToolbarCount>3</span>
-        </button>
-      </mimi-toolbar>
+      <app-canvas-tools class="absolute top-4 left-4" [(tool)]="tool" />
 
       <mimi-toolbar
         aria-label="Formato"
@@ -96,31 +43,14 @@ import { MimiTooltip } from '@/components/ui/tooltip';
         [(value)]="align"
         [(pressed)]="styles"
       >
-        <button
-          mimiToolbarItem="bold"
-          kind="toggle"
-          aria-label="Negrita"
-          mimiTooltip="Negrita"
-          mimiTooltipShortcut="⌘B"
-        >
+        <button mimiToolbarItem="bold" kind="toggle" aria-label="Negrita" mimiTooltip="Negrita">
           <svg lucideBold></svg>
         </button>
-        <button
-          mimiToolbarItem="italic"
-          kind="toggle"
-          aria-label="Cursiva"
-          mimiTooltip="Cursiva"
-          mimiTooltipShortcut="⌘I"
-        >
+        <button mimiToolbarItem="italic" kind="toggle" aria-label="Cursiva" mimiTooltip="Cursiva">
           <svg lucideItalic></svg>
         </button>
         <mimi-toolbar-separator />
-        <button
-          mimiToolbarItem="start"
-          kind="tool"
-          aria-label="Alinear al inicio"
-          mimiTooltip="Alinear al inicio"
-        >
+        <button mimiToolbarItem="start" kind="tool" aria-label="Al inicio" mimiTooltip="Al inicio">
           <svg lucideTextAlignStart></svg>
         </button>
         <button mimiToolbarItem="center" kind="tool" aria-label="Centrar" mimiTooltip="Centrar">

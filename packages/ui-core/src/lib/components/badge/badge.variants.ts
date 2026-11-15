@@ -28,8 +28,8 @@ const DOT = "gap-1.5 before:size-1.5 before:shrink-0 before:rounded-full before:
 /**
  * Colores de cada tono en cada variante. Clases completas y literales para Tailwind. Diseño:
  * docs/design/«Mimi F2 Tokens y Tonos» (Tonos en Badge). Outline lleva un punto del color del
- * tono; sin tono (secondary) se ve como en la 0.1.0, sin punto. El tono secondary es
- * provisional, sin diseño (spec 13).
+ * tono; sin tono (secondary) se ve como en la 0.1.0, sin punto. El tono secondary no estaba en
+ * el diseño: es el de Mimi (spec 13).
  */
 const TONE_CLASSES = {
   primary: {

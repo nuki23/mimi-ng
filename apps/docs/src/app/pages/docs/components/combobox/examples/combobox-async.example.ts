@@ -6,22 +6,11 @@ import {
   provideMimiComboboxText,
 } from '@/components/ui/combobox';
 
-const ALL = [
-  'Asunción',
-  'Barcelona',
-  'Bogotá',
-  'Buenos Aires',
-  'Caracas',
-  'Guadalajara',
-  'La Paz',
-  'Lima',
-  'Madrid',
-  'Montevideo',
-  'Quito',
-  'Santiago',
-  'Sevilla',
-  'Valencia',
-];
+/** Lo que tiene el «servidor». */
+const ALL = (
+  'Asunción,Barcelona,Bogotá,Buenos Aires,Caracas,Guadalajara,La Paz,Lima,Madrid,Montevideo,' +
+  'Quito,Santiago,Sevilla,Valencia'
+).split(',');
 
 @Component({
   selector: 'app-combobox-async-example',

@@ -1,0 +1,115 @@
+@let p = page();
+<!-- Plantilla de página (docs/spec/plantilla-pagina.md). Orden, nombres e id fijos. -->
+<article class="flex flex-col gap-5" data-slot="doc-page">
+  <h1 class="text-[38px] leading-[1.15] font-extrabold tracking-[-0.03em]">{{ p.name }}</h1>
+  <p data-slot="lead" class="text-lg text-pretty text-muted-foreground">
+    <app-doc-text [text]="p.lead" />
+  </p>
+
+  <app-doc-example [example]="p.demo" [demo]="true" />
+
+  <h2 id="installation" [class]="h2">{{ sections.installation }}</h2>
+  <app-install-command [name]="p.install" />
+  <app-install-extras [name]="p.install" />
+
+  <h2 id="usage" [class]="h2">{{ sections.usage }}</h2>
+  <app-code-block [code]="p.usage.code" lang="angular-ts" />
+  @if (p.usage.note) {
+    <p data-slot="usage-note" class="text-pretty"><app-doc-text [text]="p.usage.note" /></p>
+  }
+  @if (p.usage.more; as more) {
+    <app-more [summary]="more.summary" data-slot="usage-more">
+      @if (more.ordered) {
+        <ol class="flex list-decimal flex-col gap-1.5 ps-5">
+          @for (item of more.items; track $index) {
+            <li><app-doc-text [text]="item" /></li>
+          }
+        </ol>
+      } @else {
+        <ul class="flex list-disc flex-col gap-1.5 ps-5">
+          @for (item of more.items; track $index) {
+            <li><app-doc-text [text]="item" /></li>
+          }
+        </ul>
+      }
+    </app-more>
+  }
+
+  @if (blocks().length) {
+    <h2 id="examples" [class]="h2">{{ sections.examples }}</h2>
+    @for (block of blocks(); track $index) {
+      @if (block.kind === 'forms') {
+        <h3 [id]="formsId" [class]="h3">Formularios</h3>
+        <p data-slot="example-sentence" class="text-pretty">
+          El mismo campo con Signal Forms, Reactive Forms y una plantilla con
+          <app-doc-text text="`ngModel`" />, sin adaptadores.
+        </p>
+        <app-forms-tabs [component]="block.spec" />
+      } @else {
+        <h3 [id]="block.example.id" [class]="h3">{{ block.example.title }}</h3>
+        <app-doc-example [example]="block.example" />
+        @if (block.example.more; as more) {
+          <app-more [summary]="more.title">
+            <app-doc-example [example]="more" />
+          </app-more>
+        }
+      }
+    }
+  }
+
+  <h2 id="accessibility" [class]="h2">{{ sections.accessibility }}</h2>
+  <ul data-slot="accessibility" class="flex list-disc flex-col gap-1.5 ps-5 text-pretty">
+    @for (point of p.accessibility.points; track $index) {
+      <li><app-doc-text [text]="point" /></li>
+    }
+  </ul>
+  @if (p.accessibility.more?.length) {
+    <app-more summary="Más detalles de teclado y accesibilidad">
+      <ul class="flex list-disc flex-col gap-1.5 ps-5">
+        @for (point of p.accessibility.more; track $index) {
+          <li><app-doc-text [text]="point" /></li>
+        }
+      </ul>
+    </app-more>
+  }
+
+  <h2 id="api" [class]="h2">{{ sections.api }}</h2>
+  <h3 id="inputs" [class]="h3">{{ apiTitles.inputs }}</h3>
+  <app-api-table kind="inputs" [rows]="p.api.inputs" />
+  @if (p.api.dataAttributes?.length) {
+    <p data-slot="data-attributes" class="text-sm text-pretty text-muted-foreground">
+      Atributos de estado:
+      @for (attr of p.api.dataAttributes; track attr; let last = $last) {
+        <app-doc-text [text]="'`' + attr + '`'" />{{ last ? '.' : ', ' }}
+      }
+    </p>
+  }
+  @if (p.api.outputs?.length) {
+    <h3 id="outputs" [class]="h3">{{ apiTitles.outputs }}</h3>
+    <app-api-table kind="outputs" [rows]="p.api.outputs!" />
+  }
+  @if (p.api.parts?.length) {
+    <h3 id="parts" [class]="h3">{{ apiTitles.parts }}</h3>
+    <app-api-table kind="parts" [rows]="p.api.parts!" />
+  }
+  @if (p.api.service?.length) {
+    <h3 id="service" [class]="h3">{{ apiTitles.service }}</h3>
+    <app-api-table kind="service" [rows]="p.api.service!" />
+  }
+  @if (p.texts?.length) {
+    <h3 id="texts" [class]="h3">{{ apiTitles.texts }}</h3>
+    <p data-slot="texts-sentence" class="text-pretty"><app-doc-text [text]="textsSentence()" /></p>
+    <app-code-block [code]="textsCode()" lang="typescript" />
+  }
+  @if (tables().length) {
+    <h3 id="tokens" [class]="h3">{{ apiTitles.tokens }}</h3>
+    @for (table of tables(); track table; let first = $first) {
+      @if (!first) {
+        <p data-slot="tokens-of" class="mt-2 font-medium">
+          <app-doc-text [text]="'También las de `' + table + '`, que usa por dentro:'" />
+        </p>
+      }
+      <app-css-variables [component]="table" />
+    }
+  }
+</article>

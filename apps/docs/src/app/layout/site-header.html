@@ -33,15 +33,23 @@
   <a
     routerLink="/"
     aria-label="Mimi, inicio"
-    class="-ml-1 flex items-center gap-2 rounded-lg p-1 text-foreground mimi-transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
+    class="-ml-1 flex shrink-0 items-center rounded-lg p-1 mimi-transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring active:scale-(--mimi-press-scale)"
   >
-    <span
-      aria-hidden="true"
-      class="inline-flex size-7 items-center justify-center rounded-[min(var(--mimi-radius),9px)] bg-primary text-base leading-none font-extrabold text-primary-foreground shadow-primary"
-    >
-      m
-    </span>
-    <span class="text-[17px] font-bold tracking-[-0.02em]">Mimi</span>
+    <!-- Logo (R.25): archivos de public/, copiados de docs/brand/. Uno por tema (.dark). -->
+    <img
+      src="mimi-logo-horizontal.svg"
+      alt="Mimi"
+      width="85"
+      height="36"
+      class="h-9 w-auto dark:hidden"
+    />
+    <img
+      src="mimi-logo-horizontal-dark.svg"
+      alt="Mimi"
+      width="85"
+      height="36"
+      class="hidden h-9 w-auto dark:block"
+    />
   </a>
 
   <span

@@ -20,8 +20,8 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 3. «PENDIENTE DE DECIDIR: …» significa que falta una decisión del usuario: se pregunta, no se supone, salvo en modo autónomo (ver «Decidido por defecto», abajo).
 4. Los IDs no se renumeran ni se reutilizan: el código y la spec los citan (por ejemplo, «plan, G1.5b» o «tarea 5.3»). Tampoco se reutilizan los de Theme Studio (T.2 a T.5, en `docs/futuro/theme-studio.md`). Una tarea nueva toma el siguiente número libre de su grupo; el mantenimiento sin grupo usa `M.<n>`; la puerta de cada grupo es `G<n>.P`.
 5. «Depende de» cita IDs. Para los componentes, la fuente de las dependencias es la tabla de su grupo en la spec 4, «Hoja de ruta»: si el plan y la spec no coinciden, se avisa al usuario en vez de elegir (en modo autónomo se decide por la spec y se registra como «Decidido por defecto»). Excepciones aprobadas por el usuario (dependencias de trabajo, no de componentes, que no van a la tabla de la spec 4): G2.7 y G2.8 dependen de G2.1 solo por el resultado del spike de la convención de valor; G2.1 depende de 5.17a (revisión móvil del Grupo 1); G2.8 depende de M.2 (provisional, por #33974).
-6. «Diseño:» indica el archivo de `docs/design/` sin el prefijo `Mimi ` ni la extensión `.dc.html` (los Blocks se llaman `Block <nombre>`).
-7. Lo que un componente haga distinto del diseño, o sin diseño, se anota en `docs/design/correcciones-pendientes.md` (tarea D6). Una decisión que sigue vigente va a la spec, no solo al plan.
+6. «Diseño:» indica el archivo de `docs/design/` sin el prefijo `Mimi ` ni la extensión `.dc.html` (los Blocks se llaman `Block <nombre>`). **Desde el 14/11/2026 es solo una referencia de forma** (decidido por el usuario: no hay rediseño global y la fuente de verdad del diseño es el código: `theme-base.css`, `utils/field-styles.ts` y `/docs/states`; ver `docs/design/LEEME.md`).
+7. Lo nuevo de aspecto que haga un componente (sin precedente en el tema) se documenta en la spec. Una decisión que sigue vigente va a la spec, no solo al plan. (Hasta el 14/11/2026 se anotaba en `docs/design/correcciones-pendientes.md`, tarea D6, hoy cerrada y en historial.)
 
 **Estados**
 
@@ -42,7 +42,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
   - Versión · Tamaño (S/M/L) · Depende de: IDs · Bloquea: IDs
   - Estado: (solo mientras está en curso: rama, quién, desde)
   - Leer antes: secciones de la spec y tareas hechas de referencia.
-  - Diseño: archivo(s) de docs/design/ y la sección dentro del archivo.
+  - Diseño: archivo(s) de docs/design/ y la sección dentro del archivo, como referencia de forma (los valores salen del código: regla 6).
   - Objetivo: 1 o 2 frases.
   - Alcance: incluye / NO incluye (lo que se deja fuera a propósito).
   - Base técnica: @angular/aria, @angular/cdk o ninguna, y por qué (spec 4, «Base técnica»). Patrón WAI-ARIA. Si hace falta un spike, dilo.
@@ -66,7 +66,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 4. `registry.json` y las pruebas de la CLI.
 5. Prueba real con el `.tgz` en 4 escenarios: npm nuevo, pnpm nuevo, actualización desde la versión anterior sin cambios y con un archivo modificado. En Windows, los proyectos de prueba en una ruta corta (el límite de 260 caracteres rompió `ng serve` con pnpm en la 0.2.0).
 6. Presupuestos de bundle (spec 10): JS inicial y CSS global, crudo y gzip, antes y después.
-7. `docs/design/correcciones-pendientes.md` (D6) al día con lo del grupo.
+7. Lo nuevo de aspecto del grupo, documentado en la spec (desde el 14/11/2026 ya no se compara con Claude Design ni se anota en D6).
 8. Mover el texto de las tareas hechas del grupo a `docs/historial/`.
 9. Checklist de release, que ejecuta el usuario: `npm publish`, etiqueta, release de GitHub, despliegue y prueba desde npm.
 
@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-_Ninguna._
+_Ninguna._ (DP.2 a DP.5, hechas el 14/11/2026; la siguiente del plan de páginas es DP.6, Blocks y portada, y la puerta DP.P.)
 
 ## Mantenimiento
 
@@ -110,11 +110,13 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.22 Hash de `blocks.css` en el sitio · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.23 (hecha el 09/11/2026: las páginas de componentes cargan `components.css` con `@scope`; el CSS global bajó de 180 a 111 kB; ver `docs/auto/refinamiento-0.6.0-parte3-2026-11-09.md`) Por qué el CSS global del sitio crece con cada componente (y una hoja aparte por componente o grupo, como `blocks.css`) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.24 Data Table: la barra, el pie y el botón de orden siguen con `pr-3`, `pl-4` y `-ml-1.5` físicos (no RTL) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.25 Qué hace crecer `main` del sitio (137,83 kB, a 2,17 kB del aviso de 140) y bajarlo antes de añadir componentes (por ejemplo, `tailwind-merge` por `cn()` en la cabecera) · v0.7.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.26 (hecha el 14/11/2026) Quitar «provisional, sin diseño» y «plan, D6» del código y de las páginas (sin rediseño, 14/11/2026) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
 
-- [ ] D6 Correcciones de diseño pendientes (Claude Design). La lista está en `docs/design/correcciones-pendientes.md`: cada componente nuevo agrega ahí lo que hizo distinto del diseño o sin diseño, y se resuelve en Claude Design cuando se decida, sin bloquear ningún grupo. Quién: el usuario resuelve en Claude Design; Claude Code anota.
+**Sin rediseño global (decidido por el usuario el 14/11/2026).** El diseño actual (la landing, el tema de la 0.6.0 con el violeta y los grises malva medio, los estados unificados de `/docs/states` y la profundidad B) es el definitivo, y su fuente de verdad es el código (`theme-base.css`, `utils/field-styles.ts`, `/docs/states`). `docs/design/` queda como referencia histórica (`docs/design/LEEME.md`). La D6 se cerró sin llevarla a Claude Design (en «Terminado», «Tandas de diseño»); la 5.16 (Landing v2) se quitó. Lo que quedó abierto de esta limpieza (PD-5 y PD-6) lo decidió el usuario el mismo día (`docs/plan/decisiones.md`).
 
 ## Blocks → v0.4.0: pantallas
 
@@ -128,7 +130,7 @@ Cerrado (puerta G3.P, revisada por el usuario; **0.5.0 publicada el 09/11/2026**
 
 Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio «uso corto por defecto, composición cuando la necesites», reparto, orden y rupturas). Origen: las peticiones del usuario tras probar la 0.5.0 ([peticiones-usuario.md](plan/refinamiento/peticiones-usuario.md)). **Tres decisiones del usuario (09/11/2026, ya tomadas):** PD-1 Card, opción B; PD-2 API de Table/Data Table, opción C; PD-3 API de los mensajes de error de Form Field, opciones A + B ([decisiones-usuario.md](plan/refinamiento/decisiones-usuario.md)). Combobox y Select: [combobox-vs-select.md](plan/refinamiento/combobox-vs-select.md).
 
-**0.6.0:** cerrada el 13/11/2026 (puerta R.P6, revisada por el usuario con la fusión del PR #15; versión preparada en `docs/auto/release-0.6.0-2026-11-13.md`, **por publicar**). Las tareas están en «Terminado» y su texto en `docs/historial/refinamiento/R-0.6.0.md` (índice: `docs/historial/plan-refinamiento-0.6.0.md`). Lo que faltaba de R.0, R.1, R.7, R.8, R.12, R.14 y R.15 pasó a la 0.7.0 (R.25 a R.32 y M.9); lo manual, a la M.20 (puntos 14 a 18).
+**0.6.0:** cerrada el 13/11/2026 (puerta R.P6, revisada por el usuario con la fusión del PR #15; versión preparada en `docs/auto/release-0.6.0-2026-11-13.md`; **publicada el 14/11/2026**, `2026-11-14T23:00Z` en npm, registro en `docs/historial/plan-refinamiento-0.6.0.md`). Las tareas están en «Terminado» y su texto en `docs/historial/refinamiento/R-0.6.0.md` (índice: `docs/historial/plan-refinamiento-0.6.0.md`). Lo que faltaba de R.0, R.1, R.7, R.8, R.12, R.14 y R.15 pasó a la 0.7.0 (R.25 a R.32 y M.9); lo manual, a la M.20 (puntos 14 a 18).
 
 **0.7.0** (detalle: [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)):
 
@@ -137,7 +139,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [ ] R.21 Sortable List con listas conectadas · v0.7.0 · L · depende: R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.22 Block `kanban-01` · v0.7.0 · M · depende: R.21, R.19 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.23 Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [ ] R.25 Logo y favicon del sitio (lo que faltaba de la R.0) · v0.7.0 · S · depende: archivos del usuario · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [x] R.25 Logo y favicon del sitio (lo que faltaba de la R.0) · v0.7.0 · S · depende: archivos del usuario · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.26 Tabla de la escala de tamaños en la spec (lo que faltaba de la R.1) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.27 Confirm con `size` (lo que faltaba de la R.7) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.28 Ejemplos de tamaño por componente y Blocks que heredan (lo que faltaba de la R.8) · v0.7.0 · M · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
@@ -145,19 +147,21 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [ ] R.30 Form Field: ejemplos con más elementos y el diagrama (lo que faltaba de la R.14) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.31 Nota de contraste al cambiar el primario (texto `text-primary` con un primario propio claro) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.32 Quitar el alias `default` de `size` (RUPTURA, anunciada en la 0.6.0) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.33 Button en carga sigue siendo enfocable (`aria-disabled` + `aria-busy` y clics bloqueados, en vez del `disabled` nativo; **RUPTURA**) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [~] M.9 completa (lo que faltaba de la R.15; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
-- [ ] R.P7 Puerta de la 0.7.0 · v0.7.0 · — · depende: R.19 a R.23, R.25 a R.32, M.9 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] M.25 `main` del sitio a 2,17 kB de su aviso: medir y bajarlo **antes** de R.19 a R.23 (detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
+- [ ] R.P7 Puerta de la 0.7.0 · v0.7.0 · — · depende: R.19 a R.23, R.25 a R.33, M.9, M.25 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 
-## Páginas de la documentación: una plantilla común (plan del 12/11/2026, sin empezar)
+## Páginas de la documentación: una plantilla común (plan del 12/11/2026; decidido el 14/11/2026)
 
-Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También están la [auditoría](plan/docs-paginas/auditoria.md) de las 38 páginas, los 7 Blocks y la portada, y los [ejemplos](plan/docs-paginas/ejemplos.md) de Button y Select con cada variante. Lo pidió el usuario tras revisar el sitio: «las páginas no tienen una estructura común y presentan demasiada información». **Bloqueado por PD-4 (PENDIENTE DE DECIDIR, usuario):** variante A, completa (recomendada), o B, corta, y con ella la [Parte C](plan/docs-paginas/parte-c.md) (PD-4c). La Parte C hace que la plantilla se cumpla sola: el componente `app-doc-page`, la prueba `doc-pages.spec.ts` y los textos propuestos para `CLAUDE.md` y los comandos, sin aplicar. Solo cambia el sitio; ningún componente ni su API.
+Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También están la [auditoría](plan/docs-paginas/auditoria.md) de las 38 páginas, los 7 Blocks y la portada, y los [ejemplos](plan/docs-paginas/ejemplos.md) de Button y Select con cada variante. Lo pidió el usuario tras revisar el sitio: «las páginas no tienen una estructura común y presentan demasiada información». **Decidido por el usuario (14/11/2026): PD-4 variante A** (completa) y **PD-4c** con las cuatro recomendaciones de la [Parte C](plan/docs-paginas/parte-c.md): un componente común con configuración; la prueba falla desde DP.0 con la lista de pendientes que solo encoge; los textos de C.3 se aplican tal como están; cada excepción a los límites la aprueba el usuario. La Parte C hace que la plantilla se cumpla sola: el componente `app-doc-page`, la prueba `doc-pages.spec.ts` y los textos para `CLAUDE.md` y los comandos. Solo cambia el sitio; ningún componente ni su API.
 
-- [ ] DP.0 Piezas comunes (`app-doc-page` con la configuración `DocPage`, `app-api-table`, `app-more`, «Qué instala» desde el registro), la prueba `doc-pages.spec.ts`, `docs/spec/plantilla-pagina.md`, los textos de `CLAUDE.md` y de los comandos, y Button como piloto · sin versión · L · depende: PD-4 (con PD-4c) · [docs-paginas/parte-c.md](plan/docs-paginas/parte-c.md)
-- [ ] DP.1 Tanda 1, las más pesadas: Select, Combobox, Dialog, Form Field y Toolbar · sin versión · L · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
-- [ ] DP.2 Tanda 2, formularios con ejemplos repetidos (8 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
-- [ ] DP.3 Tanda 3, capas flotantes (7 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
-- [ ] DP.4 Tanda 4, datos y fechas (9 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
-- [ ] DP.5 Tanda 5, simples (9 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [x] DP.0 (14/11/2026: piezas, prueba, `docs/spec/plantilla-pagina.md` y textos de C.3; Button y Select migrados como piloto y **aprobados por el usuario el 14/11/2026**, sin ajustes; informe `docs/auto/docs-paginas-2026-11-14.md`) Piezas comunes (`app-doc-page` con la configuración `DocPage`, `app-api-table`, `app-more`, «Qué instala» desde el registro), la prueba `doc-pages.spec.ts`, `docs/spec/plantilla-pagina.md`, los textos de `CLAUDE.md` y de los comandos, y Button como piloto · sin versión · L · depende: PD-4 (con PD-4c; decididos el 14/11/2026) · [docs-paginas/parte-c.md](plan/docs-paginas/parte-c.md)
+- [x] DP.1 (14/11/2026: Select en el piloto, aprobada por el usuario; Combobox, Dialog, Form Field y Toolbar migradas; quedan para el usuario PD-7 y PD-8, en `docs/plan/decisiones.md`; informe `docs/auto/docs-paginas-2026-11-14.md`, paso 9) Tanda 1, las más pesadas: Select, Combobox, Dialog, Form Field y Toolbar · sin versión · L · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [x] DP.2 (14/11/2026: Input con la tanda 1; Switch, Checkbox, Textarea, Password, Input OTP, Number Input, Input Mask y Tags Input en la rama `auto/docs-paginas-2-2026-11-14`) Tanda 2, formularios con ejemplos repetidos (8 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [x] DP.3 (14/11/2026) Tanda 3, capas flotantes (7 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [x] DP.4 (14/11/2026) Tanda 4, datos y fechas (9 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [x] DP.5 (14/11/2026; las 39 páginas con la plantilla y la lista de pendientes quitada; queda PD-9 para el usuario) Tanda 5, simples (8 páginas; Button salió en el piloto) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [ ] DP.6 Tanda 6, Blocks (`block-doc.ts`) y vitrina de la portada · sin versión · M · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [ ] DP.P Puerta: prueba de estructura sin excepciones y Playwright de todas las páginas · sin versión · — · depende: DP.1 a DP.6 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 
@@ -222,7 +226,6 @@ Detalle: [docs/plan/plataforma.md](plan/plataforma.md). La 5.2 y la 5.17 están 
 - [ ] 5.13 Tabla de compatibilidad en la documentación · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
 - [ ] 5.14 Prerender del showcase · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
 - [ ] 5.15 Badge interactivo · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.16 Landing v2 · sin versión · — · depende: E.2, E.4 (si se usan) · [docs/plan/plataforma.md](plan/plataforma.md)
 
 ## Versión 1.0
 
@@ -356,7 +359,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] B.9 `table-01` (07/11/2026; pendiente de comprobación manual: teléfono real y NVDA).
 - [x] G3.P Puerta del Grupo 3 (07/11/2026, con ocho arreglos el 08/11/2026; revisada por el usuario; pendiente de comprobación manual en la M.20, puntos 10 a 13).
 
-**Refinamiento, v0.6.0** (`docs/historial/plan-refinamiento-0.6.0.md`, con el texto en `docs/historial/refinamiento/R-0.6.0.md`; puerta revisada por el usuario y cerrada el 13/11/2026; por publicar). Lo que faltaba de las tareas a medias pasó a la 0.7.0 (R.25 a R.32 y M.9); lo manual, a la M.20 (puntos 14 a 18).
+**Refinamiento, v0.6.0** (`docs/historial/plan-refinamiento-0.6.0.md`, con el texto en `docs/historial/refinamiento/R-0.6.0.md`; puerta revisada por el usuario y cerrada el 13/11/2026; publicada el 14/11/2026, `2026-11-14T23:00Z` en npm). Lo que faltaba de las tareas a medias pasó a la 0.7.0 (R.25 a R.32 y M.9); lo manual, a la M.20 (puntos 14 a 18).
 
 - [x] R.0 Tema de marca: escala de violeta en OKLCH, primario `#793EEA`/`#A88FFF`, `MIMI_THEME_NEUTRAL`, contrastes AA con prueba, grises malva medio (09/11/2026 y 13/11/2026; el logo y el favicon, en la R.25).
 - [x] R.1 Escala común de tamaños `sm/md/lg` (`mimiSize`, alias `default` con aviso, página «Tamaños»; 10/11/2026; la tabla de la spec, en la R.26; quitar el alias, en la R.32).
@@ -386,6 +389,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] D3 Diseño: Grupo 3. Archivos: `F4 Command Tree Sortable`, `F4 Data Table y Pagination` (con `Data Table`) y `F4 Panel admin` (composición de referencia).
 - [x] D4 Diseño: Grupo 4, Grupo 5 y Mimi Effects. Archivos: `F5 Estructura`, `F5 Dashboard y Media` y `F5 Effects`.
 - [x] D5 Diseño: Blocks. Archivos: `F6 Blocks` (índice) y `Block <nombre>` de cada uno.
+- [x] D6 Correcciones de diseño pendientes (Claude Design): **cerrada sin hacer el 14/11/2026** (decidido por el usuario: no hay rediseño; el código manda). `docs/design/correcciones-pendientes.md` queda como historial de en qué se apartó Mimi del diseño original.
 
 **Plataforma** (`docs/historial/plan-plataforma.md`)
 

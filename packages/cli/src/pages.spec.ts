@@ -5,7 +5,14 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import cliPackage from '../package.json';
 import registryJson from './registry.json';
 import type { Registry } from './registry';
-import { UI_CORE_LIB, createWorkspace, harness, json, snapshot } from './testing/harness';
+import {
+  COLD_START_TIMEOUT,
+  UI_CORE_LIB,
+  createWorkspace,
+  harness,
+  json,
+  snapshot,
+} from './testing/harness';
 import {
   TEST_PAGE,
   TEST_PAGE_FILES,
@@ -231,52 +238,56 @@ describe('conversión de un Block en página (utils/pages)', () => {
 });
 
 describe('ng g mimi <página> (B.11)', () => {
-  it('genera la página en aliases.pages, con sus bases por el nombre del registro y la línea de rutas', async () => {
-    const { run, tree, logs, warnings } = await initialized();
-    const result = await run('mimi', { components: [TEST_PAGE] }, tree);
+  it(
+    'genera la página en aliases.pages, con sus bases por el nombre del registro y la línea de rutas',
+    async () => {
+      const { run, tree, logs, warnings } = await initialized();
+      const result = await run('mimi', { components: [TEST_PAGE] }, tree);
 
-    const ts = result.readContent(`/${PAGES}/demo/demo.ts`);
-    expect(ts).toContain("selector: 'app-demo-page'");
-    expect(ts).toContain('export class DemoPage {');
-    expect(ts).toContain('output<DemoPageValue>()');
-    expect(ts).toContain("templateUrl: './demo.html'");
-    expect(ts).toContain('`app-demo-page-${0}`');
-    expect(result.readContent(`/${PAGES}/demo/demo.html`)).toBe(
-      TEST_PAGE_SOURCE['blocks/demo-01/demo-01.html'],
-    );
-    expect(result.readContent(`/${PAGES}/demo/demo.routes.ts`)).toContain(
-      "import('./demo').then((m) => m.DemoPage)",
-    );
-    // Sin index.ts ni copia en la carpeta de Blocks.
-    expect(result.exists(`/${PAGES}/demo/index.ts`)).toBe(false);
-    expect(result.exists(`/${BLOCKS}/demo-01/demo-01.ts`)).toBe(false);
-    expect(result.exists(`/${UI}/button/button.ts`)).toBe(true);
-
-    // Bases y manifiesto por el nombre del registro (B.11-f).
-    for (const key of KEYS) {
-      expect(result.readContent(`/.mimi/base/${key}`), key).toBe(
-        result.readContent(`/${inPage(key)}`),
+      const ts = result.readContent(`/${PAGES}/demo/demo.ts`);
+      expect(ts).toContain("selector: 'app-demo-page'");
+      expect(ts).toContain('export class DemoPage {');
+      expect(ts).toContain('output<DemoPageValue>()');
+      expect(ts).toContain("templateUrl: './demo.html'");
+      expect(ts).toContain('`app-demo-page-${0}`');
+      expect(result.readContent(`/${PAGES}/demo/demo.html`)).toBe(
+        TEST_PAGE_SOURCE['blocks/demo-01/demo-01.html'],
       );
-      expect(json(result, '/.mimi/manifest.json').files[key], key).toBe(VERSION);
-    }
-    const config = json(result, '/mimi.json');
-    expect(config.blocks).toEqual({
-      [TEST_PAGE]: { version: VERSION, path: `${PAGES}/demo`, name: 'demo' },
-    });
-    expect(config.aliases.pages).toBe(PAGES);
+      expect(result.readContent(`/${PAGES}/demo/demo.routes.ts`)).toContain(
+        "import('./demo').then((m) => m.DemoPage)",
+      );
+      // Sin index.ts ni copia en la carpeta de Blocks.
+      expect(result.exists(`/${PAGES}/demo/index.ts`)).toBe(false);
+      expect(result.exists(`/${BLOCKS}/demo-01/demo-01.ts`)).toBe(false);
+      expect(result.exists(`/${UI}/button/button.ts`)).toBe(true);
 
-    const messages = logs.map((l) => l.message);
-    expect(messages).toContain(`  + ${PAGES}/demo/demo.routes.ts`);
-    expect(messages).toContain(
-      `demo-01 es ahora tu página demo (${PAGES}/demo/, clase DemoPage). Para abrirla en /demo, ` +
-        `agrega esta línea a las rutas de ${APP}/app.routes.ts:`,
-    );
-    expect(messages).toContain(
-      "  { path: 'demo', loadChildren: () => import('./pages/demo/demo.routes')" +
-        '.then((m) => m.DEMO_ROUTES) },',
-    );
-    expect(warnings()).toEqual([]);
-  });
+      // Bases y manifiesto por el nombre del registro (B.11-f).
+      for (const key of KEYS) {
+        expect(result.readContent(`/.mimi/base/${key}`), key).toBe(
+          result.readContent(`/${inPage(key)}`),
+        );
+        expect(json(result, '/.mimi/manifest.json').files[key], key).toBe(VERSION);
+      }
+      const config = json(result, '/mimi.json');
+      expect(config.blocks).toEqual({
+        [TEST_PAGE]: { version: VERSION, path: `${PAGES}/demo`, name: 'demo' },
+      });
+      expect(config.aliases.pages).toBe(PAGES);
+
+      const messages = logs.map((l) => l.message);
+      expect(messages).toContain(`  + ${PAGES}/demo/demo.routes.ts`);
+      expect(messages).toContain(
+        `demo-01 es ahora tu página demo (${PAGES}/demo/, clase DemoPage). Para abrirla en /demo, ` +
+          `agrega esta línea a las rutas de ${APP}/app.routes.ts:`,
+      );
+      expect(messages).toContain(
+        "  { path: 'demo', loadChildren: () => import('./pages/demo/demo.routes')" +
+          '.then((m) => m.DEMO_ROUTES) },',
+      );
+      expect(warnings()).toEqual([]);
+    },
+    COLD_START_TIMEOUT,
+  );
 
   it('es idempotente', async () => {
     const { run, tree, logs } = await initialized();

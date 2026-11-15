@@ -21,9 +21,11 @@ describe('InputPage', () => {
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
 
+      // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // 9: los de Textarea se fueron a su página (13/11/2026); «En fila» se queda.
-      expect(previews.length).toBe(9);
+      // La demo y cinco ejemplos: los vivos de Reactive Forms, Signal Forms y ngModel se fueron
+      // (repetían las pestañas de «Formularios»).
+      expect(previews.length).toBe(6);
       for (const { example, code } of previews) {
         expect(example?.querySelector('[mimiInput]')).not.toBeNull();
         // Las importaciones son las del proyecto del usuario, no las del monorepo.
@@ -32,14 +34,11 @@ describe('InputPage', () => {
       }
       expect(el.querySelectorAll('app-install-command').length).toBe(1);
       expect(el.querySelector('h1')!.textContent!.trim()).toBe('Input');
-      expect(el.querySelector('a[href="/docs/components/textarea"]')).not.toBeNull();
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'forms',
-        'api',
-      ]);
+      expect(el.querySelector('app-forms-tabs')).not.toBeNull();
+      // La página hermana, enlazada desde la nota de Uso.
+      expect(
+        el.querySelector('[data-slot="usage-note"] a[href="/docs/components/textarea"]'),
+      ).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

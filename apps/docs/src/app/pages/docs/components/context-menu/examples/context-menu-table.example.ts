@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { LucideEllipsis } from '@lucide/angular';
-import { MimiButton } from '@/components/ui/button';
 import { MimiContextMenuImports } from '@/components/ui/context-menu';
-import { MimiDropdownMenuImports } from '@/components/ui/dropdown-menu';
+import { FILE_ACTIONS, FileActionsMenu } from './file-actions-menu';
 
 interface FileRow {
   id: number;
@@ -12,7 +10,7 @@ interface FileRow {
 
 @Component({
   selector: 'app-context-menu-table-example',
-  imports: [MimiContextMenuImports, MimiDropdownMenuImports, MimiButton, LucideEllipsis],
+  imports: [MimiContextMenuImports, FileActionsMenu],
   template: `
     <div class="flex w-full flex-col gap-3">
       <mimi-context-menu aria-label="Acciones del archivo">
@@ -35,31 +33,10 @@ interface FileRow {
                 <td class="px-3 py-2 text-muted-foreground">{{ file.size }}</td>
                 <td class="px-3 py-1">
                   <!-- En táctil no hay clic derecho: las mismas acciones, en un botón. -->
-                  <mimi-dropdown-menu align="end" [aria-label]="'Acciones de ' + file.name">
-                    <button
-                      mimiBtn
-                      variant="ghost"
-                      size="icon"
-                      class="size-8"
-                      [attr.aria-label]="'Acciones de ' + file.name"
-                      mimiDropdownMenuTrigger
-                    >
-                      <svg lucideEllipsis></svg>
-                    </button>
-                    <ng-template mimiDropdownMenuContent>
-                      @for (action of actions; track action) {
-                        @if (action === 'Eliminar') {
-                          <mimi-menu-separator />
-                        }
-                        <mimi-menu-item
-                          [tone]="action === 'Eliminar' ? 'danger' : undefined"
-                          (selected)="last.set(action + ' ' + file.name)"
-                        >
-                          {{ action }}
-                        </mimi-menu-item>
-                      }
-                    </ng-template>
-                  </mimi-dropdown-menu>
+                  <app-file-actions-menu
+                    [name]="file.name"
+                    (picked)="last.set($event + ' ' + file.name)"
+                  />
                 </td>
               </tr>
             }
@@ -91,6 +68,6 @@ export class ContextMenuTableExample {
     { id: 2, name: 'fotos-equipo.zip', size: '118 MB' },
     { id: 3, name: 'presupuesto.xlsx', size: '86 kB' },
   ];
-  protected readonly actions = ['Renombrar', 'Duplicar', 'Descargar', 'Eliminar'];
+  protected readonly actions = FILE_ACTIONS;
   protected readonly last = signal<string | null>(null);
 }

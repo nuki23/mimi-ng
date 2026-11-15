@@ -10,6 +10,7 @@ import { MimiSwitch } from '@/components/ui/switch';
       <mimi-switch [checked]="true">Encendido</mimi-switch>
       <mimi-switch disabled>Deshabilitado</mimi-switch>
       <mimi-switch [checked]="true" disabled>Deshabilitado</mimi-switch>
+      <mimi-switch [checked]="true" readonly>Solo lectura</mimi-switch>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -16,6 +16,12 @@ import { MimiSelectImports } from '@/components/ui/select';
           <mimi-option [value]="size.value">{{ size.label }}</mimi-option>
         }
       </mimi-select>
+      <!-- Solo lectura: se lee y se enfoca, pero no se abre ni se limpia. -->
+      <mimi-select aria-label="Solo lectura" readonly [(value)]="first">
+        @for (size of sizes; track size.value) {
+          <mimi-option [value]="size.value">{{ size.label }}</mimi-option>
+        }
+      </mimi-select>
       <!-- Mientras carga, el panel muestra el estado de carga en vez de las opciones. -->
       <mimi-select aria-label="Cargando" placeholder="Cargando…" loading />
       <!-- Con un formulario, invalid y touched los pasa Angular (ver «Formularios»). -->

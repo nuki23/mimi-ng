@@ -335,7 +335,7 @@ export class Settings01 {
   protected readonly bioId = `${this.id}-bio-count`;
 
   /*
-   * La navegación con `class` sobre Tabs (D6): ni `underline` ni `pill` son el diseño. Clases
+   * La navegación con `class` sobre Tabs: ni `underline` ni `pill` son su aspecto. Clases
    * completas y literales (Tailwind las detecta), sin variantes encadenadas.
    */
   /** Escritorio: filas con fondo `accent` en la elegida, sin indicador ni borde. */

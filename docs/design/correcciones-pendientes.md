@@ -1,4 +1,6 @@
-# Correcciones de diseño pendientes (tarea D6)
+# Correcciones de diseño pendientes (tarea D6): historial
+
+> **Cerrada el 14/11/2026 (decidido por el usuario): no habrá rediseño en Claude Design.** El código es la fuente de verdad del diseño (`theme-base.css`, `utils/field-styles.ts` y `/docs/states`; ver `LEEME.md`). Lo que sigue queda como historial de **en qué se apartó Mimi del diseño original y por qué**: no son tareas, nada se «lleva a Claude Design» y no se agregan apartados nuevos. Lo nuevo de aspecto que haga un componente se documenta en la spec. Los arreglos de código que salían de aquí y siguen teniendo sentido son tareas normales del plan (ver `docs/auto/docs-paginas-2026-11-14.md`, «Limpieza: sin rediseño»).
 
 Lista de la tarea D6 de `docs/plan.md`, movida aquí el 03/11/2026 con el mismo texto (antes era la sección «Correcciones de diseño pendientes» del plan). Las citas «plan, D6» de la spec y del código se refieren a esta lista: la línea D6 del plan apunta aquí.
 
@@ -8,7 +10,7 @@ Cómo se usa: cada componente nuevo agrega al final su apartado («<Componente> 
 
 Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude Design. Cada componente nuevo agrega aquí lo suyo (antes era la T.2a, dentro de Theme Studio).
 
-- [ ] D6 Correcciones de diseño pendientes (Claude Design). Revisar en el diseño `--mimi-field-error` (la hoja dice `destructive-soft-foreground`; Mimi usa `destructive`, el color de la 0.1.0; spec 13). Diseñar en Claude Design las celdas provisionales de la V.1 (tono secondary, ghost y link con tono; spec 13). Actualizar en el diseño los hovers de success, info y danger corregidos por contraste en la V.1. Definir en el diseño la animación de entrada y salida de los overlays (duración, curva y escala; hoy Popover usa los valores de `--mimi-transition`: 0,15 s, `cubic-bezier(.2,.8,.2,1)`, escala desde `--mimi-press-scale`) y, si conviene, un token propio. Definir también el margen mínimo de los overlays al borde de la pantalla: Popover y Tooltip usan 8px (`MIMI_VIEWPORT_MARGIN`, spec 13), que no está en el diseño. Tooltip: definir el ancho máximo (hoy `100vw − 16px`) y el margen del «salto sin retraso» (hoy 300 ms, como el retraso). Dropdown Menu (G1.3):
+- [x] D6 (cerrada el 14/11/2026 sin llevarla a Claude Design: no hay rediseño; los valores del código son los definitivos) Correcciones de diseño pendientes (Claude Design). Revisar en el diseño `--mimi-field-error` (la hoja dice `destructive-soft-foreground`; Mimi usa `destructive`, el color de la 0.1.0; spec 13). Diseñar en Claude Design las celdas provisionales de la V.1 (tono secondary, ghost y link con tono; spec 13). Actualizar en el diseño los hovers de success, info y danger corregidos por contraste en la V.1. Definir en el diseño la animación de entrada y salida de los overlays (duración, curva y escala; hoy Popover usa los valores de `--mimi-transition`: 0,15 s, `cubic-bezier(.2,.8,.2,1)`, escala desde `--mimi-press-scale`) y, si conviene, un token propio. Definir también el margen mínimo de los overlays al borde de la pantalla: Popover y Tooltip usan 8px (`MIMI_VIEWPORT_MARGIN`, spec 13), que no está en el diseño. Tooltip: definir el ancho máximo (hoy `100vw − 16px`) y el margen del «salto sin retraso» (hoy 300 ms, como el retraso). Dropdown Menu (G1.3):
   - **Ancho:** el diseño mide 260px y el token `--mimi-menu-width`, 240px (el del Context Menu). Se usa el token.
   - **Submenú:** 200px sin token propio.
   - **Grupo radio** (`menuitemradio`): no está en el diseño. Es provisional, con un punto de 8px en la columna del ícono.
@@ -270,7 +272,7 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
   - **Trama de puntos:** la máscara usa `var(--mimi-foreground)` en lugar de `#000` (solo cuenta el canal alfa; así no hay un color fijo).
 
   login-02 (B.3, 07/11/2026):
-  - **Imagen (provisional):** el diseño tiene un hueco de la herramienta (`image-slot`), no una imagen. Sin `imageSrc`, el Block muestra un **degradado neutro** (`from-secondary via-muted to-accent`), marcado como provisional en el código (decidido por el usuario). Pedir la imagen o una ilustración libre (SVG en línea) para el ejemplo.
+  - **Imagen (provisional):** el diseño tiene un hueco de la herramienta (`image-slot`), no una imagen. Sin `imageSrc`, el Block muestra un **degradado neutro** (`from-secondary via-muted to-accent`), marcado como provisional en el código (decidido por el usuario). Pedir la imagen o una ilustración libre (SVG en línea) para el ejemplo. **Decidido por el usuario el 14/11/2026 (PD-6): el degradado neutro es el definitivo**; ya no se marca como provisional.
   - **Error de credenciales y campos inválidos:** sin diseño, como en login-01 (`role="alert"` con los colores de error suave).
   - **Iniciales del testimonio:** `mimi-avatar` pequeño (32px) con `bg-info-soft` y `text-info-soft-foreground`, como el `span` del diseño.
   - **Vidrio:** con «reducir transparencia» (`prefers-reduced-transparency`), fondo `card` sólido y sin desenfoque (no está en el diseño).
@@ -336,3 +338,9 @@ Lo que Mimi hizo distinto del diseño, o sin diseño, y hay que llevar a Claude 
 - **La X de limpiar** (completa la nota del 12/11/2026): no solo con el foco dentro, sino con el foco que llegó por teclado. Después de elegir con el ratón, no se queda.
 - **Tags Input en solo lectura:** sin diseño. Las etiquetas toman el fondo del campo y un borde `--mimi-tags-chip-readonly-border` (por defecto, `muted-foreground`; 4,79:1 en claro y 6,7:1 en oscuro con el fondo de solo lectura).
 - **Hover de Checkbox, Switch y Toggle Group:** el diseño no lo muestra. Mimi usa el borde de hover de los campos (casilla sin marcar), el color al 88 % u 82 % con `foreground` (casilla marcada y pista del interruptor) y `foreground` al 6 % (opción no elegida del grupo), con el ratón sobre todo el control.
+
+## Plantilla de página (DP.0, 14/11/2026): sin diseño de Claude Design
+
+- **Desplegable `app-more`** («Qué instala», la matriz variante × tono, «Más detalles de teclado y accesibilidad»): sin diseño. Mimi usa una tarjeta con `border`, `bg-card` y `rounded-card`, un resumen de `text-sm font-medium` con un chevrón de Lucide que gira 90° al abrir (sin animación con movimiento reducido), `hover:bg-muted` y el foco con `outline-ring`.
+- **Frase de cada ejemplo y de la demo:** el diseño de la página de Input no tiene una frase delante de cada ejemplo ni una demo sin título bajo la cabecera. La frase del ejemplo es texto normal; la de la demo, `text-sm text-muted-foreground`.
+- **Línea de atributos de estado** debajo de Entradas: `text-sm text-muted-foreground`, sin diseño.

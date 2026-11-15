@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { LucideFolderKanban, LucideKeyRound, LucideReceipt } from '@lucide/angular';
 import { MimiTreeImports, type MimiTreeNode } from '@/components/ui/tree';
 
@@ -23,6 +23,7 @@ const PERMISSIONS: MimiTreeNode[] = [
     ],
   },
 ];
+const GRANTED = ['projects.view', 'projects.create', 'billing.view', 'billing.pay'];
 
 @Component({
   selector: 'app-tree-permissions-example',
@@ -57,7 +58,7 @@ const PERMISSIONS: MimiTreeNode[] = [
         </ng-template>
       </mimi-tree>
       <p class="text-sm text-pretty text-muted-foreground">
-        Permisos: <code class="font-mono">{{ list() }}</code>
+        Permisos: <code class="font-mono">{{ ids().join(', ') || 'ninguno' }}</code>
       </p>
     </div>
   `,
@@ -65,22 +66,12 @@ const PERMISSIONS: MimiTreeNode[] = [
 })
 export class TreePermissionsExample {
   protected readonly permissions = PERMISSIONS;
-  protected readonly granted = signal<string | null | string[]>([
-    'projects.view',
-    'projects.create',
-    'billing.view',
-    'billing.pay',
-  ]);
+  protected readonly granted = signal<string | null | string[]>(GRANTED);
   protected readonly open = signal(['projects', 'billing']);
+  // Con `multiple`, `value` es siempre una lista de ids.
+  protected readonly ids = computed(() => [this.granted() ?? []].flat());
 
   protected count(node: MimiTreeNode): number {
-    const granted = this.granted();
-    const ids = Array.isArray(granted) ? granted : [];
-    return (node.children ?? []).filter((child) => ids.includes(child.id)).length;
-  }
-
-  protected list(): string {
-    const granted = this.granted();
-    return Array.isArray(granted) && granted.length > 0 ? granted.join(', ') : 'ninguno';
+    return (node.children ?? []).filter((child) => this.ids().includes(child.id)).length;
   }
 }

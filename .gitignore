@@ -32,6 +32,9 @@ Thumbs.db
 .env
 .env.*
 
+# Capturas de Playwright: no entran en el repo (van a C:\t\capturas\<fecha>\; CLAUDE.md, A10)
+docs/auto/capturas/
+
 # Configuración local de Claude Code
 .claude/settings.local.json
 

@@ -125,7 +125,7 @@ describe('MimiDatePicker', { timeout: 20_000 }, () => {
     );
     // Se hunde al hacer clic (profundidad B).
     expect(button.classList).toContain(
-      'not-disabled:not-aria-readonly:active:scale-(--mimi-press-scale)',
+      'not-disabled:not-data-[readonly]:active:scale-(--mimi-press-scale)',
     );
     // El valor describe al botón (con aria-label, el lector lo lee igual).
     const described = document.getElementById(button.getAttribute('aria-describedby')!);

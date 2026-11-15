@@ -15,12 +15,17 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
 
-- **PD-4 (usuario, 12/11/2026): la plantilla de las páginas de componentes.** Variante A, completa (recomendada), o B, corta. Bloquea DP.0 a DP.P. No se decide por defecto, ni en modo autónomo. Opciones, reglas comunes y ejemplos (Button y Select): [docs-paginas/plan.md](docs-paginas/plan.md) y [docs-paginas/ejemplos.md](docs-paginas/ejemplos.md).
-  - **PD-4c (usuario, con PD-4):** cómo se impone la plantilla ([docs-paginas/parte-c.md](docs-paginas/parte-c.md)). Son cuatro preguntas:
-    1. Un componente común con configuración (recomendado) o una plantilla con huecos.
-    2. La prueba falla desde DP.0 con la lista `PENDING`, que solo encoge (recomendado), o solo para las páginas nuevas.
-    3. Aplicar como están los textos propuestos para `CLAUDE.md`, `componente.md` y `cerrar-grupo.md` (recomendado: sí, en DP.0).
-    4. Que las excepciones las apruebe el usuario una a una (recomendado).
+Ninguna abierta.
+
+**PD-9 la decidió el usuario el 14/11/2026** (opción (a)): `DocPage.tokens` acepta una lista de tablas (la primera, la del componente). Tags Input y Combobox muestran también la del chip; File Upload, la de Progress.
+
+**PD-8 la decidió el usuario el 14/11/2026** (opción (a)): una sección opcional **«Servicio»** en la API (`api.service`, `id="service"`, `Miembro | Tipo | Descripción`), entre Piezas y Textos; la usa Dialog y la usarán Toast, Confirm y Command.
+
+**PD-7 la decidió el usuario el 14/11/2026:** Dialog empieza por el servicio, con un ejemplo más corto (pedir un nombre y devolverlo) como demo; el diálogo en la plantilla pasa a Ejemplos. Cupo en 56 líneas entre sus dos archivos: no hizo falta la excepción hasta 80 que el usuario dejó aprobada para Dialog. Rama `auto/docs-paginas-2-2026-11-14`; el texto de la pregunta, en `docs/auto/decisiones-por-defecto.md`.
+
+**PD-5 y PD-6 (de la limpieza «sin rediseño») las decidió el usuario el 14/11/2026**, las dos con la opción recomendada: PD-5, `group2-tokens.spec.ts` compara con los valores de hoy escritos en la prueba, sin leer `docs/design/`; PD-6, el degradado neutro de `login-02` es el definitivo. Hechas en la rama `auto/docs-paginas-2026-11-14`; el texto de las preguntas está en `docs/auto/decisiones-por-defecto.md`.
+
+**PD-4 y PD-4c (la plantilla de las páginas) las decidió el usuario el 14/11/2026** y salieron de este índice: variante A; un componente común con configuración; la prueba falla desde DP.0 con la lista de pendientes que solo encoge; los textos de C.3 se aplican como están; cada excepción la aprueba el usuario. Quedan como «Decidido por el usuario» en [docs-paginas/plan.md](docs-paginas/plan.md), [docs-paginas/parte-c.md](docs-paginas/parte-c.md) y `docs/auto/decisiones-por-defecto.md`.
 
 Las tres de gusto del plan de refinamiento (PD-1, PD-2 y PD-3) las **decidió el usuario el 09/11/2026** y salieron de este índice: PD-1 Card, opción B; PD-2 Table y Data Table, opción C; PD-3 mensajes de error de Form Field, opciones A + B. Quedan como «Decidido por el usuario» en [refinamiento/decisiones-usuario.md](refinamiento/decisiones-usuario.md), en las tareas R.14, R.19 y R.20 y en `docs/auto/decisiones-por-defecto.md`.
 

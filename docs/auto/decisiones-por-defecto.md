@@ -169,6 +169,30 @@ El usuario revisó el sitio y `/docs/states` después de la unificación (inform
 - **Profundidad al hacer clic: B (cambia la A del 12/11/2026).** Todos los controles se hunden al hacer clic, también los de escribir (Input, Textarea, Combobox, Tags Input, Number Input, Password, Input Mask), con el mismo efecto que Button: hundimiento (`--mimi-press-scale`) y halo que crece. Con «reducir movimiento», nada se hunde y el halo se queda.
 - **Grises:** el tema se queda en malva suave hasta que el usuario elija; se le dejan capturas lado a lado (neutro, malva suave y malva medio) en el informe.
 
+## Decididas por el usuario: plantilla de las páginas (14/11/2026)
+
+No son decisiones por defecto: el usuario las eligió en el prompt de la rama `auto/docs-paginas-2026-11-14`. Están también en `docs/plan/docs-paginas/plan.md` (PD-4) y `docs/plan/docs-paginas/parte-c.md` (PD-4c). Ninguna es RUPTURA: solo cambia el sitio.
+
+- **PD-4: variante A, completa** (la recomendación). Límites: 8 ejemplos vivos, 6 viñetas de accesibilidad, 20 palabras por descripción de la API, 400 palabras de prosa visible fuera de la API. Base: «Decidido por el usuario».
+- **PD-4c.1: un componente común con configuración** (`app-doc-page` con `DocPage`), no una plantilla con huecos (la recomendación). Base: «Decidido por el usuario».
+- **PD-4c.2: la prueba falla desde la primera tarea (DP.0)**, con la lista de pendientes que solo encoge (la recomendación). Base: «Decidido por el usuario».
+- **PD-4c.3: los textos de C.3 se aplican tal como están en `parte-c.md`** (`CLAUDE.md`, `.claude/commands/componente.md` y `.claude/commands/cerrar-grupo.md`), en DP.0 (la recomendación). Base: «Decidido por el usuario».
+- **PD-4c.4: cada excepción a los límites la aprueba el usuario**, una a una, y queda en `docs/spec/plantilla-pagina.md` (la recomendación). Base: «Decidido por el usuario».
+
+## Decididas por el usuario: tanda 1 de la plantilla de páginas (14/11/2026)
+
+No son decisiones por defecto: el usuario las eligió en el prompt de la rama `auto/docs-paginas-2-2026-11-14`.
+
+- **PD-7: la demo de Dialog.** Pregunta: la demo con el servicio («Editar usuario», 90 líneas en dos archivos) no cabía en las 60 de la demo; se había puesto el diálogo en la plantilla como demo (recomendado: dejarlo así; o una excepción hasta 90; o recortar a 60). **Elegido:** empezar por el servicio con un caso más corto (pedir un nombre y devolverlo) en 60 líneas, y el de la plantilla a Ejemplos; si no cabía, excepción solo para Dialog hasta 80. Cupo en **56** (`dialog-ask-name.example.ts` 30 + `ask-name-dialog.ts` 26): la excepción no se usó. Base: «Decidido por el usuario».
+- **PD-8: dónde va la API de un servicio, opción (a).** Pregunta: `MimiDialogService` y `MimiDialogRef` no son entradas ni piezas con selector; iban en Piezas con `inject(…)` en «Selector». **Elegido:** una sección opcional «Servicio» en la API (`DocPage.api.service`, columnas `Miembro | Tipo | Descripción`, entre Piezas y Textos), para Dialog y, al migrarse, Toast, Confirm y Command. Alternativa que no se eligió: dejarlo en Piezas. Base: «Decidido por el usuario».
+
+## Decididas por el usuario: sin rediseño (14/11/2026)
+
+No son decisiones por defecto. Salieron de la limpieza «sin rediseño» (el código es la fuente de verdad del diseño; `docs/auto/docs-paginas-2026-11-14.md`, paso 7).
+
+- **PD-5: la prueba que comparaba el tema con el diseño original, opción (a).** `packages/ui-core/src/lib/theme/group2-tokens.spec.ts` comprobaba que los 13 globales del Grupo 2 de `theme-base.css` valían lo mismo que en `docs/design/tokens-mimi.css` (con dos excepciones de File Upload) y que los `@keyframes` `mimi-caret`, `mimi-bob`, `mimi-shake` y `mimi-indet` tenían el cuerpo del diseño. Ahora compara con los valores de hoy escritos en la prueba (`G2_EXPECTED`, `G2_KEYFRAMES`), sin leer `docs/design/`; las partes de `@theme inline` y de compatibilidad no cambian. Alternativas que no se eligieron: quitar solo las comparaciones (sin aviso de cambios por accidente) o dejarla como estaba. Base: «Decidido por el usuario».
+- **PD-6: la imagen de `login-02`, opción (a).** Sin `imageSrc`, el Block muestra un degradado neutro que estaba marcado «provisional» (B.3-a, decidido por el usuario el 07/11/2026, «hasta que el diseño tenga una»). Sin rediseño, el degradado es el definitivo: se quitó «provisional» de `login-02.html`, `login-02.ts`, su prueba y la página del Block. Alternativas que no se eligieron: una ilustración propia en SVG o dejarlo provisional hasta tener una imagen. Base: «Decidido por el usuario».
+
 ## Decidida por el usuario: grises (14/11/2026)
 
 - **Grises: malva medio** (sustituye a malva suave). Los 15 grises del tema, en claro y oscuro, llevan el tono 292 con croma **0,014** (0,007 en los casi blancos y casi negros), con la misma luminosidad: el contraste AA no cambia. `MIMI_THEME_NEUTRAL` sigue en croma 0. Base: «Decidido por el usuario», después de ver las capturas del 13/11/2026 (`docs/auto/capturas/2026-11-13/grises/`). Informe: `docs/auto/refinamiento-0.6.0-parte11-2026-11-14.md`.

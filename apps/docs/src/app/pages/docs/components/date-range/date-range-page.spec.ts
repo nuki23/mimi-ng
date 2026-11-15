@@ -2,9 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
+import { validateDocPage } from '../../../../doc-page/doc-page.rules';
 import { DateRangePage } from './date-range-page';
+import { DATE_RANGE_PAGE } from './date-range.page';
 
 describe('DateRangePage', () => {
+  it('cumple la plantilla', () => expect(validateDocPage(DATE_RANGE_PAGE)).toEqual([]));
+
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
     async () => {
@@ -21,7 +25,10 @@ describe('DateRangePage', () => {
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
 
+      // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
+      // La demo y «Estados»: el vivo de los tres formularios se fue (repetía las pestañas de
+      // «Formularios») y sus estados pasaron a «Estados».
       expect(previews.length).toBe(2);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-date-range button[aria-haspopup]')).not.toBeNull();
@@ -42,12 +49,17 @@ describe('DateRangePage', () => {
       expect(days).toContain('20 días');
       expect(days).toContain('7 días');
       expect(el.textContent).toContain('1 sept 2026 – 20 sept 2026');
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      // Estados: deshabilitado, solo lectura y con error.
+      const states = el.querySelectorAll('app-date-range-states-example mimi-date-range');
+      expect(states[0].hasAttribute('data-disabled')).toBe(true);
+      expect(states[1].querySelector('button')!.getAttribute('aria-disabled')).toBe('true');
+      expect(states[2].hasAttribute('data-invalid')).toBe(true);
+      expect(el.querySelector('h1')!.textContent!.trim()).toBe('Date Range');
+      expect(el.querySelector('app-forms-tabs')).not.toBeNull();
+      // La página hermana, enlazada desde la nota de Uso.
+      expect(
+        el.querySelector('[data-slot="usage-note"] a[href="/docs/components/date-picker"]'),
+      ).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

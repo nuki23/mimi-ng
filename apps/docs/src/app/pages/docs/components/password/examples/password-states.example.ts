@@ -53,8 +53,9 @@ function sameAs(group: AbstractControl): ValidationErrors | null {
           <input mimiInput type="password" aria-label="Deshabilitado" value="secreto" disabled />
         </mimi-password>
         <span class="mt-2 text-sm font-medium">Solo lectura</span>
-        <mimi-password>
-          <input mimiInput type="password" aria-label="Solo lectura" value="secreto" readonly />
+        <!-- readonly: no se edita, pero el ojo sigue mostrando el valor. -->
+        <mimi-password readonly>
+          <input mimiInput type="password" aria-label="Solo lectura" value="secreto" />
         </mimi-password>
       </div>
     </div>

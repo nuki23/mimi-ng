@@ -5,7 +5,7 @@
   @if (imageSrc(); as src) {
     <img [src]="src" [alt]="imageAlt()" class="absolute inset-0 size-full object-cover" />
   } @else {
-    <!-- PROVISIONAL (B.3-a): degradado neutro hasta tener una imagen en el diseño. Pon la tuya con imageSrc. -->
+    <!-- Sin imagen, un degradado neutro (B.3-a; definitivo desde el 14/11/2026). Pon la tuya con imageSrc. -->
     <div
       aria-hidden="true"
       data-slot="placeholder"

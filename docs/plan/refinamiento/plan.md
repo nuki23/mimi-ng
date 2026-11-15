@@ -22,7 +22,7 @@ Origen: las peticiones del usuario tras probar la 0.5.0 desde npm (09/11/2026), 
 | **0.7.0** | R.19 Card · R.20 Table de directivas y Data Table · R.21 Sortable List con listas conectadas · R.22 Block `kanban-01` · R.23 servicio y directiva de carga                                                                                                                                                                                             |
 | **0.8.0** | Grupo 4: G4.1 Accordion, G4.2 Sheet/Drawer, G4.3 Stepper, B.8 `dashboard-01`, G4.P (sin cambios de contenido; solo la versión)                                                                                                                                                                                                                         |
 
-Por qué esta división: la 0.6.0 son correcciones y cambios transversales (se tocan casi todos los componentes una sola vez, con la escala de tamaños y el tema de marca primero); la 0.7.0 son las piezas que se rediseñan por completo (Card, Table, Sortable) y por eso esperan a las decisiones del usuario y a que la 0.6.0 deje la escala de tamaños, el tema y la API compuesta de Select y Form Field estables.
+Por qué esta división: la 0.6.0 son correcciones y cambios transversales (se tocan casi todos los componentes una sola vez, con la escala de tamaños y el tema de marca primero); la 0.7.0 son las piezas que se rediseñan por completo en su API (Card, Table, Sortable; su aspecto sigue el tema, sin rediseño visual: decidido por el usuario el 14/11/2026) y por eso esperan a las decisiones del usuario y a que la 0.6.0 deje la escala de tamaños, el tema y la API compuesta de Select y Form Field estables.
 
 ## Orden y dependencias
 

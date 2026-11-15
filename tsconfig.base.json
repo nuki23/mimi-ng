@@ -15,6 +15,7 @@
     "paths": {
       "@mimi-ng/ui-core": ["./packages/ui-core/src/index.ts"],
       "@mimi-ng/cli/package.json": ["./packages/cli/package.json"],
+      "@mimi-ng/cli/registry.json": ["./packages/cli/src/registry.json"],
       "@/components/ui/utils": ["./packages/ui-core/src/lib/utils/index.ts"],
       "@/components/ui/utils/*": ["./packages/ui-core/src/lib/utils/*"],
       "@/components/ui/theme": ["./packages/ui-core/src/lib/theme/index.ts"],

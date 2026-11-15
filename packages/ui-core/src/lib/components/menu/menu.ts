@@ -397,7 +397,7 @@ export class MimiMenuCheckboxItem {
 
 /**
  * Grupo de opciones excluyentes: `<mimi-menu-radio-group [(value)]="orden">` con
- * `<mimi-menu-radio-item value="…">`. Provisional: no está en el diseño (plan, D6).
+ * `<mimi-menu-radio-item value="…">`, con un punto en la columna del ícono (spec 13).
  */
 @Component({
   selector: 'mimi-menu-radio-group',

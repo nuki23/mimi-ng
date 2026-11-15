@@ -66,7 +66,7 @@ const paginationVariants = cva(
 // La escala vive en el tema (`[data-size]` en el anfitrión): alto del botón e ícono (16/18/20 px).
 const ARROW_CLASSES =
   'size-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))] rounded-full [&_svg]:size-[calc(var(--mimi-size-icon,0.875rem)_+_0.125rem)]';
-// 0,9 en vez del 0,88 del diseño (plan D6); deshabilitado, sin escala (también con Espacio).
+// 0,9 (la escala pequeña del tema); deshabilitado, sin escala (también con Espacio).
 const ARROW_PRESS = 'active:scale-(--mimi-press-scale-sm) aria-disabled:active:scale-100';
 
 const INPUT_CLASSES = cn(
@@ -243,7 +243,10 @@ export class MimiPagination {
   readonly total = input.required<number>();
   /** Tamaños para elegir. Vacío (por defecto), sin selector. */
   readonly pageSizeOptions = input<readonly number[]>([]);
-  /** `sm` (por defecto, controles de 32px) o `md` (40px). */
+  /**
+   * Tamaño, con la escala del tema: `sm` (por defecto), botones de 32px y 40px de alto en total;
+   * `md`, 40 y 50px; `lg`, 48 y 60px (el total suma el relleno y el borde de la píldora).
+   */
   readonly size = input<MimiPaginationSize | 'default'>('sm');
   /** El tamaño de verdad (`default` = `md`, con aviso en desarrollo). */
   protected readonly shownSize = computed<MimiPaginationSize>(

@@ -6,9 +6,12 @@ import { MimiTextarea } from '@/components/ui/textarea';
   selector: 'app-textarea-states-example',
   imports: [MimiFormFieldImports, MimiTextarea],
   template: `
-    <div class="grid w-full max-w-xl gap-4 sm:grid-cols-2">
+    <div class="grid w-full max-w-3xl gap-4 sm:grid-cols-3">
       <mimi-form-field label="Deshabilitado">
-        <textarea mimiTextarea rows="2" disabled>Solo lectura</textarea>
+        <textarea mimiTextarea rows="2" disabled>No se edita ni se enfoca</textarea>
+      </mimi-form-field>
+      <mimi-form-field label="Solo lectura">
+        <textarea mimiTextarea rows="2" readonly>Se enfoca, pero no se edita</textarea>
       </mimi-form-field>
       <mimi-form-field label="Con error">
         <textarea mimiTextarea rows="2" [showError]="true">Hola</textarea>

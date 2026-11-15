@@ -36,4 +36,11 @@ Informes del modo autónomo: `docs/auto/plan-refinamiento-2026-11-09.md` (el pla
 
 ## Publicación de la 0.6.0 (registro)
 
-Pendiente: la hace el usuario (`docs/proceso/release.md`). Se anota aquí con los datos de npm y git cuando esté publicada.
+La hizo el usuario (`docs/proceso/release.md`). Los datos los obtuvo Claude el 14/11/2026 de npm y de git (no de lo que dijo el usuario):
+
+- `@mimi-ng/cli@0.6.0` publicada en npm el `2026-11-14T23:00:38.716Z` (UTC; las 18:00 del 14/11/2026 en Colombia, UTC−5), según `npm view @mimi-ng/cli dist-tags time --json`.
+- `dist-tags`: `{ latest: '0.6.0' }`. Versiones: 0.1.0, 0.1.1, 0.2.0, 0.3.0, 0.4.0, 0.5.0 y 0.6.0.
+- Paquete publicado: 169 archivos, 1 161 273 bytes sin empaquetar, shasum `e1edce4e3c189038bcd3f0a89eebf6ed43ae8f5e` (`npm view @mimi-ng/cli@0.6.0 dist`). Los 169 archivos coinciden con el `npm pack` de la preparación (`docs/auto/release-0.6.0-2026-11-13.md`); el shasum cambia porque `prepublishOnly` recompila.
+- Etiqueta anotada `v0.6.0` (objeto `3ed07b1`) sobre `b313f0b`, la fusión del PR #16 (`auto/release-0.6.0-2026-11-13`), según `git log -1 --oneline v0.6.0`; `git ls-remote --tags origin v0.6.0` la confirma.
+- Release de GitHub: la creó el usuario (dato del usuario, 14/11/2026).
+- Prueba desde npm: el usuario instaló y probó la 0.6.0 desde npm y le funcionó (dato del usuario, 14/11/2026). Los escenarios con el `.tgz` real, antes de publicar, están en `docs/auto/release-0.6.0-2026-11-13.md`.

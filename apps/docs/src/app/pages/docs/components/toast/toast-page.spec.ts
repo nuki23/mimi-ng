@@ -2,9 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
+import { validateDocPage } from '../../../../doc-page/doc-page.rules';
 import { ToastPage } from './toast-page';
+import { TOAST_PAGE } from './toast.page';
 
+// El orden de las secciones y los límites de la plantilla los prueba doc-page/doc-pages.spec.ts.
 describe('ToastPage', () => {
+  it('cumple la plantilla', () => expect(validateDocPage(TOAST_PAGE)).toEqual([]));
+
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
     async () => {
@@ -21,6 +26,7 @@ describe('ToastPage', () => {
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
 
+      // La demo y siete ejemplos.
       const previews = examples(fixture);
       expect(previews.length).toBe(8);
       // Tamaños: un botón por tamaño, y cada uno pide el aviso de su tamaño.
@@ -39,14 +45,8 @@ describe('ToastPage', () => {
         expect(code).toContain('injectMimiToast()');
         expect(code).toMatch(/export class Toast\w+Example/);
       }
-      // La vista estática de las seis posiciones.
-      expect(el.querySelectorAll('[role="listitem"]').length).toBe(6);
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      // Se usa con un servicio: su API va en «Servicio».
+      expect(el.querySelector('h3#service')).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

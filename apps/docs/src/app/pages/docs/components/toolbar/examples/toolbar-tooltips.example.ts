@@ -42,12 +42,7 @@ import { MimiTooltip } from '@/components/ui/tooltip';
         <svg lucideItalic></svg>
       </button>
       <mimi-toolbar-separator />
-      <button
-        mimiToolbarItem="link"
-        aria-label="Enlace"
-        mimiTooltip="Enlace"
-        mimiTooltipShortcut="⌘K"
-      >
+      <button mimiToolbarItem="link" aria-label="Enlace" mimiTooltip="Enlace">
         <svg lucideLink></svg>
       </button>
       <button

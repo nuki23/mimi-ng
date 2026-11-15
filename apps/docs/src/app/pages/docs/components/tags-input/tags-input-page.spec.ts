@@ -2,9 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
+import { validateDocPage } from '../../../../doc-page/doc-page.rules';
 import { TagsInputPage } from './tags-input-page';
+import { TAGS_INPUT_PAGE } from './tags-input.page';
 
+// El orden de las secciones y los límites de la plantilla los prueba doc-page/doc-pages.spec.ts.
 describe('TagsInputPage', () => {
+  it('cumple la plantilla', () => expect(validateDocPage(TAGS_INPUT_PAGE)).toEqual([]));
+
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
     async () => {
@@ -22,7 +27,9 @@ describe('TagsInputPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(3);
+      // La demo y cuatro ejemplos: el vivo de los tres formularios se fue (repetía las pestañas
+      // de «Formularios»); su estado deshabilitado y su `validate` quedaron en ejemplos propios.
+      expect(previews.length).toBe(5);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-tags-input input')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/tags-input';");
@@ -40,12 +47,16 @@ describe('TagsInputPage', () => {
       expect(el.querySelector('[data-slot="remove"]')!.getAttribute('aria-label')).toBe(
         'Quitar angular',
       );
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      // Deshabilitado y solo lectura: sin botones de quitar.
+      expect(el.querySelectorAll('app-tags-input-states-example [data-slot="remove"]').length).toBe(
+        0,
+      );
+      expect(el.querySelector('h1')!.textContent!.trim()).toBe('Tags Input');
+      expect(el.querySelector('app-forms-tabs')).not.toBeNull();
+      // Variables CSS: la tabla de Tags Input y, debajo, la del chip (PD-9).
+      expect(el.querySelectorAll('app-css-variables').length).toBe(2);
+      expect(el.querySelector('[data-slot="tokens-of"]')?.textContent).toContain('chip');
+      expect(el.textContent).toContain('--mimi-chip-');
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

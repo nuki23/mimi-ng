@@ -105,7 +105,14 @@ describe('readonly en los controles (R.12)', () => {
     const { q, tick } = await setup();
     for (const t of ['date', 'range']) {
       const button = q(t).querySelector<HTMLButtonElement>('button')!;
-      expect(button.getAttribute('aria-readonly'), t).toBe('true');
+      // Un `button` no admite aria-readonly: aria-disabled (sigue enfocable) y data-readonly.
+      expect(button.hasAttribute('aria-readonly'), t).toBe(false);
+      expect(button.getAttribute('aria-disabled'), t).toBe('true');
+      expect(button.hasAttribute('data-readonly'), t).toBe(true);
+      expect(button.disabled, t).toBe(false);
+      expect(button.className, t).toContain(
+        'data-[readonly]:bg-[color:var(--mimi-input-readonly)]',
+      );
       button.click();
       await tick();
       // El Popover deja el panel fuera de la vista; lo que importa es que no queda «abierto».

@@ -4,6 +4,7 @@ import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-p
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { ButtonPage } from './button-page';
 
+// El orden de las secciones y los límites de la plantilla los prueba doc-page/doc-pages.spec.ts.
 describe('ButtonPage', () => {
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
@@ -19,9 +20,9 @@ describe('ButtonPage', () => {
       });
       const fixture = TestBed.createComponent(ButtonPage);
       await settle(fixture);
-      const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
+      // La demo, seis ejemplos y la matriz (en su desplegable).
       expect(previews.length).toBe(8);
       for (const { example, code } of previews) {
         expect(example?.querySelector('[mimiBtn]')).not.toBeNull();
@@ -29,14 +30,27 @@ describe('ButtonPage', () => {
         expect(code).toContain("import { MimiButton } from '@/components/ui/button';");
         expect(code).toMatch(/export class Button\w+Example/);
       }
-      expect(el.querySelector('app-install-command')).not.toBeNull();
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
     },
     PAGE_EXAMPLES_TIMEOUT,
   );
+
+  it('no muestra los atajos que se quitan (van en el CHANGELOG)', async () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([]),
+        {
+          provide: HighlighterService,
+          useValue: { highlight: () => new Promise(() => undefined) },
+        },
+      ],
+    });
+    const fixture = TestBed.createComponent(ButtonPage);
+    await settle(fixture);
+    // La tabla de variables (compartida) sí nombra el token de la 0.1.0: queda fuera.
+    const article = (fixture.nativeElement as HTMLElement).cloneNode(true) as HTMLElement;
+    article.querySelector('app-css-variables')?.remove();
+    const text = article.textContent ?? '';
+    expect(text).not.toContain('destructive');
+    expect(text).not.toMatch(/se quita(n)? en la/);
+  });
 });

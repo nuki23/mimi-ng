@@ -97,7 +97,8 @@ const toDate = (value: unknown): MimiDate | undefined =>
         [attr.aria-describedby]="valueId"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.aria-required]="required() || null"
-        [attr.aria-readonly]="readonly() || null"
+        [attr.aria-disabled]="readonly() || null"
+        [attr.data-readonly]="readonly() ? '' : null"
         [attr.data-placeholder]="label() ? null : ''"
       >
         <svg
@@ -173,7 +174,11 @@ export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFi
   readonly format = input<Intl.DateTimeFormatOptions>(DEFAULT_FORMAT);
   readonly placeholder = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
-  /** Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. */
+  /**
+   * Solo lectura (R.12): el valor se ve y se puede enfocar, pero no cambia ni abre el panel. El
+   * disparador es un `button`, que no admite `aria-readonly`: lleva `aria-disabled` (sigue
+   * enfocable y su nombre dice el valor) y `data-readonly` para el aspecto, como File Upload.
+   */
   readonly readonly = input(false, { transform: booleanAttribute });
   /** Los pasa el formulario. Se muestra el error si es inválido y se tocó o modificó. */
   readonly invalid = input(false, { transform: booleanAttribute });

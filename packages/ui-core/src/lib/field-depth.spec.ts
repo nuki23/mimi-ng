@@ -66,7 +66,9 @@ describe('Profundidad B al hacer clic', () => {
   });
 
   it('en solo lectura y deshabilitado no hay clic', () => {
-    expect(depthConstant('fieldTriggerStyles')).toContain('not-disabled:not-aria-readonly:active:');
+    expect(depthConstant('fieldTriggerStyles')).toContain(
+      'not-disabled:not-data-[readonly]:active:',
+    );
     expect(depthConstant('fieldBoxStyles')).toContain(
       'not-data-[disabled]:not-data-[readonly]:active:scale',
     );

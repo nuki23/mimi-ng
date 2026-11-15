@@ -1,6 +1,6 @@
 # Cómo quedarían Button y Select con cada variante
 
-[← Plan](plan.md) · PD-4, **PENDIENTE DE DECIDIR (usuario)**
+[← Plan](plan.md) · PD-4, **decidido por el usuario (14/11/2026): variante A**
 
 Esqueletos: las secciones en orden, con su contenido y de dónde sale (**hoy**: el ejemplo que ya existe; **nuevo**: hay que escribirlo; **fuera**: se quita o pasa a otro sitio). Las frases son las que llevaría la página.
 

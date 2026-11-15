@@ -2,9 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
+import { validateDocPage } from '../../../../doc-page/doc-page.rules';
 import { InputMaskPage } from './input-mask-page';
+import { INPUT_MASK_PAGE } from './input-mask.page';
 
+// El orden de las secciones y los límites de la plantilla los prueba doc-page/doc-pages.spec.ts.
 describe('InputMaskPage', () => {
+  it('cumple la plantilla', () => expect(validateDocPage(INPUT_MASK_PAGE)).toEqual([]));
+
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
     async () => {
@@ -22,7 +27,10 @@ describe('InputMaskPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(3);
+      // La demo (teléfono y fecha) y tres ejemplos: la tarjeta salió de la demo a su propio
+      // ejemplo, `class` salió de Estados, y el vivo de los tres formularios se fue (repetía las
+      // pestañas de «Formularios»).
+      expect(previews.length).toBe(4);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-input-mask input')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/input-mask';");
@@ -42,12 +50,11 @@ describe('InputMaskPage', () => {
         el.querySelectorAll<HTMLInputElement>('app-input-mask-states-example input'),
       );
       expect(dates[0].value).toBe('24/12/2026');
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      expect(el.querySelector<HTMLInputElement>('app-input-mask-custom-example input')!.value).toBe(
+        '482-913',
+      );
+      expect(el.querySelector('h1')!.textContent!.trim()).toBe('Input Mask');
+      expect(el.querySelector('app-forms-tabs')).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

@@ -17,6 +17,8 @@
    Instalación y los Blocks). Un componente nuevo que use el resto del sitio se agrega a la
    lista de «ya incluidos» (no se excluye). */
 @source not './app/pages/docs/components';
+/* La plantilla de las páginas de componentes (app-doc-page, DP.0) solo la usan esas páginas. */
+@source not './app/doc-page';
 @source not '../../../packages/ui-core/src/lib/components/{calendar,chip,color-picker,combobox,command,context-menu,data-table,date-picker,date-range,dropdown-menu,file-upload,input-mask,input-otp,menu,number-input,pagination,password,progress,separator,skeleton,slider,sortable-list,tags-input,textarea,toolbar,tooltip,tree}';
 
 /* Shiki en modo dual: los colores del código vienen de los temas github-light / github-dark

@@ -34,12 +34,9 @@ describe('ToolbarPage', () => {
       for (const button of Array.from(el.querySelectorAll('[mimiToolbarItem]'))) {
         expect(button.getAttribute('aria-label'), button.outerHTML).toBeTruthy();
       }
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      // «Flotante» va en dos archivos (el lienzo y la barra de herramientas), para no pasar de 80.
+      const floating = previews.find(({ code }) => code.includes('ToolbarFloatingExample'));
+      expect(floating?.example?.querySelector('app-canvas-tools mimi-toolbar')).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

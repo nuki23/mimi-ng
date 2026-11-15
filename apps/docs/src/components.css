@@ -13,6 +13,7 @@
 @reference '@mimi-ng/ui-core/theme.css';
 
 @source './app/pages/docs/components';
+@source './app/doc-page';
 @source '../../../packages/ui-core/src/lib/components';
 @source not '../../../packages/ui-core/src/**/*.spec.ts';
 @source not './app/**/*.spec.ts';

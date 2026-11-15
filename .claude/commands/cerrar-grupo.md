@@ -21,19 +21,25 @@ Para cada punto, la evidencia: el comando y su resultado, o el archivo y la lín
 - **Spec al día:** sección 4 (catálogo, archivos por componente y la tabla del grupo), 13 (una tabla de tokens por componente del grupo), 2 (versiones, contra `package.json`) y 12 (compatibilidad).
 - **CHANGELOG:** la sección de la versión, con «Cómo actualizar desde la anterior» si cambia algo publicado, y lo específico que pida la puerta del grupo.
 - **Conteos y listas:** el número de componentes y la lista en Fundamentos (`FOUNDATION_PACKAGES` y la tabla de paquetes), `INTRODUCTION_COMPONENTS` de Introducción, la landing, el README de la CLI y el `x-prompt` de `packages/cli/src/ui/schema.json`: los mismos componentes en todos (compáralos con grep o un script, no a ojo).
+- **Páginas con la plantilla:**
+  - `doc-pages.spec.ts` en verde (cada componente del grupo registrado en `PAGES`; la lista de pendientes de la migración ya no existe);
+  - cada excepción de `EXCEPTIONS` está en `docs/spec/plantilla-pagina.md` con la aprobación del usuario y su fecha;
+  - cada componente del grupo tiene su `<nombre>.page.ts` y ningún `*-page.html`.
+  - Evidencia: la salida de la prueba y `git ls-files 'apps/docs/src/app/pages/docs/components/**/*-page.html'` vacío.
 - **Registro de la CLI:** un ítem en `registry.json` por componente del grupo, con sus dependencias; `pnpm test:cli` en verde.
 - **Presupuestos:** `pnpm build` (informe de `check-initial-js.mjs`): JS inicial y CSS global, crudo y gzip, antes del grupo y ahora (`CLAUDE.md`, «Forma de trabajar», «Bundle»; spec 10).
 - **Tabla acumulada del CSS global y del `initial`**, si la pide la puerta: una fila por componente, de los informes de bundle de cada tarea del grupo (en sus archivos de `docs/plan/` o en el historial). Si falta el informe de una tarea, dilo; no lo inventes.
-- **D6:** `docs/design/correcciones-pendientes.md` con un apartado por cada componente del grupo.
+- **Aspecto en la spec:** lo nuevo de aspecto de cada componente del grupo (sin precedente en el tema) está en la spec. `docs/design/` es referencia histórica: no se compara el grupo con Claude Design (decidido por el usuario el 14/11/2026).
 - **Controles nuevos en `/docs/states`:** cada control de formulario del grupo tiene su fila en la cuadrícula de Estados (`ROWS` en `apps/docs/src/app/pages/docs/states/states-page.ts`, que falla en su prueba si falta) y usa las piezas de `utils/field-styles.ts`. Revísalo en la página, en claro y oscuro: hover, foco, clic, deshabilitado, solo lectura y error iguales a los demás.
 - `pnpm build`, `pnpm test`, `pnpm format:check` en verde.
 - Búsqueda de correos, tokens y rutas personales en lo que se va a publicar (`CLAUDE.md`, «Forma de trabajar», «Privacidad»).
+- **Capturas fuera del repo** (`CLAUDE.md`, A10): `git ls-files docs/auto/capturas` vacío y ninguna imagen de comprobación nueva en el grupo (`git diff --stat <base>..HEAD -- '*.png' '*.jpg'` sin capturas); el informe cita la ruta `C:\t\capturas\<fecha>\`.
 
 ## 3. Entregar
 
 Tres listas:
 
-1. **Comprobado**, con la evidencia de cada punto.
+1. **Comprobado**, con la evidencia de cada punto. «Páginas con la plantilla» va como fila propia, para que el revisor la vea separada de las pruebas generales.
 2. **Falta** (o **NO COMPROBADO**), con qué haría falta para comprobarlo.
 3. **Lo que hace el USUARIO**, con los comandos de `docs/proceso/release.md`:
    - las pruebas reales con el `.tgz` en 4 escenarios (npm nuevo, pnpm nuevo, actualización desde la versión anterior sin cambios y con un archivo modificado), en una ruta corta en Windows;
