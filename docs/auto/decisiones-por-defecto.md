@@ -155,7 +155,7 @@ Pendientes de revisión del usuario. Detalle en `docs/auto/refinamiento-0.6.0-20
 
 ## Decididas por defecto: tanda 1 de la 0.7.0 (15/11/2026)
 
-Rama `auto/0.7.0-tanda1-2026-11-15`; detalle en `docs/auto/0.7.0-tanda1-2026-11-15.md`. Pendientes de revisión del usuario.
+Rama `auto/0.7.0-tanda1-2026-11-15`; detalle en `docs/auto/0.7.0-tanda1-2026-11-15.md`. **Aceptadas por el usuario el 15/11/2026** (prompt de la tanda 2, rama `auto/0.7.0-tanda2-2026-11-15`): las dos quedan como están.
 
 - **M.9 Select con `MimiOptionList`:** Select toma el aspecto de «cargando» y «sin resultados» de la lista común (la de Combobox): el ícono de la lupa sin el círculo gris de 36 px y dos renglones de carga en vez de tres; `aria-busy` pasa del bloque de carga a la lista, y «Cargando…» se anuncia por la región `status`. Base: «Más simple» (una sola lista para los dos; mantener el aspecto viejo pedía opciones nuevas en `MimiOptionList` solo para Select). Alternativa: añadir a `MimiOptionList` una variante con el círculo y tres renglones. **Cambio visual**, no de API.
 - **R.28 Tabs y R.30 Form Field no cabían en 8 ejemplos:** en vez de pedir una excepción, se juntaron dos ejemplos en uno (Tabs: «Vertical» con su desplegable «según el ancho»; Form Field: «Mensajes para toda la app» con «Los mensajes predeterminados», en dos archivos). Base: «Más simple» (`CLAUDE.md`: «se rediseña el ejemplo o se pide una excepción»).
