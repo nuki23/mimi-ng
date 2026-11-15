@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- DP.2, DP.3, DP.4 y DP.5 · `auto/docs-paginas-2-2026-11-14` · Claude Code (modo autónomo) · 14/11/2026
+_Ninguna._ (DP.2 a DP.5, hechas el 14/11/2026; la siguiente del plan de páginas es DP.6, Blocks y portada, y la puerta DP.P.)
 
 ## Mantenimiento
 
