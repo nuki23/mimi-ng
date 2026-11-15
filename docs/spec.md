@@ -1390,6 +1390,8 @@ Verificado en Angular 22.1.7 con una prueba real: un control que implementa solo
 
 El diseño visual partió de `docs/design/Mimi Sitio.dc.html` (referencia histórica: el sitio actual es el definitivo). Los botones del layout (header, panel móvil, copiar, inicio, 404 y páginas `/dev`) usan `mimiBtn` desde la tarea 2.1; las pestañas de CodePreview e InstallCommand usan `<mimi-tabs>` desde la tarea 5.11.
 
+**Marca (R.25, 14/11/2026).** Los archivos aprobados viven en `docs/brand/` (fuente, con su `LEEME.md`; no se publican). El sitio usa copias en `apps/docs/public/`: `favicon.svg` (el símbolo), `favicon.ico` de respaldo, `apple-touch-icon.png` (el icono de 180 px) y los logos horizontales `mimi-logo-horizontal.svg` y `-dark.svg`. La cabecera y el menú móvil pintan el logo como `<img alt="Mimi">` de 36 px de alto, uno por tema (`dark:hidden` / `hidden dark:block`, porque el tema del sitio es la clase `.dark`, no el esquema del sistema); cabe entero a 360 px, así que no hay versión de solo símbolo. `index.html` lleva `theme-color` `#793EEA` (claro) y `#17161D` (oscuro, con `media`), y las etiquetas Open Graph y `twitter:card` con `og-image.png` (1200×630), que genera `apps/docs/scripts/og-image.mjs` con Playwright (fuera del repo) y la fuente Outfit. Lo comprueba `brand.spec.ts`.
+
 ### Layout (tarea 1.6)
 
 ```

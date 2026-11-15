@@ -21,7 +21,29 @@
         } catch (e) {}
       })();
     </script>
-    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <!-- Marca (R.25): copias de docs/brand/. El SVG primero; el .ico, para los navegadores sin SVG. -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="icon" href="favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <meta name="theme-color" content="#793EEA" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#17161D" media="(prefers-color-scheme: dark)" />
+    <!-- Vista previa al compartir. og-image.png lo genera apps/docs/scripts/og-image.mjs. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mimi" />
+    <meta property="og:title" content="Mimi · Componentes para Angular y Tailwind CSS" />
+    <meta
+      property="og:description"
+      content="Componentes para Angular 22 y Tailwind CSS 4 que una CLI copia a tu proyecto. Los componentes son tuyos. Las actualizaciones también."
+    />
+    <meta property="og:url" content="https://ng.mimiworks.dev/" />
+    <meta property="og:image" content="https://ng.mimiworks.dev/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Mimi. Los componentes son tuyos. Las actualizaciones también."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
     <!-- Outfit solo se carga en el showcase; ui-core no carga fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
