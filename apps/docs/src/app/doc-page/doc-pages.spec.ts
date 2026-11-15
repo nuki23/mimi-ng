@@ -6,6 +6,8 @@ import { HighlighterService } from '../code/highlighter.service';
 import { DOCS_NAV } from '../layout/docs-nav';
 import { BUTTON_PAGE } from '../pages/docs/components/button/button.page';
 import { ButtonPage } from '../pages/docs/components/button/button-page';
+import { COMBOBOX_PAGE } from '../pages/docs/components/combobox/combobox.page';
+import { ComboboxPage } from '../pages/docs/components/combobox/combobox-page';
 import { SELECT_PAGE } from '../pages/docs/components/select/select.page';
 import { SelectPage } from '../pages/docs/components/select/select-page';
 import { liveExamples, validateDocPage } from './doc-page.rules';
@@ -34,6 +36,7 @@ import {
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
 const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
   button: { page: BUTTON_PAGE, component: ButtonPage },
+  combobox: { page: COMBOBOX_PAGE, component: ComboboxPage },
   select: { page: SELECT_PAGE, component: SelectPage },
 };
 
@@ -47,7 +50,6 @@ const PENDING = [
   'card',
   'checkbox',
   'color-picker',
-  'combobox',
   'command',
   'confirm',
   'context-menu',
@@ -80,8 +82,8 @@ const PENDING = [
   'tooltip',
   'tree',
 ];
-/** El tamaño de `PENDING` en esta tanda: un número fijo que solo baja (DP.0: 39; piloto: 37). */
-const PENDING_COUNT = 37;
+/** El tamaño de `PENDING`: un número fijo que solo baja (DP.0: 39; piloto: 37; DP.1, una a una). */
+const PENDING_COUNT = 36;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
@@ -193,7 +195,7 @@ describe('Plantilla de las páginas de componentes (doc-pages)', () => {
         const hasTexts =
           docFs.existsSync(`${UI_DIR}${dir}/${dir}-texts.ts`) ||
           /provideMimi\w+Text\(/.test(read(`${base}-page.ts`));
-        if (hasTexts) expect(page.texts, 'falta «texts»').toBeDefined();
+        if (hasTexts) expect(page.texts?.length, 'falta «texts»').toBeGreaterThan(0);
       });
 
       it('el h1 es el título del menú', () => {
@@ -239,7 +241,7 @@ describe('Plantilla de las páginas de componentes (doc-pages)', () => {
                 : s === 'parts'
                   ? page.api.parts?.length
                   : s === 'texts'
-                    ? page.texts
+                    ? page.texts?.length
                     : page.tokens,
           );
           const h3 = Array.from(article.querySelectorAll('h3[id]')).map((h) => h.id);

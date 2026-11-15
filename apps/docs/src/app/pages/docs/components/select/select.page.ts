@@ -307,6 +307,6 @@ export const SELECT_PAGE: DocPage = {
       'data-placeholder',
     ],
   },
-  texts: { constant: 'MIMI_SELECT_TEXT_ES', provider: 'provideMimiSelectText', path: 'select' },
+  texts: [{ constant: 'MIMI_SELECT_TEXT_ES', provider: 'provideMimiSelectText', path: 'select' }],
   tokens: 'select',
 };

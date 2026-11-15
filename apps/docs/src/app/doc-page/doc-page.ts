@@ -72,18 +72,31 @@ export class DocPageView {
     });
   });
 
-  /** El código de «Textos»: el proveedor con la constante en español. */
+  /** La frase de «Textos»: «… `MIMI_A_TEXT_ES` y `MIMI_B_TEXT_ES` traen el español; …». */
+  protected readonly textsSentence = computed(() => {
+    const names = (this.page().texts ?? []).map((t) => `\`${t.constant}\``);
+    const list =
+      names.length > 1 ? `${names.slice(0, -1).join(', ')} y ${names.at(-1)}` : (names[0] ?? '');
+    const verb = names.length > 1 ? 'traen' : 'trae';
+    return `Los textos propios están en inglés por defecto. ${list} ${verb} el español; lo que no definas sigue en inglés.`;
+  });
+
+  /** El código de «Textos»: los proveedores con las constantes en español. */
   protected readonly textsCode = computed(() => {
-    const texts = this.page().texts;
-    if (!texts) return '';
-    const { constant, provider, path } = texts;
+    const texts = this.page().texts ?? [];
+    if (!texts.length) return '';
+    const [first] = texts;
     return [
       '// app.config.ts',
-      `import { ${constant}, ${provider} } from '@/components/ui/${path}';`,
+      ...texts.map(
+        (t) => `import { ${t.constant}, ${t.provider} } from '@/components/ui/${t.path}';`,
+      ),
       '',
       'export const appConfig: ApplicationConfig = {',
-      `  providers: [${provider}(${constant})],`,
-      `  // o solo algunos: ${provider}({ ...${constant}, … })`,
+      '  providers: [',
+      ...texts.map((t) => `    ${t.provider}(${t.constant}),${t.note ? ` // ${t.note}` : ''}`),
+      `    // o solo algunos: ${first.provider}({ ...${first.constant}, … })`,
+      '  ],',
       '};',
     ].join('\n');
   });

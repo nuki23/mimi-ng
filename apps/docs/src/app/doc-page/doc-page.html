@@ -75,13 +75,9 @@
     <h3 id="parts" [class]="h3">{{ apiTitles.parts }}</h3>
     <app-api-table kind="parts" [rows]="p.api.parts!" />
   }
-  @if (p.texts; as texts) {
+  @if (p.texts?.length) {
     <h3 id="texts" [class]="h3">{{ apiTitles.texts }}</h3>
-    <p class="text-pretty">
-      Los textos propios están en inglés por defecto.
-      <app-doc-text [text]="'`' + texts.constant + '`'" /> trae el español; lo que no definas sigue
-      en inglés.
-    </p>
+    <p data-slot="texts-sentence" class="text-pretty"><app-doc-text [text]="textsSentence()" /></p>
     <app-code-block [code]="textsCode()" lang="typescript" />
   }
   @if (p.tokens; as tokens) {

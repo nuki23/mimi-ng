@@ -25,7 +25,9 @@ describe('ComboboxPage', () => {
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
 
+      // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
+      // La demo y siete ejemplos; los formularios van en las pestañas, sin ejemplos vivos.
       expect(previews.length).toBe(8);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-combobox input[role="combobox"]')).not.toBeNull();
@@ -60,12 +62,10 @@ describe('ComboboxPage', () => {
           .querySelector('mimi-combobox mimi-chip [data-slot="remove"]')!
           .getAttribute('aria-label'),
       ).toBe('Quitar Angular');
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      // «Textos» con los dos proveedores (Combobox y el chip del múltiple).
+      expect(el.querySelector('[data-slot="texts-sentence"]')?.textContent).toContain(
+        'MIMI_COMBOBOX_TEXT_ES y MIMI_CHIP_TEXT_ES traen el español',
+      );
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

@@ -115,6 +115,16 @@ export interface PartRow {
   description: string;
 }
 
+/** Un proveedor de textos: `provideMimiSelectText(MIMI_SELECT_TEXT_ES)`. */
+export interface DocTexts {
+  constant: string;
+  provider: string;
+  /** Lo que va después de `@/components/ui/`. */
+  path: string;
+  /** Para qué es, si no es el del propio componente (un comentario en el código). */
+  note?: string;
+}
+
 export interface DocPage {
   /** El h1: el mismo título del menú (`docs-nav.ts`). */
   name: string;
@@ -139,8 +149,12 @@ export interface DocPage {
     /** Los `data-*` del componente: una línea debajo de Entradas. */
     dataAttributes?: readonly string[];
   };
-  /** Los textos propios: la constante en español y su proveedor (el código lo arma la página). */
-  texts?: { constant: string; provider: string; path: string };
+  /**
+   * Los textos propios: por cada proveedor, la constante en español, el proveedor y el archivo
+   * (`select`, o `combobox/combobox-texts` para no traer el componente entero). El código lo arma
+   * la página. Varios si el componente usa los textos de otro (Combobox múltiple, los del chip).
+   */
+  texts?: readonly DocTexts[];
   /** La tabla de `component-tokens.ts`. */
   tokens?: TokenComponent;
 }
