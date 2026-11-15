@@ -27,8 +27,8 @@ import { cn } from '@/components/ui/utils/cn';
  * Utilidades de lista (ítem `option-list` de la CLI, G2.8; decidido por defecto el 05/11/2026):
  * el filtro sin tildes ni mayúsculas, el resaltado de la coincidencia y la lista de opciones con
  * @angular/aria (Listbox dentro de un Combobox), con «cargando», «sin resultados» y una fila
- * «Crear». Salen de lo que Select tiene por dentro (`normalize()`, `MimiSelectHighlight`,
- * `MimiSelectList`); Select no se toca en la 0.3.0 y la M.9 lo migra a estas.
+ * «Crear». Salieron de lo que Select tenía por dentro; desde la M.9 (0.7.0), Select y Combobox
+ * usan las mismas.
  *
  * Nada de aria sale en la API pública: la lista es de uso interno de los componentes de Mimi.
  */
@@ -95,6 +95,8 @@ export interface MimiListOptionContext<T = unknown> {
   $implicit: MimiListOption<T>;
   /** Lo escrito (para resaltar). */
   query: string;
+  /** `true` cuando se pinta en el disparador de Select; en la lista, `false`. */
+  trigger?: boolean;
 }
 
 /** Un grupo declarativo: `<mimi-optgroup label="Europa">…<mimi-option>…</mimi-optgroup>`. */
@@ -293,7 +295,7 @@ export class MimiListOutlet {
 
   private readonly render = effect(() => {
     const template = this.template();
-    const context = { $implicit: this.option(), query: this.query() };
+    const context = { $implicit: this.option(), query: this.query(), trigger: false };
     untracked(() => {
       if (this.view && this.rendered === template) {
         Object.assign(this.view.context, context);
@@ -328,12 +330,12 @@ const SKELETON_CLASSES =
   'h-[26px] rounded-[var(--mimi-radius-sm)] bg-muted animate-mimi-pulse motion-reduce:animate-none';
 
 /**
- * Uso interno de los componentes con lista (Combobox; después Select, M.9): el `ngListbox` con
+ * Uso interno de los componentes con lista (Combobox y Select, M.9): el `ngListbox` con
  * las opciones, la fila «Crear», «cargando» y «sin resultados». Va dentro de un
  * `ngComboboxPopup`: el listbox se registra en él por DI (`ngComboboxWidget`).
  *
  * El `value` del listbox es solo lo que se pinta (el check y `aria-selected`): el valor real es
- * del componente. Rodeo (como en Select): aria desmarca la opción elegida al volver a elegirla y
+ * del componente. Rodeo: aria desmarca la opción elegida al volver a elegirla y
  * vacía el valor cuando la opción queda fuera del filtro; aquí se le vuelve a escribir.
  * @internal No forma parte de la API de Mimi.
  */
@@ -353,7 +355,8 @@ const SKELETON_CLASSES =
       [id]="listId()"
       [value]="paintedKeys()"
       [activeDescendant]="listbox.activeDescendant()"
-      [attr.aria-label]="label() || null"
+      [attr.aria-label]="labelledBy() ? null : label() || null"
+      [attr.aria-labelledby]="labelledBy() || null"
       [attr.aria-busy]="loading() || null"
       [class]="listClasses()"
       (valueChange)="resync()"
@@ -534,6 +537,8 @@ export class MimiOptionList {
   readonly optionTemplate = input<TemplateRef<MimiListOptionContext> | null>(null);
   readonly listId = input.required<string>();
   readonly label = input('');
+  /** Id del elemento que nombra la lista (gana sobre `label`): el `aria-labelledby` de Select. */
+  readonly labelledBy = input<string | null | undefined>(null);
   /** Clases de la lista y de cada opción (literales, del componente que la usa). */
   readonly listClass = input('');
   readonly optionClass = input('');

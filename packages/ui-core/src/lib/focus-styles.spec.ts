@@ -51,8 +51,8 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
     why: 'Panel (el foco va a las opciones) y opción: la activa se marca con el fondo.',
   },
   'components/select/select.ts': {
-    count: 4,
-    why: 'Botón: el anillo lo pinta la caja con data-[focus-visible] (origen del foco, FocusMonitor). Lista y panel: la opción activa lleva fondo. Buscador: tiene el cursor de texto y la opción activa.',
+    count: 3,
+    why: 'Botón: el anillo lo pinta la caja con data-[focus-visible] (origen del foco, FocusMonitor). Panel: la opción activa lleva fondo (la lista es la de option-list desde la M.9). Buscador: tiene el cursor de texto y la opción activa.',
   },
   'components/popover/popover.ts': {
     count: 1,

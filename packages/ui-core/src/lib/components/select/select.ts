@@ -1,6 +1,5 @@
 import { FocusMonitor, InputModalityDetector } from '@angular/cdk/a11y';
 import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
-import { Listbox, Option } from '@angular/aria/listbox';
 import { CdkConnectedOverlay, type ConnectedOverlayPositionChange } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
@@ -52,11 +51,16 @@ import {
   MimiHighlight,
   MimiOptgroup,
   MimiOptionItem,
+  MimiOptionList,
   type MimiCompareWith,
+  type MimiListFilter,
+  type MimiListOptionContext,
+  type MimiListRow,
   type MimiSearchMode,
   mimiCompareFn,
   mimiDeclaredOptions,
-  mimiNormalizeText,
+  mimiFilterSections,
+  mimiListSections,
 } from '@/components/ui/option-list/option-list';
 import { MIMI_SELECT_TEXT } from './select-texts';
 
@@ -99,30 +103,13 @@ export interface MimiSelectOptionContext<T = unknown> {
 
 /** Distancia entre el disparador y el panel (diseño: 8px). */
 const OFFSET = 8;
-/** Pausa que reinicia la búsqueda por letra de la lista (la de aria por defecto). */
+/** Pausa que reinicia la búsqueda por letra (la de aria por defecto): Espacio no elige mientras. */
 const TYPEAHEAD_DELAY = 500;
 
 let nextId = 0;
 
-/** Filtro predeterminado: la etiqueta contiene la búsqueda, sin tildes ni mayúsculas. */
-const defaultFilter: MimiSelectFilter = (option, query) =>
-  mimiNormalizeText(option.label).includes(mimiNormalizeText(query));
-
-interface Row {
-  /** Clave interna: posición en la lista completa (estable aunque se filtre). */
-  key: string;
-  option: MimiOption;
-}
-
-interface Section {
-  id: string;
-  label: string | null;
-  rows: Row[];
-}
-
 const ICON = {
   viewBox: '0 0 24 24',
-  check: 'M20 6 9 17l-5-5',
   chevron: 'm6 9 6 6 6-6',
   spinner: 'M21 12a9 9 0 1 1-6.219-8.56',
 } as const;
@@ -204,9 +191,9 @@ export class MimiSelectOutlet {
   });
 }
 
-const LIST_CLASSES = 'flex max-h-[280px] flex-col gap-px overflow-y-auto p-1 outline-none';
-const GROUP_LABEL_CLASSES =
-  'px-2 pt-1.5 pb-1 text-[11px] font-semibold tracking-[.05em] text-muted-foreground uppercase';
+/** La lista (la de `option-list`): 280px de alto como máximo, como el diseño. */
+const LIST_CLASSES = 'max-h-[280px]';
+/** Cada opción: 34px, con la altura, el radio y el hover propios de Select. */
 const OPTION_CLASSES = cn(
   'flex h-[var(--mimi-select-option-height,34px)] shrink-0 cursor-pointer items-center gap-2 px-2 text-sm select-none',
   'rounded-[var(--mimi-select-option-radius,var(--mimi-radius-sm))]',
@@ -214,264 +201,6 @@ const OPTION_CLASSES = cn(
   'data-[active=true]:bg-[color:var(--mimi-select-option-hover,var(--mimi-accent))]',
   'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:active:scale-100',
 );
-const SKELETON_CLASSES =
-  'mx-2 h-7 rounded-[var(--mimi-radius-sm)] bg-muted animate-mimi-pulse motion-reduce:animate-none';
-
-/**
- * Uso interno de Select (no está en los Imports): el `ngListbox` con las opciones, más los estados
- * de carga y sin resultados. Es un componente aparte para que el listbox se registre, por DI, en
- * el popup que lo contiene: el del disparador (sin buscador) o el del buscador.
- *
- * El `value` del listbox es solo lo que se pinta (el check y `aria-selected`): el valor real es
- * el de Select. Rodeo: aria desmarca la opción elegida al volver a elegirla y vacía el valor
- * cuando la opción queda fuera del filtro; aquí se le vuelve a escribir (`resync`).
- * @internal No está en el índice; no forma parte de la API de Mimi.
- */
-@Component({
-  selector: 'mimi-select-list',
-  imports: [Listbox, Option, ComboboxWidget, MimiSelectOutlet, MimiSelectHighlight],
-  template: `
-    <div
-      ngListbox
-      ngComboboxWidget
-      #listbox="ngListbox"
-      focusMode="activedescendant"
-      selectionMode="explicit"
-      tabindex="-1"
-      [softDisabled]="false"
-      [typeaheadDelay]="typeaheadDelay"
-      [id]="listId()"
-      [value]="selectedKeys()"
-      [activeDescendant]="listbox.activeDescendant()"
-      [attr.aria-label]="labelledBy() ? null : label() || null"
-      [attr.aria-labelledby]="labelledBy() || null"
-      [class]="listClasses()"
-      (valueChange)="resync()"
-      (click)="onClick($event)"
-      (pointermove)="onPointerMove($event)"
-      (keydown)="keepFirst.set(false)"
-    >
-      @for (section of sections(); track section.id) {
-        <div
-          class="flex flex-col gap-px"
-          [attr.role]="section.label ? 'group' : 'presentation'"
-          [attr.aria-labelledby]="section.label ? section.id : null"
-        >
-          @if (section.label) {
-            <span role="presentation" [id]="section.id" [class]="groupLabelClasses">{{
-              section.label
-            }}</span>
-          }
-          @for (row of section.rows; track row.key) {
-            <div
-              ngOption
-              [id]="optionId(row.key)"
-              [value]="row.key"
-              [label]="row.option.label"
-              [disabled]="!!row.option.disabled"
-              [class]="optionClasses"
-              [attr.data-key]="row.key"
-              [attr.data-state]="row.key === selectedKey() ? 'checked' : 'unchecked'"
-            >
-              @if (optionTemplate(); as template) {
-                <span class="flex min-w-0 flex-1 items-center gap-2">
-                  <ng-container
-                    [mimiSelectOutlet]="template"
-                    [mimiSelectOutletOption]="row.option"
-                    [mimiSelectOutletQuery]="query()"
-                  />
-                </span>
-              } @else {
-                <mimi-select-highlight class="flex-1" [text]="row.option.label" [query]="query()" />
-              }
-              @if (row.option.hint) {
-                <span class="shrink-0 text-xs text-muted-foreground">{{ row.option.hint }}</span>
-              }
-              @if (row.key === selectedKey()) {
-                <svg
-                  aria-hidden="true"
-                  class="size-4 shrink-0"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  [attr.viewBox]="icon.viewBox"
-                >
-                  <path [attr.d]="icon.check" />
-                </svg>
-              }
-            </div>
-          }
-        </div>
-      }
-    </div>
-    @if (loading()) {
-      <div aria-busy="true" class="flex flex-col gap-1.5 p-2">
-        <div class="flex items-center gap-2 px-2 py-1.5 text-[13px] text-muted-foreground">
-          <svg
-            aria-hidden="true"
-            class="size-3.5 shrink-0 animate-[mimi-spin_0.8s_linear_infinite]"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            [attr.viewBox]="icon.viewBox"
-          >
-            <path [attr.d]="icon.spinner" />
-          </svg>
-          {{ text.loading }}
-        </div>
-        <div aria-hidden="true" [class]="skeletonClasses"></div>
-        <div aria-hidden="true" class="w-[70%]" [class]="skeletonClasses"></div>
-        <div aria-hidden="true" class="mb-1.5 w-[84%]" [class]="skeletonClasses"></div>
-      </div>
-    }
-    <div
-      role="status"
-      [class]="empty() ? 'flex flex-col items-center gap-1.5 px-4 py-6 text-center' : 'sr-only'"
-    >
-      @if (empty()) {
-        <span
-          aria-hidden="true"
-          class="inline-flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground"
-        >
-          <svg
-            class="size-[18px]"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            [attr.viewBox]="icon.viewBox"
-          >
-            <path d="m13.5 8.5-5 5" />
-            <path d="m8.5 8.5 5 5" />
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-        </span>
-        <span class="text-sm font-semibold">{{ text.noResults }}</span>
-        @if (query()) {
-          <span class="text-[13px] text-muted-foreground">{{ text.noResultsFor(query()) }}</span>
-        }
-      }
-    </div>
-  `,
-  host: { style: 'display: contents' },
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class MimiSelectList {
-  readonly sections = input.required<Section[]>();
-  /** Clave de la opción elegida, o null. */
-  readonly selectedKey = input<string | null>(null);
-  readonly query = input('');
-  readonly loading = input(false);
-  readonly optionTemplate = input<TemplateRef<MimiSelectOptionContext> | null>(null);
-  readonly listId = input.required<string>();
-  readonly label = input('');
-  readonly labelledBy = input<string | null | undefined>(null);
-  /** Se eligió una opción habilitada con el puntero. */
-  readonly pick = output<string>();
-
-  private readonly listbox = viewChild.required<Listbox<string>>('listbox');
-
-  protected readonly text = inject(MIMI_SELECT_TEXT);
-  protected readonly icon = ICON;
-  protected readonly typeaheadDelay = TYPEAHEAD_DELAY;
-  protected readonly groupLabelClasses = GROUP_LABEL_CLASSES;
-  protected readonly optionClasses = OPTION_CLASSES;
-  protected readonly skeletonClasses = SKELETON_CLASSES;
-
-  private readonly keys = computed(() =>
-    this.sections().flatMap((section) => section.rows.map((row) => row.key)),
-  );
-  protected readonly empty = computed(() => !this.loading() && this.keys().length === 0);
-  protected readonly listClasses = computed(() =>
-    cn(LIST_CLASSES, this.keys().length === 0 && 'hidden'),
-  );
-
-  /** Cambia para volver a escribir el valor en el listbox (un arreglo nuevo cada vez). */
-  private readonly version = signal(0);
-  protected readonly selectedKeys = computed(() => {
-    this.version();
-    const key = this.selectedKey();
-    return key !== null && this.keys().includes(key) ? [key] : [];
-  });
-
-  /** El activo cambió con el puntero: no hace falta traerlo a la vista. */
-  private byPointer = false;
-
-  /**
-   * La primera opción habilitada debe seguir activa (se está escribiendo en el buscador), hasta
-   * que el usuario mueva la activa con el teclado o el puntero.
-   */
-  protected readonly keepFirst = signal(false);
-
-  constructor() {
-    // Rodeo (choque): mientras no se haya usado el teclado en la lista, aria vuelve a activar la
-    // opción elegida cada vez que cambian las opciones. Mimi repone la primera cada vez.
-    afterRenderEffect({
-      read: () => {
-        if (!this.keepFirst()) return;
-        this.keys();
-        const listbox = this.listbox();
-        listbox.activeDescendant();
-        untracked(() => listbox.gotoFirst());
-      },
-    });
-    afterRenderEffect({
-      read: () => {
-        const listbox = this.listbox();
-        if (!listbox.activeDescendant()) return;
-        if (this.byPointer) this.byPointer = false;
-        else listbox.scrollActiveItemIntoView();
-      },
-    });
-  }
-
-  protected optionId(key: string): string {
-    return `${this.listId()}-${key}`;
-  }
-
-  protected resync(): void {
-    this.version.update((version) => version + 1);
-  }
-
-  /** Clave de la opción activa (la del `aria-activedescendant`), o null. */
-  activeKey(): string | null {
-    const id = this.listbox().activeDescendant();
-    return id ? id.slice(this.listId().length + 1) : null;
-  }
-
-  /** Activa la primera opción habilitada (al escribir en el buscador). */
-  gotoFirst(): void {
-    this.keepFirst.set(true);
-  }
-
-  private optionAt(event: Event): HTMLElement | null {
-    return (event.target as Element | null)?.closest<HTMLElement>('[role="option"]') ?? null;
-  }
-
-  /** Rodeo: el listbox no avisa qué opción se eligió. Solo cuentan las habilitadas. */
-  protected onClick(event: MouseEvent): void {
-    const option = this.optionAt(event);
-    const key = option?.dataset['key'];
-    if (key !== undefined && option?.getAttribute('aria-disabled') !== 'true') this.pick.emit(key);
-  }
-
-  /** El puntero activa la opción, como en el diseño (aria solo la activa con el teclado). */
-  protected onPointerMove(event: PointerEvent): void {
-    const option = this.optionAt(event);
-    const key = option?.dataset['key'];
-    if (key === undefined || option?.dataset['active'] === 'true') return;
-    if (option?.getAttribute('aria-disabled') === 'true') return;
-    this.byPointer = true;
-    this.keepFirst.set(false);
-    this.listbox().gotoIndex(this.keys().indexOf(key));
-  }
-}
 
 const TRIGGER_CLASSES = cn(
   'group/select relative flex w-full min-w-0 items-center gap-2 pr-2.5 pl-3 font-sans text-sm text-foreground mimi-transition',
@@ -535,7 +264,7 @@ const SEARCH_INPUT_CLASSES =
     ComboboxWidget,
     CdkConnectedOverlay,
     MimiOverlayFollow,
-    MimiSelectList,
+    MimiOptionList,
     MimiSelectOutlet,
   ],
   // mimi-form-field lo encuentra por este token para mostrar el mensaje de error.
@@ -724,15 +453,21 @@ const SEARCH_INPUT_CLASSES =
               }
             </div>
             <ng-template ngComboboxPopup [combobox]="searchBox">
-              <mimi-select-list
+              <mimi-option-list
                 [sections]="visibleSections()"
-                [selectedKey]="selectedKey()"
+                [selectedKeys]="selectedKeys()"
                 [query]="query()"
                 [loading]="loading()"
-                [optionTemplate]="optionTemplate()?.templateRef ?? null"
+                [loadingText]="text.loading"
+                [emptyTitle]="text.noResults"
+                [emptyText]="query() ? text.noResultsFor(query()) : ''"
+                [status]="loading() ? text.loading : ''"
+                [optionTemplate]="listTemplate()"
                 [listId]="listId"
                 [label]="panelLabel()"
                 [labelledBy]="ariaLabelledby()"
+                [listClass]="listClasses"
+                [optionClass]="optionClasses"
                 (pick)="pick($event)"
               />
             </ng-template>
@@ -747,14 +482,19 @@ const SEARCH_INPUT_CLASSES =
             [attr.inert]="state() === 'closed' ? '' : null"
             (mousedown)="onPanelMousedown($event)"
           >
-            <mimi-select-list
+            <mimi-option-list
               [sections]="visibleSections()"
-              [selectedKey]="selectedKey()"
+              [selectedKeys]="selectedKeys()"
               [loading]="loading()"
-              [optionTemplate]="optionTemplate()?.templateRef ?? null"
+              [loadingText]="text.loading"
+              [emptyTitle]="text.noResults"
+              [status]="loading() ? text.loading : ''"
+              [optionTemplate]="listTemplate()"
               [listId]="listId"
               [label]="panelLabel()"
               [labelledBy]="ariaLabelledby()"
+              [listClass]="listClasses"
+              [optionClass]="optionClasses"
               (pick)="pick($event)"
             />
           </div>
@@ -884,7 +624,7 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly boxWidth = signal<number | null>(null);
   private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
   private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
-  private readonly list = viewChild(MimiSelectList);
+  private readonly list = viewChild(MimiOptionList);
 
   /** Estado del formulario, con los errores, para el mensaje de mimi-form-field. */
   readonly fieldState = injectFieldState();
@@ -901,6 +641,8 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly icon = ICON;
+  protected readonly listClasses = LIST_CLASSES;
+  protected readonly optionClasses = OPTION_CLASSES;
   protected readonly buttonClasses = BUTTON_CLASSES;
   protected readonly clearClasses = CLEAR_CLASSES;
   protected readonly chevronClasses = CHEVRON_CLASSES;
@@ -925,38 +667,25 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   });
 
   /** Todas las opciones, con su clave interna, en secciones (sueltas o de un grupo). */
-  private readonly sections = computed<Section[]>(() => {
-    const sections: Section[] = [];
-    let loose: Section | null = null;
-    let index = 0;
-    const row = (option: MimiOption<T>): Row => ({ key: String(index++), option });
-    for (const item of this.items()) {
-      const id = `${this.listId}-group-${sections.length}`;
-      if ('options' in item) {
-        loose = null;
-        sections.push({ id, label: item.label, rows: item.options.map(row) });
-      } else {
-        if (!loose) sections.push((loose = { id, label: null, rows: [] }));
-        loose.rows.push(row(item));
-      }
-    }
-    return sections;
-  });
+  private readonly sections = computed(() => mimiListSections(this.items(), this.listId));
   private readonly rows = computed(() => this.sections().flatMap((section) => section.rows));
 
   /** Texto del buscador. */
   protected readonly query = signal('');
 
   /** Lo que se pinta: nada mientras carga, y solo las coincidencias al buscar. */
-  protected readonly visibleSections = computed<Section[]>(() => {
+  protected readonly visibleSections = computed(() => {
     if (this.loading()) return [];
     const query = this.search() ? this.query() : '';
     if (!query || this.searchMode() === 'server') return this.sections();
-    const filter = (this.filterWith() ?? defaultFilter) as MimiSelectFilter;
-    return this.sections()
-      .map((section) => ({ ...section, rows: section.rows.filter((r) => filter(r.option, query)) }))
-      .filter((section) => section.rows.length > 0);
+    // Sin `filterWith`, el de option-list: la etiqueta contiene lo escrito, sin tildes.
+    return mimiFilterSections(this.sections(), query, this.filterWith() as MimiListFilter);
   });
+
+  /** La plantilla `mimiSelectOption` para la lista (en la lista, `trigger` es `false`). */
+  protected readonly listTemplate = computed(
+    () => (this.optionTemplate()?.templateRef ?? null) as TemplateRef<MimiListOptionContext> | null,
+  );
   protected readonly count = computed(() =>
     this.visibleSections().reduce((count, section) => count + section.rows.length, 0),
   );
@@ -970,13 +699,18 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
     const value = this.value();
     return this.rows().find((row) => this.matches(row.option, value))?.key ?? null;
   });
+  /** Lo que pinta la lista (el check y `aria-selected`): la clave elegida, si la hay. */
+  protected readonly selectedKeys = computed(() => {
+    const key = this.selectedKey();
+    return key === null ? [] : [key];
+  });
 
   /**
    * La opción elegida. Si deja de estar en `options` (búsqueda en el servidor), se conserva la
    * última para seguir mostrando su texto.
    */
   protected readonly selectedOption = linkedSignal<
-    { value: T | null; rows: Row[] },
+    { value: T | null; rows: MimiListRow[] },
     MimiOption | null
   >({
     source: () => ({ value: this.value(), rows: this.rows() }),
