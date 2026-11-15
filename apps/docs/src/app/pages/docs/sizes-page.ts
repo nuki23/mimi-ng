@@ -47,7 +47,7 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
     component:
       'Button, Input, Textarea, Select, Combobox, Number Input, Password, Input Mask, Tags Input, Date Picker, Date Range, Color Picker',
     changes:
-      'La escala de arriba: alto 32 / 40 / 48 px, relleno, texto e ícono. Quedan alineados al píxel.',
+      'Alto 32 / 40 / 48 px (Textarea, su alto mínimo): quedan alineados al píxel. Button cambia además el relleno y el texto; Input y Password, el texto. Los demás conservan texto de 14 px.',
   },
   { component: 'Avatar', changes: 'Diámetro 32 / 40 / 56 px y texto de las iniciales.' },
   { component: 'Switch', changes: 'Pista 32×18 / 36×20 / 44×24 px.' },
@@ -63,7 +63,7 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
   {
     component: 'Pagination, Progress',
     changes:
-      'Botón e ícono (Pagination) y grosor de la barra o del círculo (Progress). Pagination es `sm` por defecto.',
+      'Pagination: botón 32 / 40 / 48 px e ícono 16 / 18 / 20 px (es `sm` por defecto). Progress: barra de 4 / 8 / 12 px y círculo de 44 / 76 / 96 px.',
   },
   {
     component: 'Toast',
@@ -100,7 +100,8 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
   },
   {
     component: 'Tooltip',
-    changes: 'Texto 11,5 / 12,5 / 13,5 px y relleno. Toma el tamaño del contenedor del disparador.',
+    changes:
+      'Texto 11,5 / 12,5 / 13,5 px y relleno. Toma el tamaño del contenedor del disparador; `mimiTooltipSize` lo fija.',
   },
   { component: 'Popover', changes: 'Ancho 260 / 300 / 360 px.' },
 ];

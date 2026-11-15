@@ -112,4 +112,8 @@ Pendientes sin grupo. No tienen versión propia: salen en la siguiente versión 
   - Trampas: cambiar un comentario de un archivo que copia la CLI cambia su contenido: quien lo tenga sin modificar recibe la versión nueva con `ng g mimi` (todo o nada, spec 5); no cambia la API ni el aspecto.
   - Criterios de hecho: `grep -rn "provisional\|D6" packages/ui-core/src apps/docs/src` solo con lo de la PD-6 (o nada, si ya se decidió); la página de Dropdown Menu sin la frase; `pnpm build`, `pnpm test` y `pnpm format:check` en verde.
   - Depende de: — · Bloquea: —
+- [ ] M.27 `size` en Input OTP y File Upload · sin versión · S. Origen: R.26 (15/11/2026, rama `auto/0.7.0-tanda1-2026-11-15`): al comprobar la tabla de tamaños contra el código, Input OTP (celdas fijas de 46×54 px, `--mimi-otp-width/height`) y la zona de File Upload no tienen `size`, aunque la R.2 los planeaba (OTP 40×46 / 46×54 / 52×62; la zona, relleno y texto) y no hay justificación escrita. Registrada sin hacerla.
+  - Qué: `size` con `MimiSized` en los dos (la escala del tema en `[data-size]`, como los demás); las medidas de la R.2 o las que decida el usuario.
+  - Criterios de hecho: una prueba por tamaño; la fila en la tabla de la spec 4 y en la página «Tamaños» (las compara `sizes-page.spec.ts`); fuera de la lista «Sin tamaño propio»; Playwright de las dos páginas en `sm` y `lg`.
+  - Depende de: — · Bloquea: —
 - [ ] 0.1.1-3 `pnpm publish` da 404 aunque `npm whoami` funciona (pnpm 12 no usa la sesión de `npm login`). Mientras se resuelve, publicar con `npm publish` desde `packages/cli`. Investigar cómo autentica pnpm 12.
