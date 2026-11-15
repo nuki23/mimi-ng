@@ -12,6 +12,7 @@ import {
   provideMimiErrorMessages,
 } from '@/components/ui/form-field';
 import { MimiInput } from '@/components/ui/input';
+import { FormFieldMessagesDefaultExample } from './form-field-messages-default.example';
 
 /** Validador propio: su clave (`usernameTaken`) es la que busca el mapa de mensajes. */
 function usernameAvailable(control: AbstractControl): ValidationErrors | null {
@@ -20,7 +21,7 @@ function usernameAvailable(control: AbstractControl): ValidationErrors | null {
 
 @Component({
   selector: 'app-form-field-messages-provider-example',
-  imports: [ReactiveFormsModule, MimiFormField, MimiInput],
+  imports: [ReactiveFormsModule, MimiFormField, MimiInput, FormFieldMessagesDefaultExample],
   // En tu app va en app.config.ts; aquí, en el componente, para no cambiar el resto del sitio.
   providers: [
     provideMimiErrorMessages({
@@ -30,9 +31,13 @@ function usernameAvailable(control: AbstractControl): ValidationErrors | null {
     }),
   ],
   template: `
-    <mimi-form-field label="Usuario" class="w-80">
-      <input mimiInput [formControl]="user" />
-    </mimi-form-field>
+    <div class="grid w-full max-w-2xl gap-6 sm:grid-cols-2">
+      <mimi-form-field label="Usuario" hint="Con tu mapa de mensajes.">
+        <input mimiInput [formControl]="user" />
+      </mimi-form-field>
+      <!-- Al lado, un campo sin configurar: los mensajes predeterminados, en inglés. -->
+      <app-form-field-messages-default-example />
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

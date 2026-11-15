@@ -21,7 +21,16 @@ describe('FormFieldPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(8);
+      // La demo y ocho ejemplos; los predeterminados van junto al provider (R.30).
+      expect(previews.length).toBe(9);
+      // R.30: las piezas (con su leyenda) y los controles propios dentro de FormField.
+      expect(el.querySelectorAll('app-form-field-anatomy-example li').length).toBe(5);
+      const controls = el.querySelector('app-form-field-controls-example')!;
+      for (const tag of ['mimi-select', 'mimi-combobox', 'mimi-date-picker', 'mimi-tags-input']) {
+        expect(controls.querySelector(`mimi-form-field ${tag}`), tag).not.toBeNull();
+      }
+      expect(controls.querySelector('mimi-form-field mimi-switch')).not.toBeNull();
+      expect(controls.querySelector('mimi-form-field mimi-checkbox')).not.toBeNull();
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-form-field')).not.toBeNull();
         expect(code).toMatch(
