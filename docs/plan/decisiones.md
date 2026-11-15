@@ -17,13 +17,11 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 De la tanda 1 de la plantilla de páginas (DP.1, 14/11/2026). Son excepciones a los límites o huecos de la plantilla: **las aprueba el usuario** (PD-4c.4); no se aplicaron.
 
-- **PD-7 (usuario): la demo de Dialog con el servicio.** La página tenía como primer ejemplo «Editar usuario» con `MimiDialogService` (quien abre y el componente que se abre: 39 + 51 = **90 líneas**); la demo de la plantilla admite **60**. Aplicado mientras tanto: la demo es el diálogo en la plantilla (`dialog-basic`, 48 líneas) y el del servicio pasa a «Casos avanzados» («Con el servicio: abrir un componente tuyo»); el bloque «Uso» sigue mostrando el servicio.
-  - **(a) Recomendado:** dejarlo así (el servicio se ve en Uso y en su ejemplo; la demo es más corta).
-  - (b) Excepción: la demo de Dialog puede llegar a 90 líneas en dos archivos (se anota en `docs/spec/plantilla-pagina.md`).
-  - (c) Recortar el ejemplo del servicio a 60 líneas (menos campos en el formulario del diálogo).
 - **PD-8 (usuario): dónde va la API de un servicio.** La plantilla tiene Entradas, Salidas, Piezas, Textos y Variables CSS. `MimiDialogService` y `MimiDialogRef` (`open`, `close`, `afterClosed`, `result`) no son entradas ni piezas con selector; hoy van como filas de **Piezas**, con `inject(MimiDialogService)` en la columna «Selector». Lo mismo pasará con Toast, Confirm y Command (DP.3 y DP.4).
   - **(a) Recomendado:** un h3 nuevo y opcional de API, **«Servicio»** (`id="service"`, columnas `Miembro | Tipo | Descripción`), entre Piezas y Textos; cambia la plantilla (`docs/spec/plantilla-pagina.md`, `DocPage.api.service` y la prueba).
   - (b) Dejarlo en Piezas, como ahora.
+
+**PD-7 la decidió el usuario el 14/11/2026:** Dialog empieza por el servicio, con un ejemplo más corto (pedir un nombre y devolverlo) como demo; el diálogo en la plantilla pasa a Ejemplos. Cupo en 56 líneas entre sus dos archivos: no hizo falta la excepción hasta 80 que el usuario dejó aprobada para Dialog. Rama `auto/docs-paginas-2-2026-11-14`; el texto de la pregunta, en `docs/auto/decisiones-por-defecto.md`.
 
 **PD-5 y PD-6 (de la limpieza «sin rediseño») las decidió el usuario el 14/11/2026**, las dos con la opción recomendada: PD-5, `group2-tokens.spec.ts` compara con los valores de hoy escritos en la prueba, sin leer `docs/design/`; PD-6, el degradado neutro de `login-02` es el definitivo. Hechas en la rama `auto/docs-paginas-2026-11-14`; el texto de las preguntas está en `docs/auto/decisiones-por-defecto.md`.
 

@@ -179,6 +179,12 @@ No son decisiones por defecto: el usuario las eligió en el prompt de la rama `a
 - **PD-4c.3: los textos de C.3 se aplican tal como están en `parte-c.md`** (`CLAUDE.md`, `.claude/commands/componente.md` y `.claude/commands/cerrar-grupo.md`), en DP.0 (la recomendación). Base: «Decidido por el usuario».
 - **PD-4c.4: cada excepción a los límites la aprueba el usuario**, una a una, y queda en `docs/spec/plantilla-pagina.md` (la recomendación). Base: «Decidido por el usuario».
 
+## Decididas por el usuario: tanda 1 de la plantilla de páginas (14/11/2026)
+
+No son decisiones por defecto: el usuario las eligió en el prompt de la rama `auto/docs-paginas-2-2026-11-14`.
+
+- **PD-7: la demo de Dialog.** Pregunta: la demo con el servicio («Editar usuario», 90 líneas en dos archivos) no cabía en las 60 de la demo; se había puesto el diálogo en la plantilla como demo (recomendado: dejarlo así; o una excepción hasta 90; o recortar a 60). **Elegido:** empezar por el servicio con un caso más corto (pedir un nombre y devolverlo) en 60 líneas, y el de la plantilla a Ejemplos; si no cabía, excepción solo para Dialog hasta 80. Cupo en **56** (`dialog-ask-name.example.ts` 30 + `ask-name-dialog.ts` 26): la excepción no se usó. Base: «Decidido por el usuario».
+
 ## Decididas por el usuario: sin rediseño (14/11/2026)
 
 No son decisiones por defecto. Salieron de la limpieza «sin rediseño» (el código es la fuente de verdad del diseño; `docs/auto/docs-paginas-2026-11-14.md`, paso 7).

@@ -1,7 +1,7 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
+import { DialogAskNameExample } from './examples/dialog-ask-name.example';
 import { DialogBasicExample } from './examples/dialog-basic.example';
 import { DialogCustomClassExample } from './examples/dialog-custom-class.example';
-import { DialogEditUserExample } from './examples/dialog-edit-user.example';
 import { DialogFormExample } from './examples/dialog-form.example';
 import { DialogFromMenuExample } from './examples/dialog-from-menu.example';
 import { DialogLongContentExample } from './examples/dialog-long-content.example';
@@ -14,7 +14,7 @@ import basicSource from './examples/dialog-basic.example' with { loader: 'text' 
 // @ts-expect-error
 import customClassSource from './examples/dialog-custom-class.example' with { loader: 'text' };
 // @ts-expect-error
-import editUserSource from './examples/dialog-edit-user.example' with { loader: 'text' };
+import askNameSource from './examples/dialog-ask-name.example' with { loader: 'text' };
 // @ts-expect-error
 import formSource from './examples/dialog-form.example' with { loader: 'text' };
 // @ts-expect-error
@@ -26,7 +26,7 @@ import noDismissSource from './examples/dialog-no-dismiss.example' with { loader
 // @ts-expect-error
 import optionsSource from './examples/dialog-options.example' with { loader: 'text' };
 // @ts-expect-error
-import editUserDialogSource from './examples/edit-user-dialog' with { loader: 'text' };
+import askNameDialogSource from './examples/ask-name-dialog' with { loader: 'text' };
 
 /** La página de Dialog (G1.6 y R.6/R.7), con la plantilla de página (DP.1). */
 export const DIALOG_PAGE: DocPage = {
@@ -36,9 +36,13 @@ export const DIALOG_PAGE: DocPage = {
     id: 'demo',
     title: '',
     sentence:
-      'En la plantilla, con `<mimi-dialog>`. Al abrir, el foco va al primer campo; al cerrar, vuelve al botón.',
-    component: DialogBasicExample,
-    source: basicSource as string,
+      'El servicio abre `AskNameDialog` con el nombre en su entrada; al guardar, la página recibe el nuevo.',
+    component: DialogAskNameExample,
+    source: askNameSource as string,
+    files: [
+      { name: 'dialog-ask-name.example.ts', code: askNameSource as string },
+      { name: 'ask-name-dialog.ts', code: askNameDialogSource as string },
+    ],
   },
   install: 'dialog',
   usage: {
@@ -69,16 +73,12 @@ export const DIALOG_PAGE: DocPage = {
     ],
     advanced: [
       {
-        id: 'service',
-        title: 'Con el servicio: abrir un componente tuyo',
+        id: 'template',
+        title: 'En la plantilla: <mimi-dialog>',
         sentence:
-          'El servicio abre `EditUserDialog` con el usuario en su entrada; al guardar, la página muestra el resultado.',
-        component: DialogEditUserExample,
-        source: editUserSource as string,
-        files: [
-          { name: 'dialog-edit-user.example.ts', code: editUserSource as string },
-          { name: 'edit-user-dialog.ts', code: editUserDialogSource as string },
-        ],
+          'Para casos pequeños, el contenido vive en tu plantilla con tus signals. Al abrir, el foco va al primer campo; al cerrar, vuelve al botón.',
+        component: DialogBasicExample,
+        source: basicSource as string,
       },
       {
         id: 'form',
