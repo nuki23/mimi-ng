@@ -1,8 +1,11 @@
 /**
  * Globales del Grupo 2 en theme-base.css (plan, G2.0b; spec 13, «Otros globales del diseño»).
  *
- * - Valores iguales a los de docs/design/tokens-mimi.css, en claro y oscuro.
- * - Keyframes con el mismo cuerpo que el diseño (mimi-indet sale de `F5 Estructura`).
+ * - Valores en claro y oscuro iguales a los escritos aquí (`G2_EXPECTED`), y keyframes con el
+ *   cuerpo escrito aquí. **El código es la fuente de verdad del diseño** (decidido por el usuario
+ *   el 14/11/2026, PD-5): la prueba ya no lee docs/design/ (referencia histórica). Los valores
+ *   salieron de tokens-mimi.css y de `F5 Estructura`; si uno cambia a propósito, se cambia aquí
+ *   también, y la prueba avisa si cambia por accidente.
  * - Expuestos a Tailwind con @theme inline.
  * - Compatibilidad con un tema anterior a la 0.3.0: ningún componente lee estos globales sin
  *   valor de respaldo (`var(--mimi-track, …)`), ni con una utilidad de Tailwind que no lo tiene
@@ -25,8 +28,41 @@ const g2Root = g2Node.cwd();
 const g2Read = (p: string) => g2Fs.readFileSync(`${g2Root}/${p}`, 'utf8');
 
 const G2_THEME = g2Read('packages/ui-core/src/lib/theme/theme-base.css');
-const G2_DESIGN = g2Read('docs/design/tokens-mimi.css');
-const G2_STRUCTURE = g2Read('docs/design/Mimi F5 Estructura.dc.html');
+
+/** Valores de hoy (14/11/2026) en claro y oscuro, tal como los deja `g2Flat`. */
+const G2_EXPECTED: Record<string, readonly [light: string, dark: string]> = {
+  range: [
+    'color-mix(in oklab, var(--mimi-primary) 9%, var(--mimi-background))',
+    'color-mix(in oklab, var(--mimi-primary) 14%, var(--mimi-background))',
+  ],
+  track: [
+    'color-mix(in oklab, var(--mimi-foreground) 12%, var(--mimi-background))',
+    'color-mix(in oklab, var(--mimi-foreground) 16%, var(--mimi-background))',
+  ],
+  'track-fill': ['var(--mimi-primary)', 'var(--mimi-primary)'],
+  thumb: ['oklch(1 0 0)', 'oklch(0.985 0 0)'],
+  chip: ['var(--mimi-secondary)', 'var(--mimi-secondary)'],
+  'chip-foreground': ['var(--mimi-secondary-foreground)', 'var(--mimi-secondary-foreground)'],
+  dropzone: [
+    'color-mix(in oklab, var(--mimi-muted) 55%, var(--mimi-background))',
+    'color-mix(in oklab, var(--mimi-muted) 50%, var(--mimi-background))',
+  ],
+  // La marca, no `info` (decidido por el usuario el 12/11/2026).
+  'dropzone-active': ['var(--mimi-primary-subtle)', 'var(--mimi-primary-subtle)'],
+  'dropzone-active-border': ['var(--mimi-ring)', 'var(--mimi-ring)'],
+  'strength-weak': ['var(--mimi-destructive)', 'var(--mimi-destructive)'],
+  'strength-medium': ['var(--mimi-warning)', 'var(--mimi-warning)'],
+  'strength-strong': ['var(--mimi-success)', 'var(--mimi-success)'],
+  selection: ['var(--mimi-info)', 'var(--mimi-info)'],
+};
+
+/** Cuerpo de los keyframes de hoy, como los deja `g2Keyframes` (sin espacios). */
+const G2_KEYFRAMES: Record<string, string> = {
+  'mimi-caret': '{50%{opacity:0}}',
+  'mimi-bob': '{50%{transform:translateY(-4px)}}',
+  'mimi-shake': '{20%,60%{transform:translateX(-4px)}40%,80%{transform:translateX(4px)}}',
+  'mimi-indet': '{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}',
+};
 
 const G2_GLOBALS = [
   'range',
@@ -85,45 +121,24 @@ function g2Files(dir: string): string[] {
 
 describe('theme-base.css: globales del Grupo 2 (G2.0b)', () => {
   const themeLight = g2Vars(G2_THEME, ':root');
-  const themeDark = g2Vars(G2_THEME, '.dark');
-  const designLight = g2Vars(G2_DESIGN, ':root');
-  const designDark = new Map([...designLight, ...g2Vars(G2_DESIGN, '.dark')]);
+  const themeDark = new Map([...themeLight, ...g2Vars(G2_THEME, '.dark')]);
 
-  /**
-   * Lo que Mimi hace distinto del diseño a propósito (anotado en correcciones-pendientes.md): la
-   * zona de File Upload con un archivo encima usa la marca, no `info` (decidido por el usuario,
-   * 12/11/2026). El diseño tiene que seguir teniendo la variable.
-   */
-  const G2_OVERRIDES: Record<string, string> = {
-    'dropzone-active': 'var(--mimi-primary-subtle)',
-    'dropzone-active-border': 'var(--mimi-ring)',
-  };
+  it('la lista de valores esperados cubre todos los globales', () => {
+    expect(Object.keys(G2_EXPECTED).sort()).toEqual([...G2_GLOBALS].sort());
+  });
 
-  it.each(G2_GLOBALS)(
-    '--mimi-%s vale lo mismo que en tokens-mimi.css, en claro y oscuro',
-    (name) => {
-      expect(designLight.get(name), 'falta en el diseño').toBeDefined();
-      const override = G2_OVERRIDES[name];
-      expect(themeLight.get(name)).toBe(override ?? designLight.get(name));
-      expect(themeDark.get(name)).toBe(override ?? designDark.get(name));
-    },
-  );
+  it.each(G2_GLOBALS)('--mimi-%s vale lo esperado, en claro y oscuro', (name) => {
+    const [light, dark] = G2_EXPECTED[name];
+    expect(themeLight.get(name)).toBe(light);
+    expect(themeDark.get(name)).toBe(dark);
+  });
 
   it.each(G2_GLOBALS)('--mimi-%s se expone a Tailwind con @theme inline', (name) => {
     expect(G2_THEME).toContain(`--color-${name}: var(--mimi-${name});`);
   });
 
-  it.each(['mimi-caret', 'mimi-bob', 'mimi-shake'])(
-    '@keyframes %s tiene el mismo cuerpo que tokens-mimi.css',
-    (name) => {
-      expect(g2Keyframes(G2_THEME, name)).not.toBe('');
-      expect(g2Keyframes(G2_THEME, name)).toBe(g2Keyframes(G2_DESIGN, name));
-    },
-  );
-
-  it('@keyframes mimi-indet tiene el mismo cuerpo que F5 Estructura', () => {
-    expect(g2Keyframes(G2_THEME, 'mimi-indet')).not.toBe('');
-    expect(g2Keyframes(G2_THEME, 'mimi-indet')).toBe(g2Keyframes(G2_STRUCTURE, 'mimi-indet'));
+  it.each(Object.keys(G2_KEYFRAMES))('@keyframes %s tiene el cuerpo esperado', (name) => {
+    expect(g2Keyframes(G2_THEME, name)).toBe(G2_KEYFRAMES[name]);
   });
 
   it('--mimi-corner-shape no entra (es del Theme Studio)', () => {

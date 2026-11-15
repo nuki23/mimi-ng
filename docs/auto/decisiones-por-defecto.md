@@ -179,6 +179,12 @@ No son decisiones por defecto: el usuario las eligió en el prompt de la rama `a
 - **PD-4c.3: los textos de C.3 se aplican tal como están en `parte-c.md`** (`CLAUDE.md`, `.claude/commands/componente.md` y `.claude/commands/cerrar-grupo.md`), en DP.0 (la recomendación). Base: «Decidido por el usuario».
 - **PD-4c.4: cada excepción a los límites la aprueba el usuario**, una a una, y queda en `docs/spec/plantilla-pagina.md` (la recomendación). Base: «Decidido por el usuario».
 
+## Decididas por el usuario: sin rediseño (14/11/2026)
+
+No son decisiones por defecto. Salieron de la limpieza «sin rediseño» (el código es la fuente de verdad del diseño; `docs/auto/docs-paginas-2026-11-14.md`, paso 7).
+
+- **PD-5: la prueba que comparaba el tema con el diseño original, opción (a).** `packages/ui-core/src/lib/theme/group2-tokens.spec.ts` comprobaba que los 13 globales del Grupo 2 de `theme-base.css` valían lo mismo que en `docs/design/tokens-mimi.css` (con dos excepciones de File Upload) y que los `@keyframes` `mimi-caret`, `mimi-bob`, `mimi-shake` y `mimi-indet` tenían el cuerpo del diseño. Ahora compara con los valores de hoy escritos en la prueba (`G2_EXPECTED`, `G2_KEYFRAMES`), sin leer `docs/design/`; las partes de `@theme inline` y de compatibilidad no cambian. Alternativas que no se eligieron: quitar solo las comparaciones (sin aviso de cambios por accidente) o dejarla como estaba. Base: «Decidido por el usuario».
+
 ## Decidida por el usuario: grises (14/11/2026)
 
 - **Grises: malva medio** (sustituye a malva suave). Los 15 grises del tema, en claro y oscuro, llevan el tono 292 con croma **0,014** (0,007 en los casi blancos y casi negros), con la misma luminosidad: el contraste AA no cambia. `MIMI_THEME_NEUTRAL` sigue en croma 0. Base: «Decidido por el usuario», después de ver las capturas del 13/11/2026 (`docs/auto/capturas/2026-11-13/grises/`). Informe: `docs/auto/refinamiento-0.6.0-parte11-2026-11-14.md`.

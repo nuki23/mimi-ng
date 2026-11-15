@@ -17,14 +17,12 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 De la limpieza «sin rediseño» (14/11/2026; decidido por el usuario: no habrá rediseño global y el código es la fuente de verdad del diseño). No se decide por defecto: lo pidió el usuario.
 
-- **PD-5 (usuario, 14/11/2026): la prueba que compara el tema con el diseño original.** `packages/ui-core/src/lib/theme/group2-tokens.spec.ts` comprueba que los globales del Grupo 2 de `theme-base.css` valen lo mismo que en `docs/design/tokens-mimi.css` (con dos excepciones escritas, las de File Upload) y que los `@keyframes` `mimi-caret`, `mimi-bob`, `mimi-shake` y `mimi-indet` tienen el mismo cuerpo que el diseño (`tokens-mimi.css` y `Mimi F5 Estructura.dc.html`). Hoy pasa, pero ata el código a un archivo que ya no manda: si un global cambia a propósito, la prueba pide cambiar el diseño histórico o sumar una excepción.
-  - **(a) Recomendado:** la parte que compara con `docs/design/` pasa a comparar con los valores escritos en la prueba (los de hoy, que son los mismos), con un comentario que diga que el código es la fuente; las partes de `@theme inline` y de compatibilidad con temas anteriores no cambian. Sigue avisando de un cambio por accidente, sin leer `docs/design/`.
-  - (b) Quitar solo las comparaciones con el diseño (se pierde el aviso de un cambio por accidente en esos globales).
-  - (c) Dejarla como está (el diseño histórico sigue atando esos valores).
 - **PD-6 (usuario, 14/11/2026): la imagen de `login-02`.** Sin `imageSrc`, el Block muestra un degradado neutro marcado «provisional» (B.3-a, decidido por el usuario el 07/11/2026, «hasta que el diseño tenga una»). Sin rediseño, no llegará una imagen de Claude Design.
   - **(a) Recomendado:** el degradado neutro es el definitivo: se quita «provisional» del código (`login-02.ts`), de la página del Block y del historial de D6 (con la M.26).
   - (b) Una ilustración propia en SVG en línea (tarea nueva, de aspecto).
   - (c) Dejarlo como provisional hasta tener una imagen del usuario.
+
+**PD-5 la decidió el usuario el 14/11/2026** (opción (a), la recomendada): `group2-tokens.spec.ts` compara con los valores de hoy escritos en la prueba, sin leer `docs/design/`. Hecha en la rama `auto/docs-paginas-2026-11-14`; el texto de la pregunta está en `docs/auto/decisiones-por-defecto.md`.
 
 **PD-4 y PD-4c (la plantilla de las páginas) las decidió el usuario el 14/11/2026** y salieron de este índice: variante A; un componente común con configuración; la prueba falla desde DP.0 con la lista de pendientes que solo encoge; los textos de C.3 se aplican como están; cada excepción la aprueba el usuario. Quedan como «Decidido por el usuario» en [docs-paginas/plan.md](docs-paginas/plan.md), [docs-paginas/parte-c.md](docs-paginas/parte-c.md) y `docs/auto/decisiones-por-defecto.md`.
 
