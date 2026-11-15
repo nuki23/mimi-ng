@@ -22,6 +22,8 @@ import { SWITCH_PAGE } from '../pages/docs/components/switch/switch.page';
 import { SwitchPage } from '../pages/docs/components/switch/switch-page';
 import { CHECKBOX_PAGE } from '../pages/docs/components/checkbox/checkbox.page';
 import { CheckboxPage } from '../pages/docs/components/checkbox/checkbox-page';
+import { TEXTAREA_PAGE } from '../pages/docs/components/textarea/textarea.page';
+import { TextareaPage } from '../pages/docs/components/textarea/textarea-page';
 import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
 import { textLinks } from './doc-text';
 import {
@@ -48,6 +50,7 @@ import {
 
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
 const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+  textarea: { page: TEXTAREA_PAGE, component: TextareaPage },
   checkbox: { page: CHECKBOX_PAGE, component: CheckboxPage },
   button: { page: BUTTON_PAGE, component: ButtonPage },
   combobox: { page: COMBOBOX_PAGE, component: ComboboxPage },
@@ -65,7 +68,7 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
  * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
  * con la lista de pendientes.
  */
-const PENDING_COUNT = 30;
+const PENDING_COUNT = 29;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
