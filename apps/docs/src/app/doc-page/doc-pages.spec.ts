@@ -40,6 +40,8 @@ import { CONFIRM_PAGE } from '../pages/docs/components/confirm/confirm.page';
 import { ConfirmPage } from '../pages/docs/components/confirm/confirm-page';
 import { COMMAND_PAGE } from '../pages/docs/components/command/command.page';
 import { CommandPage } from '../pages/docs/components/command/command-page';
+import { TOOLTIP_PAGE } from '../pages/docs/components/tooltip/tooltip.page';
+import { TooltipPage } from '../pages/docs/components/tooltip/tooltip-page';
 import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
 import { textLinks } from './doc-text';
 import {
@@ -66,6 +68,7 @@ import {
 
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
 const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+  tooltip: { page: TOOLTIP_PAGE, component: TooltipPage },
   command: { page: COMMAND_PAGE, component: CommandPage },
   confirm: { page: CONFIRM_PAGE, component: ConfirmPage },
   toast: { page: TOAST_PAGE, component: ToastPage },
@@ -92,7 +95,7 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
  * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
  * con la lista de pendientes.
  */
-const PENDING_COUNT = 21;
+const PENDING_COUNT = 20;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
