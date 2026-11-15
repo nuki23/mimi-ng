@@ -56,6 +56,8 @@ import { SORTABLE_LIST_PAGE } from '../pages/docs/components/sortable-list/sorta
 import { SortableListPage } from '../pages/docs/components/sortable-list/sortable-list-page';
 import { PAGINATION_PAGE } from '../pages/docs/components/pagination/pagination.page';
 import { PaginationPage } from '../pages/docs/components/pagination/pagination-page';
+import { DATE_PICKER_PAGE } from '../pages/docs/components/date-picker/date-picker.page';
+import { DatePickerPage } from '../pages/docs/components/date-picker/date-picker-page';
 import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
 import { textLinks } from './doc-text';
 import {
@@ -82,6 +84,7 @@ import {
 
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
 const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+  'date-picker': { page: DATE_PICKER_PAGE, component: DatePickerPage },
   pagination: { page: PAGINATION_PAGE, component: PaginationPage },
   'sortable-list': { page: SORTABLE_LIST_PAGE, component: SortableListPage },
   tree: { page: TREE_PAGE, component: TreePage },
@@ -116,7 +119,7 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
  * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
  * con la lista de pendientes.
  */
-const PENDING_COUNT = 13;
+const PENDING_COUNT = 12;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
