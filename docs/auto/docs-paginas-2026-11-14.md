@@ -136,6 +136,11 @@ El chunk de `doc-page` lo comparten todas las páginas migradas; la mayor parte 
 - Prueba nueva en `doc-page.spec.ts`: recalcula el mapa desde `registry.json` con otra implementación y lo compara entero. **Comprobado que falla:** con `button.items` vaciado a mano, la prueba falló (1 de 12) y `--check` salió con 1; regenerado, en verde (12 de 12, y 62 de 62 con las de Select y doc-pages).
 - **Chunk compartido de `doc-page`:** 32,25 / 8,22 kB → **22,35 / 6,81 kB** (crudo / gzip -9). JS inicial sin cambios (335,10 kB), `main` 137,83 kB.
 
+### 6.3 R.33 registrada (sin hacerla): Button en carga, enfocable
+
+- `docs/plan/refinamiento/R-0.7.0.md` y el índice: **R.33** (0.7.0, S, **RUPTURA**): con `loading`, `aria-disabled` + `aria-busy` y los clics bloqueados (también el envío implícito de un formulario) en vez del `disabled` nativo, para que el foco no caiga a `body`. Es RUPTURA porque, mientras carga, el botón deja de cumplir `:disabled`. R.P7 depende también de la R.33.
+- La página de Button sigue diciendo lo de hoy («Con `loading` queda deshabilitado y lleva `aria-busy`»). Sin código: solo `prettier --check` de los archivos.
+
 ## Revisión crítica antes de cerrar
 
 - **¿La evidencia prueba cada criterio?** La estructura y los límites, sí (la prueba rechazó una demo de 62 líneas). Lo visual lo prueban las capturas y Playwright; el criterio de «gusto» (si las páginas se leen mejor) es del usuario: por eso el piloto para aquí.
