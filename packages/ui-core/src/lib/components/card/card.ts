@@ -1,6 +1,4 @@
 import {
-  ChangeDetectionStrategy,
-  Component,
   Directive,
   ElementRef,
   Renderer2,

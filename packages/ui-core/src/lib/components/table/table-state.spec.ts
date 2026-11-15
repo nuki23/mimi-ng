@@ -67,6 +67,21 @@ describe('mimiTableState (R.20, PD-2 opción C)', () => {
     expect(company.direction()).toBeNull();
   });
 
+  it('ordena por una columna que no está en columns (row[col]): aria-sort nunca miente (revisor)', () => {
+    const table = mimiTableState(CLIENTS, { columns: ['company'] });
+    table.sort('amount').toggle();
+    expect(table.sort('amount').direction()).toBe('asc');
+    expect(table.rows().map((r) => r.data.amount)).toEqual([9, 50, 75, 300, 1200]);
+  });
+
+  it('sin columns, buscar mira los valores de la fila en vez de vaciar la tabla (revisor)', () => {
+    const table = mimiTableState(CLIENTS);
+    table.search('bravo');
+    expect(table.rows().map((r) => r.id)).toEqual([3]);
+    table.search('moroso');
+    expect(table.rows().map((r) => r.id)).toEqual([2, 4]);
+  });
+
   it('una comparación propia por columna', () => {
     const table = mimiTableState(CLIENTS, {
       columns: {

@@ -147,7 +147,7 @@ export const TABLE_PAGE: DocPage = {
       { name: 'MimiCaption', selector: 'caption[mimiCaption]', description: 'El título.' },
       {
         name: 'MimiRowToggle',
-        selector: '[mimiRowToggle]',
+        selector: 'button[mimiRowToggle]',
         description: 'Abre o cierra una fila de `mimiTableState`.',
       },
     ],

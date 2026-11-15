@@ -3,11 +3,36 @@ import { provideRouter } from '@angular/router';
 import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
 import { validateDocPage } from '../../../../doc-page/doc-page.rules';
+import { MimiTableImports } from '@/components/ui/table';
 import { TablePage } from './table-page';
 import { TABLE_PAGE } from './table.page';
 
+/** `[['button', 'mimiRowToggle', '']]` → `button[mimiRowToggle]` (selectores simples). */
+function selectorOf(type: unknown): string {
+  const def =
+    (type as { ɵdir?: { selectors: unknown[][] }; ɵcmp?: { selectors: unknown[][] } }).ɵcmp ??
+    (type as { ɵdir: { selectors: unknown[][] } }).ɵdir;
+  return def.selectors
+    .map(([tag, ...attrs]) => {
+      let out = String(tag);
+      for (let i = 0; i < attrs.length; i += 2) out += `[${String(attrs[i])}]`;
+      return out;
+    })
+    .join(', ');
+}
+
 describe('TablePage (R.20)', () => {
   it('cumple la plantilla', () => expect(validateDocPage(TABLE_PAGE)).toEqual([]));
+
+  it('los selectores de la API son los de las directivas (revisor)', () => {
+    const parts = new Map(TABLE_PAGE.api.parts!.map((p) => [p.name, p.selector]));
+    for (const piece of MimiTableImports) {
+      const name = piece.name.replace(/^_+/, '');
+      const documented = [...parts.entries()].find(([n]) => n.split(' / ').includes(name));
+      expect(documented, name).toBeDefined();
+      expect(documented![1].split(', '), name).toContain(selectorOf(piece));
+    }
+  });
 
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',

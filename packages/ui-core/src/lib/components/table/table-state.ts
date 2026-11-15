@@ -211,9 +211,31 @@ export function mimiTableState<T>(
   const selection = signal<readonly unknown[]>(initial.selection ?? []);
   const expanded = signal<readonly unknown[]>(initial.expanded ?? []);
 
-  const allRows = computed(() =>
-    server() ? [...source()] : mimiFilterSortRows(source(), columns, query(), filters(), sorting()),
-  );
+  /**
+   * Las columnas de cada pasada: las declaradas; sin ninguna, se busca en los valores propios de
+   * la fila (texto y números); y si se ordena por una columna no declarada, se ordena por `row[col]`
+   * (así `aria-sort` nunca anuncia un orden que no se aplicó).
+   */
+  const effectiveColumns = (data: readonly T[], sort: MimiTableSort | null): MimiRowColumn<T>[] => {
+    let list = columns;
+    if (!list.length) {
+      const first = data.find((row) => row !== null && typeof row === 'object') as
+        Record<string, unknown> | undefined;
+      list = Object.keys(first ?? {})
+        .filter((key) => ['string', 'number'].includes(typeof first![key]))
+        .map((id) => ({ id }));
+    }
+    if (sort && !list.some((c) => c.id === sort.column)) {
+      list = [...list, { id: sort.column, searchable: false }];
+    }
+    return list;
+  };
+  const allRows = computed(() => {
+    if (server()) return [...source()];
+    const data = source();
+    const sort = sorting();
+    return mimiFilterSortRows(data, effectiveColumns(data, sort), query(), filters(), sort);
+  });
   const count = computed(() => (server() ? (total?.() ?? 0) : allRows().length));
   const pageCount = computed(() => {
     const size = pageSize();
