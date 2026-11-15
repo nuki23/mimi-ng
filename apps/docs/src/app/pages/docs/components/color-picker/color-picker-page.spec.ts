@@ -2,9 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
+import { validateDocPage } from '../../../../doc-page/doc-page.rules';
 import { ColorPickerPage } from './color-picker-page';
+import { COLOR_PICKER_PAGE } from './color-picker.page';
 
 describe('ColorPickerPage', () => {
+  it('cumple la plantilla', () => expect(validateDocPage(COLOR_PICKER_PAGE)).toEqual([]));
+
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
     async () => {
@@ -21,8 +25,11 @@ describe('ColorPickerPage', () => {
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
 
+      // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      expect(previews.length).toBe(4);
+      // La demo (con disparador) y dos ejemplos: el vivo de los tres formularios se fue (repetía
+      // las pestañas de «Formularios») y solo lectura pasó a «Estados».
+      expect(previews.length).toBe(3);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-color-picker, mimi-color-input')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/color-picker';");
@@ -41,12 +48,13 @@ describe('ColorPickerPage', () => {
         expect(named, button.outerHTML).toBeTruthy();
       }
       expect(el.textContent).toContain('Contraste con blanco');
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      // Estados: deshabilitado, solo lectura y con error.
+      const states = el.querySelectorAll('app-color-picker-states-example mimi-color-input');
+      expect(states[0].hasAttribute('data-disabled')).toBe(true);
+      expect(states[1].hasAttribute('data-readonly')).toBe(true);
+      expect(states[2].hasAttribute('data-invalid')).toBe(true);
+      expect(el.querySelector('h1')!.textContent!.trim()).toBe('Color Picker');
+      expect(el.querySelector('app-forms-tabs')).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );
