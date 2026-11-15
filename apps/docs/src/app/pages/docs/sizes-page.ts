@@ -80,6 +80,11 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
       'Los anchos de Dialog, con `sm` por defecto (`size` en las opciones). `--mimi-confirm-width` gana si lo defines.',
   },
   {
+    component: 'Card',
+    changes:
+      'Relleno de las piezas 16 / 24 / 32 px y hueco entre ellas 12 / 16 / 20 px; los controles de dentro toman el mismo tamaño.',
+  },
+  {
     component: 'Input OTP',
     changes: 'Casilla 40×46 / 46×54 / 52×62 px, texto 18 / 22 / 26 px y hueco 6 / 8 / 10 px.',
   },

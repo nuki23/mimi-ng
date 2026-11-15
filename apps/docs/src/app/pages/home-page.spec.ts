@@ -131,7 +131,7 @@ describe('HomePage', () => {
     const card = el.querySelector('app-showcase-team')!;
     const rows = () => Array.from(card.querySelectorAll('li'));
     expect(rows().length).toBe(3);
-    expect(text(card.querySelector('mimi-card-description'))).toBe('3 personas con acceso.');
+    expect(text(card.querySelector('[mimiCardDescription]'))).toBe('3 personas con acceso.');
 
     const invite = card.querySelector<HTMLButtonElement>('button[mimiBtn]')!;
     expect(invite.disabled).toBe(false);
@@ -146,7 +146,7 @@ describe('HomePage', () => {
     );
     expect(last.textContent).toContain('lucia@empresa.com');
     expect(text(last.querySelector('[mimiBadge]'))).toBe('Lectura');
-    expect(text(card.querySelector('mimi-card-description'))).toBe('4 personas con acceso.');
+    expect(text(card.querySelector('[mimiCardDescription]'))).toBe('4 personas con acceso.');
     expect(invite.disabled).toBe(true);
   });
 

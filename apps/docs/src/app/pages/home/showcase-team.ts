@@ -25,12 +25,12 @@ const INVITED: Member = {
   selector: 'app-showcase-team',
   imports: [MimiCardImports, MimiAvatarImports, MimiBadge, MimiButton, LucideUserPlus],
   template: `
-    <mimi-card>
-      <mimi-card-header>
-        <mimi-card-title class="font-bold">Equipo</mimi-card-title>
-        <mimi-card-description>{{ members().length }} personas con acceso.</mimi-card-description>
-      </mimi-card-header>
-      <mimi-card-content>
+    <div mimiCard class="flex flex-col">
+      <div mimiCardHeader>
+        <h3 mimiCardTitle class="font-bold">Equipo</h3>
+        <p mimiCardDescription>{{ members().length }} personas con acceso.</p>
+      </div>
+      <div mimiCardContent>
         <ul class="flex flex-col">
           @for (member of members(); track member.mail) {
             <li class="flex items-center gap-3 border-b py-2.5">
@@ -47,14 +47,14 @@ const INVITED: Member = {
             </li>
           }
         </ul>
-      </mimi-card-content>
-      <mimi-card-footer>
+      </div>
+      <div mimiCardFooter>
         <button mimiBtn variant="ghost" class="w-full" [disabled]="invited()" (click)="invite()">
           <svg lucideUserPlus aria-hidden="true"></svg>
           Invitar persona
         </button>
-      </mimi-card-footer>
-    </mimi-card>
+      </div>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -121,7 +121,7 @@
     "card": {
       "type": "component",
       "files": ["components/card/card.ts", "components/card/index.ts"],
-      "registryDependencies": ["utils/cn"]
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "checkbox": {
       "type": "component",

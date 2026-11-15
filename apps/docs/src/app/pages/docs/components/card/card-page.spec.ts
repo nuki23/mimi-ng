@@ -27,10 +27,13 @@ describe('CardPage', () => {
 
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo y tres ejemplos.
-      expect(previews.length).toBe(4);
+      // La demo y seis ejemplos (R.19).
+      expect(previews.length).toBe(7);
       for (const { example, code } of previews) {
-        expect(example?.querySelector('mimi-card')).not.toBeNull();
+        // La forma nueva: la directiva en tu elemento, nunca el elemento de la 0.6.0.
+        expect(example?.querySelector('[mimiCard]')).not.toBeNull();
+        expect(example?.querySelector('mimi-card')).toBeNull();
+        expect(code).not.toContain('<mimi-card');
         expect(code).toContain("import { MimiCardImports } from '@/components/ui/card';");
         expect(code).toMatch(/export class Card\w+Example/);
       }

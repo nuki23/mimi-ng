@@ -182,10 +182,22 @@ export interface MimiCardTokens {
   radius?: string;
   borderWidth?: string;
   shadow?: string;
-  /** Padding exterior de las partes (1.5rem); los paddingHeader/Content/Footer lo detallan. */
+  /** Relleno de las piezas en `md` (1.5rem; R.19: el único relleno, sigue al `size`). */
   padding?: string;
+  /** Hueco entre dos piezas seguidas en `md` (1rem; R.19). */
+  gap?: string;
+  /** Sombra de `variant="elevated"` (por defecto, la de los paneles flotantes). */
+  shadowElevated?: string;
+  /** Fondo de `variant="flat"` (por defecto, `muted`). */
+  flatBg?: string;
+  /** Borde y sombra de una tarjeta `interactive` con el puntero encima. */
+  borderHover?: string;
+  shadowHover?: string;
+  /** @deprecated Sin efecto desde la 0.7.0 (R.19: un solo relleno, `padding`). Se quita en la 0.8.0. */
   paddingHeader?: string;
+  /** @deprecated Sin efecto desde la 0.7.0 (R.19). Se quita en la 0.8.0. */
   paddingContent?: string;
+  /** @deprecated Sin efecto desde la 0.7.0 (R.19). Se quita en la 0.8.0. */
   paddingFooter?: string;
 }
 

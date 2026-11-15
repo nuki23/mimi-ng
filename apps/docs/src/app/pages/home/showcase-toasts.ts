@@ -9,19 +9,19 @@ import type { MimiSize } from '@/components/ui/utils/size';
   selector: 'app-showcase-toasts',
   imports: [MimiCardImports, MimiButton],
   template: `
-    <mimi-card>
-      <mimi-card-header>
-        <mimi-card-title class="font-bold">Avisos</mimi-card-title>
-        <mimi-card-description>Toast en tres tamaños: pruébalos.</mimi-card-description>
-      </mimi-card-header>
-      <mimi-card-content class="flex flex-wrap gap-2">
+    <div mimiCard class="flex flex-col">
+      <div mimiCardHeader>
+        <h3 mimiCardTitle class="font-bold">Avisos</h3>
+        <p mimiCardDescription>Toast en tres tamaños: pruébalos.</p>
+      </div>
+      <div mimiCardContent class="flex flex-wrap gap-2">
         @for (size of sizes; track size) {
           <button mimiBtn variant="outline" [size]="size" (click)="show(size)">
             Aviso {{ size }}
           </button>
         }
-      </mimi-card-content>
-    </mimi-card>
+      </div>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

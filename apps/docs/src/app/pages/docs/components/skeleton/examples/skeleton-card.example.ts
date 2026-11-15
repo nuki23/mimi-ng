@@ -6,8 +6,8 @@ import { MimiSkeleton } from '@/components/ui/skeleton';
   selector: 'app-skeleton-card-example',
   imports: [MimiCardImports, MimiSkeleton],
   template: `
-    <mimi-card aria-busy="true" class="w-80 max-w-full">
-      <mimi-card-content class="flex flex-col gap-4 p-5 first:pt-5">
+    <div mimiCard aria-busy="true" class="flex w-80 max-w-full flex-col">
+      <div mimiCardContent class="flex flex-col gap-4 p-5">
         <span class="sr-only">Cargando…</span>
         <div class="flex items-center gap-3">
           <mimi-skeleton class="size-12 rounded-full" />
@@ -19,8 +19,8 @@ import { MimiSkeleton } from '@/components/ui/skeleton';
         <mimi-skeleton class="h-3 w-full" />
         <mimi-skeleton class="h-3 w-[85%]" />
         <mimi-skeleton class="h-(--mimi-control-height) w-[110px] rounded-lg" />
-      </mimi-card-content>
-    </mimi-card>
+      </div>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

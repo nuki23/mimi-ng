@@ -1,27 +1,36 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
-import { CardContentOnlyExample } from './examples/card-content-only.example';
 import { CardCustomClassExample } from './examples/card-custom-class.example';
 import { CardFormExample } from './examples/card-form.example';
+import { CardLinkExample } from './examples/card-link.example';
 import { CardPlanExample } from './examples/card-plan.example';
+import { CardSizesExample } from './examples/card-sizes.example';
+import { CardSurfaceExample } from './examples/card-surface.example';
+import { CardVariantsExample } from './examples/card-variants.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
-// @ts-expect-error
-import contentOnlySource from './examples/card-content-only.example' with { loader: 'text' };
 // @ts-expect-error
 import customClassSource from './examples/card-custom-class.example' with { loader: 'text' };
 // @ts-expect-error
 import formSource from './examples/card-form.example' with { loader: 'text' };
 // @ts-expect-error
+import linkSource from './examples/card-link.example' with { loader: 'text' };
+// @ts-expect-error
 import planSource from './examples/card-plan.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/card-sizes.example' with { loader: 'text' };
+// @ts-expect-error
+import surfaceSource from './examples/card-surface.example' with { loader: 'text' };
+// @ts-expect-error
+import variantsSource from './examples/card-variants.example' with { loader: 'text' };
 
-/** La página de Card (tarea 2.5), con la plantilla de página (DP.2). */
+/** La página de Card (tarea 2.5; superficie y piezas opcionales desde la R.19), con la plantilla. */
 export const CARD_PAGE: DocPage = {
   name: 'Card',
-  lead: 'Contenedor para agrupar información y acciones relacionadas, con encabezado, contenido y pie opcionales.',
+  lead: 'Una superficie (fondo, borde, radio y sombra) para cualquier elemento, con piezas opcionales para el encabezado, el contenido y el pie.',
   demo: {
     id: 'demo',
     title: '',
-    sentence: 'Un plan de precios: encabezado, contenido y un pie con dos acciones.',
+    sentence: 'Un plan de precios: tu `<section>`, tu `<h3>` y un pie con dos acciones.',
     component: CardPlanExample,
     source: planSource as string,
   },
@@ -34,37 +43,72 @@ export const CARD_PAGE: DocPage = {
       "  selector: 'app-plan',",
       '  imports: [MimiCardImports],',
       '  template: `',
-      '    <mimi-card>',
-      '      <mimi-card-header>',
-      '        <mimi-card-title>Plan Equipo</mimi-card-title>',
-      '        <mimi-card-description>Para equipos de hasta 10 personas.</mimi-card-description>',
-      '      </mimi-card-header>',
-      '      <mimi-card-content>…</mimi-card-content>',
-      '      <mimi-card-footer>…</mimi-card-footer>',
-      '    </mimi-card>',
+      '    <section mimiCard>',
+      '      <header mimiCardHeader>',
+      '        <h3 mimiCardTitle>Plan Equipo</h3>',
+      '        <p mimiCardDescription>Para equipos de hasta 10 personas.</p>',
+      '      </header>',
+      '      <div mimiCardContent>…</div>',
+      '      <footer mimiCardFooter>…</footer>',
+      '    </section>',
       '  `,',
       '})',
       'export class PlanComponent {}',
     ].join('\n'),
-    note: 'Todas las piezas son opcionales, salvo `<mimi-card>`. Se importan juntas con `MimiCardImports`.',
+    note: 'Las piezas son opcionales y van en tus elementos; sin ellas, `mimiCard` es solo la superficie.',
+    more: {
+      summary: 'Si vienes de la 0.6.0',
+      items: [
+        '`<mimi-card>` y sus piezas (`<mimi-card-header>`, `<mimi-card-title>`…) siguen funcionando en la 0.7.0 y se quitan en la 0.8.0.',
+        'Cambia cada elemento por su directiva en tu elemento: `<mimi-card>` → `<div mimiCard class="flex flex-col">`, `<mimi-card-title>` → `<h3 mimiCardTitle>`.',
+        'Un solo relleno: `--mimi-card-padding-header`, `-content` y `-footer` ya no tienen efecto; usa `--mimi-card-padding` y `--mimi-card-gap`.',
+      ],
+    },
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          'Con `size`, el relleno de las piezas es de 16, 24 o 32 px, y los controles de dentro toman el mismo tamaño.',
+        component: CardSizesExample,
+        source: sizesSource as string,
+      },
+    ],
+    variants: [
+      {
+        id: 'variants',
+        title: 'Variantes',
+        sentence:
+          '`outline` (por defecto), `elevated`, `flat` y `ghost`: cambian el borde, la sombra y el fondo.',
+        component: CardVariantsExample,
+        source: variantsSource as string,
+      },
+    ],
     advanced: [
+      {
+        id: 'link',
+        title: 'Un enlace o un botón entero',
+        sentence:
+          'Con `interactive`, la superficie de un `<a>` o un `<button>` tiene hover, foco visible y clic.',
+        component: CardLinkExample,
+        source: linkSource as string,
+      },
       {
         id: 'form',
         title: 'Con un formulario',
         sentence:
-          'El `<form>` envuelve el contenido y el pie, así el botón del pie envía el formulario.',
+          'El `<form>` es la tarjeta: las piezas quedan juntas y el botón del pie envía el formulario.',
         component: CardFormExample,
         source: formSource as string,
       },
       {
-        id: 'content-only',
-        title: 'Solo contenido',
-        sentence:
-          'Sin encabezado, el contenido suma espacio arriba para no quedar pegado al borde. Lo mismo pasa con el pie si va primero.',
-        component: CardContentOnlyExample,
-        source: contentOnlySource as string,
+        id: 'surface',
+        title: 'Solo la superficie',
+        sentence: 'Sin piezas, en cada `<li>` de una lista: el relleno lo pones tú con `class`.',
+        component: CardSurfaceExample,
+        source: surfaceSource as string,
       },
     ],
     custom: [
@@ -80,19 +124,32 @@ export const CARD_PAGE: DocPage = {
   },
   accessibility: {
     points: [
-      '`<mimi-card-title>` es un encabezado para los lectores de pantalla (`role="heading"`), de nivel 3.',
-      'Si en tu página le corresponde otro nivel, cámbialo con `level`: `<mimi-card-title [level]="2">`.',
-      'Si prefieres tu propio `<h2>` o `<h3>`, úsalo en lugar de `<mimi-card-title>`, no dentro: el título se anunciaría dos veces.',
-      'La tarjeta no tiene rol ni foco propios: los enlaces y botones de adentro se recorren con Tab como siempre.',
+      'El título es tu encabezado (`<h2>`, `<h3>`…): elige el nivel que le toca en tu página.',
+      'La superficie no añade rol ni foco: un `<section>` o un `<li>` siguen siendo lo que son.',
+      'Una tarjeta que se pulsa debe ser un `<a>` o un `<button>` con `interactive`, no un `<div>` con `(click)`.',
+      'Con `interactive`, el foco se ve con el anillo del tema; Enter y Espacio son los del elemento nativo.',
     ],
   },
   api: {
     inputs: [
       {
-        name: 'level (en el título)',
-        type: 'number',
-        default: '3',
-        description: 'Nivel del encabezado (`aria-level`).',
+        name: 'variant',
+        type: "'outline' | 'elevated' | 'flat' | 'ghost'",
+        default: "'outline'",
+        description: 'En `mimiCard`: el borde, la sombra y el fondo.',
+      },
+      {
+        name: 'interactive',
+        type: 'boolean',
+        default: 'false',
+        description: 'En `mimiCard` sobre un `<a>` o un `<button>`: hover, foco visible y clic.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        default: "'md' (o el del contenedor con mimiSize)",
+        description:
+          'En `mimiCard`: el relleno de las piezas y el tamaño de los controles de dentro.',
       },
       {
         name: 'class',
@@ -104,35 +161,36 @@ export const CARD_PAGE: DocPage = {
     parts: [
       {
         name: 'MimiCard',
-        selector: 'mimi-card',
-        description: 'Contenedor: fondo, borde, radio y sombra de la tarjeta.',
+        selector: '[mimiCard]',
+        description: 'La superficie: fondo, borde, radio y sombra, en cualquier elemento.',
       },
       {
         name: 'MimiCardHeader',
-        selector: 'mimi-card-header',
-        description: 'Agrupa el título y la descripción.',
+        selector: '[mimiCardHeader]',
+        description: 'Agrupa el título y la descripción, en columna.',
       },
       {
         name: 'MimiCardTitle',
-        selector: 'mimi-card-title',
-        description: 'Título, con `role="heading"` y `aria-level`.',
+        selector: '[mimiCardTitle]',
+        description: 'El aspecto del título, en tu encabezado.',
       },
       {
         name: 'MimiCardDescription',
-        selector: 'mimi-card-description',
+        selector: '[mimiCardDescription]',
         description: 'Texto secundario bajo el título.',
       },
       {
         name: 'MimiCardContent',
-        selector: 'mimi-card-content',
+        selector: '[mimiCardContent]',
         description: 'Contenido principal.',
       },
       {
         name: 'MimiCardFooter',
-        selector: 'mimi-card-footer',
-        description: 'Acciones, alineadas a la derecha.',
+        selector: '[mimiCardFooter]',
+        description: 'Acciones, alineadas al final.',
       },
     ],
+    dataAttributes: ['data-variant', 'data-size', 'data-interactive', 'data-card-part'],
   },
   tokens: 'card',
 };

@@ -63,7 +63,7 @@ export class HomePage {
     {
       icon: 'layers',
       title: 'Un solo prefijo, cero capas',
-      body: 'Todo se llama mimi: mimiBtn, mimiInput, mimi-card. Sin wrappers ni dependencias ocultas: el código que ves es el que corre.',
+      body: 'Todo se llama mimi: mimiBtn, mimiInput, mimiCard. Sin wrappers ni dependencias ocultas: el código que ves es el que corre.',
     },
     {
       icon: 'arrow-left-right',

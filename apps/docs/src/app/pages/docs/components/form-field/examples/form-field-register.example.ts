@@ -19,46 +19,44 @@ import { MimiTextarea } from '@/components/ui/textarea';
     MimiTextarea,
   ],
   template: `
-    <mimi-card class="w-full max-w-lg">
-      <mimi-card-header>
-        <mimi-card-title>Crea tu cuenta</mimi-card-title>
-        <mimi-card-description>Tarda menos de un minuto.</mimi-card-description>
-      </mimi-card-header>
-      <form [formGroup]="form" (ngSubmit)="form.markAllAsTouched()">
-        <mimi-card-content class="flex flex-col gap-4.5">
-          <mimi-form-field label="Nombre">
-            <input mimiInput autocomplete="name" formControlName="name" />
+    <form mimiCard class="w-full max-w-lg" [formGroup]="form" (ngSubmit)="form.markAllAsTouched()">
+      <div mimiCardHeader>
+        <h3 mimiCardTitle>Crea tu cuenta</h3>
+        <p mimiCardDescription>Tarda menos de un minuto.</p>
+      </div>
+      <div mimiCardContent class="flex flex-col gap-4.5">
+        <mimi-form-field label="Nombre">
+          <input mimiInput autocomplete="name" formControlName="name" />
+        </mimi-form-field>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <mimi-form-field label="Correo">
+            <input mimiInput type="email" autocomplete="email" formControlName="email" />
           </mimi-form-field>
-          <div class="grid gap-4 sm:grid-cols-2">
-            <mimi-form-field label="Correo">
-              <input mimiInput type="email" autocomplete="email" formControlName="email" />
-            </mimi-form-field>
-            <mimi-form-field label="Contraseña">
-              <input
-                mimiInput
-                type="password"
-                autocomplete="new-password"
-                formControlName="password"
-              />
-            </mimi-form-field>
-          </div>
-          <mimi-form-field>
-            <label class="text-sm font-medium">
-              Comentario <span class="font-normal text-muted-foreground">(opcional)</span>
-            </label>
-            <textarea mimiTextarea rows="3" formControlName="comment"></textarea>
+          <mimi-form-field label="Contraseña">
+            <input
+              mimiInput
+              type="password"
+              autocomplete="new-password"
+              formControlName="password"
+            />
           </mimi-form-field>
-          <mimi-form-field>
-            <mimi-checkbox formControlName="terms">
-              Acepto los términos y la política de privacidad
-            </mimi-checkbox>
-          </mimi-form-field>
-        </mimi-card-content>
-        <mimi-card-footer>
-          <button mimiBtn type="submit" class="w-full">Crear cuenta</button>
-        </mimi-card-footer>
-      </form>
-    </mimi-card>
+        </div>
+        <mimi-form-field>
+          <label class="text-sm font-medium">
+            Comentario <span class="font-normal text-muted-foreground">(opcional)</span>
+          </label>
+          <textarea mimiTextarea rows="3" formControlName="comment"></textarea>
+        </mimi-form-field>
+        <mimi-form-field>
+          <mimi-checkbox formControlName="terms">
+            Acepto los términos y la política de privacidad
+          </mimi-checkbox>
+        </mimi-form-field>
+      </div>
+      <div mimiCardFooter>
+        <button mimiBtn type="submit" class="w-full">Crear cuenta</button>
+      </div>
+    </form>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

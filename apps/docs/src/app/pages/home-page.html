@@ -54,7 +54,7 @@
     class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4 pb-20 md:pb-[104px]"
   >
     @for (feature of features; track feature.title) {
-      <mimi-card data-feature class="gap-3 p-6">
+      <div mimiCard data-feature class="flex flex-col gap-3 p-6">
         <div class="flex items-start justify-between gap-3">
           <span
             class="inline-flex size-10 items-center justify-center rounded-lg bg-secondary text-secondary-foreground [&_svg]:size-5"
@@ -82,7 +82,7 @@
           {{ feature.title }}
         </h2>
         <p class="text-sm text-pretty text-muted-foreground">{{ feature.body }}</p>
-      </mimi-card>
+      </div>
     }
   </section>
 

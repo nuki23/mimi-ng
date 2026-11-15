@@ -160,6 +160,14 @@ Rama `auto/0.7.0-tanda1-2026-11-15`; detalle en `docs/auto/0.7.0-tanda1-2026-11-
 - **M.9 Select con `MimiOptionList`:** Select toma el aspecto de «cargando» y «sin resultados» de la lista común (la de Combobox): el ícono de la lupa sin el círculo gris de 36 px y dos renglones de carga en vez de tres; `aria-busy` pasa del bloque de carga a la lista, y «Cargando…» se anuncia por la región `status`. Base: «Más simple» (una sola lista para los dos; mantener el aspecto viejo pedía opciones nuevas en `MimiOptionList` solo para Select). Alternativa: añadir a `MimiOptionList` una variante con el círculo y tres renglones. **Cambio visual**, no de API.
 - **R.28 Tabs y R.30 Form Field no cabían en 8 ejemplos:** en vez de pedir una excepción, se juntaron dos ejemplos en uno (Tabs: «Vertical» con su desplegable «según el ancho»; Form Field: «Mensajes para toda la app» con «Los mensajes predeterminados», en dos archivos). Base: «Más simple» (`CLAUDE.md`: «se rediseña el ejemplo o se pide una excepción»).
 
+## Decididas por defecto: tanda 2 de la 0.7.0 (15/11/2026)
+
+Rama `auto/0.7.0-tanda2-2026-11-15`; detalle en `docs/auto/0.7.0-tanda2-2026-11-15.md`. Pendientes de revisión del usuario.
+
+- **R.19 alias de Card:** `<mimi-card>`, `<mimi-card-header>`, `<mimi-card-title>`… siguen funcionando una versión (los mismos `MimiCard…`, con el selector de elemento además del de atributo; `<mimi-card>` conserva `flex flex-col` y `<mimi-card-title>` su `role="heading"` y `level`), `@deprecated`, sin aviso en consola; se quitan en la 0.8.0. Base: PD-1 ofrecía «se quitan o se conservan como alias durante una versión»; la más segura para quien ya los usa. Alternativa: quitarlos ya (RUPTURA dura).
+- **R.19 variantes:** `outline` = el aspecto de siempre (borde y sombra de tarjeta); `elevated` = sin borde visible, sombra de los paneles (`--mimi-shadow-popover`); `flat` = fondo `muted`, sin borde ni sombra; `ghost` = sin fondo, borde ni sombra. `interactive`: borde `--mimi-input-hover` y sombra `--mimi-shadow-neutral-hover` con hover, anillo de foco y `--mimi-press-scale-sm`. Base: tokens que ya existen (no se inventan colores). **Cambio visual menor:** el hueco entre piezas es uno (16 px en `md`): entre contenido y pie pasa de 20 a 16 px.
+- **R.19 tokens de relleno por pieza:** `--mimi-card-padding-header`, `-content` y `-footer` dejan de tener efecto (un solo relleno); quedan en `MimiCardTokens` como `@deprecated` para que un tema tipado siga compilando. **RUPTURA menor** (de efecto, no de compilación).
+
 ## Decididas por el usuario: estados de los controles (12/11/2026)
 
 Elegidas por el usuario en la página `/docs/states` (octava tanda; inventario en `docs/plan/controles/inventario.md`, informe en `docs/auto/refinamiento-0.6.0-parte9-2026-11-12.md`). Base: «Decidido por el usuario». Ninguna es una RUPTURA de API; todas son cambios visibles.

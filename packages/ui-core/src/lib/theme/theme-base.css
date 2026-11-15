@@ -345,6 +345,9 @@
   --mimi-upload-svg: 22px;
   --mimi-upload-title: 0.875rem;
   --mimi-upload-hint: 12.5px;
+  /* Card (R.19): el relleno de las piezas y el hueco entre dos seguidas. */
+  --mimi-card-p: var(--mimi-card-padding, 1.5rem);
+  --mimi-card-gap-s: var(--mimi-card-gap, 1rem);
 }
 
 [data-size='sm'] {
@@ -411,6 +414,8 @@
   --mimi-upload-svg: 18px;
   --mimi-upload-title: 13px;
   --mimi-upload-hint: 12px;
+  --mimi-card-p: 1rem;
+  --mimi-card-gap-s: 0.75rem;
 }
 
 [data-size='lg'] {
@@ -477,6 +482,8 @@
   --mimi-upload-svg: 26px;
   --mimi-upload-title: 15px;
   --mimi-upload-hint: 13.5px;
+  --mimi-card-p: 2rem;
+  --mimi-card-gap-s: 1.25rem;
 }
 
 .dark {

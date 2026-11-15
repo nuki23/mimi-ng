@@ -22,52 +22,50 @@ const INITIAL = { name: 'panel-ventas', email: '', weekly: true, notify: true };
     MimiSwitch,
   ],
   template: `
-    <mimi-card>
-      <mimi-card-header>
-        <mimi-card-title class="font-bold">Preferencias del proyecto</mimi-card-title>
-        <mimi-card-description>Elige cómo te avisamos de los cambios.</mimi-card-description>
-      </mimi-card-header>
-      <form [formGroup]="form" (ngSubmit)="save()">
-        <mimi-card-content class="flex flex-col gap-4">
-          <mimi-form-field label="Nombre del proyecto">
-            <input mimiInput formControlName="name" />
-          </mimi-form-field>
+    <form mimiCard class="flex flex-col" [formGroup]="form" (ngSubmit)="save()">
+      <div mimiCardHeader>
+        <h3 mimiCardTitle class="font-bold">Preferencias del proyecto</h3>
+        <p mimiCardDescription>Elige cómo te avisamos de los cambios.</p>
+      </div>
+      <div mimiCardContent class="flex flex-col gap-4">
+        <mimi-form-field label="Nombre del proyecto">
+          <input mimiInput formControlName="name" />
+        </mimi-form-field>
 
-          <mimi-form-field label="Correo de avisos">
-            <div class="flex gap-2">
-              <input
-                mimiInput
-                type="email"
-                placeholder="equipo@empresa.com"
-                class="min-w-0 flex-1"
-                formControlName="email"
-              />
-              <button mimiBtn type="button" tone="secondary" (click)="verify()">Verificar</button>
-            </div>
-          </mimi-form-field>
-
-          <div class="flex items-center justify-between gap-4 rounded-lg border px-3.5 py-3">
-            <div class="flex flex-col">
-              <span class="text-sm font-medium">Resumen semanal</span>
-              <span class="text-[13px] text-muted-foreground">
-                Un correo cada lunes con los cambios.
-              </span>
-            </div>
-            <mimi-switch aria-label="Resumen semanal" formControlName="weekly" />
+        <mimi-form-field label="Correo de avisos">
+          <div class="flex gap-2">
+            <input
+              mimiInput
+              type="email"
+              placeholder="equipo@empresa.com"
+              class="min-w-0 flex-1"
+              formControlName="email"
+            />
+            <button mimiBtn type="button" tone="secondary" (click)="verify()">Verificar</button>
           </div>
+        </mimi-form-field>
 
-          <mimi-checkbox formControlName="notify">
-            Avisarme cuando haya una versión nueva de Mimi
-          </mimi-checkbox>
-        </mimi-card-content>
+        <div class="flex items-center justify-between gap-4 rounded-lg border px-3.5 py-3">
+          <div class="flex flex-col">
+            <span class="text-sm font-medium">Resumen semanal</span>
+            <span class="text-[13px] text-muted-foreground">
+              Un correo cada lunes con los cambios.
+            </span>
+          </div>
+          <mimi-switch aria-label="Resumen semanal" formControlName="weekly" />
+        </div>
 
-        <mimi-card-footer class="flex-wrap">
-          <p aria-live="polite" class="mr-auto text-sm text-muted-foreground">{{ status() }}</p>
-          <button mimiBtn type="button" variant="outline" (click)="cancel()">Cancelar</button>
-          <button mimiBtn type="submit">Guardar cambios</button>
-        </mimi-card-footer>
-      </form>
-    </mimi-card>
+        <mimi-checkbox formControlName="notify">
+          Avisarme cuando haya una versión nueva de Mimi
+        </mimi-checkbox>
+      </div>
+
+      <div mimiCardFooter class="flex-wrap">
+        <p aria-live="polite" class="mr-auto text-sm text-muted-foreground">{{ status() }}</p>
+        <button mimiBtn type="button" variant="outline" (click)="cancel()">Cancelar</button>
+        <button mimiBtn type="submit">Guardar cambios</button>
+      </div>
+    </form>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

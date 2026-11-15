@@ -1,29 +1,58 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { MimiCardImports } from './card';
+import { type MimiCardVariant, MimiCardImports } from './card';
+
+const SURFACE = [
+  'bg-[color:var(--mimi-card-bg,var(--mimi-card))]',
+  'text-[color:var(--mimi-card-fg,var(--mimi-card-foreground))]',
+  'rounded-[var(--mimi-card-radius,var(--mimi-radius-card))]',
+  'border-[length:var(--mimi-card-border-width,1px)]',
+  'border-[color:var(--mimi-card-border,var(--mimi-border))]',
+  'shadow-[shadow:var(--mimi-card-shadow,var(--mimi-shadow-card))]',
+];
+const PADDING = [
+  'px-[var(--mimi-card-p,var(--mimi-card-padding,1.5rem))]',
+  'pt-[var(--mimi-card-p,var(--mimi-card-padding,1.5rem))]',
+  'pb-[var(--mimi-card-p,var(--mimi-card-padding,1.5rem))]',
+  '[[data-card-part]+&]:pt-[var(--mimi-card-gap-s,var(--mimi-card-gap,1rem))]',
+  'has-[+[data-card-part]]:pb-0',
+];
 
 @Component({
   imports: [MimiCardImports],
   template: `
-    <mimi-card id="full" [class]="extra()">
+    <section id="full" mimiCard [class]="extra()" [variant]="variant()" [size]="size()">
+      <header mimiCardHeader>
+        <h3 mimiCardTitle>Plan Equipo</h3>
+        <p mimiCardDescription>Para equipos de hasta 10 personas.</p>
+      </header>
+      <div mimiCardContent>$12</div>
+      <footer mimiCardFooter><button>Elegir plan</button></footer>
+    </section>
+    <div id="div" mimiCard>Un div</div>
+    <a id="link" mimiCard interactive href="#plan">Ver el plan</a>
+    <button id="button" type="button" mimiCard interactive (click)="clicks.set(clicks() + 1)">
+      Elegir
+    </button>
+    <mimi-card id="legacy">
       <mimi-card-header>
-        <mimi-card-title [level]="level()">Plan Equipo</mimi-card-title>
-        <mimi-card-description>Para equipos de hasta 10 personas.</mimi-card-description>
+        <mimi-card-title [level]="level()">Antes</mimi-card-title>
+        <mimi-card-description>Los elementos de la 0.6.0.</mimi-card-description>
       </mimi-card-header>
-      <mimi-card-content>$12</mimi-card-content>
-      <mimi-card-footer><button>Elegir plan</button></mimi-card-footer>
-    </mimi-card>
-    <mimi-card id="content-only">
-      <mimi-card-content>Solo contenido</mimi-card-content>
+      <mimi-card-content>Siguen</mimi-card-content>
+      <mimi-card-footer>Pie</mimi-card-footer>
     </mimi-card>
   `,
 })
 class Host {
   readonly extra = signal('');
   readonly level = signal(3);
+  readonly variant = signal<MimiCardVariant>('outline');
+  readonly size = signal<'sm' | 'md' | 'lg' | undefined>(undefined);
+  readonly clicks = signal(0);
 }
 
-describe('MimiCard', () => {
+describe('MimiCard (R.19: superficie y piezas opcionales)', () => {
   async function setup() {
     const fixture = TestBed.createComponent(Host);
     await fixture.whenStable();
@@ -36,56 +65,101 @@ describe('MimiCard', () => {
     return { host: fixture.componentInstance, q, update };
   }
 
-  it('la tarjeta tiene el fondo, el borde, el radio y la sombra del diseño', async () => {
+  it('la superficie va en cualquier elemento: section, div, a y button', async () => {
     const { q } = await setup();
+    for (const id of ['#full', '#div', '#link', '#button']) {
+      for (const cls of SURFACE) expect(q(id).classList, `${id} ${cls}`).toContain(cls);
+      expect(q(id).dataset['variant']).toBe('outline');
+      // Solo la superficie: no impone una columna flexible ni un relleno.
+      expect(q(id).classList).not.toContain('flex');
+    }
+    expect(q('#link').tagName).toBe('A');
+    expect(q('#button').tagName).toBe('BUTTON');
+  });
+
+  it('variant: elevated sin borde visible y con la sombra de los paneles; flat y ghost sin sombra', async () => {
+    const { host, q, update } = await setup();
     const card = q('#full');
-    for (const cls of [
-      'flex',
-      'flex-col',
-      'bg-[color:var(--mimi-card-bg,var(--mimi-card))]',
-      'text-[color:var(--mimi-card-fg,var(--mimi-card-foreground))]',
-      'border-[color:var(--mimi-card-border,var(--mimi-border))]',
-      'rounded-[var(--mimi-card-radius,var(--mimi-radius-card))]',
-      'border-[length:var(--mimi-card-border-width,1px)]',
-      'shadow-[shadow:var(--mimi-card-shadow,var(--mimi-shadow-card))]',
-    ]) {
-      expect(card.classList).toContain(cls);
+    await update(() => host.variant.set('elevated'));
+    expect(card.dataset['variant']).toBe('elevated');
+    expect(card.classList).toContain('border-transparent');
+    expect(card.classList).toContain(
+      'shadow-[shadow:var(--mimi-card-shadow-elevated,var(--mimi-shadow-popover))]',
+    );
+    await update(() => host.variant.set('flat'));
+    expect(card.classList).toContain('bg-[color:var(--mimi-card-flat-bg,var(--mimi-muted))]');
+    expect(card.classList).not.toContain('bg-[color:var(--mimi-card-bg,var(--mimi-card))]');
+    expect(card.classList).toContain('shadow-none');
+    await update(() => host.variant.set('ghost'));
+    expect(card.classList).toContain('bg-transparent');
+    expect(card.classList).toContain('shadow-none');
+  });
+
+  it('interactive: hover, foco visible y clic; el botón sigue siendo un botón', async () => {
+    const { host, q } = await setup();
+    for (const id of ['#link', '#button']) {
+      const el = q(id);
+      expect(el.hasAttribute('data-interactive')).toBe(true);
+      for (const cls of [
+        'cursor-pointer',
+        'focus-visible:outline-2',
+        'focus-visible:outline-ring',
+        'hover:shadow-[shadow:var(--mimi-card-shadow-hover,var(--mimi-shadow-neutral-hover))]',
+        'active:scale-(--mimi-press-scale-sm)',
+      ]) {
+        expect(el.classList, `${id} ${cls}`).toContain(cls);
+      }
+    }
+    expect(q('#div').hasAttribute('data-interactive')).toBe(false);
+    expect(q('#div').classList).not.toContain('cursor-pointer');
+    // Enter y Espacio son los del <button> nativo (se comprueban en el navegador); el clic llega.
+    q('#button').click();
+    expect(host.clicks()).toBe(1);
+  });
+
+  it('size: data-size en la superficie; las piezas leen el relleno de la escala', async () => {
+    const { host, q, update } = await setup();
+    expect(q('#full').hasAttribute('data-size')).toBe(false);
+    await update(() => host.size.set('sm'));
+    expect(q('#full').dataset['size']).toBe('sm');
+    for (const part of ['[mimiCardHeader]', '[mimiCardContent]', '[mimiCardFooter]']) {
+      const el = q(`#full ${part}`);
+      for (const cls of PADDING) expect(el.classList, `${part} ${cls}`).toContain(cls);
+      expect(el.hasAttribute('data-card-part')).toBe(true);
     }
   });
 
-  it('cada parte tiene su padding y su tipografía', async () => {
+  it('un solo relleno: entre dos piezas seguidas, el hueco (no el doble)', async () => {
     const { q } = await setup();
-    expect(q('#full mimi-card-header').classList).toContain(
-      'p-[var(--mimi-card-padding-header,var(--mimi-card-padding,1.5rem)_var(--mimi-card-padding,1.5rem)_1rem)]',
-    );
-    expect(q('#full mimi-card-header').classList).toContain('gap-1.5');
-    expect(q('#full mimi-card-title').classList).toContain('text-lg');
-    expect(q('#full mimi-card-title').classList).toContain('font-semibold');
-    expect(q('#full mimi-card-description').classList).toContain('text-muted-foreground');
-    expect(q('#full mimi-card-content').classList).toContain(
-      'p-[var(--mimi-card-padding-content,0_var(--mimi-card-padding,1.5rem)_1.25rem)]',
-    );
-    const footer = q('#full mimi-card-footer');
-    expect(footer.classList).toContain(
-      'p-[var(--mimi-card-padding-footer,0_var(--mimi-card-padding,1.5rem)_var(--mimi-card-padding,1.5rem))]',
-    );
-    expect(footer.classList).toContain('justify-end');
-    expect(footer.classList).toContain('gap-2');
+    const header = q('#full [mimiCardHeader]');
+    const content = q('#full [mimiCardContent]');
+    const footer = q('#full [mimiCardFooter]');
+    // La regla del hueco se aplica a la pieza que va después de otra, y la del pie a la que tiene otra detrás.
+    expect(header.matches('[data-card-part] + *')).toBe(false);
+    expect(content.matches('[data-card-part] + *')).toBe(true);
+    expect(footer.matches('[data-card-part] + *')).toBe(true);
+    expect(footer.nextElementSibling).toBeNull();
   });
 
-  it('el contenido suma padding arriba solo si es el primer hijo (sin encabezado)', async () => {
+  it('las piezas tienen su tipografía; el título es tu encabezado (sin role propio)', async () => {
     const { q } = await setup();
-    // La regla es la misma clase; se aplica según :first-child.
-    expect(q('#content-only mimi-card-content').classList).toContain(
-      'first:pt-[var(--mimi-card-padding,1.5rem)]',
-    );
-    expect(q('#content-only mimi-card-content').matches(':first-child')).toBe(true);
-    expect(q('#full mimi-card-content').matches(':first-child')).toBe(false);
+    expect(q('#full [mimiCardHeader]').classList).toContain('gap-1.5');
+    const title = q('#full [mimiCardTitle]');
+    expect(title.tagName).toBe('H3');
+    expect(title.hasAttribute('role')).toBe(false);
+    expect(title.classList).toContain('text-lg');
+    expect(title.classList).toContain('font-semibold');
+    expect(q('#full [mimiCardDescription]').classList).toContain('text-muted-foreground');
+    expect(q('#full [mimiCardFooter]').classList).toContain('justify-end');
   });
 
-  it('el título es un encabezado para lectores de pantalla, con nivel configurable', async () => {
+  it('los elementos de la 0.6.0 siguen (alias): columna, piezas y el título con role y nivel', async () => {
     const { host, q, update } = await setup();
-    const title = q('#full mimi-card-title');
+    const card = q('#legacy');
+    for (const cls of [...SURFACE, 'flex', 'flex-col']) expect(card.classList).toContain(cls);
+    for (const cls of PADDING) expect(q('#legacy mimi-card-content').classList).toContain(cls);
+    expect(q('#legacy mimi-card-content').classList).toContain('block');
+    const title = q('#legacy mimi-card-title');
     expect(title.getAttribute('role')).toBe('heading');
     expect(title.getAttribute('aria-level')).toBe('3');
     await update(() => host.level.set(2));
@@ -105,7 +179,6 @@ describe('MimiCard', () => {
     expect(card.classList).not.toContain('bg-[color:var(--mimi-card-bg,var(--mimi-card))]');
     expect(card.classList).toContain('border-2');
     expect(card.classList).not.toContain('border-[length:var(--mimi-card-border-width,1px)]');
-    // El color del borde es otra propiedad: se mantiene.
     expect(card.classList).toContain('border-[color:var(--mimi-card-border,var(--mimi-border))]');
   });
 

@@ -129,6 +129,9 @@ const GLOBALS = new Set([
   '--mimi-toggle-px',
   '--mimi-badge-h',
   '--mimi-badge-px-s',
+  // Card (R.19).
+  '--mimi-card-p',
+  '--mimi-card-gap-s',
   // Input OTP y File Upload (M.27).
   '--mimi-otp-w',
   '--mimi-otp-h',

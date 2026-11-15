@@ -77,12 +77,12 @@
     class="rounded-card border bg-background p-6 text-foreground"
     [class.dark]="previewDark()"
   >
-    <mimi-card class="max-w-md">
-      <mimi-card-header>
-        <mimi-card-title>Crear proyecto</mimi-card-title>
-        <mimi-card-description>Así se ven los componentes con tu tema.</mimi-card-description>
-      </mimi-card-header>
-      <mimi-card-content class="flex flex-col gap-4">
+    <div mimiCard class="flex max-w-md flex-col">
+      <div mimiCardHeader>
+        <h3 mimiCardTitle>Crear proyecto</h3>
+        <p mimiCardDescription>Así se ven los componentes con tu tema.</p>
+      </div>
+      <div mimiCardContent class="flex flex-col gap-4">
         <input mimiInput aria-label="Nombre del proyecto" placeholder="Nombre del proyecto" />
         <div class="flex flex-wrap items-center gap-2">
           <span mimiBadge>Nuevo</span>
@@ -102,12 +102,12 @@
           <button mimiToggleGroupItem="team">Equipo</button>
           <button mimiToggleGroupItem="all">Todos</button>
         </mimi-toggle-group>
-      </mimi-card-content>
-      <mimi-card-footer class="flex justify-end gap-2">
+      </div>
+      <div mimiCardFooter class="flex justify-end gap-2">
         <button mimiBtn variant="outline">Cancelar</button>
         <button mimiBtn>Crear</button>
-      </mimi-card-footer>
-    </mimi-card>
+      </div>
+    </div>
   </div>
 
   <h2 id="export" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">Exportar</h2>

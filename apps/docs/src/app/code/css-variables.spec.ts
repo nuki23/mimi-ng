@@ -37,7 +37,7 @@ describe('CssVariables', () => {
       '--mimi-card-padding',
       '1.5rem',
       '—',
-      'Padding exterior de las partes.',
+      'Relleno de las piezas en md (sm 1rem, lg 2rem).',
     ]);
     const bg = rows.find((r) => r[0] === '--mimi-card-bg')!;
     expect(bg[2]).toBe('--mimi-card');
