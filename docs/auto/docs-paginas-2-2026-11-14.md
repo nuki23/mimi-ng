@@ -188,7 +188,7 @@ Ningún presupuesto se acerca ni se sube (`main` sigue a 2,12 kB de su aviso: la
 - **Pruebas:** `brand.spec.ts` nueva (las copias son idénticas a `docs/brand/`, `og-image.png` de 1200×630, las etiquetas de `index.html` y los dos logos con `alt` y la clase de su tema en la cabecera y el menú). `public-files.spec.ts` sigue en verde (solo svg, png, ico).
 - **Bundle** (antes: final de la sección 5): JS inicial 334,38 / 106,05 kB → **334,48 / 106,04 kB**; `main` 137,88 / 40,52 kB → **137,99 / 40,50 kB**; CSS global 130,77 / 18,70 kB → **130,81 / 18,72 kB**. Entre medias están también la 6.2 y la 6.3; la cabecera cambia un `<span>` y un texto por dos `<img>`. Ningún presupuesto cambia.
 - **Spec:** sección 10, párrafo «Marca (R.25)». R.25 marcada `[x]` en `R-0.7.0.md` y en el índice.
-- **Sin tocar:** el PNG `Imagen de ChatGPT 9 nov 2026….png` (590 kB) sigue en `public/` y se publica en el sitio sin que nada lo use; la R.25 decía que lo confirmara el usuario. `icon-maskable-512.png` y los demás iconos no se usan (no hay manifiesto web; no se pidió).
+- **Borrado después (15/11/2026, decidido por el usuario):** el PNG `Imagen de ChatGPT 9 nov 2026….png` (590 kB), que estaba en `public/` y se publicaba sin que nada lo usara (ninguna referencia en el código; solo lo citaban los informes). `pnpm build` en verde después. `icon-maskable-512.png` y los demás iconos no se usan (no hay manifiesto web; no se pidió).
 - **Pruebas finales:** `pnpm build` en verde; `pnpm test` en verde (**docs 520, ui-core 1062, CLI 202**); `pnpm format:check` en verde. El `ng serve` de 4280, cerrado (`netstat`: libre).
 
 ## Alertas para el revisor
@@ -208,7 +208,7 @@ Ningún presupuesto se acerca ni se sube (`main` sigue a 2,12 kB de su aviso: la
    - Comentarios internos de ui-core con «decidido por defecto» (Input OTP, Tags Input) y «@angular/aria» (Progress): no salen en las páginas.
 6. **File Upload:** el ejemplo de la subida simulada ahora reintenta bien (antes fallaba siempre, contra lo que decía su texto): cambia cómo se comporta el ejemplo.
 7. **Dropdown Menu y Context Menu** repiten las 9 filas de las piezas de menú; si cambia la API de los ítems, hay que tocar las dos.
-8. **R.25:** `favicon.svg` y `apple-touch-icon.png` salen de `mimi-symbol.svg` e `icon-180.png` (no venían con esos nombres). El logo de la cabecera mide 36 px de alto (no 28). El PNG de ChatGPT de `public/` sigue publicándose sin uso: decide si se borra.
+8. **R.25:** `favicon.svg` y `apple-touch-icon.png` salen de `mimi-symbol.svg` e `icon-180.png` (no venían con esos nombres). El logo de la cabecera mide 36 px de alto (no 28). ~~El PNG de ChatGPT de `public/` sigue publicándose sin uso.~~ Borrado (15/11/2026).
 
 ## Pendiente del usuario
 
