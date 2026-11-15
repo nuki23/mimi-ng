@@ -146,7 +146,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [x] R.28 (hecha el 15/11/2026) Ejemplos de tamaño por componente y Blocks que heredan (lo que faltaba de la R.8) · v0.7.0 · M · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.29 (hecha el 15/11/2026) Ejemplos de solo lectura (lo que faltaba de la R.12) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.30 (hecha el 15/11/2026) Form Field: ejemplos con más elementos y el diagrama (lo que faltaba de la R.14) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [ ] R.31 Nota de contraste al cambiar el primario (texto `text-primary` con un primario propio claro) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [x] R.31 (hecha el 15/11/2026) Nota de contraste al cambiar el primario (texto `text-primary` con un primario propio claro) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.32 (hecha el 15/11/2026) Quitar el alias `default` de `size` (RUPTURA, anunciada en la 0.6.0) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.33 (hecha el 15/11/2026) Button en carga sigue siendo enfocable (`aria-disabled` + `aria-busy` y clics bloqueados, en vez del `disabled` nativo; **RUPTURA**) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [~] M.9 completa (lo que faltaba de la R.15; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
