@@ -15,11 +15,9 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
 
-De la tanda 1 de la plantilla de páginas (DP.1, 14/11/2026). Son excepciones a los límites o huecos de la plantilla: **las aprueba el usuario** (PD-4c.4); no se aplicaron.
+Ninguna abierta.
 
-- **PD-8 (usuario): dónde va la API de un servicio.** La plantilla tiene Entradas, Salidas, Piezas, Textos y Variables CSS. `MimiDialogService` y `MimiDialogRef` (`open`, `close`, `afterClosed`, `result`) no son entradas ni piezas con selector; hoy van como filas de **Piezas**, con `inject(MimiDialogService)` en la columna «Selector». Lo mismo pasará con Toast, Confirm y Command (DP.3 y DP.4).
-  - **(a) Recomendado:** un h3 nuevo y opcional de API, **«Servicio»** (`id="service"`, columnas `Miembro | Tipo | Descripción`), entre Piezas y Textos; cambia la plantilla (`docs/spec/plantilla-pagina.md`, `DocPage.api.service` y la prueba).
-  - (b) Dejarlo en Piezas, como ahora.
+**PD-8 la decidió el usuario el 14/11/2026** (opción (a)): una sección opcional **«Servicio»** en la API (`api.service`, `id="service"`, `Miembro | Tipo | Descripción`), entre Piezas y Textos; la usa Dialog y la usarán Toast, Confirm y Command.
 
 **PD-7 la decidió el usuario el 14/11/2026:** Dialog empieza por el servicio, con un ejemplo más corto (pedir un nombre y devolverlo) como demo; el diálogo en la plantilla pasa a Ejemplos. Cupo en 56 líneas entre sus dos archivos: no hizo falta la excepción hasta 80 que el usuario dejó aprobada para Dialog. Rama `auto/docs-paginas-2-2026-11-14`; el texto de la pregunta, en `docs/auto/decisiones-por-defecto.md`.
 

@@ -45,6 +45,7 @@ const PAGE: DocPage = {
   api: {
     inputs: [{ name: 'size', type: "'sm' | 'md'", default: "'md'", description: 'Tamaño.' }],
     outputs: [{ name: 'changed', type: 'void', description: 'Cambió.' }],
+    service: [{ name: 'FakeService.open()', type: 'FakeRef', description: 'Abre algo.' }],
     dataAttributes: ['data-size'],
   },
   tokens: 'button',
@@ -223,6 +224,7 @@ describe('DocPageView', () => {
       'custom-class',
       'inputs',
       'outputs',
+      'service',
       'tokens',
     ]);
     expect(el.querySelector('h1')?.textContent?.trim()).toBe('Fake');
@@ -254,5 +256,6 @@ describe('DocPageView', () => {
     );
     expect(el.querySelector('[data-slot="data-attributes"]')?.textContent).toContain('data-size');
     expect(el.querySelector('table[data-kind="outputs"] th')?.textContent?.trim()).toBe('Salida');
+    expect(el.querySelector('table[data-kind="service"] th')?.textContent?.trim()).toBe('Miembro');
   });
 });

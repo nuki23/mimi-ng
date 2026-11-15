@@ -184,6 +184,7 @@ No son decisiones por defecto: el usuario las eligió en el prompt de la rama `a
 No son decisiones por defecto: el usuario las eligió en el prompt de la rama `auto/docs-paginas-2-2026-11-14`.
 
 - **PD-7: la demo de Dialog.** Pregunta: la demo con el servicio («Editar usuario», 90 líneas en dos archivos) no cabía en las 60 de la demo; se había puesto el diálogo en la plantilla como demo (recomendado: dejarlo así; o una excepción hasta 90; o recortar a 60). **Elegido:** empezar por el servicio con un caso más corto (pedir un nombre y devolverlo) en 60 líneas, y el de la plantilla a Ejemplos; si no cabía, excepción solo para Dialog hasta 80. Cupo en **56** (`dialog-ask-name.example.ts` 30 + `ask-name-dialog.ts` 26): la excepción no se usó. Base: «Decidido por el usuario».
+- **PD-8: dónde va la API de un servicio, opción (a).** Pregunta: `MimiDialogService` y `MimiDialogRef` no son entradas ni piezas con selector; iban en Piezas con `inject(…)` en «Selector». **Elegido:** una sección opcional «Servicio» en la API (`DocPage.api.service`, columnas `Miembro | Tipo | Descripción`, entre Piezas y Textos), para Dialog y, al migrarse, Toast, Confirm y Command. Alternativa que no se eligió: dejarlo en Piezas. Base: «Decidido por el usuario».
 
 ## Decididas por el usuario: sin rediseño (14/11/2026)
 

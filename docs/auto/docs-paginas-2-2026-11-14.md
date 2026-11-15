@@ -11,3 +11,9 @@
 - Ejemplo nuevo, más corto: `dialog-ask-name.example.ts` (30 líneas: «Hola, Ana» y «Cambiar nombre») y `ask-name-dialog.ts` (26: el diálogo recibe `name` por su entrada y devuelve el nuevo con `ref.close()`). **56 líneas entre los dos**: cabe en las 60 de la demo; la excepción hasta 80 que aprobó el usuario no hizo falta.
 - Es la demo de Dialog; «En la plantilla: `<mimi-dialog>`» (el antiguo de la demo) pasa a Ejemplos. Se borran `dialog-edit-user.example.ts` y `edit-user-dialog.ts`.
 - `dialog-page.spec.ts`: la demo es la del servicio, antes de Instalación; la prueba de la demo abre el diálogo, cambia el nombre, guarda y comprueba «Hola, Ana Ruiz». `doc-pages.spec.ts` y Dialog: **71 de 71**.
+
+## 2. PD-8: sección «Servicio» en la API
+
+- `DocPage.api.service` (`ServiceRow`: `name`, `type`, `description`), h3 «Servicio» (`id="service"`) entre Piezas y Textos, con `app-api-table kind="service"` (`Miembro | Tipo | Descripción`). Las descripciones cuentan para el límite de 20 palabras y los nombres internos; los `id` de la API quedan reservados (un ejemplo no puede llamarse `service`).
+- Dialog: `MimiDialogService` y `MimiDialogRef` salen de Piezas y van a Servicio (`open`, `closeAll`, `close`, `afterClosed`/`closed`, `result` y `MIMI_DIALOG_DATA`). El bloque «Uso» usa el ejemplo nuevo (`AskNameDialog`).
+- `docs/spec/plantilla-pagina.md`, reglas 2 y 10. Pruebas: `doc-page.spec.ts` (la sección en su sitio y su encabezado «Miembro»), `doc-pages.spec.ts` (el orden de los h3 con `service`) y Dialog: **83 de 83**.

@@ -248,9 +248,11 @@ describe('Plantilla de las páginas de componentes (doc-pages)', () => {
                 ? page.api.outputs?.length
                 : s === 'parts'
                   ? page.api.parts?.length
-                  : s === 'texts'
-                    ? page.texts?.length
-                    : page.tokens,
+                  : s === 'service'
+                    ? page.api.service?.length
+                    : s === 'texts'
+                      ? page.texts?.length
+                      : page.tokens,
           );
           const h3 = Array.from(article.querySelectorAll('h3[id]')).map((h) => h.id);
           expect(h3).toEqual([...exampleIds, ...apiIds]);

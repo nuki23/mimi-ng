@@ -61,11 +61,19 @@ export const DOC_SECTION_TITLES: Record<(typeof DOC_SECTIONS)[number], string> =
 };
 
 /** Los `id` fijos de los h3 de la API, en orden (los que haya). */
-export const DOC_API_SECTIONS = ['inputs', 'outputs', 'parts', 'texts', 'tokens'] as const;
+export const DOC_API_SECTIONS = [
+  'inputs',
+  'outputs',
+  'parts',
+  'service',
+  'texts',
+  'tokens',
+] as const;
 export const DOC_API_TITLES: Record<(typeof DOC_API_SECTIONS)[number], string> = {
   inputs: 'Entradas',
   outputs: 'Salidas',
   parts: 'Piezas',
+  service: 'Servicio',
   texts: 'Textos',
   tokens: 'Variables CSS',
 };
@@ -115,6 +123,16 @@ export interface PartRow {
   description: string;
 }
 
+/**
+ * Fila de «Servicio» (PD-8, decidido por el usuario el 14/11/2026): un miembro del servicio o de
+ * su referencia (`MimiDialogService.open(…)`, `MimiDialogRef.close(…)`).
+ */
+export interface ServiceRow {
+  name: string;
+  type: string;
+  description: string;
+}
+
 /** Un proveedor de textos: `provideMimiSelectText(MIMI_SELECT_TEXT_ES)`. */
 export interface DocTexts {
   constant: string;
@@ -154,6 +172,8 @@ export interface DocPage {
     inputs: readonly ApiRow[];
     outputs?: readonly OutputRow[];
     parts?: readonly PartRow[];
+    /** La API del servicio y de su referencia, si el componente se usa también por código. */
+    service?: readonly ServiceRow[];
     /** Los `data-*` del componente: una línea debajo de Entradas. */
     dataAttributes?: readonly string[];
   };

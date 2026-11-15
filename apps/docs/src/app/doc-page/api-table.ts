@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { DocText } from './doc-text';
-import type { ApiRow, OutputRow, PartRow } from './doc-page.types';
+import type { ApiRow, OutputRow, PartRow, ServiceRow } from './doc-page.types';
 
-type Kind = 'inputs' | 'outputs' | 'parts';
-type Row = ApiRow | OutputRow | PartRow;
+type Kind = 'inputs' | 'outputs' | 'parts' | 'service';
+type Row = ApiRow | OutputRow | PartRow | ServiceRow;
 type Key = 'name' | 'type' | 'default' | 'selector' | 'description';
 
 interface Column {
@@ -31,6 +31,11 @@ const COLUMNS: Record<Kind, Column[]> = {
     { label: 'Pieza', key: 'name', mono: true },
     { label: 'Selector', key: 'selector', mono: true, muted: true },
     { label: 'Para qué', key: 'description', mono: false },
+  ],
+  service: [
+    { label: 'Miembro', key: 'name', mono: true },
+    { label: 'Tipo', key: 'type', mono: true, muted: true },
+    { label: 'Descripción', key: 'description', mono: false },
   ],
 };
 

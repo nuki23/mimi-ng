@@ -1,6 +1,7 @@
 import { COMPONENT_TOKENS } from '../code/component-tokens';
 import { FORMS_SPECS } from '../code/forms-snippets';
 import {
+  DOC_API_SECTIONS,
   DOC_EXAMPLE_CATEGORIES,
   DOC_PAGE_LIMITS as L,
   type DocExample,
@@ -113,7 +114,8 @@ export function validateDocPage(page: DocPage): string[] {
   }
   const live = liveExamples(page);
   if (live.length > L.examples) err(`tiene ${live.length} ejemplos vivos (${L.examples})`);
-  const ids = new Set<string>(['demo', 'forms']);
+  // Los id de los h3 de la API también son fijos: un ejemplo no puede usarlos.
+  const ids = new Set<string>(['demo', 'forms', ...DOC_API_SECTIONS]);
   for (const e of live) {
     const label = `ejemplo «${e.id}»`;
     if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(e.id)) err(`${label}: el id no es kebab-case`);
@@ -145,7 +147,12 @@ export function validateDocPage(page: DocPage): string[] {
 
   // API
   if (page.api.inputs.length === 0) err('la API no tiene entradas');
-  const rows = [...page.api.inputs, ...(page.api.outputs ?? []), ...(page.api.parts ?? [])];
+  const rows = [
+    ...page.api.inputs,
+    ...(page.api.outputs ?? []),
+    ...(page.api.parts ?? []),
+    ...(page.api.service ?? []),
+  ];
   for (const row of rows) {
     const words = countWords(row.description);
     if (words > L.description)

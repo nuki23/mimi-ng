@@ -92,6 +92,10 @@
     <h3 id="parts" [class]="h3">{{ apiTitles.parts }}</h3>
     <app-api-table kind="parts" [rows]="p.api.parts!" />
   }
+  @if (p.api.service?.length) {
+    <h3 id="service" [class]="h3">{{ apiTitles.service }}</h3>
+    <app-api-table kind="service" [rows]="p.api.service!" />
+  }
   @if (p.texts?.length) {
     <h3 id="texts" [class]="h3">{{ apiTitles.texts }}</h3>
     <p data-slot="texts-sentence" class="text-pretty"><app-doc-text [text]="textsSentence()" /></p>

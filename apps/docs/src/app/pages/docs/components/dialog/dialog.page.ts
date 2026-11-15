@@ -48,15 +48,15 @@ export const DIALOG_PAGE: DocPage = {
   usage: {
     code: [
       '// Quien abre: tu componente, con los valores de sus entradas.',
-      'const ref = inject(MimiDialogService).open<User>(EditUserDialog, {',
-      '  inputs: { user },',
+      'const ref = inject(MimiDialogService).open<string>(AskNameDialog, {',
+      '  inputs: { name },',
       '});',
-      'ref.afterClosed().subscribe((edited) => { /* undefined si se canceló */ });',
+      'ref.afterClosed().subscribe((newName) => { /* undefined si se canceló */ });',
       '',
-      '// Dentro de EditUserDialog: entradas normales y ref.close(resultado).',
-      'user = input.required<User>();',
-      'private ref = inject<MimiDialogRef<User>>(MimiDialogRef);',
-      'save() { this.ref.close(editedUser); }',
+      '// Dentro de AskNameDialog: entradas normales y ref.close(resultado).',
+      'name = input.required<string>();',
+      'ref = inject<MimiDialogRef<string>>(MimiDialogRef);',
+      'save() { this.ref.close(this.value()); }',
     ].join('\n'),
     note: 'Tu componente se abre dentro del panel y `afterClosed()` entrega su resultado. Las opciones valen también como entradas de `<mimi-dialog>`.',
   },
@@ -308,17 +308,40 @@ export const DIALOG_PAGE: DocPage = {
         selector: '[mimiDialogClose]',
         description: 'Cierra al hacer clic. Con un valor, ese es el resultado.',
       },
+    ],
+    service: [
       {
-        name: 'MimiDialogService',
-        selector: 'inject(MimiDialogService)',
+        name: 'MimiDialogService.open(contenido, opciones?)',
+        type: 'MimiDialogRef<R>',
         description:
-          '`open(contenido, opciones?)` abre un componente o un `TemplateRef` y devuelve su `MimiDialogRef`; `closeAll()` cierra todos.',
+          'Abre un componente o un `TemplateRef` con las opciones de Entradas y devuelve su referencia.',
       },
       {
-        name: 'MimiDialogRef',
-        selector: 'inject(MimiDialogRef)',
+        name: 'MimiDialogService.closeAll()',
+        type: 'void',
+        description: 'Cierra todos los diálogos abiertos.',
+      },
+      {
+        name: 'MimiDialogRef.close(resultado?)',
+        type: 'void',
+        description: 'Cierra el diálogo, con un resultado opcional.',
+      },
+      {
+        name: 'MimiDialogRef.afterClosed() / closed',
+        type: 'Observable<R | undefined>',
         description:
-          '`close(resultado?)`; `afterClosed()` (o `closed`) emite el resultado una vez; `result`, como señal.',
+          'Emite una vez, con el resultado, cuando el diálogo ya se cerró (`undefined` si se canceló).',
+      },
+      {
+        name: 'MimiDialogRef.result',
+        type: 'Signal<R | undefined>',
+        description: 'El resultado como señal: `undefined` hasta que se cierra con un resultado.',
+      },
+      {
+        name: 'MIMI_DIALOG_DATA',
+        type: 'InjectionToken<D>',
+        description:
+          'Los `data` de las opciones, dentro del contenido: `inject(MIMI_DIALOG_DATA)`.',
       },
     ],
   },
