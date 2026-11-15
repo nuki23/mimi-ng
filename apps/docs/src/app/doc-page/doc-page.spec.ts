@@ -7,7 +7,8 @@ import { DocPageView } from './doc-page';
 import { countSentences, countWords, usageTemplateLines, validateDocPage } from './doc-page.rules';
 import type { DocExample, DocPage } from './doc-page.types';
 import { textParts } from './doc-text';
-import { installExtras } from './install-extras';
+import registry from '@mimi-ng/cli/registry.json';
+import { INSTALL_MAP, installExtras } from './install-extras';
 
 @Component({
   selector: 'app-fake-example',
@@ -135,6 +136,48 @@ describe('installExtras (desde el registro de la CLI)', () => {
 
   it('falla con un nombre que no está en el registro', () => {
     expect(() => installExtras('no-existe')).toThrow(/registro/);
+  });
+
+  // El mapa lo genera apps/docs/scripts/install-map.mjs; aquí se recalcula desde el registro con
+  // otra implementación. Si falla: `node apps/docs/scripts/install-map.mjs` (o `pnpm build:docs`).
+  it('el mapa reducido (install-map.json) coincide con registry.json', () => {
+    type Item = {
+      type: string;
+      dependencies?: Record<string, string>;
+      peerDependencies?: Record<string, string>;
+      registryDependencies?: string[];
+      cssImports?: string[];
+    };
+    const items = (registry as unknown as { items: Record<string, Item> }).items;
+    const fromInit = ['theme', 'utils/cn', 'utils/control-styles'];
+    const initPackages = ['clsx', 'tailwind-merge', 'class-variance-authority'];
+    const closure = (name: string, acc = new Set<string>()): Set<string> => {
+      if (acc.has(name)) return acc;
+      acc.add(name);
+      for (const dep of items[name].registryDependencies ?? []) closure(dep, acc);
+      return acc;
+    };
+    const expected = Object.fromEntries(
+      Object.entries(items)
+        .filter(([, item]) => item.type === 'component')
+        .map(([name]) => {
+          const all = [...closure(name)];
+          const deps = all.map((n) => items[n]);
+          const pkgs = deps.flatMap((d) => [
+            ...Object.keys(d.dependencies ?? {}),
+            ...Object.keys(d.peerDependencies ?? {}),
+          ]);
+          return [
+            name,
+            {
+              items: all.filter((n) => n !== name && !fromInit.includes(n)).sort(),
+              packages: [...new Set(pkgs)].filter((p) => !initPackages.includes(p)).sort(),
+              css: [...new Set(deps.flatMap((d) => d.cssImports ?? []))].sort(),
+            },
+          ];
+        }),
+    );
+    expect(INSTALL_MAP).toEqual(expected);
   });
 });
 

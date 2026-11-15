@@ -129,6 +129,13 @@ El chunk de `doc-page` lo comparten todas las páginas migradas; la mayor parte 
 - M.12: anotado investigar por qué ese arranque pasa de 5 s.
 - Evidencia: `pnpm test:cli` **202 de 202**; `pnpm test` completo en verde (docs 283, ui-core 1061, CLI 202).
 
+### 6.2 «Qué instala» con un mapa reducido del registro
+
+- `apps/docs/scripts/install-map.mjs` genera `apps/docs/src/app/doc-page/install-map.json` (40 componentes; por cada uno, `items`, `packages` y `css`, ya con sus dependencias y sin lo de `ng add`), formateado con Prettier. Corre en `pnpm build:docs`, antes de `ng build`; `--check` no escribe y falla si cambió. El archivo va en el repo (lo usan `ng serve` y `ng test`).
+- `install-extras.ts` lee el mapa (`INSTALL_MAP`); ya no importa `registry.json`.
+- Prueba nueva en `doc-page.spec.ts`: recalcula el mapa desde `registry.json` con otra implementación y lo compara entero. **Comprobado que falla:** con `button.items` vaciado a mano, la prueba falló (1 de 12) y `--check` salió con 1; regenerado, en verde (12 de 12, y 62 de 62 con las de Select y doc-pages).
+- **Chunk compartido de `doc-page`:** 32,25 / 8,22 kB → **22,35 / 6,81 kB** (crudo / gzip -9). JS inicial sin cambios (335,10 kB), `main` 137,83 kB.
+
 ## Revisión crítica antes de cerrar
 
 - **¿La evidencia prueba cada criterio?** La estructura y los límites, sí (la prueba rechazó una demo de 62 líneas). Lo visual lo prueban las capturas y Playwright; el criterio de «gusto» (si las páginas se leen mejor) es del usuario: por eso el piloto para aquí.

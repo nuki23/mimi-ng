@@ -1,21 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import registry from '@mimi-ng/cli/registry.json';
+import installMap from './install-map.json';
 import { More } from './more';
-
-interface RegistryItem {
-  type: string;
-  files: string[];
-  dependencies?: Record<string, string>;
-  peerDependencies?: Record<string, string>;
-  registryDependencies?: string[];
-  cssImports?: string[];
-}
-
-const ITEMS = (registry as unknown as { items: Record<string, RegistryItem> }).items;
-
-/** Lo que ya trae `ng add @mimi-ng/cli` (spec 5, «Qué hace init»): no se repite aquí. */
-const FROM_INIT_ITEMS = new Set(['theme', 'utils/cn', 'utils/control-styles']);
-const FROM_INIT_PACKAGES = new Set(['clsx', 'tailwind-merge', 'class-variance-authority']);
 
 export interface InstallExtras {
   /** Otros ítems del registro que se copian con él (`option-list`, `utils/overlay`…). */
@@ -26,28 +11,18 @@ export interface InstallExtras {
   css: string[];
 }
 
-/** «Qué instala» un ítem, desde `packages/cli/src/registry.json` (con sus dependencias). */
+/**
+ * El mapa reducido del registro de la CLI: por componente, lo que copia y agrega con él (con sus
+ * dependencias), sin lo que ya trae `ng add`. Lo genera `apps/docs/scripts/install-map.mjs` en
+ * `pnpm build:docs`; doc-page.spec.ts lo compara con `packages/cli/src/registry.json`.
+ */
+export const INSTALL_MAP: Readonly<Record<string, InstallExtras>> = installMap;
+
+/** «Qué instala» un componente del registro. */
 export function installExtras(name: string): InstallExtras {
-  if (!ITEMS[name]) throw new Error(`[Mimi docs] «${name}» no está en el registro de la CLI.`);
-  const seen = new Set<string>();
-  const visit = (item: string) => {
-    if (seen.has(item)) return;
-    seen.add(item);
-    for (const dep of ITEMS[item]?.registryDependencies ?? []) visit(dep);
-  };
-  visit(name);
-  const closure = [...seen].map((item) => ITEMS[item]).filter(Boolean);
-  const packages = new Set(
-    closure.flatMap((item) => [
-      ...Object.keys(item.dependencies ?? {}),
-      ...Object.keys(item.peerDependencies ?? {}),
-    ]),
-  );
-  return {
-    items: [...seen].filter((item) => item !== name && !FROM_INIT_ITEMS.has(item)).sort(),
-    packages: [...packages].filter((p) => !FROM_INIT_PACKAGES.has(p)).sort(),
-    css: [...new Set(closure.flatMap((item) => item.cssImports ?? []))].sort(),
-  };
+  const extras = INSTALL_MAP[name];
+  if (!extras) throw new Error(`[Mimi docs] «${name}» no está en el registro de la CLI.`);
+  return extras;
 }
 
 /** El desplegable «Qué instala» de la sección Instalación. */
