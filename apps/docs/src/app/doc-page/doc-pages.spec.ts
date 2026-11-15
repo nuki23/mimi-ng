@@ -18,6 +18,8 @@ import { SELECT_PAGE } from '../pages/docs/components/select/select.page';
 import { TOOLBAR_PAGE } from '../pages/docs/components/toolbar/toolbar.page';
 import { ToolbarPage } from '../pages/docs/components/toolbar/toolbar-page';
 import { SelectPage } from '../pages/docs/components/select/select-page';
+import { SWITCH_PAGE } from '../pages/docs/components/switch/switch.page';
+import { SwitchPage } from '../pages/docs/components/switch/switch-page';
 import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
 import { textLinks } from './doc-text';
 import {
@@ -51,48 +53,16 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
   input: { page: INPUT_PAGE, component: InputPage },
   toolbar: { page: TOOLBAR_PAGE, component: ToolbarPage },
   select: { page: SELECT_PAGE, component: SelectPage },
+  switch: { page: SWITCH_PAGE, component: SwitchPage },
 };
 
 /**
- * Las páginas que faltan migrar (DP.1 a DP.5). **Solo encoge:** al migrar una, se quita de aquí y
- * baja `PENDING_COUNT`. En la puerta DP.P tiene que estar vacía.
+ * Cuántas páginas faltan migrar (las carpetas que no están en `MIGRATED`). **Solo baja:** al
+ * migrar una, se registra en `MIGRATED` y este número baja en uno; una carpeta nueva sin migrar lo
+ * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
+ * con la lista de pendientes.
  */
-const PENDING = [
-  'avatar',
-  'badge',
-  'card',
-  'checkbox',
-  'color-picker',
-  'command',
-  'confirm',
-  'context-menu',
-  'data-table',
-  'date-picker',
-  'date-range',
-  'dropdown-menu',
-  'file-upload',
-  'input-mask',
-  'input-otp',
-  'number-input',
-  'pagination',
-  'password',
-  'popover',
-  'progress',
-  'separator',
-  'skeleton',
-  'slider',
-  'sortable-list',
-  'switch',
-  'tabs',
-  'tags-input',
-  'textarea',
-  'toast',
-  'toggle-group',
-  'tooltip',
-  'tree',
-];
-/** El tamaño de `PENDING`: un número fijo que solo baja (DP.0: 39; piloto: 37; DP.1, una a una). */
-const PENDING_COUNT = 32;
+const PENDING_COUNT = 31;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
@@ -117,6 +87,9 @@ const dirs = docFs
   .filter((d) => docFs.statSync(`${PAGES_DIR}${d}`).isDirectory())
   .sort();
 const read = (path: string) => docFs.readFileSync(path, 'utf8');
+
+/** Las páginas que faltan migrar: las carpetas que no están en `MIGRATED`. */
+const PENDING = dirs.filter((dir) => !MIGRATED[dir]);
 
 /** El `*-page.ts` de una página migrada: solo pinta `<app-doc-page [page]="page" />`. */
 const WRAPPER = /template:\s*'<app-doc-page \[page\]="page" \/>'/;
@@ -146,22 +119,17 @@ describe('Plantilla de las páginas de componentes (doc-pages)', () => {
     expect(dirs.length).toBeGreaterThan(30);
   });
 
-  it(`la lista de pendientes solo encoge (${PENDING_COUNT} en esta tanda)`, () => {
-    expect(PENDING.length).toBe(PENDING_COUNT);
-    expect(new Set(PENDING).size).toBe(PENDING.length);
+  it(`la lista de pendientes solo encoge (${PENDING_COUNT} pendientes)`, () => {
+    expect(PENDING.length, `pendientes: ${PENDING.join(', ')}`).toBe(PENDING_COUNT);
   });
 
-  it('cada carpeta es una página migrada o está en la lista de pendientes', () => {
+  it('una carpeta con <nombre>.page.ts está registrada en MIGRATED, y al revés', () => {
     for (const dir of dirs) {
       const migrated = docFs.existsSync(`${PAGES_DIR}${dir}/${dir}.page.ts`);
-      if (PENDING.includes(dir)) {
-        expect(migrated, `${dir} ya está migrada: quítala de PENDING`).toBe(false);
-      } else {
-        expect(migrated, `${dir}: falta ${dir}.page.ts (o añádela a PENDING)`).toBe(true);
-        expect(MIGRATED[dir], `${dir}: regístrala en MIGRATED`).toBeDefined();
-      }
+      expect(migrated, `${dir}: ${migrated ? 'regístrala en MIGRATED' : 'falta .page.ts'}`).toBe(
+        !!MIGRATED[dir],
+      );
     }
-    for (const dir of PENDING) expect(dirs, `PENDING: «${dir}» no existe`).toContain(dir);
     for (const dir of Object.keys(MIGRATED)) expect(dirs).toContain(dir);
   });
 
