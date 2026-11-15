@@ -61,7 +61,7 @@ export const COMBOBOX_PAGE: DocPage = {
       '  ]);',
       '}',
     ].join('\n'),
-    note: 'La misma API que Select. Lo escrito no es el valor hasta que se elige una opción.',
+    note: 'La misma API que [Select](/docs/components/select). Lo escrito no es el valor hasta que se elige una opción.',
   },
   examples: {
     states: [

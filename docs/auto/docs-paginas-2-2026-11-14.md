@@ -17,3 +17,9 @@
 - `DocPage.api.service` (`ServiceRow`: `name`, `type`, `description`), h3 «Servicio» (`id="service"`) entre Piezas y Textos, con `app-api-table kind="service"` (`Miembro | Tipo | Descripción`). Las descripciones cuentan para el límite de 20 palabras y los nombres internos; los `id` de la API quedan reservados (un ejemplo no puede llamarse `service`).
 - Dialog: `MimiDialogService` y `MimiDialogRef` salen de Piezas y van a Servicio (`open`, `closeAll`, `close`, `afterClosed`/`closed`, `result` y `MIMI_DIALOG_DATA`). El bloque «Uso» usa el ejemplo nuevo (`AskNameDialog`).
 - `docs/spec/plantilla-pagina.md`, reglas 2 y 10. Pruebas: `doc-page.spec.ts` (la sección en su sitio y su encabezado «Miembro»), `doc-pages.spec.ts` (el orden de los h3 con `service`) y Dialog: **83 de 83**.
+
+## 3. Enlaces internos en los textos de la plantilla
+
+- `app-doc-text` entiende `[texto](/ruta)` (solo rutas que empiezan por `/`; un enlace externo queda como texto) y lo pinta con `routerLink`. Dentro del código (entre comillas invertidas) no hay enlaces. `countWords` cuenta solo el texto del enlace.
+- `doc-pages.spec.ts`, prueba nueva por página: cada enlace de todos sus textos (cabecera, frases, notas, desplegables y API) va a una página `ready` del menú.
+- Páginas hermanas: Input → Textarea y Select ↔ Combobox, en la nota de Uso (Textarea → Input y Checkbox ↔ Switch, al migrarlas, más abajo). Pruebas: `doc-page.spec.ts` (los enlaces, el externo como texto, las palabras), Input (el enlace en la nota) y las de Select, Combobox y `doc-pages`: **92 de 92**.

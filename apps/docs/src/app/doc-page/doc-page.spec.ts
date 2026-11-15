@@ -123,6 +123,21 @@ describe('textParts', () => {
       { code: false, text: ' aquí' },
     ]);
   });
+
+  it('separa los enlaces internos; las palabras cuentan solo su texto', () => {
+    expect(textParts('Usa [Textarea](/docs/components/textarea), no `x`.')).toEqual([
+      { code: false, text: 'Usa ' },
+      { code: false, text: 'Textarea', href: '/docs/components/textarea' },
+      { code: false, text: ', no ' },
+      { code: true, text: 'x' },
+      { code: false, text: '.' },
+    ]);
+    // Solo rutas internas: un enlace externo queda como texto.
+    expect(textParts('[web](https://example.com)')).toEqual([
+      { code: false, text: '[web](https://example.com)' },
+    ]);
+    expect(countWords('Usa [Textarea](/docs/components/textarea).')).toBe(2);
+  });
 });
 
 describe('installExtras (desde el registro de la CLI)', () => {

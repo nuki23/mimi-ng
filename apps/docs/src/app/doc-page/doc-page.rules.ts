@@ -1,5 +1,6 @@
 import { COMPONENT_TOKENS } from '../code/component-tokens';
 import { FORMS_SPECS } from '../code/forms-snippets';
+import { plainText } from './doc-text';
 import {
   DOC_API_SECTIONS,
   DOC_EXAMPLE_CATEGORIES,
@@ -10,7 +11,7 @@ import {
 
 /** Palabras de un texto visible (las comillas invertidas no cuentan). */
 export function countWords(text: string): number {
-  return text.replace(/`/g, '').split(/\s+/).filter(Boolean).length;
+  return plainText(text).replace(/`/g, '').split(/\s+/).filter(Boolean).length;
 }
 
 /** Frases de un texto: lo que termina en punto, cierre o exclamación. */
@@ -66,6 +67,21 @@ function prose(page: DocPage): string[] {
     page.usage.note ?? '',
     ...liveExamples(page).map((e) => e.sentence),
     ...page.accessibility.points,
+  ];
+}
+
+/** Todo el texto de la configuración que ve el usuario (con desplegables y API). */
+export function allTexts(page: DocPage): string[] {
+  return [
+    ...prose(page),
+    ...(page.usage.more?.items ?? []),
+    ...(page.accessibility.more ?? []),
+    ...[
+      ...page.api.inputs,
+      ...(page.api.outputs ?? []),
+      ...(page.api.parts ?? []),
+      ...(page.api.service ?? []),
+    ].map((r) => r.description),
   ];
 }
 

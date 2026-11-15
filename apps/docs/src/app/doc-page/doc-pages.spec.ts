@@ -18,7 +18,8 @@ import { SELECT_PAGE } from '../pages/docs/components/select/select.page';
 import { TOOLBAR_PAGE } from '../pages/docs/components/toolbar/toolbar.page';
 import { ToolbarPage } from '../pages/docs/components/toolbar/toolbar-page';
 import { SelectPage } from '../pages/docs/components/select/select-page';
-import { liveExamples, validateDocPage } from './doc-page.rules';
+import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
+import { textLinks } from './doc-text';
 import {
   DOC_API_SECTIONS,
   DOC_EXAMPLE_CATEGORIES,
@@ -204,6 +205,15 @@ describe('Plantilla de las páginas de componentes (doc-pages)', () => {
           docFs.existsSync(`${UI_DIR}${dir}/${dir}-texts.ts`) ||
           /provideMimi\w+Text\(/.test(read(`${base}-page.ts`));
         if (hasTexts) expect(page.texts?.length, 'falta «texts»').toBeGreaterThan(0);
+      });
+
+      it('los enlaces internos van a páginas que existen', () => {
+        const ready = new Set(
+          DOCS_NAV.flatMap((s) => s.items)
+            .filter((i) => i.status === 'ready')
+            .map((i) => i.path),
+        );
+        for (const href of allTexts(page).flatMap(textLinks)) expect(ready).toContain(href);
       });
 
       it('el h1 es el título del menú', () => {

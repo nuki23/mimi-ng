@@ -43,7 +43,7 @@ export const INPUT_PAGE: DocPage = {
       '})',
       'export class ContactComponent {}',
     ].join('\n'),
-    note: 'Es una directiva sobre el elemento nativo. Para varias líneas, usa Textarea.',
+    note: 'Es una directiva sobre el elemento nativo. Para varias líneas, usa [Textarea](/docs/components/textarea).',
   },
   examples: {
     sizes: [

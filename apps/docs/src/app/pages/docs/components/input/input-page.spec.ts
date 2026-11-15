@@ -35,6 +35,10 @@ describe('InputPage', () => {
       expect(el.querySelectorAll('app-install-command').length).toBe(1);
       expect(el.querySelector('h1')!.textContent!.trim()).toBe('Input');
       expect(el.querySelector('app-forms-tabs')).not.toBeNull();
+      // La página hermana, enlazada desde la nota de Uso.
+      expect(
+        el.querySelector('[data-slot="usage-note"] a[href="/docs/components/textarea"]'),
+      ).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

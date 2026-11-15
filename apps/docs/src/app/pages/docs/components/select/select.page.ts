@@ -56,7 +56,7 @@ export const SELECT_PAGE: DocPage = {
       '  country = signal<string | null>(null);',
       '}',
     ].join('\n'),
-    note: 'El texto de cada opción es lo que se ve; `value`, lo que recibe tu signal o tu formulario.',
+    note: 'El texto de cada opción es lo que se ve y `value`, lo que recibes. Para escribir y filtrar, [Combobox](/docs/components/combobox).',
   },
   examples: {
     sizes: [
