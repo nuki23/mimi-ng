@@ -49,7 +49,7 @@ export const INPUT_OTP_PAGE: DocPage = {
         id: 'states',
         title: 'Estados y longitud',
         sentence:
-          'Verificado, con error, deshabilitado y con 4 o 10 casillas; con muchas, se encogen para caber en el ancho.',
+          'Verificado, con error, deshabilitado, de solo lectura y con 4 o 10 casillas; con muchas, se encogen para caber.',
         component: InputOtpStatesExample,
         source: statesSource as string,
       },

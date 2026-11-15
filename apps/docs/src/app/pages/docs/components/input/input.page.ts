@@ -59,8 +59,9 @@ export const INPUT_PAGE: DocPage = {
     states: [
       {
         id: 'disabled',
-        title: 'Deshabilitado',
-        sentence: 'Con `disabled`, el atributo nativo: no se enfoca ni se edita.',
+        title: 'Deshabilitado y solo lectura',
+        sentence:
+          'Con `disabled`, el campo no se enfoca ni se edita. Con `readonly`, se enfoca y se copia, pero no cambia.',
         component: InputDisabledExample,
         source: disabledSource as string,
       },

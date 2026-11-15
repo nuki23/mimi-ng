@@ -144,7 +144,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [x] R.26 (hecha el 15/11/2026) Tabla de la escala de tamaños en la spec (lo que faltaba de la R.1) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.27 (hecha el 15/11/2026) Confirm con `size` (lo que faltaba de la R.7) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.28 (hecha el 15/11/2026) Ejemplos de tamaño por componente y Blocks que heredan (lo que faltaba de la R.8) · v0.7.0 · M · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [ ] R.29 Ejemplos de solo lectura (lo que faltaba de la R.12) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [x] R.29 (hecha el 15/11/2026) Ejemplos de solo lectura (lo que faltaba de la R.12) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.30 Form Field: ejemplos con más elementos y el diagrama (lo que faltaba de la R.14) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.31 Nota de contraste al cambiar el primario (texto `text-primary` con un primario propio claro) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.32 (hecha el 15/11/2026) Quitar el alias `default` de `size` (RUPTURA, anunciada en la 0.6.0) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
