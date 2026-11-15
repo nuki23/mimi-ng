@@ -176,7 +176,8 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
   it('ordena con el ciclo asc → desc → ninguno y aria-sort', async () => {
     const { table, head, names, host, fixture } = await setup();
     const sortBtn = () => head('MRR').querySelector<HTMLButtonElement>('[data-slot="sort"]')!;
-    expect(head('MRR').getAttribute('aria-sort')).toBe('none');
+    // APG: aria-sort solo en la columna ordenada (tanda 2, revisión de accesibilidad).
+    expect(head('MRR').hasAttribute('aria-sort')).toBe(false);
     expect(head('Estado').getAttribute('aria-sort')).toBeNull();
     sortBtn().click();
     await settle(fixture);
@@ -190,7 +191,9 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     sortBtn().click();
     await settle(fixture);
     expect(host.sort()).toBeNull();
-    expect(table.querySelector('th[aria-sort="none"]')).not.toBeNull();
+    expect(table.querySelector('th[aria-sort]')).toBeNull();
+    // El ícono de «se puede ordenar» sin opacidad: 3:1 contra la cabecera (WCAG 1.4.11).
+    expect(sortBtn().querySelector('svg')!.getAttribute('class')).not.toContain('opacity');
   });
 
   it('busca sin tildes (solo en columnas buscables) y vuelve a la página 1', async () => {
@@ -539,8 +542,20 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
       [expandMode]="mode()"
       [(expanded)]="expanded"
     >
-      <ng-template mimiTableActions let-row let-open="expanded" let-toggle="toggle">
-        <button type="button" data-test="own-toggle" [attr.data-open]="open" (click)="toggle()">
+      <ng-template
+        mimiTableActions
+        let-row
+        let-open="expanded"
+        let-toggle="toggle"
+        let-detailId="detailId"
+      >
+        <button
+          type="button"
+          data-test="own-toggle"
+          [attr.data-open]="open"
+          [attr.aria-controls]="open ? detailId : null"
+          (click)="toggle()"
+        >
           {{ row.name }}
         </button>
       </ng-template>
@@ -582,6 +597,20 @@ describe('MimiDataTable: expandir fácil (R.20)', { timeout: 20_000 }, () => {
     // El detalle recibe la fila y su toggle(): lo cierra.
     await click(root.querySelector<HTMLButtonElement>('[data-test="close"]')!);
     expect(host.expanded()).toEqual([]);
+  });
+
+  it('cerrar desde el detalle no pierde el foco: va al botón de expandir de la fila (APG Disclosure)', async () => {
+    const { own, click, root, fixture } = await setup();
+    await click(own()[0]);
+    // El contexto trae el id del detalle: un botón propio puede poner aria-controls.
+    const detail = root.querySelector('[data-slot="detail"] [id]')!;
+    expect(own()[0].getAttribute('aria-controls')).toBe(detail.id);
+    const close = root.querySelector<HTMLButtonElement>('[data-test="close"]')!;
+    close.focus();
+    await click(close);
+    await fixture.whenStable();
+    expect(root.querySelector('[data-slot="detail"]')).toBeNull();
+    expect(document.activeElement).toBe(root.querySelector('[data-slot="expand"]'));
   });
 
   it('expandMode="single": abrir una cierra la otra; multiple (por defecto) las deja', async () => {

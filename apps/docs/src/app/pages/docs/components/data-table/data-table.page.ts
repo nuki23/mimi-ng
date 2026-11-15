@@ -307,7 +307,7 @@ export const DATA_TABLE_PAGE: DocPage = {
         name: 'MimiTableActions',
         selector: 'ng-template[mimiTableActions]',
         description:
-          'Acciones de cada fila (`let-row`); con `let-toggle="toggle"` y `let-open="expanded"`, un botón tuyo abre el detalle.',
+          'Acciones de cada fila (`let-row`); con `let-toggle`, `let-open="expanded"` y `let-detailId`, un botón tuyo abre el detalle: ponle `aria-expanded` y `aria-controls`.',
       },
       {
         name: 'MimiTableBulk',

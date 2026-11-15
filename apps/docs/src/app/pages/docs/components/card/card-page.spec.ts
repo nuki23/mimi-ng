@@ -37,6 +37,13 @@ describe('CardPage', () => {
         expect(code).toContain("import { MimiCardImports } from '@/components/ui/card';");
         expect(code).toMatch(/export class Card\w+Example/);
       }
+      // El botón de alternar no cambia su nombre: el estado lo dice aria-pressed (APG Button).
+      const toggle = el.querySelector<HTMLButtonElement>('app-card-link-example button')!;
+      const name = toggle.textContent!.replace(/\s+/g, ' ').trim();
+      toggle.click();
+      await settle(fixture);
+      expect(toggle.getAttribute('aria-pressed')).toBe('true');
+      expect(toggle.textContent!.replace(/\s+/g, ' ').trim()).toBe(name);
       expect(el.querySelector('h1')!.textContent!.trim()).toBe('Card');
     },
     PAGE_EXAMPLES_TIMEOUT,

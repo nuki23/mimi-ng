@@ -2,9 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   Directive,
+  ElementRef,
   type EmbeddedViewRef,
+  Injector,
   TemplateRef,
   ViewContainerRef,
+  afterNextRender,
   booleanAttribute,
   computed,
   contentChild,
@@ -100,6 +103,8 @@ export interface MimiTableRowContext<T = any> {
   expanded: boolean;
   /** Abre o cierra la fila (R.20): `let-toggle="toggle"` y `(click)="toggle()"`. */
   toggle: () => void;
+  /** El `id` del detalle de la fila, para `[attr.aria-controls]` en un botón propio. */
+  detailId: string;
 }
 
 /** Celda a medida de una columna: `<ng-template mimiTableCell="estado" let-row let-value="value">`. */
@@ -174,6 +179,7 @@ export class MimiTableOutlet {
   readonly expanded = input(false, { alias: 'mimiTableOutletExpanded' });
   /** Una función estable por fila (la Data Table la guarda por id): no repite el efecto. */
   readonly toggle = input<() => void>(NOOP, { alias: 'mimiTableOutletToggle' });
+  readonly detailId = input('', { alias: 'mimiTableOutletDetailId' });
 
   private readonly viewContainer = inject(ViewContainerRef);
   private view: EmbeddedViewRef<MimiTableCellContext & MimiTableRowContext> | null = null;
@@ -187,6 +193,7 @@ export class MimiTableOutlet {
       density: this.density(),
       expanded: this.expanded(),
       toggle: this.toggle(),
+      detailId: this.detailId(),
     };
     untracked(() => {
       if (this.view && this.rendered === template) {
@@ -536,7 +543,7 @@ interface ColumnView<T> {
                 [style.width]="col.column.width ?? null"
                 [style.min-width]="col.left !== null ? col.column.width : null"
                 [style.max-width]="col.left !== null ? col.column.width : null"
-                [attr.aria-sort]="col.sort"
+                [attr.aria-sort]="col.sort === 'none' ? null : col.sort"
                 [attr.data-sorted]="
                   col.sort === 'ascending' || col.sort === 'descending' ? '' : null
                 "
@@ -558,7 +565,7 @@ interface ColumnView<T> {
                       {{ col.column.header }}
                       <svg
                         aria-hidden="true"
-                        [class]="col.sort === 'none' ? 'size-[13px] opacity-45' : 'size-[13px]'"
+                        class="size-[13px]"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -655,6 +662,7 @@ interface ColumnView<T> {
                     <button
                       type="button"
                       data-slot="expand"
+                      [id]="detailId(row) + '-toggle'"
                       [class]="ui.expand"
                       [attr.aria-label]="texts.expand(rowLabel(row))"
                       [attr.aria-expanded]="isExpanded(row)"
@@ -702,6 +710,7 @@ interface ColumnView<T> {
                       [mimiTableOutletDensity]="density()"
                       [mimiTableOutletExpanded]="isExpanded(row)"
                       [mimiTableOutletToggle]="toggleFor(row)"
+                      [mimiTableOutletDetailId]="detailId(row)"
                     />
                   </td>
                 }
@@ -720,6 +729,7 @@ interface ColumnView<T> {
                           [mimiTableOutletDensity]="density()"
                           [mimiTableOutletExpanded]="true"
                           [mimiTableOutletToggle]="toggleFor(row)"
+                          [mimiTableOutletDetailId]="detailId(row)"
                         />
                       </div>
                     </td>
@@ -1086,6 +1096,8 @@ export class MimiDataTable<T = any> {
 
   /** Una función por id de fila, la misma en cada pintada (la usan las plantillas: `toggle()`). */
   private readonly toggles = new Map<unknown, () => void>();
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private readonly injector = inject(Injector);
 
   protected toggleFor(row: T): () => void {
     const id = this.rowId()(row);
@@ -1093,8 +1105,21 @@ export class MimiDataTable<T = any> {
     if (!toggle) {
       toggle = () => {
         const current = this.data().find((r) => this.rowId()(r) === id);
+        // Cerrar desde un botón del detalle lo destruye: el foco iría a <body>. Va al botón de
+        // expandir de la fila (APG Disclosure; revisión de accesibilidad de la tanda 2).
+        const detail =
+          current !== undefined
+            ? this.host.querySelector(`[id="${this.detailId(current)}"]`)
+            : null;
+        const fromDetail = !!detail && detail.contains(this.host.ownerDocument.activeElement);
         if (current !== undefined) this.toggleExpanded(current);
         else this.expanded.update((ids) => ids.filter((x) => x !== id));
+        if (fromDetail && current !== undefined) {
+          const target = `${this.detailId(current)}-toggle`;
+          afterNextRender(() => this.host.querySelector<HTMLElement>(`[id="${target}"]`)?.focus(), {
+            injector: this.injector,
+          });
+        }
       };
       this.toggles.set(id, toggle);
     }

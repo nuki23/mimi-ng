@@ -67,7 +67,9 @@ const PEOPLE = CITIES.flatMap((city, i) => [
           </tbody>
         </table>
       </div>
-      <p class="text-sm text-muted-foreground">{{ table.selection().length }} elegidas</p>
+      <p role="status" class="text-sm text-muted-foreground">
+        {{ table.count() }} resultados · {{ table.selection().length }} elegidas
+      </p>
       <mimi-pagination [(page)]="table.page" [pageSize]="5" [total]="table.count()" />
     </div>
   `,

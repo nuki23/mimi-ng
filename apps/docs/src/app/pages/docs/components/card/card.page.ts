@@ -127,6 +127,7 @@ export const CARD_PAGE: DocPage = {
       'El título es tu encabezado (`<h2>`, `<h3>`…): elige el nivel que le toca en tu página.',
       'La superficie no añade rol ni foco: un `<section>` o un `<li>` siguen siendo lo que son.',
       'Una tarjeta que se pulsa debe ser un `<a>` o un `<button>` con `interactive`, no un `<div>` con `(click)`.',
+      'Para una tarjeta deshabilitada, usa `<button disabled>`: un `<a aria-disabled>` sigue enfocable y se abre con Enter.',
       'Con `interactive`, el foco se ve con el anillo del tema; Enter y Espacio son los del elemento nativo.',
     ],
   },

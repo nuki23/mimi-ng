@@ -114,8 +114,11 @@ describe('Table (R.20): directivas de estilo sobre la tabla nativa', () => {
   it('el encabezado que ordena: un botón con aria-sort que cambia', async () => {
     const { q, all, update, host } = await setup();
     const th = all('thead th')[0];
-    expect(th.getAttribute('aria-sort')).toBe('none');
+    // APG: aria-sort solo en la columna ordenada (revisión de accesibilidad, tanda 2).
+    expect(th.hasAttribute('aria-sort')).toBe(false);
     expect(all('thead th')[1].hasAttribute('aria-sort')).toBe(false);
+    // El ícono de «se puede ordenar», sin opacidad (3:1, WCAG 1.4.11).
+    expect(th.querySelector('svg')!.getAttribute('class')).not.toContain('opacity');
     const button = th.querySelector<HTMLButtonElement>('button[data-slot="sort"]')!;
     expect(button.getAttribute('type')).toBe('button');
     expect(button.textContent!.trim()).toBe('Nombre');
@@ -130,7 +133,7 @@ describe('Table (R.20): directivas de estilo sobre la tabla nativa', () => {
     await update(() => button.click());
     expect(th.getAttribute('aria-sort')).toBe('descending');
     await update(() => host.table.sorting.set(null));
-    expect(th.getAttribute('aria-sort')).toBe('none');
+    expect(th.hasAttribute('aria-sort')).toBe(false);
     expect(q('thead th svg').getAttribute('aria-hidden')).toBe('true');
   });
 

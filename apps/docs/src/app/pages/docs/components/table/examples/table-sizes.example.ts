@@ -9,7 +9,7 @@ import { MimiTableImports } from '@/components/ui/table';
     <div class="grid w-full gap-4 lg:grid-cols-3">
       @for (size of sizes; track size) {
         <div mimiCard class="overflow-x-auto">
-          <table mimiTable [size]="size">
+          <table mimiTable [size]="size" [attr.aria-label]="'Usuarios, tamaño ' + size">
             <thead mimiThead>
               <tr>
                 <th mimiTh>Tamaño {{ size }}</th>

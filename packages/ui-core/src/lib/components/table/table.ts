@@ -155,7 +155,7 @@ export class MimiThOutlet {
         <ng-container [mimiThOutlet]="label" />
         <svg
           aria-hidden="true"
-          [class]="handle.direction() ? 'size-[13px]' : 'size-[13px] opacity-45'"
+          class="size-[13px]"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -191,7 +191,8 @@ export class MimiTh {
     const handle = this.sort();
     if (!handle) return null;
     const direction = handle.direction();
-    return direction === 'asc' ? 'ascending' : direction === 'desc' ? 'descending' : 'none';
+    // Solo la columna ordenada lleva aria-sort (APG «Sortable Table»): sin «none» en las demás.
+    return direction === 'asc' ? 'ascending' : direction === 'desc' ? 'descending' : null;
   });
   protected readonly icon = computed(() => {
     const direction = this.sort()?.direction();
@@ -205,10 +206,11 @@ export class MimiTh {
 /**
  * Botón que abre o cierra una fila de `mimiTableState`: `<button mimiBtn mimiRowToggle [row]="fila"
  * [controls]="'detalle-' + fila.id">`. Pone `aria-expanded` (y `aria-controls` con la fila abierta).
- * El botón y su nombre son tuyos.
+ * El botón y su nombre son tuyos: mejor un nombre fijo («Detalle del pedido de Ana»), porque el
+ * estado ya lo dice `aria-expanded`. Solo en `<button>`: el teclado (Enter y Espacio) es el suyo.
  */
 @Directive({
-  selector: '[mimiRowToggle]',
+  selector: 'button[mimiRowToggle]',
   host: {
     '[attr.aria-expanded]': 'row().expanded()',
     '[attr.aria-controls]': 'row().expanded() ? controls() || null : null',

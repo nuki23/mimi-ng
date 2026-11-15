@@ -52,6 +52,21 @@ describe('TablePage (R.20)', () => {
         'false',
       ]);
       expect(expand.querySelector('#pedido-2')).not.toBeNull();
+      // Nombre fijo: el estado lo dice aria-expanded (revisión de accesibilidad).
+      expect(toggles[1].textContent!.replace(/\s+/g, ' ').trim()).toBe(
+        'Detalle del pedido de Café Altura',
+      );
+      // Las tablas de «Tamaños» tienen nombre.
+      for (const table of el.querySelectorAll('app-table-sizes-example table')) {
+        expect(table.getAttribute('aria-label')).toMatch(/^Usuarios, tamaño (sm|md|lg)$/);
+      }
+      // Buscar anuncia el resultado en una región status (WCAG 4.1.3).
+      const state = el.querySelector<HTMLElement>('app-table-state-example')!;
+      const search = state.querySelector<HTMLInputElement>('input[type=search]')!;
+      search.value = 'zzz';
+      search.dispatchEvent(new Event('input'));
+      await settle(fixture);
+      expect(state.querySelector('[role="status"]')!.textContent).toContain('0 resultados');
       expect(el.querySelector('h1')!.textContent!.trim()).toBe('Table');
     },
     PAGE_EXAMPLES_TIMEOUT,

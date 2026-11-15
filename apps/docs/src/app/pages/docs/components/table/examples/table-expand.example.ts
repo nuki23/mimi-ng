@@ -41,8 +41,7 @@ const ORDERS = [
                   [row]="row"
                   [controls]="'pedido-' + row.id"
                 >
-                  {{ row.expanded() ? 'Ocultar' : 'Ver' }}
-                  <span class="sr-only">el pedido de {{ row.data.client }}</span>
+                  Detalle<span class="sr-only"> del pedido de {{ row.data.client }}</span>
                 </button>
               </td>
             </tr>

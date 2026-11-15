@@ -18,10 +18,12 @@ import { MimiCardImports } from '@/components/ui/card';
         [attr.aria-pressed]="chosen()"
         (click)="chosen.set(!chosen())"
       >
-        <span class="block font-semibold">Plan anual</span>
-        <span class="block text-sm text-muted-foreground">
-          {{ chosen() ? 'Elegido' : 'Pulsa para elegirlo' }}
+        <!-- El nombre no cambia: el estado lo dice aria-pressed; la marca es solo visual. -->
+        <span class="flex items-center justify-between font-semibold">
+          Plan anual
+          <span aria-hidden="true" class="text-primary" [class.invisible]="!chosen()">✓</span>
         </span>
+        <span class="block text-sm text-muted-foreground">Facturación una vez al año.</span>
       </button>
     </div>
   `,
