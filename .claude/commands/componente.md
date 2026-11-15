@@ -11,8 +11,8 @@ Crea el componente **$ARGUMENTS** de Mimi. Sigue el protocolo de `CLAUDE.md`, «
 
 1. La tarea: su línea del índice (`docs/plan.md`) y su archivo en `docs/plan/` (protocolo, paso a). Lee de la plantilla «Leer antes», «Diseño», «Base técnica», «API pública propuesta», «Formularios», «Tokens», «Teclado y accesibilidad», «Trampas conocidas», «Criterios de hecho» y «Preguntas abiertas», y las notas propias de la tarea (por ejemplo, la 2.1 pedía `tabindex="-1"` en `a[mimiBtn]` con `aria-disabled`). Cumple todas.
 2. Lee en `docs/spec.md` el catálogo (sección 4), la tabla de tokens de $ARGUMENTS (sección 13) y todo lo que mencione a $ARGUMENTS: selector, variantes, tamaños, estados, formularios (sección 8).
-3. Revisa el diseño que indica la tarea («Diseño:», en `docs/design/`): medidas, estados (normal, hover, foco, deshabilitado, cargando, error…), claro y oscuro.
-4. Todo sale de ese diseño y de los tokens existentes (`packages/ui-core/src/lib/theme/theme-base.css`, clases de la spec 6.1). **No inventes valores.** Si falta algo o el diseño se contradice, pregúntame. Lo que al final quede distinto del diseño o sin diseño se anota en `docs/design/correcciones-pendientes.md` (tarea D6 del plan), en un apartado con el nombre del componente y su ID.
+3. **El código es la fuente de verdad del diseño** (`CLAUDE.md`, «Documentos del proyecto»): los valores salen del tema (`packages/ui-core/src/lib/theme/theme-base.css`, clases de la spec 6.1), los estados de los campos de `utils/field-styles.ts` y el aspecto de los controles existentes (`/docs/states`). Si la tarea cita un archivo de `docs/design/` («Diseño:»), úsalo solo como referencia de forma (qué partes tiene, cómo se ordenan), no de valores: es histórico.
+4. **No inventes valores.** Si falta un token o algo no tiene precedente en el tema, pregúntame. Lo nuevo de aspecto que quede se documenta en la spec (sección 4 o 13 del componente).
 5. El plan breve del protocolo (paso d) incluye: archivos, API pública, variantes, tokens y decisiones.
 
 ## 2. El componente, en `packages/ui-core/src/lib/components/$ARGUMENTS/`

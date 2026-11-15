@@ -20,5 +20,4 @@ Las tareas que eran la Fase 5. Conservan sus números porque el código y la spe
 - [ ] 5.13 Tabla de compatibilidad en la documentación.
 - [ ] 5.14 Prerender del showcase: páginas estáticas y 404 con estado real (hoy el modo SPA de Cloudflare responde 200 y la 404 lleva `noindex`). Revisar `not_found_handling` en `wrangler.jsonc` (pasaría a `404-page` con un `404.html`).
 - [ ] 5.15 Badge interactivo: variante de Badge sobre `a[mimiBadge]` o `button[mimiBadge]`, con hover y foco (mejora de un componente existente, no un componente nuevo).
-- [ ] 5.16 Landing v2: rediseño de la landing según `Landing v2` (`docs/design/Mimi Landing v2.dc.html`), manteniendo el lema «Los componentes son tuyos. Las actualizaciones también.» como titular (spec, sección 1). Usa Mimi Effects (Marquee, Terminal…) cuando existan; textos según la regla de la spec, sección 5.
-  - Depende de: E.2, E.4 (si se usan; «cuando existan»)
+- ~~5.16 Landing v2~~ **Quitada el 14/11/2026** (decidido por el usuario: no hay rediseño global y la landing actual es la definitiva). Era el rediseño de la landing según `docs/design/Mimi Landing v2.dc.html`, con Mimi Effects. El ID no se reutiliza (regla 4 del plan).

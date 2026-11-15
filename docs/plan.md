@@ -20,8 +20,8 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 3. «PENDIENTE DE DECIDIR: …» significa que falta una decisión del usuario: se pregunta, no se supone, salvo en modo autónomo (ver «Decidido por defecto», abajo).
 4. Los IDs no se renumeran ni se reutilizan: el código y la spec los citan (por ejemplo, «plan, G1.5b» o «tarea 5.3»). Tampoco se reutilizan los de Theme Studio (T.2 a T.5, en `docs/futuro/theme-studio.md`). Una tarea nueva toma el siguiente número libre de su grupo; el mantenimiento sin grupo usa `M.<n>`; la puerta de cada grupo es `G<n>.P`.
 5. «Depende de» cita IDs. Para los componentes, la fuente de las dependencias es la tabla de su grupo en la spec 4, «Hoja de ruta»: si el plan y la spec no coinciden, se avisa al usuario en vez de elegir (en modo autónomo se decide por la spec y se registra como «Decidido por defecto»). Excepciones aprobadas por el usuario (dependencias de trabajo, no de componentes, que no van a la tabla de la spec 4): G2.7 y G2.8 dependen de G2.1 solo por el resultado del spike de la convención de valor; G2.1 depende de 5.17a (revisión móvil del Grupo 1); G2.8 depende de M.2 (provisional, por #33974).
-6. «Diseño:» indica el archivo de `docs/design/` sin el prefijo `Mimi ` ni la extensión `.dc.html` (los Blocks se llaman `Block <nombre>`).
-7. Lo que un componente haga distinto del diseño, o sin diseño, se anota en `docs/design/correcciones-pendientes.md` (tarea D6). Una decisión que sigue vigente va a la spec, no solo al plan.
+6. «Diseño:» indica el archivo de `docs/design/` sin el prefijo `Mimi ` ni la extensión `.dc.html` (los Blocks se llaman `Block <nombre>`). **Desde el 14/11/2026 es solo una referencia de forma** (decidido por el usuario: no hay rediseño global y la fuente de verdad del diseño es el código: `theme-base.css`, `utils/field-styles.ts` y `/docs/states`; ver `docs/design/LEEME.md`).
+7. Lo nuevo de aspecto que haga un componente (sin precedente en el tema) se documenta en la spec. Una decisión que sigue vigente va a la spec, no solo al plan. (Hasta el 14/11/2026 se anotaba en `docs/design/correcciones-pendientes.md`, tarea D6, hoy cerrada y en historial.)
 
 **Estados**
 
@@ -42,7 +42,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
   - Versión · Tamaño (S/M/L) · Depende de: IDs · Bloquea: IDs
   - Estado: (solo mientras está en curso: rama, quién, desde)
   - Leer antes: secciones de la spec y tareas hechas de referencia.
-  - Diseño: archivo(s) de docs/design/ y la sección dentro del archivo.
+  - Diseño: archivo(s) de docs/design/ y la sección dentro del archivo, como referencia de forma (los valores salen del código: regla 6).
   - Objetivo: 1 o 2 frases.
   - Alcance: incluye / NO incluye (lo que se deja fuera a propósito).
   - Base técnica: @angular/aria, @angular/cdk o ninguna, y por qué (spec 4, «Base técnica»). Patrón WAI-ARIA. Si hace falta un spike, dilo.
@@ -66,7 +66,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 4. `registry.json` y las pruebas de la CLI.
 5. Prueba real con el `.tgz` en 4 escenarios: npm nuevo, pnpm nuevo, actualización desde la versión anterior sin cambios y con un archivo modificado. En Windows, los proyectos de prueba en una ruta corta (el límite de 260 caracteres rompió `ng serve` con pnpm en la 0.2.0).
 6. Presupuestos de bundle (spec 10): JS inicial y CSS global, crudo y gzip, antes y después.
-7. `docs/design/correcciones-pendientes.md` (D6) al día con lo del grupo.
+7. Lo nuevo de aspecto del grupo, documentado en la spec (desde el 14/11/2026 ya no se compara con Claude Design ni se anota en D6).
 8. Mover el texto de las tareas hechas del grupo a `docs/historial/`.
 9. Checklist de release, que ejecuta el usuario: `npm publish`, etiqueta, release de GitHub, despliegue y prueba desde npm.
 
@@ -112,11 +112,12 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [x] M.23 (hecha el 09/11/2026: las páginas de componentes cargan `components.css` con `@scope`; el CSS global bajó de 180 a 111 kB; ver `docs/auto/refinamiento-0.6.0-parte3-2026-11-09.md`) Por qué el CSS global del sitio crece con cada componente (y una hoja aparte por componente o grupo, como `blocks.css`) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.24 Data Table: la barra, el pie y el botón de orden siguen con `pr-3`, `pl-4` y `-ml-1.5` físicos (no RTL) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.25 Qué hace crecer `main` del sitio (137,83 kB, a 2,17 kB del aviso de 140) y bajarlo antes de añadir componentes (por ejemplo, `tailwind-merge` por `cn()` en la cabecera) · v0.7.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.26 Quitar «provisional, sin diseño» y «plan, D6» del código y de las páginas (sin rediseño, 14/11/2026) · sin versión · S · depende: — (lo de `login-02`, de la PD-6) · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
 
-- [ ] D6 Correcciones de diseño pendientes (Claude Design). La lista está en `docs/design/correcciones-pendientes.md`: cada componente nuevo agrega ahí lo que hizo distinto del diseño o sin diseño, y se resuelve en Claude Design cuando se decida, sin bloquear ningún grupo. Quién: el usuario resuelve en Claude Design; Claude Code anota.
+**Sin rediseño global (decidido por el usuario el 14/11/2026).** El diseño actual (la landing, el tema de la 0.6.0 con el violeta y los grises malva medio, los estados unificados de `/docs/states` y la profundidad B) es el definitivo, y su fuente de verdad es el código (`theme-base.css`, `utils/field-styles.ts`, `/docs/states`). `docs/design/` queda como referencia histórica (`docs/design/LEEME.md`). La D6 se cerró sin llevarla a Claude Design (en «Terminado», «Tandas de diseño»); la 5.16 (Landing v2) se quitó. Lo que quedó abierto de esta limpieza está en `docs/plan/decisiones.md` (PD-5 y PD-6).
 
 ## Blocks → v0.4.0: pantallas
 
@@ -226,7 +227,6 @@ Detalle: [docs/plan/plataforma.md](plan/plataforma.md). La 5.2 y la 5.17 están 
 - [ ] 5.13 Tabla de compatibilidad en la documentación · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
 - [ ] 5.14 Prerender del showcase · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
 - [ ] 5.15 Badge interactivo · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.16 Landing v2 · sin versión · — · depende: E.2, E.4 (si se usan) · [docs/plan/plataforma.md](plan/plataforma.md)
 
 ## Versión 1.0
 
@@ -390,6 +390,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] D3 Diseño: Grupo 3. Archivos: `F4 Command Tree Sortable`, `F4 Data Table y Pagination` (con `Data Table`) y `F4 Panel admin` (composición de referencia).
 - [x] D4 Diseño: Grupo 4, Grupo 5 y Mimi Effects. Archivos: `F5 Estructura`, `F5 Dashboard y Media` y `F5 Effects`.
 - [x] D5 Diseño: Blocks. Archivos: `F6 Blocks` (índice) y `Block <nombre>` de cada uno.
+- [x] D6 Correcciones de diseño pendientes (Claude Design): **cerrada sin hacer el 14/11/2026** (decidido por el usuario: no hay rediseño; el código manda). `docs/design/correcciones-pendientes.md` queda como historial de en qué se apartó Mimi del diseño original.
 
 **Plataforma** (`docs/historial/plan-plataforma.md`)
 

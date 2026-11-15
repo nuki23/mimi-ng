@@ -6,7 +6,8 @@ Librería de componentes UI para **Angular 22** + **Tailwind CSS 4**. Los compon
 
 - `docs/spec.md`: especificación completa. Léela antes de crear o cambiar un componente, el tema o la CLI.
 - `docs/plan.md`: el índice de tareas (una línea por tarea, con su estado y el enlace a su detalle) y las reglas del plan. El detalle de cada tarea está en `docs/plan/` (una tarea detallada tiene su archivo con el ID como nombre, por ejemplo `docs/plan/grupo-4/G4.1.md` cuando se detalle; las ya hechas están en `docs/historial/`, por ejemplo `docs/historial/grupo-3/G3.1.md`; las de una línea van en el archivo de su bloque). Para encontrar una tarea por su ID: el índice o `grep -rn "<ID>" docs/plan/`. Cómo se trabaja una tarea: «Forma de trabajar», abajo.
-- `docs/design/`: diseños y variables CSS de Claude Design. Colores, radios y sombras salen de aquí, nunca inventados. Lo que Mimi haga distinto del diseño, o sin diseño, se anota en `docs/design/correcciones-pendientes.md` (tarea D6 del plan).
+- **Diseño: la fuente de verdad es el código** (decidido por el usuario el 14/11/2026; no habrá rediseño global): `packages/ui-core/src/lib/theme/theme-base.css` (colores, radios, sombras, movimiento), `packages/ui-core/src/lib/utils/field-styles.ts` (estados de los campos) y la página `/docs/states`. Colores, radios y sombras salen de ahí, nunca inventados; si falta un token, se pregunta. Lo nuevo de aspecto que haga un componente se documenta en la spec.
+- `docs/design/`: diseños de Claude Design, **referencia histórica** (ver su `LEEME.md`). No mandan sobre el código; sirven de punto de partida de forma para los componentes que todavía no existen. `correcciones-pendientes.md` es historial (la tarea D6 está cerrada).
 - `docs/historial/`: el texto completo de las tareas terminadas del plan. No se edita.
 - `docs/futuro/`: proyectos aparte que no se trabajan en mimi-ng (por ahora, `theme-studio.md`). No se toman como tareas.
 
@@ -78,7 +79,7 @@ packages/cli/       # @mimi-ng/cli (Angular Schematics)
 
 - e. Verifica cada «Criterio de hecho» uno por uno y repórtalos en una lista con la evidencia de cada uno (el comando y su resultado, la prueba, el archivo). Entre ellos, siempre: `pnpm build`, `pnpm test` y `pnpm format` en verde (y `pnpm format:check`). Un criterio que no comprobaste se informa como **NO COMPROBADO**; la tarea no se marca hecha si falta alguno obligatorio.
 - f. Marca `[x]` en su archivo de detalle y en el índice, y quita su fila de «En curso». Si la tarea cierra el grupo, mueve el texto al historial como dice «Cómo usar este plan» (`docs/plan.md`).
-- g. Anota en `docs/design/correcciones-pendientes.md` lo que quedó distinto del diseño o sin diseño. Actualiza la spec si cambió algo; las decisiones que siguen vigentes van a la spec.
+- g. Actualiza la spec si cambió algo (también lo nuevo de aspecto que no tenía precedente en el tema); las decisiones que siguen vigentes van a la spec.
 - h. Informa: la **lista de archivos** nuevos y modificados, el bundle (ver «Bundle», abajo), el CSS global crudo y gzip, las alertas para el revisor y el mensaje de commit sugerido. Si algo no salió como se pidió (una decisión distinta, un valor que no está en el diseño, una regla que no cumpliste), dilo explícitamente.
 
 **Commit y push**

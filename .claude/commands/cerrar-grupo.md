@@ -29,7 +29,7 @@ Para cada punto, la evidencia: el comando y su resultado, o el archivo y la lín
 - **Registro de la CLI:** un ítem en `registry.json` por componente del grupo, con sus dependencias; `pnpm test:cli` en verde.
 - **Presupuestos:** `pnpm build` (informe de `check-initial-js.mjs`): JS inicial y CSS global, crudo y gzip, antes del grupo y ahora (`CLAUDE.md`, «Forma de trabajar», «Bundle»; spec 10).
 - **Tabla acumulada del CSS global y del `initial`**, si la pide la puerta: una fila por componente, de los informes de bundle de cada tarea del grupo (en sus archivos de `docs/plan/` o en el historial). Si falta el informe de una tarea, dilo; no lo inventes.
-- **D6:** `docs/design/correcciones-pendientes.md` con un apartado por cada componente del grupo.
+- **Aspecto en la spec:** lo nuevo de aspecto de cada componente del grupo (sin precedente en el tema) está en la spec. `docs/design/` es referencia histórica: no se compara el grupo con Claude Design (decidido por el usuario el 14/11/2026).
 - **Controles nuevos en `/docs/states`:** cada control de formulario del grupo tiene su fila en la cuadrícula de Estados (`ROWS` en `apps/docs/src/app/pages/docs/states/states-page.ts`, que falla en su prueba si falta) y usa las piezas de `utils/field-styles.ts`. Revísalo en la página, en claro y oscuro: hover, foco, clic, deshabilitado, solo lectura y error iguales a los demás.
 - `pnpm build`, `pnpm test`, `pnpm format:check` en verde.
 - Búsqueda de correos, tokens y rutas personales en lo que se va a publicar (`CLAUDE.md`, «Forma de trabajar», «Privacidad»).

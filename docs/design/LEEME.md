@@ -1,6 +1,8 @@
-# Diseños de Claude Design
+# Diseños de Claude Design (referencia histórica)
 
-Diseños de Mimi exportados de Claude Design. Claude Code toma colores, radios y sombras **solo** de estos archivos.
+> **Referencia histórica desde el 14/11/2026 (decidido por el usuario).** No habrá rediseño global de Mimi: el diseño actual (la landing, el tema de la 0.6.0 con el violeta y los grises malva medio, los estados unificados de `/docs/states` y la profundidad B) es el definitivo. **La fuente de verdad del diseño es el código:** `packages/ui-core/src/lib/theme/theme-base.css` (colores, radios, sombras y movimiento), `packages/ui-core/src/lib/utils/field-styles.ts` (los estados de los campos) y la página `/docs/states` del sitio. Estos archivos no se actualizan ni mandan sobre el código; sirven para ver cómo se pensó una pieza, y como punto de partida de forma (no de valores) para los componentes que todavía no existen (Grupos 4 y 5, Mimi Effects). Lo que el código haga distinto de aquí no es un error ni una corrección pendiente.
+
+Diseños de Mimi exportados de Claude Design. Hasta el 14/11/2026, Claude Code tomaba colores, radios y sombras de estos archivos.
 
 ## Tokens
 
