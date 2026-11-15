@@ -10,6 +10,7 @@ import { MimiCheckbox } from '@/components/ui/checkbox';
       <mimi-checkbox [checked]="true">Marcada</mimi-checkbox>
       <mimi-checkbox [indeterminate]="true">Mixta</mimi-checkbox>
       <mimi-checkbox [checked]="true" disabled>Deshabilitada</mimi-checkbox>
+      <mimi-checkbox [checked]="true" readonly>Solo lectura</mimi-checkbox>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
