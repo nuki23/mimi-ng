@@ -17,7 +17,6 @@ import { cva } from 'class-variance-authority';
 import { MimiButton } from '@/components/ui/button';
 import { MimiInput } from '@/components/ui/input';
 import { cn } from '@/components/ui/utils/cn';
-import { normalizeMimiSize } from '@/components/ui/utils/size';
 import { MimiPaginationPageSize } from './pagination-page-size';
 import { MIMI_PAGINATION_TEXT } from './pagination-texts';
 
@@ -247,11 +246,9 @@ export class MimiPagination {
    * Tamaño, con la escala del tema: `sm` (por defecto), botones de 32px y 40px de alto en total;
    * `md`, 40 y 50px; `lg`, 48 y 60px (el total suma el relleno y el borde de la píldora).
    */
-  readonly size = input<MimiPaginationSize | 'default'>('sm');
-  /** El tamaño de verdad (`default` = `md`, con aviso en desarrollo). */
-  protected readonly shownSize = computed<MimiPaginationSize>(
-    () => normalizeMimiSize(this.size(), 'MimiPagination') ?? 'sm',
-  );
+  readonly size = input<MimiPaginationSize>('sm');
+  /** El tamaño de verdad (`sm` si llega vacío). */
+  protected readonly shownSize = computed<MimiPaginationSize>(() => this.size() ?? 'sm');
   /** `floating` solo cambia la sombra; la posición va en `class`. */
   readonly variant = input<MimiPaginationVariant>('inline');
   /** Todo deshabilitado (por ejemplo, mientras carga), sin sacar el foco de donde esté. */

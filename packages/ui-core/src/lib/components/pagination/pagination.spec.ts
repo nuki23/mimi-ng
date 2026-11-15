@@ -341,12 +341,9 @@ describe('MimiPagination', { timeout: 20_000 }, () => {
     expect(nav.classList).toContain('p-2');
     expect(nav.classList).not.toContain('p-[4px]');
     expect(field().classList).toContain('w-[var(--mimi-pagination-input-width,52px)]');
-    // lg: tercer tamaño de la escala, y `default` sigue aceptándose como `md`.
+    // lg: tercer tamaño de la escala.
     h.size.set('lg');
     await settle(fixture);
     expect(nav.dataset['size']).toBe('lg');
-    h.size.set('default' as never);
-    await settle(fixture);
-    expect(nav.dataset['size']).toBe('md');
   });
 });

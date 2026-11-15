@@ -12,7 +12,7 @@ import {
   untracked,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
-import { injectMimiSize, normalizeMimiSize } from '@/components/ui/utils/size';
+import { injectMimiSize } from '@/components/ui/utils/size';
 import { type AvatarSize, type AvatarStatus, avatarVariants } from './avatar.variants';
 
 /**
@@ -38,10 +38,10 @@ import { type AvatarSize, type AvatarStatus, avatarVariants } from './avatar.var
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MimiAvatar {
-  /** `sm | md | lg`. Sin `size`, el del contenedor `mimiSize` o `md` (`default` = `md`, deprecado). */
-  readonly size = input<AvatarSize | 'default'>();
-  protected readonly sizeResolved = injectMimiSize(this.size, 'MimiAvatar');
-  protected readonly ownSize = computed(() => normalizeMimiSize(this.size(), 'MimiAvatar') ?? null);
+  /** `sm | md | lg`. Sin `size`, el del contenedor `mimiSize` o `md`. */
+  readonly size = input<AvatarSize>();
+  protected readonly sizeResolved = injectMimiSize(this.size);
+  protected readonly ownSize = computed(() => this.size() ?? null);
   readonly userClass = input('', { alias: 'class' });
 
   /** Estado de la imagen. Lo escribe `img[mimiAvatarImage]`; sin imagen queda en `idle`. */

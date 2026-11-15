@@ -12,7 +12,7 @@ import {
   isDevMode,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
-import { type MimiSizeInput, injectMimiSize, normalizeMimiSize } from '@/components/ui/utils/size';
+import { injectMimiSize } from '@/components/ui/utils/size';
 import {
   type ButtonSize,
   type ButtonTone,
@@ -87,24 +87,19 @@ export class MimiButton {
   /** Incluye los atajos de la 0.1.x (`ButtonVariantShortcut`, deprecados). */
   readonly variant = input<ButtonVariant>('solid');
   readonly tone = input<ButtonTone>();
-  /**
-   * `sm | md | lg | icon`. Sin `size`, el del contenedor `mimiSize` o `md`. `default` es el nombre
-   * viejo de `md` (se quita en la 0.7.0).
-   */
-  readonly size = input<ButtonSize | 'default'>();
+  /** `sm | md | lg | icon`. Sin `size`, el del contenedor `mimiSize` o `md`. */
+  readonly size = input<ButtonSize>();
   /** El tamaño de verdad: el propio, el del contenedor o `md` (`icon` no se hereda). */
   protected readonly sizeResolved = (() => {
     const inherited = injectMimiSize(
-      computed(() => (this.size() === 'icon' ? undefined : (this.size() as MimiSizeInput))),
-      'MimiButton',
+      computed(() => {
+        const size = this.size();
+        return size === 'icon' ? undefined : size;
+      }),
     );
     return computed<ButtonSize>(() => (this.size() === 'icon' ? 'icon' : inherited()));
   })();
-  protected readonly ownSize = computed<ButtonSize | null>(() =>
-    this.size() === 'icon'
-      ? 'icon'
-      : (normalizeMimiSize(this.size() as MimiSizeInput, 'MimiButton') ?? null),
-  );
+  protected readonly ownSize = computed<ButtonSize | null>(() => this.size() ?? null);
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly loading = input(false, { transform: booleanAttribute });
   readonly userClass = input('', { alias: 'class' });
