@@ -74,6 +74,8 @@ import { CARD_PAGE } from '../pages/docs/components/card/card.page';
 import { CardPage } from '../pages/docs/components/card/card-page';
 import { SEPARATOR_PAGE } from '../pages/docs/components/separator/separator.page';
 import { SeparatorPage } from '../pages/docs/components/separator/separator-page';
+import { SKELETON_PAGE } from '../pages/docs/components/skeleton/skeleton.page';
+import { SkeletonPage } from '../pages/docs/components/skeleton/skeleton-page';
 import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
 import { textLinks } from './doc-text';
 import {
@@ -100,6 +102,7 @@ import {
 
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
 const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+  skeleton: { page: SKELETON_PAGE, component: SkeletonPage },
   separator: { page: SEPARATOR_PAGE, component: SeparatorPage },
   card: { page: CARD_PAGE, component: CardPage },
   avatar: { page: AVATAR_PAGE, component: AvatarPage },
@@ -143,7 +146,7 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
  * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
  * con la lista de pendientes.
  */
-const PENDING_COUNT = 4;
+const PENDING_COUNT = 3;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
