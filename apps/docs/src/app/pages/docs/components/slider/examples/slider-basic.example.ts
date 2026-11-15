@@ -24,10 +24,6 @@ import { MimiSlider, type MimiSliderValue } from '@/components/ui/slider';
           [(value)]="opacity"
         />
       </div>
-      <div class="flex flex-col gap-3">
-        <span id="locked" class="text-sm font-medium">Deshabilitado</span>
-        <mimi-slider aria-labelledby="locked" [value]="40" disabled />
-      </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

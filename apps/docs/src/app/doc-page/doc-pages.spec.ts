@@ -64,6 +64,8 @@ import { COLOR_PICKER_PAGE } from '../pages/docs/components/color-picker/color-p
 import { ColorPickerPage } from '../pages/docs/components/color-picker/color-picker-page';
 import { FILE_UPLOAD_PAGE } from '../pages/docs/components/file-upload/file-upload.page';
 import { FileUploadPage } from '../pages/docs/components/file-upload/file-upload-page';
+import { SLIDER_PAGE } from '../pages/docs/components/slider/slider.page';
+import { SliderPage } from '../pages/docs/components/slider/slider-page';
 import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
 import { textLinks } from './doc-text';
 import {
@@ -90,6 +92,7 @@ import {
 
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
 const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+  slider: { page: SLIDER_PAGE, component: SliderPage },
   'file-upload': { page: FILE_UPLOAD_PAGE, component: FileUploadPage },
   'color-picker': { page: COLOR_PICKER_PAGE, component: ColorPickerPage },
   'date-range': { page: DATE_RANGE_PAGE, component: DateRangePage },
@@ -128,7 +131,7 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
  * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
  * con la lista de pendientes.
  */
-const PENDING_COUNT = 9;
+const PENDING_COUNT = 8;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};

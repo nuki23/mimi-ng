@@ -2,9 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
+import { validateDocPage } from '../../../../doc-page/doc-page.rules';
 import { SliderPage } from './slider-page';
+import { SLIDER_PAGE } from './slider.page';
 
 describe('SliderPage', () => {
+  it('cumple la plantilla', () => expect(validateDocPage(SLIDER_PAGE)).toEqual([]));
+
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
     async () => {
@@ -21,7 +25,10 @@ describe('SliderPage', () => {
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
 
+      // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
+      // La demo y tres ejemplos: deshabilitado y solo lectura pasaron a «Estados»; el rango con
+      // su validador queda junto a las pestañas de «Formularios».
       expect(previews.length).toBe(4);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-slider [role="slider"]')).not.toBeNull();
@@ -37,12 +44,17 @@ describe('SliderPage', () => {
       expect(
         el.querySelector('app-slider-range-example [role="slider"]')!.getAttribute('aria-label'),
       ).toBe('Precio por noche, Mínimo');
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      // La distancia mínima del ejemplo de edad: 30–33 no llega a 5 años y se ve el error.
+      expect(el.querySelector('app-slider-range-example mimi-slider[data-invalid]')).not.toBeNull();
+      // Estados: deshabilitado, solo lectura y con error.
+      const states = el.querySelectorAll('app-slider-states-example mimi-slider');
+      expect(states[0].hasAttribute('data-disabled')).toBe(true);
+      expect(states[1].querySelector('[role="slider"]')!.getAttribute('aria-readonly')).toBe(
+        'true',
+      );
+      expect(states[2].hasAttribute('data-invalid')).toBe(true);
+      expect(el.querySelector('h1')!.textContent!.trim()).toBe('Slider');
+      expect(el.querySelector('app-forms-tabs')).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );
