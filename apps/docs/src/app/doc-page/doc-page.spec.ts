@@ -100,6 +100,11 @@ describe('validateDocPage (variante A)', () => {
     }
   });
 
+  it('pide «Variables CSS» también cuando la tabla tiene otro nombre (date, menu, sortable)', () => {
+    const errors = validateDocPage({ ...PAGE, install: 'dropdown-menu', tokens: undefined });
+    expect(errors.join()).toContain("falta «tokens: 'menu'»");
+  });
+
   it('pide las pestañas de formularios si el componente está en FORMS_SPECS', () => {
     expect(validateDocPage({ ...PAGE, install: 'select', tokens: 'select' }).join()).toContain(
       "falta «forms: 'select'»",

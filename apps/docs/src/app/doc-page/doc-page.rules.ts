@@ -48,9 +48,18 @@ export const INTERNAL_NAMES = [
   /decidido por defecto/i,
 ];
 
-/** `color-picker` → `colorPicker` (las claves de component-tokens.ts). */
+/** Páginas cuya tabla de component-tokens.ts tiene otro nombre (la comparten o es más corto). */
+const TOKENS_ALIASES: Record<string, string> = {
+  'sortable-list': 'sortable',
+  'date-picker': 'date',
+  'date-range': 'date',
+  'dropdown-menu': 'menu',
+  'context-menu': 'menu',
+};
+
+/** `color-picker` → `colorPicker` (las claves de component-tokens.ts), con los alias de arriba. */
 export const tokensKey = (name: string): string =>
-  name.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
+  TOKENS_ALIASES[name] ?? name.replace(/-([a-z])/g, (_, c: string) => c.toUpperCase());
 
 /** Todos los ejemplos vivos de una página (sin la demo), con los de los desplegables. */
 export function liveExamples(page: DocPage): DocExample[] {
