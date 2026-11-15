@@ -36,6 +36,8 @@ import { TAGS_INPUT_PAGE } from '../pages/docs/components/tags-input/tags-input.
 import { TagsInputPage } from '../pages/docs/components/tags-input/tags-input-page';
 import { TOAST_PAGE } from '../pages/docs/components/toast/toast.page';
 import { ToastPage } from '../pages/docs/components/toast/toast-page';
+import { CONFIRM_PAGE } from '../pages/docs/components/confirm/confirm.page';
+import { ConfirmPage } from '../pages/docs/components/confirm/confirm-page';
 import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
 import { textLinks } from './doc-text';
 import {
@@ -62,6 +64,7 @@ import {
 
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
 const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+  confirm: { page: CONFIRM_PAGE, component: ConfirmPage },
   toast: { page: TOAST_PAGE, component: ToastPage },
   'tags-input': { page: TAGS_INPUT_PAGE, component: TagsInputPage },
   'input-mask': { page: INPUT_MASK_PAGE, component: InputMaskPage },
@@ -86,7 +89,7 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
  * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
  * con la lista de pendientes.
  */
-const PENDING_COUNT = 23;
+const PENDING_COUNT = 22;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
