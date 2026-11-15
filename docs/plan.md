@@ -142,7 +142,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [ ] R.23 Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.25 Logo y favicon del sitio (lo que faltaba de la R.0) · v0.7.0 · S · depende: archivos del usuario · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.26 (hecha el 15/11/2026) Tabla de la escala de tamaños en la spec (lo que faltaba de la R.1) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [ ] R.27 Confirm con `size` (lo que faltaba de la R.7) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [x] R.27 (hecha el 15/11/2026) Confirm con `size` (lo que faltaba de la R.7) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.28 Ejemplos de tamaño por componente y Blocks que heredan (lo que faltaba de la R.8) · v0.7.0 · M · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.29 Ejemplos de solo lectura (lo que faltaba de la R.12) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.30 Form Field: ejemplos con más elementos y el diagrama (lo que faltaba de la R.14) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)

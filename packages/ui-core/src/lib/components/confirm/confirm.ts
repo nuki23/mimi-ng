@@ -21,12 +21,14 @@ import {
   MimiDialogTitle,
 } from '@/components/ui/dialog';
 import { cn } from '@/components/ui/utils/cn';
+import type { MimiSize } from '@/components/ui/utils/size';
 import { MIMI_CONFIRM_TEXT } from './confirm-texts';
 
 /*
  * Confirm (docs/design/Mimi F2 Overlays.dc.html, «2 · Confirm»; prefijo de tokens `confirm`,
- * spec 13): un alertdialog de 380px, sin X, con un círculo de 40px para el ícono, el título, la
- * descripción y dos botones de 36px a la derecha.
+ * spec 13): un alertdialog sin X, con un círculo de 40px para el ícono, el título, la descripción y
+ * dos botones de 36px a la derecha. Su ancho es el de Dialog en `sm` (360px) por defecto (R.27;
+ * hasta la 0.6.0, 380px fijos); `--mimi-confirm-width` sigue mandando si lo pones.
  *
  * Por dentro abre un Dialog (MimiDialogService): el foco, el fondo, Escape, el bloqueo del scroll
  * y la animación son suyos. Confirm solo pone el contenido y traduce el cierre a true o false.
@@ -49,6 +51,11 @@ export interface MimiConfirmOptions {
   tone?: 'primary' | 'danger';
   /** Ícono dentro del círculo de color: una plantilla con un `<svg>`. Sin él, no hay círculo. */
   icon?: TemplateRef<unknown>;
+  /**
+   * Ancho, con los tamaños de Dialog: `sm` 360px (por defecto), `md` 420px y `lg` 560px.
+   * `--mimi-confirm-width`, si lo defines, gana sobre el tamaño; `class` gana sobre los dos.
+   */
+  size?: MimiSize;
   /** Clases del panel, mezcladas con `cn()` (gana la del usuario). */
   class?: string;
 }
@@ -176,8 +183,13 @@ export function injectMimiConfirm(): MimiConfirmFn {
         closeOnBackdropClick: false,
         // Lo más seguro primero: en una acción destructiva, Enter no confirma por accidente.
         autoFocus: options.tone === 'danger' ? '[data-slot="cancel"]' : '[data-slot="confirm"]',
-        // Por clase y no con `width`: así la clase del usuario puede cambiar el ancho.
-        class: cn('w-[var(--mimi-confirm-width,380px)] gap-3.5 p-5', options.class),
+        // El ancho del tamaño lo pone Dialog en `--mimi-dialog-width` (`md`: el del tema). Por
+        // clase y no con `width`: así `--mimi-confirm-width` y la clase del usuario lo cambian.
+        size: options.size ?? 'sm',
+        class: cn(
+          'w-[var(--mimi-confirm-width,var(--mimi-dialog-width,420px))] gap-3.5 p-5',
+          options.class,
+        ),
         injector,
       });
       // Si el componente que pregunta se destruye antes de la respuesta, se cierra con false.

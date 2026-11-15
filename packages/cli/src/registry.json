@@ -144,7 +144,7 @@
         "components/confirm/confirm-texts.ts",
         "components/confirm/index.ts"
       ],
-      "registryDependencies": ["button", "dialog", "utils/cn"]
+      "registryDependencies": ["button", "dialog", "utils/cn", "utils/size"]
     },
     "context-menu": {
       "type": "component",

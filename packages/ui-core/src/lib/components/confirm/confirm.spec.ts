@@ -4,6 +4,9 @@ import { MimiDialogService, MimiDialogTitle } from '@/components/ui/dialog';
 import { type MimiConfirmOptions, injectMimiConfirm } from './confirm';
 import { MIMI_CONFIRM_TEXT_ES, provideMimiConfirmText } from './confirm-texts';
 
+/** La clase del ancho: la variable de Confirm y, si no está, la del tamaño de Dialog (R.27). */
+const CONFIRM_WIDTH = 'w-[var(--mimi-confirm-width,var(--mimi-dialog-width,420px))]';
+
 @Component({
   selector: 'test-host',
   template: `
@@ -112,7 +115,7 @@ describe('injectMimiConfirm', { timeout: 20_000 }, () => {
   it('las medidas del diseño: panel, título, descripción y botones de 36px', async () => {
     const { ask, panel, button, container } = await setup();
     await ask({ title: 'Título', description: 'Descripción' });
-    for (const cls of ['w-[var(--mimi-confirm-width,380px)]', 'p-5', 'gap-3.5', 'flex-col']) {
+    for (const cls of [CONFIRM_WIDTH, 'p-5', 'gap-3.5', 'flex-col']) {
       expect(panel()!.classList).toContain(cls);
     }
     expect(panel()!.classList).not.toContain('w-[var(--mimi-dialog-width,420px)]');
@@ -237,8 +240,31 @@ describe('injectMimiConfirm', { timeout: 20_000 }, () => {
     await ask({ title: 'Ancho', class: 'w-[440px] rounded-none' });
     expect(panel()!.classList).toContain('w-[440px]');
     expect(panel()!.classList).toContain('rounded-none');
-    expect(panel()!.classList).not.toContain('w-[var(--mimi-confirm-width,380px)]');
+    expect(panel()!.classList).not.toContain(CONFIRM_WIDTH);
     expect(panel()!.style.width).toBe('');
+  });
+
+  it('size (R.27): el ancho de Dialog, `sm` por defecto; --mimi-confirm-width va primero', async () => {
+    const { fixture, ask, panel } = await setup();
+    const width = () => panel()!.style.getPropertyValue('--mimi-dialog-width');
+    await ask({ title: 'Por defecto' });
+    expect(width()).toBe('360px');
+    // La variable propia de Confirm manda sobre la del tamaño, si el usuario la define.
+    expect(CONFIRM_WIDTH.indexOf('--mimi-confirm-width')).toBeLessThan(
+      CONFIRM_WIDTH.indexOf('--mimi-dialog-width'),
+    );
+    for (const [size, expected] of [
+      ['md', ''],
+      ['lg', '560px'],
+      ['sm', '360px'],
+    ] as const) {
+      TestBed.inject(MimiDialogService).closeAll();
+      await settle(fixture);
+      await ask({ title: size, size });
+      // `md` no escribe nada: usa el `--mimi-dialog-width` del tema (420px).
+      expect(width(), size).toBe(expected);
+      expect(panel()!.classList).toContain(CONFIRM_WIDTH);
+    }
   });
 
   it('closeAll y dos confirm seguidos: cada uno resuelve una vez', async () => {

@@ -6,6 +6,7 @@ import { ConfirmDangerExample } from './examples/confirm-danger.example';
 import { ConfirmFromDialogExample } from './examples/confirm-from-dialog.example';
 import { ConfirmFromMenuExample } from './examples/confirm-from-menu.example';
 import { ConfirmIconExample } from './examples/confirm-icon.example';
+import { ConfirmSizesExample } from './examples/confirm-sizes.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -22,6 +23,8 @@ import fromDialogSource from './examples/confirm-from-dialog.example' with { loa
 import fromMenuSource from './examples/confirm-from-menu.example' with { loader: 'text' };
 // @ts-expect-error
 import iconSource from './examples/confirm-icon.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/confirm-sizes.example' with { loader: 'text' };
 
 /** La página de Confirm (G1.7), con la plantilla de página (DP). Se usa con un servicio. */
 export const CONFIRM_PAGE: DocPage = {
@@ -76,6 +79,16 @@ export const CONFIRM_PAGE: DocPage = {
           'El ícono es opcional: sin `icon` no hay círculo. En el tono primary, el círculo usa los colores de info.',
         component: ConfirmIconExample,
         source: iconSource as string,
+      },
+    ],
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          'Los anchos de Dialog: `sm` (360px, por defecto), `md` (420px) y `lg` (560px). `--mimi-confirm-width` gana si lo defines.',
+        component: ConfirmSizesExample,
+        source: sizesSource as string,
       },
     ],
     advanced: [
@@ -161,6 +174,12 @@ export const CONFIRM_PAGE: DocPage = {
         type: 'TemplateRef',
         default: '—',
         description: 'Plantilla con un `<svg>` para el círculo de color. Sin ella, no hay círculo.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        default: "'sm'",
+        description: 'Ancho, con los tamaños de Dialog. `--mimi-confirm-width` gana si lo defines.',
       },
       {
         name: 'class',

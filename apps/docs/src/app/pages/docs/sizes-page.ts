@@ -74,6 +74,11 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
     component: 'Dialog',
     changes: 'Ancho 360 / 420 / 560 px (`size` en `service.open` y en `mimi-dialog`).',
   },
+  {
+    component: 'Confirm',
+    changes:
+      'Los anchos de Dialog, con `sm` por defecto (`size` en las opciones). `--mimi-confirm-width` gana si lo defines.',
+  },
   { component: 'Slider', changes: 'Pista 4 / 6 / 8 px y pulgar 16 / 20 / 24 px.' },
   { component: 'Toolbar', changes: 'Botón 32 / 40 / 48 px e ícono 16 / 18 / 20 px.' },
   {
