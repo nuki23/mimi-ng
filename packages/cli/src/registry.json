@@ -230,10 +230,20 @@
         "dropdown-menu",
         "input",
         "pagination",
+        "table",
         "toggle-group",
         "utils/cn",
         "utils/size"
       ]
+    },
+    "table": {
+      "type": "component",
+      "files": [
+        "components/table/table.ts",
+        "components/table/table-state.ts",
+        "components/table/index.ts"
+      ],
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "input-mask": {
       "type": "component",

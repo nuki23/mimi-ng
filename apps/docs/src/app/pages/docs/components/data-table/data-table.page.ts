@@ -236,6 +236,12 @@ export const DATA_TABLE_PAGE: DocPage = {
         description: 'Ids de las filas con el detalle abierto, con `[(expanded)]`.',
       },
       {
+        name: 'expandMode',
+        type: "'single' | 'multiple'",
+        default: "'multiple'",
+        description: 'Con `single`, abrir una fila cierra la que estaba abierta.',
+      },
+      {
         name: 'sort',
         type: '{ column, direction } | null',
         default: 'null',
@@ -294,12 +300,14 @@ export const DATA_TABLE_PAGE: DocPage = {
       {
         name: 'MimiTableDetail',
         selector: 'ng-template[mimiTableDetail]',
-        description: 'Detalle expandible de la fila (`let-row`); agrega la columna de la flecha.',
+        description:
+          'Detalle expandible de la fila (`let-row`, `let-toggle="toggle"` para cerrarlo); agrega la columna de la flecha.',
       },
       {
         name: 'MimiTableActions',
         selector: 'ng-template[mimiTableActions]',
-        description: 'Acciones de cada fila (`let-row`); agrega su columna.',
+        description:
+          'Acciones de cada fila (`let-row`); con `let-toggle="toggle"` y `let-open="expanded"`, un botón tuyo abre el detalle.',
       },
       {
         name: 'MimiTableBulk',

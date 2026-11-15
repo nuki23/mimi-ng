@@ -118,6 +118,11 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
       '`size` escala el alto de fila (34 / 42 / 50 px) y de cabecera (32 / 38 / 44 px). `density` es aparte: `comfortable` mantiene su alto fijo (60 / 44 px).',
   },
   {
+    component: 'Table',
+    changes:
+      '`size` en `mimiTable`: alto de fila (34 / 42 / 50 px) y de cabecera (32 / 38 / 44 px), como Data Table.',
+  },
+  {
     component: 'Tooltip',
     changes:
       'Texto 11,5 / 12,5 / 13,5 px y relleno. Toma el tamaño del contenedor del disparador; `mimiTooltipSize` lo fija.',

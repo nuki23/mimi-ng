@@ -138,7 +138,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 **0.7.0** (detalle: [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)):
 
 - [x] R.19 (hecha el 15/11/2026; alias `mimi-card-*` hasta la 0.8.0) Card como superficie `mimiCard` (PD-1, decidido por el usuario el 09/11/2026: opción B) · v0.7.0 · M · depende: R.1, R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [ ] R.20 Table de directivas y Data Table fácil de llenar (PD-2, decidido por el usuario el 09/11/2026: opción C) · v0.7.0 · L · depende: R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [x] R.20 (hecha el 15/11/2026: `table` nuevo con `mimiTableState`; Data Table sobre la base, con `expandMode` y `toggle`) Table de directivas y Data Table fácil de llenar (PD-2, decidido por el usuario el 09/11/2026: opción C) · v0.7.0 · L · depende: R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.21 Sortable List con listas conectadas · v0.7.0 · L · depende: R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.22 Block `kanban-01` · v0.7.0 · M · depende: R.21, R.19 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.23 Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)

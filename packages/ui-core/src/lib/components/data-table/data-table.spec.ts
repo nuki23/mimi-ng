@@ -527,3 +527,73 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     errors.mockRestore();
   });
 });
+
+@Component({
+  imports: [MimiDataTableImports],
+  template: `
+    <mimi-data-table
+      aria-label="Clientes"
+      [data]="data"
+      [columns]="columns"
+      [toolbar]="false"
+      [expandMode]="mode()"
+      [(expanded)]="expanded"
+    >
+      <ng-template mimiTableActions let-row let-open="expanded" let-toggle="toggle">
+        <button type="button" data-test="own-toggle" [attr.data-open]="open" (click)="toggle()">
+          {{ row.name }}
+        </button>
+      </ng-template>
+      <ng-template mimiTableDetail let-row let-toggle="toggle">
+        <button type="button" data-test="close" (click)="toggle()">Cerrar {{ row.name }}</button>
+      </ng-template>
+    </mimi-data-table>
+  `,
+})
+class ExpandHost {
+  readonly data = CLIENTS;
+  readonly columns = COLUMNS;
+  readonly mode = signal<'single' | 'multiple'>('multiple');
+  readonly expanded = signal<unknown[]>([]);
+}
+
+describe('MimiDataTable: expandir fácil (R.20)', { timeout: 20_000 }, () => {
+  async function setup() {
+    TestBed.configureTestingModule({});
+    const fixture = TestBed.createComponent(ExpandHost);
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    const own = () => [...root.querySelectorAll<HTMLButtonElement>('[data-test="own-toggle"]')];
+    const click = async (el: HTMLElement) => {
+      el.click();
+      await fixture.whenStable();
+    };
+    return { host: fixture.componentInstance, root, own, click, fixture };
+  }
+
+  it('toggle() y expanded en la plantilla de acciones: un botón propio abre la fila', async () => {
+    const { host, own, click, root } = await setup();
+    expect(own()[0].dataset['open']).toBe('false');
+    await click(own()[0]);
+    expect(host.expanded()).toEqual([1]);
+    expect(own()[0].dataset['open']).toBe('true');
+    // El botón de la columna de expandir sigue al mismo estado.
+    expect(root.querySelector('[data-slot="expand"]')!.getAttribute('aria-expanded')).toBe('true');
+    // El detalle recibe la fila y su toggle(): lo cierra.
+    await click(root.querySelector<HTMLButtonElement>('[data-test="close"]')!);
+    expect(host.expanded()).toEqual([]);
+  });
+
+  it('expandMode="single": abrir una cierra la otra; multiple (por defecto) las deja', async () => {
+    const { host, own, click, fixture } = await setup();
+    await click(own()[0]);
+    await click(own()[1]);
+    expect(host.expanded()).toEqual([1, 2]);
+    host.mode.set('single');
+    host.expanded.set([]);
+    await fixture.whenStable();
+    await click(own()[0]);
+    await click(own()[1]);
+    expect(host.expanded()).toEqual([2]);
+  });
+});

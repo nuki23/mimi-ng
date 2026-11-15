@@ -59,6 +59,7 @@
       "option-list",
       "pagination",
       "select",
+      "table",
       "toggle-group",
       "utils/field-state",
       "utils/field-styles",
@@ -178,6 +179,7 @@
     "packages": ["@angular/forms"],
     "css": []
   },
+  "table": { "items": ["utils/size"], "packages": [], "css": [] },
   "tabs": { "items": ["utils/size"], "packages": ["@angular/aria"], "css": [] },
   "tags-input": {
     "items": ["chip", "utils/field-state", "utils/field-styles", "utils/size"],
