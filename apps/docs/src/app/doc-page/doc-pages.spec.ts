@@ -97,17 +97,21 @@ import {
  * PD-4c, decididos por el usuario el 14/11/2026). Falla si una página de componente (actual o
  * futura: cada carpeta de `pages/docs/components/` y cada ítem `ready` del menú) no usa
  * `<app-doc-page>`, si le falta una sección, si cambia el orden, si pasa de un límite o si un
- * ejemplo no tiene su frase. Sustituye a `short-use-pages.spec.ts` (R.24): su medida del bloque
- * «Uso» sigue aquí para las páginas que faltan migrar.
+ * ejemplo no tiene su frase. Sustituye a `short-use-pages.spec.ts` (R.24): la medida del bloque
+ * «Uso» es la de `usage.code`. Desde el 14/11/2026 todas las páginas usan la plantilla: la lista de
+ * pendientes de la migración (DP.0 a DP.5) se vació y se quitó.
  *
  * Si una página no cabe, se rediseña el ejemplo o se pide una excepción al usuario (y queda en
  * la spec de la plantilla, con su fecha): esta prueba no se cambia por cuenta propia.
  */
 
-// --- Las páginas migradas: su configuración y su componente de ruta ---------------------------
+// --- Las páginas: su configuración y su componente de ruta ------------------------------------
 
-/** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
-const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+/**
+ * Cada página de componente se registra aquí: una carpeta nueva en `pages/docs/components/` (un
+ * componente nuevo) que no esté en esta lista hace fallar la prueba.
+ */
+const PAGES: Record<string, { page: DocPage; component: Type<unknown> }> = {
   'toggle-group': { page: TOGGLE_GROUP_PAGE, component: ToggleGroupPage },
   tabs: { page: TABS_PAGE, component: TabsPage },
   progress: { page: PROGRESS_PAGE, component: ProgressPage },
@@ -149,14 +153,6 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
   switch: { page: SWITCH_PAGE, component: SwitchPage },
 };
 
-/**
- * Cuántas páginas faltan migrar (las carpetas que no están en `MIGRATED`). **Solo baja:** al
- * migrar una, se registra en `MIGRATED` y este número baja en uno; una carpeta nueva sin migrar lo
- * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
- * con la lista de pendientes.
- */
-const PENDING_COUNT = 0;
-
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
 
@@ -181,29 +177,8 @@ const dirs = docFs
   .sort();
 const read = (path: string) => docFs.readFileSync(path, 'utf8');
 
-/** Las páginas que faltan migrar: las carpetas que no están en `MIGRATED`. */
-const PENDING = dirs.filter((dir) => !MIGRATED[dir]);
-
-/** El `*-page.ts` de una página migrada: solo pinta `<app-doc-page [page]="page" />`. */
+/** El `*-page.ts` de una página: solo pinta `<app-doc-page [page]="page" />`. */
 const WRAPPER = /template:\s*'<app-doc-page \[page\]="page" \/>'/;
-
-// --- R.24 (uso corto) para las páginas que faltan migrar -------------------------------------
-
-/** Páginas que se usan con un servicio (`toast.success('…')`): sin plantilla en el uso. */
-const SERVICE_ONLY = new Set(['toast', 'confirm']);
-const R24_MAX_LINES = 12;
-/** Dialog en plantilla: un formulario completo (con el servicio son 1). Aprobada en la R.24. */
-const R24_EXCEPTIONS: Record<string, number> = { dialog: 14 };
-
-function legacyTemplateLines(page: string): number | null {
-  const m = /usage(?:Template)?\s*=\s*\[([\s\S]*?)\]\.join/.exec(read(page));
-  if (!m) return null;
-  const lines = [...m[1].matchAll(/^\s*(['"`])([\s\S]*?)\1,?\s*$/gm)].map((x) => x[2]);
-  if (lines.some((l) => /template:\s*`[^`]+`/.test(l))) return 1;
-  const start = lines.findIndex((l) => /template:\s*`\s*$/.test(l));
-  const end = lines.findIndex((l, i) => i > start && /^\s*`,?\s*$/.test(l));
-  return start >= 0 && end > start ? end - start - 1 : null;
-}
 
 // --- Pruebas -----------------------------------------------------------------------------------
 
@@ -212,18 +187,14 @@ describe('Plantilla de las páginas de componentes (doc-pages)', () => {
     expect(dirs.length).toBeGreaterThan(30);
   });
 
-  it(`la lista de pendientes solo encoge (${PENDING_COUNT} pendientes)`, () => {
-    expect(PENDING.length, `pendientes: ${PENDING.join(', ')}`).toBe(PENDING_COUNT);
-  });
-
-  it('una carpeta con <nombre>.page.ts está registrada en MIGRATED, y al revés', () => {
+  it('cada carpeta tiene su <nombre>.page.ts y está registrada en PAGES (sin pendientes)', () => {
     for (const dir of dirs) {
-      const migrated = docFs.existsSync(`${PAGES_DIR}${dir}/${dir}.page.ts`);
-      expect(migrated, `${dir}: ${migrated ? 'regístrala en MIGRATED' : 'falta .page.ts'}`).toBe(
-        !!MIGRATED[dir],
+      expect(docFs.existsSync(`${PAGES_DIR}${dir}/${dir}.page.ts`), `${dir}: falta .page.ts`).toBe(
+        true,
       );
+      expect(PAGES[dir], `${dir}: regístrala en PAGES`).toBeDefined();
     }
-    for (const dir of Object.keys(MIGRATED)) expect(dirs).toContain(dir);
+    for (const dir of Object.keys(PAGES)) expect(dirs).toContain(dir);
   });
 
   it('cada ítem del menú en /docs/components/ tiene su carpeta', () => {
@@ -234,17 +205,7 @@ describe('Plantilla de las páginas de componentes (doc-pages)', () => {
     for (const item of items) expect(dirs).toContain(item.path.split('/').pop());
   });
 
-  for (const dir of PENDING) {
-    if (SERVICE_ONLY.has(dir)) continue;
-    const max = R24_EXCEPTIONS[dir] ?? R24_MAX_LINES;
-    it(`${dir} (pendiente): la plantilla del bloque «Uso» cabe en ${max} líneas (R.24)`, () => {
-      const lines = legacyTemplateLines(`${PAGES_DIR}${dir}/${dir}-page.ts`);
-      expect(lines, 'no se encontró la plantilla del bloque «Uso»').not.toBeNull();
-      expect(lines!).toBeLessThanOrEqual(max);
-    });
-  }
-
-  for (const [dir, { page, component }] of Object.entries(MIGRATED)) {
+  for (const [dir, { page, component }] of Object.entries(PAGES)) {
     describe(dir, () => {
       const base = `${PAGES_DIR}${dir}/${dir}`;
 

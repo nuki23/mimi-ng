@@ -9,7 +9,7 @@
 - **Una página es una configuración, no HTML.** `pages/docs/components/<nombre>/<nombre>.page.ts` exporta una constante `DocPage`; `<nombre>-page.ts` (el componente de la ruta) solo pinta `<app-doc-page [page]="page" />` (y, si el componente tiene textos, aplica su proveedor en español en `providers`). No hay `<nombre>-page.html`. Las páginas no escriben encabezados: el orden, los nombres y los `id` los pone `<app-doc-page>`.
 - **La prueba:** `apps/docs/src/app/doc-page/doc-pages.spec.ts`. Falla si una carpeta de `pages/docs/components/` (o un ítem `ready` del menú en `/docs/components/`) no tiene su configuración, si su `*-page.ts` hace otra cosa, si queda un `*-page.html`, si falta una sección obligatoria, si al pintarla el orden de los h2 y los h3 no es el de la plantilla, si un ejemplo no tiene su frase delante, si pasa de un límite (abajo) o si hay nombres internos en el texto visible.
 - **Aviso en desarrollo:** `<app-doc-page>` llama a `validateDocPage` y escribe en la consola `[Mimi docs] <Nombre>: …` por cada cosa que no cumple, antes de pasar la prueba.
-- **Durante la migración** (DP.0 a DP.5): la lista `PENDING` de la prueba tiene las páginas que faltan, y `PENDING_COUNT` su tamaño. Solo encoge: al migrar una página se quita de la lista y baja el número; la prueba falla si una página de la lista ya está migrada. Las pendientes siguen con la medida del bloque «Uso» de la R.24 (12 líneas; Dialog, 14). En la puerta DP.P la lista queda vacía.
+- **Todas las páginas con la plantilla** (desde el 14/11/2026): la lista de pendientes de la migración (DP.0 a DP.5) se vació y se quitó de la prueba. Cada carpeta de `pages/docs/components/` tiene que estar registrada en `PAGES` de `doc-pages.spec.ts` con su `<nombre>.page.ts`: un componente nuevo sin página con la plantilla hace fallar la prueba.
 - **Excepciones:** `EXCEPTIONS` de la prueba, con la regla y la razón. **Cada una la aprueba el usuario** y se anota abajo, en «Excepciones aprobadas», con su fecha. Si una página no cabe, primero se rediseña el ejemplo (o se parte en dos archivos con `files`, o pasa a un Block); la prueba no se cambia por cuenta propia.
 
 ## Piezas (`apps/docs/src/app/doc-page/`)
@@ -95,7 +95,7 @@ export class ButtonPage {
 
 - El código de cada ejemplo se importa también como texto (`with { loader: 'text' }`, spec 10): lo que se ve en Código es lo que corre.
 - **Escape para lo que no encaja:** solo `advanced` (un ejemplo más), `accessibility.more`, `usage.note` o `usage.more`. No hay un campo de HTML libre.
-- Al migrar una página: se borra su `*-page.html`, se quita de `PENDING` (y baja `PENDING_COUNT`), se registra en `MIGRATED` de la prueba y se adapta su `*-page.spec.ts`.
+- Una página nueva: su `<nombre>.page.ts`, el envoltorio de una línea y su registro en `PAGES` de `doc-pages.spec.ts`; su `*-page.spec.ts` incluye `it('cumple la plantilla', () => expect(validateDocPage(<NOMBRE>_PAGE)).toEqual([]))`.
 
 ## Excepciones aprobadas
 

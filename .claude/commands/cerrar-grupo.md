@@ -22,7 +22,7 @@ Para cada punto, la evidencia: el comando y su resultado, o el archivo y la lín
 - **CHANGELOG:** la sección de la versión, con «Cómo actualizar desde la anterior» si cambia algo publicado, y lo específico que pida la puerta del grupo.
 - **Conteos y listas:** el número de componentes y la lista en Fundamentos (`FOUNDATION_PACKAGES` y la tabla de paquetes), `INTRODUCTION_COMPONENTS` de Introducción, la landing, el README de la CLI y el `x-prompt` de `packages/cli/src/ui/schema.json`: los mismos componentes en todos (compáralos con grep o un script, no a ojo).
 - **Páginas con la plantilla:**
-  - `doc-pages.spec.ts` en verde, con la lista `PENDING` vacía;
+  - `doc-pages.spec.ts` en verde (cada componente del grupo registrado en `PAGES`; la lista de pendientes de la migración ya no existe);
   - cada excepción de `EXCEPTIONS` está en `docs/spec/plantilla-pagina.md` con la aprobación del usuario y su fecha;
   - cada componente del grupo tiene su `<nombre>.page.ts` y ningún `*-page.html`.
   - Evidencia: la salida de la prueba y `git ls-files 'apps/docs/src/app/pages/docs/components/**/*-page.html'` vacío.

@@ -1386,7 +1386,7 @@ Verificado en Angular 22.1.7 con una prueba real: un control que implementa solo
 
 ## 10. Showcase (`apps/docs`)
 
-**Páginas de componentes: con la plantilla de página** (`docs/spec/plantilla-pagina.md`; variante A, decidida por el usuario el 14/11/2026). Cada página es una configuración `DocPage` que pinta `<app-doc-page>` (`apps/docs/src/app/doc-page/`), con el orden, los nombres y los `id` fijos; los límites y el orden los comprueba `doc-page/doc-pages.spec.ts`, que sustituye a `code/short-use-pages.spec.ts` (R.24). Las páginas que faltan migrar están en su lista `PENDING`, que solo encoge.
+**Páginas de componentes: con la plantilla de página** (`docs/spec/plantilla-pagina.md`; variante A, decidida por el usuario el 14/11/2026). Cada página es una configuración `DocPage` que pinta `<app-doc-page>` (`apps/docs/src/app/doc-page/`), con el orden, los nombres y los `id` fijos; los límites y el orden los comprueba `doc-page/doc-pages.spec.ts`, que sustituye a `code/short-use-pages.spec.ts` (R.24). Desde el 14/11/2026 las 39 páginas usan la plantilla (la lista de pendientes se quitó).
 
 El diseño visual partió de `docs/design/Mimi Sitio.dc.html` (referencia histórica: el sitio actual es el definitivo). Los botones del layout (header, panel móvil, copiar, inicio, 404 y páginas `/dev`) usan `mimiBtn` desde la tarea 2.1; las pestañas de CodePreview e InstallCommand usan `<mimi-tabs>` desde la tarea 5.11.
 
