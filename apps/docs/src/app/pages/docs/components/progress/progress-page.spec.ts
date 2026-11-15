@@ -27,8 +27,9 @@ describe('ProgressPage', () => {
 
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo y cuatro ejemplos.
-      expect(previews.length).toBe(5);
+      // La demo y cinco ejemplos.
+      expect(previews.length).toBe(6);
+      expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-progress[role="progressbar"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/progress';");

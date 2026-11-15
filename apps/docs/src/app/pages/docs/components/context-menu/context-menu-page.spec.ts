@@ -27,8 +27,11 @@ describe('ContextMenuPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      // La demo (el ejemplo básico) y cuatro ejemplos.
-      expect(previews.length).toBe(5);
+      // La demo (el ejemplo básico) y cinco ejemplos.
+      expect(previews.length).toBe(6);
+      // Tamaños: una zona por tamaño, cada una con su menú.
+      expect(previews[1].code).toContain("['sm', 'md', 'lg']");
+      expect(previews[1].example!.querySelectorAll('mimi-context-menu').length).toBe(3);
       for (const { example, code } of previews) {
         expect(example?.querySelector('[mimiContextMenuTrigger][data-state]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/context-menu';");

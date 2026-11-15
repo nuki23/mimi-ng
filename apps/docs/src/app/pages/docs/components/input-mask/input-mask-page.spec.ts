@@ -29,8 +29,9 @@ describe('InputMaskPage', () => {
       const previews = examples(fixture);
       // La demo (teléfono y fecha) y tres ejemplos: la tarjeta salió de la demo a su propio
       // ejemplo, `class` salió de Estados, y el vivo de los tres formularios se fue (repetía las
-      // pestañas de «Formularios»).
-      expect(previews.length).toBe(4);
+      // pestañas de «Formularios»). Y «Tamaños».
+      expect(previews.length).toBe(5);
+      expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-input-mask input')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/input-mask';");

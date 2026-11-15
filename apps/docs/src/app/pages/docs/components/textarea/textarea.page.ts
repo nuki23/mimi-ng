@@ -1,10 +1,13 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { TextareaBasicExample } from './examples/textarea-basic.example';
+import { TextareaSizesExample } from './examples/textarea-sizes.example';
 import { TextareaStatesExample } from './examples/textarea-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
 import basicSource from './examples/textarea-basic.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/textarea-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/textarea-states.example' with { loader: 'text' };
 
@@ -35,6 +38,16 @@ export const TEXTAREA_PAGE: DocPage = {
     note: 'Es una directiva sobre el elemento nativo. Para una sola línea, usa [Input](/docs/components/input).',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`sm`, `md` y `lg` cambian el alto mínimo (32, 40 y 48 px). Con `rows="1"`, se alinea con Input y Button.',
+        component: TextareaSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',
@@ -62,7 +75,7 @@ export const TEXTAREA_PAGE: DocPage = {
         type: "'sm' | 'md' | 'lg'",
         default: "'md' (o el del contenedor con mimiSize)",
         description:
-          'Letra y relleno, los de Input. Con `rows="1"`, el mismo alto que Input y Button.',
+          'Alto mínimo de 32, 40 o 48 px: con `rows="1"`, el de Input y Button. Letra de 14 px.',
       },
       {
         name: 'showError',

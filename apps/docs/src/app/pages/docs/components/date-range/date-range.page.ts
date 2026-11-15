@@ -1,10 +1,13 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { DateRangeReportExample } from './examples/date-range-report.example';
+import { DateRangeSizesExample } from './examples/date-range-sizes.example';
 import { DateRangeStatesExample } from './examples/date-range-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
 import reportSource from './examples/date-range-report.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/date-range-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/date-range-states.example' with { loader: 'text' };
 
@@ -37,6 +40,16 @@ export const DATE_RANGE_PAGE: DocPage = {
     note: 'El valor es `{ start, end }`, fechas ISO con los dos extremos incluidos. Para una sola fecha, [Date Picker](/docs/components/date-picker).',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`size` cambia el alto del botón (32, 40 o 48 px; el texto sigue en 14 px) y las celdas del calendario.',
+        component: DateRangeSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',

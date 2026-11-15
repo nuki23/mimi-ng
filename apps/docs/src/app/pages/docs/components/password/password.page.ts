@@ -3,6 +3,7 @@ import { PasswordCustomExample } from './examples/password-custom.example';
 import { PasswordLevelsExample } from './examples/password-levels.example';
 import { PasswordLoginExample } from './examples/password-login.example';
 import { PasswordNewExample } from './examples/password-new.example';
+import { PasswordSizesExample } from './examples/password-sizes.example';
 import { PasswordStatesExample } from './examples/password-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -14,6 +15,8 @@ import levelsSource from './examples/password-levels.example' with { loader: 'te
 import loginSource from './examples/password-login.example' with { loader: 'text' };
 // @ts-expect-error
 import newSource from './examples/password-new.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/password-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/password-states.example' with { loader: 'text' };
 
@@ -49,6 +52,15 @@ export const PASSWORD_PAGE: DocPage = {
     note: 'El `<input mimiInput>` es tuyo, con su `autocomplete` y su formulario. Mostrar solo cambia su `type`.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence: '`sm`, `md` y `lg` cambian el alto de la caja y el texto, los mismos que Input.',
+        component: PasswordSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',

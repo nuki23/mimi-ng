@@ -1,12 +1,15 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { CommandDialogExample } from './examples/command-dialog.example';
 import { CommandInlineExample } from './examples/command-inline.example';
+import { CommandSizesExample } from './examples/command-sizes.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
 import dialogSource from './examples/command-dialog.example' with { loader: 'text' };
 // @ts-expect-error
 import inlineSource from './examples/command-inline.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/command-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import appCommandsSource from './examples/app-commands' with { loader: 'text' };
 
@@ -59,6 +62,16 @@ export const COMMAND_PAGE: DocPage = {
     },
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`sm`, `md` y `lg` cambian el alto del buscador y de cada comando, y el texto. En el diálogo, igual.',
+        component: CommandSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     advanced: [
       {
         id: 'dialog',

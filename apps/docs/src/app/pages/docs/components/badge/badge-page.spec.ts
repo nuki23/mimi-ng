@@ -30,8 +30,9 @@ describe('BadgePage', () => {
       const { fixture, el } = await setup();
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo, tres ejemplos y la matriz (en su desplegable).
-      expect(previews.length).toBe(5);
+      // La demo, cuatro ejemplos y la matriz (en su desplegable).
+      expect(previews.length).toBe(6);
+      expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('[mimiBadge]')).not.toBeNull();
         expect(code).toContain("import { MimiBadge } from '@/components/ui/badge';");

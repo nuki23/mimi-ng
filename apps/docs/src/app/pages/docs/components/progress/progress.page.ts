@@ -3,6 +3,7 @@ import { ProgressBarExample } from './examples/progress-bar.example';
 import { ProgressCircleExample } from './examples/progress-circle.example';
 import { ProgressCustomExample } from './examples/progress-custom.example';
 import { ProgressIndeterminateExample } from './examples/progress-indeterminate.example';
+import { ProgressSizesExample } from './examples/progress-sizes.example';
 import { ProgressTonesExample } from './examples/progress-tones.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -14,6 +15,8 @@ import circleSource from './examples/progress-circle.example' with { loader: 'te
 import customSource from './examples/progress-custom.example' with { loader: 'text' };
 // @ts-expect-error
 import indeterminateSource from './examples/progress-indeterminate.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/progress-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import tonesSource from './examples/progress-tones.example' with { loader: 'text' };
 
@@ -48,6 +51,16 @@ export const PROGRESS_PAGE: DocPage = {
     note: 'Necesita un nombre: `aria-label` o `aria-labelledby`. Sin `value`, es indeterminado.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`sm`, `md` (por defecto) y `lg`: la barra mide 4, 8 o 12 px de alto; el círculo, 44, 76 o 96 px.',
+        component: ProgressSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     variants: [
       {
         id: 'tones',

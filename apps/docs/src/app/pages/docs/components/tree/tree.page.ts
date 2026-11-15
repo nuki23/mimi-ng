@@ -2,6 +2,7 @@ import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { TreeDemoExample } from './examples/tree-demo.example';
 import { TreeFilesExample } from './examples/tree-files.example';
 import { TreePermissionsExample } from './examples/tree-permissions.example';
+import { TreeSizesExample } from './examples/tree-sizes.example';
 import { TreeStatesExample } from './examples/tree-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -13,6 +14,8 @@ import filesDataSource from './examples/files' with { loader: 'text' };
 import filesSource from './examples/tree-files.example' with { loader: 'text' };
 // @ts-expect-error
 import permissionsSource from './examples/tree-permissions.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/tree-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/tree-states.example' with { loader: 'text' };
 
@@ -62,6 +65,15 @@ export const TREE_PAGE: DocPage = {
     },
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence: '`sm`, `md` y `lg` cambian el alto de cada fila (28, 32 y 36 px) y su texto.',
+        component: TreeSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',

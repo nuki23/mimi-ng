@@ -180,7 +180,7 @@
     <button
       mimiBtn
       type="submit"
-      class="h-[calc(var(--mimi-control-height,2.5rem)+4px)] text-[15px] font-semibold aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]"
+      class="h-[calc(var(--mimi-btn-h,var(--mimi-control-height,2.5rem))+4px)] text-[15px] font-semibold aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]"
       [attr.aria-disabled]="loading() || !complete() ? 'true' : null"
       [attr.aria-busy]="loading() ? 'true' : null"
       [attr.aria-describedby]="id + '-hint'"

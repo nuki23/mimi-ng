@@ -27,8 +27,9 @@ describe('PasswordPage', () => {
 
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo (contraseña nueva) y cuatro ejemplos: el de solo lectura pasó a «Estados».
-      expect(previews.length).toBe(5);
+      // La demo (contraseña nueva) y cinco ejemplos: el de solo lectura pasó a «Estados».
+      expect(previews.length).toBe(6);
+      expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-password input[mimiInput]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/password';");

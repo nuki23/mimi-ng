@@ -3,6 +3,7 @@ import { DropdownMenuBasicExample } from './examples/dropdown-menu-basic.example
 import { DropdownMenuCheckboxRadioExample } from './examples/dropdown-menu-checkbox-radio.example';
 import { DropdownMenuDestructiveExample } from './examples/dropdown-menu-destructive.example';
 import { DropdownMenuShortcutsExample } from './examples/dropdown-menu-shortcuts.example';
+import { DropdownMenuSizesExample } from './examples/dropdown-menu-sizes.example';
 import { DropdownMenuSubmenuExample } from './examples/dropdown-menu-submenu.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -18,6 +19,8 @@ import destructiveSource from './examples/dropdown-menu-destructive.example' wit
 };
 // @ts-expect-error
 import shortcutsSource from './examples/dropdown-menu-shortcuts.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/dropdown-menu-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import submenuSource from './examples/dropdown-menu-submenu.example' with { loader: 'text' };
 
@@ -57,6 +60,16 @@ export const DROPDOWN_MENU_PAGE: DocPage = {
     note: 'Al elegir un ítem, el menú se cierra y el foco vuelve al botón. `shortcut` muestra el atajo, sin registrarlo.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`size` va en `<mimi-dropdown-menu>`: el botón de dentro lo hereda y los ítems miden 28, 32 o 36 px de alto.',
+        component: DropdownMenuSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     variants: [
       {
         id: 'destructive',
@@ -129,6 +142,12 @@ export const DROPDOWN_MENU_PAGE: DocPage = {
         type: "'start' | 'center' | 'end'",
         default: "'start'",
         description: 'Alineación con el botón.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        default: "'md' (o el del contenedor con mimiSize)",
+        description: 'Alto y texto de los ítems; el botón de dentro sin `size` propio lo hereda.',
       },
       {
         name: 'aria-label',

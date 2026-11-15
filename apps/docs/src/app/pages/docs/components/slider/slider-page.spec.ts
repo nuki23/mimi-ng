@@ -27,9 +27,10 @@ describe('SliderPage', () => {
 
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo y tres ejemplos: deshabilitado y solo lectura pasaron a «Estados»; el rango con
+      // La demo y cuatro ejemplos: deshabilitado y solo lectura pasaron a «Estados»; el rango con
       // su validador queda junto a las pestañas de «Formularios».
-      expect(previews.length).toBe(4);
+      expect(previews.length).toBe(5);
+      expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-slider [role="slider"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/slider';");

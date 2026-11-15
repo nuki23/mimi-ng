@@ -2,6 +2,7 @@ import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { SliderBasicExample } from './examples/slider-basic.example';
 import { SliderMarksExample } from './examples/slider-marks.example';
 import { SliderRangeExample } from './examples/slider-range.example';
+import { SliderSizesExample } from './examples/slider-sizes.example';
 import { SliderStatesExample } from './examples/slider-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -11,6 +12,8 @@ import basicSource from './examples/slider-basic.example' with { loader: 'text' 
 import marksSource from './examples/slider-marks.example' with { loader: 'text' };
 // @ts-expect-error
 import rangeSource from './examples/slider-range.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/slider-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/slider-states.example' with { loader: 'text' };
 
@@ -46,6 +49,16 @@ export const SLIDER_PAGE: DocPage = {
     note: 'Con `range`, el valor es `[desde, hasta]` y los dos pulgares no se cruzan.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`sm`, `md` (por defecto) y `lg`: la pista mide 4, 6 u 8 px de alto y el pulgar, 16, 20 o 24 px.',
+        component: SliderSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',
@@ -137,7 +150,7 @@ export const SLIDER_PAGE: DocPage = {
         name: 'size',
         type: "'sm' | 'md' | 'lg'",
         default: "'md' (o el del contenedor con mimiSize)",
-        description: 'Tamaño de los pulgares.',
+        description: 'Pista de 4, 6 u 8 px y pulgar de 16, 20 o 24 px.',
       },
       {
         name: 'disabled',

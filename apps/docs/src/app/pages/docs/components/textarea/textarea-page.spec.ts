@@ -27,8 +27,9 @@ describe('TextareaPage', () => {
 
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo y los estados.
-      expect(previews.length).toBe(2);
+      // La demo, los tamaños y los estados.
+      expect(previews.length).toBe(3);
+      expect(previews[1].code).toContain('size="lg"');
       for (const { example, code } of previews) {
         expect(example?.querySelector('[mimiTextarea]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/textarea';");

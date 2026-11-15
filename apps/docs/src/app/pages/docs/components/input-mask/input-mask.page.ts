@@ -2,6 +2,7 @@ import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { InputMaskBasicExample } from './examples/input-mask-basic.example';
 import { InputMaskCardExample } from './examples/input-mask-card.example';
 import { InputMaskCustomExample } from './examples/input-mask-custom.example';
+import { InputMaskSizesExample } from './examples/input-mask-sizes.example';
 import { InputMaskStatesExample } from './examples/input-mask-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -11,6 +12,8 @@ import basicSource from './examples/input-mask-basic.example' with { loader: 'te
 import cardSource from './examples/input-mask-card.example' with { loader: 'text' };
 // @ts-expect-error
 import customSource from './examples/input-mask-custom.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/input-mask-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/input-mask-states.example' with { loader: 'text' };
 
@@ -53,6 +56,16 @@ export const INPUT_MASK_PAGE: DocPage = {
     },
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`size` cambia el alto de la caja: 32, 40 o 48 px, alineada con Input y Button. El texto sigue en 14 px.',
+        component: InputMaskSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',

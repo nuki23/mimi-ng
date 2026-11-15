@@ -27,9 +27,11 @@ describe('TagsInputPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      // La demo y cuatro ejemplos: el vivo de los tres formularios se fue (repetía las pestañas
+      // La demo y cinco ejemplos: el vivo de los tres formularios se fue (repetía las pestañas
       // de «Formularios»); su estado deshabilitado y su `validate` quedaron en ejemplos propios.
-      expect(previews.length).toBe(5);
+      expect(previews.length).toBe(6);
+      // Tamaños, el primero después de la demo.
+      expect(previews[1].code).toContain('size="lg"');
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-tags-input input')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/tags-input';");

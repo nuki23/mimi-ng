@@ -1,6 +1,7 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { NumberInputBasicExample } from './examples/number-input-basic.example';
 import { NumberInputCustomExample } from './examples/number-input-custom.example';
+import { NumberInputSizesExample } from './examples/number-input-sizes.example';
 import { NumberInputStatesExample } from './examples/number-input-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -8,6 +9,8 @@ import { NumberInputStatesExample } from './examples/number-input-states.example
 import basicSource from './examples/number-input-basic.example' with { loader: 'text' };
 // @ts-expect-error
 import customSource from './examples/number-input-custom.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/number-input-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/number-input-states.example' with { loader: 'text' };
 
@@ -41,6 +44,16 @@ export const NUMBER_INPUT_PAGE: DocPage = {
     note: 'El formato usa `Intl.NumberFormat` del navegador, sin dependencias. Lo escrito se lee con los separadores del idioma: «1.250,5» en `es-ES`.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`size` cambia el alto de la caja: 32, 40 o 48 px, alineada con Input y Button. El texto sigue en 14 px.',
+        component: NumberInputSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',

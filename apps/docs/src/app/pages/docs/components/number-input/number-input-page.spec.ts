@@ -27,9 +27,10 @@ describe('NumberInputPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      // La demo y dos ejemplos: el vivo de Signal Forms, Reactive y ngModel se fue (repetía las
-      // pestañas de «Formularios»).
-      expect(previews.length).toBe(3);
+      // La demo y tres ejemplos: el vivo de Signal Forms, Reactive y ngModel se fue (repetía las
+      // pestañas de «Formularios»); «Tamaños» va primero.
+      expect(previews.length).toBe(4);
+      expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-number-input input[role="spinbutton"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/number-input';");

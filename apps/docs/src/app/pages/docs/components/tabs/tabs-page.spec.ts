@@ -27,8 +27,14 @@ describe('TabsPage', () => {
 
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo, siete ejemplos y el de «según el ancho» (en el desplegable de Vertical).
+      // La demo y ocho ejemplos: «Tamaños» (R.28) y «Vertical», que ya cambia según el ancho.
       expect(previews.length).toBe(9);
+      expect(previews[1].code).toContain('size="lg"');
+      expect(
+        Array.from(el.querySelectorAll('app-tabs-sizes-example mimi-tabs')).map((t) =>
+          t.getAttribute('data-size'),
+        ),
+      ).toEqual(['sm', null, 'lg']);
       for (const { example, code } of previews) {
         // Las pestañas del ejemplo (dentro del lienzo), no las de Preview/Código.
         expect(example?.querySelector('mimi-tabs [role="tab"]')).not.toBeNull();

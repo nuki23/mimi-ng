@@ -27,9 +27,10 @@ describe('DateRangePage', () => {
 
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo y «Estados»: el vivo de los tres formularios se fue (repetía las pestañas de
-      // «Formularios») y sus estados pasaron a «Estados».
-      expect(previews.length).toBe(2);
+      // La demo, «Tamaños» y «Estados»: el vivo de los tres formularios se fue (repetía las
+      // pestañas de «Formularios») y sus estados pasaron a «Estados».
+      expect(previews.length).toBe(3);
+      expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-date-range button[aria-haspopup]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/date-range';");

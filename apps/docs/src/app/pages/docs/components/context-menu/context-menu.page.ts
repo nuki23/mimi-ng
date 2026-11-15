@@ -2,6 +2,7 @@ import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { ContextMenuBasicExample } from './examples/context-menu-basic.example';
 import { ContextMenuCheckboxExample } from './examples/context-menu-checkbox.example';
 import { ContextMenuDisabledExample } from './examples/context-menu-disabled.example';
+import { ContextMenuSizesExample } from './examples/context-menu-sizes.example';
 import { ContextMenuSubmenuExample } from './examples/context-menu-submenu.example';
 import { ContextMenuTableExample } from './examples/context-menu-table.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
@@ -12,6 +13,8 @@ import basicSource from './examples/context-menu-basic.example' with { loader: '
 import checkboxSource from './examples/context-menu-checkbox.example' with { loader: 'text' };
 // @ts-expect-error
 import disabledSource from './examples/context-menu-disabled.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/context-menu-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import submenuSource from './examples/context-menu-submenu.example' with { loader: 'text' };
 // @ts-expect-error
@@ -57,6 +60,16 @@ export const CONTEXT_MENU_PAGE: DocPage = {
     note: 'Usa los mismos ítems que [Dropdown Menu](/docs/components/dropdown-menu). Elegir un ítem o Escape cierra el menú y devuelve el foco.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          'Haz clic derecho en cada zona: `sm`, `md` y `lg` cambian el alto de los ítems y su texto.',
+        component: ContextMenuSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'disabled',
@@ -132,6 +145,12 @@ export const CONTEXT_MENU_PAGE: DocPage = {
         type: 'boolean',
         default: 'false',
         description: 'Sin menú propio: el clic derecho muestra el del navegador.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        default: "'md' (o el del contenedor con mimiSize)",
+        description: 'Alto de los ítems (28, 32 o 36 px) y tamaño del texto.',
       },
       {
         name: 'class',

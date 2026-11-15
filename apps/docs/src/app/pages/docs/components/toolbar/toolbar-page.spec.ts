@@ -22,7 +22,9 @@ describe('ToolbarPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(5);
+      expect(previews.length).toBe(6);
+      // Tamaños, el primero después de la demo.
+      expect(previews[1].code).toContain('size="lg"');
       for (const { example, code } of previews) {
         expect(
           example?.querySelector('mimi-toolbar[role="toolbar"] [mimiToolbarItem]'),
