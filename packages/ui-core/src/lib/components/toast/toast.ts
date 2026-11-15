@@ -478,9 +478,10 @@ class MimiToastItem {
   protected readonly actionClasses = computed(() =>
     cn(
       'h-7 shrink-0 rounded-[var(--mimi-radius-sm)] px-2.5 text-[12.5px] font-semibold',
-      // En el sólido (sin diseño), el mismo fondo translúcido que el círculo del ícono.
+      // En el sólido (sin diseño), el mismo fondo translúcido que el círculo del ícono. Los hover,
+      // con los mismos modificadores que los de Button (`not-aria-busy:`), para que cn() los cambie.
       this.solid() &&
-        'bg-[color-mix(in_oklch,currentColor_16%,transparent)] text-current shadow-none hover:not-disabled:bg-[color-mix(in_oklch,currentColor_24%,transparent)] hover:not-disabled:shadow-none',
+        'bg-[color-mix(in_oklch,currentColor_16%,transparent)] text-current shadow-none hover:not-disabled:not-aria-busy:bg-[color-mix(in_oklch,currentColor_24%,transparent)] hover:not-disabled:not-aria-busy:shadow-none',
     ),
   );
   protected readonly closeClasses = computed(() =>

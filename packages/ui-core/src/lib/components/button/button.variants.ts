@@ -29,59 +29,61 @@ export type ButtonVariant = ButtonStyleVariant | ButtonVariantShortcut;
 const TONE_CLASSES = {
   primary: {
     solid:
-      'bg-primary text-primary-foreground shadow-primary hover:not-disabled:bg-primary-hover hover:not-disabled:shadow-primary-hover active:ring-3 active:ring-ring-soft',
-    soft: 'bg-secondary text-secondary-foreground hover:not-disabled:bg-primary-soft-hover',
+      'bg-primary text-primary-foreground shadow-primary hover:not-disabled:not-aria-busy:bg-primary-hover hover:not-disabled:not-aria-busy:shadow-primary-hover active:not-aria-busy:ring-3 active:not-aria-busy:ring-ring-soft',
+    soft: 'bg-secondary text-secondary-foreground hover:not-disabled:not-aria-busy:bg-primary-soft-hover',
     outline:
-      'border-primary-border bg-transparent text-secondary-foreground hover:not-disabled:bg-primary-subtle',
+      'border-primary-border bg-transparent text-secondary-foreground hover:not-disabled:not-aria-busy:bg-primary-subtle',
     ghost:
-      'bg-transparent text-foreground hover:not-disabled:bg-accent hover:not-disabled:text-accent-foreground',
+      'bg-transparent text-foreground hover:not-disabled:not-aria-busy:bg-accent hover:not-disabled:not-aria-busy:text-accent-foreground',
     link: 'bg-transparent text-primary',
   },
   secondary: {
     solid:
-      'bg-secondary text-secondary-foreground shadow-neutral hover:not-disabled:bg-secondary-hover hover:not-disabled:shadow-neutral-hover active:ring-3 active:ring-ring-soft',
-    soft: 'bg-muted text-foreground hover:not-disabled:bg-accent hover:not-disabled:text-accent-foreground',
+      'bg-secondary text-secondary-foreground shadow-neutral hover:not-disabled:not-aria-busy:bg-secondary-hover hover:not-disabled:not-aria-busy:shadow-neutral-hover active:not-aria-busy:ring-3 active:not-aria-busy:ring-ring-soft',
+    soft: 'bg-muted text-foreground hover:not-disabled:not-aria-busy:bg-accent hover:not-disabled:not-aria-busy:text-accent-foreground',
     outline:
-      'border-border bg-card text-foreground shadow-neutral hover:not-disabled:bg-accent hover:not-disabled:text-accent-foreground hover:not-disabled:shadow-neutral-hover active:ring-3 active:ring-ring-soft',
+      'border-border bg-card text-foreground shadow-neutral hover:not-disabled:not-aria-busy:bg-accent hover:not-disabled:not-aria-busy:text-accent-foreground hover:not-disabled:not-aria-busy:shadow-neutral-hover active:not-aria-busy:ring-3 active:not-aria-busy:ring-ring-soft',
     ghost:
-      'bg-transparent text-foreground hover:not-disabled:bg-accent hover:not-disabled:text-accent-foreground',
+      'bg-transparent text-foreground hover:not-disabled:not-aria-busy:bg-accent hover:not-disabled:not-aria-busy:text-accent-foreground',
     link: 'bg-transparent text-foreground',
   },
   success: {
     solid:
-      'bg-success text-success-foreground shadow-success hover:not-disabled:bg-success-hover hover:not-disabled:shadow-success-hover active:ring-3 active:ring-success-ring',
-    soft: 'bg-success-soft text-success-soft-foreground hover:not-disabled:bg-success-soft-hover',
+      'bg-success text-success-foreground shadow-success hover:not-disabled:not-aria-busy:bg-success-hover hover:not-disabled:not-aria-busy:shadow-success-hover active:not-aria-busy:ring-3 active:not-aria-busy:ring-success-ring',
+    soft: 'bg-success-soft text-success-soft-foreground hover:not-disabled:not-aria-busy:bg-success-soft-hover',
     outline:
-      'border-success-border bg-transparent text-success-soft-foreground hover:not-disabled:bg-success-subtle',
-    ghost: 'bg-transparent text-success-soft-foreground hover:not-disabled:bg-success-soft',
+      'border-success-border bg-transparent text-success-soft-foreground hover:not-disabled:not-aria-busy:bg-success-subtle',
+    ghost:
+      'bg-transparent text-success-soft-foreground hover:not-disabled:not-aria-busy:bg-success-soft',
     link: 'bg-transparent text-success-soft-foreground',
   },
   warning: {
     solid:
-      'bg-warning text-warning-foreground shadow-warning hover:not-disabled:bg-warning-hover hover:not-disabled:shadow-warning-hover active:ring-3 active:ring-warning-ring',
-    soft: 'bg-warning-soft text-warning-soft-foreground hover:not-disabled:bg-warning-soft-hover',
+      'bg-warning text-warning-foreground shadow-warning hover:not-disabled:not-aria-busy:bg-warning-hover hover:not-disabled:not-aria-busy:shadow-warning-hover active:not-aria-busy:ring-3 active:not-aria-busy:ring-warning-ring',
+    soft: 'bg-warning-soft text-warning-soft-foreground hover:not-disabled:not-aria-busy:bg-warning-soft-hover',
     outline:
-      'border-warning-border bg-transparent text-warning-soft-foreground hover:not-disabled:bg-warning-subtle',
-    ghost: 'bg-transparent text-warning-soft-foreground hover:not-disabled:bg-warning-soft',
+      'border-warning-border bg-transparent text-warning-soft-foreground hover:not-disabled:not-aria-busy:bg-warning-subtle',
+    ghost:
+      'bg-transparent text-warning-soft-foreground hover:not-disabled:not-aria-busy:bg-warning-soft',
     link: 'bg-transparent text-warning-soft-foreground',
   },
   info: {
     solid:
-      'bg-info text-info-foreground shadow-info hover:not-disabled:bg-info-hover hover:not-disabled:shadow-info-hover active:ring-3 active:ring-info-ring',
-    soft: 'bg-info-soft text-info-soft-foreground hover:not-disabled:bg-info-soft-hover',
+      'bg-info text-info-foreground shadow-info hover:not-disabled:not-aria-busy:bg-info-hover hover:not-disabled:not-aria-busy:shadow-info-hover active:not-aria-busy:ring-3 active:not-aria-busy:ring-info-ring',
+    soft: 'bg-info-soft text-info-soft-foreground hover:not-disabled:not-aria-busy:bg-info-soft-hover',
     outline:
-      'border-info-border bg-transparent text-info-soft-foreground hover:not-disabled:bg-info-subtle',
-    ghost: 'bg-transparent text-info-soft-foreground hover:not-disabled:bg-info-soft',
+      'border-info-border bg-transparent text-info-soft-foreground hover:not-disabled:not-aria-busy:bg-info-subtle',
+    ghost: 'bg-transparent text-info-soft-foreground hover:not-disabled:not-aria-busy:bg-info-soft',
     link: 'bg-transparent text-info-soft-foreground',
   },
   danger: {
     solid:
-      'bg-destructive text-destructive-foreground shadow-destructive hover:not-disabled:bg-destructive-hover hover:not-disabled:shadow-destructive-hover active:ring-3 active:ring-destructive-ring',
-    soft: 'bg-destructive-soft-bg text-destructive-soft-foreground hover:not-disabled:bg-destructive-soft-hover',
+      'bg-destructive text-destructive-foreground shadow-destructive hover:not-disabled:not-aria-busy:bg-destructive-hover hover:not-disabled:not-aria-busy:shadow-destructive-hover active:not-aria-busy:ring-3 active:not-aria-busy:ring-destructive-ring',
+    soft: 'bg-destructive-soft-bg text-destructive-soft-foreground hover:not-disabled:not-aria-busy:bg-destructive-soft-hover',
     outline:
-      'border-destructive-border bg-transparent text-destructive-soft-foreground hover:not-disabled:bg-destructive-subtle',
+      'border-destructive-border bg-transparent text-destructive-soft-foreground hover:not-disabled:not-aria-busy:bg-destructive-subtle',
     ghost:
-      'bg-transparent text-destructive-soft-foreground hover:not-disabled:bg-destructive-soft-bg',
+      'bg-transparent text-destructive-soft-foreground hover:not-disabled:not-aria-busy:bg-destructive-soft-bg',
     link: 'bg-transparent text-destructive-soft-foreground',
   },
 } as const satisfies Record<ButtonTone, Record<ButtonStyleVariant, string>>;
@@ -107,9 +109,13 @@ export const buttonVariants = cva(
     'focus-visible:outline-[length:var(--mimi-btn-focus-ring-width,2px)]',
     controlDisabledStyles,
     // Escala al presionar: --mimi-btn-press-scale → --mimi-press-scale (spec 6.6).
-    'mimi-transition active:scale-[var(--mimi-btn-press-scale,var(--mimi-press-scale))]',
-    // Cargando: deshabilitado, pero con opacidad 85% y cursor de progreso (gana a disabled:).
+    'mimi-transition active:not-aria-busy:scale-[var(--mimi-btn-press-scale,var(--mimi-press-scale))]',
+    // Cargando: opacidad 85% y cursor de progreso (gana a disabled:). Un <button> que carga lleva
+    // aria-disabled (R.33), cuyo pointer-events-none quitaría el cursor: en ese caso el puntero
+    // vuelve (solo con data-loading, que pone Button cuando bloquea los clics) y el hover y el
+    // clic no cambian el aspecto (`not-aria-busy:` en los hover y active de los tonos).
     'aria-busy:disabled:cursor-progress aria-busy:disabled:opacity-85 aria-busy:aria-disabled:opacity-85',
+    '[button&]:aria-busy:cursor-progress [button&]:aria-busy:data-loading:pointer-events-auto',
   ],
   {
     variants: {
@@ -118,7 +124,7 @@ export const buttonVariants = cva(
         soft: '',
         outline: '',
         ghost: '',
-        link: 'underline-offset-4 hover:not-disabled:underline',
+        link: 'underline-offset-4 hover:not-disabled:not-aria-busy:underline',
       },
       tone: {
         primary: '',
