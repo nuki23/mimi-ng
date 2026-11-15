@@ -28,6 +28,8 @@ import { PASSWORD_PAGE } from '../pages/docs/components/password/password.page';
 import { PasswordPage } from '../pages/docs/components/password/password-page';
 import { INPUT_OTP_PAGE } from '../pages/docs/components/input-otp/input-otp.page';
 import { InputOtpPage } from '../pages/docs/components/input-otp/input-otp-page';
+import { NUMBER_INPUT_PAGE } from '../pages/docs/components/number-input/number-input.page';
+import { NumberInputPage } from '../pages/docs/components/number-input/number-input-page';
 import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
 import { textLinks } from './doc-text';
 import {
@@ -54,6 +56,7 @@ import {
 
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
 const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+  'number-input': { page: NUMBER_INPUT_PAGE, component: NumberInputPage },
   'input-otp': { page: INPUT_OTP_PAGE, component: InputOtpPage },
   password: { page: PASSWORD_PAGE, component: PasswordPage },
   textarea: { page: TEXTAREA_PAGE, component: TextareaPage },
@@ -74,7 +77,7 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
  * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
  * con la lista de pendientes.
  */
-const PENDING_COUNT = 27;
+const PENDING_COUNT = 26;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
