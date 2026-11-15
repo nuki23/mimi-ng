@@ -5,8 +5,8 @@ import { TabsCustomClassExample } from './examples/tabs-custom-class.example';
 import { TabsDisabledExample } from './examples/tabs-disabled.example';
 import { TabsPillExample } from './examples/tabs-pill.example';
 import { TabsPreserveExample } from './examples/tabs-preserve.example';
-import { TabsResponsiveExample } from './examples/tabs-responsive.example';
 import { TabsShortcutExample } from './examples/tabs-shortcut.example';
+import { TabsSizesExample } from './examples/tabs-sizes.example';
 import { TabsVerticalExample } from './examples/tabs-vertical.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -23,9 +23,9 @@ import pillSource from './examples/tabs-pill.example' with { loader: 'text' };
 // @ts-expect-error
 import preserveSource from './examples/tabs-preserve.example' with { loader: 'text' };
 // @ts-expect-error
-import responsiveSource from './examples/tabs-responsive.example' with { loader: 'text' };
-// @ts-expect-error
 import shortcutSource from './examples/tabs-shortcut.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/tabs-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import verticalSource from './examples/tabs-vertical.example' with { loader: 'text' };
 
@@ -65,6 +65,16 @@ export const TABS_PAGE: DocPage = {
     note: 'Sin `value`, se elige la primera pestaña habilitada. `<ng-template mimiTab>` crea su panel solo al elegir la pestaña.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`sm`, `md` y `lg`: la pestaña subrayada mide 36, 44 o 52 px de alto; la píldora, 30, 34 o 40 px.',
+        component: TabsSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     variants: [
       {
         id: 'pill',
@@ -113,17 +123,9 @@ export const TABS_PAGE: DocPage = {
         id: 'vertical',
         title: 'Vertical',
         sentence:
-          'Con `orientation="vertical"`, las pestañas en columna, el panel al lado y ↑/↓ para moverse.',
+          'Con `orientation="vertical"`, pestañas en columna, panel al lado y ↑/↓. Aquí cambia en vivo: vertical desde 768 px, horizontal en pantallas chicas.',
         component: TabsVerticalExample,
         source: verticalSource as string,
-        more: {
-          id: 'responsive',
-          title: 'Ver la orientación según el ancho',
-          sentence:
-            'La orientación puede cambiar en vivo: vertical desde 768 px y horizontal en pantallas chicas.',
-          component: TabsResponsiveExample,
-          source: responsiveSource as string,
-        },
       },
     ],
     custom: [

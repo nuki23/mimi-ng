@@ -71,4 +71,19 @@ describe('página de Tamaños', () => {
       expect(row.querySelector('button')!.hasAttribute('data-size')).toBe(false);
     }
   });
+
+  it('la tabla de la spec 4 (R.26) tiene cada fila de la página, palabra por palabra', () => {
+    const spec = sizesFs.readFileSync(`${sizesNode.cwd()}/docs/spec.md`, 'utf8');
+    const start = spec.indexOf('### Tamaños: qué cambia en cada componente');
+    expect(start).toBeGreaterThan(-1);
+    const section = spec.slice(start, spec.indexOf('\n### ', start + 10));
+    const rows = section
+      .split('\n')
+      .filter((line) => line.startsWith('| ') && !line.startsWith('| ---'))
+      .slice(1)
+      .map((line) => line.split('|').map((cell) => cell.trim()));
+    expect(rows.map((cells) => [cells[1], cells[2]])).toEqual(
+      SIZE_COMPONENTS.map((row) => [row.component, row.changes]),
+    );
+  });
 });

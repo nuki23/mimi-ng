@@ -3,7 +3,21 @@ import { TestBed } from '@angular/core/testing';
 import { MimiAvatar } from '@/components/ui/avatar';
 import { MimiButton } from '@/components/ui/button';
 import { MimiInput } from '@/components/ui/input';
-import { MimiSizeScope, type MimiSizeInput } from './size';
+import type { AvatarSize } from '@/components/ui/avatar';
+import type { ButtonSize } from '@/components/ui/button';
+import type { InputSize } from '@/components/ui/input';
+import { MimiSizeScope, type MimiSize } from './size';
+
+// R.32: `default` (el nombre viejo de `md`) ya no es un tamaño. Si vuelve, esto no compila.
+// @ts-expect-error `default` se quitó en la 0.7.0.
+const OLD_BUTTON: ButtonSize = 'default';
+// @ts-expect-error `default` se quitó en la 0.7.0.
+const OLD_INPUT: InputSize = 'default';
+// @ts-expect-error `default` se quitó en la 0.7.0.
+const OLD_AVATAR: AvatarSize = 'default';
+// @ts-expect-error `default` se quitó en la 0.7.0.
+const OLD_SCALE: MimiSize = 'default';
+void [OLD_BUTTON, OLD_INPUT, OLD_AVATAR, OLD_SCALE];
 
 /** R.1: escala común `sm | md | lg` y herencia con `mimiSize`. */
 @Component({
@@ -19,12 +33,10 @@ import { MimiSizeScope, type MimiSizeInput } from './size';
       <section mimiSize="lg"><button mimiBtn id="nested">D</button></section>
     </section>
     <button mimiBtn id="outside">E</button>
-    <button mimiBtn id="old" [size]="old()">F</button>
   `,
 })
 class Host {
-  readonly scope = signal<MimiSizeInput>('sm');
-  readonly old = signal<MimiSizeInput | 'icon'>('default');
+  readonly scope = signal<MimiSize>('sm');
 }
 
 describe('escala de tamaños (R.1)', () => {
@@ -71,15 +83,10 @@ describe('escala de tamaños (R.1)', () => {
     expect(q('inherit').closest('[data-size]')).not.toBeNull();
   });
 
-  it('`default` es un alias de `md` y avisa una vez en desarrollo', async () => {
+  it('ya no avisa de `default` (R.32): no hay alias que normalizar', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-    const { q, fixture, host } = await setup();
-    expect(q('old').dataset['size']).toBe('md');
-    host.old.set('default');
-    await fixture.whenStable();
-    expect(
-      warn.mock.calls.filter(([m]) => String(m).includes('MimiButton')).length,
-    ).toBeLessThanOrEqual(1);
+    await setup();
+    expect(warn.mock.calls.filter(([m]) => String(m).includes('Size:'))).toEqual([]);
     warn.mockRestore();
   });
 });

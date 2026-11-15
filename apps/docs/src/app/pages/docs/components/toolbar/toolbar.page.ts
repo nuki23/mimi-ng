@@ -1,6 +1,7 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { ToolbarBasicExample } from './examples/toolbar-basic.example';
 import { ToolbarFloatingExample } from './examples/toolbar-floating.example';
+import { ToolbarSizesExample } from './examples/toolbar-sizes.example';
 import { ToolbarToggleExample } from './examples/toolbar-toggle.example';
 import { ToolbarTooltipsExample } from './examples/toolbar-tooltips.example';
 import { ToolbarVerticalExample } from './examples/toolbar-vertical.example';
@@ -12,6 +13,8 @@ import basicSource from './examples/toolbar-basic.example' with { loader: 'text'
 import canvasToolsSource from './examples/canvas-tools' with { loader: 'text' };
 // @ts-expect-error
 import floatingSource from './examples/toolbar-floating.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/toolbar-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import toggleSource from './examples/toolbar-toggle.example' with { loader: 'text' };
 // @ts-expect-error
@@ -58,6 +61,16 @@ export const TOOLBAR_PAGE: DocPage = {
     note: 'Los botones son tuyos: les pones `mimiToolbarItem` con su valor, el contenido y el `aria-label`.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`sm`, `md` y `lg` cambian el botón (32, 40 y 48 px) y el ícono (16, 18 y 20 px).',
+        component: ToolbarSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     variants: [
       {
         id: 'basic',
@@ -149,6 +162,12 @@ export const TOOLBAR_PAGE: DocPage = {
         description: 'Las flechas vuelven al principio desde el último botón.',
       },
       {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        default: "'md' (o el del contenedor con mimiSize)",
+        description: 'Tamaño de los botones y sus íconos, con la escala del tema.',
+      },
+      {
         name: 'class',
         type: 'string',
         default: "''",
@@ -212,7 +231,13 @@ export const TOOLBAR_PAGE: DocPage = {
         description: 'El contador sobre un botón (decorativo). Acepta `class`.',
       },
     ],
-    dataAttributes: ['data-orientation', 'data-state (en el botón)', 'data-kind', 'data-disabled'],
+    dataAttributes: [
+      'data-orientation',
+      'data-size',
+      'data-state (en el botón)',
+      'data-kind',
+      'data-disabled',
+    ],
   },
   tokens: 'toolbar',
 };

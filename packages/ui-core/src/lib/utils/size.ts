@@ -7,18 +7,15 @@ import {
   forwardRef,
   inject,
   input,
-  isDevMode,
 } from '@angular/core';
 
 /**
  * Tamaño de los componentes (R.1, spec 4): una sola escala `sm | md | lg` en toda la librería.
  * Las alturas de los controles salen de `--mimi-control-height-sm/-/lg`, así Button, Input,
- * Select… quedan alineados en el mismo tamaño.
+ * Select… quedan alineados en el mismo tamaño. (`default`, el nombre viejo de `md`, se quitó en la
+ * 0.7.0: R.32.)
  */
 export type MimiSize = 'sm' | 'md' | 'lg';
-
-/** Tamaños que acepta un componente: `default` es el nombre viejo de `md` (se quita en la 0.7.0). */
-export type MimiSizeInput = MimiSize | 'default';
 
 /** Lo que un contenedor con `mimiSize` le da a los controles de dentro. */
 export interface MimiSizeContext {
@@ -27,40 +24,18 @@ export interface MimiSizeContext {
 
 export const MIMI_SIZE = new InjectionToken<MimiSizeContext>('MIMI_SIZE');
 
-const warned = new Set<string>();
-
-/** `default` → `md`, con un aviso en desarrollo (una vez por componente). */
-export function normalizeMimiSize(
-  value: MimiSizeInput | null | undefined,
-  component: string,
-): MimiSize | undefined {
-  if (value === 'default') {
-    if (isDevMode() && !warned.has(component)) {
-      warned.add(component);
-      console.warn(
-        `[Mimi] Size: ${component} usa size="default", que se llama ahora "md"; "default" se quitará en la 0.7.0.`,
-      );
-    }
-    return 'md';
-  }
-  return value ?? undefined;
-}
-
 /**
  * El tamaño de un control: el suyo (`size`), si no el del contenedor `mimiSize` más cercano, y si
  * no `md`. Se llama en un contexto de inyección (una propiedad del componente).
  *
  * ```ts
- * readonly size = input<MimiSizeInput>();
- * protected readonly resolvedSize = injectMimiSize(this.size, 'MimiInput');
+ * readonly size = input<MimiSize>();
+ * protected readonly resolvedSize = injectMimiSize(this.size);
  * ```
  */
-export function injectMimiSize(
-  own: Signal<MimiSizeInput | null | undefined>,
-  component: string,
-): Signal<MimiSize> {
+export function injectMimiSize(own: Signal<MimiSize | null | undefined>): Signal<MimiSize> {
   const scope = inject(MIMI_SIZE, { optional: true });
-  return computed(() => normalizeMimiSize(own(), component) ?? scope?.size() ?? 'md');
+  return computed(() => own() ?? scope?.size() ?? 'md');
 }
 
 /**
@@ -70,7 +45,7 @@ export function injectMimiSize(
  */
 @Directive({ host: { '[attr.data-size]': 'own()' } })
 export class MimiSized {
-  readonly size = input<MimiSizeInput>();
+  readonly size = input<MimiSize>();
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
   private readonly scope = inject(MIMI_SIZE, { optional: true });
   /**
@@ -78,9 +53,9 @@ export class MimiSized {
    * tema (`:root`) y el control hereda, por la cascada de CSS, el `[data-size]` más cercano (un
    * `mimiSize` o cualquier contenedor que lo lleve).
    */
-  protected readonly own = computed(() => normalizeMimiSize(this.size(), 'MimiSized') ?? null);
+  protected readonly own = computed(() => this.size() ?? null);
   /** El tamaño de verdad (el propio, el del contenedor `mimiSize` o `md`). */
-  readonly resolved = injectMimiSize(this.size, 'MimiSized');
+  readonly resolved = injectMimiSize(this.size);
 
   /**
    * Como `resolved`, pero mirando también el `[data-size]` más cercano en el DOM. Para lo que se
@@ -108,6 +83,6 @@ export class MimiSized {
   host: { '[attr.data-size]': 'size()' },
 })
 export class MimiSizeScope implements MimiSizeContext {
-  readonly mimiSize = input.required<MimiSizeInput>();
-  readonly size = computed<MimiSize>(() => normalizeMimiSize(this.mimiSize(), 'mimiSize') ?? 'md');
+  readonly mimiSize = input.required<MimiSize>();
+  readonly size = computed<MimiSize>(() => this.mimiSize() ?? 'md');
 }

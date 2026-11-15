@@ -22,15 +22,7 @@
         height="36"
         class="hidden h-9 w-auto dark:block"
       />
-      <button
-        type="button"
-        mimiBtn
-        variant="ghost"
-        size="icon"
-        class="-mr-2 size-9 rounded-[min(var(--mimi-radius),10px)] [&_svg]:size-[18px]"
-        aria-label="Cerrar menú"
-        (click)="nav.close()"
-      >
+      <button type="button" appIconBtn class="-mr-2" aria-label="Cerrar menú" (click)="nav.close()">
         <!-- Lucide x (ISC), en línea para que @lucide/angular no entre en el bundle inicial -->
         <svg
           width="18"

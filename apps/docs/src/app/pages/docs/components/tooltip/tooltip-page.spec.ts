@@ -27,8 +27,10 @@ describe('TooltipPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      // La demo (el ejemplo básico) y cinco ejemplos.
-      expect(previews.length).toBe(6);
+      // La demo (el ejemplo básico) y seis ejemplos.
+      expect(previews.length).toBe(7);
+      // Tamaños, el primero después de la demo.
+      expect(previews[1].code).toContain('mimiTooltipSize="lg"');
       for (const { example, code } of previews) {
         // data-tooltip-state lo pone la directiva (también con [mimiTooltip]="…").
         expect(example?.querySelector('[data-tooltip-state]')).not.toBeNull();

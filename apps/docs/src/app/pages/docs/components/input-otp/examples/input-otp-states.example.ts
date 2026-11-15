@@ -6,22 +6,27 @@ import { MimiInputOtp } from '@/components/ui/input-otp';
   selector: 'app-input-otp-states-example',
   imports: [MimiInputOtp, ReactiveFormsModule],
   template: `
-    <div class="grid gap-5 sm:grid-cols-2">
-      <div class="flex flex-col gap-2">
+    <div class="grid min-w-0 gap-5 sm:grid-cols-2">
+      <div class="flex min-w-0 flex-col gap-2">
         <span class="text-xs text-muted-foreground">Completo y verificado</span>
         <mimi-input-otp aria-label="Verificado" value="246810" [separatorAfter]="3" success />
       </div>
-      <div class="flex flex-col gap-2">
+      <div class="flex min-w-0 flex-col gap-2">
         <!-- El error lo da el formulario (aquí, ya tocado y con un validador que falla). -->
         <span class="text-xs text-muted-foreground">Con error</span>
         <mimi-input-otp aria-label="Con error" [separatorAfter]="3" [formControl]="wrong" />
       </div>
-      <div class="flex flex-col gap-2">
+      <div class="flex min-w-0 flex-col gap-2">
         <span class="text-xs text-muted-foreground">Deshabilitado</span>
         <mimi-input-otp aria-label="Deshabilitado" [separatorAfter]="3" disabled />
         <span class="text-xs text-muted-foreground">Espera 0:42 para pedir otro.</span>
       </div>
-      <div class="flex flex-col gap-2">
+      <div class="flex min-w-0 flex-col gap-2">
+        <!-- Solo lectura: se enfoca y se lee, pero no se escribe ni se borra. -->
+        <span class="text-xs text-muted-foreground">Solo lectura</span>
+        <mimi-input-otp aria-label="Código enviado" value="582913" [separatorAfter]="3" readonly />
+      </div>
+      <div class="flex min-w-0 flex-col gap-2">
         <span class="text-xs text-muted-foreground">4 casillas, sin guion</span>
         <mimi-input-otp aria-label="PIN" [length]="4" />
       </div>

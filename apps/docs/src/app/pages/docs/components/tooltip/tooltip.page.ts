@@ -4,6 +4,7 @@ import { TooltipDelayExample } from './examples/tooltip-delay.example';
 import { TooltipDisabledExample } from './examples/tooltip-disabled.example';
 import { TooltipIconButtonExample } from './examples/tooltip-icon-button.example';
 import { TooltipPositionsExample } from './examples/tooltip-positions.example';
+import { TooltipSizesExample } from './examples/tooltip-sizes.example';
 import { TooltipToolbarExample } from './examples/tooltip-toolbar.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -17,6 +18,8 @@ import disabledSource from './examples/tooltip-disabled.example' with { loader: 
 import iconButtonSource from './examples/tooltip-icon-button.example' with { loader: 'text' };
 // @ts-expect-error
 import positionsSource from './examples/tooltip-positions.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/tooltip-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import toolbarSource from './examples/tooltip-toolbar.example' with { loader: 'text' };
 
@@ -51,6 +54,16 @@ export const TOOLTIP_PAGE: DocPage = {
     note: 'Solo texto: desaparece cuando el puntero o el foco se van. Para contenido interactivo, [Popover](/docs/components/popover).',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          'Toma el tamaño del contenedor del elemento; `mimiTooltipSize` lo fija. Cambian el texto (11,5, 12,5 y 13,5 px) y el relleno.',
+        component: TooltipSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'disabled',

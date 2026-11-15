@@ -27,8 +27,9 @@ describe('ComboboxPage', () => {
 
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo y siete ejemplos; los formularios van en las pestañas, sin ejemplos vivos.
-      expect(previews.length).toBe(8);
+      // La demo y ocho ejemplos; los formularios van en las pestañas, sin ejemplos vivos.
+      expect(previews.length).toBe(9);
+      expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-combobox input[role="combobox"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/combobox';");

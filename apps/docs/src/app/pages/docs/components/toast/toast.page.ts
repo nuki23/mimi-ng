@@ -133,6 +133,7 @@ export const TOAST_PAGE: DocPage = {
       'El tiempo se detiene con el puntero encima, con el foco dentro y con la pestaña oculta. Los toasts con acción no se cierran solos.',
       'La X tiene nombre («Cerrar notificación»). Los toasts quedan encima de los diálogos.',
       'Con movimiento reducido, sin desplazamientos.',
+      'El nombre de la región («Notificaciones (F8)») se lee en la raíz: pon `provideMimiToastText` en `app.config.ts`, no en un componente.',
     ],
   },
   api: {

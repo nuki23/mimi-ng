@@ -6,6 +6,7 @@ import { ComboboxCustomExample } from './examples/combobox-custom.example';
 import { ComboboxDeclarativeExample } from './examples/combobox-declarative.example';
 import { ComboboxMultipleExample } from './examples/combobox-multiple.example';
 import { ComboboxOptionsExample } from './examples/combobox-options.example';
+import { ComboboxSizesExample } from './examples/combobox-sizes.example';
 import { ComboboxStatesExample } from './examples/combobox-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -23,6 +24,8 @@ import declarativeSource from './examples/combobox-declarative.example' with { l
 import multipleSource from './examples/combobox-multiple.example' with { loader: 'text' };
 // @ts-expect-error
 import optionsSource from './examples/combobox-options.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/combobox-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/combobox-states.example' with { loader: 'text' };
 
@@ -64,6 +67,16 @@ export const COMBOBOX_PAGE: DocPage = {
     note: 'La misma API que [Select](/docs/components/select). Lo escrito no es el valor hasta que se elige una opción.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`sm`, `md` y `lg` cambian el alto del campo (32, 40 y 48 px), alineado con Input y Button.',
+        component: ComboboxSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',

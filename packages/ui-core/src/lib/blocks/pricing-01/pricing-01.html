@@ -115,7 +115,7 @@
         <button
           mimiBtn
           type="button"
-          class="h-[calc(var(--mimi-control-height,2.5rem)+4px)] text-[14.5px] font-semibold"
+          class="h-[calc(var(--mimi-btn-h,var(--mimi-control-height,2.5rem))+4px)] text-[14.5px] font-semibold"
           [variant]="card.plan.featured ? 'solid' : 'outline'"
           [tone]="card.plan.featured ? 'primary' : 'secondary'"
           (click)="planSelected.emit({ plan: card.plan, period: period() })"

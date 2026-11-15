@@ -149,7 +149,7 @@
     "packages": ["@angular/cdk"],
     "css": ["@angular/cdk/overlay-prebuilt.css"]
   },
-  "progress": { "items": ["utils/size"], "packages": [], "css": [] },
+  "progress": { "items": [], "packages": [], "css": [] },
   "select": {
     "items": [
       "option-list",

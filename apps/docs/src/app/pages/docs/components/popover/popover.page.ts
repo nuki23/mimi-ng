@@ -4,6 +4,7 @@ import { PopoverControlledExample } from './examples/popover-controlled.example'
 import { PopoverCustomClassExample } from './examples/popover-custom-class.example';
 import { PopoverFormExample } from './examples/popover-form.example';
 import { PopoverPositionsExample } from './examples/popover-positions.example';
+import { PopoverSizesExample } from './examples/popover-sizes.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -16,6 +17,8 @@ import customClassSource from './examples/popover-custom-class.example' with { l
 import formSource from './examples/popover-form.example' with { loader: 'text' };
 // @ts-expect-error
 import positionsSource from './examples/popover-positions.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/popover-sizes.example' with { loader: 'text' };
 
 /** La página de Popover (tarea G1.1), con la plantilla de página. */
 export const POPOVER_PAGE: DocPage = {
@@ -53,6 +56,16 @@ export const POPOVER_PAGE: DocPage = {
     note: '`class` y `aria-label` van en `<mimi-popover>` y se aplican al panel: escritos en el `ng-template`, se perderían.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`size` cambia el ancho del panel: `sm` (260 px), `md` (300 px, por defecto) y `lg` (360 px).',
+        component: PopoverSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     advanced: [
       {
         id: 'positions',
@@ -135,6 +148,12 @@ export const POPOVER_PAGE: DocPage = {
         default: 'false',
         description:
           'El botón no abre el panel (sigue enfocable). Un `open` puesto desde fuera sigue funcionando.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        default: "'md' (o el del contenedor con mimiSize)",
+        description: 'El ancho del panel: 260, 300 o 360 px.',
       },
       {
         name: 'aria-label',

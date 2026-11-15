@@ -14,7 +14,7 @@ import { MimiInput } from '@/components/ui/input';
   // así que aquí se vuelve a los predeterminados; en tu app no hace falta escribir nada.
   providers: [provideMimiErrorMessages(MIMI_ERROR_MESSAGES_EN)],
   template: `
-    <mimi-form-field label="Email" class="w-80">
+    <mimi-form-field label="Email" hint="Without configuring anything.">
       <input mimiInput type="email" [formControl]="email" />
     </mimi-form-field>
   `,

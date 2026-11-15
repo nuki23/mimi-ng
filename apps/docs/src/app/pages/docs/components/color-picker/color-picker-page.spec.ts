@@ -28,8 +28,9 @@ describe('ColorPickerPage', () => {
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
       // La demo (con disparador) y dos ejemplos: el vivo de los tres formularios se fue (repetía
-      // las pestañas de «Formularios») y solo lectura pasó a «Estados».
-      expect(previews.length).toBe(3);
+      // las pestañas de «Formularios») y solo lectura pasó a «Estados». Más «Tamaños».
+      expect(previews.length).toBe(4);
+      expect(previews.some(({ code }) => code.includes('mimiSize="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-color-picker, mimi-color-input')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/color-picker';");

@@ -876,9 +876,9 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
   confirm: [
     {
       name: '--mimi-confirm-width',
-      default: '380px',
+      default: 'el de Dialog en su size (sm: 360px)',
       preset: true,
-      description: 'Ancho del panel.',
+      description: 'Ancho del panel. Si lo defines, gana sobre `size`.',
     },
     {
       name: '--mimi-confirm-icon-bg',

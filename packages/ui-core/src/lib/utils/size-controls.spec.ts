@@ -15,7 +15,7 @@ import { MimiPassword } from '@/components/ui/password';
 import { MimiSelect } from '@/components/ui/select';
 import { MimiTagsInput } from '@/components/ui/tags-input';
 import { MimiTextarea } from '@/components/ui/textarea';
-import { MimiSizeScope, type MimiSizeInput } from './size';
+import { MimiSizeScope, type MimiSize } from './size';
 
 /**
  * R.2: todos los controles de formulario aceptan `size` (sm | md | lg), ponen `data-size` (que
@@ -65,7 +65,7 @@ import { MimiSizeScope, type MimiSizeInput } from './size';
   `,
 })
 class Host {
-  readonly scope = signal<MimiSizeInput>('sm');
+  readonly scope = signal<MimiSize>('sm');
 }
 
 const CONTROLS = [

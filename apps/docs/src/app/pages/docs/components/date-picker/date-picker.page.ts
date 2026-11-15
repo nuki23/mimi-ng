@@ -2,6 +2,7 @@ import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { DatePickerCalendarExample } from './examples/date-picker-calendar.example';
 import { DatePickerDeliveryExample } from './examples/date-picker-delivery.example';
 import { DatePickerLocaleExample } from './examples/date-picker-locale.example';
+import { DatePickerSizesExample } from './examples/date-picker-sizes.example';
 import { DatePickerStatesExample } from './examples/date-picker-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -11,6 +12,8 @@ import calendarSource from './examples/date-picker-calendar.example' with { load
 import deliverySource from './examples/date-picker-delivery.example' with { loader: 'text' };
 // @ts-expect-error
 import localeSource from './examples/date-picker-locale.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/date-picker-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/date-picker-states.example' with { loader: 'text' };
 
@@ -53,6 +56,16 @@ export const DATE_PICKER_PAGE: DocPage = {
     },
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`size` cambia el alto del botón (32, 40 o 48 px; el texto sigue en 14 px) y las celdas del calendario.',
+        component: DatePickerSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',

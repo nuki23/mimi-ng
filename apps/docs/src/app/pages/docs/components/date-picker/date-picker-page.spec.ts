@@ -27,9 +27,10 @@ describe('DatePickerPage', () => {
 
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo y tres ejemplos: el vivo de los tres formularios se fue (repetía las pestañas de
-      // «Formularios») y sus estados pasaron a «Estados».
-      expect(previews.length).toBe(4);
+      // La demo y cuatro ejemplos: el vivo de los tres formularios se fue (repetía las pestañas de
+      // «Formularios») y sus estados pasaron a «Estados»; «Tamaños» va primero.
+      expect(previews.length).toBe(5);
+      expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-date-picker, mimi-calendar')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/");

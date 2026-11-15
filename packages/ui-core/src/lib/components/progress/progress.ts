@@ -10,7 +10,6 @@ import {
   numberAttribute,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
-import { normalizeMimiSize } from '@/components/ui/utils/size';
 
 /*
  * Progress (docs/design/Mimi F5 Estructura.dc.html, «4 · Progress»; prefijo de tokens
@@ -155,12 +154,10 @@ export class MimiProgress {
   readonly max = input(100, { transform: numberAttribute });
   readonly tone = input<MimiProgressTone>('primary');
   readonly shape = input<MimiProgressShape>('bar');
-  /** `sm | md | lg` (la barra y el círculo); `default` es el nombre viejo de `md`. */
-  readonly size = input<MimiProgressSize | 'default'>('md');
-  /** El tamaño de verdad (`default` = `md`, con aviso en desarrollo). */
-  protected readonly shown = computed<MimiProgressSize>(
-    () => normalizeMimiSize(this.size(), 'MimiProgress') ?? 'md',
-  );
+  /** `sm | md | lg` (la barra y el círculo). */
+  readonly size = input<MimiProgressSize>('md');
+  /** El tamaño de verdad (`md` si llega vacío). */
+  protected readonly shown = computed<MimiProgressSize>(() => this.size() ?? 'md');
   /** Nombre accesible (obligatorio, o `aria-labelledby`). */
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });

@@ -27,9 +27,11 @@ describe('ToggleGroupPage', () => {
 
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
-      // La demo y cinco ejemplos: el vivo de formularios se fue (repetía las pestañas de
+      // La demo y seis ejemplos: el vivo de formularios se fue (repetía las pestañas de
       // «Formularios») y Deshabilitado y Solo lectura van juntos en Estados.
-      expect(previews.length).toBe(6);
+      expect(previews.length).toBe(7);
+      // Tamaños, el primero después de la demo.
+      expect(previews[1].code).toContain('size="lg"');
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-toggle-group [mimiToggleGroupItem]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/toggle-group';");

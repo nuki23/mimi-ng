@@ -5,7 +5,7 @@ import {
   type MimiFieldControl,
   injectFieldState,
 } from '@/components/ui/utils/field-state';
-import { injectMimiSize, normalizeMimiSize } from '@/components/ui/utils/size';
+import { injectMimiSize } from '@/components/ui/utils/size';
 import { type InputSize, inputVariants } from './input.variants';
 
 /**
@@ -30,10 +30,10 @@ import { type InputSize, inputVariants } from './input.variants';
   },
 })
 export class MimiInput implements MimiFieldControl {
-  /** `sm | md | lg`. Sin `size`, el del contenedor `mimiSize` o `md` (`default` = `md`, deprecado). */
-  readonly size = input<InputSize | 'default'>();
-  protected readonly sizeResolved = injectMimiSize(this.size, 'MimiInput');
-  protected readonly ownSize = computed(() => normalizeMimiSize(this.size(), 'MimiInput') ?? null);
+  /** `sm | md | lg`. Sin `size`, el del contenedor `mimiSize` o `md`. */
+  readonly size = input<InputSize>();
+  protected readonly sizeResolved = injectMimiSize(this.size);
+  protected readonly ownSize = computed(() => this.size() ?? null);
   /**
    * Muestra el error a mano. `undefined` (por defecto): decide el formulario. `true`: lo muestra.
    * `false`: lo oculta aunque el formulario sea inválido.

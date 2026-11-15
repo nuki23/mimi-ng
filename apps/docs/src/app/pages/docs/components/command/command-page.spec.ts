@@ -35,9 +35,11 @@ describe('CommandPage', () => {
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
 
-      // La demo (la paleta en la página) y el diálogo con ⌘K.
+      // La demo (la paleta en la página), los tamaños y el diálogo con ⌘K.
       const previews = examples(fixture);
-      expect(previews.length).toBe(2);
+      expect(previews.length).toBe(3);
+      expect(previews[1].code).toContain('size="lg"');
+      expect(previews[1].example?.querySelectorAll('mimi-command').length).toBe(3);
       for (const { code } of previews) {
         expect(code).toContain("from '@/components/ui/command';");
         expect(code).toMatch(/export class Command\w+Example/);
@@ -50,8 +52,8 @@ describe('CommandPage', () => {
       // Los textos de la página, en español.
       expect(inline.querySelector('[data-slot="footer"]')!.textContent).toContain('Navegar');
       // El diálogo empieza cerrado: su disparador está.
-      expect(previews[1].example?.querySelector('mimi-command-dialog')).not.toBeNull();
-      expect(previews[1].example?.querySelector('button')!.textContent).toContain('Buscar…');
+      expect(previews[2].example?.querySelector('mimi-command-dialog')).not.toBeNull();
+      expect(previews[2].example?.querySelector('button')!.textContent).toContain('Buscar…');
       expect(el.querySelector('#tokens')).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,

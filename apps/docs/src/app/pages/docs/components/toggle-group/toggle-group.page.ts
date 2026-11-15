@@ -2,6 +2,7 @@ import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { ToggleGroupCustomExample } from './examples/toggle-group-custom.example';
 import { ToggleGroupIconsExample } from './examples/toggle-group-icons.example';
 import { ToggleGroupMultipleExample } from './examples/toggle-group-multiple.example';
+import { ToggleGroupSizesExample } from './examples/toggle-group-sizes.example';
 import { ToggleGroupSolidExample } from './examples/toggle-group-solid.example';
 import { ToggleGroupStatesExample } from './examples/toggle-group-states.example';
 import { ToggleGroupTextExample } from './examples/toggle-group-text.example';
@@ -13,6 +14,8 @@ import customSource from './examples/toggle-group-custom.example' with { loader:
 import iconsSource from './examples/toggle-group-icons.example' with { loader: 'text' };
 // @ts-expect-error
 import multipleSource from './examples/toggle-group-multiple.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/toggle-group-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import solidSource from './examples/toggle-group-solid.example' with { loader: 'text' };
 // @ts-expect-error
@@ -54,6 +57,15 @@ export const TOGGLE_GROUP_PAGE: DocPage = {
     note: 'Los botones son tuyos: ponles `mimiToggleGroupItem` con su valor. Los de solo ícono llevan `aria-label`.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence: '`sm`, `md` y `lg` cambian el alto de cada botón (28, 32 y 40 px) y su relleno.',
+        component: ToggleGroupSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     variants: [
       {
         id: 'solid',

@@ -26,9 +26,10 @@ describe('ConfirmPage', () => {
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
 
-      // La demo (el caso destructivo) y seis ejemplos.
+      // La demo (el caso destructivo) y siete ejemplos (con «Tamaños», R.27).
       const previews = examples(fixture);
-      expect(previews.length).toBe(7);
+      expect(previews.length).toBe(8);
+      expect(previews.some(({ code }) => code.includes('size,'))).toBe(true);
       expect(previews[0].code).toContain("tone: 'danger'");
       for (const { example, code } of previews) {
         expect(example?.querySelector('button')).not.toBeNull();

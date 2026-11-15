@@ -2,6 +2,7 @@ import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { BadgeCustomClassExample } from './examples/badge-custom-class.example';
 import { BadgeDemoExample } from './examples/badge-demo.example';
 import { BadgeMatrixExample } from './examples/badge-matrix.example';
+import { BadgeSizesExample } from './examples/badge-sizes.example';
 import { BadgeVariantsExample } from './examples/badge-variants.example';
 import { BadgeWithIconExample } from './examples/badge-with-icon.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
@@ -12,6 +13,8 @@ import customClassSource from './examples/badge-custom-class.example' with { loa
 import demoSource from './examples/badge-demo.example' with { loader: 'text' };
 // @ts-expect-error
 import matrixSource from './examples/badge-matrix.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/badge-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import variantsSource from './examples/badge-variants.example' with { loader: 'text' };
 // @ts-expect-error
@@ -43,6 +46,16 @@ export const BADGE_PAGE: DocPage = {
     note: 'Es una directiva sobre el `<span>` nativo: `span[mimiBadge]`.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`sm`, `md` y `lg` cambian el alto (18, 22 y 26 px) y el relleno; la letra queda igual.',
+        component: BadgeSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     variants: [
       {
         id: 'variants',

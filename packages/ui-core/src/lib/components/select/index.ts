@@ -1,4 +1,5 @@
-// Solo la API pública: MimiSelectList y MimiSelectOutlet son internos (se quedan en './select').
+// Solo la API pública: MimiSelectOutlet es interno (se queda en './select'). La lista es la de
+// option-list (MimiOptionList), desde la M.9.
 export {
   type MimiOption,
   type MimiOptionGroup,

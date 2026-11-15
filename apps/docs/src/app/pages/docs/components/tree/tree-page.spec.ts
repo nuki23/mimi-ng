@@ -27,8 +27,10 @@ describe('TreePage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      // La demo y tres ejemplos; los formularios van en las pestañas, sin ejemplos vivos.
-      expect(previews.length).toBe(4);
+      // La demo y cuatro ejemplos; los formularios van en las pestañas, sin ejemplos vivos.
+      expect(previews.length).toBe(5);
+      // Tamaños, el primero después de la demo.
+      expect(previews[1].code).toContain('size="lg"');
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-tree [role="tree"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/tree';");
@@ -41,7 +43,7 @@ describe('TreePage', () => {
         ).toBeTruthy();
       }
       // Estados: un nodo deshabilitado y un árbol entero deshabilitado.
-      const states = previews[1].example!;
+      const states = previews[2].example!;
       expect(
         states.querySelector('[role="treeitem"][data-id="abrigos"][aria-disabled]'),
       ).not.toBeNull();

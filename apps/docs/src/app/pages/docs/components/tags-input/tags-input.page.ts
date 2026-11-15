@@ -2,6 +2,7 @@ import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { TagsInputBasicExample } from './examples/tags-input-basic.example';
 import { TagsInputCustomExample } from './examples/tags-input-custom.example';
 import { TagsInputSeparatorsExample } from './examples/tags-input-separators.example';
+import { TagsInputSizesExample } from './examples/tags-input-sizes.example';
 import { TagsInputStatesExample } from './examples/tags-input-states.example';
 import { TagsInputValidateExample } from './examples/tags-input-validate.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
@@ -12,6 +13,8 @@ import basicSource from './examples/tags-input-basic.example' with { loader: 'te
 import customSource from './examples/tags-input-custom.example' with { loader: 'text' };
 // @ts-expect-error
 import separatorsSource from './examples/tags-input-separators.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/tags-input-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/tags-input-states.example' with { loader: 'text' };
 // @ts-expect-error
@@ -45,6 +48,16 @@ export const TAGS_INPUT_PAGE: DocPage = {
     note: 'Las etiquetas son los chips del [Combobox](/docs/components/combobox) múltiple. Lo escrito que no se agregó no es parte del valor.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          '`sm`, `md` y `lg` cambian el alto mínimo de la caja (32, 40 y 48 px); el texto queda en 14 px.',
+        component: TagsInputSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',

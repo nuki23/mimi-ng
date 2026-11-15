@@ -1,8 +1,9 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
+import { FormFieldAnatomyExample } from './examples/form-field-anatomy.example';
 import { FormFieldBasicExample } from './examples/form-field-basic.example';
+import { FormFieldControlsExample } from './examples/form-field-controls.example';
 import { FormFieldCustomClassExample } from './examples/form-field-custom-class.example';
 import { FormFieldCustomErrorExample } from './examples/form-field-custom-error.example';
-import { FormFieldMessagesDefaultExample } from './examples/form-field-messages-default.example';
 import { FormFieldMessagesProviderExample } from './examples/form-field-messages-provider.example';
 import { FormFieldOwnLabelExample } from './examples/form-field-own-label.example';
 import { FormFieldRegisterExample } from './examples/form-field-register.example';
@@ -10,7 +11,11 @@ import { FormFieldSignalFormsExample } from './examples/form-field-signal-forms.
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
+import anatomySource from './examples/form-field-anatomy.example' with { loader: 'text' };
+// @ts-expect-error
 import basicSource from './examples/form-field-basic.example' with { loader: 'text' };
+// @ts-expect-error
+import controlsSource from './examples/form-field-controls.example' with { loader: 'text' };
 // @ts-expect-error
 import customClassSource from './examples/form-field-custom-class.example' with { loader: 'text' };
 // @ts-expect-error
@@ -76,6 +81,14 @@ export const FORM_FIELD_PAGE: DocPage = {
   examples: {
     advanced: [
       {
+        id: 'anatomy',
+        title: 'Las piezas',
+        sentence:
+          'Etiqueta, descripción, control, ayuda y error, cada uno con su borde de color. Todas son opcionales salvo el control.',
+        component: FormFieldAnatomyExample,
+        source: anatomySource as string,
+      },
+      {
         id: 'own-label',
         title: 'Etiqueta propia',
         sentence:
@@ -90,6 +103,14 @@ export const FORM_FIELD_PAGE: DocPage = {
           'Card, FormField, Input, Textarea, Checkbox y Button juntos. Pulsa «Crear cuenta» para ver todos los errores.',
         component: FormFieldRegisterExample,
         source: registerSource as string,
+      },
+      {
+        id: 'controls',
+        title: 'Con otros controles',
+        sentence:
+          'Select, Combobox, Date Picker, Tags Input, Switch y Checkbox dentro de FormField. Pulsa «Guardar» para ver sus errores.',
+        component: FormFieldControlsExample,
+        source: controlsSource as string,
       },
       {
         id: 'level-form-error',
@@ -111,16 +132,19 @@ export const FORM_FIELD_PAGE: DocPage = {
         id: 'level-provider',
         title: 'Mensajes para toda la app',
         sentence:
-          'Parte de `MIMI_ERROR_MESSAGES_ES`, cambia los que quieras y agrega los de tus validadores. Borra el campo para ver el `required` cambiado.',
+          'Parte de `MIMI_ERROR_MESSAGES_ES` y agrega los de tus validadores; borra «Usuario» para ver tu `required`. Al lado, sin configurar: en inglés.',
         component: FormFieldMessagesProviderExample,
         source: messagesProviderSource as string,
-      },
-      {
-        id: 'level-default',
-        title: 'Los mensajes predeterminados',
-        sentence: 'Sin configurar nada, los mensajes están en inglés.',
-        component: FormFieldMessagesDefaultExample,
-        source: messagesDefaultSource as string,
+        files: [
+          {
+            name: 'form-field-messages-provider.example.ts',
+            code: messagesProviderSource as string,
+          },
+          {
+            name: 'form-field-messages-default.example.ts',
+            code: messagesDefaultSource as string,
+          },
+        ],
       },
     ],
     custom: [

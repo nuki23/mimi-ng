@@ -412,6 +412,15 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
     expect(panel()).toBeNull();
   });
 
+  it('la lista es la de option-list (M.9), con la altura y el máximo de Select', async () => {
+    const { open, panel, options } = await setup();
+    await open('plain');
+    expect(panel()!.querySelector('mimi-option-list')).not.toBeNull();
+    expect(panel()!.querySelector('mimi-select-list')).toBeNull();
+    expect(panel()!.querySelector('[role="listbox"]')!.classList).toContain('max-h-[280px]');
+    expect(options()[0].classList).toContain('h-[var(--mimi-select-option-height,34px)]');
+  });
+
   it('cargando: spinner en el disparador y, en el panel, aria-busy sin opciones', async () => {
     const { fixture, h, host, open, panel, options } = await setup();
     h.loading.set(true);
@@ -419,8 +428,10 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
     expect(host('plain').querySelector('[data-slot="spinner"]')).not.toBeNull();
     await open('plain');
     expect(options().length).toBe(0);
-    const busy = panel()!.querySelector('[aria-busy="true"]')!;
-    expect(busy.textContent).toContain('Cargando…');
+    // M.9: la lista de option-list lleva aria-busy; «Cargando…» se ve y se anuncia (status).
+    expect(panel()!.querySelector('[role="listbox"]')!.getAttribute('aria-busy')).toBe('true');
+    expect(panel()!.querySelector('[data-slot="loading"]')!.textContent).toContain('Cargando…');
+    expect(panel()!.querySelector('[role="status"]')!.textContent).toContain('Cargando…');
     h.loading.set(false);
     await settle(fixture);
     expect(panel()!.querySelector('[aria-busy="true"]')).toBeNull();

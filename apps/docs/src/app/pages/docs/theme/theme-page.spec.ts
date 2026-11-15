@@ -236,6 +236,13 @@ describe('ThemePage', () => {
     expect(el.querySelector('[data-slot="contrast-warning"]')).toBeNull();
   });
 
+  it('avisa del principal como color de texto (R.31), con o sin poco contraste', async () => {
+    const { el } = await setup();
+    const note = el.querySelector('[data-slot="primary-text-note"]');
+    expect(note?.textContent).toContain('color de texto');
+    expect(note?.textContent).toContain('4,5:1');
+  });
+
   it('la vista previa: oscuro solo en su contenedor, sin tocar el modo del sitio', async () => {
     const { fixture, el, doc } = await setup();
     const preview = el.querySelector<HTMLElement>('[data-slot="theme-preview"]')!;

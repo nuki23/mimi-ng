@@ -1,6 +1,7 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { ColorPickerInputExample } from './examples/color-picker-input.example';
 import { ColorPickerPanelExample } from './examples/color-picker-panel.example';
+import { ColorPickerSizesExample } from './examples/color-picker-sizes.example';
 import { ColorPickerStatesExample } from './examples/color-picker-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -8,6 +9,8 @@ import { ColorPickerStatesExample } from './examples/color-picker-states.example
 import inputSource from './examples/color-picker-input.example' with { loader: 'text' };
 // @ts-expect-error
 import panelSource from './examples/color-picker-panel.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/color-picker-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/color-picker-states.example' with { loader: 'text' };
 
@@ -39,6 +42,16 @@ export const COLOR_PICKER_PAGE: DocPage = {
     note: 'El valor es siempre hex de 6 dígitos en minúsculas (`#4f46e5`), aunque se escriba en OKLCH.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          'El disparador toma el tamaño de su contenedor `mimiSize`: alto de 32, 40 o 48 px, como Input y Button.',
+        component: ColorPickerSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',
@@ -135,6 +148,13 @@ export const COLOR_PICKER_PAGE: DocPage = {
         default: '—',
         description:
           'Los del disparador: `id` para un `<label for>` externo, o el nombre accesible.',
+      },
+      {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        default: "'md' (o el del contenedor con mimiSize)",
+        description:
+          'Solo `mimi-color-picker`. El disparador `mimi-color-input` toma el de su contenedor `mimiSize`.',
       },
       {
         name: 'class, panelClass',

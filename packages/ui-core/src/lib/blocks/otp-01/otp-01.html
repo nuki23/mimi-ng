@@ -93,7 +93,7 @@
   <button
     mimiBtn
     type="button"
-    class="h-[calc(var(--mimi-control-height,2.5rem)+4px)] w-full text-[15px] font-semibold"
+    class="h-[calc(var(--mimi-btn-h,var(--mimi-control-height,2.5rem))+4px)] w-full text-[15px] font-semibold"
     [attr.aria-disabled]="loading() ? 'true' : null"
     [attr.aria-busy]="loading() ? 'true' : null"
     (click)="onVerify()"
