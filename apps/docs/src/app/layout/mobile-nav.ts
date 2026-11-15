@@ -12,10 +12,10 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router } from '@angular/router';
-import { MimiButton } from '@/components/ui/button';
 import { filter } from 'rxjs';
 import type { DocsNavSection } from './docs-nav';
 import { DocsSidebar } from './docs-sidebar';
+import { SiteIconButton } from './icon-button';
 import { MobileNavService } from './mobile-nav.service';
 
 /**
@@ -28,7 +28,7 @@ import { MobileNavService } from './mobile-nav.service';
  */
 @Component({
   selector: 'app-mobile-nav',
-  imports: [DocsSidebar, MimiButton],
+  imports: [DocsSidebar, SiteIconButton],
   templateUrl: './mobile-nav.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
