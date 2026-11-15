@@ -152,6 +152,17 @@ Ningún presupuesto se acerca ni se sube (`main` sigue a 2,12 kB de su aviso: la
 
 **Servidores y temporales:** los tres `ng serve` de esta rama (4280), cerrados (`netstat`: libre). Subagentes: 7, todos terminados. `playwright-core` y los scripts, en el directorio temporal; se borran al final.
 
+## 6. Decisiones del usuario tras la revisión (14/11/2026)
+
+### 6.1 Capturas fuera del repo
+
+- **Borrado** en un commit todo `docs/auto/capturas/`: **286 archivos, 70 428 510 bytes (67,2 MB)**: las de las ramas anteriores (2026-11-12, -13 y -14, con `paginas/` y `tanda1/`) y las de esta rama (`2026-11-14-b/`, 48 MB). Siguen en el historial de git de las ramas; con «Squash and merge» de esta rama (y `auto/docs-paginas-2026-11-14` cerrada sin fusionar, como dijo el usuario), no llegan a `main`.
+- `.gitignore`: `docs/auto/capturas/`.
+- `CLAUDE.md`, modo autónomo, **A10**: las capturas van a `C:\t\capturas\<AAAA-MM-DD>\` y el informe solo cita la ruta.
+- `.claude/commands/cerrar-grupo.md`: punto «Capturas fuera del repo» en lo que comprueba el revisor.
+- Los informes anteriores citan rutas `docs/auto/capturas/…` que ya no existen: son historial y no se editan.
+- **Desde aquí**, las capturas de esta rama van a `C:\t\capturas\2026-11-14\`.
+
 ## Alertas para el revisor
 
 1. **Base de la rama:** sale de `auto/docs-paginas-2026-11-14`, no de `main` (que no tenía su fusión). Fusiona primero aquella.

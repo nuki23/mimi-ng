@@ -33,6 +33,7 @@ Para cada punto, la evidencia: el comando y su resultado, o el archivo y la lín
 - **Controles nuevos en `/docs/states`:** cada control de formulario del grupo tiene su fila en la cuadrícula de Estados (`ROWS` en `apps/docs/src/app/pages/docs/states/states-page.ts`, que falla en su prueba si falta) y usa las piezas de `utils/field-styles.ts`. Revísalo en la página, en claro y oscuro: hover, foco, clic, deshabilitado, solo lectura y error iguales a los demás.
 - `pnpm build`, `pnpm test`, `pnpm format:check` en verde.
 - Búsqueda de correos, tokens y rutas personales en lo que se va a publicar (`CLAUDE.md`, «Forma de trabajar», «Privacidad»).
+- **Capturas fuera del repo** (`CLAUDE.md`, A10): `git ls-files docs/auto/capturas` vacío y ninguna imagen de comprobación nueva en el grupo (`git diff --stat <base>..HEAD -- '*.png' '*.jpg'` sin capturas); el informe cita la ruta `C:\t\capturas\<fecha>\`.
 
 ## 3. Entregar
 
