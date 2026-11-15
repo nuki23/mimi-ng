@@ -84,7 +84,11 @@ describe('readonly en los controles que faltaban (R.12)', () => {
   it('Color Input: el panel no se abre', async () => {
     const { q } = await setup();
     const button = q('colorinput').querySelector<HTMLButtonElement>('button')!;
-    expect(button.getAttribute('aria-readonly')).toBe('true');
+    // Un `button` no admite aria-readonly: aria-disabled (sigue enfocable) y data-readonly.
+    expect(button.hasAttribute('aria-readonly')).toBe(false);
+    expect(button.getAttribute('aria-disabled')).toBe('true');
+    expect(button.hasAttribute('data-readonly')).toBe(true);
+    expect(button.disabled).toBe(false);
     button.click();
     await new Promise((r) => setTimeout(r, 30));
     expect(button.getAttribute('aria-expanded')).not.toBe('true');

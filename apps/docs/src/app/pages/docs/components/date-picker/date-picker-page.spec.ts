@@ -53,7 +53,7 @@ describe('DatePickerPage', () => {
       // Estados: deshabilitado, solo lectura y con error.
       const states = el.querySelectorAll('app-date-picker-states-example mimi-date-picker');
       expect(states[0].hasAttribute('data-disabled')).toBe(true);
-      expect(states[1].querySelector('button')!.getAttribute('aria-readonly')).toBe('true');
+      expect(states[1].querySelector('button')!.getAttribute('aria-disabled')).toBe('true');
       expect(states[2].hasAttribute('data-invalid')).toBe(true);
       // El calendario suelto, en español.
       expect(el.querySelector('mimi-calendar [data-slot="go-today"]')!.textContent?.trim()).toBe(

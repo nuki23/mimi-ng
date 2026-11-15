@@ -95,7 +95,7 @@ export const DATE_PICKER_PAGE: DocPage = {
     more: [
       'El botón del título cambia la vista: días, meses y años.',
       'En un documento de derecha a izquierda, ← y → se invierten.',
-      'Con `readonly`, el botón se enfoca y lleva `aria-readonly`, pero no abre el calendario.',
+      'Con `readonly`, el botón se enfoca y lleva `aria-disabled` (un botón no admite `aria-readonly`), pero no abre el calendario.',
     ],
   },
   api: {

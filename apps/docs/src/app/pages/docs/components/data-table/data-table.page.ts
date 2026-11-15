@@ -147,6 +147,9 @@ export const DATA_TABLE_PAGE: DocPage = {
       'Las filas elegidas, el rango al buscar o filtrar y «Cargando…» se anuncian en una región de estado; al cargar, la tabla lleva `aria-busy`.',
       'Dale nombre con `aria-label`; los botones de solo ícono de tus plantillas también lo necesitan.',
     ],
+    more: [
+      'La fila elegida lleva `data-selected` (para tu CSS), no `aria-selected`: la tabla no es un `grid` y el estado lo anuncia su casilla, que está marcada.',
+    ],
   },
   api: {
     inputs: [

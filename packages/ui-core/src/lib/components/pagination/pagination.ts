@@ -243,7 +243,10 @@ export class MimiPagination {
   readonly total = input.required<number>();
   /** Tamaños para elegir. Vacío (por defecto), sin selector. */
   readonly pageSizeOptions = input<readonly number[]>([]);
-  /** `sm` (por defecto, controles de 32px) o `md` (40px). */
+  /**
+   * Tamaño, con la escala del tema: `sm` (por defecto), botones de 32px y 40px de alto en total;
+   * `md`, 40 y 50px; `lg`, 48 y 60px (el total suma el relleno y el borde de la píldora).
+   */
   readonly size = input<MimiPaginationSize | 'default'>('sm');
   /** El tamaño de verdad (`default` = `md`, con aviso en desarrollo). */
   protected readonly shownSize = computed<MimiPaginationSize>(

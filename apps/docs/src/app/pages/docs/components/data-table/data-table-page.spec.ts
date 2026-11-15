@@ -10,6 +10,16 @@ import { DATA_TABLE_PAGE } from './data-table.page';
 describe('DataTablePage', () => {
   it('cumple la plantilla', () => expect(validateDocPage(DATA_TABLE_PAGE)).toEqual([]));
 
+  it('la fila elegida se documenta con data-selected, no con aria-selected (como el código)', () => {
+    const texts = [
+      ...DATA_TABLE_PAGE.accessibility.points,
+      ...(DATA_TABLE_PAGE.accessibility.more ?? []),
+    ].join(' ');
+    expect(texts).toContain('`data-selected`');
+    expect(texts).not.toMatch(/lleva `aria-selected`/);
+    expect(DATA_TABLE_PAGE.api.dataAttributes).toContain('data-selected (en la fila)');
+  });
+
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
     async () => {

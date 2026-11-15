@@ -622,7 +622,8 @@ let nextInputId = 0;
         [id]="controlId()"
         [class]="classes()"
         [disabled]="disabled()"
-        [attr.aria-readonly]="readonly() || null"
+        [attr.aria-disabled]="readonly() || null"
+        [attr.data-readonly]="readonly() ? '' : null"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
         [attr.aria-describedby]="valueId"
@@ -679,7 +680,10 @@ export class MimiColorInput implements FormValueControl<string>, MimiFieldContro
   readonly format = input<MimiColorFormat>('hex');
   readonly placeholder = input('');
   readonly disabled = input(false, { transform: booleanAttribute });
-  /** Solo lectura (R.12): se ve el color y el campo se enfoca, pero el panel no se abre. */
+  /**
+   * Solo lectura (R.12): se ve el color y el campo se enfoca, pero el panel no se abre. El
+   * disparador lleva `aria-disabled` y `data-readonly` (un `button` no admite `aria-readonly`).
+   */
   readonly readonly = input(false, { transform: booleanAttribute });
   readonly invalid = input(false, { transform: booleanAttribute });
   readonly touched = input(false, { transform: booleanAttribute });

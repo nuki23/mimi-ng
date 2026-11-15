@@ -52,7 +52,7 @@ describe('DateRangePage', () => {
       // Estados: deshabilitado, solo lectura y con error.
       const states = el.querySelectorAll('app-date-range-states-example mimi-date-range');
       expect(states[0].hasAttribute('data-disabled')).toBe(true);
-      expect(states[1].querySelector('button')!.getAttribute('aria-readonly')).toBe('true');
+      expect(states[1].querySelector('button')!.getAttribute('aria-disabled')).toBe('true');
       expect(states[2].hasAttribute('data-invalid')).toBe(true);
       expect(el.querySelector('h1')!.textContent!.trim()).toBe('Date Range');
       expect(el.querySelector('app-forms-tabs')).not.toBeNull();

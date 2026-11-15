@@ -169,6 +169,13 @@ Ningún presupuesto se acerca ni se sube (`main` sigue a 2,12 kB de su aviso: la
 - Usada en **Tags Input** y **Combobox** (`chip`, que no tiene página propia) y en **File Upload** (`progress`, las barras de cada archivo).
 - Pruebas: `doc-page.spec.ts` (lista válida, la del componente no primero, repetida), Tags Input (dos tablas y `--mimi-chip-*` en la página) y las de Combobox, File Upload y `doc-pages`: **257 de 257**.
 
+### 6.3 Arreglos que señalaron los subagentes
+
+- **Data Table:** la página dice `data-selected` en la fila elegida (en Atributos y, ahora también, en «Más detalles de accesibilidad»: «no `aria-selected`: la tabla no es un `grid` y el estado lo anuncia su casilla»). Prueba nueva en `data-table-page.spec.ts`.
+- **Pagination:** el comentario de `size` en `pagination.ts` decía «`sm` 32px, `md` 40px» (solo los botones y sin `lg`); el ejemplo de tamaños, «40, 50 y 60px» (el total). Los dos eran ciertos a medias. Ahora los dos dicen las dos cosas: **sm, botones de 32 y 40px en total; md, 40 y 50; lg, 48 y 60**. Medido en Chrome: `[{sm, total 40, botón 32}, {md, 50, 40}, {lg, 60, 48}]`.
+- **Date Picker (y los otros dos disparadores iguales: Date Range y el de Color Picker):** ponían `aria-readonly` en un `<button>`, que no lo admite. Ahora, como File Upload (spec 4): **`aria-disabled="true"`** (el botón sigue enfocable, el lector lo anuncia como no disponible y su descripción da el valor) y **`data-readonly`** para el aspecto; `fieldTriggerStyles` (`utils/field-styles.ts`) lee `data-[readonly]` en vez de `aria-readonly`. Se arreglaron los tres porque comparten el disparador y el estilo; el área y el tono de Color Picker (rol `slider`) siguen con `aria-readonly`, que sí lo admiten. Pruebas: `readonly-controls.spec.ts` y `readonly-controls-2.spec.ts` (sin `aria-readonly`, con `aria-disabled` y `data-readonly`, no `disabled`, la clase del fondo de solo lectura), `field-depth.spec.ts`, `date-picker.spec.ts` y las páginas de Date Picker y Date Range. **Comprobado en Chrome:** sin `aria-readonly`; `aria-disabled="true"`; se enfoca; el fondo cambia al de solo lectura y el cursor es `default`; ni el clic ni Enter abren el panel; el árbol de accesibilidad da `button «Solo lectura»`, descripción «30 sept 2026», `disabled`. Cambia archivos que copia la CLI (`field-styles.ts`, `date-picker.ts`, `date-range.ts`, `color-picker.ts`): quien los tenga sin modificar lo recibe con `ng g mimi`; la API no cambia.
+- **Los demás avisos de los subagentes, sin arreglar** (siguen en «Alertas», punto 5): Sortable List y los tokens de la escala con `class` sin `data-size`; Password y el método que lee Reactive Forms en la plantilla; Toast y el nombre de la región de avisos solo en la raíz; el aviso de Tabs «`<mimi-tab label="">` no tiene value» desde `code/forms-tabs.ts`; los comentarios internos con «decidido por defecto» (Input OTP, Tags Input) y «@angular/aria» (Progress); las 9 filas de piezas de menú repetidas en Dropdown Menu y Context Menu; la subida simulada de File Upload, que ahora reintenta bien.
+
 ## Alertas para el revisor
 
 1. **Base de la rama:** sale de `auto/docs-paginas-2026-11-14`, no de `main` (que no tenía su fusión). Fusiona primero aquella.
@@ -176,10 +183,10 @@ Ningún presupuesto se acerca ni se sube (`main` sigue a 2,12 kB de su aviso: la
 3. **El texto total sube un 6 %** (arriba): vale la pena mirar Data Table, Date Range, Slider e Input Mask, las que más crecen.
 4. **PD-9** (varias tablas de Variables CSS; Tags Input perdió la del chip), en `docs/plan/decisiones.md`.
 5. **Hechos del código que vieron los subagentes y no se tocaron** (ui-core no se cambió en esta rama):
-   - Data Table: la página vieja decía `aria-selected` en la fila elegida, pero el código solo pone `data-selected` (se quitó del texto).
+   - ~~Data Table: la página vieja decía `aria-selected` en la fila elegida, pero el código solo pone `data-selected` (se quitó del texto).~~ Arreglado (6.3).
    - Sortable List: cambiar `--mimi-sortable-item-height` con `class` en un elemento sin `data-size` no surte efecto (la escala se resuelve en `:root` o `[data-size]`); lo mismo puede pasar con otros tokens de la escala.
-   - Pagination: el comentario de `size` en `pagination.ts` (sm 32, md 40 px) y el ejemplo de tamaños (40, 50, 60 px) no coinciden.
-   - Date Picker: `aria-readonly` en un `<button>` (el rol no lo admite); File Upload lo evita con `aria-disabled`.
+   - ~~Pagination: el comentario de `size` en `pagination.ts` (sm 32, md 40 px) y el ejemplo de tamaños (40, 50, 60 px) no coinciden.~~ Arreglado (6.3).
+   - ~~Date Picker: `aria-readonly` en un `<button>` (el rol no lo admite); File Upload lo evita con `aria-disabled`.~~ Arreglado, también en Date Range y Color Picker (6.3).
    - Password: `password-states.example.ts` llama a un método que lee el estado de Reactive Forms en la plantilla (la regla 7 de `CLAUDE.md` prefiere `toSignal(control.events)`).
    - Toast: la página ya no dice que el nombre de la región de avisos solo se lee en la raíz (`app.config.ts`).
    - Forms tabs: en la prueba de Toggle Group sale en la consola el aviso de Tabs «`<mimi-tab label="">` no tiene value…», desde `code/forms-tabs.ts` (las pestañas reciben sus valores después del primer render); la prueba pasa.
