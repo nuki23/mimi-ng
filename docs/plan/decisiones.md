@@ -15,7 +15,9 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
 
-Ninguna abierta.
+- **PD-9 (usuario, 14/11/2026): varias tablas de «Variables CSS» en una página.** `DocPage.tokens` admite una sola tabla de `component-tokens.ts`. Al migrar, **Tags Input** perdió la tabla del chip (`chip`), que la página vieja mostraba además de la suya; **File Upload** usa también las de Progress (no se mostraban antes). Aplicado mientras tanto: solo la tabla del componente. No es una excepción a un límite, sino un hueco de la plantilla.
+  - **(a) Recomendado:** `tokens` acepta también una lista (`['tagsInput', 'chip']`): la primera es la del componente y las demás se pintan debajo con su nombre («Variables CSS del chip»). Cambia `doc-page.types.ts`, el componente y la prueba; Tags Input vuelve a mostrar la del chip.
+  - (b) Dejarlo así: cada página muestra solo su tabla (la del chip está en la página de Combobox… tampoco: la plantilla solo muestra `combobox`); las variables del chip quedarían sin página.
 
 **PD-8 la decidió el usuario el 14/11/2026** (opción (a)): una sección opcional **«Servicio»** en la API (`api.service`, `id="service"`, `Miembro | Tipo | Descripción`), entre Piezas y Textos; la usa Dialog y la usarán Toast, Confirm y Command.
 
