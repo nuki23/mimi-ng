@@ -50,7 +50,7 @@ const groupVariants = cva(
     'bg-[color:var(--mimi-toggle-group-bg,var(--mimi-muted))] mimi-transition',
     // Deshabilitado: el grupo entero (el diseño no tiene ítems deshabilitados de a uno).
     'data-disabled:cursor-not-allowed data-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
-    // Error del formulario (sin diseño, plan D6): un filo de 1px como el borde de Input (el grupo
+    // Error del formulario: un filo de 1px como el borde de Input (el grupo
     // no tiene borde; Switch hace lo mismo).
     'data-invalid:ring-1 data-invalid:ring-[color:var(--mimi-input-error,var(--mimi-destructive))]',
   ],

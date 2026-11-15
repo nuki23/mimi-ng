@@ -30,7 +30,7 @@ export interface BlockApiRow {
 /**
  * Plantilla de la página de un Block (B.1). La página del sitio no tiene diseño propio: se arma
  * con lo que ya tiene el sitio (InstallCommand, la vista previa en iframe, CodeBlock y la tabla
- * de API; anotado en D6). Cada Block tiene su página, que importa sus archivos como texto y
+ * de API). Cada Block tiene su página, que importa sus archivos como texto y
  * proyecta lo propio (notas de uso, accesibilidad) en el hueco de «Uso».
  */
 @Component({

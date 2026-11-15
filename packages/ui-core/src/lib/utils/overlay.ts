@@ -11,7 +11,7 @@ import { DestroyRef, Directive, ElementRef, inject, output } from '@angular/core
 export type MimiOverlaySide = 'top' | 'right' | 'bottom' | 'left';
 export type MimiOverlayAlign = 'start' | 'center' | 'end';
 
-/** Distancia mínima de un overlay al borde de la pantalla (no está en el diseño: spec 13, plan D6). */
+/** Distancia mínima de un overlay al borde de la pantalla (spec 13). */
 export const MIMI_VIEWPORT_MARGIN = 8;
 
 const OPPOSITE: Record<MimiOverlaySide, MimiOverlaySide> = {

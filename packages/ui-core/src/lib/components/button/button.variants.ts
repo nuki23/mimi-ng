@@ -24,7 +24,7 @@ export type ButtonVariant = ButtonStyleVariant | ButtonVariantShortcut;
  * Colores de cada tono en cada variante: una fila por tono, una entrada por variante. Todas las
  * clases van completas y literales para que Tailwind las detecte. Diseño: docs/design/
  * «Mimi F2 Tokens y Tonos» (solid, soft y outline con tono). Las celdas de secondary, ghost y
- * link con tono son provisionales, sin diseño (spec 13).
+ * link con tono no estaban en el diseño: son las de Mimi (spec 13).
  */
 const TONE_CLASSES = {
   primary: {
