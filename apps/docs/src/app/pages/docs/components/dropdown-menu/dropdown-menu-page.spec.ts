@@ -2,9 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
+import { validateDocPage } from '../../../../doc-page/doc-page.rules';
 import { DropdownMenuPage } from './dropdown-menu-page';
+import { DROPDOWN_MENU_PAGE } from './dropdown-menu.page';
 
+// El orden de las secciones y los límites de la plantilla los prueba doc-page/doc-pages.spec.ts.
 describe('DropdownMenuPage', () => {
+  it('cumple la plantilla', () => expect(validateDocPage(DROPDOWN_MENU_PAGE)).toEqual([]));
+
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
     async () => {
@@ -22,6 +27,7 @@ describe('DropdownMenuPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
+      // La demo (el ejemplo básico) y cuatro ejemplos.
       expect(previews.length).toBe(5);
       for (const { example, code } of previews) {
         expect(
@@ -30,12 +36,9 @@ describe('DropdownMenuPage', () => {
         expect(code).toContain("from '@/components/ui/dropdown-menu';");
         expect(code).toMatch(/export class DropdownMenu\w+Example/);
       }
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      expect(el.querySelector('h1')!.textContent!.trim()).toBe('Dropdown Menu');
+      // Las piezas de menú compartidas van en «Piezas».
+      expect(el.querySelector('#parts')).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );
