@@ -84,7 +84,7 @@ export const BUTTON_PAGE: DocPage = {
         id: 'states',
         title: 'Estados',
         sentence:
-          'Deshabilitado y cargando. Pulsa «Guardar»: muestra un spinner y queda deshabilitado, sin cambiar de ancho.',
+          'Deshabilitado y cargando. Pulsa «Guardar»: muestra un spinner y no responde, pero conserva el foco y el ancho.',
         component: ButtonStatesExample,
         source: statesSource as string,
       },
@@ -122,12 +122,12 @@ export const BUTTON_PAGE: DocPage = {
     points: [
       'Es el elemento nativo: Enter y Espacio activan un `<button>`, Enter sigue un `<a>` y el foco se ve con un anillo.',
       '`disabled` usa el atributo nativo en `<button>`; en `<a>`, pone `aria-disabled`, lo saca del orden de tabulación y cancela el clic.',
-      'Con `loading` queda deshabilitado y lleva `aria-busy` mientras carga.',
+      'Con `loading`, un `<button>` lleva `aria-busy` y `aria-disabled`: sigue enfocable, pero no responde al clic, a Enter ni a Espacio, ni envía el formulario.',
       'Un botón `size="icon"` no tiene texto: dale un `aria-label`.',
     ],
     more: [
       'Para un botón deshabilitado que siga enfocable (por ejemplo, para no perder el foco cuando se deshabilita estando enfocado), usa `[attr.aria-disabled]` en vez de `disabled`: se ve deshabilitado y no recibe clics del puntero, pero Enter y Espacio siguen llegando a tu `(click)`, así que revisa el estado ahí.',
-      'Button conserva tu `aria-disabled`, tu `tabindex` y tu `aria-busy`: solo los cambia mientras los necesita (un enlace deshabilitado o cargando).',
+      'Button conserva tu `aria-disabled`, tu `tabindex` y tu `aria-busy`: solo los cambia mientras los necesita (un enlace deshabilitado o un botón cargando).',
     ],
   },
   api: {
@@ -162,7 +162,8 @@ export const BUTTON_PAGE: DocPage = {
         name: 'loading',
         type: 'boolean',
         default: 'false',
-        description: 'Muestra el spinner, deshabilita y agrega `aria-busy`. No cambia el ancho.',
+        description:
+          'Muestra el spinner y bloquea clics y envíos sin quitar el foco (`aria-disabled`, `aria-busy`). No cambia el ancho.',
       },
       {
         name: 'class',

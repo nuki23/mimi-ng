@@ -85,6 +85,26 @@ class UserAttrsHost {
   readonly linkLoading = signal(false);
 }
 
+/** Un formulario cuyo envío pone el botón en carga (R.33: no se envía dos veces). */
+@Component({
+  imports: [MimiButton],
+  template: `
+    <form (submit)="onSubmit($event)">
+      <input name="q" />
+      <button type="submit" mimiBtn [loading]="saving()">Guardar</button>
+    </form>
+  `,
+})
+class FormHost {
+  readonly saving = signal(false);
+  readonly submits = signal(0);
+  onSubmit(event: Event) {
+    event.preventDefault();
+    this.submits.update((n) => n + 1);
+    this.saving.set(true);
+  }
+}
+
 describe('MimiButton', () => {
   async function setup() {
     const fixture = TestBed.createComponent(Host);
@@ -344,22 +364,77 @@ describe('MimiButton', () => {
     expect(host.linkClicks()).toBe(0);
   });
 
-  it('cargando: deshabilitado, aria-busy y spinner', async () => {
+  it('cargando: aria-disabled (no disabled nativo), aria-busy, spinner y sin clics (R.33)', async () => {
     const { host, button, link, update } = await setup();
     await update(() => host.loading.set(true));
 
-    expect(button.hasAttribute('disabled')).toBe(true);
+    expect(button.hasAttribute('disabled')).toBe(false);
+    expect(button.disabled).toBe(false);
+    expect(button.getAttribute('aria-disabled')).toBe('true');
     expect(button.getAttribute('aria-busy')).toBe('true');
     expect(button.hasAttribute('data-loading')).toBe(true);
+    expect(button.hasAttribute('data-disabled')).toBe(true);
+    expect(button.hasAttribute('tabindex')).toBe(false);
     // Conserva la sombra: el diseño de "cargando" la mantiene.
     expect(button.classList).not.toContain('shadow-none');
     expect(button.querySelector('[data-slot="spinner"]')?.getAttribute('aria-hidden')).toBe('true');
-    button.click();
+    const event = new MouseEvent('click', { bubbles: true, cancelable: true });
+    button.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(true);
     expect(host.clicks()).toBe(0);
 
+    // <a> cargando, como hasta ahora: fuera del orden de tabulación.
     expect(link.getAttribute('aria-disabled')).toBe('true');
     expect(link.getAttribute('aria-busy')).toBe('true');
     expect(link.getAttribute('tabindex')).toBe('-1');
+
+    // Al terminar se quitan los dos atributos.
+    await update(() => host.loading.set(false));
+    expect(button.hasAttribute('aria-disabled')).toBe(false);
+    expect(button.hasAttribute('aria-busy')).toBe(false);
+    button.click();
+    expect(host.clicks()).toBe(1);
+  });
+
+  it('cargando y deshabilitado a la vez: gana el disabled nativo', async () => {
+    const { host, button, update } = await setup();
+    await update(() => {
+      host.loading.set(true);
+      host.disabled.set(true);
+    });
+    expect(button.hasAttribute('disabled')).toBe(true);
+    expect(button.hasAttribute('aria-disabled')).toBe(false);
+    expect(button.getAttribute('aria-busy')).toBe('true');
+  });
+
+  it('cargando no envía el formulario otra vez (R.33)', async () => {
+    const fixture = TestBed.createComponent(FormHost);
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    const button = el.querySelector('button')!;
+    button.click();
+    expect(fixture.componentInstance.submits()).toBe(1);
+    await fixture.whenStable();
+    // Otro clic, ya cargando: cancelado.
+    const second = new MouseEvent('click', { bubbles: true, cancelable: true });
+    button.dispatchEvent(second);
+    expect(second.defaultPrevented).toBe(true);
+    // El envío implícito (Enter en un campo) llega como un clic en el botón de envío.
+    const implicit = new MouseEvent('click', { bubbles: true, cancelable: true });
+    button.dispatchEvent(implicit);
+    expect(implicit.defaultPrevented).toBe(true);
+    expect(fixture.componentInstance.submits()).toBe(1);
+    expect(button.getAttribute('aria-disabled')).toBe('true');
+  });
+
+  it('el foco se queda en el botón al empezar y al terminar de cargar (R.33)', async () => {
+    const { host, button, update } = await setup();
+    button.focus();
+    expect(document.activeElement).toBe(button);
+    await update(() => host.loading.set(true));
+    expect(document.activeElement).toBe(button);
+    await update(() => host.loading.set(false));
+    expect(document.activeElement).toBe(button);
   });
 
   it('cargando no cambia el ancho: el spinner va encima y el contenido sigue en su lugar', async () => {

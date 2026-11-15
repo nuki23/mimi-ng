@@ -33,10 +33,13 @@ let warnedShortcutWithTone = false;
  *   muestran los valores resueltos.
  * - Los atajos de la 0.1.0 (`default`, `secondary`, `destructive`) siguen funcionando y ganan
  *   sobre `tone` (en modo desarrollo, avisa una vez).
- * - `disabled` o `loading` deshabilitan: `disabled` nativo en <button>; en <a>,
- *   `aria-disabled="true"`, `tabindex="-1"` y el clic se cancela.
+ * - `disabled` deshabilita: `disabled` nativo en <button>; en <a>, `aria-disabled="true"`,
+ *   `tabindex="-1"` y el clic se cancela.
  * - `loading` muestra un spinner centrado encima del contenido, que queda transparente en su
  *   lugar: el botón no cambia de ancho y conserva su nombre accesible. Lleva `aria-busy="true"`.
+ *   En <button> **sigue enfocable** (R.33): `aria-disabled="true"` en vez del `disabled` nativo, y
+ *   Button cancela el clic, Enter, Espacio y el envío implícito del formulario (Enter en un campo).
+ *   Así el foco no cae a <body> al empezar ni al terminar de cargar. En <a>, como `disabled`.
  */
 @Component({
   selector: 'button[mimiBtn], a[mimiBtn]',
@@ -73,7 +76,8 @@ let warnedShortcutWithTone = false;
     '[attr.data-size]': 'ownSize()',
     '[attr.data-loading]': 'loading() ? "" : null',
     '[attr.data-disabled]': 'isDisabled() ? "" : null',
-    '[attr.disabled]': 'isNativeButton && isDisabled() ? "" : null',
+    // Solo `disabled`: cargando, el <button> sigue enfocable (aria-disabled, R.33).
+    '[attr.disabled]': 'isNativeButton && disabled() ? "" : null',
     // aria-disabled, tabindex y aria-busy no van aquí: un binding de host que vale null borra el
     // atributo que haya puesto el usuario. Los pone `ownAttributes` solo cuando hacen falta.
   },
@@ -137,8 +141,9 @@ export class MimiButton {
   );
 
   /**
-   * `aria-disabled="true"` y `tabindex="-1"` en un <a> deshabilitado, y `aria-busy="true"` mientras
-   * carga. Solo se escriben cuando hacen falta; al dejar de hacer falta vuelve el valor que tenía el
+   * `aria-disabled="true"` y `tabindex="-1"` en un <a> deshabilitado o cargando, `aria-disabled` en
+   * un <button> que carga (sin `disabled`: sigue en el orden de tabulación) y `aria-busy="true"`
+   * mientras carga. Solo se escriben cuando hacen falta; al dejar de hacer falta vuelve el valor que tenía el
    * elemento (el del usuario, fijo o enlazado) o se quitan. Así `<button mimiBtn aria-disabled="true">`
    * (un botón deshabilitado que sigue enfocable) conserva su atributo.
    */
@@ -160,16 +165,21 @@ export class MimiButton {
     };
     return effect(() => {
       const disabledLink = !this.isNativeButton && this.isDisabled();
-      apply('aria-disabled', disabledLink ? 'true' : null);
+      const loadingButton = this.isNativeButton && this.loading() && !this.disabled();
+      apply('aria-disabled', disabledLink || loadingButton ? 'true' : null);
       apply('tabindex', disabledLink ? '-1' : null);
       apply('aria-busy', this.loading() ? 'true' : null);
     });
   })();
 
   /**
-   * En <a> deshabilitado cancela el clic (en <button> el navegador ya lo bloquea). Se escucha
-   * en la fase de captura: en el propio elemento corre antes que los (click) del usuario, que
-   * Angular registra primero, y así stopImmediatePropagation también los detiene.
+   * Cancela el clic en <a> deshabilitado y en <button> que carga (con `disabled` nativo, el
+   * navegador ya lo bloquea). Se escucha en la fase de captura: en el propio elemento corre antes
+   * que los (click) del usuario, que Angular registra primero, y así stopImmediatePropagation
+   * también los detiene. Enter y Espacio en el botón, y Enter en un campo del formulario (el envío
+   * implícito), llegan como un `click` en el botón: `preventDefault` cancela también el envío.
+   * `loading` es una entrada: cambia cuando Angular pinta, así que un segundo clic en el mismo
+   * instante que el primero no se bloquea aquí (M.1).
    */
   private readonly blockDisabledClicks = (() => {
     const onClick = (event: Event) => {
