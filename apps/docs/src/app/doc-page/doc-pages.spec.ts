@@ -48,6 +48,8 @@ import { DROPDOWN_MENU_PAGE } from '../pages/docs/components/dropdown-menu/dropd
 import { DropdownMenuPage } from '../pages/docs/components/dropdown-menu/dropdown-menu-page';
 import { CONTEXT_MENU_PAGE } from '../pages/docs/components/context-menu/context-menu.page';
 import { ContextMenuPage } from '../pages/docs/components/context-menu/context-menu-page';
+import { DATA_TABLE_PAGE } from '../pages/docs/components/data-table/data-table.page';
+import { DataTablePage } from '../pages/docs/components/data-table/data-table-page';
 import { allTexts, liveExamples, validateDocPage } from './doc-page.rules';
 import { textLinks } from './doc-text';
 import {
@@ -74,6 +76,7 @@ import {
 
 /** Cada página migrada se registra aquí (la prueba falla si una carpeta con `.page.ts` falta). */
 const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
+  'data-table': { page: DATA_TABLE_PAGE, component: DataTablePage },
   'context-menu': { page: CONTEXT_MENU_PAGE, component: ContextMenuPage },
   'dropdown-menu': { page: DROPDOWN_MENU_PAGE, component: DropdownMenuPage },
   popover: { page: POPOVER_PAGE, component: PopoverPage },
@@ -104,7 +107,7 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
  * haría subir y la prueba falla. (DP.0: 39; piloto: 37; DP.1: 32.) Cuando llegue a 0 se quita,
  * con la lista de pendientes.
  */
-const PENDING_COUNT = 17;
+const PENDING_COUNT = 16;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};
