@@ -170,6 +170,63 @@ Decidido por el usuario (14/11/2026): no habrá rediseño global; el diseño act
 
 **Archivos (paso 7):** `CLAUDE.md`, `.claude/commands/componente.md`, `.claude/commands/cerrar-grupo.md`, `docs/design/LEEME.md`, `docs/design/correcciones-pendientes.md`, `docs/spec.md`, `docs/plan.md`, `docs/plan/plataforma.md`, `docs/plan/mantenimiento.md` (M.26), `docs/plan/decisiones.md` (PD-5 y PD-6), `docs/plan/refinamiento/R-0.7.0.md`, `docs/plan/refinamiento/plan.md`, este informe. Ningún archivo de código.
 
+## 8. Revisión del usuario y decisiones (14/11/2026)
+
+- **Piloto aprobado** (Button y Select), **sin ajustes**: el campo «Ajustes» del encargo llegó sin rellenar («[ninguno / describe aquí…]») y se tomó como «ninguno». DP.0 `[x]`.
+- **PD-5** (opción a): `group2-tokens.spec.ts` compara con `G2_EXPECTED` y `G2_KEYFRAMES`, escritos en la prueba; ya no lee `docs/design/`. 36 de 36.
+- **PD-6** (opción a): el degradado neutro de `login-02` es el definitivo; sin «provisional» en `login-02.html`, `login-02.ts`, su prueba y la página del Block. Pruebas: ui-core 8, docs (Blocks) 13.
+- **M.26**: 14 textos en 11 archivos (comentarios de `button.variants.ts`, `badge.variants.ts`, `menu.ts`, `pagination.ts`, `tabs.ts`, `toggle-group.ts`, `toolbar.ts`, `utils/overlay.ts`, `settings-01.ts`, `block-doc.ts`) y la frase de la página de Dropdown Menu. Prueba nueva `apps/docs/src/app/design-source.spec.ts`: falla si vuelve «provisional» o «D6» al código del sitio o de ui-core (no se vio fallar antes del arreglo: se escribió junto con él). Los comentarios cambiados van en archivos que copia la CLI: quien los tenga sin modificar recibe la versión nueva con `ng g mimi`; ni la API ni el aspecto cambian.
+
+## 9. DP.1: la tanda 1 con `app-doc-page` (y Input)
+
+**Plan breve:** las cuatro que faltaban de la tanda 1 (Combobox, Dialog, Form Field, Toolbar) y la siguiente por prioridad, **Input** (la primera de la tanda 2), porque el usuario pidió cinco y Select ya estaba. Una página por commit, con su prueba; `PENDING` 37 → 32. Capturas antes y después con Playwright en el sitio servido. Ninguna excepción a los límites aplicada.
+
+**Por página:**
+
+| Página     | Ejemplos (antes → después) | Palabras del artículo | Qué cambió                                                                                                                                                                                                                                                                                                                     |
+| ---------- | -------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Combobox   | 8 → 8 (demo + 7)           | 1169 → 1142           | «Formularios y estados» repetía las pestañas: pasa a **Estados** (limpiar, deshabilitado, solo lectura, cargando, error). `combobox-async` 84 → 73 líneas (la lista de ciudades en una cadena). API con `size`, `clearable` y `readonly`, que faltaban; Salidas y Piezas. **Textos con dos proveedores** (Combobox y el chip). |
+| Dialog     | 8 → 8                      | 1325 → 1088           | La demo era «Editar usuario» con el servicio (**90 líneas**, el límite es 60): la demo es el diálogo en la plantilla y el del servicio pasa a avanzados (**PD-7**). El servicio y `MimiDialogRef` van en Piezas (**PD-8**). Accesibilidad: 6 viñetas y 1 en el desplegable.                                                    |
+| Form Field | 8 → 8                      | 976 → 730             | Los dos h2 propios pasan a 4 ejemplos avanzados y al **desplegable de Uso** («Qué mensaje de error se muestra», los 5 niveles), como decía la Parte C. `register` 84 → 79 líneas (sin el placeholder del comentario). **Accesibilidad**, que no tenía.                                                                         |
+| Toolbar    | 5 → 5                      | 888 → 760             | «Flotante» (**140 líneas**) en **dos archivos** (el lienzo y `canvas-tools.ts`, la barra vertical), el remedio de la plantilla; `tooltips` 82 → 77 (el botón «Enlace» sin atajo ⌘K). Las entradas del botón (`kind`…) en Entradas, con «(en el botón)».                                                                        |
+| Input      | 9 → 6                      | 683 → 701             | Fuera los tres vivos de Reactive Forms, Signal Forms y ngModel (repetían las pestañas). **Accesibilidad**, que no tenía (por eso suben las palabras). El enlace a Textarea de la cabecera pasa a la nota de Uso, sin enlace (los textos de la plantilla no tienen enlaces).                                                    |
+
+**Cambios en la plantilla** (los dos estaban en la Parte C; están en `docs/spec/plantilla-pagina.md`):
+
+- `DocPage.texts` es una **lista** de proveedores (`DocTexts`: `constant`, `provider`, `path`, `note?`); la frase y el código los arma `<app-doc-page>`. Select pasó a la lista.
+- `usage.more`: un desplegable cerrado debajo de Uso (título y lista, numerada si es un orden). La regla de nombres internos también mira los desplegables.
+
+**Criterios:**
+
+| Criterio                        | Evidencia                                                                                                                                                                                                                                                                                                                                                                                             |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cada página cumple la plantilla | `doc-pages.spec.ts`: Button, Select, Combobox, Dialog, Form Field, Toolbar e Input en `MIGRATED`; `PENDING_COUNT` 32; sin `EXCEPTIONS`.                                                                                                                                                                                                                                                               |
+| Pruebas de cada página          | Combobox 67, Dialog 59, Form Field 75, Toolbar 66, Input 85 (con `doc-pages` y `doc-page` en cada corrida).                                                                                                                                                                                                                                                                                           |
+| Playwright                      | `pages.mjs` (fuera del repo) contra `ng serve` (4280), cinco páginas en claro 1280, oscuro 1280 y claro 360: **antes 60 de 60, después 135 de 135** (modo, sin errores de consola ni avisos `[Mimi docs]`, sin desborde, cada ejemplo corre; después, además: secciones en orden, frase delante de cada ejemplo, desplegables cerrados, «Qué instala» con Enter, sin espacio antes de la puntuación). |
+| Capturas                        | `docs/auto/capturas/2026-11-14/tanda1/{antes,despues}/` (15 + 15 JPEG de página entera y `resultado.json`). Como en el piloto, la cabecera fija y la barra lateral salen pintadas a la altura del primer pantallazo: es la captura.                                                                                                                                                                   |
+| `pnpm test`                     | Completo en verde: docs **306**, ui-core **1062**, CLI **202**.                                                                                                                                                                                                                                                                                                                                       |
+| `pnpm build`                    | En verde, sin avisos de presupuesto.                                                                                                                                                                                                                                                                                                                                                                  |
+| `pnpm format:check`             | En verde tras formatear los dos `resultado.json` nuevos (lo único que fallaba).                                                                                                                                                                                                                                                                                                                       |
+| Servidores                      | Los dos `ng serve` (4280) de esta parte, cerrados; `netstat`: 4280 libre. Un `git worktree` para medir el bundle de antes, borrado (sus `node_modules` eran uniones a los del repo, quitadas antes de borrar).                                                                                                                                                                                        |
+
+**Bundle** (gzip -9; antes = el build del commit `70b98cc`, justo antes de la tanda):
+
+| Qué                     | Antes (crudo / gzip) | Después (crudo / gzip)                                     |
+| ----------------------- | -------------------- | ---------------------------------------------------------- |
+| JS inicial              | 335,10 / 106,27 kB   | 335,10 / 106,27 kB                                         |
+| `main`                  | 137,83 kB            | 137,83 kB                                                  |
+| CSS global              | 130,77 / 18,70 kB    | 130,77 / 18,70 kB                                          |
+| `doc-page` (compartido) | 22,35 / 6,81 kB      | 23,46 / 7,04 kB (+1,1: `usage.more` y los textos en lista) |
+| Combobox                | 39,44 / 10,80 kB     | 33,96 / 9,31 kB                                            |
+| Dialog                  | 48,51 / 12,49 kB     | 39,92 / 10,24 kB                                           |
+| Form Field              | 31,02 / 8,30 kB      | 23,23 / 6,26 kB                                            |
+| Toolbar                 | 41,87 / 10,94 kB     | 37,10 / 9,67 kB                                            |
+| Input                   | 19,78 / 5,34 kB      | 10,09 / 3,02 kB                                            |
+
+**Un tropiezo al medir (sin efecto en la rama):** el primer intento de medir «antes» hizo `git checkout 70b98cc -- apps/docs` en el árbol de trabajo; el build falló (mezclaba archivos de las dos versiones) y un `gzip` sin archivo quedó esperando. Se detuvo, se volvió a HEAD (`git checkout HEAD -- apps/docs` y `git rm` de 9 archivos que ese checkout había vuelto a añadir) y se comprobó que el árbol era igual a HEAD (`git diff HEAD` vacío) antes de seguir. La medida buena es la del worktree aparte.
+
+**Para el usuario:** PD-7 (demo de Dialog con el servicio) y PD-8 (dónde va la API de un servicio), en `docs/plan/decisiones.md`, sin aplicar.
+
 ## Revisión crítica antes de cerrar
 
 - **¿La evidencia prueba cada criterio?** La estructura y los límites, sí (la prueba rechazó una demo de 62 líneas). Lo visual lo prueban las capturas y Playwright; el criterio de «gusto» (si las páginas se leen mejor) es del usuario: por eso el piloto para aquí.

@@ -111,7 +111,7 @@ Las dos variantes comparten las reglas comunes (abajo). Se diferencian en cuánt
 
 ## Prioridad y tandas (después de PD-4)
 
-**Estado (14/11/2026, rama `auto/docs-paginas-2026-11-14`):** DP.0 `[x]`: piezas comunes, prueba, `docs/spec/plantilla-pagina.md` y los textos de C.3; el piloto (**Button y Select**, Select adelantada de DP.1) lo **aprobó el usuario el 14/11/2026, sin ajustes** a la plantilla. DP.1 `[~]`: Combobox, Dialog, Form Field y Toolbar, más **Input** (la primera de la tanda 2), porque el usuario pidió cinco páginas y Select ya estaba hecha. Informe: `docs/auto/docs-paginas-2026-11-14.md`.
+**Estado (14/11/2026, rama `auto/docs-paginas-2026-11-14`):** DP.0 `[x]`: piezas comunes, prueba, `docs/spec/plantilla-pagina.md` y los textos de C.3; el piloto (**Button y Select**, Select adelantada de DP.1) lo **aprobó el usuario el 14/11/2026, sin ajustes** a la plantilla. DP.1 `[x]` (14/11/2026): Combobox, Dialog, Form Field y Toolbar migradas; además **Input** (la primera de la tanda 2, DP.2 `[~]`), porque el usuario pidió cinco páginas y Select ya estaba hecha. Lo que no cabía en los límites no se aplicó como excepción: PD-7 y PD-8 en `docs/plan/decisiones.md`. La plantilla sumó dos cosas que la Parte C ya preveía: `texts` con varios proveedores y `usage.more` (el desplegable de Uso). Informe: `docs/auto/docs-paginas-2026-11-14.md`.
 
 Un commit por página. Al final de cada tanda: Playwright en claro y oscuro (que cada ejemplo corra, que el orden de las secciones sea el de la plantilla y que no haya errores de consola) y la prueba de estructura (DP.0).
 

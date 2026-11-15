@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- DP.1 · `auto/docs-paginas-2026-11-14` · Claude Code (modo autónomo) · 14/11/2026
+- DP.2 (solo Input, hecha) · `auto/docs-paginas-2026-11-14` · Claude Code (modo autónomo) · 14/11/2026 — parada al terminar la tanda 1, a pedido del usuario
 
 ## Mantenimiento
 
@@ -157,8 +157,8 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También están la [auditoría](plan/docs-paginas/auditoria.md) de las 38 páginas, los 7 Blocks y la portada, y los [ejemplos](plan/docs-paginas/ejemplos.md) de Button y Select con cada variante. Lo pidió el usuario tras revisar el sitio: «las páginas no tienen una estructura común y presentan demasiada información». **Decidido por el usuario (14/11/2026): PD-4 variante A** (completa) y **PD-4c** con las cuatro recomendaciones de la [Parte C](plan/docs-paginas/parte-c.md): un componente común con configuración; la prueba falla desde DP.0 con la lista de pendientes que solo encoge; los textos de C.3 se aplican tal como están; cada excepción a los límites la aprueba el usuario. La Parte C hace que la plantilla se cumpla sola: el componente `app-doc-page`, la prueba `doc-pages.spec.ts` y los textos para `CLAUDE.md` y los comandos. Solo cambia el sitio; ningún componente ni su API.
 
 - [x] DP.0 (14/11/2026: piezas, prueba, `docs/spec/plantilla-pagina.md` y textos de C.3; Button y Select migrados como piloto y **aprobados por el usuario el 14/11/2026**, sin ajustes; informe `docs/auto/docs-paginas-2026-11-14.md`) Piezas comunes (`app-doc-page` con la configuración `DocPage`, `app-api-table`, `app-more`, «Qué instala» desde el registro), la prueba `doc-pages.spec.ts`, `docs/spec/plantilla-pagina.md`, los textos de `CLAUDE.md` y de los comandos, y Button como piloto · sin versión · L · depende: PD-4 (con PD-4c; decididos el 14/11/2026) · [docs-paginas/parte-c.md](plan/docs-paginas/parte-c.md)
-- [~] DP.1 (14/11/2026: Select migrada en el piloto de DP.0 y aprobada por el usuario; en curso: Combobox, Dialog, Form Field y Toolbar, más Input, la siguiente por prioridad) Tanda 1, las más pesadas: Select, Combobox, Dialog, Form Field y Toolbar · sin versión · L · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
-- [ ] DP.2 Tanda 2, formularios con ejemplos repetidos (8 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [x] DP.1 (14/11/2026: Select en el piloto, aprobada por el usuario; Combobox, Dialog, Form Field y Toolbar migradas; quedan para el usuario PD-7 y PD-8, en `docs/plan/decisiones.md`; informe `docs/auto/docs-paginas-2026-11-14.md`, paso 9) Tanda 1, las más pesadas: Select, Combobox, Dialog, Form Field y Toolbar · sin versión · L · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [~] DP.2 (14/11/2026: Input migrada, la siguiente por prioridad, junto con la tanda 1; faltan Switch, Checkbox, Input OTP, Number Input, Input Mask, Password y Tags Input) Tanda 2, formularios con ejemplos repetidos (8 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [ ] DP.3 Tanda 3, capas flotantes (7 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [ ] DP.4 Tanda 4, datos y fechas (9 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [ ] DP.5 Tanda 5, simples (9 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)

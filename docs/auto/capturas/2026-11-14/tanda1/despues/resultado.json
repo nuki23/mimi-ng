@@ -1,0 +1,812 @@
+[
+  {
+    "name": "combobox · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "combobox · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "combobox · claro: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "combobox · claro: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 1142,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "combobox · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "combobox · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "combobox · oscuro: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "combobox · oscuro: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · oscuro: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · oscuro: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · oscuro: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 1142,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "combobox · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "combobox · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "combobox · claro-360: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "combobox · claro-360: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro-360: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro-360: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro-360: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "combobox · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 1142,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "dialog · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "dialog · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "dialog · claro: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "dialog · claro: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 1088,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "dialog · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "dialog · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "dialog · oscuro: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "dialog · oscuro: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · oscuro: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · oscuro: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · oscuro: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 1088,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "dialog · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "dialog · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "dialog · claro-360: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "dialog · claro-360: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro-360: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro-360: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro-360: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dialog · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 1088,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "form-field · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "form-field · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "form-field · claro: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "form-field · claro: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 730,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "form-field · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "form-field · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "form-field · oscuro: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "form-field · oscuro: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · oscuro: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · oscuro: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · oscuro: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 730,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "form-field · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "form-field · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "form-field · claro-360: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "form-field · claro-360: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro-360: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro-360: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro-360: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "form-field · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 730,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "toolbar · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "toolbar · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "toolbar · claro: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "toolbar · claro: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 760,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "toolbar · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "toolbar · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "toolbar · oscuro: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "toolbar · oscuro: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · oscuro: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · oscuro: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · oscuro: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 760,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "toolbar · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "toolbar · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "toolbar · claro-360: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "toolbar · claro-360: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro-360: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro-360: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro-360: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toolbar · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 760,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "input · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "input · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "6 ejemplos"
+  },
+  {
+    "name": "input · claro: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "input · claro: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 6,
+      "words": 701,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "input · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "input · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "6 ejemplos"
+  },
+  {
+    "name": "input · oscuro: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "input · oscuro: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · oscuro: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · oscuro: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · oscuro: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 6,
+      "words": 701,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  },
+  {
+    "name": "input · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "input · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "6 ejemplos"
+  },
+  {
+    "name": "input · claro-360: secciones en orden",
+    "ok": true,
+    "detail": "installation,usage,examples,accessibility,api"
+  },
+  {
+    "name": "input · claro-360: cada ejemplo con su frase",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro-360: desplegables cerrados",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro-360: sin espacio antes de la puntuación",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro-360: «Qué instala» se abre con Enter",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "input · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 6,
+      "words": 701,
+      "h2": ["installation", "usage", "examples", "accessibility", "api"]
+    }
+  }
+]
