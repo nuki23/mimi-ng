@@ -1,0 +1,611 @@
+[
+  {
+    "name": "toast · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toast · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toast · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "toast · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "toast · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 952,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "toast · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toast · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toast · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "toast · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "toast · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 952,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "toast · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toast · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "toast · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "toast · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "8 ejemplos"
+  },
+  {
+    "name": "toast · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 8,
+      "words": 952,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "tooltip · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "tooltip · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "tooltip · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "tooltip · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "6 ejemplos"
+  },
+  {
+    "name": "tooltip · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 6,
+      "words": 709,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "tooltip · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "tooltip · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "tooltip · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "tooltip · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "6 ejemplos"
+  },
+  {
+    "name": "tooltip · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 6,
+      "words": 709,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "tooltip · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "tooltip · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "tooltip · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "tooltip · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "6 ejemplos"
+  },
+  {
+    "name": "tooltip · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 6,
+      "words": 709,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "popover · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "popover · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "popover · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "popover · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "popover · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 677,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "popover · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "popover · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "popover · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "popover · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "popover · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 677,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "popover · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "popover · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "popover · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "popover · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "popover · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 677,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "dropdown-menu · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dropdown-menu · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dropdown-menu · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "dropdown-menu · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "dropdown-menu · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 842,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "dropdown-menu · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dropdown-menu · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dropdown-menu · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "dropdown-menu · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "dropdown-menu · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 842,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "dropdown-menu · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dropdown-menu · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "dropdown-menu · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "dropdown-menu · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "dropdown-menu · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 842,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "context-menu · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "context-menu · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "context-menu · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "context-menu · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "context-menu · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 887,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "context-menu · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "context-menu · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "context-menu · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "context-menu · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "context-menu · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 887,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "context-menu · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "context-menu · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "context-menu · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "context-menu · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "5 ejemplos"
+  },
+  {
+    "name": "context-menu · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 5,
+      "words": 887,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "confirm · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "confirm · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "confirm · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "confirm · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "7 ejemplos"
+  },
+  {
+    "name": "confirm · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 7,
+      "words": 799,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "confirm · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "confirm · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "confirm · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "confirm · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "7 ejemplos"
+  },
+  {
+    "name": "confirm · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 7,
+      "words": 799,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "confirm · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "confirm · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "confirm · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "confirm · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "7 ejemplos"
+  },
+  {
+    "name": "confirm · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 7,
+      "words": 799,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "command · claro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "command · claro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "command · claro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "command · claro: cada ejemplo corre",
+    "ok": true,
+    "detail": "2 ejemplos"
+  },
+  {
+    "name": "command · claro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 2,
+      "words": 735,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "command · oscuro: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "command · oscuro: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "command · oscuro: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "command · oscuro: cada ejemplo corre",
+    "ok": true,
+    "detail": "2 ejemplos"
+  },
+  {
+    "name": "command · oscuro: datos",
+    "ok": true,
+    "detail": {
+      "previews": 2,
+      "words": 735,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  },
+  {
+    "name": "command · claro-360: modo",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "command · claro-360: sin errores de consola",
+    "ok": true,
+    "detail": ""
+  },
+  {
+    "name": "command · claro-360: sin desborde horizontal",
+    "ok": true,
+    "detail": "0px"
+  },
+  {
+    "name": "command · claro-360: cada ejemplo corre",
+    "ok": true,
+    "detail": "2 ejemplos"
+  },
+  {
+    "name": "command · claro-360: datos",
+    "ok": true,
+    "detail": {
+      "previews": 2,
+      "words": 735,
+      "h2": ["installation", "usage", "examples", "api"]
+    }
+  }
+]

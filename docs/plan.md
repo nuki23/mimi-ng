@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- DP.2 (solo Input, hecha) · `auto/docs-paginas-2026-11-14` · Claude Code (modo autónomo) · 14/11/2026 — parada al terminar la tanda 1, a pedido del usuario
+- DP.2, DP.3, DP.4 y DP.5 · `auto/docs-paginas-2-2026-11-14` · Claude Code (modo autónomo) · 14/11/2026
 
 ## Mantenimiento
 
@@ -159,9 +159,9 @@ Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También e
 - [x] DP.0 (14/11/2026: piezas, prueba, `docs/spec/plantilla-pagina.md` y textos de C.3; Button y Select migrados como piloto y **aprobados por el usuario el 14/11/2026**, sin ajustes; informe `docs/auto/docs-paginas-2026-11-14.md`) Piezas comunes (`app-doc-page` con la configuración `DocPage`, `app-api-table`, `app-more`, «Qué instala» desde el registro), la prueba `doc-pages.spec.ts`, `docs/spec/plantilla-pagina.md`, los textos de `CLAUDE.md` y de los comandos, y Button como piloto · sin versión · L · depende: PD-4 (con PD-4c; decididos el 14/11/2026) · [docs-paginas/parte-c.md](plan/docs-paginas/parte-c.md)
 - [x] DP.1 (14/11/2026: Select en el piloto, aprobada por el usuario; Combobox, Dialog, Form Field y Toolbar migradas; quedan para el usuario PD-7 y PD-8, en `docs/plan/decisiones.md`; informe `docs/auto/docs-paginas-2026-11-14.md`, paso 9) Tanda 1, las más pesadas: Select, Combobox, Dialog, Form Field y Toolbar · sin versión · L · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [~] DP.2 (14/11/2026: Input migrada, la siguiente por prioridad, junto con la tanda 1; faltan Switch, Checkbox, Input OTP, Number Input, Input Mask, Password y Tags Input) Tanda 2, formularios con ejemplos repetidos (8 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
-- [ ] DP.3 Tanda 3, capas flotantes (7 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
-- [ ] DP.4 Tanda 4, datos y fechas (9 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
-- [ ] DP.5 Tanda 5, simples (9 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [~] DP.3 Tanda 3, capas flotantes (7 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [~] DP.4 Tanda 4, datos y fechas (9 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [~] DP.5 Tanda 5, simples (9 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [ ] DP.6 Tanda 6, Blocks (`block-doc.ts`) y vitrina de la portada · sin versión · M · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [ ] DP.P Puerta: prueba de estructura sin excepciones y Playwright de todas las páginas · sin versión · — · depende: DP.1 a DP.6 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 
