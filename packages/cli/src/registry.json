@@ -249,7 +249,7 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/field-state"]
+      "registryDependencies": ["utils/cn", "utils/field-state", "utils/size"]
     },
     "number-input": {
       "type": "component",
@@ -407,7 +407,7 @@
         "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["button", "progress", "utils/cn", "utils/field-state"]
+      "registryDependencies": ["button", "progress", "utils/cn", "utils/field-state", "utils/size"]
     },
     "color-picker": {
       "type": "component",

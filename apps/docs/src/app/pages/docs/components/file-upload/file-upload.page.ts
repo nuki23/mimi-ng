@@ -2,6 +2,7 @@ import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { FileUploadBasicExample } from './examples/file-upload-basic.example';
 import { FileUploadDemoExample } from './examples/file-upload-demo.example';
 import { FileUploadListExample } from './examples/file-upload-list.example';
+import { FileUploadSizesExample } from './examples/file-upload-sizes.example';
 import { FileUploadStatesExample } from './examples/file-upload-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
@@ -11,6 +12,8 @@ import basicSource from './examples/file-upload-basic.example' with { loader: 't
 import demoSource from './examples/file-upload-demo.example' with { loader: 'text' };
 // @ts-expect-error
 import listSource from './examples/file-upload-list.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/file-upload-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/file-upload-states.example' with { loader: 'text' };
 // @ts-expect-error
@@ -48,6 +51,16 @@ export const FILE_UPLOAD_PAGE: DocPage = {
     note: 'Mimi no sube nada: la subida es de tu app, que pasa a cada fila su `status` y su `progress`.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          'Con `size`, la zona cambia su alto mínimo (136, 176 o 216 px), el relleno, el ícono y los textos.',
+        component: FileUploadSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',
@@ -132,6 +145,13 @@ export const FILE_UPLOAD_PAGE: DocPage = {
         description: 'Qué acepta, debajo del título. Describe la zona.',
       },
       {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        default: "'md' (o el del contenedor con mimiSize)",
+        description:
+          'Alto mínimo, relleno, ícono y textos de la zona. La lista de archivos no cambia.',
+      },
+      {
         name: 'disabled',
         type: 'boolean',
         default: 'false',
@@ -201,7 +221,14 @@ export const FILE_UPLOAD_PAGE: DocPage = {
         description: 'Un ícono propio dentro de `mimi-file-item`, en lugar del del tipo.',
       },
     ],
-    dataAttributes: ['data-state', 'data-invalid', 'data-disabled', 'data-readonly', 'data-status'],
+    dataAttributes: [
+      'data-state',
+      'data-size',
+      'data-invalid',
+      'data-disabled',
+      'data-readonly',
+      'data-status',
+    ],
   },
   texts: [
     {

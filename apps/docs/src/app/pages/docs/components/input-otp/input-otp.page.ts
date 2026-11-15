@@ -1,6 +1,7 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
 import { InputOtpPlaygroundExample } from './examples/input-otp-playground.example';
 import { InputOtpSeparatorExample } from './examples/input-otp-separator.example';
+import { InputOtpSizesExample } from './examples/input-otp-sizes.example';
 import { InputOtpStatesExample } from './examples/input-otp-states.example';
 import { InputOtpVerifyExample } from './examples/input-otp-verify.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
@@ -9,6 +10,8 @@ import { InputOtpVerifyExample } from './examples/input-otp-verify.example';
 import playgroundSource from './examples/input-otp-playground.example' with { loader: 'text' };
 // @ts-expect-error
 import separatorSource from './examples/input-otp-separator.example' with { loader: 'text' };
+// @ts-expect-error
+import sizesSource from './examples/input-otp-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/input-otp-states.example' with { loader: 'text' };
 // @ts-expect-error
@@ -44,6 +47,16 @@ export const INPUT_OTP_PAGE: DocPage = {
     note: 'Un solo campo real, transparente, cubre las casillas: pegar, borrar y el autocompletado del SMS funcionan como siempre.',
   },
   examples: {
+    sizes: [
+      {
+        id: 'sizes',
+        title: 'Tamaños',
+        sentence:
+          'Con `size`, casillas de 40×46, 46×54 o 52×62 px, con el texto y el hueco a juego.',
+        component: InputOtpSizesExample,
+        source: sizesSource as string,
+      },
+    ],
     states: [
       {
         id: 'states',
@@ -129,6 +142,12 @@ export const INPUT_OTP_PAGE: DocPage = {
           'El código se verificó: borde y anillo de éxito. El error lo da el formulario.',
       },
       {
+        name: 'size',
+        type: "'sm' | 'md' | 'lg'",
+        default: "'md' (o el del contenedor con mimiSize)",
+        description: 'Tamaño de las casillas, del texto y del hueco.',
+      },
+      {
         name: 'autocomplete',
         type: 'string',
         default: "'one-time-code'",
@@ -170,6 +189,7 @@ export const INPUT_OTP_PAGE: DocPage = {
     ],
     dataAttributes: [
       'data-state="empty|partial|complete"',
+      'data-size',
       'data-invalid',
       'data-success',
       'data-disabled',

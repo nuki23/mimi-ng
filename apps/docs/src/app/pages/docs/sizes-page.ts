@@ -79,6 +79,15 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
     changes:
       'Los anchos de Dialog, con `sm` por defecto (`size` en las opciones). `--mimi-confirm-width` gana si lo defines.',
   },
+  {
+    component: 'Input OTP',
+    changes: 'Casilla 40×46 / 46×54 / 52×62 px, texto 18 / 22 / 26 px y hueco 6 / 8 / 10 px.',
+  },
+  {
+    component: 'File Upload',
+    changes:
+      'Zona: alto mínimo 136 / 176 / 216 px, relleno 12 / 16 / 24 px, ícono 36 / 44 / 52 px y textos (título 13 / 14 / 15 px, ayuda 12 / 12,5 / 13,5 px). La lista de archivos no cambia.',
+  },
   { component: 'Slider', changes: 'Pista 4 / 6 / 8 px y pulgar 16 / 20 / 24 px.' },
   { component: 'Toolbar', changes: 'Botón 32 / 40 / 48 px e ícono 16 / 18 / 20 px.' },
   {

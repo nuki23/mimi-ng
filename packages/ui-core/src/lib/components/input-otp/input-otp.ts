@@ -20,6 +20,7 @@ import {
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   injectFieldState,
@@ -40,7 +41,7 @@ import {
  * en la fila. Es un campo de escribir: no se hunde.
  */
 const BOX_BASE =
-  'relative flex min-w-0 shrink items-center justify-center border-[length:var(--mimi-input-border-width,1px)] font-semibold tabular-nums text-foreground mimi-transition w-[var(--mimi-otp-width,46px)] h-[var(--mimi-otp-height,54px)] rounded-[var(--mimi-otp-radius,var(--mimi-radius,0.75rem))] text-[length:var(--mimi-otp-font-size,22px)] bg-[color:var(--mimi-otp-bg,var(--mimi-input-bg,var(--mimi-input-background)))] group-data-[readonly]/otp:bg-[color:var(--mimi-input-readonly)]';
+  'relative flex min-w-0 shrink items-center justify-center border-[length:var(--mimi-input-border-width,1px)] font-semibold tabular-nums text-foreground mimi-transition w-[var(--mimi-otp-w,var(--mimi-otp-width,46px))] h-[var(--mimi-otp-h,var(--mimi-otp-height,54px))] rounded-[var(--mimi-otp-radius,var(--mimi-radius,0.75rem))] text-[length:var(--mimi-otp-text,var(--mimi-otp-font-size,22px))] bg-[color:var(--mimi-otp-bg,var(--mimi-input-bg,var(--mimi-input-background)))] group-data-[readonly]/otp:bg-[color:var(--mimi-input-readonly)]';
 /**
  * Borde y anillo de cada casilla según el estado (elegidos en TypeScript: menos CSS global). El
  * error es el de todos los campos: borde rojo siempre y el halo de error solo con el foco.
@@ -109,6 +110,8 @@ const SEPARATOR_CLASSES =
 @Component({
   selector: 'mimi-input-otp',
   imports: [MimiOtpOutlet],
+  // `size` (M.27): casillas 40×46 / 46×54 / 52×62 px, texto 18 / 22 / 26 px y hueco 6 / 8 / 10 px.
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     @for (box of boxes(); track $index) {
       @if (box.separator) {
@@ -138,7 +141,7 @@ const SEPARATOR_CLASSES =
         @if (box.caret) {
           <span
             data-slot="caret"
-            class="h-[22px] w-0.5 rounded-[1px] bg-[color:var(--mimi-otp-caret,var(--mimi-foreground))] animate-[mimi-caret_1s_steps(1)_infinite] motion-reduce:animate-none"
+            class="h-[var(--mimi-otp-text,22px)] w-0.5 rounded-[1px] bg-[color:var(--mimi-otp-caret,var(--mimi-foreground))] animate-[mimi-caret_1s_steps(1)_infinite] motion-reduce:animate-none"
           ></span>
         }
       </span>
@@ -282,7 +285,7 @@ export class MimiInputOtp implements FormValueControl<string>, MimiFieldControl 
   protected readonly classes = computed(() =>
     cn(
       // max-w-full: con muchas casillas (length 10) las casillas se encogen en vez de desbordar.
-      'group/otp relative inline-flex max-w-full items-center gap-[var(--mimi-otp-gap,8px)] align-middle font-sans',
+      'group/otp relative inline-flex max-w-full items-center gap-[var(--mimi-otp-gap-s,var(--mimi-otp-gap,8px))] align-middle font-sans',
       'data-[disabled]:opacity-[var(--mimi-disabled-opacity,0.5)]',
       // Error: la fila se sacude una vez (sin movimiento con «reducir movimiento»).
       'data-[invalid]:animate-[mimi-shake_.4s] motion-reduce:data-[invalid]:animate-none',

@@ -28,8 +28,12 @@ describe('FileUploadPage', () => {
       // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
       // La demo y tres ejemplos: el vivo de los tres formularios se fue (repetía las pestañas de
-      // «Formularios») y solo lectura pasó a «Estados».
-      expect(previews.length).toBe(4);
+      // «Formularios») y solo lectura pasó a «Estados». Y «Tamaños» (M.27).
+      expect(previews.length).toBe(5);
+      const sizes = el.querySelectorAll<HTMLElement>(
+        'app-file-upload-sizes-example mimi-file-upload',
+      );
+      expect([...sizes].map((zone) => zone.dataset['size'])).toEqual(['sm', 'md', 'lg']);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-file-upload, mimi-file-list')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/file-upload';");

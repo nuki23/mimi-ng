@@ -114,7 +114,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.24 Data Table: la barra, el pie y el botón de orden siguen con `pr-3`, `pl-4` y `-ml-1.5` físicos (no RTL) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.25 (hecha el 15/11/2026: 98,02 kB) Qué hace crecer `main` del sitio (137,83 kB, a 2,17 kB del aviso de 140) y bajarlo antes de añadir componentes (por ejemplo, `tailwind-merge` por `cn()` en la cabecera) · v0.7.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.26 (hecha el 14/11/2026) Quitar «provisional, sin diseño» y «plan, D6» del código y de las páginas (sin rediseño, 14/11/2026) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.27 `size` en Input OTP y File Upload (sin justificación para no tenerlo; visto en la R.26) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.27 (hecha el 15/11/2026, con `mimi-color-input`) `size` en Input OTP y File Upload (sin justificación para no tenerlo; visto en la R.26) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño

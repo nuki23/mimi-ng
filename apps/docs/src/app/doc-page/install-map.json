@@ -119,7 +119,11 @@
     "packages": ["@angular/forms"],
     "css": []
   },
-  "input-otp": { "items": ["utils/field-state"], "packages": ["@angular/forms"], "css": [] },
+  "input-otp": {
+    "items": ["utils/field-state", "utils/size"],
+    "packages": ["@angular/forms"],
+    "css": []
+  },
   "number-input": {
     "items": ["utils/field-state", "utils/field-styles", "utils/size"],
     "packages": ["@angular/forms"],

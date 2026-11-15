@@ -28,8 +28,10 @@ describe('InputOtpPage', () => {
 
       const previews = examples(fixture);
       // La demo (verificación) y tres ejemplos: los vivos de Signal Forms y Reactive Forms se
-      // fueron (repetían las pestañas de «Formularios»).
-      expect(previews.length).toBe(4);
+      // fueron (repetían las pestañas de «Formularios»). Y «Tamaños» (M.27).
+      expect(previews.length).toBe(5);
+      const sizes = el.querySelectorAll<HTMLElement>('app-input-otp-sizes-example mimi-input-otp');
+      expect([...sizes].map((otp) => otp.dataset['size'])).toEqual(['sm', 'md', 'lg']);
       // El interactivo: 8 casillas en dos mitades, y el código que lo hace.
       const playground = el.querySelector<HTMLElement>('app-input-otp-playground-example')!;
       expect(playground.querySelectorAll('mimi-input-otp [data-slot="box"]').length).toBe(8);

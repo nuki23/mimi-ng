@@ -605,6 +605,9 @@ let nextInputId = 0;
   selector: 'mimi-color-input',
   imports: [MimiPopover, MimiPopoverTrigger, MimiPopoverContent, MimiColorPicker],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiColorInput }],
+  // `size` (M.27): el alto del disparador (32 / 40 / 48 px, como Input) y el selector del panel,
+  // que se pinta en un overlay y por eso recibe el tamaño de verdad (`effective()`).
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <mimi-popover
       align="start"
@@ -646,6 +649,7 @@ let nextInputId = 0;
       <ng-template mimiPopoverContent>
         <mimi-color-picker
           class="w-full"
+          [size]="sized.effective()"
           [value]="value()"
           [swatches]="swatches()"
           [(recent)]="recent"
@@ -672,6 +676,7 @@ let nextInputId = 0;
 })
 export class MimiColorInput implements FormValueControl<string>, MimiFieldControl {
   protected readonly texts = inject(MIMI_COLOR_PICKER_TEXT);
+  protected readonly sized = inject(MimiSized);
 
   readonly value = model('');
   readonly swatches = input<readonly string[]>([]);
