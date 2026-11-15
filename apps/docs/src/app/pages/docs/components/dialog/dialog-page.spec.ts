@@ -21,21 +21,22 @@ describe('DialogPage', () => {
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
 
+      // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
       expect(previews.length).toBe(8);
-      // La página empieza con el servicio: el primer ejemplo, antes de Instalación, en dos
-      // archivos (quien abre y el componente que se abre).
+      // La demo (antes de Instalación) es el diálogo en la plantilla: el del servicio, en dos
+      // archivos, pasa de las 60 líneas de la demo (PENDIENTE DE DECIDIR, usuario).
       const first = el.querySelector('app-code-preview')!;
-      expect(first.querySelector('app-dialog-edit-user-example')).not.toBeNull();
+      expect(first.querySelector('app-dialog-basic-example')).not.toBeNull();
       expect(
         first.compareDocumentPosition(el.querySelector('#installation')!) &
           Node.DOCUMENT_POSITION_FOLLOWING,
       ).toBeTruthy();
-      expect(previews[0].code).toContain('MimiDialogService');
-      // Las opciones del servicio, antes del <mimi-dialog> declarativo.
-      expect(
-        el.querySelector('#options')!.compareDocumentPosition(el.querySelector('#template')!),
-      ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+      // El servicio, en Ejemplos y en dos archivos; las opciones, con chrome: 'none'.
+      const service = previews.find(({ example }) =>
+        example?.querySelector('app-dialog-edit-user-example'),
+      );
+      expect(service?.code).toContain('MimiDialogService');
       expect(previews[1].code).toContain("chrome: 'none'");
       for (const { example, code } of previews) {
         expect(example?.querySelector('button')).not.toBeNull();
@@ -43,12 +44,6 @@ describe('DialogPage', () => {
         expect(code).toMatch(/export class Dialog\w+Example/);
       }
       expect(el.querySelectorAll('[mimiDialogTrigger][aria-haspopup="dialog"]').length).toBe(5);
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
     },
     PAGE_EXAMPLES_TIMEOUT,
   );
