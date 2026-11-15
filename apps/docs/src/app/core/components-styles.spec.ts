@@ -12,9 +12,13 @@ const run = (url: string) =>
   TestBed.runInInjectionContext(() => loadComponentsStyles(route, state(url)));
 
 describe('hoja de las páginas de componentes (M.23)', () => {
-  afterEach(() => {
+  const clean = () =>
     document.head.querySelectorAll('link[data-mimi-components]').forEach((l) => l.remove());
-  });
+  // También antes (M.12, tanda 2): varios archivos de prueba comparten el `document` de un worker,
+  // y las pruebas de páginas que navegan a /docs/components dejan la hoja en `<head>`. Por eso
+  // «el resto de /docs no la pide» fallaba a veces en la batería completa y pasaba sola.
+  beforeEach(clean);
+  afterEach(clean);
 
   it('el resto de /docs no la pide', () => {
     expect(run('/docs/introduction')).toBe(true);

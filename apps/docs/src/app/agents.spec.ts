@@ -3,20 +3,19 @@
  * Los dos solo informan (no cambian código): no pueden tener `Edit` ni `NotebookEdit`, y su
  * texto dice que no tocan el repo. `CLAUDE.md` dice cuándo usarlos.
  *
- * Se leen con fs sin importarlo, como en commands.spec.ts.
+ * Se leen con fs sin importarlo, con nombres propios (todas las pruebas se compilan juntas: un
+ * `declare const process` o un `const fs` sueltos chocan con los de commands.spec.ts).
  */
-interface NodeFs {
-  readFileSync(path: string, encoding: 'utf8'): string;
-}
-interface NodePath {
-  join(...parts: string[]): string;
-}
-declare const process: { cwd(): string; getBuiltinModule(id: string): unknown };
-
-const fs = process.getBuiltinModule('node:fs') as NodeFs;
-const path = process.getBuiltinModule('node:path') as NodePath;
-
-const AGENTS = path.join(process.cwd(), '.claude', 'agents');
+const agentsNode = (
+  globalThis as unknown as {
+    process: { cwd(): string; getBuiltinModule(id: string): unknown };
+  }
+).process;
+const agentsFs = agentsNode.getBuiltinModule('node:fs') as {
+  readFileSync(p: string, e: 'utf8'): string;
+};
+const agentsRoot = agentsNode.cwd();
+const AGENTS = `${agentsRoot}/.claude/agents`;
 
 function frontmatter(text: string): Record<string, string> {
   const block = /^---\r?\n([\s\S]*?)\r?\n---/.exec(text);
@@ -39,7 +38,7 @@ describe('subagentes del repo', () => {
     ['accesibilidad', ['APG', 'Playwright', 'teclado', 'foco', 'contraste', 'anuncios']],
   ] as const) {
     describe(name, () => {
-      const text = fs.readFileSync(path.join(AGENTS, `${name}.md`), 'utf8');
+      const text = agentsFs.readFileSync(`${AGENTS}/${name}.md`, 'utf8');
       const meta = frontmatter(text);
 
       it('tiene nombre, descripción y herramientas', () => {
@@ -66,7 +65,7 @@ describe('subagentes del repo', () => {
   }
 
   it('CLAUDE.md dice cuándo usar subagentes', () => {
-    const claude = fs.readFileSync(path.join(process.cwd(), 'CLAUDE.md'), 'utf8');
+    const claude = agentsFs.readFileSync(`${agentsRoot}/CLAUDE.md`, 'utf8');
     const section = claude.slice(claude.indexOf('**Cuándo usar subagentes**'));
     expect(section.length).toBeGreaterThan(100);
     for (const must of [
