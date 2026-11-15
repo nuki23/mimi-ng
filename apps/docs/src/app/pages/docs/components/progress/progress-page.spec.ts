@@ -2,9 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { examples, PAGE_EXAMPLES_TIMEOUT, settle } from '../../../../code/code-preview.testing';
 import { HighlighterService } from '../../../../code/highlighter.service';
+import { validateDocPage } from '../../../../doc-page/doc-page.rules';
 import { ProgressPage } from './progress-page';
+import { PROGRESS_PAGE } from './progress.page';
 
 describe('ProgressPage', () => {
+  it('cumple la plantilla', () => expect(validateDocPage(PROGRESS_PAGE)).toEqual([]));
+
   it(
     'cada ejemplo corre en Preview y su pestaña Código muestra el archivo real',
     async () => {
@@ -21,7 +25,9 @@ describe('ProgressPage', () => {
       await settle(fixture);
       const el = fixture.nativeElement as HTMLElement;
 
+      // El orden de las secciones y los límites los prueba doc-page/doc-pages.spec.ts.
       const previews = examples(fixture);
+      // La demo y cuatro ejemplos.
       expect(previews.length).toBe(5);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-progress[role="progressbar"]')).not.toBeNull();
@@ -33,12 +39,9 @@ describe('ProgressPage', () => {
         const name = bar.getAttribute('aria-label') ?? bar.getAttribute('aria-labelledby');
         expect(name, bar.outerHTML.slice(0, 80)).toBeTruthy();
       }
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'api',
-      ]);
+      expect(el.querySelector('h1')!.textContent!.trim()).toBe('Progress');
+      // El Toast, enlazado desde la accesibilidad.
+      expect(el.querySelector('a[href="/docs/components/toast"]')).not.toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );
