@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 import {
   type AbstractControl,
   FormControl,
@@ -11,10 +13,8 @@ import { MimiInput } from '@/components/ui/input';
 import { MimiPassword } from '@/components/ui/password';
 
 /** Validador del grupo: las dos contraseñas coinciden (el «No coinciden.» es tuyo). */
-function sameAs(group: AbstractControl): ValidationErrors | null {
-  const { password, repeat } = group.value as { password: string; repeat: string };
-  return password === repeat ? null : { mismatch: true };
-}
+const sameAs = (group: AbstractControl): ValidationErrors | null =>
+  group.value.password === group.value.repeat ? null : { mismatch: true };
 
 @Component({
   selector: 'app-password-states-example',
@@ -71,7 +71,10 @@ export class PasswordStatesExample {
     { validators: sameAs },
   );
 
-  protected mismatch(): boolean {
-    return this.group.hasError('mismatch') && this.group.controls.repeat.touched;
-  }
+  // El estado del formulario no es un signal: se lee en cada evento del grupo (y de sus campos).
+  private readonly repeat = this.group.controls.repeat;
+  protected readonly mismatch = toSignal(
+    this.group.events.pipe(map(() => this.group.hasError('mismatch') && this.repeat.touched)),
+    { initialValue: false },
+  );
 }

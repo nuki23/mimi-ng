@@ -141,7 +141,10 @@ export class MimiTabElement implements MimiTabLike {
     const taken = new Set(tabs.slice(0, index).map((tab) => tab.value()));
     let value = base;
     for (let n = 2; taken.has(value); n++) value = `${base}-${n}`;
-    if (value !== this.slug()) this.group?.warnMissingValue(this.label(), value);
+    // Sin label tampoco se avisa: con `[value]` y `[label]` enlazados (dentro de un `@for`), el
+    // grupo lee el valor antes de que lleguen las entradas y saltaba un aviso falso que, además,
+    // gastaba el único aviso del grupo.
+    if (value !== this.slug() && this.label()) this.group?.warnMissingValue(this.label(), value);
     return value;
   });
   private readonly content = viewChild.required(TemplateRef);

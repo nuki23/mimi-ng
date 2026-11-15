@@ -24,7 +24,38 @@ class Host {
   readonly value = signal<string | undefined>(undefined);
 }
 
+/** `[value]` y `[label]` enlazados dentro de un `@for` (como las pestañas de «Formularios»). */
+@Component({
+  imports: [MimiTabsImports],
+  template: `
+    <mimi-tabs aria-label="Formularios">
+      @for (tab of tabs; track tab.id) {
+        <mimi-tab [value]="tab.id" [label]="tab.label">{{ tab.label }}</mimi-tab>
+      }
+    </mimi-tabs>
+  `,
+})
+class BoundHost {
+  readonly tabs = [
+    { id: 'signal', label: 'Signal Forms' },
+    { id: 'reactive', label: 'Reactive Forms' },
+  ];
+}
+
 describe('<mimi-tab>: valor por defecto válido y único', () => {
+  it('con value y label enlazados en un @for no avisa (las entradas llegan después)', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const fixture = TestBed.createComponent(BoundHost);
+    await fixture.whenStable();
+    const calls = warn.mock.calls.map(([m]) => String(m)).filter((m) => m.includes('Tabs'));
+    warn.mockRestore();
+    expect(calls).toEqual([]);
+    const values = [
+      ...(fixture.nativeElement as HTMLElement).querySelectorAll<HTMLElement>('[role="tab"]'),
+    ].map((t) => t.getAttribute('data-value'));
+    expect(values).toEqual(['signal', 'reactive']);
+  });
+
   async function setup() {
     const fixture = TestBed.createComponent(Host);
     document.body.appendChild(fixture.nativeElement);
