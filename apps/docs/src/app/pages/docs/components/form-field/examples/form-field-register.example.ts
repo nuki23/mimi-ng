@@ -46,12 +46,7 @@ import { MimiTextarea } from '@/components/ui/textarea';
             <label class="text-sm font-medium">
               Comentario <span class="font-normal text-muted-foreground">(opcional)</span>
             </label>
-            <textarea
-              mimiTextarea
-              rows="3"
-              placeholder="¿Cómo nos conociste?"
-              formControlName="comment"
-            ></textarea>
+            <textarea mimiTextarea rows="3" formControlName="comment"></textarea>
           </mimi-form-field>
           <mimi-form-field>
             <mimi-checkbox formControlName="terms">

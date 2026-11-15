@@ -162,7 +162,9 @@ export function validateDocPage(page: DocPage): string[] {
   const words = visible.reduce((sum, t) => sum + countWords(t), 0);
   if (words > L.prose) err(`tiene ${words} palabras de prosa visible fuera de la API (${L.prose})`);
   const apiText = rows.map((r) => r.description);
-  for (const text of [...visible, ...apiText]) {
+  // Los desplegables (menos «Qué instala») también son texto para el usuario.
+  const folded = [...(page.usage.more?.items ?? []), ...(page.accessibility.more ?? [])];
+  for (const text of [...visible, ...apiText, ...folded]) {
     const found = INTERNAL_NAMES.find((re) => re.test(text));
     if (found) err(`nombre interno en el texto visible (${found.source}): «${text}»`);
   }

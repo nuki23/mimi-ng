@@ -36,7 +36,7 @@ Las clases de `doc-page/` van en `components.css` (no en el CSS global): solo la
 3. **Cabecera:** el h1 con el nombre del menú (`DocPage.name` igual al título de `docs-nav.ts`) y **una frase de 12 a 25 palabras**, nominal («Botón para…»): qué es y para qué sirve, sin enumerar todas sus funciones.
 4. **Demo principal**, sin título y antes de Instalación: **un** ejemplo realista del caso común, con su frase y con Vista y Código, de **60 líneas como máximo** (sumando sus archivos).
 5. **Instalación:** el comando y el desplegable «Qué instala», generado desde el registro. Nada de versiones exactas: van en Fundamentos.
-6. **Uso:** el código mínimo (**12 líneas** de plantilla, la medida de R.24) y, si hace falta, una nota de **dos frases y 20 palabras como máximo**. Nada de cómo está hecho por dentro.
+6. **Uso:** el código mínimo (**12 líneas** de plantilla, la medida de R.24) y, si hace falta, una nota de **dos frases y 20 palabras como máximo**. Nada de cómo está hecho por dentro. Una explicación para el usuario de más de tres frases va en un desplegable debajo (`usage.more`: un título y una lista, numerada si es un orden), como el orden de los mensajes de error de Form Field (Parte C del plan: los h2 propios de Form Field pasan «a un ejemplo `advanced` y a un desplegable en Uso»).
 7. **Cada ejemplo** lleva un h3 y **una frase de 25 palabras como máximo**, distinta del título: qué muestra y, si hace falta, cómo probarlo. En presente o en imperativo, sin nombres internos.
 8. **Los ejemplos van en un orden fijo**, por categoría (`DocPage.examples`), solo con las que aplican:
    1. `sizes`: Tamaños
@@ -49,7 +49,7 @@ Las clases de `doc-page/` van en `components.css` (no en el CSS global): solo la
 9. **Los ejemplos son cortos:** **80 líneas como máximo** por archivo. Si un caso necesita más, se parte en dos archivos (`files`) o pasa a un Block. Un ejemplo puede llevar otro en un desplegable (`more`; por ejemplo, la matriz variante × tono), que cuenta como ejemplo vivo.
 10. **API:** columnas fijas `Entrada | Tipo | Por defecto | Descripción`, `Salida | Tipo | Descripción` y `Pieza | Selector | Para qué`; descripciones de **20 palabras como máximo**; los `data-*` en una línea debajo de Entradas (`api.dataAttributes`). **Textos** (`DocPage.texts`, una lista de proveedores `{ constant, provider, path, note? }`: varios si el componente usa los textos de otro, como el chip en el Combobox múltiple) es obligatorio si el componente tiene `<nombre>-texts.ts` en ui-core o la página aplica un `provideMimi…Text`; la frase y el código los arma `<app-doc-page>`; **Variables CSS** (`DocPage.tokens`), si el componente tiene tabla en `component-tokens.ts`.
 11. **Fuera de la página:** decisiones y rodeos internos (a la spec); versiones, atajos que se quitan y migraciones (al CHANGELOG); notas para el revisor. La prueba rechaza en el texto visible `rodeo`, `@angular/aria`, `@angular/cdk`, `CDK` y «decidido por defecto» (fuera de «Qué instala»).
-12. **Desplegable** (`<app-more>`, cerrado): «Qué instala», el ejemplo `more` de un ejemplo, y lo que pase de 6 viñetas de accesibilidad (`accessibility.more`).
+12. **Desplegable** (`<app-more>`, cerrado): «Qué instala», el ejemplo `more` de un ejemplo, las explicaciones largas de Uso (`usage.more`) y lo que pase de 6 viñetas de accesibilidad (`accessibility.more`). Los nombres internos de la regla 11 tampoco van en estos desplegables (salvo «Qué instala»).
 
 ## Límites de la variante A (`DOC_PAGE_LIMITS`)
 
@@ -94,7 +94,7 @@ export class ButtonPage {
 ```
 
 - El código de cada ejemplo se importa también como texto (`with { loader: 'text' }`, spec 10): lo que se ve en Código es lo que corre.
-- **Escape para lo que no encaja:** solo `advanced` (un ejemplo más), `accessibility.more` o `usage.note`. No hay un campo de HTML libre.
+- **Escape para lo que no encaja:** solo `advanced` (un ejemplo más), `accessibility.more`, `usage.note` o `usage.more`. No hay un campo de HTML libre.
 - Al migrar una página: se borra su `*-page.html`, se quita de `PENDING` (y baja `PENDING_COUNT`), se registra en `MIGRATED` de la prueba y se adapta su `*-page.spec.ts`.
 
 ## Excepciones aprobadas

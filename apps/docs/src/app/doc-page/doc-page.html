@@ -17,6 +17,23 @@
   @if (p.usage.note) {
     <p data-slot="usage-note" class="text-pretty"><app-doc-text [text]="p.usage.note" /></p>
   }
+  @if (p.usage.more; as more) {
+    <app-more [summary]="more.summary" data-slot="usage-more">
+      @if (more.ordered) {
+        <ol class="flex list-decimal flex-col gap-1.5 ps-5">
+          @for (item of more.items; track $index) {
+            <li><app-doc-text [text]="item" /></li>
+          }
+        </ol>
+      } @else {
+        <ul class="flex list-disc flex-col gap-1.5 ps-5">
+          @for (item of more.items; track $index) {
+            <li><app-doc-text [text]="item" /></li>
+          }
+        </ul>
+      }
+    </app-more>
+  }
 
   @if (blocks().length) {
     <h2 id="examples" [class]="h2">{{ sections.examples }}</h2>

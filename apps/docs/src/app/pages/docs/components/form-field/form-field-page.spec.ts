@@ -29,14 +29,12 @@ describe('FormFieldPage', () => {
         );
         expect(code).toMatch(/export class FormField\w+Example/);
       }
-      expect(Array.from(el.querySelectorAll('h2[id]')).map((h) => h.id)).toEqual([
-        'installation',
-        'usage',
-        'examples',
-        'messages',
-        'customize-messages',
-        'api',
-      ]);
+      // Los dos h2 propios («Mensajes de error», «Personalizar los mensajes») pasaron a ejemplos
+      // avanzados y al desplegable de Uso, con el orden de los cinco niveles (cerrado).
+      const more = el.querySelector<HTMLDetailsElement>('[data-slot="usage-more"] details')!;
+      expect(more.open).toBe(false);
+      expect(more.querySelectorAll('ol > li').length).toBe(5);
+      expect(el.querySelector('#messages, #customize-messages')).toBeNull();
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

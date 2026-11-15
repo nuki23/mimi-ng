@@ -10,6 +10,8 @@ import { COMBOBOX_PAGE } from '../pages/docs/components/combobox/combobox.page';
 import { ComboboxPage } from '../pages/docs/components/combobox/combobox-page';
 import { DIALOG_PAGE } from '../pages/docs/components/dialog/dialog.page';
 import { DialogPage } from '../pages/docs/components/dialog/dialog-page';
+import { FORM_FIELD_PAGE } from '../pages/docs/components/form-field/form-field.page';
+import { FormFieldPage } from '../pages/docs/components/form-field/form-field-page';
 import { SELECT_PAGE } from '../pages/docs/components/select/select.page';
 import { SelectPage } from '../pages/docs/components/select/select-page';
 import { liveExamples, validateDocPage } from './doc-page.rules';
@@ -40,6 +42,7 @@ const MIGRATED: Record<string, { page: DocPage; component: Type<unknown> }> = {
   button: { page: BUTTON_PAGE, component: ButtonPage },
   combobox: { page: COMBOBOX_PAGE, component: ComboboxPage },
   dialog: { page: DIALOG_PAGE, component: DialogPage },
+  'form-field': { page: FORM_FIELD_PAGE, component: FormFieldPage },
   select: { page: SELECT_PAGE, component: SelectPage },
 };
 
@@ -61,7 +64,6 @@ const PENDING = [
   'date-range',
   'dropdown-menu',
   'file-upload',
-  'form-field',
   'input',
   'input-mask',
   'input-otp',
@@ -85,7 +87,7 @@ const PENDING = [
   'tree',
 ];
 /** El tamaño de `PENDING`: un número fijo que solo baja (DP.0: 39; piloto: 37; DP.1, una a una). */
-const PENDING_COUNT = 35;
+const PENDING_COUNT = 34;
 
 /** Excepciones a los límites, cada una aprobada por el usuario (en la spec de la plantilla). */
 const EXCEPTIONS: Record<string, readonly string[]> = {};

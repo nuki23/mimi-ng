@@ -134,8 +134,16 @@ export interface DocPage {
   demo: DocExample;
   /** Nombre en el registro de la CLI: el comando y «Qué instala». Es también el de la carpeta. */
   install: string;
-  /** El código mínimo (12 líneas de plantilla) y, si hace falta, una o dos frases. */
-  usage: { code: string; note?: string };
+  /**
+   * El código mínimo (12 líneas de plantilla) y, si hace falta, una o dos frases. `more`: una
+   * explicación para el usuario de más de tres frases (regla 12), en un desplegable cerrado
+   * debajo; por ejemplo, el orden de los mensajes de error de Form Field.
+   */
+  usage: {
+    code: string;
+    note?: string;
+    more?: { summary: string; items: readonly string[]; ordered?: boolean };
+  };
   /** Los ejemplos por categoría; se pintan en el orden de `DOC_EXAMPLE_CATEGORIES`. */
   examples: Partial<Record<DocExampleCategory, readonly DocExample[]>>;
   /** Clave de `FORMS_SPECS`: las pestañas de R.13, en «Formularios». */
