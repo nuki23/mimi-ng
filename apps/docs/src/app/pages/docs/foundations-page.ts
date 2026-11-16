@@ -142,6 +142,12 @@ export const FOUNDATION_TEXTS = [
     file: 'color-picker/color-picker-texts',
   },
   {
+    component: 'Loading',
+    provider: 'provideMimiLoadingText',
+    spanish: 'MIMI_LOADING_TEXT_ES',
+    file: 'loading/loading-texts',
+  },
+  {
     component: 'Sortable List',
     provider: 'provideMimiSortableText',
     spanish: 'MIMI_SORTABLE_TEXT_ES',

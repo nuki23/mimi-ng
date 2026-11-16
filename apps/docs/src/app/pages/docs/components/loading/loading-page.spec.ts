@@ -35,12 +35,21 @@ describe('LoadingPage (R.23)', () => {
       }
       // «Cargar una tarjeta»: el botón la bloquea con el mensaje en español de la página.
       const block = el.querySelector<HTMLElement>('app-loading-block-example')!;
-      block.querySelector<HTMLButtonElement>('footer button')!.click();
-      await new Promise((r) => setTimeout(r, 250));
-      await settle(fixture);
-      const card = block.querySelector<HTMLElement>('section')!;
-      expect(card.getAttribute('aria-busy')).toBe('true');
-      expect(card.querySelector('mimi-loading-overlay')!.textContent).toContain('Guardando…');
+      // Con reloj falso desde el clic (M.12; el revisor lo vio fallar con la máquina ocupada): con
+      // reloj real, los 1500 ms en que el ejemplo termina de guardar podían pasar antes de mirar.
+      vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+      try {
+        block.querySelector<HTMLButtonElement>('footer button')!.click();
+        await vi.advanceTimersByTimeAsync(250);
+        const card = block.querySelector<HTMLElement>('section')!;
+        expect(card.getAttribute('aria-busy')).toBe('true');
+        expect(card.querySelector('mimi-loading-overlay')!.textContent).toContain('Guardando…');
+        // Y termina: a los 1500 ms deja de guardar (más el mínimo visible).
+        await vi.advanceTimersByTimeAsync(2000);
+        expect(card.getAttribute('aria-busy')).toBeNull();
+      } finally {
+        vi.useRealTimers();
+      }
       expect(el.querySelector('h1')!.textContent!.trim()).toBe('Loading');
       expect(el.querySelector('#texts')).not.toBeNull();
     },
