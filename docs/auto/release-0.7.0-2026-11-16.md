@@ -26,3 +26,22 @@ Commit: `docs(decisiones): acepta las decisiones por defecto de la tanda 3 de la
 - `docs/plan/refinamiento/plan.md`: el enlace de la 0.7.0 apunta al historial y el de la R.34 a su archivo nuevo. El resto de `docs/plan/refinamiento/` (peticiones, PD-1 a PD-3, Combobox y Select, uso corto) se queda: la spec cita esas decisiones.
 
 Commit: `docs(plan): cierra la puerta R.P7 y pasa la 0.7.0 al historial; R.34 al plan de la 0.8.0; M.28 (quitar lo marcado «hasta la 1.0») y 5.18 (ng update)`.
+
+## 3. Versión 0.7.0 y CHANGELOG
+
+Búsqueda de `0.6.0` en el repo (`git grep`, sin `CHANGELOG.md`, `docs/historial/`, `docs/auto/`, `docs/plan*` ni `pnpm-lock.yaml`). **Cambiadas (la versión actual):**
+
+- `packages/cli/package.json:3`: `"version": "0.7.0"` (la única fuente: el build la escribe en `dist/registry.json` y el sitio la lee de ahí).
+- `apps/docs/src/app/pages/docs/installation-page.ts:89`: el `mimi.json` de ejemplo, `"button": { "version": "0.7.0" }`.
+- `apps/docs/src/app/pages/docs/installation-page.html:203`: «button actualizado de 0.6.0 a 0.7.0».
+- `docs/proceso/release.md`: los ejemplos de versión (0.7.0 y 0.6.0), la puerta de la 0.7.0 (`R.P7`) y dónde va el registro de la publicación (`docs/historial/plan-refinamiento-0.7.0.md`).
+
+**Sin cambiar (nombran la 0.6.0 a propósito):** la página de Card («Si vienes de la 0.6.0») y su prueba; los comentarios de `card.ts`, `card.spec.ts`, `size.spec.ts`, `confirm.ts`, `tab-value.spec.ts`, `gate-review-fixes.spec.ts`, `contrast.spec.ts`, `busy.spec.ts`, `ui.spec.ts` y `write-files.ts` (historia de un arreglo o de una ruptura); `docs/design/LEEME.md` y `correcciones-pendientes.md` («el tema de la 0.6.0»); la spec (doce menciones, todas de historia: el tema de marca de la 0.6.0, la tabla de tamaños «lo que salió en la 0.6.0», `size="default"` «en la 0.6.0 era un alias»…).
+
+**CHANGELOG:** el título del borrador pasa a `## 0.7.0 (16/11/2026): Card, Table, tableros y carga`, sin la nota «Borrador», y con una línea arriba sobre la política de rupturas (sin obsoletos antes de la 1.0; lo marcado «hasta la 1.0» desde la 0.2.0 se quita en la 0.8.0, M.28). **La fecha es la de la preparación**: si el usuario publica otro día, la cambia (como en la 0.6.0, que dice 13/11 y se publicó el 14/11). Revisado contra los «RUPTURA» de los tres informes de la 0.7.0 y contra `git diff v0.6.0 HEAD` de `packages/ui-core/src/lib` (lo exportado o con selector que desaparece), de `theme/types.ts` y `theme-base.css` y de `packages/cli/src/registry.json`:
+
+- **Rupturas, todas con su «Cómo actualizar»:** Card a directivas sin alias y sin los tokens de relleno por pieza (los seis selectores `mimi-card*` y `paddingHeader`, `paddingContent` y `paddingFooter`, que son lo que el diff muestra quitado en Card); Button cargando sin `disabled` nativo (R.33); hover con `not-aria-busy:`; `size="default"` y la compatibilidad de `utils/size` (`MimiSizeInput`, `normalizeMimiSize` y el segundo argumento de `injectMimiSize`, los tres que el diff muestra quitados de `utils/size`); `aria-sort` de Data Table; Data Table instalado con `table` (`MimiTableSort` y `MimiTableFilters`, que el diff muestra «quitados» de `data-table`, se reexportan desde `table`: no rompen); los cinco textos de `MimiSortableText`. **Ya estaban todas.**
+- **Lo que el diff muestra y no es ruptura:** `MimiSelectList` (interna desde siempre, no estaba en el `index.ts` de Select de la 0.6.0, comprobado con `git show v0.6.0:…/select/index.ts`); `MimiSortableListImports` (cambia su contenido, suma el grupo, no se quita); el registro: `utils/size` como dependencia nueva de Card, Confirm, Input OTP y File Upload, y deja de serlo de dos ítems que ya no la usan; los ítems nuevos (`table`, `loading`, `kanban-01`).
+- **Faltaba, y se agregó** (en «Cambios visibles»): **Card, Input OTP, File Upload y `mimi-color-input` siguen el tamaño de su contenedor** (R.19 y M.27; comprobado en `theme-base.css`: `--mimi-card-p` es 1rem en `[data-size="sm"]` y 2rem en `lg`, y los cuatro usan `MimiSized`). En la 0.6.0 una Card dentro de un `mimiSize="sm"` tenía 24 px de relleno; ahora 16. Con su salida (`size="md"` en el componente).
+
+Commit: `chore(release): versión 0.7.0 y CHANGELOG 0.7.0 (16/11/2026), con el tamaño heredado de Card, Input OTP y File Upload en «Cambios visibles»`.

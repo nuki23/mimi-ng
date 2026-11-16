@@ -2,9 +2,9 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
-## 0.7.0 (por publicar — borrador de la puerta R.P7, 16/11/2026): Card, Table, tableros y carga
+## 0.7.0 (16/11/2026): Card, Table, tableros y carga
 
-> **Borrador.** Lo escribió la puerta R.P7 (rama `auto/0.7.0-tanda3-2026-11-15`) a partir de las tres tandas de la 0.7.0. Al publicar, el usuario cambia el título por `## 0.7.0 (DD/MM/AAAA): …` y sube la versión de `packages/cli/package.json` (`docs/proceso/release.md`). Detalle y evidencia: `docs/auto/0.7.0-tanda1-2026-11-15.md`, `0.7.0-tanda2-2026-11-15.md` y `0.7.0-tanda3-2026-11-15.md`.
+Antes de la 1.0, Mimi no mantiene obsoletos (política del 16/11/2026, [`docs/spec.md`](docs/spec.md), sección 12): lo que cambia, cambia en esta versión, y cada ruptura dice abajo cómo actualizar. Lo que sigue marcado «hasta la 1.0» desde la 0.2.0 (los atajos de `variant` de Button y Badge, `destructive-soft`, los nombres de tokens de la 0.1.0 y `"style": "vivid"`) **se quita en la 0.8.0**.
 
 ### Rupturas (qué cambia en algo que ya tenías y qué hacer)
 
@@ -21,6 +21,7 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 
 - **Select:** «cargando» y «sin resultados» con el aspecto de la lista común (la de Combobox): la lupa sin el círculo gris y dos renglones de carga; «Cargando…» se anuncia por la región `status` (M.9).
 - **Confirm** pasa de 380 a **360 px** de ancho (el `sm` de Dialog); `--mimi-confirm-width` sigue mandando si lo defines (R.27).
+- **Card, Input OTP, File Upload y `mimi-color-input` siguen el tamaño de su contenedor** (R.19 y M.27): dentro de un `mimiSize="sm"` o `"lg"` (o de cualquier elemento con `data-size`), Card cambia su relleno (`sm` 16 px, `lg` 32 px; en `md`, 24 px, como antes) y los otros, sus medidas. Sin contenedor con tamaño, no cambian. **Si no lo quieres:** `size="md"` en el componente.
 - **Blocks:** los botones principales de `login-01`, `login-02`, `signup-01`, `otp-01` y `pricing-01` siguen el tamaño (`sm` 36 px, `lg` 52 px); en `md`, como antes (R.28). Las tarjetas de `login-01`, `otp-01` y `settings-01` usan `mimiCard` (mismo aspecto).
 - **Sortable List:** su anfitrión es `relative` (sus textos para lectores de pantalla no desbordan una columna con desplazamiento); su región de anuncios es `role="status"` sin `aria-live="assertive"` (ya no interrumpe en cada flecha) y las instrucciones quedan fuera del orden de lectura (`hidden`, siguen en `aria-describedby`). **Tocar el asa ahora agarra el elemento** (antes no hacía nada). El `cdkDropList` pasa del `ul` al propio `mimi-sortable-list` (la zona de soltar es la lista entera); si tu CSS apuntaba a `ul.cdk-drop-list`, apunta ahora a `mimi-sortable-list.cdk-drop-list`.
 
