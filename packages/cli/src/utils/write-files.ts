@@ -259,11 +259,12 @@ export function writeTemplates(options: {
       ]),
     );
 
-    // La versión en que se queda un ítem que no se escribe: la más vieja de sus archivos.
+    // La versión en que se queda un ítem que no se escribe: la más vieja de sus archivos que no
+    // están al día (los nuevos y los iguales a la plantilla no tienen versión vieja: `from` null).
     const oldestOf = (item: string) =>
       states
         .get(item)!
-        .filter((s) => s.state !== 'new')
+        .filter((s) => s.state !== 'new' && s.state !== 'same' && s.from !== null)
         .map((s) => s.from)
         .reduce<string | null | undefined>(
           (oldest, from) =>

@@ -916,7 +916,10 @@ describe('ng g mimi: todo o nada por componente', () => {
     // utilidad: se avisa.
     const { run, tree, warnings } = await initialized();
     const installed = await run('mimi', { components: ['button'] }, tree);
-    makeOld(installed, [...BUTTON_FILES, 'utils/size.ts'], ['button/button.ts']);
+    // Solo button.ts es de la versión anterior: sus otros archivos son iguales a la plantilla (como
+    // un index.ts que no cambió entre versiones); la versión del aviso es la de button.ts, no
+    // «versión anterior» (escenario 4 del .tgz, 16/11/2026).
+    makeOld(installed, ['button/button.ts', 'utils/size.ts'], ['button/button.ts']);
     const result = await run('mimi', { components: ['button'] }, installed);
 
     expect(result.readContent(`/${UI}/utils/size.ts`)).toBe(templateOf('utils/size.ts'));
