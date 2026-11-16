@@ -121,7 +121,7 @@
     "card": {
       "type": "component",
       "files": ["components/card/card.ts", "components/card/index.ts"],
-      "registryDependencies": ["utils/cn"]
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "checkbox": {
       "type": "component",
@@ -230,10 +230,20 @@
         "dropdown-menu",
         "input",
         "pagination",
+        "table",
         "toggle-group",
         "utils/cn",
         "utils/size"
       ]
+    },
+    "table": {
+      "type": "component",
+      "files": [
+        "components/table/table.ts",
+        "components/table/table-state.ts",
+        "components/table/index.ts"
+      ],
+      "registryDependencies": ["utils/cn", "utils/size"]
     },
     "input-mask": {
       "type": "component",
@@ -249,7 +259,7 @@
       "peerDependencies": {
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["utils/cn", "utils/field-state"]
+      "registryDependencies": ["utils/cn", "utils/field-state", "utils/size"]
     },
     "number-input": {
       "type": "component",
@@ -407,7 +417,7 @@
         "@angular/cdk": "^22.2.4",
         "@angular/forms": "^22.0.0"
       },
-      "registryDependencies": ["button", "progress", "utils/cn", "utils/field-state"]
+      "registryDependencies": ["button", "progress", "utils/cn", "utils/field-state", "utils/size"]
     },
     "color-picker": {
       "type": "component",

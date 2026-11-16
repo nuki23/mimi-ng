@@ -155,10 +155,22 @@ Pendientes de revisión del usuario. Detalle en `docs/auto/refinamiento-0.6.0-20
 
 ## Decididas por defecto: tanda 1 de la 0.7.0 (15/11/2026)
 
-Rama `auto/0.7.0-tanda1-2026-11-15`; detalle en `docs/auto/0.7.0-tanda1-2026-11-15.md`. Pendientes de revisión del usuario.
+Rama `auto/0.7.0-tanda1-2026-11-15`; detalle en `docs/auto/0.7.0-tanda1-2026-11-15.md`. **Aceptadas por el usuario el 15/11/2026** (prompt de la tanda 2, rama `auto/0.7.0-tanda2-2026-11-15`): las dos quedan como están.
 
 - **M.9 Select con `MimiOptionList`:** Select toma el aspecto de «cargando» y «sin resultados» de la lista común (la de Combobox): el ícono de la lupa sin el círculo gris de 36 px y dos renglones de carga en vez de tres; `aria-busy` pasa del bloque de carga a la lista, y «Cargando…» se anuncia por la región `status`. Base: «Más simple» (una sola lista para los dos; mantener el aspecto viejo pedía opciones nuevas en `MimiOptionList` solo para Select). Alternativa: añadir a `MimiOptionList` una variante con el círculo y tres renglones. **Cambio visual**, no de API.
 - **R.28 Tabs y R.30 Form Field no cabían en 8 ejemplos:** en vez de pedir una excepción, se juntaron dos ejemplos en uno (Tabs: «Vertical» con su desplegable «según el ancho»; Form Field: «Mensajes para toda la app» con «Los mensajes predeterminados», en dos archivos). Base: «Más simple» (`CLAUDE.md`: «se rediseña el ejemplo o se pide una excepción»).
+
+## Decididas por defecto: tanda 2 de la 0.7.0 (15/11/2026)
+
+Rama `auto/0.7.0-tanda2-2026-11-15`; detalle en `docs/auto/0.7.0-tanda2-2026-11-15.md`. Pendientes de revisión del usuario.
+
+- **R.19 alias de Card:** `<mimi-card>`, `<mimi-card-header>`, `<mimi-card-title>`… siguen funcionando una versión (los mismos `MimiCard…`, con el selector de elemento además del de atributo; `<mimi-card>` conserva `flex flex-col` y `<mimi-card-title>` su `role="heading"` y `level`), `@deprecated`, sin aviso en consola; se quitan en la 0.8.0. Base: PD-1 ofrecía «se quitan o se conservan como alias durante una versión»; la más segura para quien ya los usa. Alternativa: quitarlos ya (RUPTURA dura).
+- **R.19 variantes:** `outline` = el aspecto de siempre (borde y sombra de tarjeta); `elevated` = sin borde visible, sombra de los paneles (`--mimi-shadow-popover`); `flat` = fondo `muted`, sin borde ni sombra; `ghost` = sin fondo, borde ni sombra. `interactive`: borde `--mimi-input-hover` y sombra `--mimi-shadow-neutral-hover` con hover, anillo de foco y `--mimi-press-scale-sm`. Base: tokens que ya existen (no se inventan colores). **Cambio visual menor:** el hueco entre piezas es uno (16 px en `md`): entre contenido y pie pasa de 20 a 16 px.
+- **R.19 tokens de relleno por pieza:** `--mimi-card-padding-header`, `-content` y `-footer` dejan de tener efecto (un solo relleno); quedan en `MimiCardTokens` como `@deprecated` para que un tema tipado siga compilando. **RUPTURA menor** (de efecto, no de compilación).
+
+- **R.20 sin columnas como directivas:** la propuesta del plan traía `<ng-container mimiColumn>` dentro de la Data Table (la opción B de la PD-2); con la C elegida por el usuario, no se hace: lo cubre la capa base (`@for` y `@if` en tu HTML). `[columns]` + `mimiTableCell` siguen como el atajo, sin fecha de retiro (PD-2: «recomendado: son el atajo»). Alternativa: hacerlas además (más API que mantener).
+- **R.20 la Data Table «sobre» la base:** comparte las clases de celda y encabezado y las funciones de búsqueda, filtro y orden con `table` (no se reescribió su plantilla con las directivas): mismo aspecto, misma lógica y sin riesgo para `table-01`. Base: «Más simple».
+- **R.20 nombres:** `mimiTableState(data, opciones)`, con `sorting` (la señal) y `sort(columna)` (el mando del encabezado, como en la PD-2), `expandMode` (como pedía el plan con `expandedRows`, renombrado para que coincida con el de la Data Table), `mimiRowToggle` y `mimiCaption`. `mimiTh` sin `NgTemplateOutlet` (metía `@angular/common` en el JS inicial del sitio).
 
 ## Decididas por el usuario: estados de los controles (12/11/2026)
 

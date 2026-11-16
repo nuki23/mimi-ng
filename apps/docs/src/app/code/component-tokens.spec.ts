@@ -129,6 +129,20 @@ const GLOBALS = new Set([
   '--mimi-toggle-px',
   '--mimi-badge-h',
   '--mimi-badge-px-s',
+  // Card (R.19).
+  '--mimi-card-p',
+  '--mimi-card-gap-s',
+  // Input OTP y File Upload (M.27).
+  '--mimi-otp-w',
+  '--mimi-otp-h',
+  '--mimi-otp-text',
+  '--mimi-otp-gap-s',
+  '--mimi-upload-min-h',
+  '--mimi-upload-p',
+  '--mimi-upload-icon-s',
+  '--mimi-upload-svg',
+  '--mimi-upload-title',
+  '--mimi-upload-hint',
   // Lo mismo en Toggle Group (G2.1).
   '--mimi-toggle-group-count',
   '--mimi-toggle-group-index',
@@ -140,6 +154,8 @@ const GLOBALS = new Set([
  */
 const SHARED_SOURCES: Partial<Record<TokenComponent, readonly string[]>> = {
   input: ['utils/field-styles.ts'],
+  // Las celdas y encabezados de la Data Table son los de la capa base (R.20).
+  dataTable: ['components/table/table.ts'],
 };
 
 /** Código del componente (sin pruebas). */

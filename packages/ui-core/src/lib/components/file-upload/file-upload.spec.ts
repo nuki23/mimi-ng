@@ -157,7 +157,9 @@ describe('MimiFileUpload', () => {
     );
     expect(z.textContent).toContain('Arrastra archivos o haz clic');
     expect(z.className).toContain('border-dashed');
-    expect(z.className).toContain('min-h-[var(--mimi-upload-height,176px)]');
+    expect(z.className).toContain(
+      'min-h-[var(--mimi-upload-min-h,var(--mimi-upload-height,176px))]',
+    );
     expect(picker('plain').hidden).toBe(true);
     expect(picker('plain').getAttribute('accept')).toBe('image/*,.pdf');
     expect(picker('plain').multiple).toBe(true);
@@ -361,7 +363,7 @@ describe('MimiFileUpload', () => {
     h.extra.set('min-h-24');
     await settle(fixture);
     expect(zone('plain').classList).toContain('min-h-24');
-    expect(zone('plain').className).not.toContain('min-h-[var(--mimi-upload-height');
+    expect(zone('plain').className).not.toContain('min-h-[var(--mimi-upload-min-h');
     const instance = fixture.debugElement.query(
       (de) => de.componentInstance instanceof MimiFileUpload,
     ).componentInstance as unknown as Record<string, unknown>;

@@ -109,7 +109,8 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "tsConfig": "apps/docs/tsconfig.spec.json"
+            "tsConfig": "apps/docs/tsconfig.spec.json",
+            "runnerConfig": "vitest-base.config.mts"
           }
         }
       }
@@ -124,7 +125,8 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "buildTarget": "docs:build:development",
-            "tsConfig": "packages/ui-core/tsconfig.spec.json"
+            "tsConfig": "packages/ui-core/tsconfig.spec.json",
+            "runnerConfig": "vitest-base.config.mts"
           }
         }
       }

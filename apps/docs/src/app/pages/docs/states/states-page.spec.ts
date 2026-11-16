@@ -92,6 +92,9 @@ describe('Página «Estados»', () => {
         'error',
       ]);
       const grid = el.querySelector<HTMLElement>('[data-test="states-grid"]')!;
+      // Posicionado: los `sr-only` (absolutos) de dentro no se escapan y no desbordan la página a
+      // 360 px (932 px de ancho antes; visto por el revisor de la tanda 2).
+      expect(grid.classList).toContain('relative');
       expect(grid.querySelectorAll('tbody tr').length).toBe(20);
       expect(grid.querySelectorAll('[data-cell]').length).toBe(20 * 7);
       // Estados forzados: el elemento interactivo de cada celda lleva su data-force.

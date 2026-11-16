@@ -30,7 +30,12 @@ describe('ColorPickerPage', () => {
       // La demo (con disparador) y dos ejemplos: el vivo de los tres formularios se fue (repetía
       // las pestañas de «Formularios») y solo lectura pasó a «Estados». Más «Tamaños».
       expect(previews.length).toBe(4);
-      expect(previews.some(({ code }) => code.includes('mimiSize="lg"'))).toBe(true);
+      // M.27: `size` en el disparador, sin contenedor `mimiSize`.
+      expect(previews.some(({ code }) => code.includes('<mimi-color-input size="lg"'))).toBe(true);
+      const sizes = el.querySelectorAll<HTMLElement>(
+        'app-color-picker-sizes-example mimi-color-input',
+      );
+      expect([...sizes].map((input) => input.dataset['size'] ?? null)).toEqual(['sm', null, 'lg']);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-color-picker, mimi-color-input')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/color-picker';");

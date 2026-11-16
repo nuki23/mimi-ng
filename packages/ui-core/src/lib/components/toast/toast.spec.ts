@@ -206,6 +206,22 @@ describe('injectMimiToast', { timeout: 20_000 }, () => {
     expect(row(li).classList).toContain('border');
   });
 
+  it('la acción del sólido reemplaza el hover de Button (los mismos modificadores, tanda 2)', async () => {
+    const { toast, settle, items, slot } = await setup();
+    toast.success('Con acción', {
+      variant: 'solid',
+      action: { label: 'Ver', onClick: () => undefined },
+    });
+    await settle();
+    const action = slot(items()[0], 'action')!;
+    const hovers = [...action.classList].filter(
+      (c) => c.startsWith('hover:') && c.includes(':bg-'),
+    );
+    expect(hovers).toEqual([
+      'hover:not-disabled:not-aria-busy:bg-[color-mix(in_oklch,currentColor_24%,transparent)]',
+    ]);
+  });
+
   it('outline lleva el color del tono (borde y fondo suave); neutral es la tarjeta de la 0.5.0 (R.5)', async () => {
     const { toast, settle, items, row, slot } = await setup();
     const TONES = [

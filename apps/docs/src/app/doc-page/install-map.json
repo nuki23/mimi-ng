@@ -3,7 +3,7 @@
   "badge": { "items": ["utils/size"], "packages": [], "css": [] },
   "button": { "items": ["utils/size"], "packages": [], "css": [] },
   "calendar": { "items": ["utils/size"], "packages": ["@angular/cdk"], "css": [] },
-  "card": { "items": [], "packages": [], "css": [] },
+  "card": { "items": ["utils/size"], "packages": [], "css": [] },
   "checkbox": {
     "items": ["utils/field-state", "utils/field-styles", "utils/size"],
     "packages": ["@angular/forms"],
@@ -59,6 +59,7 @@
       "option-list",
       "pagination",
       "select",
+      "table",
       "toggle-group",
       "utils/field-state",
       "utils/field-styles",
@@ -119,7 +120,11 @@
     "packages": ["@angular/forms"],
     "css": []
   },
-  "input-otp": { "items": ["utils/field-state"], "packages": ["@angular/forms"], "css": [] },
+  "input-otp": {
+    "items": ["utils/field-state", "utils/size"],
+    "packages": ["@angular/forms"],
+    "css": []
+  },
   "number-input": {
     "items": ["utils/field-state", "utils/field-styles", "utils/size"],
     "packages": ["@angular/forms"],
@@ -174,6 +179,7 @@
     "packages": ["@angular/forms"],
     "css": []
   },
+  "table": { "items": ["utils/size"], "packages": [], "css": [] },
   "tabs": { "items": ["utils/size"], "packages": ["@angular/aria"], "css": [] },
   "tags-input": {
     "items": ["chip", "utils/field-state", "utils/field-styles", "utils/size"],

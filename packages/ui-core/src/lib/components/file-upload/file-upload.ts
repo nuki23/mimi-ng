@@ -23,6 +23,7 @@ import type { FormValueControl } from '@angular/forms/signals';
 import { MimiButton } from '@/components/ui/button';
 import { MimiProgress } from '@/components/ui/progress';
 import { cn } from '@/components/ui/utils/cn';
+import { MimiSized } from '@/components/ui/utils/size';
 import {
   MIMI_FIELD_CONTROL,
   type MimiFieldControl,
@@ -93,8 +94,8 @@ export function mimiFormatFileSize(bytes: number, locale: string): string {
  * de solo lectura, sin hover ni clic. Su borde punteado de 2px es el del diseño.
  */
 const ZONE_BASE = cn(
-  'flex w-full cursor-pointer flex-col items-center justify-center gap-2 p-4 text-center font-sans text-foreground',
-  'min-h-[var(--mimi-upload-height,176px)] rounded-[var(--mimi-upload-radius,var(--mimi-radius-card,1rem))] border-2',
+  'flex w-full cursor-pointer flex-col items-center justify-center gap-2 p-[var(--mimi-upload-p,1rem)] text-center font-sans text-foreground',
+  'min-h-[var(--mimi-upload-min-h,var(--mimi-upload-height,176px))] rounded-[var(--mimi-upload-radius,var(--mimi-radius-card,1rem))] border-2',
   'mimi-transition outline-none',
   'focus-visible:border-[color:var(--mimi-input-border-focus,var(--mimi-ring))] focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)] focus-visible:ring-ring-soft',
   'not-disabled:not-aria-disabled:active:scale-(--mimi-press-scale) not-disabled:not-aria-disabled:active:ring-[length:var(--mimi-input-focus-ring-width,3px)] not-disabled:not-aria-disabled:active:ring-ring-soft',
@@ -116,7 +117,7 @@ const ZONE = {
   ),
 } as const;
 const ICON_BASE =
-  'inline-flex size-[var(--mimi-upload-icon-size,44px)] items-center justify-center rounded-full [&_svg]:size-[22px]';
+  'inline-flex size-[var(--mimi-upload-icon-s,var(--mimi-upload-icon-size,44px))] items-center justify-center rounded-full [&_svg]:size-[var(--mimi-upload-svg,22px)]';
 const ICON = {
   idle: cn(ICON_BASE, 'bg-muted text-foreground'),
   over: cn(
@@ -141,6 +142,9 @@ let nextId = 0;
 @Component({
   selector: 'mimi-file-upload',
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiFileUpload }],
+  // `size` (M.27): alto mínimo 136 / 176 / 216 px, relleno, ícono 36 / 44 / 52 px y los textos.
+  // La lista de archivos (`mimi-file-item`) no cambia: su `size` es el peso del archivo.
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   template: `
     <button
       #zone
@@ -175,13 +179,21 @@ let nextId = 0;
           <path d="m8 17 4-4 4 4" />
         </svg>
       </span>
-      <span [id]="headingId" data-slot="title" class="text-sm font-semibold">{{
-        over() ? texts.drop(dragCount()) : heading() || (readonly() ? readonlyTitle : texts.title)
-      }}</span>
+      <span
+        [id]="headingId"
+        data-slot="title"
+        class="text-[length:var(--mimi-upload-title,0.875rem)] font-semibold"
+        >{{
+          over() ? texts.drop(dragCount()) : heading() || (readonly() ? readonlyTitle : texts.title)
+        }}</span
+      >
       @if (hint()) {
-        <span [id]="hintId" data-slot="hint" class="text-[12.5px] text-muted-foreground">{{
-          hint()
-        }}</span>
+        <span
+          [id]="hintId"
+          data-slot="hint"
+          class="text-[length:var(--mimi-upload-hint,12.5px)] text-muted-foreground"
+          >{{ hint() }}</span
+        >
       }
     </button>
     @if (ariaLabel()) {

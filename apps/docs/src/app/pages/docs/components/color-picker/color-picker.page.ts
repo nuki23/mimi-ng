@@ -47,7 +47,7 @@ export const COLOR_PICKER_PAGE: DocPage = {
         id: 'sizes',
         title: 'Tamaños',
         sentence:
-          'El disparador toma el tamaño de su contenedor `mimiSize`: alto de 32, 40 o 48 px, como Input y Button.',
+          'Con `size` en el disparador: alto de 32, 40 o 48 px, como Input y Button; el selector del panel toma el mismo tamaño.',
         component: ColorPickerSizesExample,
         source: sizesSource as string,
       },
@@ -154,7 +154,7 @@ export const COLOR_PICKER_PAGE: DocPage = {
         type: "'sm' | 'md' | 'lg'",
         default: "'md' (o el del contenedor con mimiSize)",
         description:
-          'Solo `mimi-color-picker`. El disparador `mimi-color-input` toma el de su contenedor `mimiSize`.',
+          'En los dos. En `mimi-color-input`, el alto del disparador y el selector del panel.',
       },
       {
         name: 'class, panelClass',
@@ -179,7 +179,7 @@ export const COLOR_PICKER_PAGE: DocPage = {
           'El selector suelto, sin disparador: las mismas entradas de color, también con un formulario.',
       },
     ],
-    dataAttributes: ['data-state', 'data-invalid', 'data-disabled', 'data-readonly'],
+    dataAttributes: ['data-state', 'data-size', 'data-invalid', 'data-disabled', 'data-readonly'],
   },
   texts: [
     {

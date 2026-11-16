@@ -8,6 +8,7 @@ import type {
   ButtonVariant,
   ButtonVariantShortcut,
 } from './button.variants';
+import { buttonVariants } from './button.variants';
 
 // Código de la 0.1.x: `ButtonVariant` aceptaba los atajos. Tiene que seguir compilando (D1).
 const LEGACY_VARIANTS: ButtonVariant[] = ['default', 'secondary', 'destructive', 'outline'];
@@ -133,7 +134,7 @@ describe('MimiButton', () => {
     );
     expect(button.classList).toContain('focus-visible:outline-ring');
     expect(button.classList).toContain(
-      'active:scale-[var(--mimi-btn-press-scale,var(--mimi-press-scale))]',
+      'active:not-aria-busy:scale-[var(--mimi-btn-press-scale,var(--mimi-press-scale))]',
     );
     expect(button.hasAttribute('disabled')).toBe(false);
     expect(button.hasAttribute('aria-busy')).toBe(false);
@@ -150,7 +151,7 @@ describe('MimiButton', () => {
       danger: 'bg-destructive',
     },
     soft: {
-      primary: 'hover:not-disabled:bg-primary-soft-hover',
+      primary: 'hover:not-disabled:not-aria-busy:bg-primary-soft-hover',
       secondary: 'bg-muted',
       success: 'bg-success-soft',
       warning: 'bg-warning-soft',
@@ -166,12 +167,12 @@ describe('MimiButton', () => {
       danger: 'border-destructive-border',
     },
     ghost: {
-      primary: 'hover:not-disabled:bg-accent',
-      secondary: 'hover:not-disabled:bg-accent',
-      success: 'hover:not-disabled:bg-success-soft',
-      warning: 'hover:not-disabled:bg-warning-soft',
-      info: 'hover:not-disabled:bg-info-soft',
-      danger: 'hover:not-disabled:bg-destructive-soft-bg',
+      primary: 'hover:not-disabled:not-aria-busy:bg-accent',
+      secondary: 'hover:not-disabled:not-aria-busy:bg-accent',
+      success: 'hover:not-disabled:not-aria-busy:bg-success-soft',
+      warning: 'hover:not-disabled:not-aria-busy:bg-warning-soft',
+      info: 'hover:not-disabled:not-aria-busy:bg-info-soft',
+      danger: 'hover:not-disabled:not-aria-busy:bg-destructive-soft-bg',
     },
     link: {
       primary: 'text-primary',
@@ -219,25 +220,29 @@ describe('MimiButton', () => {
       'bg-card',
       'text-foreground',
       'shadow-neutral',
-      'hover:not-disabled:bg-accent',
-      'hover:not-disabled:shadow-neutral-hover',
-      'active:ring-ring-soft',
+      'hover:not-disabled:not-aria-busy:bg-accent',
+      'hover:not-disabled:not-aria-busy:shadow-neutral-hover',
+      'active:not-aria-busy:ring-ring-soft',
     ]) {
       expect(button.classList).toContain(cls);
     }
     await update(() => host.variant.set('ghost'));
-    for (const cls of ['bg-transparent', 'text-foreground', 'hover:not-disabled:bg-accent']) {
+    for (const cls of [
+      'bg-transparent',
+      'text-foreground',
+      'hover:not-disabled:not-aria-busy:bg-accent',
+    ]) {
       expect(button.classList).toContain(cls);
     }
   });
 
   it.each<[ButtonVariantShortcut, ButtonTone, string[]]>([
-    ['default', 'primary', ['bg-primary', 'shadow-primary', 'active:ring-ring-soft']],
+    ['default', 'primary', ['bg-primary', 'shadow-primary', 'active:not-aria-busy:ring-ring-soft']],
     ['secondary', 'secondary', ['bg-secondary', 'shadow-neutral']],
     [
       'destructive',
       'danger',
-      ['bg-destructive', 'shadow-destructive', 'active:ring-destructive-ring'],
+      ['bg-destructive', 'shadow-destructive', 'active:not-aria-busy:ring-destructive-ring'],
     ],
   ])('atajo de la 0.1.0: variant="%s" = solid + %s', async (shortcut, tone, classes) => {
     const { host, button, update } = await setup();
@@ -394,6 +399,31 @@ describe('MimiButton', () => {
     expect(button.hasAttribute('aria-busy')).toBe(false);
     button.click();
     expect(host.clicks()).toBe(1);
+  });
+
+  it('cargando: cursor de progreso sin disabled nativo, y sin hover ni clic visibles (tanda 2)', async () => {
+    const { host, button, update } = await setup();
+    await update(() => host.loading.set(true));
+    // aria-disabled pone pointer-events-none: en un <button> que carga el puntero vuelve (solo con
+    // data-loading, el que bloquea los clics) para que se vea el cursor de progreso.
+    expect(button.classList).toContain('[button&]:aria-busy:cursor-progress');
+    expect(button.classList).toContain('[button&]:aria-busy:data-loading:pointer-events-auto');
+    expect(button.matches('[aria-busy="true"][data-loading]')).toBe(true);
+    // Con el puntero dentro, ni el hover ni el clic de ningún tono cambian el aspecto.
+    for (const variant of ['solid', 'soft', 'outline', 'ghost', 'link'] as const) {
+      for (const tone of [
+        'primary',
+        'secondary',
+        'success',
+        'warning',
+        'info',
+        'danger',
+      ] as const) {
+        const classes = buttonVariants({ variant, tone, size: 'md' }).split(/\s+/);
+        const pointer = classes.filter((c) => /^(hover|active):/.test(c));
+        expect(pointer.filter((c) => !c.includes(':not-aria-busy:'))).toEqual([]);
+      }
+    }
   });
 
   it('cargando y deshabilitado a la vez: gana el disabled nativo', async () => {

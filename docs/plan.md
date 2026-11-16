@@ -114,7 +114,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.24 Data Table: la barra, el pie y el botón de orden siguen con `pr-3`, `pl-4` y `-ml-1.5` físicos (no RTL) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.25 (hecha el 15/11/2026: 98,02 kB) Qué hace crecer `main` del sitio (137,83 kB, a 2,17 kB del aviso de 140) y bajarlo antes de añadir componentes (por ejemplo, `tailwind-merge` por `cn()` en la cabecera) · v0.7.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.26 (hecha el 14/11/2026) Quitar «provisional, sin diseño» y «plan, D6» del código y de las páginas (sin rediseño, 14/11/2026) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.27 `size` en Input OTP y File Upload (sin justificación para no tenerlo; visto en la R.26) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.27 (hecha el 15/11/2026, con `mimi-color-input`) `size` en Input OTP y File Upload (sin justificación para no tenerlo; visto en la R.26) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
@@ -137,8 +137,8 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 
 **0.7.0** (detalle: [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)):
 
-- [ ] R.19 Card como superficie `mimiCard` (PD-1, decidido por el usuario el 09/11/2026: opción B) · v0.7.0 · M · depende: R.1, R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [ ] R.20 Table de directivas y Data Table fácil de llenar (PD-2, decidido por el usuario el 09/11/2026: opción C) · v0.7.0 · L · depende: R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [x] R.19 (hecha el 15/11/2026; alias `mimi-card-*` hasta la 0.8.0) Card como superficie `mimiCard` (PD-1, decidido por el usuario el 09/11/2026: opción B) · v0.7.0 · M · depende: R.1, R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [x] R.20 (hecha el 15/11/2026: `table` nuevo con `mimiTableState`; Data Table sobre la base, con `expandMode` y `toggle`) Table de directivas y Data Table fácil de llenar (PD-2, decidido por el usuario el 09/11/2026: opción C) · v0.7.0 · L · depende: R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.21 Sortable List con listas conectadas · v0.7.0 · L · depende: R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.22 Block `kanban-01` · v0.7.0 · M · depende: R.21, R.19 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] R.23 Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
@@ -151,6 +151,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [x] R.31 (hecha el 15/11/2026) Nota de contraste al cambiar el primario (texto `text-primary` con un primario propio claro) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.32 (hecha el 15/11/2026) Quitar el alias `default` de `size` (RUPTURA, anunciada en la 0.6.0) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.33 (hecha el 15/11/2026) Button en carga sigue siendo enfocable (`aria-disabled` + `aria-busy` y clics bloqueados, en vez del `disabled` nativo; **RUPTURA**) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.34 Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; valora adelantar el Sheet público, G4.2) · v0.7.0 (tanda 3, propuesta) · L · depende: M.9, R.16 · **solo plan, pendiente de revisión del usuario** (15/11/2026) · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [~] M.9 completa (hecha el 15/11/2026 a falta de `ng g mimi select` en un proyecto real, en la puerta R.P7) (lo que faltaba de la R.15; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
 - [x] M.25 `main` del sitio a 2,17 kB de su aviso: medir y bajarlo **antes** de R.19 a R.23 (**hecha el 15/11/2026**: `main` de 137,99 a 98,02 kB; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
 - [ ] R.P7 Puerta de la 0.7.0 · v0.7.0 · — · depende: R.19 a R.23, R.25 a R.33, M.9, M.25 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)

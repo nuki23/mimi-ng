@@ -148,6 +148,10 @@
             "label": "switch"
           },
           {
+            "value": "table",
+            "label": "table"
+          },
+          {
             "value": "tabs",
             "label": "tabs"
           },

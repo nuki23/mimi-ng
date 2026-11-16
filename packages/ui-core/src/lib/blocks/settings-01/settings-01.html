@@ -60,7 +60,7 @@
 
     <!-- Perfil -->
     <ng-template mimiTab="profile" label="Profile">
-      <mimi-card>
+      <div mimiCard class="flex flex-col">
         <div class="flex flex-col gap-0.5 px-5 pt-5 pb-1">
           <h2 class="text-base font-bold">Public profile</h2>
           <p class="text-[13.5px] text-muted-foreground">Visible to people on your team.</p>
@@ -157,9 +157,9 @@
             ></textarea>
           </mimi-form-field>
         </div>
-      </mimi-card>
+      </div>
 
-      <mimi-card>
+      <div mimiCard class="flex flex-col">
         <h2 class="px-5 pt-5 pb-2 text-base font-bold">Preferences</h2>
         @for (row of profileSwitches; track row.key) {
           <!-- Una fila con interruptor: el título lo nombra y la descripción lo describe. -->
@@ -179,13 +179,13 @@
             />
           </div>
         }
-      </mimi-card>
+      </div>
     </ng-template>
 
     <!-- Notificaciones -->
     <ng-template mimiTab="notifications" label="Notifications">
       @for (group of notificationGroups; track group.title) {
-        <mimi-card>
+        <div mimiCard class="flex flex-col">
           <div class="flex items-center gap-2.5 px-5 pt-[18px] pb-2.5">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -231,13 +231,13 @@
               />
             </div>
           }
-        </mimi-card>
+        </div>
       }
     </ng-template>
 
     <!-- Seguridad -->
     <ng-template mimiTab="security" label="Security">
-      <mimi-card class="gap-3.5 p-5">
+      <div mimiCard class="flex flex-col gap-3.5 p-5">
         <div class="flex items-center justify-between gap-3">
           <div class="flex flex-col gap-0.5">
             <h2 class="flex flex-wrap items-center gap-2 text-base font-bold">
@@ -310,7 +310,7 @@
             </li>
           }
         </ul>
-      </mimi-card>
+      </div>
 
       <section
         [attr.aria-labelledby]="id + '-danger'"
@@ -347,7 +347,7 @@
 
     <!-- Facturación -->
     <ng-template mimiTab="billing" label="Billing">
-      <mimi-card class="gap-3.5 p-5">
+      <div mimiCard class="flex flex-col gap-3.5 p-5">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="flex flex-col gap-0.5">
             <h2 class="text-[13px] font-normal text-muted-foreground">Current plan</h2>
@@ -385,7 +385,7 @@
           </svg>
           {{ plan().card }} · next invoice on {{ nextInvoice() }}
         </span>
-      </mimi-card>
+      </div>
     </ng-template>
   </mimi-tabs>
 </div>

@@ -176,7 +176,8 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
   it('ordena con el ciclo asc → desc → ninguno y aria-sort', async () => {
     const { table, head, names, host, fixture } = await setup();
     const sortBtn = () => head('MRR').querySelector<HTMLButtonElement>('[data-slot="sort"]')!;
-    expect(head('MRR').getAttribute('aria-sort')).toBe('none');
+    // APG: aria-sort solo en la columna ordenada (tanda 2, revisión de accesibilidad).
+    expect(head('MRR').hasAttribute('aria-sort')).toBe(false);
     expect(head('Estado').getAttribute('aria-sort')).toBeNull();
     sortBtn().click();
     await settle(fixture);
@@ -190,7 +191,9 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     sortBtn().click();
     await settle(fixture);
     expect(host.sort()).toBeNull();
-    expect(table.querySelector('th[aria-sort="none"]')).not.toBeNull();
+    expect(table.querySelector('th[aria-sort]')).toBeNull();
+    // El ícono de «se puede ordenar» sin opacidad: 3:1 contra la cabecera (WCAG 1.4.11).
+    expect(sortBtn().querySelector('svg')!.getAttribute('class')).not.toContain('opacity');
   });
 
   it('busca sin tildes (solo en columnas buscables) y vuelve a la página 1', async () => {
@@ -525,5 +528,101 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     );
     expect(ng0103).toEqual([]);
     errors.mockRestore();
+  });
+});
+
+@Component({
+  imports: [MimiDataTableImports],
+  template: `
+    <mimi-data-table
+      aria-label="Clientes"
+      [data]="data"
+      [columns]="columns"
+      [toolbar]="false"
+      [expandMode]="mode()"
+      [(expanded)]="expanded"
+    >
+      <ng-template
+        mimiTableActions
+        let-row
+        let-open="expanded"
+        let-toggle="toggle"
+        let-detailId="detailId"
+      >
+        <button
+          type="button"
+          data-test="own-toggle"
+          [attr.data-open]="open"
+          [attr.aria-controls]="open ? detailId : null"
+          (click)="toggle()"
+        >
+          {{ row.name }}
+        </button>
+      </ng-template>
+      <ng-template mimiTableDetail let-row let-toggle="toggle">
+        <button type="button" data-test="close" (click)="toggle()">Cerrar {{ row.name }}</button>
+      </ng-template>
+    </mimi-data-table>
+  `,
+})
+class ExpandHost {
+  readonly data = CLIENTS;
+  readonly columns = COLUMNS;
+  readonly mode = signal<'single' | 'multiple'>('multiple');
+  readonly expanded = signal<unknown[]>([]);
+}
+
+describe('MimiDataTable: expandir fácil (R.20)', { timeout: 20_000 }, () => {
+  async function setup() {
+    TestBed.configureTestingModule({});
+    const fixture = TestBed.createComponent(ExpandHost);
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    const own = () => [...root.querySelectorAll<HTMLButtonElement>('[data-test="own-toggle"]')];
+    const click = async (el: HTMLElement) => {
+      el.click();
+      await fixture.whenStable();
+    };
+    return { host: fixture.componentInstance, root, own, click, fixture };
+  }
+
+  it('toggle() y expanded en la plantilla de acciones: un botón propio abre la fila', async () => {
+    const { host, own, click, root } = await setup();
+    expect(own()[0].dataset['open']).toBe('false');
+    await click(own()[0]);
+    expect(host.expanded()).toEqual([1]);
+    expect(own()[0].dataset['open']).toBe('true');
+    // El botón de la columna de expandir sigue al mismo estado.
+    expect(root.querySelector('[data-slot="expand"]')!.getAttribute('aria-expanded')).toBe('true');
+    // El detalle recibe la fila y su toggle(): lo cierra.
+    await click(root.querySelector<HTMLButtonElement>('[data-test="close"]')!);
+    expect(host.expanded()).toEqual([]);
+  });
+
+  it('cerrar desde el detalle no pierde el foco: va al botón de expandir de la fila (APG Disclosure)', async () => {
+    const { own, click, root, fixture } = await setup();
+    await click(own()[0]);
+    // El contexto trae el id del detalle: un botón propio puede poner aria-controls.
+    const detail = root.querySelector('[data-slot="detail"] [id]')!;
+    expect(own()[0].getAttribute('aria-controls')).toBe(detail.id);
+    const close = root.querySelector<HTMLButtonElement>('[data-test="close"]')!;
+    close.focus();
+    await click(close);
+    await fixture.whenStable();
+    expect(root.querySelector('[data-slot="detail"]')).toBeNull();
+    expect(document.activeElement).toBe(root.querySelector('[data-slot="expand"]'));
+  });
+
+  it('expandMode="single": abrir una cierra la otra; multiple (por defecto) las deja', async () => {
+    const { host, own, click, fixture } = await setup();
+    await click(own()[0]);
+    await click(own()[1]);
+    expect(host.expanded()).toEqual([1, 2]);
+    host.mode.set('single');
+    host.expanded.set([]);
+    await fixture.whenStable();
+    await click(own()[0]);
+    await click(own()[1]);
+    expect(host.expanded()).toEqual([2]);
   });
 });

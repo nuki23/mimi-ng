@@ -334,6 +334,20 @@
   --mimi-tooltip-text: var(--mimi-tooltip-font-size, 12.5px);
   --mimi-tooltip-px: 10px;
   --mimi-popover-w: 300px;
+  /* Input OTP y File Upload (M.27): casilla, texto y hueco; alto mínimo, relleno, ícono y textos. */
+  --mimi-otp-w: var(--mimi-otp-width, 46px);
+  --mimi-otp-h: var(--mimi-otp-height, 54px);
+  --mimi-otp-text: var(--mimi-otp-font-size, 22px);
+  --mimi-otp-gap-s: var(--mimi-otp-gap, 8px);
+  --mimi-upload-min-h: var(--mimi-upload-height, 176px);
+  --mimi-upload-p: 1rem;
+  --mimi-upload-icon-s: var(--mimi-upload-icon-size, 44px);
+  --mimi-upload-svg: 22px;
+  --mimi-upload-title: 0.875rem;
+  --mimi-upload-hint: 12.5px;
+  /* Card (R.19): el relleno de las piezas y el hueco entre dos seguidas. */
+  --mimi-card-p: var(--mimi-card-padding, 1.5rem);
+  --mimi-card-gap-s: var(--mimi-card-gap, 1rem);
 }
 
 [data-size='sm'] {
@@ -390,6 +404,18 @@
   --mimi-tooltip-text: 11.5px;
   --mimi-tooltip-px: 8px;
   --mimi-popover-w: 260px;
+  --mimi-otp-w: 40px;
+  --mimi-otp-h: 46px;
+  --mimi-otp-text: 18px;
+  --mimi-otp-gap-s: 6px;
+  --mimi-upload-min-h: 136px;
+  --mimi-upload-p: 0.75rem;
+  --mimi-upload-icon-s: 36px;
+  --mimi-upload-svg: 18px;
+  --mimi-upload-title: 13px;
+  --mimi-upload-hint: 12px;
+  --mimi-card-p: 1rem;
+  --mimi-card-gap-s: 0.75rem;
 }
 
 [data-size='lg'] {
@@ -446,6 +472,18 @@
   --mimi-tooltip-text: 13.5px;
   --mimi-tooltip-px: 12px;
   --mimi-popover-w: 360px;
+  --mimi-otp-w: 52px;
+  --mimi-otp-h: 62px;
+  --mimi-otp-text: 26px;
+  --mimi-otp-gap-s: 10px;
+  --mimi-upload-min-h: 216px;
+  --mimi-upload-p: 1.5rem;
+  --mimi-upload-icon-s: 52px;
+  --mimi-upload-svg: 26px;
+  --mimi-upload-title: 15px;
+  --mimi-upload-hint: 13.5px;
+  --mimi-card-p: 2rem;
+  --mimi-card-gap-s: 1.25rem;
 }
 
 .dark {

@@ -79,6 +79,20 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
     changes:
       'Los anchos de Dialog, con `sm` por defecto (`size` en las opciones). `--mimi-confirm-width` gana si lo defines.',
   },
+  {
+    component: 'Card',
+    changes:
+      'Relleno de las piezas 16 / 24 / 32 px y hueco entre ellas 12 / 16 / 20 px; los controles de dentro toman el mismo tamaño.',
+  },
+  {
+    component: 'Input OTP',
+    changes: 'Casilla 40×46 / 46×54 / 52×62 px, texto 18 / 22 / 26 px y hueco 6 / 8 / 10 px.',
+  },
+  {
+    component: 'File Upload',
+    changes:
+      'Zona: alto mínimo 136 / 176 / 216 px, relleno 12 / 16 / 24 px, ícono 36 / 44 / 52 px y textos (título 13 / 14 / 15 px, ayuda 12 / 12,5 / 13,5 px). La lista de archivos no cambia.',
+  },
   { component: 'Slider', changes: 'Pista 4 / 6 / 8 px y pulgar 16 / 20 / 24 px.' },
   { component: 'Toolbar', changes: 'Botón 32 / 40 / 48 px e ícono 16 / 18 / 20 px.' },
   {
@@ -102,6 +116,11 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
     component: 'Data Table',
     changes:
       '`size` escala el alto de fila (34 / 42 / 50 px) y de cabecera (32 / 38 / 44 px). `density` es aparte: `comfortable` mantiene su alto fijo (60 / 44 px).',
+  },
+  {
+    component: 'Table',
+    changes:
+      '`size` en `mimiTable`: alto de fila (34 / 42 / 50 px) y de cabecera (32 / 38 / 44 px), como Data Table.',
   },
   {
     component: 'Tooltip',

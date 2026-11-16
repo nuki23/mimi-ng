@@ -2,9 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   Directive,
+  ElementRef,
   type EmbeddedViewRef,
+  Injector,
   TemplateRef,
   ViewContainerRef,
+  afterNextRender,
   booleanAttribute,
   computed,
   contentChild,
@@ -27,6 +30,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MimiInput } from '@/components/ui/input';
 import { MimiPagination } from '@/components/ui/pagination';
+import {
+  MIMI_DEFAULT_ROW_ID,
+  MIMI_TABLE_CELL,
+  MIMI_TABLE_HEAD,
+  type MimiTableFilters,
+  type MimiTableSort,
+  mimiFilterSortRows,
+  mimiNextSort,
+} from '@/components/ui/table';
 import { MimiToggleGroup, MimiToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
@@ -70,17 +82,11 @@ export interface MimiTableColumn<T = any> {
   sticky?: boolean;
 }
 
-/** Orden de la tabla. */
-export interface MimiTableSort {
-  column: string;
-  direction: 'asc' | 'desc';
-}
+/** El orden y los filtros son los de la capa base (`table`, R.20): los mismos tipos en las dos. */
+export type { MimiTableFilters, MimiTableSort } from '@/components/ui/table';
 
 /** Densidad: filas de 42px (`compact`) o de 60px (`comfortable`). */
 export type MimiTableDensity = 'compact' | 'comfortable';
-
-/** Filtros por columna: los valores elegidos de cada una. */
-export type MimiTableFilters = Readonly<Record<string, readonly unknown[]>>;
 
 /** Contexto de las plantillas de celda: `let-row let-value="value" let-density="density"`. */
 export interface MimiTableCellContext<T = any> {
@@ -93,6 +99,12 @@ export interface MimiTableCellContext<T = any> {
 export interface MimiTableRowContext<T = any> {
   $implicit: T;
   density: MimiTableDensity;
+  /** La fila está abierta (R.20): `let-expanded="expanded"`. */
+  expanded: boolean;
+  /** Abre o cierra la fila (R.20): `let-toggle="toggle"` y `(click)="toggle()"`. */
+  toggle: () => void;
+  /** El `id` del detalle de la fila, para `[attr.aria-controls]` en un botón propio. */
+  detailId: string;
 }
 
 /** Celda a medida de una columna: `<ng-template mimiTableCell="estado" let-row let-value="value">`. */
@@ -164,17 +176,24 @@ export class MimiTableOutlet {
   readonly item = input.required<unknown>({ alias: 'mimiTableOutletItem' });
   readonly value = input<unknown>(undefined, { alias: 'mimiTableOutletValue' });
   readonly density = input.required<MimiTableDensity>({ alias: 'mimiTableOutletDensity' });
+  readonly expanded = input(false, { alias: 'mimiTableOutletExpanded' });
+  /** Una función estable por fila (la Data Table la guarda por id): no repite el efecto. */
+  readonly toggle = input<() => void>(NOOP, { alias: 'mimiTableOutletToggle' });
+  readonly detailId = input('', { alias: 'mimiTableOutletDetailId' });
 
   private readonly viewContainer = inject(ViewContainerRef);
-  private view: EmbeddedViewRef<MimiTableCellContext> | null = null;
+  private view: EmbeddedViewRef<MimiTableCellContext & MimiTableRowContext> | null = null;
   private rendered: TemplateRef<unknown> | null = null;
 
   private readonly render = effect(() => {
     const template = this.template();
-    const context: MimiTableCellContext = {
+    const context: MimiTableCellContext & MimiTableRowContext = {
       $implicit: this.item(),
       value: this.value(),
       density: this.density(),
+      expanded: this.expanded(),
+      toggle: this.toggle(),
+      detailId: this.detailId(),
     };
     untracked(() => {
       if (this.view && this.rendered === template) {
@@ -188,6 +207,8 @@ export class MimiTableOutlet {
     });
   });
 }
+
+const NOOP = (): void => undefined;
 
 let nextId = 0;
 
@@ -224,23 +245,15 @@ const HOST_CLASSES = cn(
 const TOOLBAR_CLASSES =
   'flex min-h-[var(--mimi-table-toolbar-height,56px)] flex-wrap items-center gap-2.5 border-b border-border py-2.5 pr-3 pl-4';
 
-/** Fondo de las celdas: fijo, en hover y elegida (las fijas necesitan fondo opaco). */
-const CELL_BG = cn(
-  'bg-[color:var(--mimi-table-bg,var(--mimi-card))] transition-[background-color] duration-120 ease-[ease]',
-  'group-hover/row:bg-[color:var(--mimi-table-row-hover,color-mix(in_oklab,var(--mimi-foreground)_3.5%,var(--mimi-card)))]',
-  'group-data-[selected]/row:bg-[color:var(--mimi-table-row-selected,color-mix(in_oklab,var(--mimi-primary)_8%,var(--mimi-card)))]',
-);
-
+/** Celda y encabezado: los de la capa base (`mimiTd`, `mimiTh`; R.20), más la densidad. */
 const CELL_CLASSES = cn(
-  'h-[var(--mimi-table-row-h,var(--mimi-table-row-height,42px))] border-b border-border px-[var(--mimi-table-cell-px,10px)]',
+  MIMI_TABLE_CELL,
   'group-data-[density=comfortable]/data-table:h-[var(--mimi-table-row-height-comfortable,60px)]',
-  CELL_BG,
 );
 
 const HEAD_CLASSES = cn(
-  'h-[var(--mimi-table-head-h,var(--mimi-table-head-height,38px))] border-b border-border px-[var(--mimi-table-cell-px,10px)] text-start whitespace-nowrap',
+  MIMI_TABLE_HEAD,
   'group-data-[density=comfortable]/data-table:h-[var(--mimi-table-head-height-comfortable,44px)]',
-  'bg-[color:var(--mimi-table-head-bg,var(--mimi-muted))] text-[12.5px] font-semibold text-muted-foreground',
 );
 
 /**
@@ -302,19 +315,8 @@ const UI = {
   skeletonMid: cn(SKELETON_CLASSES, 'w-1/5'),
 } as const;
 
-const fold = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-
-/** Compara dos valores: números como números, texto sin tildes ni mayúsculas, vacíos al final. */
-function compareValues(a: unknown, b: unknown): number {
-  if (a == null || a === '') return b == null || b === '' ? 0 : 1;
-  if (b == null || b === '') return -1;
-  if (typeof a === 'number' && typeof b === 'number') return a - b;
-  if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
-  return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' });
-}
-
-/** `row.id` o, sin él, la propia fila: nunca `undefined`, que repetiría la clave de todas. */
-const DEFAULT_ROW_ID = (row: unknown): unknown => (row as { id?: unknown } | null)?.id ?? row;
+/** `row.id` o, sin él, la propia fila (el mismo que `mimiTableState`). */
+const DEFAULT_ROW_ID = MIMI_DEFAULT_ROW_ID;
 
 /** Una columna con lo que la plantilla necesita ya calculado. */
 interface ColumnView<T> {
@@ -541,7 +543,7 @@ interface ColumnView<T> {
                 [style.width]="col.column.width ?? null"
                 [style.min-width]="col.left !== null ? col.column.width : null"
                 [style.max-width]="col.left !== null ? col.column.width : null"
-                [attr.aria-sort]="col.sort"
+                [attr.aria-sort]="col.sort === 'none' ? null : col.sort"
                 [attr.data-sorted]="
                   col.sort === 'ascending' || col.sort === 'descending' ? '' : null
                 "
@@ -563,7 +565,7 @@ interface ColumnView<T> {
                       {{ col.column.header }}
                       <svg
                         aria-hidden="true"
-                        [class]="col.sort === 'none' ? 'size-[13px] opacity-45' : 'size-[13px]'"
+                        class="size-[13px]"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
@@ -660,6 +662,7 @@ interface ColumnView<T> {
                     <button
                       type="button"
                       data-slot="expand"
+                      [id]="detailId(row) + '-toggle'"
                       [class]="ui.expand"
                       [attr.aria-label]="texts.expand(rowLabel(row))"
                       [attr.aria-expanded]="isExpanded(row)"
@@ -705,6 +708,9 @@ interface ColumnView<T> {
                       [mimiTableOutlet]="actions.templateRef"
                       [mimiTableOutletItem]="row"
                       [mimiTableOutletDensity]="density()"
+                      [mimiTableOutletExpanded]="isExpanded(row)"
+                      [mimiTableOutletToggle]="toggleFor(row)"
+                      [mimiTableOutletDetailId]="detailId(row)"
                     />
                   </td>
                 }
@@ -721,6 +727,9 @@ interface ColumnView<T> {
                           [mimiTableOutlet]="detail.templateRef"
                           [mimiTableOutletItem]="row"
                           [mimiTableOutletDensity]="density()"
+                          [mimiTableOutletExpanded]="true"
+                          [mimiTableOutletToggle]="toggleFor(row)"
+                          [mimiTableOutletDetailId]="detailId(row)"
                         />
                       </div>
                     </td>
@@ -833,6 +842,8 @@ export class MimiDataTable<T = any> {
   readonly selection = model<unknown[]>([]);
   /** Ids con el detalle abierto. */
   readonly expanded = model<unknown[]>([]);
+  /** Varias filas abiertas a la vez (`multiple`, por defecto) o una sola (`single`; R.20). */
+  readonly expandMode = input<'single' | 'multiple'>('multiple');
   readonly sort = model<MimiTableSort | null>(null);
   /** La búsqueda global. */
   readonly query = model('');
@@ -913,26 +924,8 @@ export class MimiDataTable<T = any> {
   private readonly filteredRows = computed(() => {
     const data = this.data();
     if (this.server()) return data;
-    const columns = this.columns();
-    const query = fold(this.query().trim());
-    const filters = this.filters();
-    const searchable = columns.filter((c) => c.searchable !== false);
-    const active = columns.filter((c) => (filters[c.id]?.length ?? 0) > 0);
-    let rows = data.filter(
-      (row) =>
-        active.every((c) => filters[c.id].includes(this.valueOf(c, row))) &&
-        (!query ||
-          searchable.some((c) => fold(String(this.valueOf(c, row) ?? '')).includes(query))),
-    );
-    const sort = this.sort();
-    const column = sort && columns.find((c) => c.id === sort.column);
-    if (sort && column) {
-      const factor = sort.direction === 'asc' ? 1 : -1;
-      rows = [...rows].sort(
-        (a, b) => factor * compareValues(this.valueOf(column, a), this.valueOf(column, b)),
-      );
-    }
-    return rows;
+    // La misma búsqueda, filtro y orden que `mimiTableState` (capa base, R.20).
+    return mimiFilterSortRows(data, this.columns(), this.query(), this.filters(), this.sort());
   });
 
   /** Filas en total (con la búsqueda y los filtros), o `total` en modo servidor. */
@@ -1092,19 +1085,50 @@ export class MimiDataTable<T = any> {
 
   protected toggleExpanded(row: T): void {
     const id = this.rowId()(row);
-    this.expanded.update((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]));
+    this.expanded.update((ids) =>
+      ids.includes(id)
+        ? ids.filter((x) => x !== id)
+        : this.expandMode() === 'single'
+          ? [id]
+          : [...ids, id],
+    );
+  }
+
+  /** Una función por id de fila, la misma en cada pintada (la usan las plantillas: `toggle()`). */
+  private readonly toggles = new Map<unknown, () => void>();
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private readonly injector = inject(Injector);
+
+  protected toggleFor(row: T): () => void {
+    const id = this.rowId()(row);
+    let toggle = this.toggles.get(id);
+    if (!toggle) {
+      toggle = () => {
+        const current = this.data().find((r) => this.rowId()(r) === id);
+        // Cerrar desde un botón del detalle lo destruye: el foco iría a <body>. Va al botón de
+        // expandir de la fila (APG Disclosure; revisión de accesibilidad de la tanda 2).
+        const detail =
+          current !== undefined
+            ? this.host.querySelector(`[id="${this.detailId(current)}"]`)
+            : null;
+        const fromDetail = !!detail && detail.contains(this.host.ownerDocument.activeElement);
+        if (current !== undefined) this.toggleExpanded(current);
+        else this.expanded.update((ids) => ids.filter((x) => x !== id));
+        if (fromDetail && current !== undefined) {
+          const target = `${this.detailId(current)}-toggle`;
+          afterNextRender(() => this.host.querySelector<HTMLElement>(`[id="${target}"]`)?.focus(), {
+            injector: this.injector,
+          });
+        }
+      };
+      this.toggles.set(id, toggle);
+    }
+    return toggle;
   }
 
   /** Sin orden → ascendente → descendente → sin orden. */
   protected toggleSort(column: string): void {
-    const sort = this.sort();
-    this.sort.set(
-      sort?.column !== column
-        ? { column, direction: 'asc' }
-        : sort.direction === 'asc'
-          ? { column, direction: 'desc' }
-          : null,
-    );
+    this.sort.set(mimiNextSort(this.sort(), column));
     this.page.set(1);
   }
 

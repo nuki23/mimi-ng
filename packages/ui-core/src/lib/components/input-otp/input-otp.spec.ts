@@ -260,7 +260,7 @@ describe('MimiInputOtp', () => {
     host.extra.set('gap-4');
     await settle(fixture);
     expect(part('plain').className).toContain('gap-4');
-    expect(part('plain').className).not.toContain('gap-[var(--mimi-otp-gap');
+    expect(part('plain').className).not.toContain('gap-[var(--mimi-otp-gap-s');
   });
 
   it('Reactive Forms: valor, desde el formulario, disabled y etiqueta por mimi-form-field', async () => {
