@@ -6,7 +6,15 @@ import { MimiInput } from '@/components/ui/input';
 import type { AvatarSize } from '@/components/ui/avatar';
 import type { ButtonSize } from '@/components/ui/button';
 import type { InputSize } from '@/components/ui/input';
-import { MimiSizeScope, type MimiSize } from './size';
+import { MimiSizeScope, type MimiSize, injectMimiSize } from './size';
+import * as sizeModule from './size';
+
+// Política de rupturas (16/11/2026): antes de la 1.0 no se mantienen obsoletos. La compatibilidad
+// con las copias de la 0.6.0 (R.P7) se quitó: si vuelve, esto no compila.
+// @ts-expect-error `MimiSizeInput` se quitó en la 0.7.0.
+type OldSizeInput = import('./size').MimiSizeInput;
+// @ts-expect-error `injectMimiSize` recibe un solo argumento desde la 0.7.0.
+const oldInject = () => injectMimiSize(signal<MimiSize>('md'), 'MimiButton');
 
 // R.32: `default` (el nombre viejo de `md`) ya no es un tamaño. Si vuelve, esto no compila.
 // @ts-expect-error `default` se quitó en la 0.7.0.
@@ -81,6 +89,11 @@ describe('escala de tamaños (R.1)', () => {
     expect([...q('field').classList].join(' ')).toContain('h-[var(--mimi-input-h,');
     // Un contenedor con mimiSize pone data-size: la escala llega por CSS a quien no tiene size.
     expect(q('inherit').closest('[data-size]')).not.toBeNull();
+  });
+
+  it('sin la compatibilidad con la 0.6.0: ni normalizeMimiSize ni MimiSizeInput (16/11/2026)', () => {
+    expect('normalizeMimiSize' in sizeModule).toBe(false);
+    expect([oldInject, undefined as OldSizeInput | undefined].length).toBe(2);
   });
 
   it('ya no avisa de `default` (R.32): no hay alias que normalizar', async () => {

@@ -8,6 +8,12 @@ import {
   provideMimiTheme,
 } from './provider';
 import { MIMI_THEME_NEUTRAL } from './neutral';
+import type { MimiCardTokens } from './types';
+
+// Política de rupturas (16/11/2026): los tokens de relleno por pieza de Card (sin efecto desde la
+// R.19) se quitaron en la 0.7.0, sin obsoleto de transición. Si vuelven, esto no compila.
+// @ts-expect-error `paddingHeader` se quitó en la 0.7.0.
+export const OLD_CARD_TOKENS: MimiCardTokens = { paddingHeader: '1rem' };
 
 describe('mimiThemeToCss', () => {
   it('devuelve cadena vacía con un preset vacío', () => {
@@ -49,7 +55,7 @@ describe('mimiThemeToCss', () => {
       components: {
         button: { fontWeight: 600, paddingX: '1rem' },
         input: { placeholderColor: 'gray' },
-        card: { paddingHeader: '1.5rem' },
+        card: { padding: '1.5rem' },
       },
       shadows: { primaryHover: 'none' },
       darkShadows: { card: 'none' },
@@ -66,7 +72,7 @@ describe('mimiThemeToCss', () => {
       '--mimi-btn-font-weight: 600;',
       '--mimi-btn-padding-x: 1rem;',
       '--mimi-input-placeholder-color: gray;',
-      '--mimi-card-padding-header: 1.5rem;',
+      '--mimi-card-padding: 1.5rem;',
       '--mimi-shadow-primary-hover: none;',
       '--mimi-shadow-card: none;',
     ]) {

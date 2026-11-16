@@ -193,12 +193,6 @@ export interface MimiCardTokens {
   /** Borde y sombra de una tarjeta `interactive` con el puntero encima. */
   borderHover?: string;
   shadowHover?: string;
-  /** @deprecated Sin efecto desde la 0.7.0 (R.19: un solo relleno, `padding`). Se quita en la 0.8.0. */
-  paddingHeader?: string;
-  /** @deprecated Sin efecto desde la 0.7.0 (R.19). Se quita en la 0.8.0. */
-  paddingContent?: string;
-  /** @deprecated Sin efecto desde la 0.7.0 (R.19). Se quita en la 0.8.0. */
-  paddingFooter?: string;
 }
 
 export interface MimiAvatarTokens {

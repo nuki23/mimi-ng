@@ -7,7 +7,6 @@ import {
   forwardRef,
   inject,
   input,
-  isDevMode,
 } from '@angular/core';
 
 /**
@@ -25,40 +24,6 @@ export interface MimiSizeContext {
 
 export const MIMI_SIZE = new InjectionToken<MimiSizeContext>('MIMI_SIZE');
 
-/*
- * Compatibilidad con las copias de la 0.6.0 (puerta R.P7). Si modificaste Button o Pagination, la
- * CLI no los actualiza (todo o nada) pero sí actualiza este archivo; sus versiones de la 0.6.0
- * importan `MimiSizeInput` y `normalizeMimiSize` y llaman a `injectMimiSize(señal, 'Nombre')`.
- * Siguen aquí, deprecados, para que esas copias compilen; **se quitan en la 1.0**. Ningún
- * componente de la 0.7.0 los usa (en ellos, `size="default"` no compila: R.32).
- */
-
-/** @deprecated Solo para las copias de la 0.6.0 (`default` era `md`). Se quita en la 1.0. */
-export type MimiSizeInput = MimiSize | 'default';
-
-const warnedDefault = new Set<string>();
-
-/**
- * `default` → `md`, con un aviso en desarrollo (una vez por componente).
- * @deprecated Solo para las copias de la 0.6.0. Se quita en la 1.0.
- */
-export function normalizeMimiSize(
-  value: MimiSizeInput | null | undefined,
-  component: string,
-): MimiSize | undefined {
-  if (value === 'default') {
-    if (isDevMode() && !warnedDefault.has(component)) {
-      warnedDefault.add(component);
-      console.warn(
-        `[Mimi] Size: ${component} usa size="default", que se llama "md". Es una copia de la ` +
-          `0.6.0 (la CLI no la actualizó porque la modificaste): actualízala; esto se quita en la 1.0.`,
-      );
-    }
-    return 'md';
-  }
-  return value ?? undefined;
-}
-
 /**
  * El tamaño de un control: el suyo (`size`), si no el del contenedor `mimiSize` más cercano, y si
  * no `md`. Se llama en un contexto de inyección (una propiedad del componente).
@@ -67,24 +32,10 @@ export function normalizeMimiSize(
  * readonly size = input<MimiSize>();
  * protected readonly resolvedSize = injectMimiSize(this.size);
  * ```
- *
- * El segundo argumento solo lo pasan las copias de la 0.6.0 (deprecado; se quita en la 1.0).
  */
-export function injectMimiSize(
-  own: Signal<MimiSize | null | undefined>,
-  component?: string,
-): Signal<MimiSize>;
-/** @deprecated La forma de la 0.6.0 (con `default`). Se quita en la 1.0. */
-export function injectMimiSize(
-  own: Signal<MimiSizeInput | null | undefined>,
-  component: string,
-): Signal<MimiSize>;
-export function injectMimiSize(
-  own: Signal<MimiSizeInput | null | undefined>,
-  component = 'Mimi',
-): Signal<MimiSize> {
+export function injectMimiSize(own: Signal<MimiSize | null | undefined>): Signal<MimiSize> {
   const scope = inject(MIMI_SIZE, { optional: true });
-  return computed(() => normalizeMimiSize(own(), component) ?? scope?.size() ?? 'md');
+  return computed(() => own() ?? scope?.size() ?? 'md');
 }
 
 /**
