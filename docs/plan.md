@@ -141,7 +141,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [x] R.20 (hecha el 15/11/2026: `table` nuevo con `mimiTableState`; Data Table sobre la base, con `expandMode` y `toggle`) Table de directivas y Data Table fácil de llenar (PD-2, decidido por el usuario el 09/11/2026: opción C) · v0.7.0 · L · depende: R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.21 (hecha el 15/11/2026) Sortable List con listas conectadas · v0.7.0 · L · depende: R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.22 (hecha el 15/11/2026) Block `kanban-01` · v0.7.0 · M · depende: R.21, R.19 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [ ] R.23 Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [x] R.23 (hecha el 16/11/2026) Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.25 Logo y favicon del sitio (lo que faltaba de la R.0) · v0.7.0 · S · depende: archivos del usuario · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.26 (hecha el 15/11/2026) Tabla de la escala de tamaños en la spec (lo que faltaba de la R.1) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.27 (hecha el 15/11/2026) Confirm con `size` (lo que faltaba de la R.7) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)

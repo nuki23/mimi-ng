@@ -104,6 +104,10 @@
             "label": "input-otp"
           },
           {
+            "value": "loading",
+            "label": "loading"
+          },
+          {
             "value": "number-input",
             "label": "number-input"
           },

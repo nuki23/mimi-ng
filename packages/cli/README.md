@@ -92,6 +92,7 @@ export class App {}
 - **Input**: `ng g mimi input` · [documentación](https://ng.mimiworks.dev/docs/components/input)
 - **Input Mask**: `ng g mimi input-mask` · [documentación](https://ng.mimiworks.dev/docs/components/input-mask)
 - **Input OTP**: `ng g mimi input-otp` · [documentación](https://ng.mimiworks.dev/docs/components/input-otp)
+- **Loading**: `ng g mimi loading` · [documentación](https://ng.mimiworks.dev/docs/components/loading)
 - **Number Input**: `ng g mimi number-input` · [documentación](https://ng.mimiworks.dev/docs/components/number-input)
 - **Pagination**: `ng g mimi pagination` · [documentación](https://ng.mimiworks.dev/docs/components/pagination)
 - **Password**: `ng g mimi password` · [documentación](https://ng.mimiworks.dev/docs/components/password)

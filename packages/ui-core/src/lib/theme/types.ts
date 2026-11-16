@@ -700,6 +700,20 @@ export interface MimiComponentTokens {
   sortable?: MimiSortableTokens;
   command?: MimiCommandTokens;
   dataTable?: MimiTableTokens;
+  loading?: MimiLoadingTokens;
+}
+
+/**
+ * Carga (R.23). El fondo de la capa, el del panel, el texto y el anillo van en el CSS
+ * (`--mimi-loading-bg`, `-panel-bg`, `-fg`, `-spinner`).
+ */
+export interface MimiLoadingTokens {
+  /** El z-index de la capa (50). */
+  z?: string;
+  /** Desenfoque del fondo (el de `--mimi-overlay-blur`). */
+  blur?: string;
+  /** Sombra del panel (la de los paneles flotantes). */
+  shadow?: string;
 }
 
 export interface MimiThemePreset {

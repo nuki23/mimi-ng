@@ -52,6 +52,8 @@ import { DATA_TABLE_PAGE } from '../pages/docs/components/data-table/data-table.
 import { DataTablePage } from '../pages/docs/components/data-table/data-table-page';
 import { TABLE_PAGE } from '../pages/docs/components/table/table.page';
 import { TablePage } from '../pages/docs/components/table/table-page';
+import { LOADING_PAGE } from '../pages/docs/components/loading/loading.page';
+import { LoadingPage } from '../pages/docs/components/loading/loading-page';
 import { TREE_PAGE } from '../pages/docs/components/tree/tree.page';
 import { TreePage } from '../pages/docs/components/tree/tree-page';
 import { SORTABLE_LIST_PAGE } from '../pages/docs/components/sortable-list/sortable-list.page';
@@ -132,6 +134,7 @@ const PAGES: Record<string, { page: DocPage; component: Type<unknown> }> = {
   tree: { page: TREE_PAGE, component: TreePage },
   'data-table': { page: DATA_TABLE_PAGE, component: DataTablePage },
   table: { page: TABLE_PAGE, component: TablePage },
+  loading: { page: LOADING_PAGE, component: LoadingPage },
   'context-menu': { page: CONTEXT_MENU_PAGE, component: ContextMenuPage },
   'dropdown-menu': { page: DROPDOWN_MENU_PAGE, component: DropdownMenuPage },
   popover: { page: POPOVER_PAGE, component: PopoverPage },

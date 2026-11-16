@@ -149,6 +149,11 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./components/combobox/combobox-page').then((m) => m.ComboboxPage),
   },
   {
+    path: 'components/loading',
+    title: 'Loading · Mimi',
+    loadComponent: () => import('./components/loading/loading-page').then((m) => m.LoadingPage),
+  },
+  {
     path: 'components/table',
     title: 'Table · Mimi',
     loadComponent: () => import('./components/table/table-page').then((m) => m.TablePage),

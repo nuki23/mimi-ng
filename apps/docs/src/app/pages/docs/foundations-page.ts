@@ -16,6 +16,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   button: [],
   card: [],
   table: [],
+  loading: ['cdk'],
   progress: [],
   separator: [],
   skeleton: [],
