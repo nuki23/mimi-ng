@@ -297,12 +297,8 @@ let nextId = 0;
     <span [id]="instructionsId" hidden>{{
       group ? text.instructionsGroup : text.instructions
     }}</span>
-    <span
-      role="status"
-      data-slot="announcement"
-      class="min-h-[18px] text-[12.5px] text-muted-foreground"
-      >{{ announcement() }}</span
-    >
+    <!-- Solo para lectores de pantalla, como las demás regiones vivas de Mimi (no se ve ni ocupa sitio). -->
+    <span role="status" data-slot="announcement" class="sr-only">{{ announcement() }}</span>
     <ng-content select="[mimiSortableFooter]" />
   `,
   host: {

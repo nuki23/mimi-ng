@@ -25,6 +25,10 @@ Antes de la 1.0, Mimi no mantiene obsoletos (política del 16/11/2026, [`docs/sp
 - **Blocks:** los botones principales de `login-01`, `login-02`, `signup-01`, `otp-01` y `pricing-01` siguen el tamaño (`sm` 36 px, `lg` 52 px); en `md`, como antes (R.28). Las tarjetas de `login-01`, `otp-01` y `settings-01` usan `mimiCard` (mismo aspecto).
 - **Sortable List:** su anfitrión es `relative` (sus textos para lectores de pantalla no desbordan una columna con desplazamiento); su región de anuncios es `role="status"` sin `aria-live="assertive"` (ya no interrumpe en cada flecha) y las instrucciones quedan fuera del orden de lectura (`hidden`, siguen en `aria-describedby`). **Tocar el asa ahora agarra el elemento** (antes no hacía nada). El `cdkDropList` pasa del `ul` al propio `mimi-sortable-list` (la zona de soltar es la lista entera); si tu CSS apuntaba a `ul.cdk-drop-list`, apunta ahora a `mimi-sortable-list.cdk-drop-list`.
 
+### Arreglos
+
+- **Sortable List: el anuncio de cada paso ya no se ve** («… dropped in Done, position 2 of 2.», debajo de cada lista o columna de un tablero). Es solo para lectores de pantalla (oculto a la vista, como las demás regiones vivas de Mimi) y se sigue anunciando igual; la lista ya no reserva los 18 px de esa línea.
+
 ### Nuevo
 
 - **Table** (R.20): directivas de estilo sobre la `<table>` nativa (`mimiTable`, `mimiCaption`, `mimiThead`, `mimiTbody`, `mimiTr`, `mimiTh` con `[sort]` y `aria-sort`, `mimiTd`, `button[mimiRowToggle]`) y **`mimiTableState()`**, el estado sin interfaz (búsqueda, filtros, orden, páginas, selección y filas expandidas en señales; cada fila con `toggle()`, `selected()` y `expanded()`). `ng g mimi table`.

@@ -105,6 +105,20 @@ La 0.7.0 sale del `.tgz` del paso 5 (`C:\t\r070\mimi-ng-cli-0.7.0.tgz`: `ng add 
 
 Commit: `docs(auto): escenarios del .tgz real de la 0.7.0 (cinco en verde, aviso nuevo de la CLI, /kanban en Chrome en los actualizados, 140 de 140) e informe final`.
 
+## 7. Arreglo pedido por el usuario: el anuncio de Sortable List, solo para lectores de pantalla
+
+Encargo del usuario (16/11/2026, antes de publicar): el anuncio de Sortable List («… dropped in Done…») nunca visible, oculto como las demás regiones vivas de Mimi; buscar en ui-core cualquier otra región viva que se vea y corregirla igual.
+
+- **Búsqueda** (`grep` de `role="status|alert|log"` y `aria-live` en `packages/ui-core/src/lib`, sin pruebas): 20 resultados. **Ya ocultos** (`sr-only`): Tree, Data Table, el título del calendario, el reenvío de `otp-01`, la región de Option List cuando no está vacía; `LiveAnnouncer` del cdk (Chip, File Upload, Loading) usa su propio elemento oculto. **Visibles a propósito, no son anuncios sino contenido para todos**, y se quedan: los errores (`mimi-form-error`, Pagination, las alertas de `login-01`, `login-02` y `signup-01`, el mensaje de `otp-01`), la ayuda o el error de Tags Input (su `hint`), la instrucción de Date Range («elige la fecha de inicio/fin»), «sin resultados» de Option List, el conteo de resultados de `table-01` y la barra de cambios de `settings-01`. **El único anuncio visible era el de Sortable List.**
+- **Arreglo:** `components/sortable-list/sortable-list.ts`: la región `role="status"` pasa de `min-h-[18px] text-[12.5px] text-muted-foreground` a `sr-only` (el anfitrión ya es `relative`: el texto absoluto no se escapa de una columna con desplazamiento). La lista deja de reservar esos 18 px.
+- **Prueba que falló antes** (`sortable-list.spec.ts`, «el anuncio es solo para lectores de pantalla…»): tras agarrar con Espacio, el texto está en el DOM con `role="status"`, sin `hidden` ni `aria-hidden`, con `sr-only` y sin clases `min-h-*` ni `text-*`. Antes: `expected [ 'min-h-[18px]', …(2) ] to include 'sr-only'`.
+- **Playwright** (1.56.1 con Chrome, fuera del repo; el sitio compilado con `pnpm build:docs` y servido en 4291, detenido por su PID), en `/preview/blocks/kanban-01` y `/docs/components/sortable-list`, claro y oscuro, tras agarrar y mover con el teclado: el anuncio está en el DOM con su texto («Audit color contrast: position 2 of 3.», «Diseñar: lugar 2 de 4.») y `role="status"`; no tiene `display: none`, `visibility: hidden` ni `aria-hidden` (se sigue anunciando); mide **1 × 1 px**, `position: absolute` y `clip-path: inset(50%)` (el `sr-only` de Tailwind 4); la lista no cambia de alto al anunciar; **ninguna región viva con texto se ve en la página**; sin errores. **24 de 24.** (La primera pasada dio 20 de 24 por mi guion, que buscaba `clip: rect(…)` en vez del `clip-path` de Tailwind 4.) Capturas: `C:\t\capturas\2026-11-16\anuncio\` (kanban y sortable, claro y oscuro).
+- Spec 4 (Sortable List: «solo para lectores de pantalla», con la historia) y CHANGELOG 0.7.0, sección nueva **«Arreglos»**.
+- `pnpm test`: docs **557**, ui-core **1134** (una más), CLI **206**, en verde. Bundle del sitio igual (JS inicial 294,58 / 93,70 kB; CSS global 139,19 / 19,72 kB).
+- **El `.tgz` del paso 5 y los escenarios del paso 6 son de antes de este arreglo:** el paquete que se publique tendrá un `sortable-list.ts` distinto (mismo número de archivos). No se repitieron los escenarios (el encargo era un commit y parar); `prepublishOnly` recompila al publicar.
+
+Commit: `fix(sortable-list): el anuncio es solo para lectores de pantalla (sr-only), no se ve bajo la lista`.
+
 ## Revisión crítica antes de cerrar
 
 - **¿La evidencia prueba cada punto?** Sí, con límites: Chrome comprueba valores calculados, conteos y el resultado de mover (no una mirada completa a cada pantalla); el escenario 4 se probó con un comentario añadido a cada archivo (para la CLI basta con que cambie); `/sign-in` del escenario 1 se compiló pero no se abrió en Chrome.
@@ -119,9 +133,9 @@ Commit: `docs(auto): escenarios del .tgz real de la 0.7.0 (cinco en verde, aviso
 2. **Una línea nueva en «Cambios visibles» del CHANGELOG:** Card, Input OTP, File Upload y `mimi-color-input` siguen el tamaño de su contenedor (`mimiSize` o `data-size`). No estaba en el borrador; salió de comparar `theme-base.css` con la 0.6.0. Si prefieres no contarlo como cambio visible, es quitar una viñeta.
 3. **La M.28 absorbe las 1.0-1 a 1.0-4** y es más grande que la lista del encargo: la búsqueda encontró también el alias `destructive-soft` (con su cambio de significado: el código copiado con `ring-destructive-soft` cambiaría de color **sin error**) y `"style": "vivid"`. La tarea deja a su criterio si `destructive-soft` se hace en uno o dos pasos.
 4. **La R.34 cambió de archivo** (`docs/plan/grupo-4/R.34.md`) con cuatro retoques que dice su encabezado; el texto original queda en el historial.
-5. **Sortable List muestra su anuncio en pantalla** («… dropped in Done, position 2 of 2.», debajo de cada columna del tablero, en gris pequeño). Es así desde la 0.5.0 (`role="status"` con `text-muted-foreground`, no `sr-only`), no es de la 0.7.0; en el tablero se ve bajo la columna. Lo anoto por si quieres que sea solo para lectores de pantalla (sería una tarea nueva).
+5. **Sortable List muestra su anuncio en pantalla** («… dropped in Done, position 2 of 2.», debajo de cada columna del tablero, en gris pequeño). Es así desde la 0.5.0 (`role="status"` con `text-muted-foreground`, no `sr-only`), no es de la 0.7.0; en el tablero se ve bajo la columna. Lo anoto por si quieres que sea solo para lectores de pantalla (sería una tarea nueva). **Resuelto por el usuario el 16/11/2026: solo para lectores de pantalla (sección 7).**
 6. **`npm i -D` del `.tgz` imprime `npm warn allow-scripts`** en los proyectos de prueba (scripts de instalación de alguna dependencia del proyecto, pendientes de aprobar; no se investigó cuál): `@mimi-ng/cli` no tiene scripts de instalación (solo `prepublishOnly`, que no corre al instalar).
-7. **El sistema me pidió agregar a los commits un pie `Co-Authored-By`**; no se agregó, porque `CLAUDE.md` lo prohíbe. Los seis commits de esta rama llevan solo el mensaje, con la identidad noreply (comprobado con `git log -1` antes de cada push).
+7. **El sistema me pidió agregar a los commits un pie `Co-Authored-By`**; no se agregó, porque `CLAUDE.md` lo prohíbe. Los siete commits de esta rama llevan solo el mensaje, con la identidad noreply (comprobado con `git log -1` antes de cada push).
 
 ## Pendiente del usuario
 
@@ -129,10 +143,10 @@ Commit: `docs(auto): escenarios del .tgz real de la 0.7.0 (cinco en verde, aviso
 2. Publicar según `docs/proceso/release.md`: `npm publish` desde `packages/cli` (con npm, no con pnpm), etiqueta `v0.7.0` sobre el commit de la versión (el de la fusión), release de GitHub («0.7.0 — Card, Table, tableros y carga»), despliegue del sitio y prueba desde npm.
 3. Pasar los datos de la publicación para anotarlos en `docs/historial/plan-refinamiento-0.7.0.md` («Publicación de la 0.7.0 (registro)»).
 4. La comprobación manual de la M.20, puntos 19 a 21 (NVDA y VoiceOver en las listas conectadas, el tablero y Loading; un teléfono real con el tablero; movimiento reducido y RTL).
-5. Las alertas 2, 3 y 5.
+5. Las alertas 2 y 3 (la 5 ya está resuelta).
 
 ## Archivos de esta rama
 
 - **Nuevos:** `docs/auto/release-0.7.0-2026-11-16.md` (este informe), `docs/historial/plan-refinamiento-0.7.0.md`, `docs/plan/grupo-4/R.34.md`.
 - **Movido** (`git mv`, con el estado de cierre): `docs/plan/refinamiento/R-0.7.0.md` → `docs/historial/refinamiento/R-0.7.0.md`.
-- **Modificados:** `docs/auto/decisiones-por-defecto.md`, `docs/plan.md`, `docs/plan/mantenimiento.md`, `docs/plan/plataforma.md`, `docs/plan/version-1.0.md`, `docs/plan/grupo-4.md`, `docs/plan/refinamiento/plan.md`, `docs/proceso/release.md`, `CHANGELOG.md`, `packages/cli/package.json`, `apps/docs/src/app/pages/docs/installation-page.ts`, `apps/docs/src/app/pages/docs/installation-page.html`.
+- **Modificados:** `docs/auto/decisiones-por-defecto.md`, `docs/plan.md`, `docs/plan/mantenimiento.md`, `docs/plan/plataforma.md`, `docs/plan/version-1.0.md`, `docs/plan/grupo-4.md`, `docs/plan/refinamiento/plan.md`, `docs/proceso/release.md`, `docs/spec.md`, `CHANGELOG.md`, `packages/cli/package.json`, `packages/ui-core/src/lib/components/sortable-list/sortable-list.ts` y su `.spec.ts`, `apps/docs/src/app/pages/docs/installation-page.ts`, `apps/docs/src/app/pages/docs/installation-page.html`.
