@@ -20,6 +20,9 @@ Para cada punto, la evidencia: el comando y su resultado, o el archivo y la lín
 
 - **Spec al día:** sección 4 (catálogo, archivos por componente y la tabla del grupo), 13 (una tabla de tokens por componente del grupo), 2 (versiones, contra `package.json`) y 12 (compatibilidad).
 - **CHANGELOG:** la sección de la versión, con «Cómo actualizar desde la anterior» si cambia algo publicado, y lo específico que pida la puerta del grupo.
+- **Rupturas y obsoletos, según la versión** (spec 12, «Rupturas y obsoletos», decidido por el usuario el 16/11/2026; la versión, en `packages/cli/package.json` o la que se va a publicar):
+  - **Antes de la 1.0.0:** ningún obsoleto de transición en `packages/ui-core` (`grep -rn "@deprecated\|deprecad" packages/ui-core/src`: cada resultado se justifica o es un hallazgo) y **cada ruptura** del grupo (las marcadas RUPTURA en los informes y en `docs/auto/decisiones-por-defecto.md`, y cualquier cambio de API en `git diff <base>..HEAD`) está en «Rupturas» del CHANGELOG con su «Cómo actualizar».
+  - **Desde la 1.0.0:** ningún cambio incompatible en componentes, `utils` ni tema en una versión menor o de parche; lo que se quite estaba marcado obsoleto (`@deprecated`, CHANGELOG) en una versión menor anterior y solo se quita en una mayor.
 - **Conteos y listas:** el número de componentes y la lista en Fundamentos (`FOUNDATION_PACKAGES` y la tabla de paquetes), `INTRODUCTION_COMPONENTS` de Introducción, la landing, el README de la CLI y el `x-prompt` de `packages/cli/src/ui/schema.json`: los mismos componentes en todos (compáralos con grep o un script, no a ojo).
 - **Páginas con la plantilla:**
   - `doc-pages.spec.ts` en verde (cada componente del grupo registrado en `PAGES`; la lista de pendientes de la migración ya no existe);

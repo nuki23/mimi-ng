@@ -193,12 +193,6 @@ export interface MimiCardTokens {
   /** Borde y sombra de una tarjeta `interactive` con el puntero encima. */
   borderHover?: string;
   shadowHover?: string;
-  /** @deprecated Sin efecto desde la 0.7.0 (R.19: un solo relleno, `padding`). Se quita en la 0.8.0. */
-  paddingHeader?: string;
-  /** @deprecated Sin efecto desde la 0.7.0 (R.19). Se quita en la 0.8.0. */
-  paddingContent?: string;
-  /** @deprecated Sin efecto desde la 0.7.0 (R.19). Se quita en la 0.8.0. */
-  paddingFooter?: string;
 }
 
 export interface MimiAvatarTokens {
@@ -700,6 +694,20 @@ export interface MimiComponentTokens {
   sortable?: MimiSortableTokens;
   command?: MimiCommandTokens;
   dataTable?: MimiTableTokens;
+  loading?: MimiLoadingTokens;
+}
+
+/**
+ * Carga (R.23). El fondo de la capa, el del panel, el texto y el anillo van en el CSS
+ * (`--mimi-loading-bg`, `-panel-bg`, `-fg`, `-spinner`).
+ */
+export interface MimiLoadingTokens {
+  /** El z-index de la capa (50). */
+  z?: string;
+  /** Desenfoque del fondo (el de `--mimi-overlay-blur`). */
+  blur?: string;
+  /** Sombra del panel (la de los paneles flotantes). */
+  shadow?: string;
 }
 
 export interface MimiThemePreset {

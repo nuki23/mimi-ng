@@ -59,9 +59,9 @@ export const CARD_PAGE: DocPage = {
     more: {
       summary: 'Si vienes de la 0.6.0',
       items: [
-        '`<mimi-card>` y sus piezas (`<mimi-card-header>`, `<mimi-card-title>`…) siguen funcionando en la 0.7.0 y se quitan en la 0.8.0.',
+        '`<mimi-card>` y sus piezas (`<mimi-card-header>`, `<mimi-card-title>`…) se quitaron en la 0.7.0: no compilan.',
         'Cambia cada elemento por su directiva en tu elemento: `<mimi-card>` → `<div mimiCard class="flex flex-col">`, `<mimi-card-title>` → `<h3 mimiCardTitle>`.',
-        'Un solo relleno: `--mimi-card-padding-header`, `-content` y `-footer` ya no tienen efecto; usa `--mimi-card-padding` y `--mimi-card-gap`.',
+        'Un solo relleno: `--mimi-card-padding-header`, `-content` y `-footer` (y sus claves del tema) se quitaron; usa `--mimi-card-padding` y `--mimi-card-gap`.',
       ],
     },
   },

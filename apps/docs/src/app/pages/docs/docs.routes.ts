@@ -149,6 +149,11 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./components/combobox/combobox-page').then((m) => m.ComboboxPage),
   },
   {
+    path: 'components/loading',
+    title: 'Loading · Mimi',
+    loadComponent: () => import('./components/loading/loading-page').then((m) => m.LoadingPage),
+  },
+  {
     path: 'components/table',
     title: 'Table · Mimi',
     loadComponent: () => import('./components/table/table-page').then((m) => m.TablePage),
@@ -283,6 +288,11 @@ export const DOCS_ROUTES: Routes = [
     path: 'blocks/table-01',
     title: 'table-01 · Blocks · Mimi',
     loadComponent: () => import('./blocks/table-01-page').then((m) => m.Table01Page),
+  },
+  {
+    path: 'blocks/kanban-01',
+    title: 'kanban-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/kanban-01-page').then((m) => m.Kanban01Page),
   },
   {
     path: 'blocks/pricing-01',

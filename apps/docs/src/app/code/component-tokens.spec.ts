@@ -54,6 +54,7 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   sortable: 'sortable-list',
   command: 'command',
   dataTable: 'data-table',
+  loading: 'loading',
 };
 
 /**

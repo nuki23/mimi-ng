@@ -125,6 +125,7 @@
     "packages": ["@angular/forms"],
     "css": []
   },
+  "loading": { "items": ["utils/size"], "packages": ["@angular/cdk"], "css": [] },
   "number-input": {
     "items": ["utils/field-state", "utils/field-styles", "utils/size"],
     "packages": ["@angular/forms"],

@@ -41,6 +41,7 @@ import {
   type FileReport,
   type Pages,
   blockedMessages,
+  staleCopyMessages,
   emptyReport,
   hasFileChanges,
   isBlockFile,
@@ -771,6 +772,7 @@ function summary(plan: Plan, report: FileReport): Rule {
     )) {
       log.warn(message);
     }
+    for (const message of staleCopyMessages(report, itemOf, registry.version)) log.warn(message);
     // Una página nueva se enruta con la línea exacta (B.11-e); la CLI no edita app.routes.ts.
     // Una sección nueva va dentro de una página.
     const created = new Set(report.created);

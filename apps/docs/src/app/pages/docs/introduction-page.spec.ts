@@ -19,6 +19,11 @@ describe('IntroductionPage', () => {
     expect(el.textContent).not.toContain('próximamente');
   });
 
+  it('la lista va en orden alfabético por nombre (revisor, tanda 3)', () => {
+    const names = INTRODUCTION_COMPONENTS.map((c) => c.name);
+    expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, 'en')));
+  });
+
   it('termina con «Por qué "Mimi"», con su h2 para la TOC', async () => {
     TestBed.configureTestingModule({ providers: [provideRouter([])] });
     const fixture = TestBed.createComponent(IntroductionPage);

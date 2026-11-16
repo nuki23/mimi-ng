@@ -162,7 +162,9 @@ Rama `auto/0.7.0-tanda1-2026-11-15`; detalle en `docs/auto/0.7.0-tanda1-2026-11-
 
 ## Decididas por defecto: tanda 2 de la 0.7.0 (15/11/2026)
 
-Rama `auto/0.7.0-tanda2-2026-11-15`; detalle en `docs/auto/0.7.0-tanda2-2026-11-15.md`. Pendientes de revisión del usuario.
+Rama `auto/0.7.0-tanda2-2026-11-15`; detalle en `docs/auto/0.7.0-tanda2-2026-11-15.md`. **Aceptadas por el usuario el 15/11/2026** (prompt de la tanda 3, rama `auto/0.7.0-tanda3-2026-11-15`): alias de Card hasta la 0.8.0, variantes de Card, Data Table sin directivas de columna (y la ruptura de los tokens de relleno, al CHANGELOG con su migración).
+
+**Decididas por el usuario para la R.34 (15/11/2026):** el Sheet público (G4.2) se construye junto con la R.34; Command a pantalla completa en el teléfono; punto de corte de 640 px; **la 0.7.0 se divide**: R.34 y Sheet abren la 0.8.0 (con Accordion, Stepper y `dashboard-01`). Base: «Decidido por el usuario».
 
 - **R.19 alias de Card:** `<mimi-card>`, `<mimi-card-header>`, `<mimi-card-title>`… siguen funcionando una versión (los mismos `MimiCard…`, con el selector de elemento además del de atributo; `<mimi-card>` conserva `flex flex-col` y `<mimi-card-title>` su `role="heading"` y `level`), `@deprecated`, sin aviso en consola; se quitan en la 0.8.0. Base: PD-1 ofrecía «se quitan o se conservan como alias durante una versión»; la más segura para quien ya los usa. Alternativa: quitarlos ya (RUPTURA dura).
 - **R.19 variantes:** `outline` = el aspecto de siempre (borde y sombra de tarjeta); `elevated` = sin borde visible, sombra de los paneles (`--mimi-shadow-popover`); `flat` = fondo `muted`, sin borde ni sombra; `ghost` = sin fondo, borde ni sombra. `interactive`: borde `--mimi-input-hover` y sombra `--mimi-shadow-neutral-hover` con hover, anillo de foco y `--mimi-press-scale-sm`. Base: tokens que ya existen (no se inventan colores). **Cambio visual menor:** el hueco entre piezas es uno (16 px en `md`): entre contenido y pie pasa de 20 a 16 px.
@@ -171,6 +173,23 @@ Rama `auto/0.7.0-tanda2-2026-11-15`; detalle en `docs/auto/0.7.0-tanda2-2026-11-
 - **R.20 sin columnas como directivas:** la propuesta del plan traía `<ng-container mimiColumn>` dentro de la Data Table (la opción B de la PD-2); con la C elegida por el usuario, no se hace: lo cubre la capa base (`@for` y `@if` en tu HTML). `[columns]` + `mimiTableCell` siguen como el atajo, sin fecha de retiro (PD-2: «recomendado: son el atajo»). Alternativa: hacerlas además (más API que mantener).
 - **R.20 la Data Table «sobre» la base:** comparte las clases de celda y encabezado y las funciones de búsqueda, filtro y orden con `table` (no se reescribió su plantilla con las directivas): mismo aspecto, misma lógica y sin riesgo para `table-01`. Base: «Más simple».
 - **R.20 nombres:** `mimiTableState(data, opciones)`, con `sorting` (la señal) y `sort(columna)` (el mando del encabezado, como en la PD-2), `expandMode` (como pedía el plan con `expandedRows`, renombrado para que coincida con el de la Data Table), `mimiRowToggle` y `mimiCaption`. `mimiTh` sin `NgTemplateOutlet` (metía `@angular/common` en el JS inicial del sitio).
+
+## Decididas por defecto: tanda 3 de la 0.7.0 (15/11/2026)
+
+Rama `auto/0.7.0-tanda3-2026-11-15`; detalle en `docs/auto/0.7.0-tanda3-2026-11-15.md`. Pendientes de revisión del usuario.
+
+- **R.21, cómo se conectan las listas:** con el contenedor `<mimi-sortable-group>` (sobre `CdkDropListGroup`), no con una entrada `group="nombre"`. El plan ofrecía las dos; el contenedor es la forma del cdk, no necesita un registro global y el orden de las columnas (para ← →) sale del documento. Alternativa: `group` por nombre (listas conectadas en cualquier lugar de la página).
+- **R.22, `kanban-01`:** textos en inglés («To do», «In progress», «Done»; el prompt los nombra en español, pero todos los Blocks van en inglés, spec 4); `[(columns)]` (el Block cambia las columnas al mover, como `[(selection)]` en `table-01`) además de `moved`; «In progress» con `limit: 3` en el ejemplo. Base: «Más simple y coherente con la spec».
+- **R.23, carga:** el anillo se copia en la capa (`loading-overlay.ts`) en vez de extraerlo a `utils/spinner.ts`, para no tocar Button en el cierre de la versión; `injectMimiLoading()` además del servicio (limpia al destruir el componente y usa sus textos); un solo anillo (sin `provideMimiLoading({ spinner })`); la capa de un contenedor queda dentro del borde (`inset-0`) con `rounded-[inherit]`. Base: «Más simple».
+- **R.21, textos de Sortable List:** los cinco textos nuevos son **obligatorios** en `MimiSortableText` (como los de antes). **RUPTURA** de tipo para quien escribe el objeto entero (lo vio el revisor de la tanda 3); va al CHANGELOG con su «Cómo actualizar». Alternativa: hacerlos opcionales (con un `??` al inglés en cada uso).
+- **R.21, teclado:** al pasar a otra lista, el elemento va al mismo lugar o al último; las flechas del otro eje (en una lista horizontal, ↑ la anterior y ↓ la siguiente). Sin anuncio cuando la otra lista no lo acepta (el elemento se queda y sigue agarrado).
+
+## Decididas por el usuario: rupturas y obsoletos (16/11/2026)
+
+- **Antes de la 1.0.0:** las rupturas están permitidas y **no se mantienen obsoletos** (sin alias ni exports `@deprecated` de transición); cada ruptura va al CHANGELOG con cómo actualizar.
+- **Desde la 1.0.0:** cambios compatibles en componentes, `utils` y tema; lo que se quite se marca obsoleto y vive al menos una versión menor.
+- La puerta de cada grupo lo comprueba según la versión (`.claude/commands/cerrar-grupo.md`). Está en la spec (12, «Rupturas y obsoletos») y en `CLAUDE.md`.
+- **Reemplaza** dos decisiones anteriores: los alias de Card «hasta la 0.8.0» (tanda 2, aceptada el 15/11/2026) y `utils/size` «deprecado hasta la 1.0» (puerta R.P7, tanda 3): los dos se quitan en la 0.7.0, con su ruptura en el CHANGELOG.
 
 ## Decididas por el usuario: estados de los controles (12/11/2026)
 

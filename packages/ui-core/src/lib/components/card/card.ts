@@ -1,14 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  Renderer2,
-  booleanAttribute,
-  computed,
-  effect,
-  inject,
-  input,
-  numberAttribute,
-} from '@angular/core';
+import { Directive, booleanAttribute, computed, input } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
 
@@ -20,8 +10,8 @@ import { MimiSized } from '@/components/ui/utils/size';
  * lleva el relleno a los lados, la primera arriba y la última abajo; entre dos piezas seguidas, el
  * hueco `--mimi-card-gap` (sin reglas de «primer hijo» que dependan de qué pieza va antes).
  *
- * Los elementos de antes (`<mimi-card>`, `<mimi-card-header>`…) siguen funcionando una versión
- * más, como alias (decidido por defecto el 15/11/2026; se quitan en la 0.8.0).
+ * Los elementos de la 0.6.0 (`<mimi-card>`, `<mimi-card-header>`…) se quitaron en la 0.7.0, sin
+ * alias (política de rupturas antes de la 1.0, 16/11/2026; cómo migrar, en el CHANGELOG).
  */
 
 /** Cómo se ve la superficie. */
@@ -62,7 +52,7 @@ const INTERACTIVE = cn(
  * `size` (el relleno de las piezas, y el tamaño de los controles de dentro, como `mimiSize`).
  */
 @Directive({
-  selector: '[mimiCard], mimi-card',
+  selector: '[mimiCard]',
   hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   host: {
     '[class]': 'classes()',
@@ -75,17 +65,12 @@ export class MimiCard {
   readonly interactive = input(false, { transform: booleanAttribute });
   readonly userClass = input('', { alias: 'class' });
 
-  /** `<mimi-card>` (alias de la 0.6.0) era una columna flexible: se mantiene. */
-  private readonly legacy =
-    inject<ElementRef<HTMLElement>>(ElementRef).nativeElement.tagName === 'MIMI-CARD';
-
   protected readonly classes = computed(() =>
     cn(
       'bg-[color:var(--mimi-card-bg,var(--mimi-card))] text-[color:var(--mimi-card-fg,var(--mimi-card-foreground))]',
       'rounded-[var(--mimi-card-radius,var(--mimi-radius-card))]',
       SURFACE[this.variant()],
       this.interactive() && INTERACTIVE,
-      this.legacy && 'flex flex-col',
       this.userClass(),
     ),
   );
@@ -93,7 +78,7 @@ export class MimiCard {
 
 /** Encabezado: título y descripción, en columna. `<header mimiCardHeader>`. */
 @Directive({
-  selector: '[mimiCardHeader], mimi-card-header',
+  selector: '[mimiCardHeader]',
   host: { [PART]: 'header', '[class]': 'classes()' },
 })
 export class MimiCardHeader {
@@ -103,34 +88,21 @@ export class MimiCardHeader {
   );
 }
 
-/**
- * Título: **tu** encabezado (`<h3 mimiCardTitle>`), con el aspecto de Mimi. El elemento de antes,
- * `<mimi-card-title>`, sigue llevando `role="heading"` y `aria-level` (`level`).
- */
+/** Título: **tu** encabezado (`<h3 mimiCardTitle>`, con su nivel), con el aspecto de Mimi. */
 @Directive({
-  selector: '[mimiCardTitle], mimi-card-title',
+  selector: '[mimiCardTitle]',
   host: { '[class]': 'classes()' },
 })
 export class MimiCardTitle {
-  /** Solo para `<mimi-card-title>` (el alias): su `aria-level`. Con `<h3>`, el nivel es el tuyo. */
-  readonly level = input(3, { transform: numberAttribute });
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
     cn('block text-lg leading-tight font-semibold tracking-[-0.01em]', this.userClass()),
   );
-
-  private readonly legacyHeading = (() => {
-    const element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-    if (element.tagName !== 'MIMI-CARD-TITLE') return null;
-    const renderer = inject(Renderer2);
-    if (!element.hasAttribute('role')) renderer.setAttribute(element, 'role', 'heading');
-    return effect(() => renderer.setAttribute(element, 'aria-level', String(this.level())));
-  })();
 }
 
 /** Descripción bajo el título. `<p mimiCardDescription>`. */
 @Directive({
-  selector: '[mimiCardDescription], mimi-card-description',
+  selector: '[mimiCardDescription]',
   host: { '[class]': 'classes()' },
 })
 export class MimiCardDescription {
@@ -142,7 +114,7 @@ export class MimiCardDescription {
 
 /** Contenido. `<div mimiCardContent>`. */
 @Directive({
-  selector: '[mimiCardContent], mimi-card-content',
+  selector: '[mimiCardContent]',
   host: { [PART]: 'content', '[class]': 'classes()' },
 })
 export class MimiCardContent {
@@ -152,7 +124,7 @@ export class MimiCardContent {
 
 /** Pie con acciones, alineadas al final. `<footer mimiCardFooter>`. */
 @Directive({
-  selector: '[mimiCardFooter], mimi-card-footer',
+  selector: '[mimiCardFooter]',
   host: { [PART]: 'footer', '[class]': 'classes()' },
 })
 export class MimiCardFooter {

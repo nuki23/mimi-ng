@@ -123,6 +123,11 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
       '`size` en `mimiTable`: alto de fila (34 / 42 / 50 px) y de cabecera (32 / 38 / 44 px), como Data Table.',
   },
   {
+    component: 'Loading',
+    changes:
+      'Anillo 20 / 28 / 40 px y texto 12 / 14 / 16 px (`mimiBlockSize` o `size` en `show()`).',
+  },
+  {
     component: 'Tooltip',
     changes:
       'Texto 11,5 / 12,5 / 13,5 px y relleno. Toma el tamaño del contenedor del disparador; `mimiTooltipSize` lo fija.',

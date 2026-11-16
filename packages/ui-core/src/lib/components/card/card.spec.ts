@@ -34,19 +34,10 @@ const PADDING = [
     <button id="button" type="button" mimiCard interactive (click)="clicks.set(clicks() + 1)">
       Elegir
     </button>
-    <mimi-card id="legacy">
-      <mimi-card-header>
-        <mimi-card-title [level]="level()">Antes</mimi-card-title>
-        <mimi-card-description>Los elementos de la 0.6.0.</mimi-card-description>
-      </mimi-card-header>
-      <mimi-card-content>Siguen</mimi-card-content>
-      <mimi-card-footer>Pie</mimi-card-footer>
-    </mimi-card>
   `,
 })
 class Host {
   readonly extra = signal('');
-  readonly level = signal(3);
   readonly variant = signal<MimiCardVariant>('outline');
   readonly size = signal<'sm' | 'md' | 'lg' | undefined>(undefined);
   readonly clicks = signal(0);
@@ -153,17 +144,14 @@ describe('MimiCard (R.19: superficie y piezas opcionales)', () => {
     expect(q('#full [mimiCardFooter]').classList).toContain('justify-end');
   });
 
-  it('los elementos de la 0.6.0 siguen (alias): columna, piezas y el título con role y nivel', async () => {
-    const { host, q, update } = await setup();
-    const card = q('#legacy');
-    for (const cls of [...SURFACE, 'flex', 'flex-col']) expect(card.classList).toContain(cls);
-    for (const cls of PADDING) expect(q('#legacy mimi-card-content').classList).toContain(cls);
-    expect(q('#legacy mimi-card-content').classList).toContain('block');
-    const title = q('#legacy mimi-card-title');
-    expect(title.getAttribute('role')).toBe('heading');
-    expect(title.getAttribute('aria-level')).toBe('3');
-    await update(() => host.level.set(2));
-    expect(title.getAttribute('aria-level')).toBe('2');
+  it('sin los elementos de la 0.6.0 (política de rupturas, 16/11/2026): solo las directivas', () => {
+    // Antes de la 1.0 no se mantienen alias: `<mimi-card>`, `<mimi-card-title>`… se quitaron.
+    const def = (d: unknown) =>
+      (d as { ɵdir: { selectors: unknown; inputs: Record<string, unknown> } }).ɵdir;
+    for (const d of MimiCardImports)
+      expect(JSON.stringify(def(d).selectors)).not.toContain('mimi-card');
+    // `level` era solo para `<mimi-card-title>`.
+    expect(Object.keys(def(MimiCardImports[2]).inputs)).not.toContain('level');
   });
 
   it('la clase del usuario gana', async () => {

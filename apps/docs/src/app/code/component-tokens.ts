@@ -55,7 +55,8 @@ export type TokenComponent =
   | 'tree'
   | 'sortable'
   | 'command'
-  | 'dataTable';
+  | 'dataTable'
+  | 'loading';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -97,6 +98,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   sortable: 'sortable',
   command: 'command',
   dataTable: 'table',
+  loading: 'loading',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1930,6 +1932,51 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-primary-subtle',
       preset: false,
       description: 'Fondo del hueco donde caerá.',
+    },
+  ],
+  loading: [
+    { name: '--mimi-loading-z', default: '50', preset: true, description: 'z-index de la capa.' },
+    {
+      name: '--mimi-loading-blur',
+      default: 'overlay-blur',
+      inherits: '--mimi-overlay-blur',
+      preset: true,
+      description: 'Desenfoque del fondo.',
+    },
+    {
+      name: '--mimi-loading-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: true,
+      description: 'Sombra del panel.',
+    },
+    {
+      name: '--mimi-loading-bg',
+      default: 'overlay',
+      inherits: '--mimi-overlay',
+      preset: false,
+      description: 'Fondo de la capa.',
+    },
+    {
+      name: '--mimi-loading-panel-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo del panel del mensaje.',
+    },
+    {
+      name: '--mimi-loading-fg',
+      default: 'popover-foreground',
+      inherits: '--mimi-popover-foreground',
+      preset: false,
+      description: 'Texto del mensaje.',
+    },
+    {
+      name: '--mimi-loading-spinner',
+      default: 'primary',
+      inherits: '--mimi-primary',
+      preset: false,
+      description: 'Color del anillo.',
     },
   ],
   command: [

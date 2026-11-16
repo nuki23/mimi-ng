@@ -104,6 +104,10 @@
             "label": "input-otp"
           },
           {
+            "value": "loading",
+            "label": "loading"
+          },
+          {
             "value": "number-input",
             "label": "number-input"
           },
@@ -182,6 +186,10 @@
           {
             "value": "tree",
             "label": "tree"
+          },
+          {
+            "value": "kanban-01",
+            "label": "kanban-01 (Block, página)"
           },
           {
             "value": "login-01",

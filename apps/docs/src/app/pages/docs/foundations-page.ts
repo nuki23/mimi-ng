@@ -16,6 +16,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   button: [],
   card: [],
   table: [],
+  loading: ['cdk'],
   progress: [],
   separator: [],
   skeleton: [],
@@ -139,6 +140,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiColorPickerText',
     spanish: 'MIMI_COLOR_PICKER_TEXT_ES',
     file: 'color-picker/color-picker-texts',
+  },
+  {
+    component: 'Loading',
+    provider: 'provideMimiLoadingText',
+    spanish: 'MIMI_LOADING_TEXT_ES',
+    file: 'loading/loading-texts',
   },
   {
     component: 'Sortable List',

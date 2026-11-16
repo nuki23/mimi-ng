@@ -102,4 +102,23 @@ describe('FoundationsPage', () => {
       expect(code, text.spanish).toContain(`export const ${text.spanish}`);
     }
   });
+
+  it('y al revés: cada provideMimi…Text de ui-core está en la tabla (revisor, tanda 3)', () => {
+    const fs = foundationsFs as unknown as {
+      readdirSync(p: string, o: { recursive: true }): string[];
+    };
+    const dir = `${ROOT}/packages/ui-core/src/lib/components`;
+    const providers = fs
+      .readdirSync(dir, { recursive: true })
+      .filter((f) => /-texts\.ts$|error-messages\.ts$/.test(String(f)))
+      .flatMap((f) =>
+        [
+          ...foundationsFs
+            .readFileSync(`${dir}/${f}`, 'utf8')
+            .matchAll(/export function (provideMimi\w+)\(/g),
+        ].map((m) => m[1]),
+      );
+    const listed = new Set<string>(FOUNDATION_TEXTS.map((t) => t.provider));
+    expect(providers.filter((p) => !listed.has(p))).toEqual([]);
+  });
 });

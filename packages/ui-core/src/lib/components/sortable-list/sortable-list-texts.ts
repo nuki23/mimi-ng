@@ -21,6 +21,16 @@ export interface MimiSortableText {
   dropped: (label: string, position: number, total: number) => string;
   /** Al cancelar con Escape. */
   canceled: (label: string, position: number, total: number) => string;
+  /** Instrucciones dentro de un grupo de listas (R.21): también ← →. */
+  instructionsGroup: string;
+  /** Al pasar a otra lista con el teclado (R.21). `list` es el nombre de la lista. */
+  movedToList: (label: string, list: string, position: number, total: number) => string;
+  /** Al soltar en otra lista (R.21). */
+  droppedInList: (label: string, list: string, position: number, total: number) => string;
+  /** El texto de una lista vacía dentro de un grupo, donde se suelta (R.21). */
+  empty: string;
+  /** La otra lista no admite el elemento (`accepts`; R.21). */
+  rejected: (label: string, list: string) => string;
 }
 
 /** Textos predeterminados (inglés). */
@@ -35,6 +45,14 @@ export const MIMI_SORTABLE_TEXT_EN: MimiSortableText = {
   dropped: (label, position, total) => `${label} dropped at position ${position} of ${total}.`,
   canceled: (label, position, total) =>
     `Reordering canceled. ${label} is back at position ${position} of ${total}.`,
+  instructionsGroup:
+    'Press Space or Enter to grab, the up and down arrows to move, the left and right arrows to move to another list, Space or Enter to drop and Escape to cancel.',
+  movedToList: (label, list, position, total) =>
+    `${label} moved to ${list}, position ${position} of ${total}.`,
+  droppedInList: (label, list, position, total) =>
+    `${label} dropped in ${list}, position ${position} of ${total}.`,
+  empty: 'Drop here',
+  rejected: (label, list) => `${list} doesn't accept ${label}.`,
 };
 
 /** Textos en español: `provideMimiSortableText(MIMI_SORTABLE_TEXT_ES)`. */
@@ -49,6 +67,14 @@ export const MIMI_SORTABLE_TEXT_ES: MimiSortableText = {
   dropped: (label, position, total) => `${label} soltado en el lugar ${position} de ${total}.`,
   canceled: (label, position, total) =>
     `Se canceló. ${label} vuelve al lugar ${position} de ${total}.`,
+  instructionsGroup:
+    'Pulsa Espacio o Enter para agarrar, las flechas arriba y abajo para mover, izquierda y derecha para pasar a otra lista, Espacio o Enter para soltar y Escape para cancelar.',
+  movedToList: (label, list, position, total) =>
+    `${label} movido a ${list}, lugar ${position} de ${total}.`,
+  droppedInList: (label, list, position, total) =>
+    `${label} soltado en ${list}, lugar ${position} de ${total}.`,
+  empty: 'Suelta aquí',
+  rejected: (label, list) => `${list} no admite ${label}.`,
 };
 
 /** Textos activos. Sin `provideMimiSortableText`, los predeterminados en inglés. */

@@ -93,6 +93,7 @@ packages/cli/       # @mimi-ng/cli (Angular Schematics)
   - Antes del push, verifica autor y mensaje con `git log -1 --format='%an <%ae>%n%B'`.
   - Push sin `--force`. Si algo falla, detente y avisa.
 - **No publiques nada** (npm, tags, releases, despliegues): lo hace siempre el usuario, aunque autorice commits. Puedes darle los comandos (`docs/proceso/release.md`).
+- **Rupturas y obsoletos** (decidido por el usuario el 16/11/2026; spec 12): **antes de la 1.0.0** las rupturas están permitidas y **no se mantienen obsoletos** (nada de alias ni exports `@deprecated` de transición: lo que cambia, cambia en esa versión), y cada ruptura va al CHANGELOG con cómo actualizar. **Desde la 1.0.0**, los cambios en componentes, `utils` y tema son compatibles; lo que se quite se marca obsoleto y vive al menos una versión menor. `/cerrar-grupo` lo comprueba según la versión.
 - No agregues dependencias que no estén en la spec sin preguntar.
 - Cada componente tiene su página en el showcase, escrita **con la plantilla de página** (`docs/spec/plantilla-pagina.md`). La página es una configuración `DocPage` (`<nombre>.page.ts`) que pinta `<app-doc-page>`: nunca HTML propio, ni encabezados ni secciones a mano. Cada ejemplo lleva su categoría y su frase. Los límites (ejemplos, palabras, líneas) y el orden los comprueba `apps/docs/src/app/doc-page/doc-pages.spec.ts`; si una página no cabe, se rediseña el ejemplo o se pide una excepción al usuario, nunca se cambia la prueba por tu cuenta.
 - Para crear o editar archivos usa siempre la herramienta de archivos, nunca bash con heredoc ni echo: las comillas invertidas se ejecutan como comandos. Tampoco `sed -i` para editar archivos del repo.
@@ -117,7 +118,7 @@ Se activa solo cuando el prompt de la sesión dice «modo autónomo». Mientras 
 
 **A3. Decisiones.** Toda «PENDIENTE DE DECIDIR» de la tarea se resuelve sola: si tiene «Recomendación», se adopta; si no, se elige la opción más simple y coherente con `docs/spec.md`. Se anota en la tarea como «Decidido por defecto (DD/MM/AAAA), pendiente de revisión del usuario», con una fila en `docs/auto/decisiones-por-defecto.md`, y la línea se quita del índice de `docs/plan/decisiones.md`. Si el plan y la spec no coinciden (regla 5 del plan), se decide igual, por la spec, y se registra igual. Los spikes se ejecutan; si fallan, se usa el plan B documentado en la tarea.
 
-**A4. Rupturas.** Hasta la 1.0 se permiten cambios de API. Todo lo que cambie algo publicado en la 0.2.0 se marca **RUPTURA** en el registro. El CHANGELOG no tiene sección «Sin publicar»: las rupturas las pasa al CHANGELOG la puerta del grupo, desde el registro.
+**A4. Rupturas.** Hasta la 1.0 se permiten cambios de API, sin obsoletos de transición (ver «Rupturas y obsoletos» en «Forma de trabajar»). Todo lo que cambie algo publicado en la 0.2.0 se marca **RUPTURA** en el registro. El CHANGELOG no tiene sección «Sin publicar»: las rupturas las pasa al CHANGELOG la puerta del grupo, desde el registro.
 
 **A5. Commits.** Un commit por tarea en la rama, con las barreras de «Commit y push» (identidad noreply, `git add` de rutas concretas, nunca `-A` ni `.`, nunca `.vscode/`, sin atribución ni mención a Claude o a una IA, sin `--force`). Después de cada commit, push de la rama `auto/…` (nunca de otra). Fusionar a `main` lo hace siempre el usuario.
 

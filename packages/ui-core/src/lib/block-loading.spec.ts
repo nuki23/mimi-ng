@@ -7,6 +7,7 @@ import { Pricing01 } from './blocks/pricing-01/pricing-01';
 import { Settings01 } from './blocks/settings-01/settings-01';
 import { Signup01 } from './blocks/signup-01/signup-01';
 import { Table01 } from './blocks/table-01/table-01';
+import { Kanban01 } from './blocks/kanban-01/kanban-01';
 
 /**
  * R.11: mientras un Block carga (o guarda), nada se puede editar, pulsar ni enfocar. El anfitrión
@@ -21,6 +22,7 @@ const BLOCKS: { name: string; type: Type<unknown>; input: 'loading' | 'saving' }
   { name: 'settings-01', type: Settings01, input: 'saving' },
   { name: 'pricing-01', type: Pricing01, input: 'loading' },
   { name: 'table-01', type: Table01, input: 'loading' },
+  { name: 'kanban-01', type: Kanban01, input: 'loading' },
 ];
 
 /**
