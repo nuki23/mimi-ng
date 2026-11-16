@@ -72,6 +72,8 @@ export interface BlockedItem {
   dependency?: string;
   /** Ya estaba en el proyecto (se habría actualizado) o se habría agregado. */
   installed: boolean;
+  /** La versión en que se queda (la más vieja de sus archivos), si estaba instalado. */
+  from?: string | null;
 }
 
 export const emptyReport = (): FileReport => ({
@@ -257,6 +259,18 @@ export function writeTemplates(options: {
       ]),
     );
 
+    // La versión en que se queda un ítem que no se escribe: la más vieja de sus archivos.
+    const oldestOf = (item: string) =>
+      states
+        .get(item)!
+        .filter((s) => s.state !== 'new')
+        .map((s) => s.from)
+        .reduce<string | null | undefined>(
+          (oldest, from) =>
+            oldest === undefined || compareVersions(from, oldest) < 0 ? from : oldest,
+          undefined,
+        ) ?? null;
+
     // Bloqueados por un cambio propio y, después, por una dependencia bloqueada.
     const blocked = new Map<string, BlockedItem>();
     if (!options.overwrite) {
@@ -267,6 +281,7 @@ export function writeTemplates(options: {
             item,
             files: modified.map((s) => s.file),
             installed: true,
+            from: oldestOf(item),
           });
         }
       }
@@ -276,11 +291,13 @@ export function writeTemplates(options: {
           .filter((dep) => dep !== item)
           .find((dep) => blocked.has(dep) && blocked.get(dep)!.files.length > 0);
         if (dependency) {
+          const installed = states.get(item)!.some((s) => s.state !== 'new');
           blocked.set(item, {
             item,
             files: [],
             dependency,
-            installed: states.get(item)!.some((s) => s.state !== 'new'),
+            installed,
+            from: installed ? oldestOf(item) : null,
           });
         }
       }
@@ -401,6 +418,45 @@ export function blockedMessages(
       `${BASE_DIR}/${dir}/, para comparar.`
     );
   });
+}
+
+/**
+ * Una copia vieja que se queda (bloqueada por un cambio propio o por una dependencia bloqueada)
+ * junto a una utilidad o el tema que sí se actualizaron en esta ejecución: si la copia usa algo
+ * que cambió, deja de compilar (escenario 4 del `.tgz`, R.P7: un Button de la 0.6.0 modificado y
+ * `utils/size` nuevo). No se bloquea la utilidad (la usan los demás): se avisa, con el componente,
+ * lo que cambió y las dos salidas. `itemOf` dice a qué ítem pertenece cada archivo actualizado.
+ */
+export function staleCopyMessages(
+  report: FileReport,
+  itemOf: (file: string) => string,
+  version: string,
+): string[] {
+  const updated = new Set(report.updated.map(({ file }) => itemOf(file)));
+  const messages: string[] = [];
+  for (const { item, files, dependency, installed, from } of report.blocked) {
+    const type = registry.items[item]?.type;
+    if (!installed || type === 'theme') continue;
+    const uses = resolveItems(item).filter(
+      (dep) => dep !== item && updated.has(dep) && registry.items[dep]?.type === 'util',
+    );
+    // El tema no es una dependencia del registro, pero todos los componentes lo usan.
+    if (type === 'component' && updated.has('theme')) uses.push('el tema');
+    if (uses.length === 0) continue;
+    const list = uses.length === 1 ? uses[0] : `${uses.slice(0, -1).join(', ')} y ${uses.at(-1)}`;
+    const why = dependency ? `necesita ${dependency}, que no se actualizó` : 'lo modificaste';
+    const source = files[0] ?? registry.items[item].files[0];
+    const dir = projectPathOf(source).split('/').slice(0, -1).join('/');
+    messages.push(
+      `Tu ${item} se quedó en la ${from ?? 'versión anterior'} (${why}), pero usa ${list}, que sí ` +
+        `${uses.length === 1 ? 'se actualizó' : 'se actualizaron'} a ${version}: si tu copia usa ` +
+        'algo que cambió, dejará de compilar. Dos salidas: (1) adapta tu copia a ' +
+        `${list} ${version} (compara ${BASE_DIR}/${dir}/ con la versión nueva y lee el ` +
+        `CHANGELOG); o (2) guarda tus cambios${dependency ? ` de ${dependency}` : ''}, vuelve a ` +
+        'ejecutar el comando con --overwrite y aplícalos de nuevo.',
+    );
+  }
+  return messages;
 }
 
 /** Compara versiones `x.y.z` numéricamente (`0.10.0` > `0.9.0`). `null` es la más vieja. */

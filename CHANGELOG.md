@@ -34,6 +34,7 @@ Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [ve
 - **Loading** (R.23): `injectMimiLoading().show()` / `MimiLoadingService` para toda la vista (con contador, `delay` de 200 ms y `minDuration` de 400 ms) y `[mimiBlock]` para un contenedor; lo de debajo queda `inert` y con `aria-busy`, se anuncia y el foco vuelve. Textos `provideMimiLoadingText` (`_ES`). `ng g mimi loading`.
 - **Tamaños** en Input OTP, File Upload (la zona) y `mimi-color-input` (M.27), y en Card y Table.
 - **Confirm** con `size` (R.27).
+- **CLI:** aviso cuando una copia tuya que no se actualiza usa una utilidad o el tema que sí se actualizó (con el componente, la utilidad y las dos salidas).
 
 ### Cómo actualizar desde la 0.6.0
 
@@ -42,7 +43,7 @@ npm i -D @mimi-ng/cli@0.7.0     # o: pnpm add -D @mimi-ng/cli@0.7.0
 npx ng g mimi <los componentes y Blocks que usas>
 ```
 
-La CLI dice «actualizado de 0.6.0 a 0.7.0» en lo que no modificaste y **bloquea** lo que sí (con su aviso y la copia de `.mimi/base/` para comparar). **Ojo con el efecto en cadena:** lo que depende de un componente bloqueado tampoco se actualiza ni se agrega (todo o nada). Por ejemplo, con tu Button modificado no se actualizan Pagination, Data Table ni `pricing-01`, y `kanban-01` no se agrega («necesita button 0.7.0»); la CLI lo dice ítem por ítem. Actualiza primero ese componente (`--overwrite` y vuelve a aplicar tus cambios). Antes, cambia `size="default"` por `md` (deja de compilar) y revisa las rupturas de Card, Button y Data Table de arriba.
+La CLI dice «actualizado de 0.6.0 a 0.7.0» en lo que no modificaste y **bloquea** lo que sí (con su aviso y la copia de `.mimi/base/` para comparar). **Ojo con el efecto en cadena:** lo que depende de un componente bloqueado tampoco se actualiza ni se agrega (todo o nada). Por ejemplo, con tu Button modificado no se actualizan Pagination, Data Table ni `pricing-01`, y `kanban-01` no se agrega («necesita button 0.7.0»); la CLI lo dice ítem por ítem. **Y las utilidades sí se actualizan:** si tu copia vieja (modificada, o bloqueada por otra) usa una utilidad o el tema que cambió, la CLI te avisa con el componente, la utilidad y las dos salidas (adaptar tu copia o `--overwrite`): es el caso de `utils/size` con un Button o una Pagination de la 0.6.0 modificados. Actualiza primero ese componente (`--overwrite` y vuelve a aplicar tus cambios). Antes, cambia `size="default"` por `md` (deja de compilar) y revisa las rupturas de Card, Button y Data Table de arriba.
 
 ## 0.6.0 (13/11/2026): tema de marca, tamaños y formularios
 

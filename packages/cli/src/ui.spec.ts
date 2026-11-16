@@ -910,6 +910,51 @@ describe('ng g mimi: todo o nada por componente', () => {
     ]);
   });
 
+  it('button modificado y utils/size nuevo: se actualiza la utilidad y avisa con las dos salidas (16/11/2026)', async () => {
+    // El escenario 4 del .tgz (R.P7): tu Button de la 0.6.0 se queda, pero utils/size (que no
+    // tocaste) se actualiza; si tu copia usa algo que cambió, deja de compilar. No se bloquea la
+    // utilidad: se avisa.
+    const { run, tree, warnings } = await initialized();
+    const installed = await run('mimi', { components: ['button'] }, tree);
+    makeOld(installed, [...BUTTON_FILES, 'utils/size.ts'], ['button/button.ts']);
+    const result = await run('mimi', { components: ['button'] }, installed);
+
+    expect(result.readContent(`/${UI}/utils/size.ts`)).toBe(templateOf('utils/size.ts'));
+    expect(result.readContent(`/${UI}/button/button.ts`)).toBe(
+      `${oldContent('button/button.ts')}// cambio propio\n`,
+    );
+    const warning = warnings().find((w) => w.includes('utils/size') && w.startsWith('Tu button'));
+    expect(warning).toBe(
+      `Tu button se quedó en la ${OLD} (lo modificaste), pero usa utils/size, que sí se ` +
+        `actualizó a ${registry.version}: si tu copia usa algo que cambió, dejará de compilar. ` +
+        `Dos salidas: (1) adapta tu copia a utils/size ${registry.version} (compara ` +
+        `.mimi/base/button/ con la versión nueva y lee el CHANGELOG); o (2) guarda tus cambios, ` +
+        'vuelve a ejecutar el comando con --overwrite y aplícalos de nuevo.',
+    );
+  });
+
+  it('pagination bloqueado por button y utils/size nuevo: también avisa (y nombra a button)', async () => {
+    const { run, tree, warnings } = await initialized();
+    const installed = await run('mimi', { components: ['pagination'] }, tree);
+    const pagination = [
+      'components/pagination/pagination.ts',
+      'components/pagination/pagination-page-size.ts',
+      'components/pagination/pagination-texts.ts',
+      'components/pagination/index.ts',
+    ].map((f) => f.replace(/^components\//, ''));
+    makeOld(installed, [...BUTTON_FILES, ...pagination, 'utils/size.ts'], ['button/button.ts']);
+    const result = await run('mimi', { components: ['pagination'] }, installed);
+
+    expect(result.readContent(`/${UI}/utils/size.ts`)).toBe(templateOf('utils/size.ts'));
+    expect(warnings()).toContain(
+      `Tu pagination se quedó en la ${OLD} (necesita button, que no se actualizó), pero usa ` +
+        `utils/size, que sí se actualizó a ${registry.version}: si tu copia usa algo que cambió, ` +
+        `dejará de compilar. Dos salidas: (1) adapta tu copia a utils/size ${registry.version} ` +
+        `(compara .mimi/base/pagination/ con la versión nueva y lee el CHANGELOG); o (2) guarda ` +
+        'tus cambios de button, vuelve a ejecutar el comando con --overwrite y aplícalos de nuevo.',
+    );
+  });
+
   it('confirm instalado y button modificado: confirm tampoco se actualiza; dialog sí', async () => {
     const { run, tree, warnings, logs } = await initialized();
     const installed = await run('mimi', { components: ['confirm'] }, tree);
