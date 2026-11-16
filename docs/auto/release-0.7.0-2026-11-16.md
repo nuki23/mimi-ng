@@ -45,3 +45,23 @@ Búsqueda de `0.6.0` en el repo (`git grep`, sin `CHANGELOG.md`, `docs/historial
 - **Faltaba, y se agregó** (en «Cambios visibles»): **Card, Input OTP, File Upload y `mimi-color-input` siguen el tamaño de su contenedor** (R.19 y M.27; comprobado en `theme-base.css`: `--mimi-card-p` es 1rem en `[data-size="sm"]` y 2rem en `lg`, y los cuatro usan `MimiSized`). En la 0.6.0 una Card dentro de un `mimiSize="sm"` tenía 24 px de relleno; ahora 16. Con su salida (`size="md"` en el componente).
 
 Commit: `chore(release): versión 0.7.0 y CHANGELOG 0.7.0 (16/11/2026), con el tamaño heredado de Card, Input OTP y File Upload en «Cambios visibles»`.
+
+## 4. Build, pruebas y formato
+
+Con la versión ya en 0.7.0 (salidas guardadas fuera del repo, en `C:\t\r070log`, borradas al final):
+
+- `pnpm build` (con `NG_CLI_ANALYTICS=false`): en verde, **sin avisos** de presupuesto ni de compilación (la búsqueda de `warning`, `error`, `budget` y `exceeded` en la salida no encontró nada). `packages/cli/dist/registry.json` dice `"version": "0.7.0"`.
+- `pnpm test`: **docs 557 (82 archivos), ui-core 1133 (103 archivos), CLI 206 (6 archivos)**, todas en verde. 0.6.0: 260 / 1061 / 202 (`docs/auto/release-0.6.0-2026-11-13.md`, paso 4): **+297 / +72 / +4**.
+- `pnpm format:check`: «All matched files use Prettier code style!».
+
+| Medida                  | Crudo (0.6.0) | Crudo (0.7.0) | gzip (0.6.0) | gzip (0.7.0) | Aviso  | Error  |
+| ----------------------- | ------------- | ------------- | ------------ | ------------ | ------ | ------ |
+| JS inicial              | 334,89 kB     | 294,58 kB     | 106,23 kB    | 93,70 kB     | 345 kB | 360 kB |
+| CSS global (`styles`)   | 130,77 kB     | 139,19 kB     | 18,70 kB     | 19,72 kB     | 180 kB | 195 kB |
+| `main`                  | 137,83 kB     | 98,08 kB      | —            | —            | 140 kB | 145 kB |
+| `initial` (JS + CSS)    | 465,66 kB     | 433,77 kB     | —            | —            | 525 kB | 555 kB |
+| `components.css` (dif.) | 140,94 kB     | 148,05 kB     | 19,81 kB     | 20,55 kB     | —      | —      |
+
+Cifras de `apps/docs/scripts/check-initial-js.mjs` (JS inicial y CSS global, crudo y gzip; brotli del JS inicial: 83,18 kB) y de `ng build` (`main`, `initial`); `components.css`, con `ls` y `gzip -c | wc -c` (148 050 y 20 545 bytes). **Antes y después de esta preparación son iguales** a los de la tanda 3 (sección 7.7: 294,58 / 93,71 y 139,19 / 19,72; el gzip del JS varía 0,01 kB entre compilaciones): esta rama solo cambió la versión en dos textos del sitio. **Frente a la 0.6.0**, el JS inicial baja 40,31 kB crudo (la M.25: Button y `tailwind-merge` fuera de la cabecera; `main` −39,75 kB) y el CSS global sube 8,42 kB crudo / 1,02 kB gzip (las clases de las tandas de la 0.7.0 que usa el sitio inicial: la capa de Loading, Card y Table; las midieron sus informes). Ningún presupuesto avisa ni se subió.
+
+Commit: `docs(auto): build, pruebas y bundle de la 0.7.0 frente a la 0.6.0`.
