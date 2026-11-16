@@ -151,7 +151,6 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [x] R.31 (hecha el 15/11/2026) Nota de contraste al cambiar el primario (texto `text-primary` con un primario propio claro) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.32 (hecha el 15/11/2026) Quitar el alias `default` de `size` (RUPTURA, anunciada en la 0.6.0) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.33 (hecha el 15/11/2026) Button en carga sigue siendo enfocable (`aria-disabled` + `aria-busy` y clics bloqueados, en vez del `disabled` nativo; **RUPTURA**) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [ ] R.34 Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; valora adelantar el Sheet público, G4.2) · v0.7.0 (tanda 3, propuesta) · L · depende: M.9, R.16 · **solo plan, pendiente de revisión del usuario** (15/11/2026) · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [~] M.9 completa (hecha el 15/11/2026 a falta de `ng g mimi select` en un proyecto real, en la puerta R.P7) (lo que faltaba de la R.15; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
 - [x] M.25 `main` del sitio a 2,17 kB de su aviso: medir y bajarlo **antes** de R.19 a R.23 (**hecha el 15/11/2026**: `main` de 137,99 a 98,02 kB; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
 - [ ] R.P7 Puerta de la 0.7.0 · v0.7.0 · — · depende: R.19 a R.23, R.25 a R.33, M.9, M.25 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
@@ -171,10 +170,11 @@ Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También e
 
 ## Grupo 4 → v0.8.0: estructura
 
-Movido de la 0.6.0 a la **0.8.0** (09/11/2026: la 0.6.0 y la 0.7.0 son el plan de refinamiento, arriba). Sin cambios de contenido. Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md) (B.8, en [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)).
+Movido de la 0.6.0 a la **0.8.0** (09/11/2026: la 0.6.0 y la 0.7.0 son el plan de refinamiento, arriba). **La abren la R.34 y el Sheet (G4.2), juntos** (decidido por el usuario el 15/11/2026, al dividir la 0.7.0). Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md) (B.8, en [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)).
 
+- [ ] R.34 Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; Command a pantalla completa; corte 640 px) · v0.8.0 (la abre, con la G4.2; decidido por el usuario el 15/11/2026) · L · depende: M.9, R.16 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [ ] G4.1 Accordion · v0.8.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.2 Sheet/Drawer · v0.8.0 · — · depende: G3.P, G1.6 (y la 0.7.0 publicada: usa los tamaños de R.1) · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] G4.2 Sheet/Drawer (se construye junto con la R.34, sobre la misma hoja; lados izquierda, derecha y abajo) · v0.8.0 · — · depende: G3.P, G1.6, R.34 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 - [ ] G4.3 Stepper · v0.8.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 - [ ] B.8 `dashboard-01` · v0.8.0 · — · depende: B.1, G3.4, G4.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] G4.P Puerta del Grupo 4 · v0.8.0 · — · depende: G4.1 a G4.3, B.8 · [docs/plan/grupo-4.md](plan/grupo-4.md)

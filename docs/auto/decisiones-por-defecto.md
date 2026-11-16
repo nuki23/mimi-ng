@@ -162,7 +162,9 @@ Rama `auto/0.7.0-tanda1-2026-11-15`; detalle en `docs/auto/0.7.0-tanda1-2026-11-
 
 ## Decididas por defecto: tanda 2 de la 0.7.0 (15/11/2026)
 
-Rama `auto/0.7.0-tanda2-2026-11-15`; detalle en `docs/auto/0.7.0-tanda2-2026-11-15.md`. Pendientes de revisión del usuario.
+Rama `auto/0.7.0-tanda2-2026-11-15`; detalle en `docs/auto/0.7.0-tanda2-2026-11-15.md`. **Aceptadas por el usuario el 15/11/2026** (prompt de la tanda 3, rama `auto/0.7.0-tanda3-2026-11-15`): alias de Card hasta la 0.8.0, variantes de Card, Data Table sin directivas de columna (y la ruptura de los tokens de relleno, al CHANGELOG con su migración).
+
+**Decididas por el usuario para la R.34 (15/11/2026):** el Sheet público (G4.2) se construye junto con la R.34; Command a pantalla completa en el teléfono; punto de corte de 640 px; **la 0.7.0 se divide**: R.34 y Sheet abren la 0.8.0 (con Accordion, Stepper y `dashboard-01`). Base: «Decidido por el usuario».
 
 - **R.19 alias de Card:** `<mimi-card>`, `<mimi-card-header>`, `<mimi-card-title>`… siguen funcionando una versión (los mismos `MimiCard…`, con el selector de elemento además del de atributo; `<mimi-card>` conserva `flex flex-col` y `<mimi-card-title>` su `role="heading"` y `level`), `@deprecated`, sin aviso en consola; se quitan en la 0.8.0. Base: PD-1 ofrecía «se quitan o se conservan como alias durante una versión»; la más segura para quien ya los usa. Alternativa: quitarlos ya (RUPTURA dura).
 - **R.19 variantes:** `outline` = el aspecto de siempre (borde y sombra de tarjeta); `elevated` = sin borde visible, sombra de los paneles (`--mimi-shadow-popover`); `flat` = fondo `muted`, sin borde ni sombra; `ghost` = sin fondo, borde ni sombra. `interactive`: borde `--mimi-input-hover` y sombra `--mimi-shadow-neutral-hover` con hover, anillo de foco y `--mimi-press-scale-sm`. Base: tokens que ya existen (no se inventan colores). **Cambio visual menor:** el hueco entre piezas es uno (16 px en `md`): entre contenido y pie pasa de 20 a 16 px.
