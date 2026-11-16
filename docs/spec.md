@@ -1688,6 +1688,13 @@ Mimi usa versionado semántico propio, independiente del de Angular: `0.x` mient
 - **Menor:** componentes o funciones nuevas.
 - **Parche:** correcciones.
 
+### Rupturas y obsoletos (decidido por el usuario el 16/11/2026)
+
+- **Antes de la 1.0.0:** las rupturas están **permitidas** y **no se mantienen obsoletos**: lo que se quita o cambia, se quita o cambia en esa versión, sin alias ni exports `@deprecated` de transición. Cada ruptura va al CHANGELOG de su versión, en «Rupturas», con **cómo actualizar**.
+- **Desde la 1.0.0:** los cambios en componentes, `utils` y tema son **compatibles** en las versiones menores y de parche. Lo que se vaya a quitar se marca **obsoleto** (`@deprecated` en el código, aviso en desarrollo si se puede, y en el CHANGELOG) y **vive al menos una versión menor** antes de quitarse, que solo se quita en una versión mayor.
+- La puerta de cada grupo (`/cerrar-grupo`) lo comprueba según la versión: antes de la 1.0, que no queden obsoletos de transición y que cada ruptura esté en el CHANGELOG con cómo actualizar; desde la 1.0, que no haya rupturas sin su obsoleto previo.
+- Esto reemplaza lo de «alias deprecados hasta la 0.8.0» de Card (R.19) y «deprecados hasta la 1.0» de `utils/size` (R.P7): se quitaron en la 0.7.0.
+
 La versión está en un solo lugar: `packages/cli/package.json`. De ahí la toman el showcase (`SITE.version`), el build de la CLI (que la escribe en `dist/registry.json`) y, a través del registro, `.mimi/manifest.json` y `mimi.json` en los proyectos. ui-core no tiene versión: se entrega dentro de la CLI. Las pruebas `registry.spec.ts` (CLI) y `site.spec.ts` (showcase) fallan si alguna quedara distinta.
 
 ### Versiones de Angular soportadas

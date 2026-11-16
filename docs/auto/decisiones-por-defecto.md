@@ -184,6 +184,13 @@ Rama `auto/0.7.0-tanda3-2026-11-15`; detalle en `docs/auto/0.7.0-tanda3-2026-11-
 - **R.21, textos de Sortable List:** los cinco textos nuevos son **obligatorios** en `MimiSortableText` (como los de antes). **RUPTURA** de tipo para quien escribe el objeto entero (lo vio el revisor de la tanda 3); va al CHANGELOG con su «Cómo actualizar». Alternativa: hacerlos opcionales (con un `??` al inglés en cada uso).
 - **R.21, teclado:** al pasar a otra lista, el elemento va al mismo lugar o al último; las flechas del otro eje (en una lista horizontal, ↑ la anterior y ↓ la siguiente). Sin anuncio cuando la otra lista no lo acepta (el elemento se queda y sigue agarrado).
 
+## Decididas por el usuario: rupturas y obsoletos (16/11/2026)
+
+- **Antes de la 1.0.0:** las rupturas están permitidas y **no se mantienen obsoletos** (sin alias ni exports `@deprecated` de transición); cada ruptura va al CHANGELOG con cómo actualizar.
+- **Desde la 1.0.0:** cambios compatibles en componentes, `utils` y tema; lo que se quite se marca obsoleto y vive al menos una versión menor.
+- La puerta de cada grupo lo comprueba según la versión (`.claude/commands/cerrar-grupo.md`). Está en la spec (12, «Rupturas y obsoletos») y en `CLAUDE.md`.
+- **Reemplaza** dos decisiones anteriores: los alias de Card «hasta la 0.8.0» (tanda 2, aceptada el 15/11/2026) y `utils/size` «deprecado hasta la 1.0» (puerta R.P7, tanda 3): los dos se quitan en la 0.7.0, con su ruptura en el CHANGELOG.
+
 ## Decididas por el usuario: estados de los controles (12/11/2026)
 
 Elegidas por el usuario en la página `/docs/states` (octava tanda; inventario en `docs/plan/controles/inventario.md`, informe en `docs/auto/refinamiento-0.6.0-parte9-2026-11-12.md`). Base: «Decidido por el usuario». Ninguna es una RUPTURA de API; todas son cambios visibles.
