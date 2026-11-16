@@ -98,6 +98,17 @@ describe('Kanban01', { timeout: 20_000 }, () => {
     }
   });
 
+  it('la columna entera es la zona de soltar: título, tarjetas, hueco y «Add card» (16/11/2026)', async () => {
+    const { column } = await setup();
+    for (const id of ['todo', 'doing', 'done']) {
+      const col = column(id);
+      expect(col.tagName.toLowerCase(), id).toBe('mimi-sortable-list');
+      expect(col.classList, id).toContain('cdk-drop-list');
+      expect(col.querySelector('h2'), id).not.toBeNull();
+      expect(col.querySelector('button[mimiBtn]')!.textContent, id).toContain('Add card');
+    }
+  });
+
   it('mover una tarjeta con el teclado (→) cambia [(columns)] y emite moved con los id de las columnas', async () => {
     const { host, handles, ids, key } = await setup();
     await key(handles('todo')[0], 'Enter');

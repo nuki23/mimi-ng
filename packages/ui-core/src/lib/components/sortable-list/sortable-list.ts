@@ -141,11 +141,24 @@ const GRIP = [
 /** La lista (sin la dirección, que pone `orientation`). */
 const LIST_BASE = cn(
   'relative m-0 flex list-none gap-[var(--mimi-sortable-gap-s,var(--mimi-sortable-gap,8px))] p-0',
-  // Mientras se arrastra, los demás se apartan con la curva del diseño (0,18 s).
-  '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:transition-transform',
-  '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:duration-[180ms]',
-  '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:ease-[var(--mimi-sortable-easing,cubic-bezier(.2,.8,.2,1))]',
+  // Mientras se arrastra, los demás se apartan con la curva del diseño (0,18 s). La clase del cdk
+  // está en el anfitrión (la zona de soltar), no en el ul.
+  '[.cdk-drop-list-dragging>&>li:not(.cdk-drag-placeholder)]:transition-transform',
+  '[.cdk-drop-list-dragging>&>li:not(.cdk-drag-placeholder)]:duration-[180ms]',
+  '[.cdk-drop-list-dragging>&>li:not(.cdk-drag-placeholder)]:ease-[var(--mimi-sortable-easing,cubic-bezier(.2,.8,.2,1))]',
 );
+
+/**
+ * Lo que va dentro de la zona de soltar, antes de la lista (`<h3 mimiSortableHeader>`), y después
+ * (`<button mimiSortableFooter>`): en un tablero, el título y «Agregar» de la columna, así toda la
+ * columna acepta la tarjeta (16/11/2026). Solo marcan el sitio; no cambian el elemento.
+ */
+@Directive({ selector: '[mimiSortableHeader]' })
+export class MimiSortableHeader {}
+
+/** Ver `MimiSortableHeader`. */
+@Directive({ selector: '[mimiSortableFooter]' })
+export class MimiSortableFooter {}
 
 let nextId = 0;
 
@@ -158,29 +171,19 @@ let nextId = 0;
  */
 @Component({
   selector: 'mimi-sortable-list',
-  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
-  imports: [
-    CdkDropList,
-    CdkDrag,
-    CdkDragHandle,
-    CdkDragPlaceholder,
-    CdkDragPreview,
-    MimiSortableOutlet,
-  ],
+  // La zona de soltar es el componente entero (cabecera, lista, pie y el hueco que quede), no solo
+  // el ul, que mide lo que sus elementos: los elementos van en el ul (`elementContainerSelector`).
+  hostDirectives: [{ directive: MimiSized, inputs: ['size'] }, CdkDropList],
+  imports: [CdkDrag, CdkDragHandle, CdkDragPlaceholder, CdkDragPreview, MimiSortableOutlet],
   template: `
+    <ng-content select="[mimiSortableHeader]" />
     <ul
-      cdkDropList
-      [cdkDropListLockAxis]="group ? null : orientation() === 'horizontal' ? 'x' : 'y'"
-      [cdkDropListOrientation]="orientation()"
-      [cdkDropListData]="self"
-      [cdkDropListEnterPredicate]="enterPredicate"
-      [cdkDropListDisabled]="disabled()"
+      data-slot="items"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabelledby() || null"
       [attr.aria-orientation]="orientation() === 'horizontal' ? 'horizontal' : null"
       [attr.data-empty]="items().length ? null : ''"
       [class]="listClasses()"
-      (cdkDropListDropped)="onDrop($event)"
     >
       @for (item of items(); track trackItem(item, $index); let index = $index) {
         <li
@@ -283,7 +286,8 @@ let nextId = 0;
         @if (group) {
           <!-- Una lista vacía de un grupo: se ve dónde soltar (R.21). -->
           <!-- Con un elemento agarrado, tocarla lo pone aquí (sin arrastrar, WCAG 2.5.7). -->
-          <li aria-hidden="true" data-slot="empty" [class]="emptyClasses" (click)="onEmptyClick()">
+          <!-- El toque lo recoge el anfitrión (onZoneClick), como el del resto del hueco. -->
+          <li aria-hidden="true" data-slot="empty" [class]="emptyClasses">
             {{ text.empty }}
           </li>
         }
@@ -299,9 +303,12 @@ let nextId = 0;
       class="min-h-[18px] text-[12.5px] text-muted-foreground"
       >{{ announcement() }}</span
     >
+    <ng-content select="[mimiSortableFooter]" />
   `,
   host: {
     '[class]': 'classes()',
+    '(click)': 'onZoneClick($event)',
+    '(mousedown)': 'onZoneMousedown($event)',
     '[attr.data-disabled]': 'disabled() || null',
     '[attr.data-sorting]': 'grabbedIndex() !== null || null',
     // aria-* van a la lista.
@@ -350,6 +357,27 @@ export class MimiSortableList<T = unknown> {
   /** Los de otra lista entran si `accepts` lo permite (el cdk lo pregunta al pasar por encima). */
   protected readonly enterPredicate = (drag: CdkDrag<T>): boolean => this.canAccept(drag.data);
 
+  /**
+   * El `cdkDropList` del anfitrión (la zona de soltar entera). Sus entradas se ponen aquí: el
+   * anfitrión no tiene plantilla propia donde enlazarlas.
+   */
+  private readonly dropList = (() => {
+    const dropList = inject<CdkDropList<MimiSortableList<T>>>(CdkDropList);
+    dropList.data = this;
+    dropList.enterPredicate = this.enterPredicate;
+    // Los elementos están en el ul (el cdk lo busca al iniciarse, con la vista ya creada).
+    dropList.elementContainerSelector = ':scope > ul';
+    const dropped = dropList.dropped.subscribe((event) => this.onDrop(event));
+    inject(DestroyRef).onDestroy(() => dropped.unsubscribe());
+    return dropList;
+  })();
+  private readonly syncDropList = effect(() => {
+    const orientation = this.orientation();
+    this.dropList.orientation = orientation;
+    this.dropList.lockAxis = this.group ? null : orientation === 'horizontal' ? 'x' : 'y';
+    this.dropList.disabled = this.disabled();
+  });
+
   private readonly membership = (() => {
     this.group?.register(this as MimiSortableGroupMember);
     inject(DestroyRef).onDestroy(() => this.group?.unregister(this as MimiSortableGroupMember));
@@ -374,8 +402,10 @@ export class MimiSortableList<T = unknown> {
   protected readonly listClasses = computed(() =>
     cn(
       this.orientation() === 'horizontal' ? 'flex-row flex-wrap' : 'flex-col',
-      // En un grupo, una lista vacía conserva un alto donde soltar.
-      this.group && 'min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))]',
+      // En un grupo, una lista vacía conserva un alto donde soltar, y la lista crece hasta el pie:
+      // si la columna es más alta que sus tarjetas, el hueco del cdk (al final) se ve donde caerá.
+      this.group &&
+        'min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))] flex-1',
       LIST_BASE,
     ),
   );
@@ -505,9 +535,30 @@ export class MimiSortableList<T = unknown> {
     this.placeHere(holder, index);
   }
 
-  protected onEmptyClick(): void {
+  /**
+   * El hueco de la zona (no una tarjeta ni un control de la cabecera o el pie): el propio
+   * anfitrión, el ul o la marca de lista vacía.
+   */
+  private isGap(event: Event): boolean {
+    const target = event.target as Element | null;
+    if (!target) return false;
+    return (
+      target === this.host ||
+      target === this.host.querySelector(':scope > ul') ||
+      !!target.closest('[data-slot="empty"]')
+    );
+  }
+
+  /** Con un elemento agarrado, el clic en el hueco no quita el foco del asa (su blur lo soltaría). */
+  protected onZoneMousedown(event: MouseEvent): void {
+    if (this.group?.holder() && this.isGap(event)) event.preventDefault();
+  }
+
+  /** Tocar el hueco de una lista con un elemento agarrado lo pone al final (sin arrastrar). */
+  protected onZoneClick(event: MouseEvent): void {
     const holder = this.group?.holder() as MimiSortableList<T> | null | undefined;
-    if (holder && holder !== this) this.placeHere(holder, 0);
+    if (!holder || this.disabled() || !this.isGap(event)) return;
+    this.placeHere(holder, holder === this ? this.items().length - 1 : this.items().length);
   }
 
   /** Lleva el elemento que tiene agarrado `holder` a `index` de esta lista y lo suelta. */
@@ -810,5 +861,7 @@ function move<T>(items: T[], from: number, to: number): T[] {
 export const MimiSortableListImports = [
   MimiSortableList,
   MimiSortableItemTemplate,
+  MimiSortableHeader,
+  MimiSortableFooter,
   MimiSortableGroup,
 ] as const;

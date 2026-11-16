@@ -2,6 +2,8 @@
 export {
   MimiSortableItemTemplate,
   type MimiSortableItemContext,
+  MimiSortableFooter,
+  MimiSortableHeader,
   MimiSortableList,
   MimiSortableListImports,
   type MimiSortableReorder,

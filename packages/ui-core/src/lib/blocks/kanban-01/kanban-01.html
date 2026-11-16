@@ -10,12 +10,22 @@
   (moved)="onMoved($event)"
 >
   @for (column of columns(); track column.id) {
-    <section
+    <!-- La columna entera es la lista (su zona de soltar): título, tarjetas, hueco y «Add card». -->
+    <mimi-sortable-list
       data-slot="column"
-      class="flex w-[85%] shrink-0 snap-start flex-col gap-3 rounded-[var(--mimi-radius-card)] bg-muted p-3 sm:w-72 md:w-auto"
+      class="w-[85%] shrink-0 snap-start gap-3 rounded-[var(--mimi-radius-card)] bg-muted p-3 sm:w-72 md:w-auto"
       [attr.data-column]="column.id"
+      size="sm"
+      [listId]="column.id"
+      [aria-label]="column.title"
+      [items]="column.cards"
+      (itemsChange)="setCards(column.id, $event)"
+      [itemLabel]="title"
+      [trackBy]="byId"
+      [accepts]="acceptsFor(column)"
+      (reordered)="onReordered(column.id, $event)"
     >
-      <div class="flex items-center justify-between gap-2">
+      <div mimiSortableHeader class="flex items-center justify-between gap-2">
         <h2
           class="text-sm font-semibold"
           [id]="'kanban-' + column.id"
@@ -29,40 +39,27 @@
             : column.cards.length + ' / ' + column.limit
         }}</span>
       </div>
-      <mimi-sortable-list
-        size="sm"
-        [listId]="column.id"
-        [aria-label]="column.title"
-        [items]="column.cards"
-        (itemsChange)="setCards(column.id, $event)"
-        [itemLabel]="title"
-        [trackBy]="byId"
-        [accepts]="acceptsFor(column)"
-        (reordered)="onReordered(column.id, $event)"
-      >
-        <ng-template mimiSortableItem let-card>
-          <div class="flex min-w-0 flex-1 flex-col gap-1.5 py-2">
-            <span class="text-sm font-medium text-pretty">{{ card.title }}</span>
-            <span class="flex items-center justify-between gap-2">
-              @if (card.tag; as tag) {
-                <span mimiBadge variant="soft" [tone]="tag.tone ?? 'secondary'">{{
-                  tag.label
-                }}</span>
-              } @else {
-                <span></span>
-              }
-              @if (card.assignee; as person) {
-                <mimi-avatar size="sm">
-                  <mimi-avatar-fallback [label]="person.name">{{
-                    initials(person.name)
-                  }}</mimi-avatar-fallback>
-                </mimi-avatar>
-              }
-            </span>
-          </div>
-        </ng-template>
-      </mimi-sortable-list>
+      <ng-template mimiSortableItem let-card>
+        <div class="flex min-w-0 flex-1 flex-col gap-1.5 py-2">
+          <span class="text-sm font-medium text-pretty">{{ card.title }}</span>
+          <span class="flex items-center justify-between gap-2">
+            @if (card.tag; as tag) {
+              <span mimiBadge variant="soft" [tone]="tag.tone ?? 'secondary'">{{ tag.label }}</span>
+            } @else {
+              <span></span>
+            }
+            @if (card.assignee; as person) {
+              <mimi-avatar size="sm">
+                <mimi-avatar-fallback [label]="person.name">{{
+                  initials(person.name)
+                }}</mimi-avatar-fallback>
+              </mimi-avatar>
+            }
+          </span>
+        </div>
+      </ng-template>
       <button
+        mimiSortableFooter
         mimiBtn
         variant="ghost"
         size="sm"
@@ -87,6 +84,6 @@
         </svg>
         Add card
       </button>
-    </section>
+    </mimi-sortable-list>
   }
 </mimi-sortable-group>

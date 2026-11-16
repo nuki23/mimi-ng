@@ -200,6 +200,12 @@ export const SORTABLE_LIST_PAGE: DocPage = {
         description:
           'Conecta las listas de dentro (R.21): emite `moved`. El reparto en columnas es tuyo, con `class`.',
       },
+      {
+        name: 'MimiSortableHeader / MimiSortableFooter',
+        selector: '[mimiSortableHeader], [mimiSortableFooter]',
+        description:
+          'Lo de antes y después de los elementos, dentro de la zona de soltar: la lista entera acepta el elemento.',
+      },
     ],
     dataAttributes: [
       'data-disabled',

@@ -35,7 +35,10 @@ const make = (ids: string) => ids.split('').map((id) => ({ id, title: `T${id}` }
           [trackBy]="byId"
           [accepts]="limit"
           (moved)="listMoves.push($event)"
-        />
+        >
+          <h3 mimiSortableHeader data-test="doing-header">En curso</h3>
+          <button mimiSortableFooter data-test="doing-footer" type="button">Agregar</button>
+        </mimi-sortable-list>
         <mimi-sortable-list
           data-test="done"
           listId="done"
@@ -182,6 +185,46 @@ describe('Sortable List: listas conectadas (R.21)', () => {
       { item: { id: 'a', title: 'Ta' }, previousIndex: 0, currentIndex: 1 },
     ]);
     expect(host.groupMoves).toEqual([]);
+  });
+
+  it('la zona de soltar es la lista entera, con su cabecera y su pie (16/11/2026)', async () => {
+    const { list } = await setup();
+    // El cdkDropList es el propio mimi-sortable-list (no solo el ul, que mide lo que sus tarjetas):
+    // el cdk acepta el soltado en cualquier punto de su rectángulo, también el hueco de abajo.
+    for (const name of ['todo', 'doing', 'done']) {
+      expect(list(name).classList, name).toContain('cdk-drop-list');
+      expect(list(name).querySelector('ul')!.classList, name).not.toContain('cdk-drop-list');
+      // El ul crece hasta el pie: el hueco del cdk (al final) se ve donde caerá.
+      expect(list(name).querySelector('ul')!.classList, name).toContain('flex-1');
+    }
+    // Cabecera y pie proyectados dentro de la zona, en su orden: cabecera, lista, pie.
+    const doing = list('doing');
+    const order = [...doing.children].map(
+      (c) => c.getAttribute('data-test') ?? c.tagName.toLowerCase(),
+    );
+    expect(order.indexOf('doing-header')).toBe(0);
+    expect(order.indexOf('ul')).toBe(1);
+    expect(order.indexOf('doing-footer')).toBeGreaterThan(1);
+  });
+
+  it('tocar el hueco de una lista con un elemento agarrado lo pone al final (WCAG 2.5.7)', async () => {
+    const { fixture, handles, ids, list, status } = await setup();
+    const tap = async (el: HTMLElement) => {
+      el.click();
+      await settle(fixture);
+    };
+    await tap(handles('todo')[0]); // agarra «Ta»
+    await tap(list('doing')); // el hueco de «En curso» (la zona, no una tarjeta)
+    expect(ids()).toEqual({ todo: 'bc', doing: 'da', done: '' });
+    expect(status('doing')).toBe('Ta dropped in En curso, position 2 of 2.');
+    // En su propia lista, al final.
+    await tap(handles('todo')[0]); // agarra «Tb»
+    await tap(list('todo'));
+    expect(ids().todo).toBe('cb');
+    // Tocar un control del pie (o de la cabecera) no mueve nada.
+    await tap(handles('todo')[0]);
+    await tap(list('doing').querySelector<HTMLElement>('[data-test="doing-footer"]')!);
+    expect(ids()).toEqual({ todo: 'cb', doing: 'da', done: '' });
   });
 
   it('con solo toques, sin arrastrar (WCAG 2.5.7): asa de origen y asa o zona de destino', async () => {
