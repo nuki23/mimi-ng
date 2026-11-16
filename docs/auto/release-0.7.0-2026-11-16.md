@@ -65,3 +65,17 @@ Con la versión ya en 0.7.0 (salidas guardadas fuera del repo, en `C:\t\r070log`
 Cifras de `apps/docs/scripts/check-initial-js.mjs` (JS inicial y CSS global, crudo y gzip; brotli del JS inicial: 83,18 kB) y de `ng build` (`main`, `initial`); `components.css`, con `ls` y `gzip -c | wc -c` (148 050 y 20 545 bytes). **Antes y después de esta preparación son iguales** a los de la tanda 3 (sección 7.7: 294,58 / 93,71 y 139,19 / 19,72; el gzip del JS varía 0,01 kB entre compilaciones): esta rama solo cambió la versión en dos textos del sitio. **Frente a la 0.6.0**, el JS inicial baja 40,31 kB crudo (la M.25: Button y `tailwind-merge` fuera de la cabecera; `main` −39,75 kB) y el CSS global sube 8,42 kB crudo / 1,02 kB gzip (las clases de las tandas de la 0.7.0 que usa el sitio inicial: la capa de Loading, Card y Table; las midieron sus informes). Ningún presupuesto avisa ni se subió.
 
 Commit: `docs(auto): build, pruebas y bundle de la 0.7.0 frente a la 0.6.0`.
+
+## 5. `npm pack --dry-run` (`packages/cli`)
+
+`@mimi-ng/cli@0.7.0`, `mimi-ng-cli-0.7.0.tgz`: **181 archivos**, **329,3 kB** empaquetado, **1,2 MB** sin empaquetar, shasum `767a9fea62b6f4d280990909442c92d0eb526f6a` (0.6.0 publicada: 169 archivos, 306,6 kB). Fuera de `dist/` solo entran `package.json`, `README.md`, `LICENSE` y `THIRD_PARTY_NOTICES.md`.
+
+**El `.tgz` real** (`npm pack --pack-destination C:\t\r070`, fuera del repo; el mismo shasum que el dry-run; el de `npm publish` puede variar, porque `prepublishOnly` recompila), revisado con `tar -tzf` y extraído en `C:\t\r070\x`:
+
+- **Los 12 archivos nuevos frente a la 0.6.0** (la lista del `.tgz` de la 0.6.0 de npm, `npm pack @mimi-ng/cli@0.6.0`, comparada con `diff`): `blocks/kanban-01/` (3), `components/loading/` (5), `components/sortable-list/sortable-group.ts` y `components/table/` (3). Ninguno se quitó.
+- **0 archivos `.spec.`**, **0 rutas con `testing`**, **nada de `docs/`** y **nada de la marca** (`docs/brand/`: 0 rutas con «brand»).
+- **Rutas personales:** la búsqueda de `C:\\`, `C:/Users`, `/Users/`, `/home/`, `AppData` y los nombres del autor solo encontró el comentario de `dist/init/paths.js:28-29` que pone `C:\x` como ejemplo de ruta absoluta que se rechaza (igual que en la 0.6.0).
+- **Correos:** solo `name@example.com` (tres veces: los ejemplos de `login-02` y `signup-01`). El `author` publicado es «Ariel O (https://github.com/nuki23)», sin correo.
+- **Respaldos:** «respaldo» aparece solo como palabra («valor de reserva») en comentarios de siete plantillas (una más que en la 0.6.0: `loading-overlay.ts`) y en el README (el respaldo WASI de Tailwind); ningún `.bundle` ni `mimi-ng-respaldo`.
+
+Commit: `docs(auto): npm pack de la 0.7.0 (181 archivos, sin pruebas, docs ni datos personales)`.
