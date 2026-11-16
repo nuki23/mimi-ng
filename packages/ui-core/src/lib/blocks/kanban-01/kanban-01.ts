@@ -137,7 +137,12 @@ export class Kanban01 {
   private readonly focusBack = restoreFocusAfterBusy(this.loading);
 
   protected readonly classes = computed(() =>
-    cn('flex w-full min-w-0 flex-col gap-5 font-sans text-foreground', this.userClass()),
+    // El contenedor de los Blocks de página (table-01: px-4 / md:px-8, pt-5 / md:pt-7) con el ancho
+    // del contenido de pricing-01 (1080 px), centrado.
+    cn(
+      'mx-auto flex w-full max-w-[1080px] min-w-0 flex-col gap-5 px-4 pt-5 pb-8 font-sans text-foreground md:px-8 md:pt-7 md:pb-10',
+      this.userClass(),
+    ),
   );
 
   protected readonly title = (card: Kanban01Card) => card.title;

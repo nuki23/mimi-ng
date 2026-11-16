@@ -89,6 +89,15 @@ describe('Kanban01', { timeout: 20_000 }, () => {
     expect(el.querySelector('mimi-kanban-01')!.className).toContain('bg-muted');
   });
 
+  it('tiene el contenedor de los Blocks de página: margen lateral y ancho máximo (16/11/2026)', async () => {
+    const { el } = await setup();
+    const block = el.querySelector('mimi-kanban-01')!.classList;
+    // El de table-01 (px-4 / md:px-8, pt-5 / md:pt-7) con el ancho del contenido de pricing-01.
+    for (const c of ['mx-auto', 'max-w-[1080px]', 'px-4', 'md:px-8', 'pt-5', 'md:pt-7', 'pb-8']) {
+      expect(block, c).toContain(c);
+    }
+  });
+
   it('mover una tarjeta con el teclado (→) cambia [(columns)] y emite moved con los id de las columnas', async () => {
     const { host, handles, ids, key } = await setup();
     await key(handles('todo')[0], 'Enter');
