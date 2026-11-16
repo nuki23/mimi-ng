@@ -174,6 +174,13 @@ Rama `auto/0.7.0-tanda2-2026-11-15`; detalle en `docs/auto/0.7.0-tanda2-2026-11-
 - **R.20 la Data Table «sobre» la base:** comparte las clases de celda y encabezado y las funciones de búsqueda, filtro y orden con `table` (no se reescribió su plantilla con las directivas): mismo aspecto, misma lógica y sin riesgo para `table-01`. Base: «Más simple».
 - **R.20 nombres:** `mimiTableState(data, opciones)`, con `sorting` (la señal) y `sort(columna)` (el mando del encabezado, como en la PD-2), `expandMode` (como pedía el plan con `expandedRows`, renombrado para que coincida con el de la Data Table), `mimiRowToggle` y `mimiCaption`. `mimiTh` sin `NgTemplateOutlet` (metía `@angular/common` en el JS inicial del sitio).
 
+## Decididas por defecto: tanda 3 de la 0.7.0 (15/11/2026)
+
+Rama `auto/0.7.0-tanda3-2026-11-15`; detalle en `docs/auto/0.7.0-tanda3-2026-11-15.md`. Pendientes de revisión del usuario.
+
+- **R.21, cómo se conectan las listas:** con el contenedor `<mimi-sortable-group>` (sobre `CdkDropListGroup`), no con una entrada `group="nombre"`. El plan ofrecía las dos; el contenedor es la forma del cdk, no necesita un registro global y el orden de las columnas (para ← →) sale del documento. Alternativa: `group` por nombre (listas conectadas en cualquier lugar de la página).
+- **R.21, teclado:** al pasar a otra lista, el elemento va al mismo lugar o al último; las flechas del otro eje (en una lista horizontal, ↑ la anterior y ↓ la siguiente). Sin anuncio cuando la otra lista no lo acepta (el elemento se queda y sigue agarrado).
+
 ## Decididas por el usuario: estados de los controles (12/11/2026)
 
 Elegidas por el usuario en la página `/docs/states` (octava tanda; inventario en `docs/plan/controles/inventario.md`, informe en `docs/auto/refinamiento-0.6.0-parte9-2026-11-12.md`). Base: «Decidido por el usuario». Ninguna es una RUPTURA de API; todas son cambios visibles.

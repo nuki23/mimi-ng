@@ -10,6 +10,7 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
   ElementRef,
   type EmbeddedViewRef,
@@ -33,6 +34,13 @@ import {
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
 import { MIMI_SORTABLE_TEXT } from './sortable-list-texts';
+import {
+  MIMI_SORTABLE_GROUP,
+  MimiSortableGroup,
+  type MimiSortableGrab,
+  type MimiSortableGroupMember,
+  type MimiSortableMove,
+} from './sortable-group';
 
 /*
  * Sortable List (docs/design/Mimi F4 Command Tree Sortable.dc.html, «3 · Sortable List»;
@@ -130,6 +138,15 @@ const GRIP = [
   'M15 19h.01',
 ] as const;
 
+/** La lista (sin la dirección, que pone `orientation`). */
+const LIST_BASE = cn(
+  'relative m-0 flex list-none gap-[var(--mimi-sortable-gap-s,var(--mimi-sortable-gap,8px))] p-0',
+  // Mientras se arrastra, los demás se apartan con la curva del diseño (0,18 s).
+  '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:transition-transform',
+  '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:duration-[180ms]',
+  '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:ease-[var(--mimi-sortable-easing,cubic-bezier(.2,.8,.2,1))]',
+);
+
 let nextId = 0;
 
 /**
@@ -153,17 +170,22 @@ let nextId = 0;
   template: `
     <ul
       cdkDropList
-      cdkDropListLockAxis="y"
+      [cdkDropListLockAxis]="group ? null : orientation() === 'horizontal' ? 'x' : 'y'"
+      [cdkDropListOrientation]="orientation()"
+      [cdkDropListData]="self"
+      [cdkDropListEnterPredicate]="enterPredicate"
       [cdkDropListDisabled]="disabled()"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabelledby() || null"
-      [class]="listClasses"
+      [attr.aria-orientation]="orientation() === 'horizontal' ? 'horizontal' : null"
+      [attr.data-empty]="items().length ? null : ''"
+      [class]="listClasses()"
       (cdkDropListDropped)="onDrop($event)"
     >
       @for (item of items(); track trackItem(item, $index); let index = $index) {
         <li
           cdkDrag
-          cdkDragPreviewContainer="parent"
+          [cdkDragPreviewContainer]="group ? 'global' : 'parent'"
           [cdkDragData]="item"
           [attr.aria-roledescription]="text.roleDescription"
           [attr.data-grabbed]="grabbedIndex() === index || null"
@@ -255,9 +277,16 @@ let nextId = 0;
             </div>
           </ng-template>
         </li>
+      } @empty {
+        @if (group) {
+          <!-- Una lista vacía de un grupo: se ve dónde soltar (R.21). -->
+          <li aria-hidden="true" data-slot="empty" [class]="emptyClasses">{{ text.empty }}</li>
+        }
       }
     </ul>
-    <span [id]="instructionsId" class="sr-only">{{ text.instructions }}</span>
+    <span [id]="instructionsId" class="sr-only">{{
+      group ? text.instructionsGroup : text.instructions
+    }}</span>
     <span
       role="status"
       aria-live="assertive"
@@ -290,12 +319,36 @@ export class MimiSortableList<T = unknown> {
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
   readonly userClass = input('', { alias: 'class' });
+  /** Identificador de la lista en un grupo (R.21): sale en `moved` (`from.list`, `to.list`). */
+  readonly listId = input<string>();
+  /** `vertical` (por defecto) u `horizontal` (los elementos en fila; ← → mueven sin grupo). */
+  readonly orientation = input<'vertical' | 'horizontal'>('vertical');
+  /**
+   * Si la lista acepta un elemento que viene de otra (R.21): por ejemplo, «no más de 3 en curso».
+   * Vale para el puntero, el dedo y el teclado.
+   */
+  readonly accepts = input<((item: T, list: MimiSortableList<T>) => boolean) | undefined>(
+    undefined,
+  );
 
-  /** Un elemento se soltó en otro lugar. */
+  /** Un elemento se soltó en otro lugar de la misma lista. */
   readonly reordered = output<MimiSortableReorder<T>>();
+  /** Un elemento llegó a esta lista desde otra del grupo (R.21). */
+  readonly moved = output<MimiSortableMove<T>>();
 
   protected readonly text = inject(MIMI_SORTABLE_TEXT);
   private readonly injector = inject(Injector);
+  /** El grupo, si la lista está dentro de un `mimi-sortable-group` (R.21). */
+  protected readonly group = inject(MIMI_SORTABLE_GROUP, { optional: true });
+  protected readonly self = this;
+  readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  /** Los de otra lista entran si `accepts` lo permite (el cdk lo pregunta al pasar por encima). */
+  protected readonly enterPredicate = (drag: CdkDrag<T>): boolean => this.canAccept(drag.data);
+
+  private readonly membership = (() => {
+    this.group?.register(this as MimiSortableGroupMember);
+    inject(DestroyRef).onDestroy(() => this.group?.unregister(this as MimiSortableGroupMember));
+  })();
   protected readonly itemTemplate = contentChild(MimiSortableItemTemplate);
   private readonly handles = viewChildren<ElementRef<HTMLButtonElement>>('handle');
 
@@ -311,13 +364,32 @@ export class MimiSortableList<T = unknown> {
 
   protected readonly classes = computed(() => cn('flex flex-col gap-2', this.userClass()));
 
-  protected readonly listClasses = cn(
-    'relative m-0 flex list-none flex-col gap-[var(--mimi-sortable-gap-s,var(--mimi-sortable-gap,8px))] p-0',
-    // Mientras se arrastra, los demás se apartan con la curva del diseño (0,18 s).
-    '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:transition-transform',
-    '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:duration-[180ms]',
-    '[&.cdk-drop-list-dragging>li:not(.cdk-drag-placeholder)]:ease-[var(--mimi-sortable-easing,cubic-bezier(.2,.8,.2,1))]',
+  protected readonly listClasses = computed(() =>
+    cn(
+      this.orientation() === 'horizontal' ? 'flex-row flex-wrap' : 'flex-col',
+      // En un grupo, una lista vacía conserva un alto donde soltar.
+      this.group && 'min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))]',
+      LIST_BASE,
+    ),
   );
+
+  protected readonly emptyClasses =
+    'flex min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))] items-center justify-center rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border-2 border-dashed border-border text-[12.5px] text-muted-foreground';
+
+  /** @internal Para el grupo: lo que hay ahora, y volver a eso (Escape). */
+  snapshot(): T[] {
+    return this.items();
+  }
+
+  /** @internal */
+  restore(items: T[]): void {
+    this.items.set(items);
+  }
+
+  private canAccept(item: T): boolean {
+    const accepts = this.accepts();
+    return !accepts || accepts(item, this);
+  }
 
   private readonly itemShape =
     'flex min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))] items-center gap-2.5 rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border border-border bg-[color:var(--mimi-sortable-bg,var(--mimi-card))] ps-1.5 pe-3 text-card-foreground select-none';
@@ -385,9 +457,15 @@ export class MimiSortableList<T = unknown> {
     this.placeholderHeight.set(event.source.element.nativeElement.offsetHeight || null);
   }
 
-  protected onDrop(event: CdkDragDrop<T[], T[], T>): void {
+  protected onDrop(event: CdkDragDrop<MimiSortableList<T>, MimiSortableList<T>, T>): void {
     this.placeholderHeight.set(null);
     const { previousIndex, currentIndex } = event;
+    const from = event.previousContainer?.data;
+    if (from && from !== this) {
+      this.receive(from, previousIndex, currentIndex);
+      this.announce('droppedInList', currentIndex);
+      return;
+    }
     if (previousIndex === currentIndex) return;
     const items = this.items();
     this.items.set(move(items, previousIndex, currentIndex));
@@ -404,20 +482,38 @@ export class MimiSortableList<T = unknown> {
       if (event.key === ' ' || event.key === 'Enter') {
         event.preventDefault();
         this.grabStart = { index, items: this.items() };
+        this.group?.start(this, index, this.items()[index]);
         this.grabbedIndex.set(index);
         this.announce('grabbed', index);
       }
       return;
     }
     const last = this.items().length - 1;
+    // Dentro de la lista, las flechas de su eje; a otra lista del grupo, las del otro eje.
+    const horizontal = this.orientation() === 'horizontal';
+    const rtl = this.host.closest('[dir]')?.getAttribute('dir') === 'rtl';
+    const back = horizontal ? (rtl ? 'ArrowRight' : 'ArrowLeft') : 'ArrowUp';
+    const forward = horizontal ? (rtl ? 'ArrowLeft' : 'ArrowRight') : 'ArrowDown';
     let target: number | null = null;
     switch (event.key) {
-      case 'ArrowUp':
+      case back:
         target = Math.max(0, grabbed - 1);
         break;
-      case 'ArrowDown':
+      case forward:
         target = Math.min(last, grabbed + 1);
         break;
+      case 'ArrowLeft':
+      case 'ArrowRight':
+      case 'ArrowUp':
+      case 'ArrowDown': {
+        // El otro eje: en una lista vertical, ← →; en una horizontal, ↑ ↓ (↑ la anterior).
+        const upDown = event.key === 'ArrowUp' || event.key === 'ArrowDown';
+        if (!this.group || upDown !== horizontal) return;
+        event.preventDefault();
+        const toward = upDown ? (event.key === 'ArrowUp' ? 'ArrowLeft' : 'ArrowRight') : event.key;
+        this.toNeighbor(toward as 'ArrowLeft' | 'ArrowRight', grabbed);
+        return;
+      }
       case 'Home':
         target = 0;
         break;
@@ -460,12 +556,78 @@ export class MimiSortableList<T = unknown> {
     );
   }
 
+  /**
+   * ← → con un elemento agarrado (R.21): pasa a la lista de al lado del grupo, al mismo lugar o al
+   * último, si esa lista lo acepta. El agarre sigue (en la otra lista) y se anuncia.
+   */
+  private toNeighbor(key: 'ArrowLeft' | 'ArrowRight', grabbed: number): void {
+    const neighbor = this.group?.neighbor(this, key) as MimiSortableList<T> | null | undefined;
+    const item = this.items()[grabbed];
+    if (!neighbor || neighbor.disabled() || !neighbor.canAccept(item)) return;
+    const index = Math.min(grabbed, neighbor.items().length);
+    this.items.set(this.items().filter((_, i) => i !== grabbed));
+    const next = [...neighbor.items()];
+    next.splice(index, 0, item);
+    neighbor.items.set(next);
+    this.grabbedIndex.set(null);
+    this.grabStart = null;
+    neighbor.grabbedIndex.set(index);
+    neighbor.announce('movedToList', index);
+    neighbor.focusHandle(index);
+  }
+
+  /** Un elemento llega de otra lista (puntero o dedo): los dos modelos, en el mismo momento. */
+  private receive(from: MimiSortableList<T>, previousIndex: number, currentIndex: number): void {
+    const source = from.items();
+    const item = source[previousIndex];
+    const next = [...this.items()];
+    next.splice(currentIndex, 0, item);
+    from.items.set(source.filter((_, i) => i !== previousIndex));
+    this.items.set(next);
+    this.emitMove({
+      item,
+      from: { list: from.listId(), index: previousIndex },
+      to: { list: this.listId(), index: currentIndex },
+    });
+  }
+
+  private emitMove(move: MimiSortableMove<T>): void {
+    this.moved.emit(move);
+    this.group?.moved.emit(move as MimiSortableMove<unknown>);
+  }
+
   private drop(): void {
     const grabbed = this.grabbedIndex();
+    const shared = this.group?.grab as MimiSortableGrab<T> | null | undefined;
     const start = this.grabStart;
     this.grabbedIndex.set(null);
     this.grabStart = null;
-    if (grabbed === null || !start) return;
+    if (this.group) this.group.grab = null;
+    if (grabbed === null) return;
+    if (shared) {
+      // Llegó desde otra lista del grupo con el teclado.
+      if (shared.origin !== this) {
+        const origin = shared.origin as MimiSortableList<T>;
+        this.announce('droppedInList', grabbed);
+        this.emitMove({
+          item: shared.item,
+          from: { list: origin.listId(), index: shared.originIndex },
+          to: { list: this.listId(), index: grabbed },
+        });
+        return;
+      }
+      // Volvió a su lista (quizá tras pasar por otras): cuenta como un reorden si cambió de lugar.
+      this.announce('dropped', grabbed);
+      if (grabbed !== shared.originIndex) {
+        this.reordered.emit({
+          item: shared.item,
+          previousIndex: shared.originIndex,
+          currentIndex: grabbed,
+        });
+      }
+      return;
+    }
+    if (!start) return;
     this.announce('dropped', grabbed);
     if (grabbed !== start.index) {
       this.reordered.emit({
@@ -476,8 +638,23 @@ export class MimiSortableList<T = unknown> {
     }
   }
 
-  /** Escape (o un arrastre con el puntero): vuelve al orden de cuando se agarró. */
+  /** Escape (o un arrastre con el puntero): vuelve al orden de cuando se agarró, en todas las listas. */
   private cancelKeyboardGrab(announce: boolean): void {
+    const shared = this.group?.grab as MimiSortableGrab<T> | null | undefined;
+    if (shared) {
+      this.group!.grab = null;
+      this.grabbedIndex.set(null);
+      this.grabStart = null;
+      for (const [member, items] of shared.snapshot) member.restore(items);
+      const origin = shared.origin as MimiSortableList<T>;
+      origin.grabbedIndex.set(null);
+      origin.grabStart = null;
+      if (announce) {
+        origin.announce('canceled', shared.originIndex);
+        origin.focusHandle(shared.originIndex);
+      }
+      return;
+    }
     const start = this.grabStart;
     if (!start) return;
     this.grabbedIndex.set(null);
@@ -489,9 +666,17 @@ export class MimiSortableList<T = unknown> {
     }
   }
 
-  private announce(kind: 'grabbed' | 'moved' | 'dropped' | 'canceled', index: number): void {
+  private announce(
+    kind: 'grabbed' | 'moved' | 'dropped' | 'canceled' | 'movedToList' | 'droppedInList',
+    index: number,
+  ): void {
     const items = this.items();
     const label = this.labelOf(items[index]);
+    if (kind === 'movedToList' || kind === 'droppedInList') {
+      const list = this.ariaLabel() || this.listId() || '';
+      this.announcement.set(this.text[kind](label, list, index + 1, items.length));
+      return;
+    }
     this.announcement.set(this.text[kind](label, index + 1, items.length));
   }
 
@@ -510,5 +695,12 @@ function move<T>(items: T[], from: number, to: number): T[] {
   return next;
 }
 
-/** Todo lo que hace falta para usar la lista: `imports: [MimiSortableListImports]`. */
-export const MimiSortableListImports = [MimiSortableList, MimiSortableItemTemplate] as const;
+/**
+ * Todo lo que hace falta para usar la lista: `imports: [MimiSortableListImports]` (con el grupo de
+ * listas conectadas, R.21).
+ */
+export const MimiSortableListImports = [
+  MimiSortableList,
+  MimiSortableItemTemplate,
+  MimiSortableGroup,
+] as const;

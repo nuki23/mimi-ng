@@ -27,10 +27,10 @@ describe('SortableListPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      // La demo, tamaños, deshabilitada y prioridades.
-      expect(previews.length).toBe(4);
+      // La demo, tamaños, deshabilitada, prioridades y el tablero (R.21).
+      expect(previews.length).toBe(5);
       for (const { example, code } of previews) {
-        expect(example?.querySelector('mimi-sortable-list ul li')).not.toBeNull();
+        expect(example?.querySelector('mimi-sortable-list ul')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/sortable-list';");
         expect(code).toMatch(/export class SortableList\w+Example/);
       }
@@ -51,6 +51,10 @@ describe('SortableListPage', () => {
       expect(priorities.querySelector('[data-slot="handle"]')!.getAttribute('aria-label')).toBe(
         'Reordenar Revisar contraste AA',
       );
+      // El tablero: tres listas en un grupo; la vacía muestra dónde soltar.
+      const board = previews[4].example!;
+      expect(board.querySelectorAll('mimi-sortable-group mimi-sortable-list').length).toBe(3);
+      expect(board.querySelector('[data-slot="empty"]')!.textContent!.trim()).toBe('Suelta aquí');
       expect(el.querySelector('#texts')).not.toBeNull();
       expect(el.querySelector('#tokens')).not.toBeNull();
     },

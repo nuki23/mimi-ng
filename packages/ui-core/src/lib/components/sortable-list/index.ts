@@ -6,4 +6,5 @@ export {
   MimiSortableListImports,
   type MimiSortableReorder,
 } from './sortable-list';
+export { MimiSortableGroup, type MimiSortableMove, type MimiSortablePlace } from './sortable-group';
 export * from './sortable-list-texts';

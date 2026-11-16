@@ -1,10 +1,13 @@
 import type { DocPage } from '../../../../doc-page/doc-page.types';
+import { SortableListBoardExample } from './examples/sortable-list-board.example';
 import { SortableListPrioritiesExample } from './examples/sortable-list-priorities.example';
 import { SortableListSimpleExample } from './examples/sortable-list-simple.example';
 import { SortableListSizesExample } from './examples/sortable-list-sizes.example';
 import { SortableListStatesExample } from './examples/sortable-list-states.example';
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
+// @ts-expect-error
+import boardSource from './examples/sortable-list-board.example' with { loader: 'text' };
 // @ts-expect-error
 import prioritiesSource from './examples/sortable-list-priorities.example' with { loader: 'text' };
 // @ts-expect-error
@@ -76,6 +79,14 @@ export const SORTABLE_LIST_PAGE: DocPage = {
         component: SortableListPrioritiesExample,
         source: prioritiesSource as string,
       },
+      {
+        id: 'board',
+        title: 'Tablero: listas conectadas',
+        sentence:
+          'Dentro de `<mimi-sortable-group>`, las tarjetas pasan de una columna a otra; con el teclado, ← → mientras la agarras. «En curso» admite tres.',
+        component: SortableListBoardExample,
+        source: boardSource as string,
+      },
     ],
   },
   accessibility: {
@@ -85,7 +96,10 @@ export const SORTABLE_LIST_PAGE: DocPage = {
       'Espacio o Enter lo sueltan y Escape lo devuelve a su lugar; si el foco sale del asa, se suelta donde está.',
       'Cada paso se anuncia («Diseñar Tabs: lugar 3 de 5») en la línea de debajo de la lista, que también se ve.',
       'Con el puntero o el dedo, solo se arrastra desde el asa: el resto se puede seleccionar y pulsar.',
-      'Dale nombre a la lista con `aria-label` o `aria-labelledby`.',
+      'Dale nombre a la lista con `aria-label` o `aria-labelledby`: en un grupo, es el que se anuncia al pasar («Movido a En curso, lugar 2 de 4»).',
+    ],
+    more: [
+      'En un grupo, ← y → pasan el elemento agarrado a la columna de al lado (en RTL, al revés) y Escape lo devuelve a su sitio, en su lista.',
     ],
   },
   api: {
@@ -123,6 +137,25 @@ export const SORTABLE_LIST_PAGE: DocPage = {
         description: 'El alto de cada elemento y el hueco, con la escala del tema.',
       },
       {
+        name: 'listId',
+        type: 'string',
+        default: '—',
+        description: 'En un grupo, el nombre de la lista en `moved` (`from.list`, `to.list`).',
+      },
+      {
+        name: 'accepts',
+        type: '(item: T, list) => boolean',
+        default: '—',
+        description: 'Si acepta un elemento de otra lista, con el puntero, el dedo o el teclado.',
+      },
+      {
+        name: 'orientation',
+        type: "'vertical' | 'horizontal'",
+        default: "'vertical'",
+        description:
+          'Los elementos en columna o en fila; en fila, ← → reordenan y ↑ ↓ cambian de lista.',
+      },
+      {
         name: 'aria-label / aria-labelledby',
         type: 'string',
         default: '—',
@@ -147,6 +180,12 @@ export const SORTABLE_LIST_PAGE: DocPage = {
         description:
           '`{ item, previousIndex, currentIndex }` al soltar un elemento en otro lugar, con el puntero, el dedo o el teclado.',
       },
+      {
+        name: 'moved',
+        type: 'MimiSortableMove<T>',
+        description:
+          '`{ item, from, to }` (cada uno con `list` e `index`) al llegar de otra lista; también en el grupo.',
+      },
     ],
     parts: [
       {
@@ -154,6 +193,12 @@ export const SORTABLE_LIST_PAGE: DocPage = {
         selector: 'ng-template[mimiSortableItem]',
         description:
           'Contenido de cada elemento, al lado del asa: `let-item`, `let-index="index"` y `let-grabbed="grabbed"`.',
+      },
+      {
+        name: 'MimiSortableGroup',
+        selector: 'mimi-sortable-group, [mimiSortableGroup]',
+        description:
+          'Conecta las listas de dentro (R.21): emite `moved`. El reparto en columnas es tuyo, con `class`.',
       },
     ],
     dataAttributes: [

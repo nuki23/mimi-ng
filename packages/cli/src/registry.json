@@ -300,6 +300,7 @@
       "type": "component",
       "files": [
         "components/sortable-list/sortable-list.ts",
+        "components/sortable-list/sortable-group.ts",
         "components/sortable-list/sortable-list-texts.ts",
         "components/sortable-list/index.ts"
       ],
