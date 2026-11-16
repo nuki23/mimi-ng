@@ -176,7 +176,7 @@ Rama `auto/0.7.0-tanda2-2026-11-15`; detalle en `docs/auto/0.7.0-tanda2-2026-11-
 
 ## Decididas por defecto: tanda 3 de la 0.7.0 (15/11/2026)
 
-Rama `auto/0.7.0-tanda3-2026-11-15`; detalle en `docs/auto/0.7.0-tanda3-2026-11-15.md`. Pendientes de revisión del usuario.
+Rama `auto/0.7.0-tanda3-2026-11-15`; detalle en `docs/auto/0.7.0-tanda3-2026-11-15.md`. **Aceptadas por el usuario el 16/11/2026** (prompt de la preparación de la 0.7.0, rama `auto/release-0.7.0-2026-11-16`): las cinco de abajo quedan como están, también la RUPTURA de los textos de `MimiSortableText`. **Salvo los obsoletos:** `utils/size` «deprecado hasta la 1.0» (puerta R.P7) ya no está, porque lo reemplazó la política de rupturas del usuario (abajo) y se quitó en la 0.7.0; los demás obsoletos «hasta la 1.0» se quitan en la M.28 (0.8.0).
 
 - **R.21, cómo se conectan las listas:** con el contenedor `<mimi-sortable-group>` (sobre `CdkDropListGroup`), no con una entrada `group="nombre"`. El plan ofrecía las dos; el contenedor es la forma del cdk, no necesita un registro global y el orden de las columnas (para ← →) sale del documento. Alternativa: `group` por nombre (listas conectadas en cualquier lugar de la página).
 - **R.22, `kanban-01`:** textos en inglés («To do», «In progress», «Done»; el prompt los nombra en español, pero todos los Blocks van en inglés, spec 4); `[(columns)]` (el Block cambia las columnas al mover, como `[(selection)]` en `table-01`) además de `moved`; «In progress» con `limit: 3` en el ejemplo. Base: «Más simple y coherente con la spec».
