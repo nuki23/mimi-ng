@@ -192,6 +192,7 @@ let nextId = 0;
           [attr.data-index]="index"
           [class]="itemClasses"
           (cdkDragStarted)="onDragStart($event)"
+          (cdkDragEnded)="onDragEnded()"
         >
           <button
             #handle
@@ -204,6 +205,7 @@ let nextId = 0;
             [attr.aria-pressed]="grabbedIndex() === index"
             [class]="handleClasses"
             (keydown)="onHandleKeydown($event, index)"
+            (click)="onHandleClick(index)"
             (blur)="onHandleBlur(index)"
           >
             <svg
@@ -280,16 +282,19 @@ let nextId = 0;
       } @empty {
         @if (group) {
           <!-- Una lista vacía de un grupo: se ve dónde soltar (R.21). -->
-          <li aria-hidden="true" data-slot="empty" [class]="emptyClasses">{{ text.empty }}</li>
+          <!-- Con un elemento agarrado, tocarla lo pone aquí (sin arrastrar, WCAG 2.5.7). -->
+          <li aria-hidden="true" data-slot="empty" [class]="emptyClasses" (click)="onEmptyClick()">
+            {{ text.empty }}
+          </li>
         }
       }
     </ul>
-    <span [id]="instructionsId" class="sr-only">{{
+    <!-- Solo para aria-describedby: fuera del orden de lectura (no se lee una vez por lista). -->
+    <span [id]="instructionsId" hidden>{{
       group ? text.instructionsGroup : text.instructions
     }}</span>
     <span
       role="status"
-      aria-live="assertive"
       data-slot="announcement"
       class="min-h-[18px] text-[12.5px] text-muted-foreground"
       >{{ announcement() }}</span
@@ -475,6 +480,91 @@ export class MimiSortableList<T = unknown> {
     this.announce('dropped', currentIndex);
   }
 
+  /** Tras un arrastre, el `click` que sigue al soltar sobre el asa no cuenta como un toque. */
+  private justDragged = false;
+
+  protected onDragEnded(): void {
+    this.justDragged = true;
+    setTimeout(() => (this.justDragged = false));
+  }
+
+  // ── Con toques, sin arrastrar (WCAG 2.5.7; revisión de accesibilidad de la tanda 3) ──────
+  //
+  // Tocar un asa agarra el elemento (como Espacio); con uno agarrado, tocar otra asa (de esta lista
+  // o de otra del grupo) lo pone en ese lugar, y tocar la zona de una lista vacía, allí. Tocar la
+  // misma asa lo suelta donde está.
+
+  protected onHandleClick(index: number): void {
+    if (this.disabled() || this.justDragged) return;
+    const holder = (this.group?.holder() ??
+      (this.grabbedIndex() !== null ? this : null)) as MimiSortableList<T> | null;
+    if (!holder) {
+      this.startGrab(index);
+      return;
+    }
+    this.placeHere(holder, index);
+  }
+
+  protected onEmptyClick(): void {
+    const holder = this.group?.holder() as MimiSortableList<T> | null | undefined;
+    if (holder && holder !== this) this.placeHere(holder, 0);
+  }
+
+  /** Lleva el elemento que tiene agarrado `holder` a `index` de esta lista y lo suelta. */
+  private placeHere(holder: MimiSortableList<T>, index: number): void {
+    const from = holder.grabbedIndex();
+    if (from === null) return;
+    if (holder === this) {
+      if (index !== from) {
+        this.items.set(move(this.items(), from, index));
+        this.grabbedIndex.set(index);
+      }
+      this.drop();
+      this.focusHandle(index);
+      return;
+    }
+    const item = holder.items()[from];
+    if (!this.canAccept(item)) {
+      // Con el puntero el foco ya pasó a esta asa: el agarre termina (nada se movió) y queda el
+      // aviso; si no, el blur del origen lo soltaría y taparía el aviso con «soltado».
+      holder.cancelKeyboardGrab(false);
+      holder.announceRejected(this, item);
+      return;
+    }
+    holder.items.set(holder.items().filter((_, i) => i !== from));
+    const next = [...this.items()];
+    next.splice(index, 0, item);
+    this.items.set(next);
+    holder.grabbedIndex.set(null);
+    holder.grabStart = null;
+    this.grabbedIndex.set(index);
+    this.drop();
+    this.focusHandle(index);
+  }
+
+  private startGrab(index: number): void {
+    this.grabStart = { index, items: this.items() };
+    this.group?.start(this, index, this.items()[index]);
+    this.grabbedIndex.set(index);
+    this.group?.clearOthers(this);
+    this.announce('grabbed', index);
+  }
+
+  /** @internal Para el grupo. */
+  grabbedAt(): number | null {
+    return this.grabbedIndex();
+  }
+
+  /** @internal Para el grupo. */
+  clearAnnouncement(): void {
+    this.announcement.set('');
+  }
+
+  private announceRejected(target: MimiSortableList<T>, item: T): void {
+    const list = target.ariaLabel() || target.listId() || '';
+    this.setAnnouncement(this.text.rejected(this.labelOf(item), list));
+  }
+
   // ── Teclado (G3.2-d) ─────────────────────────────────────────────────────────────────
 
   protected onHandleKeydown(event: KeyboardEvent, index: number): void {
@@ -483,10 +573,7 @@ export class MimiSortableList<T = unknown> {
     if (grabbed === null) {
       if (event.key === ' ' || event.key === 'Enter') {
         event.preventDefault();
-        this.grabStart = { index, items: this.items() };
-        this.group?.start(this, index, this.items()[index]);
-        this.grabbedIndex.set(index);
-        this.announce('grabbed', index);
+        this.startGrab(index);
       }
       return;
     }
@@ -565,7 +652,12 @@ export class MimiSortableList<T = unknown> {
   private toNeighbor(key: 'ArrowLeft' | 'ArrowRight', grabbed: number): void {
     const neighbor = this.group?.neighbor(this, key) as MimiSortableList<T> | null | undefined;
     const item = this.items()[grabbed];
-    if (!neighbor || neighbor.disabled() || !neighbor.canAccept(item)) return;
+    if (!neighbor || neighbor.disabled()) return;
+    if (!neighbor.canAccept(item)) {
+      // Sin moverlo, pero se dice por qué (no un silencio).
+      this.announceRejected(neighbor, item);
+      return;
+    }
     const index = Math.min(grabbed, neighbor.items().length);
     this.items.set(this.items().filter((_, i) => i !== grabbed));
     const next = [...neighbor.items()];
@@ -604,7 +696,10 @@ export class MimiSortableList<T = unknown> {
     const start = this.grabStart;
     this.grabbedIndex.set(null);
     this.grabStart = null;
-    if (this.group) this.group.grab = null;
+    if (this.group) {
+      this.group.grab = null;
+      this.group.clearOthers(this);
+    }
     if (grabbed === null) return;
     if (shared) {
       // Llegó desde otra lista del grupo con el teclado.
@@ -645,6 +740,7 @@ export class MimiSortableList<T = unknown> {
     const shared = this.group?.grab as MimiSortableGrab<T> | null | undefined;
     if (shared) {
       this.group!.grab = null;
+      this.group!.clearOthers(shared.origin as MimiSortableList<T>);
       this.grabbedIndex.set(null);
       this.grabStart = null;
       for (const [member, items] of shared.snapshot) member.restore(items);
@@ -676,10 +772,20 @@ export class MimiSortableList<T = unknown> {
     const label = this.labelOf(items[index]);
     if (kind === 'movedToList' || kind === 'droppedInList') {
       const list = this.ariaLabel() || this.listId() || '';
-      this.announcement.set(this.text[kind](label, list, index + 1, items.length));
+      this.setAnnouncement(this.text[kind](label, list, index + 1, items.length));
       return;
     }
-    this.announcement.set(this.text[kind](label, index + 1, items.length));
+    this.setAnnouncement(this.text[kind](label, index + 1, items.length));
+  }
+
+  /**
+   * Escribe el anuncio. Si es el mismo texto que ya hay, alterna un espacio duro al final: sin un
+   * cambio en el DOM, los lectores de pantalla no lo vuelven a leer (ida y vuelta entre listas).
+   */
+  private setAnnouncement(text: string): void {
+    const current = this.announcement();
+    if (current.replace(/ $/, '') !== text) this.announcement.set(text);
+    else this.announcement.set(current.endsWith(' ') ? text : `${text} `);
   }
 
   private focusHandle(index: number): void {

@@ -29,6 +29,10 @@ export interface MimiSortableGroupMember<T = unknown> {
   readonly host: HTMLElement;
   snapshot(): T[];
   restore(items: T[]): void;
+  /** Dónde tiene el elemento agarrado (o `null`). */
+  grabbedAt(): number | null;
+  /** Vacía su región de anuncios (al soltar o cancelar en otra lista). */
+  clearAnnouncement(): void;
 }
 
 /**
@@ -90,6 +94,17 @@ export class MimiSortableGroup {
     for (const member of this.members) snapshot.set(member, member.snapshot());
     this.grab = { origin, originIndex: index, item, snapshot } as MimiSortableGrab;
     return this.grab as MimiSortableGrab<T>;
+  }
+
+  /** @internal La lista que tiene ahora el elemento agarrado. */
+  holder(): MimiSortableGroupMember | null {
+    for (const member of this.members) if (member.grabbedAt() !== null) return member;
+    return null;
+  }
+
+  /** @internal Vacía los anuncios de todas las listas menos `keep` (no quedan mensajes viejos). */
+  clearOthers(keep: MimiSortableGroupMember): void {
+    for (const member of this.members) if (member !== keep) member.clearAnnouncement();
   }
 
   /**

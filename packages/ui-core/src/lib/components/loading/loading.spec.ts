@@ -196,6 +196,42 @@ describe('Carga (R.23)', () => {
     });
   });
 
+  describe('con el LiveAnnouncer real (revisión de accesibilidad de la tanda 3)', () => {
+    beforeEach(() => {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        providers: [provideMimiLoading({ delay: 0, minDuration: 0 })],
+      });
+    });
+
+    it('la región de los anuncios no queda inerte ni con aria-busy (si no, «Loading…» no se oye)', async () => {
+      const service = TestBed.inject(MimiLoadingService);
+      const ref = service.show('Guardando…');
+      await new Promise((r) => setTimeout(r, 150));
+      const region = document.querySelector<HTMLElement>('.cdk-live-announcer-element')!;
+      expect(region).not.toBeNull();
+      expect(region.closest('[inert], [aria-busy="true"]')).toBeNull();
+      expect(region.textContent).toContain('Guardando…');
+      ref.hide();
+    });
+
+    it('si cambia el mensaje que se ve (update o la carga de encima termina), se anuncia', async () => {
+      const service = TestBed.inject(MimiLoadingService);
+      const outer = service.show('Subiendo archivos…');
+      const inner = service.show('Generando la vista previa…');
+      await new Promise((r) => setTimeout(r, 150));
+      const region = () => document.querySelector('.cdk-live-announcer-element')!.textContent;
+      expect(region()).toContain('Generando la vista previa…');
+      inner.hide();
+      await new Promise((r) => setTimeout(r, 150));
+      expect(region()).toContain('Subiendo archivos…');
+      outer.update('Casi listo…');
+      await new Promise((r) => setTimeout(r, 150));
+      expect(region()).toContain('Casi listo…');
+      outer.hide();
+    });
+  });
+
   describe('mimiBlock (un contenedor)', () => {
     async function setup() {
       const fixture = TestBed.createComponent(BlockHost);

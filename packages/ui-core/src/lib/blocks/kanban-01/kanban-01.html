@@ -16,8 +16,12 @@
       [attr.data-column]="column.id"
     >
       <div class="flex items-center justify-between gap-2">
-        <h2 class="text-sm font-semibold" [id]="'kanban-' + column.id">
-          {{ column.title }}<span class="sr-only">, {{ countText(column) }}</span>
+        <h2
+          class="text-sm font-semibold"
+          [id]="'kanban-' + column.id"
+          [attr.aria-label]="column.title + ', ' + countText(column)"
+        >
+          {{ column.title }}
         </h2>
         <span mimiBadge variant="soft" tone="secondary" aria-hidden="true">{{
           column.limit === undefined

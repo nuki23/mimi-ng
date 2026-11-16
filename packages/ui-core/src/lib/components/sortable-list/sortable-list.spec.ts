@@ -92,7 +92,8 @@ describe('MimiSortableList', () => {
     expect(first.getAttribute('aria-pressed')).toBe('false');
     const help = list.querySelector(`#${first.getAttribute('aria-describedby')}`)!;
     expect(help.textContent).toContain('Press Space or Enter to grab');
-    expect(list.querySelector('[role="status"]')!.getAttribute('aria-live')).toBe('assertive');
+    // `status` ya es educada; sin `assertive` (no interrumpe en cada flecha; tanda 3).
+    expect(list.querySelector('[role="status"]')!.hasAttribute('aria-live')).toBe(false);
     // La plantilla recibe el elemento y su índice.
     expect(list.querySelector('[data-test="content"]')!.textContent).toBe(
       '1·Revisar contraste·false',

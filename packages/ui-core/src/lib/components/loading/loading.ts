@@ -249,6 +249,17 @@ export class MimiLoadingService {
     this.component.setInput('message', top.message);
     this.component.setInput('size', top.size);
     this.component.changeDetectorRef.detectChanges();
+    // Con la capa a la vista, un mensaje nuevo (update o la carga de encima terminó) se anuncia.
+    if (top.message !== this.announced) this.announceCurrent();
+  }
+
+  /** El último mensaje anunciado (para no repetirlo en cada pintada). */
+  private announced: string | null = null;
+
+  private announceCurrent(): void {
+    const message = this.current()?.message ?? this.texts.loading;
+    this.announced = message;
+    void this.announcer.announce(message, 'polite');
   }
 
   private attach(): void {
@@ -261,12 +272,20 @@ export class MimiLoadingService {
       height: '100%',
     });
     this.component = this.overlayRef.attach(new ComponentPortal(MimiLoadingOverlay));
-    this.render();
     const container = this.overlayRef.hostElement.parentElement;
+    // Fuera quedan la capa, los scripts y las regiones vivas (la de LiveAnnouncer y cualquier
+    // `aria-live` suelto en el body): inertes, el lector no oiría el mensaje (revisión de la tanda 3).
     this.restoreInert = mimiMakeInert(
-      [...doc.body.children].filter((el) => el !== container && el.tagName !== 'SCRIPT'),
+      [...doc.body.children].filter(
+        (el) =>
+          el !== container &&
+          el.tagName !== 'SCRIPT' &&
+          !el.classList.contains('cdk-live-announcer-element') &&
+          !el.hasAttribute('aria-live'),
+      ),
     );
-    void this.announcer.announce(this.current()?.message ?? this.texts.loading, 'polite');
+    // Pinta y anuncia el mensaje (una vez: `render` anuncia si no se había anunciado).
+    this.render();
   }
 
   private detach(): void {
@@ -275,6 +294,7 @@ export class MimiLoadingService {
     this.overlayRef?.dispose();
     this.overlayRef = null;
     this.component = null;
+    this.announced = null;
     void this.announcer.announce(this.lastTexts.done, 'polite');
     const target = this.focusBack;
     this.focusBack = null;

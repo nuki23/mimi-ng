@@ -184,6 +184,74 @@ describe('Sortable List: listas conectadas (R.21)', () => {
     expect(host.groupMoves).toEqual([]);
   });
 
+  it('con solo toques, sin arrastrar (WCAG 2.5.7): asa de origen y asa o zona de destino', async () => {
+    const { fixture, handles, ids, list, status } = await setup();
+    const tap = async (el: HTMLElement) => {
+      el.click();
+      await settle(fixture);
+    };
+    await tap(handles('todo')[0]); // agarra «Ta»
+    expect(handles('todo')[0].getAttribute('aria-pressed')).toBe('true');
+    await tap(handles('doing')[0]); // la pone donde está «Td»
+    expect(ids()).toEqual({ todo: 'bc', doing: 'ad', done: '' });
+    expect(status('doing')).toBe('Ta dropped in En curso, position 1 of 2.');
+    // A una lista vacía, tocando su zona de soltar.
+    await tap(handles('todo')[0]);
+    await tap(list('done').querySelector<HTMLElement>('[data-slot="empty"]')!);
+    expect(ids()).toEqual({ todo: 'c', doing: 'ad', done: 'b' });
+    // Tocar otra vez la misma asa la suelta donde está.
+    await tap(handles('todo')[0]);
+    await tap(handles('todo')[0]);
+    expect(handles('todo')[0].getAttribute('aria-pressed')).toBe('false');
+    expect(ids().todo).toBe('c');
+  });
+
+  it('un toque rechazado (accepts) termina el agarre y deja el aviso, aunque el foco cambie de asa', async () => {
+    const { host, fixture, handles, ids, list } = await setup();
+    host.max.set(1);
+    await settle(fixture);
+    handles('todo')[0].focus();
+    handles('todo')[0].click();
+    await settle(fixture);
+    // El clic enfoca el asa de destino: el blur del origen no debe soltar encima del aviso.
+    handles('doing')[0].focus();
+    handles('doing')[0].click();
+    await settle(fixture);
+    expect(ids()).toEqual({ todo: 'abc', doing: 'd', done: '' });
+    expect(handles('todo')[0].getAttribute('aria-pressed')).toBe('false');
+    expect(list('todo').querySelector('[role="status"]')!.textContent).toContain(
+      "En curso doesn't accept Ta.",
+    );
+  });
+
+  it('el anuncio se repite aunque el texto sea el mismo; el rechazo se anuncia; las demás regiones se limpian', async () => {
+    const { host, fixture, handles, list, key } = await setup();
+    const region = (name: string) => list(name).querySelector('[role="status"]')!;
+    await key(handles('todo')[0], 'Enter');
+    await key(handles('todo')[0], 'ArrowRight');
+    const first = region('doing').textContent;
+    await key(handles('doing')[0], 'ArrowLeft');
+    await key(handles('todo')[0], 'ArrowRight');
+    // Mismo mensaje, pero el DOM cambia (si no, el lector no lo vuelve a leer).
+    expect(region('doing').textContent).not.toBe(first);
+    expect(region('doing').textContent!.trim()).toBe(first!.trim());
+    await key(handles('doing')[0], 'Escape');
+    // Tras cancelar, solo la lista de origen dice algo.
+    expect(region('doing').textContent!.trim()).toBe('');
+    expect(region('todo').textContent).toContain('is back');
+    // Rechazo por `accepts`: se anuncia en la lista de origen.
+    host.max.set(1);
+    await settle(fixture);
+    await key(handles('todo')[0], 'Enter');
+    await key(handles('todo')[0], 'ArrowRight');
+    expect(region('todo').textContent).toContain("En curso doesn't accept Ta.");
+    await key(handles('todo')[0], 'Escape');
+    // La región es educada (status), sin assertive; las instrucciones, fuera del orden de lectura.
+    expect(region('todo').hasAttribute('aria-live')).toBe(false);
+    const help = handles('todo')[0].getAttribute('aria-describedby')!;
+    expect(list('todo').querySelector(`#${help}`)!.hasAttribute('hidden')).toBe(true);
+  });
+
   it('accepts rechaza (no más de max): el elemento se queda; RTL invierte ← →', async () => {
     const { host, fixture, handles, ids, key } = await setup();
     host.max.set(1);

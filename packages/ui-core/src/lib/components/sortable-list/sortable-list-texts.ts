@@ -29,6 +29,8 @@ export interface MimiSortableText {
   droppedInList: (label: string, list: string, position: number, total: number) => string;
   /** El texto de una lista vacía dentro de un grupo, donde se suelta (R.21). */
   empty: string;
+  /** La otra lista no admite el elemento (`accepts`; R.21). */
+  rejected: (label: string, list: string) => string;
 }
 
 /** Textos predeterminados (inglés). */
@@ -50,6 +52,7 @@ export const MIMI_SORTABLE_TEXT_EN: MimiSortableText = {
   droppedInList: (label, list, position, total) =>
     `${label} dropped in ${list}, position ${position} of ${total}.`,
   empty: 'Drop here',
+  rejected: (label, list) => `${list} doesn't accept ${label}.`,
 };
 
 /** Textos en español: `provideMimiSortableText(MIMI_SORTABLE_TEXT_ES)`. */
@@ -71,6 +74,7 @@ export const MIMI_SORTABLE_TEXT_ES: MimiSortableText = {
   droppedInList: (label, list, position, total) =>
     `${label} soltado en ${list}, lugar ${position} de ${total}.`,
   empty: 'Suelta aquí',
+  rejected: (label, list) => `${list} no admite ${label}.`,
 };
 
 /** Textos activos. Sin `provideMimiSortableText`, los predeterminados en inglés. */

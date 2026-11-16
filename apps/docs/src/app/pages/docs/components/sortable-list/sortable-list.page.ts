@@ -95,7 +95,7 @@ export const SORTABLE_LIST_PAGE: DocPage = {
       'Espacio o Enter agarran el elemento; ↑ y ↓ lo mueven, Inicio y Fin lo llevan a un extremo. El foco sigue al asa.',
       'Espacio o Enter lo sueltan y Escape lo devuelve a su lugar; si el foco sale del asa, se suelta donde está.',
       'Cada paso se anuncia («Diseñar Tabs: lugar 3 de 5») en la línea de debajo de la lista, que también se ve.',
-      'Con el puntero o el dedo, solo se arrastra desde el asa: el resto se puede seleccionar y pulsar.',
+      'Sin arrastrar: toca el asa para agarrar y luego otra asa (o la zona vacía de una lista) para ponerlo allí.',
       'Dale nombre a la lista con `aria-label` o `aria-labelledby`: en un grupo, es el que se anuncia al pasar («Movido a En curso, lugar 2 de 4»).',
     ],
     more: [

@@ -64,11 +64,14 @@ describe('Kanban01', { timeout: 20_000 }, () => {
     const { el, column } = await setup();
     expect(el.querySelectorAll('h1').length).toBe(1);
     // El título con el número de tarjetas para los lectores (el contador visible es aria-hidden).
-    expect(
-      [...el.querySelectorAll('[data-slot="column"] h2')].map((h) =>
-        h.textContent!.replace(/\s+/g, ' ').trim(),
-      ),
-    ).toEqual(['To do, 3 cards', 'In progress, 1 of 3 cards', 'Done, 1 card']);
+    // Con `aria-label` en el h2 (un span sr-only absoluto metía un espacio: «To do , 3 cards»).
+    const headings = [...el.querySelectorAll('[data-slot="column"] h2')];
+    expect(headings.map((h) => h.getAttribute('aria-label'))).toEqual([
+      'To do, 3 cards',
+      'In progress, 1 of 3 cards',
+      'Done, 1 card',
+    ]);
+    expect(headings.map((h) => h.textContent!.trim())).toEqual(['To do', 'In progress', 'Done']);
     expect(column('doing').querySelector('[mimiBadge]')!.textContent!.trim()).toBe('1 / 3');
     // La lista se llama como la columna: es el nombre que se anuncia al pasar una tarjeta.
     expect(column('todo').querySelector('ul')!.getAttribute('aria-label')).toBe('To do');
