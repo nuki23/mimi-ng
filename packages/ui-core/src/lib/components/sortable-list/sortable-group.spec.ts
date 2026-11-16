@@ -125,6 +125,8 @@ describe('Sortable List: listas conectadas (R.21)', () => {
     expect(empty.textContent!.trim()).toBe('Drop here');
     expect(empty.getAttribute('aria-hidden')).toBe('true');
     expect(list('done').querySelector('ul')!.hasAttribute('data-empty')).toBe(true);
+    // Posicionada: sus textos sr-only no se escapan de una columna con desplazamiento.
+    expect(list('todo').classList).toContain('relative');
   });
 
   it('teclado: → pasa a la lista siguiente, al mismo lugar o al último, con anuncio y el foco', async () => {

@@ -739,6 +739,23 @@
         "blocks/pricing-01/index.ts"
       ],
       "registryDependencies": ["badge", "button", "toggle-group", "utils/busy", "utils/cn"]
+    },
+    "kanban-01": {
+      "type": "block",
+      "kind": "page",
+      "files": [
+        "blocks/kanban-01/kanban-01.ts",
+        "blocks/kanban-01/kanban-01.html",
+        "blocks/kanban-01/index.ts"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "sortable-list",
+        "utils/busy",
+        "utils/cn"
+      ]
     }
   }
 }

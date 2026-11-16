@@ -11,6 +11,7 @@ import { Otp01Page } from './otp-01-page';
 import { Pricing01Page } from './pricing-01-page';
 import { Settings01Page } from './settings-01-page';
 import { Table01Page } from './table-01-page';
+import { Kanban01Page } from './kanban-01-page';
 import { Signup01Page } from './signup-01-page';
 
 interface Case {
@@ -77,6 +78,13 @@ const CASES: Case[] = [
     page: Table01Page,
     components: ['data-table', 'badge', 'button', 'checkbox', 'input'],
     states: ['selected', 'loading'],
+  },
+  {
+    name: 'kanban-01',
+    kind: 'page',
+    page: Kanban01Page,
+    components: ['sortable-list', 'avatar', 'badge', 'button'],
+    states: ['empty', 'loading'],
   },
   {
     name: 'pricing-01',

@@ -23,6 +23,19 @@ export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {
     load: () => import('./otp-01-demo').then((m) => m.Otp01Demo),
     states: { resend: { resendSeconds: 0 } },
   },
+  'kanban-01': {
+    load: () => import('@/blocks/kanban-01').then((m) => m.Kanban01),
+    states: {
+      empty: {
+        columns: [
+          { id: 'todo', title: 'To do', cards: [{ id: 1, title: 'Plan the next release' }] },
+          { id: 'doing', title: 'In progress', limit: 3, cards: [] },
+          { id: 'done', title: 'Done', cards: [] },
+        ],
+      },
+      loading: { loading: true },
+    },
+  },
   'table-01': {
     load: () => import('@/blocks/table-01').then((m) => m.Table01),
     states: { selected: { selection: [2, 8] }, loading: { loading: true } },

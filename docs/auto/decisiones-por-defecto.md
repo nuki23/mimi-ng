@@ -179,6 +179,7 @@ Rama `auto/0.7.0-tanda2-2026-11-15`; detalle en `docs/auto/0.7.0-tanda2-2026-11-
 Rama `auto/0.7.0-tanda3-2026-11-15`; detalle en `docs/auto/0.7.0-tanda3-2026-11-15.md`. Pendientes de revisión del usuario.
 
 - **R.21, cómo se conectan las listas:** con el contenedor `<mimi-sortable-group>` (sobre `CdkDropListGroup`), no con una entrada `group="nombre"`. El plan ofrecía las dos; el contenedor es la forma del cdk, no necesita un registro global y el orden de las columnas (para ← →) sale del documento. Alternativa: `group` por nombre (listas conectadas en cualquier lugar de la página).
+- **R.22, `kanban-01`:** textos en inglés («To do», «In progress», «Done»; el prompt los nombra en español, pero todos los Blocks van en inglés, spec 4); `[(columns)]` (el Block cambia las columnas al mover, como `[(selection)]` en `table-01`) además de `moved`; «In progress» con `limit: 3` en el ejemplo. Base: «Más simple y coherente con la spec».
 - **R.21, teclado:** al pasar a otra lista, el elemento va al mismo lugar o al último; las flechas del otro eje (en una lista horizontal, ↑ la anterior y ↓ la siguiente). Sin anuncio cuando la otra lista no lo acepta (el elemento se queda y sigue agarrado).
 
 ## Decididas por el usuario: estados de los controles (12/11/2026)

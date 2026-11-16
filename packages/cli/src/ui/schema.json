@@ -184,6 +184,10 @@
             "label": "tree"
           },
           {
+            "value": "kanban-01",
+            "label": "kanban-01 (Block, página)"
+          },
+          {
             "value": "login-01",
             "label": "login-01 (Block, página)"
           },

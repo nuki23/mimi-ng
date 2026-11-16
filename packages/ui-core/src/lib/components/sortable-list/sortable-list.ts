@@ -362,7 +362,9 @@ export class MimiSortableList<T = unknown> {
   /** Alto del elemento que se arrastra con el puntero: el del hueco. */
   protected readonly placeholderHeight = signal<number | null>(null);
 
-  protected readonly classes = computed(() => cn('flex flex-col gap-2', this.userClass()));
+  // `relative`: las instrucciones `sr-only` (absolutas) quedan dentro de la lista; si no, en una
+  // columna con desplazamiento horizontal se escapan y desbordan la página (kanban-01 a 360 px).
+  protected readonly classes = computed(() => cn('relative flex flex-col gap-2', this.userClass()));
 
   protected readonly listClasses = computed(() =>
     cn(
