@@ -2,6 +2,48 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
+## 0.7.0 (por publicar — borrador de la puerta R.P7, 16/11/2026): Card, Table, tableros y carga
+
+> **Borrador.** Lo escribió la puerta R.P7 (rama `auto/0.7.0-tanda3-2026-11-15`) a partir de las tres tandas de la 0.7.0. Al publicar, el usuario cambia el título por `## 0.7.0 (DD/MM/AAAA): …` y sube la versión de `packages/cli/package.json` (`docs/proceso/release.md`). Detalle y evidencia: `docs/auto/0.7.0-tanda1-2026-11-15.md`, `0.7.0-tanda2-2026-11-15.md` y `0.7.0-tanda3-2026-11-15.md`.
+
+### Rupturas (qué cambia en algo que ya tenías y qué hacer)
+
+- **Card pasa de componentes a directivas** (R.19). La forma nueva es una **superficie** en tu elemento, `<section mimiCard>`, con piezas opcionales también en tus elementos: `<header mimiCardHeader>`, `<h3 mimiCardTitle>`, `<p mimiCardDescription>`, `<div mimiCardContent>`, `<footer mimiCardFooter>`. **Los elementos de la 0.6.0 (`<mimi-card>`, `<mimi-card-header>`…) siguen funcionando en la 0.7.0 y se quitan en la 0.8.0.** Un solo relleno: `--mimi-card-padding-header`, `-content` y `-footer` **ya no tienen efecto** (quedan `@deprecated` en `MimiCardTokens` para que tu tema compile); usa `--mimi-card-padding` y el nuevo `--mimi-card-gap`. Entre el contenido y el pie hay ahora 16 px (antes 20). **Cómo actualizar:** `<mimi-card>` → `<div mimiCard class="flex flex-col">`; `<mimi-card-title>` → `<h3 mimiCardTitle>` (el nivel es el de tu encabezado, sin `level`); el resto, cada elemento por su directiva. Las piezas deben ser **hermanas**: si un `<form>` envuelve el contenido y el pie, haz del `<form>` la tarjeta (`<form mimiCard>`).
+- **Button cargando ya no tiene el `disabled` nativo** (R.33). Mientras carga, un `<button mimiBtn [loading]>` lleva `aria-disabled="true"` y `aria-busy="true"`, sigue en el orden de tabulación (el foco no cae a `<body>`) y Button cancela el clic, Enter, Espacio y el envío implícito del formulario. Muestra el cursor de progreso, y el hover y el clic no cambian su aspecto. **Cómo actualizar:** el CSS o las pruebas que miren `:disabled`, `[disabled]` o `button.disabled` para saber si carga deben mirar `[aria-busy="true"]` o `[data-loading]` (`[data-disabled]` sigue en los dos casos). Con `disabled` y `loading` a la vez no cambia nada.
+- **Los hover de Button llevan `not-aria-busy:`** (para no cambiar el aspecto mientras carga). Si cambiabas un hover o el halo al pulsar con `class` (`hover:not-disabled:bg-…`, `active:ring-…`), ya no reemplaza el de Button. **Cómo actualizar:** escribe `hover:not-disabled:not-aria-busy:…` y `active:not-aria-busy:…`.
+- **`size="default"` deja de compilar** (R.32, anunciado en la 0.6.0) en Button, Input, Avatar, Progress y Pagination; `MimiSizeInput`, `normalizeMimiSize` y el segundo argumento de `injectMimiSize` quedan en `utils/size` **deprecados hasta la 1.0**, solo para que compilen las copias de la 0.6.0 que la CLI no actualiza porque las modificaste. **Cómo actualizar:** `default` → `md`, o quita `size`; cuando puedas, actualiza también tu Button o Pagination modificados (`--overwrite` y vuelve a aplicar tus cambios).
+- **Data Table: `aria-sort` solo en la columna ordenada** (antes, `aria-sort="none"` en todas las demás que se podían ordenar; patrón «Sortable Table» de la APG), y el ícono de «se puede ordenar» sin opacidad (3:1 de contraste). **Cómo actualizar:** si tus pruebas buscaban `th[aria-sort="none"]`, busca que no tenga `aria-sort`.
+- **Data Table se instala con `table`** (la capa base nueva, R.20): `ng g mimi data-table` trae también `components/ui/table/`. `MimiTableSort` y `MimiTableFilters` viven ahora en `table` y `data-table` los reexporta (tus importaciones siguen). **No hay columnas como directivas dentro de la Data Table** (lo que pedía la PD-2 con `@for` e `@if` se hace con Table). **Cómo migrar** si quieres tu propio HTML: `<table mimiTable>` con `mimiTableState(datos, { columns, pageSize })` y `@for (fila of tabla.rows(); …)` (ejemplos en la página de Table); `[data]` + `[columns]` + `mimiTableCell` siguen como el atajo, sin fecha de retiro.
+
+- **`MimiSortableText` tiene cinco textos nuevos obligatorios** (R.21): `instructionsGroup`, `movedToList`, `droppedInList`, `empty` y `rejected`. Si escribes el objeto entero con su tipo (por ejemplo, `const textos: MimiSortableText = { … }` o `{ provide: MIMI_SORTABLE_TEXT, useValue: … }`), deja de compilar. **Cómo actualizar:** agrega los cinco (los de `MIMI_SORTABLE_TEXT_ES` sirven de modelo) o usa `provideMimiSortableText({ … })`, que acepta un objeto parcial y completa en inglés lo que falta.
+
+### Cambios visibles (sin cambio de API)
+
+- **Select:** «cargando» y «sin resultados» con el aspecto de la lista común (la de Combobox): la lupa sin el círculo gris y dos renglones de carga; «Cargando…» se anuncia por la región `status` (M.9).
+- **Confirm** pasa de 380 a **360 px** de ancho (el `sm` de Dialog); `--mimi-confirm-width` sigue mandando si lo defines (R.27).
+- **Blocks:** los botones principales de `login-01`, `login-02`, `signup-01`, `otp-01` y `pricing-01` siguen el tamaño (`sm` 36 px, `lg` 52 px); en `md`, como antes (R.28). Las tarjetas de `login-01`, `otp-01` y `settings-01` usan `mimiCard` (mismo aspecto).
+- **Sortable List:** su anfitrión es `relative` (sus textos para lectores de pantalla no desbordan una columna con desplazamiento); su región de anuncios es `role="status"` sin `aria-live="assertive"` (ya no interrumpe en cada flecha) y las instrucciones quedan fuera del orden de lectura (`hidden`, siguen en `aria-describedby`). **Tocar el asa ahora agarra el elemento** (antes no hacía nada).
+
+### Nuevo
+
+- **Table** (R.20): directivas de estilo sobre la `<table>` nativa (`mimiTable`, `mimiCaption`, `mimiThead`, `mimiTbody`, `mimiTr`, `mimiTh` con `[sort]` y `aria-sort`, `mimiTd`, `button[mimiRowToggle]`) y **`mimiTableState()`**, el estado sin interfaz (búsqueda, filtros, orden, páginas, selección y filas expandidas en señales; cada fila con `toggle()`, `selected()` y `expanded()`). `ng g mimi table`.
+- **Data Table:** `expandMode` (`single` / `multiple`) y, en `mimiTableDetail` y `mimiTableActions`, `toggle`, `expanded` y `detailId` para abrir el detalle con un botón propio; cerrar desde el detalle devuelve el foco al botón de la fila.
+- **Card:** `variant` (`outline`, `elevated`, `flat`, `ghost`), `interactive` (para un `<a>` o un `<button>` entero) y `size`.
+- **Sortable List con listas conectadas** (R.21): `<mimi-sortable-group>` alrededor de varias listas; pasa elementos con el puntero, el dedo y el teclado (con el elemento agarrado, ← → a la lista de al lado; Escape devuelve todo) y **sin arrastrar** (tocar el asa agarra; tocar otra asa o la zona vacía de una lista lo pone allí: WCAG 2.5.7, también en una lista sola), con anuncios (también el rechazo de `accepts`); `listId`, `accepts`, `orientation` y la salida `moved`; una lista vacía muestra «Suelta aquí». Textos nuevos en `MimiSortableText` (con `provideMimiSortableText` y un objeto parcial, los que faltan quedan en inglés; ver la ruptura de arriba si escribes el objeto entero).
+- **Block `kanban-01`** (R.22, página): un tablero con «To do», «In progress» (con tope) y «Done», `[(columns)]`, `moved`, `reordered` y `addCard`. `ng g mimi kanban-01` lo genera en `src/app/pages/kanban/`.
+- **Loading** (R.23): `injectMimiLoading().show()` / `MimiLoadingService` para toda la vista (con contador, `delay` de 200 ms y `minDuration` de 400 ms) y `[mimiBlock]` para un contenedor; lo de debajo queda `inert` y con `aria-busy`, se anuncia y el foco vuelve. Textos `provideMimiLoadingText` (`_ES`). `ng g mimi loading`.
+- **Tamaños** en Input OTP, File Upload (la zona) y `mimi-color-input` (M.27), y en Card y Table.
+- **Confirm** con `size` (R.27).
+
+### Cómo actualizar desde la 0.6.0
+
+```sh
+npm i -D @mimi-ng/cli@0.7.0     # o: pnpm add -D @mimi-ng/cli@0.7.0
+npx ng g mimi <los componentes y Blocks que usas>
+```
+
+La CLI dice «actualizado de 0.6.0 a 0.7.0» en lo que no modificaste y **bloquea** lo que sí (con su aviso y la copia de `.mimi/base/` para comparar). **Ojo con el efecto en cadena:** lo que depende de un componente bloqueado tampoco se actualiza ni se agrega (todo o nada). Por ejemplo, con tu Button modificado no se actualizan Pagination, Data Table ni `pricing-01`, y `kanban-01` no se agrega («necesita button 0.7.0»); la CLI lo dice ítem por ítem. Actualiza primero ese componente (`--overwrite` y vuelve a aplicar tus cambios). Antes, cambia `size="default"` por `md` (deja de compilar) y revisa las rupturas de Card, Button y Data Table de arriba.
+
 ## 0.6.0 (13/11/2026): tema de marca, tamaños y formularios
 
 Detalle y evidencia: `docs/auto/refinamiento-0.6.0-*.md` y `docs/auto/release-0.6.0-2026-11-13.md`.

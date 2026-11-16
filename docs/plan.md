@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- M.9 · `auto/0.7.0-tanda1-2026-11-15` · Claude Code (modo autónomo) · desde 15/11/2026 · hecha salvo `ng g mimi select` en un proyecto real (va con los escenarios del `.tgz` de la puerta R.P7).
+- R.P7 · `auto/0.7.0-tanda3-2026-11-15` · Claude Code (modo autónomo) · desde 16/11/2026 · escenarios del `.tgz`, revisor y borrador del CHANGELOG.
 
 (DP.2 a DP.5, hechas el 14/11/2026; la siguiente del plan de páginas es DP.6, Blocks y portada, y la puerta DP.P.)
 
@@ -96,7 +96,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [ ] M.6 Select: saltar a una opción con una letra estando cerrado · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.7 Íconos de Lucide en los chunks del showcase · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.8 La CLI y los bloqueos de «todo o nada» · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [~] M.9 (15/11/2026: Select usa `MimiOptionList`; falta `ng g mimi select` en un proyecto real, en la puerta R.P7) Migrar Select a las utilidades de lista del Combobox (lo que faltaba de la R.15) · v0.7.0 · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.9 (cerrada el 16/11/2026 en la R.P7: `ng g mimi select` en proyectos reales con el `.tgz`) Migrar Select a las utilidades de lista del Combobox (lo que faltaba de la R.15) · v0.7.0 · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.10 Script `check-plan` (casillas del índice y del detalle, enlaces, IDs) · sin versión · — · depende: la reorganización del plan (PASO 4) · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.11 La CLI y `--overwrite` con la misma versión (era un error; corregido) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.12 Pruebas deterministas con temporizadores y animaciones (Dialog, Toast, docs bajo carga; la parte de docs, hecha el 05/11/2026) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
@@ -151,9 +151,9 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 - [x] R.31 (hecha el 15/11/2026) Nota de contraste al cambiar el primario (texto `text-primary` con un primario propio claro) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.32 (hecha el 15/11/2026) Quitar el alias `default` de `size` (RUPTURA, anunciada en la 0.6.0) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 - [x] R.33 (hecha el 15/11/2026) Button en carga sigue siendo enfocable (`aria-disabled` + `aria-busy` y clics bloqueados, en vez del `disabled` nativo; **RUPTURA**) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [~] M.9 completa (hecha el 15/11/2026 a falta de `ng g mimi select` en un proyecto real, en la puerta R.P7) (lo que faltaba de la R.15; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
+- [x] M.9 completa (cerrada el 16/11/2026 con los escenarios del `.tgz` de la R.P7) (lo que faltaba de la R.15; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
 - [x] M.25 `main` del sitio a 2,17 kB de su aviso: medir y bajarlo **antes** de R.19 a R.23 (**hecha el 15/11/2026**: `main` de 137,99 a 98,02 kB; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
-- [ ] R.P7 Puerta de la 0.7.0 · v0.7.0 · — · depende: R.19 a R.23, R.25 a R.33, M.9, M.25 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [~] R.P7 (en curso, 16/11/2026) Puerta de la 0.7.0 · v0.7.0 · — · depende: R.19 a R.23, R.25 a R.33, M.9, M.25 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
 
 ## Páginas de la documentación: una plantilla común (plan del 12/11/2026; decidido el 14/11/2026)
 
