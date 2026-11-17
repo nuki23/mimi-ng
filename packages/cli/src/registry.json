@@ -400,7 +400,13 @@
       "peerDependencies": {
         "@angular/aria": "^22.2.4"
       },
-      "registryDependencies": ["dialog", "option-list", "utils/cn", "utils/size"]
+      "registryDependencies": [
+        "dialog",
+        "option-list",
+        "utils/cn",
+        "utils/overlay-config",
+        "utils/size"
+      ]
     },
     "calendar": {
       "type": "component",

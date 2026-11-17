@@ -36,7 +36,7 @@
     "css": ["@angular/cdk/overlay-prebuilt.css"]
   },
   "command": {
-    "items": ["dialog", "option-list", "utils/overlay", "utils/size"],
+    "items": ["dialog", "option-list", "utils/overlay", "utils/overlay-config", "utils/size"],
     "packages": ["@angular/aria", "@angular/cdk"],
     "css": ["@angular/cdk/overlay-prebuilt.css"]
   },
