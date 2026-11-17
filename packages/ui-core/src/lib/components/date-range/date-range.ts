@@ -29,6 +29,7 @@ import {
 import { MimiPopover, MimiPopoverContent, MimiPopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
+import type { MimiOverlayPresentation } from '@/components/ui/utils/overlay-config';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import {
   MIMI_FIELD_CONTROL,
@@ -101,6 +102,9 @@ let nextId = 0;
       [class]="panelClasses()"
       [(open)]="open"
       [blocked]="readonly()"
+      [presentation]="presentation()"
+      mobilePresentation="fullscreen"
+      [sheetTitle]="ariaLabel() || ''"
       (openChange)="onOpenChange($event)"
       aria-label="{{ texts.pickRange }}"
     >
@@ -242,6 +246,8 @@ export class MimiDateRangePicker
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
   readonly userClass = input('', { alias: 'class' });
   readonly panelClass = input('');
+  /** Cómo se abre (R.34): `auto` = pantalla completa por debajo de 640 px (un mes debajo del otro). */
+  readonly presentation = input<MimiOverlayPresentation>('auto');
 
   /** Se cerró el panel: marca el control como tocado. */
   readonly touch = output<void>();

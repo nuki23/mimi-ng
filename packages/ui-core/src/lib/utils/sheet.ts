@@ -331,13 +331,17 @@ const ICON_BUTTON_CLASSES = cn(
             </svg>
           </button>
         }
-        <h2
-          data-slot="title"
-          class="min-w-0 flex-1 truncate text-base leading-tight font-bold"
-          [id]="host.titleId"
-        >
-          {{ host.title() }}
-        </h2>
+        @if (host.title()) {
+          <h2
+            data-slot="title"
+            class="min-w-0 flex-1 truncate text-base leading-tight font-bold"
+            [id]="host.titleId"
+          >
+            {{ host.title() }}
+          </h2>
+        } @else {
+          <span class="flex-1"></span>
+        }
         <button
           type="button"
           data-slot="close"

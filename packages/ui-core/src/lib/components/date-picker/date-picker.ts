@@ -19,6 +19,7 @@ import { type MimiDate, mimiFormatDate, mimiIsDate } from '@/components/ui/calen
 import { MimiPopover, MimiPopoverContent, MimiPopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
+import type { MimiOverlayPresentation } from '@/components/ui/utils/overlay-config';
 import { fieldTriggerStyles } from '@/components/ui/utils/field-styles';
 import {
   MIMI_FIELD_CONTROL,
@@ -82,6 +83,9 @@ const toDate = (value: unknown): MimiDate | undefined =>
       [class]="panelClasses()"
       [(open)]="open"
       [blocked]="readonly()"
+      [presentation]="presentation()"
+      mobilePresentation="sheet"
+      [sheetTitle]="ariaLabel() || ''"
       (openChange)="onOpenChange($event)"
       aria-label="{{ texts.pickDate }}"
     >
@@ -192,6 +196,8 @@ export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFi
   readonly userClass = input('', { alias: 'class' });
   /** Clases del panel. */
   readonly panelClass = input('');
+  /** Cómo se abre el calendario (R.34): `auto` = hoja inferior por debajo de 640 px. */
+  readonly presentation = input<MimiOverlayPresentation>('auto');
 
   /** Se cerró el panel: marca el control como tocado. */
   readonly touch = output<void>();

@@ -55,8 +55,8 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
     why: 'Botón: el anillo lo pinta la caja con data-[focus-visible] (origen del foco, FocusMonitor). Panel: la opción activa lleva fondo (la lista es la de option-list desde la M.9). Buscador: tiene el cursor de texto y la opción activa.',
   },
   'components/popover/popover.ts': {
-    count: 1,
-    why: 'Panel: recibe el foco al abrir solo si no hay nada enfocable dentro (cdk).',
+    count: 2,
+    why: 'Panel (y su contenido en la hoja, R.34): recibe el foco al abrir solo si no hay nada enfocable dentro (cdk).',
   },
   'utils/sheet.ts': {
     count: 2,
