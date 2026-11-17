@@ -13,8 +13,13 @@ Lo que quedaba de la 0.1.x se quita en esta versión, sin obsoletos (política d
 - **Se quitan los nombres de tokens de la 0.1.0** en el tema y sus avisos de `provideMimiTheme`: `components.button.paddingX` y `components.input.paddingX` (y las variables `--mimi-btn-padding-x` e `--mimi-input-padding-x`), `components.input.placeholderColor` (y `--mimi-input-placeholder-color`) y `radii.badge`. Un preset que los use deja de compilar, y las variables viejas en tu CSS ya no hacen nada. **Cómo actualizar:** `paddingX` → `px` (`--mimi-btn-px`, `--mimi-input-px`); `placeholderColor` → `--mimi-input-placeholder` en tu CSS (es un color, va en claro y en oscuro); `radii.badge` → `components.badge.radius`.
 - **`"style": "vivid"` en `mimi.json`** (lo que escribía la 0.1.0) deja de ser un sinónimo: `ng g mimi` lo cambia por `"mimi"` la próxima vez que reescribe `mimi.json`. **Cómo actualizar:** nada (o cámbialo tú).
 
+### Cambios visibles (sin cambio de API)
+
+- **En el teléfono (menos de 640 px de ancho), los paneles ya no son popovers** (R.34): Date Picker, Color Picker (`mimi-color-input`), Dropdown Menu y Context Menu se abren en una **hoja inferior**, y Date Range a **pantalla completa**, con título, X, Escape, toque en el fondo y arrastre para cerrar, el foco dentro y el alto que sigue al teclado. Popover y Tooltip no cambian. **Si no lo quieres:** `presentation="popover"` en el componente, o `provideMimiOverlay({ mobileBreakpoint: 0 })` en `app.config.ts` para toda la app. Tus pruebas de Playwright o Cypress que abran estos paneles con una ventana de menos de 640 px verán la hoja (con `role="dialog"`), no el popover; las de jsdom no cambian.
+
 ### Nuevo
 
+- **`presentation`** (`'auto' | 'popover' | 'sheet' | 'fullscreen'`) en Popover, Date Picker, Date Range, Color Picker (`mimi-color-input`), Dropdown Menu y Context Menu, y `sheetTitle` para el título de la hoja.
 - **Sheet** (G4.2): un panel modal pegado a un lado de la pantalla (`side="left" | "right" | "bottom"`), flotante, con el radio de las tarjetas y, abajo, una barra de agarre; `size` (`sm`, `md`, `lg`), `[(open)]`, `disableClose`, y las piezas `mimiSheetTrigger`, `mimiSheetContent`, `mimiSheetHeader`, `mimiSheetTitle`, `mimiSheetDescription`, `mimiSheetBody`, `mimiSheetFooter` y `mimiSheetClose`. Se cierra con Escape, con un toque en el fondo, con la X o arrastrando hacia el borde; el foco queda dentro y vuelve al botón; con el teclado del móvil abierto, se achica a la parte visible. Tokens `--mimi-sheet-*`. `ng g mimi sheet`.
 - **La hoja común** (`utils/sheet`, R.34), la que usa Sheet y, en el teléfono, los paneles de los componentes; `provideMimiOverlay({ mobileBreakpoint, presentation })` y `provideMimiOverlayText` (`MIMI_OVERLAY_TEXT_ES`) en `utils/overlay-config`.
 
