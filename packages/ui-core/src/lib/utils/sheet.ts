@@ -67,6 +67,9 @@ const BACKDROP_CLASSES = [
   'motion-reduce:duration-[1ms]!',
 ];
 
+/** El fondo mientras la hoja sale: transparente y sin recibir toques. */
+const BACKDROP_CLOSING = ['opacity-0!', 'pointer-events-none'];
+
 /**
  * Pinta una plantilla donde está (sin @angular/common, como las demás salidas de Mimi). La usan la
  * hoja y los componentes que pintan el mismo contenido en el popover y en la hoja.
@@ -134,7 +137,7 @@ export class MimiSheetOverlay {
   readonly detached = output<void>({ alias: 'mimiSheetDetach' });
 
   /** id del título de la cabecera (aria-labelledby). */
-  readonly titleId = `mimi-sheet-title-${nextId++}`;
+  readonly titleId = `mimi-sheet-heading-${nextId++}`;
   /** Abierta o cerrándose (para la animación). */
   readonly state = signal<'open' | 'closed'>('closed');
 
@@ -197,7 +200,8 @@ export class MimiSheetOverlay {
     this.closing++;
     this.state.set('open');
     if (this.ref) {
-      this.ref.overlayRef.getConfig().hasBackdrop = true;
+      // Reabierta durante la salida: el fondo vuelve a verse y a recibir toques.
+      this.ref.overlayRef.backdropElement?.classList.remove(...BACKDROP_CLOSING);
       return;
     }
     const side = this.side();
@@ -253,7 +257,9 @@ export class MimiSheetOverlay {
     const ref = this.ref;
     if (!ref || this.state() === 'closed') return;
     this.state.set('closed');
-    ref.overlayRef.detachBackdrop();
+    // El fondo se desvanece pero sigue montado: si se reabre durante la salida, vuelve (revisor
+    // D1: `detachBackdrop()` no tiene vuelta atrás con el mismo diálogo). Se va con `ref.close()`.
+    ref.overlayRef.backdropElement?.classList.add(...BACKDROP_CLOSING);
     const closing = ++this.closing;
     afterNextRender(
       {
@@ -626,7 +632,8 @@ export class MimiSheetFrame {
         e.type === 'pointerup' &&
         distance > 0 &&
         (distance > size * DRAG_DISTANCE || distance / elapsed > DRAG_VELOCITY);
-      if (close) {
+      // Con `dismissable` en false no se cierra: vuelve a su sitio (revisor M2).
+      if (close && this.host.dismissable()) {
         this.host.requestClose('drag');
       } else {
         this.dragOffset.set(null);

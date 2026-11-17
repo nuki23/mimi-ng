@@ -56,6 +56,21 @@ describe('Command a pantalla completa (R.34)', () => {
     expect(document.querySelector('.h-dvh.w-screen')).not.toBeNull();
   });
 
+  it('al cerrar conserva la pantalla completa durante la salida (revisor M3)', async () => {
+    narrow = true;
+    const fixture = TestBed.createComponent(Host);
+    document.body.appendChild(fixture.nativeElement);
+    fixture.componentInstance.open.set(true);
+    for (let i = 0; i < 2; i++) {
+      fixture.detectChanges();
+      await fixture.whenStable();
+      await new Promise((resolve) => setTimeout(resolve));
+    }
+    fixture.componentInstance.open.set(false);
+    fixture.detectChanges();
+    expect(document.querySelector('.h-dvh.w-screen')).not.toBeNull();
+  });
+
   it('en escritorio, la ventana centrada; presentation="popover" la conserva en el teléfono', async () => {
     const desktop = await openWith();
     expect(desktop.host.getAttribute('data-presentation')).toBe('popover');

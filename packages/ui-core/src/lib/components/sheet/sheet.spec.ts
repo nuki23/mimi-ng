@@ -108,6 +108,48 @@ describe('MimiSheet (G4.2)', () => {
     expect(host.open()).toBe(true);
   });
 
+  it('con disableClose, un arrastre largo no deja la hoja desplazada (revisor M2)', async () => {
+    const trigger = await setup();
+    host.side.set('bottom');
+    host.locked.set(true);
+    trigger.click();
+    await settle();
+    Object.defineProperty(frame()!, 'offsetHeight', { value: 400, configurable: true });
+    const handle = frame()!.querySelector<HTMLElement>('[data-slot="handle"]')!;
+    handle.setPointerCapture = () => undefined;
+    const fire = (type: string, y: number) =>
+      handle.dispatchEvent(
+        new PointerEvent(type, { clientY: y, pointerId: 1, isPrimary: true, bubbles: true }),
+      );
+    fire('pointerdown', 100);
+    fire('pointermove', 300);
+    fire('pointerup', 300);
+    await settle();
+    expect(host.open()).toBe(true);
+    expect(frame()!.style.translate).toBe('');
+  });
+
+  it('sin título ni aria-label no apunta a un id que no existe (revisor M4)', async () => {
+    @Component({
+      imports: [MimiSheetImports],
+      template: `<mimi-sheet [open]="true"
+        ><ng-template mimiSheetContent><p>Hola</p></ng-template></mimi-sheet
+      >`,
+    })
+    class Bare {}
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const f = TestBed.createComponent(Bare);
+    document.body.appendChild(f.nativeElement);
+    for (let i = 0; i < 2; i++) {
+      f.detectChanges();
+      await f.whenStable();
+      await new Promise((resolve) => setTimeout(resolve));
+    }
+    expect(dialog()!.hasAttribute('aria-labelledby')).toBe(false);
+    warn.mockRestore();
+    f.destroy();
+  });
+
   it('abajo lleva la barra de agarre; a los lados, no', async () => {
     const trigger = await setup();
     host.side.set('bottom');

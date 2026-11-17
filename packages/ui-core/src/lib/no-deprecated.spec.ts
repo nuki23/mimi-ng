@@ -58,6 +58,11 @@ describe('sin obsoletos antes de la 1.0 (M.28)', () => {
     ['placeholderColor', new RegExp(String.raw`\bplaceholder` + String.raw`Color\b`)],
     ['ButtonVariantShortcut / BadgeVariantShortcut', new RegExp('VariantShort' + 'cut')],
     ['ButtonStyleVariant / BadgeStyleVariant', new RegExp('(Button|Badge)Style' + 'Variant')],
+    ['resolveButtonStyle / resolveBadgeStyle', new RegExp('resolve(Button|Badge)' + 'Style')],
+    [
+      'variant="destructive"',
+      new RegExp(String.raw`variant="(default|secondary|destr` + 'uctive)"'),
+    ],
     ['"vivid"', new RegExp('viv' + 'id', 'i')],
   ];
 

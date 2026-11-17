@@ -126,6 +126,30 @@ describe('MimiSheetOverlay (R.34)', () => {
     expect(dialog()).toBeNull();
   });
 
+  it('reabierta durante la salida, conserva el fondo y el toque en él (revisor D1)', async () => {
+    await setup();
+    await openSheet();
+    const backdrop = document.querySelector<HTMLElement>('.cdk-overlay-backdrop')!;
+    host.open.set(false);
+    fixture.detectChanges();
+    // Durante la salida, el fondo se desvanece y no recibe toques, pero sigue montado.
+    expect(backdrop.isConnected).toBe(true);
+    expect(backdrop.classList).toContain('pointer-events-none');
+    host.open.set(true);
+    await settle();
+    expect(document.querySelector('.cdk-overlay-backdrop')).toBe(backdrop);
+    expect(backdrop.classList).not.toContain('pointer-events-none');
+    backdrop.click();
+    await settle();
+    expect(host.reasons).toEqual(['backdrop']);
+  });
+
+  it('el id del título no choca con el del Sheet público (revisor M1)', async () => {
+    await setup();
+    await openSheet();
+    expect(slot('title')!.id).toMatch(/^mimi-sheet-heading-\d+$/);
+  });
+
   it('la X usa los textos de provideMimiOverlayText', async () => {
     await setup([provideMimiOverlayText(MIMI_OVERLAY_TEXT_ES)]);
     host.back.set(true);

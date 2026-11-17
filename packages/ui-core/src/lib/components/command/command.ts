@@ -15,6 +15,7 @@ import {
   forwardRef,
   inject,
   input,
+  linkedSignal,
   model,
   output,
   untracked,
@@ -541,13 +542,22 @@ export class MimiCommandDialog<T = unknown> implements MimiCommandHost {
 
   private readonly overlayConfig = inject(MIMI_OVERLAY_CONFIG);
   private readonly view = inject(DOCUMENT).defaultView;
-  /** Se elige al abrir (cambia `open`): no cambia con la paleta abierta. */
-  protected readonly fullscreen = computed(
-    () =>
-      this.open() &&
-      mimiResolvePresentation(this.presentation(), 'fullscreen', this.overlayConfig, this.view) !==
-        'popover',
-  );
+  /**
+   * Se elige al abrir y se conserva al cerrar: así la salida anima con la misma forma (revisor
+   * M3). No cambia con la paleta abierta.
+   */
+  protected readonly fullscreen = linkedSignal<boolean, boolean>({
+    source: () => this.open(),
+    computation: (open, previous) =>
+      open
+        ? mimiResolvePresentation(
+            this.presentation(),
+            'fullscreen',
+            this.overlayConfig,
+            this.view,
+          ) !== 'popover'
+        : (previous?.value ?? false),
+  });
 
   /** Se ejecutó un comando; el diálogo ya se está cerrando. */
   readonly run = output<MimiCommandItem<T>>();
