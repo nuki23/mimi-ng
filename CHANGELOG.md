@@ -13,6 +13,11 @@ Lo que quedaba de la 0.1.x se quita en esta versión, sin obsoletos (política d
 - **Se quitan los nombres de tokens de la 0.1.0** en el tema y sus avisos de `provideMimiTheme`: `components.button.paddingX` y `components.input.paddingX` (y las variables `--mimi-btn-padding-x` e `--mimi-input-padding-x`), `components.input.placeholderColor` (y `--mimi-input-placeholder-color`) y `radii.badge`. Un preset que los use deja de compilar, y las variables viejas en tu CSS ya no hacen nada. **Cómo actualizar:** `paddingX` → `px` (`--mimi-btn-px`, `--mimi-input-px`); `placeholderColor` → `--mimi-input-placeholder` en tu CSS (es un color, va en claro y en oscuro); `radii.badge` → `components.badge.radius`.
 - **`"style": "vivid"` en `mimi.json`** (lo que escribía la 0.1.0) deja de ser un sinónimo: `ng g mimi` lo cambia por `"mimi"` la próxima vez que reescribe `mimi.json`. **Cómo actualizar:** nada (o cámbialo tú).
 
+### Nuevo
+
+- **Sheet** (G4.2): un panel modal pegado a un lado de la pantalla (`side="left" | "right" | "bottom"`), flotante, con el radio de las tarjetas y, abajo, una barra de agarre; `size` (`sm`, `md`, `lg`), `[(open)]`, `disableClose`, y las piezas `mimiSheetTrigger`, `mimiSheetContent`, `mimiSheetHeader`, `mimiSheetTitle`, `mimiSheetDescription`, `mimiSheetBody`, `mimiSheetFooter` y `mimiSheetClose`. Se cierra con Escape, con un toque en el fondo, con la X o arrastrando hacia el borde; el foco queda dentro y vuelve al botón; con el teclado del móvil abierto, se achica a la parte visible. Tokens `--mimi-sheet-*`. `ng g mimi sheet`.
+- **La hoja común** (`utils/sheet`, R.34), la que usa Sheet y, en el teléfono, los paneles de los componentes; `provideMimiOverlay({ mobileBreakpoint, presentation })` y `provideMimiOverlayText` (`MIMI_OVERLAY_TEXT_ES`) en `utils/overlay-config`.
+
 ## 0.7.0 (16/11/2026): Card, Table, tableros y carga
 
 Antes de la 1.0, Mimi no mantiene obsoletos (política del 16/11/2026, [`docs/spec.md`](docs/spec.md), sección 12): lo que cambia, cambia en esta versión, y cada ruptura dice abajo cómo actualizar. Lo que sigue marcado «hasta la 1.0» desde la 0.2.0 (los atajos de `variant` de Button y Badge, `destructive-soft`, los nombres de tokens de la 0.1.0 y `"style": "vivid"`) **se quita en la 0.8.0**.

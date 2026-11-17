@@ -44,6 +44,18 @@
         "@angular/cdk": "^22.2.4"
       }
     },
+    "utils/overlay-config": {
+      "type": "util",
+      "files": ["utils/overlay-config.ts"]
+    },
+    "utils/sheet": {
+      "type": "util",
+      "files": ["utils/sheet.ts"],
+      "peerDependencies": {
+        "@angular/cdk": "^22.2.4"
+      },
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/overlay-config"]
+    },
     "menu": {
       "type": "util",
       "files": ["components/menu/menu.ts", "components/menu/index.ts"],
@@ -235,6 +247,12 @@
         "utils/cn",
         "utils/size"
       ]
+    },
+    "sheet": {
+      "type": "component",
+      "files": ["components/sheet/sheet.ts", "components/sheet/index.ts"],
+      "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
+      "registryDependencies": ["utils/cn", "utils/sheet", "utils/size"]
     },
     "loading": {
       "type": "component",

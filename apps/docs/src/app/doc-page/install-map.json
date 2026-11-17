@@ -168,6 +168,11 @@
     "css": ["@angular/cdk/overlay-prebuilt.css"]
   },
   "separator": { "items": [], "packages": [], "css": [] },
+  "sheet": {
+    "items": ["utils/overlay-config", "utils/sheet", "utils/size"],
+    "packages": ["@angular/cdk"],
+    "css": ["@angular/cdk/overlay-prebuilt.css"]
+  },
   "skeleton": { "items": [], "packages": [], "css": [] },
   "slider": {
     "items": ["utils/field-state", "utils/size"],

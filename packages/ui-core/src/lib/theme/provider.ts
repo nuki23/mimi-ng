@@ -103,6 +103,7 @@ const COMPONENT_PREFIX: Record<keyof MimiComponentTokens, string> = {
   tree: 'tree',
   sortable: 'sortable',
   command: 'command',
+  sheet: 'sheet',
   dataTable: 'table',
   loading: 'loading',
 };

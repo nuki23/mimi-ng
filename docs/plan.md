@@ -80,7 +80,8 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-(Ninguna: la M.28 se cerró el 16/11/2026 en la rama `auto/0.8.0-tanda1-2026-11-16`.)
+- R.34 · auto/0.8.0-tanda1-2026-11-16 · Claude (modo autónomo) · 16/11/2026
+- G4.2 · auto/0.8.0-tanda1-2026-11-16 · Claude (modo autónomo) · 16/11/2026
 
 (DP.2 a DP.5, hechas el 14/11/2026; la siguiente del plan de páginas es DP.6, Blocks y portada, y la puerta DP.P.)
 
@@ -155,9 +156,9 @@ Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También e
 
 Movido de la 0.6.0 a la **0.8.0** (09/11/2026: la 0.6.0 y la 0.7.0 son el plan de refinamiento, arriba). **La abren la R.34 y el Sheet (G4.2), juntos** (decidido por el usuario el 15/11/2026, al dividir la 0.7.0). Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md) (la R.34, en [docs/plan/grupo-4/R.34.md](plan/grupo-4/R.34.md); B.8, en [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)). También sale en la 0.8.0 la **M.28** (quitar lo marcado «hasta la 1.0», en «Mantenimiento»).
 
-- [ ] R.34 Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; Command a pantalla completa; corte 640 px) · v0.8.0 (la abre, con la G4.2; decidido por el usuario el 15/11/2026) · L · depende: M.9, R.16 · [docs/plan/grupo-4/R.34.md](plan/grupo-4/R.34.md)
+- [~] R.34 Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; Command a pantalla completa; corte 640 px) · v0.8.0 (la abre, con la G4.2; decidido por el usuario el 15/11/2026) · L · depende: M.9, R.16 · [docs/plan/grupo-4/R.34.md](plan/grupo-4/R.34.md)
 - [ ] G4.1 Accordion · v0.8.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.2 Sheet/Drawer (se construye junto con la R.34, sobre la misma hoja; lados izquierda, derecha y abajo) · v0.8.0 · — · depende: G3.P, G1.6, R.34 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [~] G4.2 Sheet/Drawer (se construye junto con la R.34, sobre la misma hoja; lados izquierda, derecha y abajo) · v0.8.0 · — · depende: G3.P, G1.6, R.34 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 - [ ] G4.3 Stepper · v0.8.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 - [ ] B.8 `dashboard-01` · v0.8.0 · — · depende: B.1, G3.4, G4.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] G4.P Puerta del Grupo 4 · v0.8.0 · — · depende: R.34, G4.1 a G4.3, B.8, M.28 · [docs/plan/grupo-4.md](plan/grupo-4.md)

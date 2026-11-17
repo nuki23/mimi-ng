@@ -32,6 +32,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   slider: ['forms', 'cdk'],
   password: ['forms', 'cdk'],
   popover: ['cdk'],
+  sheet: ['cdk'],
   tooltip: ['cdk'],
   dialog: ['cdk'],
   confirm: ['cdk'],

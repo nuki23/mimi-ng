@@ -684,6 +684,24 @@ export interface MimiComponentTokens {
   command?: MimiCommandTokens;
   dataTable?: MimiTableTokens;
   loading?: MimiLoadingTokens;
+  sheet?: MimiSheetTokens;
+}
+
+/**
+ * La hoja (Sheet, G4.2, y los paneles en el teléfono, R.34). Fondo, borde, sombra, asa y fondo
+ * de detrás van en el CSS (`--mimi-sheet-bg`, `-border`, `-shadow`, `-handle`, `-overlay`).
+ */
+export interface MimiSheetTokens {
+  /** Radio (el de las tarjetas, `--mimi-radius-card`). */
+  radius?: string;
+  /** Separación de los bordes de la pantalla (8px). */
+  inset?: string;
+  /** Alto máximo de la hoja inferior (85dvh). */
+  maxH?: string;
+  /** Ancho de la hoja lateral (24rem; con `size`, sm 20rem y lg 32rem). */
+  w?: string;
+  /** Desenfoque del fondo de detrás (el de `--mimi-overlay-blur`). */
+  overlayBlur?: string;
 }
 
 /**

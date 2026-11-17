@@ -58,6 +58,10 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
     count: 1,
     why: 'Panel: recibe el foco al abrir solo si no hay nada enfocable dentro (cdk).',
   },
+  'utils/sheet.ts': {
+    count: 2,
+    why: 'La hoja (R.34) y el contenedor del cdk: el contenedor recibe el foco al abrir si el contenido no tiene nada enfocable, como Dialog.',
+  },
   'components/dialog/dialog.ts': {
     count: 2,
     why: 'Panel y contenedor del cdk: reciben el foco al abrir (autoFocus) para que el lector lea el título.',

@@ -54,7 +54,8 @@ export type TokenComponent =
   | 'sortable'
   | 'command'
   | 'dataTable'
-  | 'loading';
+  | 'loading'
+  | 'sheet';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -97,6 +98,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   command: 'command',
   dataTable: 'table',
   loading: 'loading',
+  sheet: 'sheet',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1909,6 +1911,75 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-primary-subtle',
       preset: false,
       description: 'Fondo del hueco donde caerá.',
+    },
+  ],
+  sheet: [
+    {
+      name: '--mimi-sheet-radius',
+      default: 'radius-card',
+      inherits: '--mimi-radius-card',
+      preset: true,
+      description: 'Radio de la hoja.',
+    },
+    {
+      name: '--mimi-sheet-inset',
+      default: '8px',
+      preset: true,
+      description: 'Separación de los bordes de la pantalla.',
+    },
+    {
+      name: '--mimi-sheet-max-h',
+      default: '85dvh',
+      preset: true,
+      description: 'Alto máximo de la hoja inferior.',
+    },
+    {
+      name: '--mimi-sheet-w',
+      default: '24rem',
+      preset: true,
+      description: 'Ancho de la hoja lateral (sm 20rem, lg 32rem).',
+    },
+    {
+      name: '--mimi-sheet-overlay-blur',
+      default: 'overlay-blur',
+      inherits: '--mimi-overlay-blur',
+      preset: true,
+      description: 'Desenfoque del fondo de detrás.',
+    },
+    {
+      name: '--mimi-sheet-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo de la hoja.',
+    },
+    {
+      name: '--mimi-sheet-border',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'Borde de la hoja.',
+    },
+    {
+      name: '--mimi-sheet-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra de la hoja.',
+    },
+    {
+      name: '--mimi-sheet-handle',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'La barra de agarre de la hoja inferior.',
+    },
+    {
+      name: '--mimi-sheet-overlay',
+      default: 'overlay',
+      inherits: '--mimi-overlay',
+      preset: false,
+      description: 'Fondo de detrás.',
     },
   ],
   loading: [
