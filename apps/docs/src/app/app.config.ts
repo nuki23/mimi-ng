@@ -11,6 +11,7 @@ import {
   provideMimiErrorMessages,
 } from '@/components/ui/form-field/error-messages';
 import { MIMI_TOAST_TEXT_ES, provideMimiToastText } from '@/components/ui/toast/toast-texts';
+import { MIMI_OVERLAY_TEXT_ES, provideMimiOverlayText } from '@/components/ui/utils/overlay-config';
 import { routes } from './app.routes';
 
 /** Alto del header fijo (60px) más 16px, para que los anclas no queden debajo del header. */
@@ -30,5 +31,7 @@ export const appConfig: ApplicationConfig = {
     // Los toasts viven en la raíz: el nombre de su región se lee aquí. Archivo concreto, sin Toast
     // ni @angular/cdk.
     provideMimiToastText(MIMI_TOAST_TEXT_ES),
+    // La X y «Atrás» de la hoja de los paneles en el teléfono (R.34). Archivo sin @angular/cdk.
+    provideMimiOverlayText(MIMI_OVERLAY_TEXT_ES),
   ],
 };

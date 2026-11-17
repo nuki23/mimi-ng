@@ -206,6 +206,9 @@ export class MimiMenuPanel implements MimiMenuHost {
   protected onFocusOut(event: FocusEvent): void {
     const next = event.relatedTarget as Node | null;
     if (!next || this.element.contains(next) || next === this.focusExempt()) return;
+    // Dentro de la hoja del teléfono (R.34), Tab va a la X o a las anclas de la trampa de foco del
+    // CDK (hermanas del contenedor, dentro de su panel): sigue en el diálogo, no cierra.
+    if (this.element.closest('.mimi-sheet-pane, [data-mimi-sheet]')?.contains(next)) return;
     this.closeRequest.emit(false);
   }
 
@@ -571,6 +574,7 @@ export class MimiMenuSubContent {
       [attr.aria-labelledby]="triggerId"
       [attr.data-state]="menu.visible() ? 'open' : 'closed'"
       [attr.data-side]="side()"
+      [attr.data-in-sheet]="inSheet() ? '' : null"
       [style.translate]="shiftY() ? '0 ' + -shiftY() + 'px' : null"
       [class]="panelClasses()"
     >
@@ -600,6 +604,12 @@ export class MimiMenuSub {
   protected readonly side = signal<'right' | 'left'>('right');
   /** Cuánto sube el panel para no salir por abajo de la pantalla. */
   protected readonly shiftY = signal(0);
+  /**
+   * Dentro de la hoja del teléfono (R.34): el submenú se abre en línea, debajo de su ítem y con
+   * sangría, en vez de al lado (al lado no cabe en 360 px y quedaba fuera de la pantalla).
+   */
+  protected readonly inSheet = signal(false);
+  private readonly hostElement = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
 
   private readonly labelText = signal('');
   protected readonly searchTerm = computed(() => this.trigger()?.textValue() || this.labelText());
@@ -613,13 +623,16 @@ export class MimiMenuSub {
       'absolute top-[-5px] z-10 w-[200px] cursor-default',
       'data-[side=right]:left-[calc(100%_+_10px)] data-[side=left]:right-[calc(100%_+_10px)]',
       this.userClass(),
+      this.inSheet() && 'static z-auto mt-0.5 ml-4 w-auto border-0 bg-transparent p-0 shadow-none',
     ),
   );
 
   constructor() {
     afterNextRender({
-      read: () =>
-        this.labelText.set(this.trigger()?.label()?.nativeElement.textContent?.trim() ?? ''),
+      read: () => {
+        this.labelText.set(this.trigger()?.label()?.nativeElement.textContent?.trim() ?? '');
+        this.inSheet.set(!!this.hostElement.closest('[data-mimi-sheet]'));
+      },
     });
     // Al abrir: a la derecha; si no cabe, a la izquierda. Sube si sale por abajo.
     const injector = inject(Injector);
@@ -636,7 +649,7 @@ export class MimiMenuSub {
   private place(): void {
     const panel = this.panel().nativeElement;
     const view = panel.ownerDocument.defaultView;
-    if (!view || panel.hidden) return;
+    if (!view || panel.hidden || this.inSheet()) return;
     const rect = panel.getBoundingClientRect();
     if (rect.width === 0) return;
     if (rect.right > view.innerWidth - MIMI_VIEWPORT_MARGIN) this.side.set('left');

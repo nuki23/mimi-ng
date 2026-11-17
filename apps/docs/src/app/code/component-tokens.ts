@@ -1969,8 +1969,8 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
     },
     {
       name: '--mimi-sheet-handle',
-      default: 'border',
-      inherits: '--mimi-border',
+      default: 'muted-foreground',
+      inherits: '--mimi-muted-foreground',
       preset: false,
       description: 'La barra de agarre de la hoja inferior.',
     },

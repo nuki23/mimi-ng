@@ -33,7 +33,7 @@ import { cn } from '@/components/ui/utils/cn';
 
 /** En la hoja (R.34), el menú no lleva su caja: la pone la hoja. */
 const SHEET_PANEL_CLASSES =
-  'w-auto max-w-none rounded-none border-0 bg-transparent px-2 pt-0 pb-2 shadow-none';
+  'w-auto max-w-none rounded-none border-0 bg-transparent px-2 pt-0 pb-2 shadow-none [&_[role^=menuitem]]:min-h-11';
 import {
   MIMI_VIEWPORT_MARGIN,
   MimiOverlayFollow,

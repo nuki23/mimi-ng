@@ -93,6 +93,10 @@ describe('MimiSheetOverlay (R.34)', () => {
     expect(frame()!.dataset['side']).toBe('bottom');
     expect(frame()!.dataset['state']).toBe('open');
     expect(slot('handle')).not.toBeNull();
+    // El asa con contraste de 3:1 (WCAG 1.4.11; revisión de accesibilidad H3): muted-foreground.
+    expect(slot('handle')!.querySelector('span')!.className).toContain(
+      'bg-[color:var(--mimi-sheet-handle,var(--mimi-muted-foreground))]',
+    );
     expect(frame()!.querySelector('[data-test="list"]')).not.toBeNull();
   });
 

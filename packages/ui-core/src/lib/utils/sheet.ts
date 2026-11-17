@@ -298,7 +298,7 @@ const ICON_BUTTON_CLASSES = cn(
         (pointerdown)="onDragStart($event)"
       >
         <span
-          class="h-1 w-10 rounded-full bg-[color:var(--mimi-sheet-handle,var(--mimi-border))]"
+          class="h-1 w-10 rounded-full bg-[color:var(--mimi-sheet-handle,var(--mimi-muted-foreground))]"
         ></span>
       </div>
     }

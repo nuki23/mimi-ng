@@ -13,6 +13,12 @@ import { MimiDropdownMenuImports } from './dropdown-menu';
       <ng-template mimiDropdownMenuContent>
         <mimi-menu-item (selected)="picked.set('editar')">Editar</mimi-menu-item>
         <mimi-menu-item>Borrar</mimi-menu-item>
+        <mimi-menu-sub>
+          <mimi-menu-sub-trigger>Invitar</mimi-menu-sub-trigger>
+          <ng-template mimiMenuSubContent>
+            <mimi-menu-item>Por correo</mimi-menu-item>
+          </ng-template>
+        </mimi-menu-sub>
       </ng-template>
     </mimi-dropdown-menu>
     <mimi-context-menu aria-label="Archivo">
@@ -68,6 +74,8 @@ describe('Menús en la hoja (R.34)', () => {
     expect(sheet()!.querySelector('[data-slot="title"]')!.textContent?.trim()).toBe('Acciones');
     const menu = sheet()!.querySelector('[role="menu"]')!;
     expect(menu).not.toBeNull();
+    // Objetivos táctiles de 44 px en la hoja (revisión de accesibilidad H5).
+    expect(menu.className).toContain('[&_[role^=menuitem]]:min-h-11');
     expect(document.activeElement?.closest('[role="menu"]')).toBe(menu);
     // Elegir un ítem cierra la hoja.
     menu.querySelector<HTMLElement>('[role="menuitem"]')!.click();
@@ -75,6 +83,32 @@ describe('Menús en la hoja (R.34)', () => {
     expect(host.picked()).toBe('editar');
     expect(host.open()).toBe(false);
     expect(sheet()).toBeNull();
+  });
+
+  it('Tab desde el menú se queda en la hoja (va a la X) y no la cierra (a11y H2)', async () => {
+    narrow = true;
+    const { host, el, settle } = await setup();
+    el.querySelector<HTMLElement>('[data-test="trigger"]')!.click();
+    await settle();
+    const item = sheet()!.querySelector<HTMLElement>('[role="menuitem"]')!;
+    const close = sheet()!.querySelector<HTMLElement>('[data-slot="close"]')!;
+    item.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: close }));
+    close.focus();
+    await settle();
+    expect(host.open()).toBe(true);
+    expect(sheet()!.dataset['state']).toBe('open');
+  });
+
+  it('un submenú en la hoja se abre en línea, dentro de la hoja (a11y H1)', async () => {
+    narrow = true;
+    const { el, settle } = await setup();
+    el.querySelector<HTMLElement>('[data-test="trigger"]')!.click();
+    await settle();
+    const sub = sheet()!.querySelector('mimi-menu-sub')!;
+    const panel = sub.querySelector<HTMLElement>('[ngmenu], [role="menu"]')!;
+    expect(panel.hasAttribute('data-in-sheet')).toBe(true);
+    expect(panel.classList).toContain('static');
+    expect(panel.classList).not.toContain('absolute');
   });
 
   it('en escritorio sigue siendo popover; presentation="sheet" lo pide siempre', async () => {

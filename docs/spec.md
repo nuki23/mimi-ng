@@ -568,7 +568,7 @@ Cada grupo es una versión menor. Hasta el Grupo 3 iba precedido por su tarea de
 | 2     | Sheet/Drawer | shadcn (Sheet y Drawer)    | Dialog                                  |
 | 3     | Stepper      | PrimeNG (Stepper) y Vuesax | Button, Progress                        |
 
-- **Sheet/Drawer:** flotante, como el de shadcn: separado de los bordes de la pantalla, con el radio de las tarjetas y, en la versión inferior, una barra de agarre. **Hecho en la 0.8.0** (G4.2, con la R.34; ver «Grupo 4 (0.8.0)», arriba): 8 px de los bordes (`--mimi-sheet-inset`), el radio de las tarjetas en las cuatro esquinas también abajo, el fondo de Dialog (`--mimi-overlay` y su desenfoque), la sombra de los paneles, y el asa de 40×4 px con el color del borde.
+- **Sheet/Drawer:** flotante, como el de shadcn: separado de los bordes de la pantalla, con el radio de las tarjetas y, en la versión inferior, una barra de agarre. **Hecho en la 0.8.0** (G4.2, con la R.34; ver «Grupo 4 (0.8.0)», arriba): 8 px de los bordes (`--mimi-sheet-inset`), el radio de las tarjetas en las cuatro esquinas también abajo, el fondo de Dialog (`--mimi-overlay` y su desenfoque), la sombra de los paneles, y el asa de 40×4 px en `--mimi-muted-foreground` (3:1 o más sobre la hoja, WCAG 1.4.11; con el color del borde quedaba en 1,25:1). En los menús dentro de la hoja, cada ítem mide 44 px de alto (objetivo táctil) y un submenú se abre en línea, debajo de su ítem.
 
 **Grupo 5: según lo que pidan los usuarios** (sin orden fijo; revisado en la G2.P: **sigue sin versión** hasta la G4.P, decidido por el usuario el 05/11/2026)
 
@@ -2060,18 +2060,18 @@ Implementado en la G1.8. En el preset (`MimiToastTokens`): `radius`, `width`, `o
 
 #### Sheet y la hoja de los paneles (`sheet`, G4.2 y R.34)
 
-| Variable                    | Qué controla                             | Hereda de               | Valor por defecto |
-| --------------------------- | ---------------------------------------- | ----------------------- | ----------------- |
-| `--mimi-sheet-bg`           | Fondo                                    | `--mimi-popover`        | —                 |
-| `--mimi-sheet-border`       | Borde                                    | `--mimi-border`         | —                 |
-| `--mimi-sheet-shadow`       | Sombra                                   | `--mimi-shadow-popover` | —                 |
-| `--mimi-sheet-handle`       | Barra de agarre (abajo)                  | `--mimi-border`         | —                 |
-| `--mimi-sheet-overlay`      | Fondo de detrás                          | `--mimi-overlay`        | —                 |
-| `--mimi-sheet-overlay-blur` | Desenfoque del fondo de detrás           | `--mimi-overlay-blur`   | —                 |
-| `--mimi-sheet-radius`       | Radio                                    | `--mimi-radius-card`    | —                 |
-| `--mimi-sheet-inset`        | Separación de los bordes                 | —                       | `8px`             |
-| `--mimi-sheet-max-h`        | Alto máximo de la hoja inferior          | —                       | `85dvh`           |
-| `--mimi-sheet-w`            | Ancho lateral (`md`; sm 20rem, lg 32rem) | —                       | `24rem`           |
+| Variable                    | Qué controla                             | Hereda de                 | Valor por defecto |
+| --------------------------- | ---------------------------------------- | ------------------------- | ----------------- |
+| `--mimi-sheet-bg`           | Fondo                                    | `--mimi-popover`          | —                 |
+| `--mimi-sheet-border`       | Borde                                    | `--mimi-border`           | —                 |
+| `--mimi-sheet-shadow`       | Sombra                                   | `--mimi-shadow-popover`   | —                 |
+| `--mimi-sheet-handle`       | Barra de agarre (abajo)                  | `--mimi-muted-foreground` | —                 |
+| `--mimi-sheet-overlay`      | Fondo de detrás                          | `--mimi-overlay`          | —                 |
+| `--mimi-sheet-overlay-blur` | Desenfoque del fondo de detrás           | `--mimi-overlay-blur`     | —                 |
+| `--mimi-sheet-radius`       | Radio                                    | `--mimi-radius-card`      | —                 |
+| `--mimi-sheet-inset`        | Separación de los bordes                 | —                         | `8px`             |
+| `--mimi-sheet-max-h`        | Alto máximo de la hoja inferior          | —                         | `85dvh`           |
+| `--mimi-sheet-w`            | Ancho lateral (`md`; sm 20rem, lg 32rem) | —                         | `24rem`           |
 
 **En ui-core desde la 0.8.0** (`utils/sheet.ts`; el Sheet público no añade variables). En el preset (`components.sheet`, `MimiSheetTokens`): `radius`, `inset`, `maxH`, `w` y `overlayBlur`; los colores, solo en el CSS. La hoja escribe además `--mimi-sheet-visible`, `--mimi-sheet-keyboard` y `--mimi-sheet-offset` (la parte visible de la pantalla y lo que tapa el teclado): no son para el usuario.
 
