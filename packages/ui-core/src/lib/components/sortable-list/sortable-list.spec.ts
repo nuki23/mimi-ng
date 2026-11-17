@@ -100,6 +100,24 @@ describe('MimiSortableList', () => {
     );
   });
 
+  it('el anuncio es solo para lectores de pantalla: en el DOM, con role="status", oculto a la vista', async () => {
+    // Preparación de la 0.7.0 (16/11/2026): se veía bajo cada lista («… dropped in Done…»).
+    const { fixture, list, handles, status } = await setup();
+    const region = list.querySelector<HTMLElement>('[data-slot="announcement"]')!;
+    expect(region.getAttribute('role')).toBe('status');
+    handles()[1].focus();
+    press(handles()[1], ' ');
+    await settle(fixture);
+    // Sigue anunciándose: el texto está en el DOM.
+    expect(status()).toBe('Diseñar Tabs grabbed. Position 2 of 4. Use the arrow keys to move it.');
+    expect(region.hidden).toBe(false);
+    expect(region.getAttribute('aria-hidden')).toBeNull();
+    // Oculto a la vista y sin ocupar espacio (sr-only), sin las clases del texto visible de antes.
+    const classes = region.className.split(/\s+/);
+    expect(classes).toContain('sr-only');
+    expect(classes.filter((c) => c.startsWith('min-h-') || c.startsWith('text-'))).toEqual([]);
+  });
+
   it('teclado: agarra, mueve con ↓ ↑ Fin Inicio y suelta, con anuncios y el foco en el asa', async () => {
     const { fixture, host, handles, order, status } = await setup();
     handles()[1].focus();

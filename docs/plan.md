@@ -72,7 +72,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 
 Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proceso/release.md`. La puerta la recorre el comando `/cerrar-grupo`; las tareas, `/componente` y `/tarea`, con el protocolo de `CLAUDE.md`, «Forma de trabajar».
 
-**Historial:** `docs/historial/plan-fase-0-3.md`, `plan-0.1.x.md`, `plan-grupo-1.md` (incluye la Fase 4 y la publicación de la 0.2.0), `plan-grupo-2.md` (índice del Grupo 2, con la 5.2, la 5.17 y la publicación de la 0.3.0; el texto de cada tarea, en `docs/historial/grupo-2/`), `plan-blocks.md` (índice de los Blocks de la 0.4.0; el texto de cada tarea, en `docs/historial/blocks/`), `plan-grupo-3.md` (índice del Grupo 3 y de B.9 y B.11 de la 0.5.0; el texto, en `docs/historial/grupo-3/` y `docs/historial/blocks/B.11.md`), `plan-refinamiento-0.6.0.md` (índice del refinamiento de la 0.6.0; el texto, en `docs/historial/refinamiento/R-0.6.0.md`), `plan-plataforma.md` y `decisiones.md`.
+**Historial:** `docs/historial/plan-fase-0-3.md`, `plan-0.1.x.md`, `plan-grupo-1.md` (incluye la Fase 4 y la publicación de la 0.2.0), `plan-grupo-2.md` (índice del Grupo 2, con la 5.2, la 5.17 y la publicación de la 0.3.0; el texto de cada tarea, en `docs/historial/grupo-2/`), `plan-blocks.md` (índice de los Blocks de la 0.4.0; el texto de cada tarea, en `docs/historial/blocks/`), `plan-grupo-3.md` (índice del Grupo 3 y de B.9 y B.11 de la 0.5.0; el texto, en `docs/historial/grupo-3/` y `docs/historial/blocks/B.11.md`), `plan-refinamiento-0.6.0.md` (índice del refinamiento de la 0.6.0; el texto, en `docs/historial/refinamiento/R-0.6.0.md`), `plan-refinamiento-0.7.0.md` (índice de la 0.7.0; el texto, en `docs/historial/refinamiento/R-0.7.0.md`), `plan-plataforma.md` y `decisiones.md`.
 
 **Al cerrar un grupo** (desde el Grupo 2): los archivos de sus tareas pasan tal cual de `docs/plan/<grupo>/` a `docs/historial/<grupo>/` (con `git mv`, sin reescribirlos), y `docs/historial/plan-<grupo>.md` lleva el índice, el registro de la publicación y lo que se movió de otros lugares (por ejemplo, «Decididas» de `docs/plan/decisiones.md`). Lo manual que quede pendiente no se deja solo en el historial: va a una tarea abierta (por ejemplo, la M.20).
 
@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- R.P7 · `auto/0.7.0-tanda3-2026-11-15` · Claude Code (modo autónomo) · desde 16/11/2026 · escenarios del `.tgz`, revisor y borrador del CHANGELOG.
+(Ninguna: la R.P7 se cerró el 16/11/2026 en la rama `auto/release-0.7.0-2026-11-16`.)
 
 (DP.2 a DP.5, hechas el 14/11/2026; la siguiente del plan de páginas es DP.6, Blocks y portada, y la puerta DP.P.)
 
@@ -115,6 +115,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [x] M.25 (hecha el 15/11/2026: 98,02 kB) Qué hace crecer `main` del sitio (137,83 kB, a 2,17 kB del aviso de 140) y bajarlo antes de añadir componentes (por ejemplo, `tailwind-merge` por `cn()` en la cabecera) · v0.7.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.26 (hecha el 14/11/2026) Quitar «provisional, sin diseño» y «plan, D6» del código y de las páginas (sin rediseño, 14/11/2026) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.27 (hecha el 15/11/2026, con `mimi-color-input`) `size` en Input OTP y File Upload (sin justificación para no tenerlo; visto en la R.26) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.28 Quitar todo lo marcado «hasta la 1.0» (atajos de `variant` de la 0.1.x en Button y Badge, radio de Badge, `paddingX` y `placeholderColor` de Input en el tema, alias `destructive-soft`, `"vivid"`; absorbe 1.0-1 a 1.0-4), con una prueba que falla si queda algo marcado así; **RUPTURA** · v0.8.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
@@ -129,31 +130,13 @@ Cerrada el 07/11/2026 (puerta B.P) y **publicada el 07/11/2026** (`@mimi-ng/cli@
 
 Cerrado (puerta G3.P, revisada por el usuario; **0.5.0 publicada el 09/11/2026**, `2026-11-09T16:26Z` en npm, registro en `docs/historial/plan-grupo-3.md`). Las tareas están en «Terminado» y su texto en `docs/historial/plan-grupo-3.md` y `docs/historial/grupo-3/`.
 
-## Refinamiento → v0.6.0 (cerrada) y v0.7.0
+## Refinamiento → v0.6.0 y v0.7.0 (cerradas)
 
 Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio «uso corto por defecto, composición cuando la necesites», reparto, orden y rupturas). Origen: las peticiones del usuario tras probar la 0.5.0 ([peticiones-usuario.md](plan/refinamiento/peticiones-usuario.md)). **Tres decisiones del usuario (09/11/2026, ya tomadas):** PD-1 Card, opción B; PD-2 API de Table/Data Table, opción C; PD-3 API de los mensajes de error de Form Field, opciones A + B ([decisiones-usuario.md](plan/refinamiento/decisiones-usuario.md)). Combobox y Select: [combobox-vs-select.md](plan/refinamiento/combobox-vs-select.md).
 
 **0.6.0:** cerrada el 13/11/2026 (puerta R.P6, revisada por el usuario con la fusión del PR #15; versión preparada en `docs/auto/release-0.6.0-2026-11-13.md`; **publicada el 14/11/2026**, `2026-11-14T23:00Z` en npm, registro en `docs/historial/plan-refinamiento-0.6.0.md`). Las tareas están en «Terminado» y su texto en `docs/historial/refinamiento/R-0.6.0.md` (índice: `docs/historial/plan-refinamiento-0.6.0.md`). Lo que faltaba de R.0, R.1, R.7, R.8, R.12, R.14 y R.15 pasó a la 0.7.0 (R.25 a R.32 y M.9); lo manual, a la M.20 (puntos 14 a 18).
 
-**0.7.0** (detalle: [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)):
-
-- [x] R.19 (hecha el 15/11/2026; los alias `mimi-card-*` se quitaron el 16/11/2026 por la política de rupturas) Card como superficie `mimiCard` (PD-1, decidido por el usuario el 09/11/2026: opción B) · v0.7.0 · M · depende: R.1, R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.20 (hecha el 15/11/2026: `table` nuevo con `mimiTableState`; Data Table sobre la base, con `expandMode` y `toggle`) Table de directivas y Data Table fácil de llenar (PD-2, decidido por el usuario el 09/11/2026: opción C) · v0.7.0 · L · depende: R.1, R.8, R.12 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.21 (hecha el 15/11/2026) Sortable List con listas conectadas · v0.7.0 · L · depende: R.8 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.22 (hecha el 15/11/2026) Block `kanban-01` · v0.7.0 · M · depende: R.21, R.19 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.23 (hecha el 16/11/2026) Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`) · v0.7.0 · M · depende: R.1, R.11 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.25 Logo y favicon del sitio (lo que faltaba de la R.0) · v0.7.0 · S · depende: archivos del usuario · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.26 (hecha el 15/11/2026) Tabla de la escala de tamaños en la spec (lo que faltaba de la R.1) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.27 (hecha el 15/11/2026) Confirm con `size` (lo que faltaba de la R.7) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.28 (hecha el 15/11/2026) Ejemplos de tamaño por componente y Blocks que heredan (lo que faltaba de la R.8) · v0.7.0 · M · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.29 (hecha el 15/11/2026) Ejemplos de solo lectura (lo que faltaba de la R.12) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.30 (hecha el 15/11/2026) Form Field: ejemplos con más elementos y el diagrama (lo que faltaba de la R.14) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.31 (hecha el 15/11/2026) Nota de contraste al cambiar el primario (texto `text-primary` con un primario propio claro) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.32 (hecha el 15/11/2026) Quitar el alias `default` de `size` (RUPTURA, anunciada en la 0.6.0) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] R.33 (hecha el 15/11/2026) Button en carga sigue siendo enfocable (`aria-disabled` + `aria-busy` y clics bloqueados, en vez del `disabled` nativo; **RUPTURA**) · v0.7.0 · S · depende: — · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
-- [x] M.9 completa (cerrada el 16/11/2026 con los escenarios del `.tgz` de la R.P7) (lo que faltaba de la R.15; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
-- [x] M.25 `main` del sitio a 2,17 kB de su aviso: medir y bajarlo **antes** de R.19 a R.23 (**hecha el 15/11/2026**: `main` de 137,99 a 98,02 kB; detalle en [mantenimiento.md](plan/mantenimiento.md), en «Mantenimiento») · v0.7.0
-- [~] R.P7 (en curso, 16/11/2026) Puerta de la 0.7.0 · v0.7.0 · — · depende: R.19 a R.23, R.25 a R.33, M.9, M.25 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+**0.7.0:** cerrada el 16/11/2026 (puerta R.P7, recorrida en la rama `auto/0.7.0-tanda3-2026-11-15` y revisada por el usuario con la fusión del PR #21; versión preparada en `docs/auto/release-0.7.0-2026-11-16.md`; **por publicar**: la publica el usuario, registro en `docs/historial/plan-refinamiento-0.7.0.md`). Las tareas están en «Terminado» y su texto en `docs/historial/refinamiento/R-0.7.0.md` (índice: `docs/historial/plan-refinamiento-0.7.0.md`). La R.34 abre la 0.8.0 (abajo, en el Grupo 4); lo manual, a la M.20 (puntos 19 a 21); los obsoletos «hasta la 1.0», a la M.28 (0.8.0).
 
 ## Páginas de la documentación: una plantilla común (plan del 12/11/2026; decidido el 14/11/2026)
 
@@ -170,14 +153,14 @@ Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También e
 
 ## Grupo 4 → v0.8.0: estructura
 
-Movido de la 0.6.0 a la **0.8.0** (09/11/2026: la 0.6.0 y la 0.7.0 son el plan de refinamiento, arriba). **La abren la R.34 y el Sheet (G4.2), juntos** (decidido por el usuario el 15/11/2026, al dividir la 0.7.0). Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md) (B.8, en [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)).
+Movido de la 0.6.0 a la **0.8.0** (09/11/2026: la 0.6.0 y la 0.7.0 son el plan de refinamiento, arriba). **La abren la R.34 y el Sheet (G4.2), juntos** (decidido por el usuario el 15/11/2026, al dividir la 0.7.0). Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md) (la R.34, en [docs/plan/grupo-4/R.34.md](plan/grupo-4/R.34.md); B.8, en [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)). También sale en la 0.8.0 la **M.28** (quitar lo marcado «hasta la 1.0», en «Mantenimiento»).
 
-- [ ] R.34 Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; Command a pantalla completa; corte 640 px) · v0.8.0 (la abre, con la G4.2; decidido por el usuario el 15/11/2026) · L · depende: M.9, R.16 · [R-0.7.0.md](plan/refinamiento/R-0.7.0.md)
+- [ ] R.34 Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; Command a pantalla completa; corte 640 px) · v0.8.0 (la abre, con la G4.2; decidido por el usuario el 15/11/2026) · L · depende: M.9, R.16 · [docs/plan/grupo-4/R.34.md](plan/grupo-4/R.34.md)
 - [ ] G4.1 Accordion · v0.8.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
 - [ ] G4.2 Sheet/Drawer (se construye junto con la R.34, sobre la misma hoja; lados izquierda, derecha y abajo) · v0.8.0 · — · depende: G3.P, G1.6, R.34 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 - [ ] G4.3 Stepper · v0.8.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 - [ ] B.8 `dashboard-01` · v0.8.0 · — · depende: B.1, G3.4, G4.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [ ] G4.P Puerta del Grupo 4 · v0.8.0 · — · depende: G4.1 a G4.3, B.8 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [ ] G4.P Puerta del Grupo 4 · v0.8.0 · — · depende: R.34, G4.1 a G4.3, B.8, M.28 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 
 ## Mimi Effects (sin versión asignada)
 
@@ -230,15 +213,16 @@ Detalle: [docs/plan/plataforma.md](plan/plataforma.md). La 5.2 y la 5.17 están 
 - [ ] 5.13 Tabla de compatibilidad en la documentación · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
 - [ ] 5.14 Prerender del showcase · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
 - [ ] 5.15 Badge interactivo · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.18 Migraciones automáticas con `ng update` (idea, sin detallar; anotada el 16/11/2026) · después de la 1.0 · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
 
 ## Versión 1.0
 
-Detalle: [docs/plan/version-1.0.md](plan/version-1.0.md).
+Detalle: [docs/plan/version-1.0.md](plan/version-1.0.md). **Las cuatro pasan a la M.28 (v0.8.0)** desde el 16/11/2026: con la política de rupturas del usuario, antes de la 1.0 no se mantienen obsoletos. Después de la 1.0: la 5.18 (migraciones con `ng update`, en «Plataforma»).
 
-- [ ] 1.0-1 Quitar alias `destructive-soft` y renombrar `destructive-soft-bg` · v1.0.0 · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
-- [ ] 1.0-2 Quitar los atajos de variante de Button y Badge · v1.0.0 · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
-- [ ] 1.0-3 Dejar de aceptar `"style": "vivid"` en `mimi.json` · v1.0.0 · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
-- [ ] 1.0-4 Quitar los nombres de tokens de la 0.1.0 · v1.0.0 · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-1 (→ M.28) Quitar alias `destructive-soft` y renombrar `destructive-soft-bg` · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-2 (→ M.28) Quitar los atajos de variante de Button y Badge · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-3 (→ M.28) Dejar de aceptar `"style": "vivid"` en `mimi.json` · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-4 (→ M.28) Quitar los nombres de tokens de la 0.1.0 · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
 
 ## Decisiones pendientes
 
@@ -386,6 +370,24 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] R.18 Input OTP: cantidad de dígitos que quepa (09/11/2026).
 - [x] R.24 Auditoría de «uso corto» (10/11/2026).
 - [x] R.P6 Puerta de la 0.6.0 (recorrida el 10/11/2026; revisada por el usuario con la fusión del PR #15 y cerrada el 13/11/2026; pendiente de comprobación manual en la M.20, puntos 14 a 18).
+
+**Refinamiento, v0.7.0** (`docs/historial/plan-refinamiento-0.7.0.md`, con el texto en `docs/historial/refinamiento/R-0.7.0.md`; puerta revisada por el usuario con la fusión del PR #21 y cerrada el 16/11/2026; por publicar). M.9, M.25 y M.27 están en «Mantenimiento» (arriba), con su estado. Lo manual, en la M.20 (puntos 19 a 21).
+
+- [x] R.19 Card como superficie `mimiCard` (PD-1, opción B; 15/11/2026; los alias `mimi-card-*` se quitaron el 16/11/2026 por la política de rupturas).
+- [x] R.20 Table de directivas (`table`, `mimiTableState`) y Data Table sobre la base, con `expandMode` y `toggle` (PD-2, opción C; 15/11/2026).
+- [x] R.21 Sortable List con listas conectadas (`mimi-sortable-group`; 15/11/2026; la zona de soltar es la lista entera desde el 16/11/2026).
+- [x] R.22 Block `kanban-01` (15/11/2026).
+- [x] R.23 Servicio y directiva de carga (`MimiLoadingService`, `mimiBlock`; 16/11/2026).
+- [x] R.25 Logo y favicon del sitio (14/11/2026).
+- [x] R.26 Tabla de la escala de tamaños en la spec (15/11/2026).
+- [x] R.27 Confirm con `size` (15/11/2026).
+- [x] R.28 Ejemplos de tamaño por componente y Blocks que heredan (15/11/2026).
+- [x] R.29 Ejemplos de solo lectura (15/11/2026).
+- [x] R.30 Form Field: ejemplos con más elementos y el diagrama (15/11/2026).
+- [x] R.31 Nota de contraste al cambiar el primario (15/11/2026).
+- [x] R.32 Quitar el alias `default` de `size` (RUPTURA; 15/11/2026).
+- [x] R.33 Button en carga sigue siendo enfocable (RUPTURA; 15/11/2026).
+- [x] R.P7 Puerta de la 0.7.0 (recorrida el 16/11/2026; revisada por el usuario con la fusión del PR #21 y cerrada el 16/11/2026; pendiente de comprobación manual en la M.20, puntos 19 a 21).
 
 **Tandas de diseño** (texto completo en la línea)
 
