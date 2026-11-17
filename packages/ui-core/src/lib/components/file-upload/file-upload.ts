@@ -438,7 +438,7 @@ const TYPE_ICON = {
     ],
   },
   pdf: {
-    tone: 'bg-destructive-soft-bg text-destructive-soft-foreground',
+    tone: 'bg-destructive-soft text-destructive-soft-foreground',
     paths: [
       'M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z',
       'M14 2v4a2 2 0 0 0 2 2h4',
@@ -588,7 +588,7 @@ const ITEM = {
       variant="ghost"
       size="icon"
       data-slot="remove"
-      class="size-[30px] text-muted-foreground hover:bg-destructive-soft-bg hover:text-destructive-soft-foreground [&_svg]:size-4"
+      class="size-[30px] text-muted-foreground hover:bg-destructive-soft hover:text-destructive-soft-foreground [&_svg]:size-4"
       [attr.aria-label]="texts.remove(fileName())"
       (click)="onRemove()"
     >

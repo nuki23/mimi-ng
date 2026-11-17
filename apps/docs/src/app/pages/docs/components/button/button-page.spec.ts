@@ -46,7 +46,7 @@ describe('ButtonPage', () => {
     });
     const fixture = TestBed.createComponent(ButtonPage);
     await settle(fixture);
-    // La tabla de variables (compartida) sí nombra el token de la 0.1.0: queda fuera.
+    // La tabla de variables (compartida, con sus propias pruebas) queda fuera.
     const article = (fixture.nativeElement as HTMLElement).cloneNode(true) as HTMLElement;
     article.querySelector('app-css-variables')?.remove();
     const text = article.textContent ?? '';

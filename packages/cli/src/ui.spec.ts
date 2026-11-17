@@ -109,7 +109,7 @@ describe('mimi (alias ui)', () => {
     expect(added.length).toBe(new Set(added).size);
   });
 
-  it('con "style": "vivid" (mimi.json de la 0.1.0) funciona igual y conserva el valor', async () => {
+  it('con "style": "vivid" (mimi.json de la 0.1.0) lo cambia por "mimi" (M.28, 0.8.0)', async () => {
     const { run, tree, warnings } = await initialized();
     const config = json(tree, '/mimi.json');
     tree.overwrite('/mimi.json', `${JSON.stringify({ ...config, style: 'vivid' }, null, 2)}\n`);
@@ -117,7 +117,7 @@ describe('mimi (alias ui)', () => {
     expect(result.readContent(`/${UI}/button/button.ts`)).toBe(
       template('components/button/button.ts'),
     );
-    expect(json(result, '/mimi.json').style).toBe('vivid');
+    expect(json(result, '/mimi.json').style).toBe('mimi');
     expect(json(result, '/mimi.json').components.button).toEqual({ version: registry.version });
     expect(warnings()).toEqual([]);
   });

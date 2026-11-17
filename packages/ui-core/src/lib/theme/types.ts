@@ -93,8 +93,6 @@ export interface MimiShadowTokens {
 export interface MimiRadiusTokens {
   sm?: string;
   card?: string;
-  /** @deprecated Usa components.badge.radius (la misma variable). Sigue hasta la 1.0. */
-  badge?: string;
 }
 
 export interface MimiFontTokens {
@@ -149,17 +147,12 @@ export interface MimiControlTokens extends MimiControlSizeTokens {
   radius?: string;
   /** Padding horizontal del tamaño default: --mimi-<prefijo>-px. */
   px?: string;
-  /**
-   * @deprecated Nombre de la 0.1.0 (--mimi-<prefijo>-padding-x): usa `px`. Sigue funcionando
-   * hasta la 1.0 (spec 12).
-   */
-  paddingX?: string;
   fontSize?: string;
   borderWidth?: string;
   focusRingWidth?: string;
 }
 
-/** paddingX y fontSize se aplican al tamaño default; sm y lg usan los valores del diseño. */
+/** px y fontSize se aplican al tamaño md; sm y lg usan los valores del diseño. */
 export interface MimiButtonTokens extends MimiControlTokens {
   /** Espacio entre ícono y texto del tamaño default. */
   gap?: string;
@@ -169,12 +162,8 @@ export interface MimiButtonTokens extends MimiControlTokens {
   letterSpacing?: string;
 }
 
+/** El color del marcador va en el CSS, con --mimi-input-placeholder (spec 6.2). */
 export interface MimiInputTokens extends MimiControlTokens {
-  /**
-   * @deprecated Es un color: cámbialo en el CSS con --mimi-input-placeholder (spec 6.2). Sigue
-   * funcionando hasta la 1.0.
-   */
-  placeholderColor?: string;
   disabledOpacity?: string | number;
 }
 
@@ -237,7 +226,7 @@ export interface MimiBadgeTokens {
   px?: string;
   fontSize?: string;
   fontWeight?: string | number;
-  /** --mimi-badge-radius (el mismo que radii.badge de la 0.1.0). */
+  /** --mimi-badge-radius. */
   radius?: string;
 }
 

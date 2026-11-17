@@ -164,7 +164,7 @@ const CONTRAST_PAIRS: [string, string, string][] = [
   ['banda del rango (Date Range)', 'foreground', 'range'],
   ...(['success', 'warning', 'info', 'destructive'] as const).flatMap(
     (t): [string, string, string][] => {
-      const soft = t === 'destructive' ? 'destructive-soft-bg' : `${t}-soft`;
+      const soft = `${t}-soft`;
       return [
         [`${t} solid`, `${t}-foreground`, t],
         [`${t} solid hover`, `${t}-foreground`, `${t}-hover`],

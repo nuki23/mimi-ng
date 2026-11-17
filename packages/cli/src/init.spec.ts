@@ -385,7 +385,7 @@ describe('init', () => {
     const { runner, run } = harness();
     const tree = await createWorkspace(runner);
     const config = {
-      style: 'vivid',
+      style: 'mimi',
       aliases: { components: 'projects\\app\\src\\shared\\ui\\' },
       components: {},
     };
@@ -731,16 +731,10 @@ describe('init: "style" de mimi.json (tarea V.2)', () => {
     expect(json(tree, '/mimi.json').style).toBe('mimi');
   });
 
-  it('"vivid" (lo que escribe la 0.1.0) se acepta: init re-ejecutado no lo cambia ni avisa', async () => {
-    const { before, second, logs, warnings } = await rerunWith('vivid');
+  it('un valor desconocido: init re-ejecutado no lo lee ni lo valida, y lo conserva', async () => {
+    const { before, second, logs, warnings } = await rerunWith('otro');
     expect(second.readContent('/mimi.json')).toBe(before);
     expect(warnings()).toEqual([]);
     expect(logs.map((l) => l.message)).toContain('Mimi ya estaba configurado; no hubo cambios.');
-  });
-
-  it('un valor desconocido se comporta igual: la CLI no lo lee ni lo valida, y lo conserva', async () => {
-    const { before, second, warnings } = await rerunWith('otro');
-    expect(second.readContent('/mimi.json')).toBe(before);
-    expect(warnings()).toEqual([]);
   });
 });

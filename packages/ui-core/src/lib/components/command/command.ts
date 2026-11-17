@@ -200,7 +200,7 @@ const ICON_TONE_CLASSES: Record<MimiCommandTone | 'none', string> = {
   warning:
     'bg-warning-soft text-warning-soft-foreground group-data-[active=true]/command-item:bg-warning group-data-[active=true]/command-item:text-warning-foreground',
   danger:
-    'bg-destructive-soft-bg text-destructive-soft-foreground group-data-[active=true]/command-item:bg-destructive group-data-[active=true]/command-item:text-destructive-foreground',
+    'bg-destructive-soft text-destructive-soft-foreground group-data-[active=true]/command-item:bg-destructive group-data-[active=true]/command-item:text-destructive-foreground',
 };
 
 /** Busca en el texto y en las `keywords`, sin tildes ni mayúsculas. */

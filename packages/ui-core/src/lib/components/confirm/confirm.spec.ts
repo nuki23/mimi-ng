@@ -197,7 +197,7 @@ describe('injectMimiConfirm', { timeout: 20_000 }, () => {
     expect(button('cancel').dataset['tone']).toBe('secondary');
     const icon = container()!.querySelector('[data-slot="icon"]')!;
     expect(icon.classList).toContain(
-      'bg-[color:var(--mimi-confirm-icon-bg,var(--mimi-destructive-soft-bg))]',
+      'bg-[color:var(--mimi-confirm-icon-bg,var(--mimi-destructive-soft))]',
     );
     expect(icon.classList).toContain(
       'text-[color:var(--mimi-confirm-icon-fg,var(--mimi-destructive-soft-foreground))]',

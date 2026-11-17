@@ -8,7 +8,7 @@ import {
   provideMimiTheme,
 } from './provider';
 import { MIMI_THEME_NEUTRAL } from './neutral';
-import type { MimiCardTokens } from './types';
+import type { MimiCardTokens, MimiThemePreset } from './types';
 
 // Política de rupturas (16/11/2026): los tokens de relleno por pieza de Card (sin efecto desde la
 // R.19) se quitaron en la 0.7.0, sin obsoleto de transición. Si vuelven, esto no compila.
@@ -49,12 +49,13 @@ describe('mimiThemeToCss', () => {
   it('convierte controles, componentes, radios, fuentes y sombras con el mapa de nombres', () => {
     const css = mimiThemeToCss({
       radius: '4px',
-      radii: { sm: '2px', card: '8px', badge: '4px' },
+      radii: { sm: '2px', card: '8px' },
       fonts: { sans: 'Inter, sans-serif' },
       controls: { height: '36px', heightSm: '28px', heightLg: '44px' },
       components: {
-        button: { fontWeight: 600, paddingX: '1rem' },
-        input: { placeholderColor: 'gray' },
+        badge: { radius: '4px' },
+        button: { fontWeight: 600, px: '1rem' },
+        input: { px: '0.5rem' },
         card: { padding: '1.5rem' },
       },
       shadows: { primaryHover: 'none' },
@@ -70,8 +71,8 @@ describe('mimiThemeToCss', () => {
       '--mimi-control-height-sm: 28px;',
       '--mimi-control-height-lg: 44px;',
       '--mimi-btn-font-weight: 600;',
-      '--mimi-btn-padding-x: 1rem;',
-      '--mimi-input-placeholder-color: gray;',
+      '--mimi-btn-px: 1rem;',
+      '--mimi-input-px: 0.5rem;',
       '--mimi-card-padding: 1.5rem;',
       '--mimi-shadow-primary-hover: none;',
       '--mimi-shadow-card: none;',
@@ -579,23 +580,21 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
     }
   });
 
-  it('radii.badge (0.1.0) y components.badge.radius generan la misma variable', () => {
-    expect(mimiThemeToCss({ radii: { badge: '4px' } })).toContain('--mimi-badge-radius: 4px;');
-    expect(mimiThemeToCss({ components: { badge: { radius: '4px' } } })).toContain(
-      '--mimi-badge-radius: 4px;',
-    );
-  });
-
-  it('los nombres de la 0.1.0 siguen generando su variable (respaldo en la cascada)', () => {
-    const css = mimiThemeToCss({
+  it('los nombres de la 0.1.0 ya no están en el tipo del preset (M.28, 0.8.0)', () => {
+    const removed = {
+      // @ts-expect-error radii.badge se quitó: components.badge.radius.
+      radii: { badge: '4px' },
       components: {
+        // @ts-expect-error paddingX se quitó: px.
         button: { paddingX: '2rem' },
-        input: { paddingX: '1rem', placeholderColor: 'gray' },
+        // @ts-expect-error placeholderColor se quitó: --mimi-input-placeholder en el CSS.
+        input: { placeholderColor: 'gray' },
       },
-    });
-    expect(css).toContain('--mimi-btn-padding-x: 2rem;');
-    expect(css).toContain('--mimi-input-padding-x: 1rem;');
-    expect(css).toContain('--mimi-input-placeholder-color: gray;');
+    } satisfies MimiThemePreset;
+    // radii.badge ya no va a --mimi-badge-radius: el nombre genérico no lo usa ningún componente.
+    expect(mimiThemeToCss(removed as unknown as MimiThemePreset)).not.toContain(
+      '--mimi-badge-radius',
+    );
   });
 
   it('button.pressScale con movimiento reducido vale 1', () => {
@@ -604,36 +603,6 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
     expect(css).toContain('@media (prefers-reduced-motion: reduce)');
     expect(css).toContain('    --mimi-btn-press-scale: 1;');
     expect(mimiThemeToCss({ motion: { pressScale: 0.9 } })).not.toContain('--mimi-btn-press-scale');
-  });
-});
-
-describe('provideMimiTheme: nombres de la 0.1.0', () => {
-  afterEach(() => TestBed.inject(DOCUMENT).getElementById(MIMI_THEME_STYLE_ID)?.remove());
-
-  it('avisa una sola vez por cada nombre viejo, diciendo cuál usar', () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-    const preset = {
-      radii: { badge: '4px' },
-      components: {
-        button: { paddingX: '2rem' },
-        input: { paddingX: '1rem', placeholderColor: 'gray' },
-      },
-    };
-    provideMimiTheme(preset);
-    provideMimiTheme(preset);
-    const messages = warn.mock.calls.map((call) => String(call[0]));
-    expect(messages).toHaveLength(4);
-    expect(messages.join('\n')).toContain(
-      'components.button.paddingX es un nombre de la 0.1.0: usa components.button.px',
-    );
-    expect(messages.join('\n')).toContain(
-      'components.input.paddingX es un nombre de la 0.1.0: usa components.input.px',
-    );
-    expect(messages.join('\n')).toContain('--mimi-input-placeholder');
-    expect(messages.join('\n')).toContain(
-      'radii.badge es un nombre de la 0.1.0: usa components.badge.radius',
-    );
-    warn.mockRestore();
   });
 });
 
@@ -655,7 +624,7 @@ describe('provideMimiTheme', () => {
   });
 });
 
-describe('theme-base.css: compatibilidad de destructive-soft con la 0.1.0 (spec 12)', () => {
+describe('theme-base.css: destructive-soft es el fondo suave (M.28, 0.8.0)', () => {
   // Las pruebas corren en Node: se lee el CSS con fs, sin importarlo (ver imports.spec.ts).
   const node = (
     globalThis as unknown as { process: { cwd(): string; getBuiltinModule(id: string): unknown } }
@@ -672,18 +641,19 @@ describe('theme-base.css: compatibilidad de destructive-soft con la 0.1.0 (spec 
     return css.slice(start, css.indexOf('\n}', start));
   };
 
-  it('--mimi-destructive-soft es alias de --mimi-destructive-ring en claro y oscuro', () => {
+  it('--mimi-destructive-soft es el fondo suave (como <tono>-soft), en claro y oscuro', () => {
     for (const selector of [':root', '.dark']) {
       expect(block(selector)).toContain('--mimi-destructive-ring: color-mix(');
-      expect(block(selector)).toContain('--mimi-destructive-soft: var(--mimi-destructive-ring);');
+      expect(block(selector)).toMatch(
+        /--mimi-destructive-soft: color-mix\(\s*in oklab,\s*var\(--mimi-destructive\) var\(--mimi-soft-mix\),\s*var\(--mimi-background\)\s*\);/,
+      );
     }
   });
 
-  it('ring-destructive-soft sigue generando el color del anillo (Tailwind lee --color-destructive-soft)', () => {
+  it('Tailwind: bg-destructive-soft es el fondo suave y ring-destructive-ring el anillo', () => {
     const theme = block('@theme inline');
-    expect(theme).toContain('--color-destructive-soft: var(--mimi-destructive-ring);');
+    expect(theme).toContain('--color-destructive-soft: var(--mimi-destructive-soft);');
     expect(theme).toContain('--color-destructive-ring: var(--mimi-destructive-ring);');
-    expect(theme).toContain('--color-destructive-soft-bg: var(--mimi-destructive-soft-bg);');
   });
 });
 

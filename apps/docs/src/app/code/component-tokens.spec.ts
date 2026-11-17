@@ -201,13 +201,4 @@ describe('Variables CSS de cada componente (component-tokens.ts)', () => {
       ).toEqual([]);
     });
   }
-
-  it('cada nombre de la 0.1.0 apunta a uno que existe en la lista', () => {
-    for (const tokens of Object.values(COMPONENT_TOKENS)) {
-      const names = tokens.map((t) => t.name);
-      for (const t of tokens.filter((t) => t.deprecated)) {
-        expect(names, t.name).toContain(t.deprecated);
-      }
-    }
-  });
 });

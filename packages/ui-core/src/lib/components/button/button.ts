@@ -9,7 +9,6 @@ import {
   effect,
   inject,
   input,
-  isDevMode,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { injectMimiSize } from '@/components/ui/utils/size';
@@ -18,11 +17,8 @@ import {
   type ButtonTone,
   type ButtonVariant,
   buttonVariants,
-  resolveButtonStyle,
+  resolveButtonTone,
 } from './button.variants';
-
-/** El aviso de atajo + tone sale una sola vez por página. */
-let warnedShortcutWithTone = false;
 
 /**
  * Botón de Mimi sobre el elemento nativo: `<button mimiBtn>` o `<a mimiBtn>`.
@@ -31,8 +27,6 @@ let warnedShortcutWithTone = false;
  *   secondary, success, warning, info, danger). Sin `tone`, cada variante usa su tono natural:
  *   outline y ghost son neutros (secondary); las demás, primary. `data-variant` y `data-tone`
  *   muestran los valores resueltos.
- * - Los atajos de la 0.1.0 (`default`, `secondary`, `destructive`) siguen funcionando y ganan
- *   sobre `tone` (en modo desarrollo, avisa una vez).
  * - `disabled` deshabilita: `disabled` nativo en <button>; en <a>, `aria-disabled="true"`,
  *   `tabindex="-1"` y el clic se cancela.
  * - `loading` muestra un spinner centrado encima del contenido, que queda transparente en su
@@ -70,8 +64,8 @@ let warnedShortcutWithTone = false;
   `,
   host: {
     '[class]': 'classes()',
-    '[attr.data-variant]': 'resolved().variant',
-    '[attr.data-tone]': 'resolved().tone',
+    '[attr.data-variant]': 'variant()',
+    '[attr.data-tone]': 'toneResolved()',
     // Solo el `size` propio (y `icon`): sin él, el `md` del tema o el del contenedor `[data-size]`.
     '[attr.data-size]': 'ownSize()',
     '[attr.data-loading]': 'loading() ? "" : null',
@@ -84,7 +78,6 @@ let warnedShortcutWithTone = false;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MimiButton {
-  /** Incluye los atajos de la 0.1.x (`ButtonVariantShortcut`, deprecados). */
   readonly variant = input<ButtonVariant>('solid');
   readonly tone = input<ButtonTone>();
   /** `sm | md | lg | icon`. Sin `size`, el del contenedor `mimiSize` o `md`. */
@@ -109,24 +102,13 @@ export class MimiButton {
 
   protected readonly isDisabled = computed(() => this.disabled() || this.loading());
 
-  protected readonly resolved = computed(() => {
-    const style = resolveButtonStyle(this.variant(), this.tone());
-    if (style.ignoredTone && isDevMode() && !warnedShortcutWithTone) {
-      warnedShortcutWithTone = true;
-      console.warn(
-        `[Mimi] Button: variant="${this.variant()}" ya define el color; se ignora ` +
-          `tone="${this.tone()}". Usa variant="${style.variant}" con tone (los atajos se ` +
-          `quitan en la 1.0).`,
-      );
-    }
-    return style;
-  });
+  protected readonly toneResolved = computed(() => resolveButtonTone(this.variant(), this.tone()));
 
   protected readonly classes = computed(() =>
     cn(
       buttonVariants({
-        variant: this.resolved().variant,
-        tone: this.resolved().tone,
+        variant: this.variant(),
+        tone: this.toneResolved(),
         size: this.sizeResolved(),
       }),
       // El diseño deshabilitado no tiene sombra; cargando la conserva.

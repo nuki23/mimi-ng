@@ -12,8 +12,8 @@ export interface PackageJson {
 /** Configuración de Mimi en el workspace (spec, sección 5). */
 export interface MimiConfig {
   /**
-   * Tema: "mimi". La 0.1.0 escribe "vivid", sinónimo que se acepta hasta la 1.0 (spec 12). La CLI no
-   * lo lee ni lo valida: cualquier valor se conserva tal cual.
+   * Tema: "mimi". La CLI no lo lee ni lo valida: cualquier valor se conserva tal cual, salvo el
+   * nombre que escribía la 0.1.0, que `ng g mimi` cambia por "mimi" (M.28, spec 12).
    */
   style?: string;
   tailwind?: { css?: string };

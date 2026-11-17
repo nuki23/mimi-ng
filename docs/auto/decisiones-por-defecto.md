@@ -184,6 +184,14 @@ Rama `auto/0.7.0-tanda3-2026-11-15`; detalle en `docs/auto/0.7.0-tanda3-2026-11-
 - **R.21, textos de Sortable List:** los cinco textos nuevos son **obligatorios** en `MimiSortableText` (como los de antes). **RUPTURA** de tipo para quien escribe el objeto entero (lo vio el revisor de la tanda 3); va al CHANGELOG con su «Cómo actualizar». Alternativa: hacerlos opcionales (con un `??` al inglés en cada uso).
 - **R.21, teclado:** al pasar a otra lista, el elemento va al mismo lugar o al último; las flechas del otro eje (en una lista horizontal, ↑ la anterior y ↓ la siguiente). Sin anuncio cuando la otra lista no lo acepta (el elemento se queda y sigue agarrado).
 
+## Decididas por defecto: tanda 1 de la 0.8.0 (16/11/2026)
+
+Rama `auto/0.8.0-tanda1-2026-11-16`; detalle en `docs/auto/0.8.0-tanda1-2026-11-16.md`. Pendientes de revisión del usuario.
+
+- **M.28, `destructive-soft` en un paso** (la tarea lo dejaba por decidir: «con la política, en un paso y avisado»): en la 0.8.0 se quita el alias del anillo y `destructive-soft-bg` se renombra a `destructive-soft` a la vez. **RUPTURA** (el código con `ring-destructive-soft` compila con otro color; el CHANGELOG lo avisa y dice qué buscar). Alternativa: dos versiones (quitar el alias en la 0.8.0 y renombrar en la 0.9.0). Base: «Recomendación» (la de la tarea).
+- **M.28, `"style": "vivid"`** («decidir si la CLI lo corrige al leerlo o avisa»): `ng g mimi` lo cambia por `"mimi"` en silencio cuando reescribe `mimi.json` (ya lo reescribe en cada ejecución); `init` no lo toca. **RUPTURA** solo de nombre (la CLI no lee `style`). Alternativa: avisar y dejarlo. Base: «Más simple».
+- **M.28, tipos de Button y Badge:** `ButtonVariant` / `BadgeVariant` quedan como la lista de variantes y se quitan `ButtonStyleVariant` / `BadgeStyleVariant` (sin alias: con la política); `resolveButtonStyle` / `resolveBadgeStyle` pasan a `resolveButtonTone` / `resolveBadgeTone` (ya no hay atajo que resolver). **RUPTURA** para quien los importaba. Alternativa: conservar `ButtonStyleVariant` y quitar `ButtonVariant`. Base: «Más simple» (el nombre corto para el tipo de la entrada).
+
 ## Decididas por el usuario: rupturas y obsoletos (16/11/2026)
 
 - **Antes de la 1.0.0:** las rupturas están permitidas y **no se mantienen obsoletos** (sin alias ni exports `@deprecated` de transición); cada ruptura va al CHANGELOG con cómo actualizar.

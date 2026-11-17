@@ -27,7 +27,7 @@ const CHIP_BASE = cn(
 const CHIP_TONE = {
   default:
     'bg-[color:var(--mimi-chip-bg,var(--mimi-chip,var(--mimi-secondary)))] text-[color:var(--mimi-chip-fg,var(--mimi-chip-foreground,var(--mimi-secondary-foreground)))]',
-  invalid: 'bg-destructive-soft-bg text-destructive-soft-foreground',
+  invalid: 'bg-destructive-soft text-destructive-soft-foreground',
 } as const;
 
 const REMOVE_CLASSES = cn(

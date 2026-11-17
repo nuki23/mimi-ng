@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-(Ninguna: la R.P7 se cerró el 16/11/2026 en la rama `auto/release-0.7.0-2026-11-16`.)
+(Ninguna: la M.28 se cerró el 16/11/2026 en la rama `auto/0.8.0-tanda1-2026-11-16`.)
 
 (DP.2 a DP.5, hechas el 14/11/2026; la siguiente del plan de páginas es DP.6, Blocks y portada, y la puerta DP.P.)
 
@@ -115,7 +115,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propi
 - [x] M.25 (hecha el 15/11/2026: 98,02 kB) Qué hace crecer `main` del sitio (137,83 kB, a 2,17 kB del aviso de 140) y bajarlo antes de añadir componentes (por ejemplo, `tailwind-merge` por `cn()` en la cabecera) · v0.7.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.26 (hecha el 14/11/2026) Quitar «provisional, sin diseño» y «plan, D6» del código y de las páginas (sin rediseño, 14/11/2026) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.27 (hecha el 15/11/2026, con `mimi-color-input`) `size` en Input OTP y File Upload (sin justificación para no tenerlo; visto en la R.26) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.28 Quitar todo lo marcado «hasta la 1.0» (atajos de `variant` de la 0.1.x en Button y Badge, radio de Badge, `paddingX` y `placeholderColor` de Input en el tema, alias `destructive-soft`, `"vivid"`; absorbe 1.0-1 a 1.0-4), con una prueba que falla si queda algo marcado así; **RUPTURA** · v0.8.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.28 (hecha el 16/11/2026; los escenarios del `.tgz`, en la G4.P) Quitar todo lo marcado «hasta la 1.0» (atajos de `variant` de la 0.1.x en Button y Badge, radio de Badge, `paddingX` y `placeholderColor` de Input en el tema, alias `destructive-soft`, `"vivid"`; absorbe 1.0-1 a 1.0-4), con una prueba que falla si queda algo marcado así; **RUPTURA** · v0.8.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
@@ -219,10 +219,10 @@ Detalle: [docs/plan/plataforma.md](plan/plataforma.md). La 5.2 y la 5.17 están 
 
 Detalle: [docs/plan/version-1.0.md](plan/version-1.0.md). **Las cuatro pasan a la M.28 (v0.8.0)** desde el 16/11/2026: con la política de rupturas del usuario, antes de la 1.0 no se mantienen obsoletos. Después de la 1.0: la 5.18 (migraciones con `ng update`, en «Plataforma»).
 
-- [ ] 1.0-1 (→ M.28) Quitar alias `destructive-soft` y renombrar `destructive-soft-bg` · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
-- [ ] 1.0-2 (→ M.28) Quitar los atajos de variante de Button y Badge · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
-- [ ] 1.0-3 (→ M.28) Dejar de aceptar `"style": "vivid"` en `mimi.json` · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
-- [ ] 1.0-4 (→ M.28) Quitar los nombres de tokens de la 0.1.0 · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [x] 1.0-1 (→ M.28, hecha el 16/11/2026) Quitar alias `destructive-soft` y renombrar `destructive-soft-bg` · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [x] 1.0-2 (→ M.28, hecha el 16/11/2026) Quitar los atajos de variante de Button y Badge · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [x] 1.0-3 (→ M.28, hecha el 16/11/2026) Dejar de aceptar `"style": "vivid"` en `mimi.json` · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [x] 1.0-4 (→ M.28, hecha el 16/11/2026) Quitar los nombres de tokens de la 0.1.0 · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
 
 ## Decisiones pendientes
 

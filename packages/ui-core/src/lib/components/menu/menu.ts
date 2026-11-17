@@ -232,8 +232,8 @@ const NO_TONE = [
 
 const DANGER = [
   'text-[color:var(--mimi-menu-danger,var(--mimi-destructive-soft-foreground))]',
-  'not-aria-disabled:data-[active=true]:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft-bg))]',
-  'aria-disabled:focus-visible:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft-bg))]',
+  'not-aria-disabled:data-[active=true]:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft))]',
+  'aria-disabled:focus-visible:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft))]',
 ];
 
 const MENU_ITEM_BASE = [

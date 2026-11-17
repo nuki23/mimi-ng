@@ -208,7 +208,7 @@ describe('MimiCommand', { timeout: 20_000 }, () => {
     const plain = options()[2].querySelector<HTMLElement>('[data-slot="icon"]')!;
     expect(plain.className).toContain('bg-muted');
     const danger = options()[4].querySelector<HTMLElement>('[data-slot="icon"]')!;
-    expect(danger.className).toContain('bg-destructive-soft-bg');
+    expect(danger.className).toContain('bg-destructive-soft');
     const keys = Array.from(first.querySelectorAll('[data-slot="shortcut"] kbd')).map(
       (k) => k.textContent,
     );

@@ -49,7 +49,7 @@ describe('MimiChip', () => {
     host.extra.set('h-8');
     await fixture.whenStable();
     expect(button()).toBeNull();
-    expect(chip().className).toContain('bg-destructive-soft-bg');
+    expect(chip().className).toContain('bg-destructive-soft');
     expect(chip().className).toContain('h-8');
     expect(chip().className).not.toContain('h-[var(--mimi-chip-height');
   });

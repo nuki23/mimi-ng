@@ -29,5 +29,5 @@ export const STATUS_CLASSES: Record<Client['status'], string> = {
   Activo: 'bg-success-soft text-success-soft-foreground',
   Prueba: 'bg-info-soft text-info-soft-foreground',
   Moroso: 'bg-warning-soft text-warning-soft-foreground',
-  Cancelado: 'bg-destructive-soft-bg text-destructive-soft-foreground',
+  Cancelado: 'bg-destructive-soft text-destructive-soft-foreground',
 };

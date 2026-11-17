@@ -1,15 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MimiBadge } from './badge';
-import type {
-  BadgeStyleVariant,
-  BadgeTone,
-  BadgeVariant,
-  BadgeVariantShortcut,
-} from './badge.variants';
+import type { BadgeTone, BadgeVariant } from './badge.variants';
 
-// Código de la 0.1.x: `BadgeVariant` aceptaba los atajos. Tiene que seguir compilando (D1).
-const LEGACY_VARIANTS: BadgeVariant[] = ['default', 'secondary', 'destructive', 'outline'];
+// Los atajos de la 0.1.x se quitaron en la 0.8.0 (M.28): ya no son variantes.
+// @ts-expect-error `destructive` es ahora `tone="danger"`.
+const REMOVED_SHORTCUT: BadgeVariant = 'destructive';
 
 @Component({
   imports: [MimiBadge],
@@ -60,7 +56,7 @@ describe('MimiBadge', () => {
   });
 
   // Una clase representativa de cada variante con cada tono (badge.variants.ts, TONE_CLASSES).
-  const EXPECTED: Record<BadgeStyleVariant, Record<BadgeTone, string>> = {
+  const EXPECTED: Record<BadgeVariant, Record<BadgeTone, string>> = {
     solid: {
       primary: 'bg-primary',
       secondary: 'bg-secondary',
@@ -75,7 +71,7 @@ describe('MimiBadge', () => {
       success: 'bg-success-soft',
       warning: 'bg-warning-soft',
       info: 'bg-info-soft',
-      danger: 'bg-destructive-soft-bg',
+      danger: 'bg-destructive-soft',
     },
     outline: {
       primary: 'before:bg-primary',
@@ -86,7 +82,7 @@ describe('MimiBadge', () => {
       danger: 'before:bg-destructive',
     },
   };
-  const COMBOS = (Object.keys(EXPECTED) as BadgeStyleVariant[]).flatMap((variant) =>
+  const COMBOS = (Object.keys(EXPECTED) as BadgeVariant[]).flatMap((variant) =>
     (Object.keys(EXPECTED[variant]) as BadgeTone[]).map(
       (tone) => [variant, tone, EXPECTED[variant][tone]] as const,
     ),
@@ -103,7 +99,7 @@ describe('MimiBadge', () => {
     expect(badge.classList).toContain(expected);
   });
 
-  it('outline sin tone es neutro y sin punto, como en la 0.1.0', async () => {
+  it('outline sin tone es neutro y sin punto', async () => {
     const { host, badge, update } = await setup();
     await update(() => host.variant.set('outline'));
     expect(badge.dataset['tone']).toBe('secondary');
@@ -124,36 +120,13 @@ describe('MimiBadge', () => {
     expect(badge.textContent?.trim()).toBe('Nuevo');
   });
 
-  it.each<[BadgeVariantShortcut, BadgeTone, string]>([
-    ['default', 'primary', 'bg-primary'],
-    ['secondary', 'secondary', 'bg-secondary'],
-    ['destructive', 'danger', 'bg-destructive'],
-  ])('atajo de la 0.1.0: variant="%s" = solid + %s', async (shortcut, tone, cls) => {
-    const { host, badge, update } = await setup();
-    await update(() => host.variant.set(shortcut));
-    expect(badge.dataset['variant']).toBe('solid');
-    expect(badge.dataset['tone']).toBe(tone);
-    expect(badge.classList).toContain(cls);
-  });
-
-  it('el tipo BadgeVariant de la 0.1.x (con atajos) sigue sirviendo para la entrada', async () => {
-    const { host, badge, update } = await setup();
-    for (const variant of LEGACY_VARIANTS) {
-      await update(() => host.variant.set(variant));
-      expect(badge.dataset['variant']).toBe(variant === 'outline' ? 'outline' : 'solid');
-    }
-  });
-
-  it('un atajo con tone: gana el atajo y avisa una sola vez en modo desarrollo', async () => {
+  it('los atajos de la 0.1.x ya no existen: un valor así no tiene clases de color (M.28)', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const { host, badge, update } = await setup();
-    await update(() => {
-      host.variant.set('secondary');
-      host.tone.set('warning');
-    });
-    expect(badge.dataset['tone']).toBe('secondary');
-    await update(() => host.tone.set('info'));
-    expect(warn).toHaveBeenCalledTimes(1);
+    await update(() => host.variant.set(REMOVED_SHORTCUT));
+    expect(badge.dataset['variant']).toBe('destructive');
+    expect(badge.classList).not.toContain('bg-destructive');
+    expect(warn).not.toHaveBeenCalled();
     warn.mockRestore();
   });
 

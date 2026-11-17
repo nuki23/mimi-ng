@@ -1,26 +1,13 @@
 import { cva } from 'class-variance-authority';
 
 /**
- * Cómo se ve el badge (spec 4, «Variante y tono»), sin los atajos de la 0.1.x. Sin ghost ni link:
- * el diseño no los tiene.
+ * Cómo se ve el badge (spec 4, «Variante y tono»). El color va en `tone`. Sin ghost ni link: el
+ * diseño no los tiene.
  */
-export type BadgeStyleVariant = 'solid' | 'soft' | 'outline';
+export type BadgeVariant = 'solid' | 'soft' | 'outline';
 
 /** De qué color es. `danger` usa los tokens `destructive`. */
 export type BadgeTone = 'primary' | 'secondary' | 'success' | 'warning' | 'info' | 'danger';
-
-/**
- * Atajos de la 0.1.0, cuando el color era una variante. Siguen funcionando, sin error ni aviso:
- * `default` = solid + primary, `secondary` = solid + secondary, `destructive` = solid + danger.
- * @deprecated Se quitan en la 1.0 (spec 12). Usa `variant` y `tone`.
- */
-export type BadgeVariantShortcut = 'default' | 'secondary' | 'destructive';
-
-/**
- * Lo que acepta `variant`: las variantes y, hasta la 1.0, los atajos de la 0.1.x (deprecados), para
- * que el código que tipaba `BadgeVariant` con `'default'` o `'destructive'` siga compilando.
- */
-export type BadgeVariant = BadgeStyleVariant | BadgeVariantShortcut;
 
 /** Punto decorativo de outline (un ::before vacío: no lo leen los lectores de pantalla). */
 const DOT = "gap-1.5 before:size-1.5 before:shrink-0 before:rounded-full before:content-['']";
@@ -28,7 +15,7 @@ const DOT = "gap-1.5 before:size-1.5 before:shrink-0 before:rounded-full before:
 /**
  * Colores de cada tono en cada variante. Clases completas y literales para Tailwind. Diseño:
  * docs/design/«Mimi F2 Tokens y Tonos» (Tonos en Badge). Outline lleva un punto del color del
- * tono; sin tono (secondary) se ve como en la 0.1.0, sin punto. El tono secondary no estaba en
+ * tono; sin tono (secondary) es neutro, sin punto. El tono secondary no estaba en
  * el diseño: es el de Mimi (spec 13).
  */
 const TONE_CLASSES = {
@@ -59,10 +46,10 @@ const TONE_CLASSES = {
   },
   danger: {
     solid: 'border-transparent bg-destructive text-destructive-foreground',
-    soft: 'border-transparent bg-destructive-soft-bg text-destructive-soft-foreground',
+    soft: 'border-transparent bg-destructive-soft text-destructive-soft-foreground',
     outline: `border-border bg-transparent text-foreground ${DOT} before:bg-destructive`,
   },
-} as const satisfies Record<BadgeTone, Record<BadgeStyleVariant, string>>;
+} as const satisfies Record<BadgeTone, Record<BadgeVariant, string>>;
 
 /**
  * Clases de mimiBadge (docs/design/Mimi Componentes.dc.html, sección 5). Literales para que
@@ -83,7 +70,7 @@ export const badgeVariants = cva(
     compoundVariants: Object.entries(TONE_CLASSES).flatMap(([tone, byVariant]) =>
       Object.entries(byVariant).map(([variant, cls]) => ({
         tone: tone as BadgeTone,
-        variant: variant as BadgeStyleVariant,
+        variant: variant as BadgeVariant,
         class: cls,
       })),
     ),
@@ -91,31 +78,14 @@ export const badgeVariants = cva(
   },
 );
 
-/** Sin `tone`, cada variante usa su tono natural: outline es neutro, como en la 0.1.0. */
-const NATURAL_TONE: Record<BadgeStyleVariant, BadgeTone> = {
+/** Sin `tone`, cada variante usa su tono natural: outline es neutro (secondary). */
+const NATURAL_TONE: Record<BadgeVariant, BadgeTone> = {
   solid: 'primary',
   soft: 'primary',
   outline: 'secondary',
 };
 
-const SHORTCUTS: Record<BadgeVariantShortcut, { variant: BadgeStyleVariant; tone: BadgeTone }> = {
-  default: { variant: 'solid', tone: 'primary' },
-  secondary: { variant: 'solid', tone: 'secondary' },
-  destructive: { variant: 'solid', tone: 'danger' },
-};
-
-/**
- * Resuelve variante y tono. Un atajo de la 0.1.0 gana siempre; `ignoredTone` indica que además
- * se pasó un `tone` que no se aplicó.
- */
-export function resolveBadgeStyle(
-  variant: BadgeVariant,
-  tone: BadgeTone | undefined,
-): { variant: BadgeStyleVariant; tone: BadgeTone; ignoredTone: boolean } {
-  if (variant in SHORTCUTS) {
-    const shortcut = SHORTCUTS[variant as BadgeVariantShortcut];
-    return { ...shortcut, ignoredTone: tone !== undefined && tone !== shortcut.tone };
-  }
-  const v = variant as BadgeStyleVariant;
-  return { variant: v, tone: tone ?? NATURAL_TONE[v], ignoredTone: false };
+/** El tono de verdad: el que se pasó o el natural de la variante. */
+export function resolveBadgeTone(variant: BadgeVariant, tone: BadgeTone | undefined): BadgeTone {
+  return tone ?? NATURAL_TONE[variant];
 }

@@ -218,14 +218,12 @@
   --mimi-warning-ring: color-mix(in oklch, var(--mimi-warning) 34%, transparent);
   --mimi-info-ring: color-mix(in oklch, var(--mimi-info) 30%, transparent);
   --mimi-destructive-ring: color-mix(in oklch, var(--mimi-destructive) 24%, transparent);
-  /* Fondo suave de destructive. En la 1.0 pasa a llamarse destructive-soft (spec 12). */
-  --mimi-destructive-soft-bg: color-mix(
+  /* Fondo suave de destructive (<tono>-soft, como los demás tonos; hasta la 0.7.0, -soft-bg). */
+  --mimi-destructive-soft: color-mix(
     in oklab,
     var(--mimi-destructive) var(--mimi-soft-mix),
     var(--mimi-background)
   );
-  /* Alias de la 0.1.0 (era el anillo). Se quita en la 1.0: usar destructive-ring (spec 12). */
-  --mimi-destructive-soft: var(--mimi-destructive-ring);
   /* Variantes con tono (fórmulas de F2 Tokens y Tonos): hover de soft, borde y hover de outline */
   --mimi-primary-soft-hover: color-mix(in oklab, var(--mimi-primary) 22%, var(--mimi-background));
   --mimi-primary-border: color-mix(in oklch, var(--mimi-primary) 55%, transparent);
@@ -287,7 +285,7 @@
   --mimi-btn-h: var(--mimi-btn-height, var(--mimi-size-height));
   --mimi-btn-text: var(--mimi-btn-font-size, var(--mimi-size-text));
   --mimi-btn-gap-s: var(--mimi-btn-gap, var(--mimi-size-gap));
-  --mimi-btn-px-s: var(--mimi-btn-px, var(--mimi-btn-padding-x, var(--mimi-size-px)));
+  --mimi-btn-px-s: var(--mimi-btn-px, var(--mimi-size-px));
   --mimi-input-h: var(--mimi-input-height, var(--mimi-size-height));
   --mimi-input-text: var(--mimi-input-font-size, var(--mimi-size-text));
   --mimi-avatar-s: var(--mimi-avatar-size, 2.5rem);
@@ -632,14 +630,12 @@
   --mimi-warning-ring: color-mix(in oklch, var(--mimi-warning) 34%, transparent);
   --mimi-info-ring: color-mix(in oklch, var(--mimi-info) 30%, transparent);
   --mimi-destructive-ring: color-mix(in oklch, var(--mimi-destructive) 24%, transparent);
-  /* Fondo suave de destructive. En la 1.0 pasa a llamarse destructive-soft (spec 12). */
-  --mimi-destructive-soft-bg: color-mix(
+  /* Fondo suave de destructive (<tono>-soft, como los demás tonos; hasta la 0.7.0, -soft-bg). */
+  --mimi-destructive-soft: color-mix(
     in oklab,
     var(--mimi-destructive) var(--mimi-soft-mix),
     var(--mimi-background)
   );
-  /* Alias de la 0.1.0 (era el anillo). Se quita en la 1.0: usar destructive-ring (spec 12). */
-  --mimi-destructive-soft: var(--mimi-destructive-ring);
   /* Variantes con tono (fórmulas de F2 Tokens y Tonos): hover de soft, borde y hover de outline */
   --mimi-primary-soft-hover: color-mix(in oklab, var(--mimi-primary) 22%, var(--mimi-background));
   --mimi-primary-border: color-mix(in oklch, var(--mimi-primary) 55%, transparent);
@@ -733,10 +729,8 @@
   --color-destructive-foreground: var(--mimi-destructive-foreground);
   --color-destructive-hover: var(--mimi-destructive-hover);
   --color-destructive-ring: var(--mimi-destructive-ring);
-  --color-destructive-soft-bg: var(--mimi-destructive-soft-bg);
+  --color-destructive-soft: var(--mimi-destructive-soft);
   --color-destructive-soft-foreground: var(--mimi-destructive-soft-foreground);
-  /* Alias de la 0.1.0: ring-destructive-soft sigue funcionando hasta la 1.0 (spec 12) */
-  --color-destructive-soft: var(--mimi-destructive-ring);
   --color-success: var(--mimi-success);
   --color-success-foreground: var(--mimi-success-foreground);
   --color-success-soft: var(--mimi-success-soft);
