@@ -46,7 +46,7 @@
     "css": ["@angular/cdk/overlay-prebuilt.css"]
   },
   "context-menu": {
-    "items": ["menu", "utils/overlay", "utils/size"],
+    "items": ["menu", "utils/overlay", "utils/overlay-config", "utils/sheet", "utils/size"],
     "packages": ["@angular/aria", "@angular/cdk"],
     "css": ["@angular/cdk/overlay-prebuilt.css"]
   },
@@ -66,6 +66,8 @@
       "utils/field-state",
       "utils/field-styles",
       "utils/overlay",
+      "utils/overlay-config",
+      "utils/sheet",
       "utils/size"
     ],
     "packages": ["@angular/aria", "@angular/cdk", "@angular/forms"],
@@ -106,7 +108,7 @@
     "css": ["@angular/cdk/overlay-prebuilt.css"]
   },
   "dropdown-menu": {
-    "items": ["menu", "utils/overlay", "utils/size"],
+    "items": ["menu", "utils/overlay", "utils/overlay-config", "utils/sheet", "utils/size"],
     "packages": ["@angular/aria", "@angular/cdk"],
     "css": ["@angular/cdk/overlay-prebuilt.css"]
   },

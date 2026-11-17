@@ -165,7 +165,14 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["menu", "utils/overlay", "utils/size"]
+      "registryDependencies": [
+        "menu",
+        "utils/cn",
+        "utils/overlay",
+        "utils/overlay-config",
+        "utils/sheet",
+        "utils/size"
+      ]
     },
     "dialog": {
       "type": "component",
@@ -524,7 +531,14 @@
         "@angular/cdk": "^22.2.4"
       },
       "cssImports": ["@angular/cdk/overlay-prebuilt.css"],
-      "registryDependencies": ["menu", "utils/overlay", "utils/size"]
+      "registryDependencies": [
+        "menu",
+        "utils/cn",
+        "utils/overlay",
+        "utils/overlay-config",
+        "utils/sheet",
+        "utils/size"
+      ]
     },
     "form-field": {
       "type": "component",
