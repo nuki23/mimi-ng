@@ -29,4 +29,11 @@ Informes del modo autónomo: `docs/auto/0.7.0-tanda1-2026-11-15.md`, `docs/auto/
 
 ## Publicación de la 0.7.0 (registro)
 
-Vacía hasta que el usuario publique (`docs/proceso/release.md`). Se anota aquí: fecha y hora de `npm publish`, que es `latest`, la etiqueta y su commit, la release de GitHub, el despliegue y la prueba desde npm.
+La hizo el usuario (`docs/proceso/release.md`). Los datos los obtuvo Claude el 16/11/2026 de npm y de git (no de lo que dijo el usuario):
+
+- `@mimi-ng/cli@0.7.0` publicada en npm el `2026-11-17T02:31:23.091Z` (UTC; las 21:31 del 16/11/2026 en Colombia, UTC−5), según `npm view @mimi-ng/cli dist-tags time --json`.
+- `dist-tags`: `{ latest: '0.7.0' }`. Versiones: 0.1.0, 0.1.1, 0.2.0, 0.3.0, 0.4.0, 0.5.0, 0.6.0 y 0.7.0.
+- Paquete publicado: 181 archivos, 1 240 354 bytes sin empaquetar, shasum `7d1befb7184d2dac191793302eb803e7c69cad94` (`npm view @mimi-ng/cli@0.7.0 dist`). Los 181 archivos coinciden con el `npm pack` de la preparación (`docs/auto/release-0.7.0-2026-11-16.md`, shasum `767a9fea…`); el shasum cambia porque `prepublishOnly` recompila.
+- Etiqueta anotada `v0.7.0` (objeto `1db4273`) sobre `006520e` (`fix(sortable-list): el anuncio es solo para lectores de pantalla…`, el último commit de la rama `auto/release-0.7.0-2026-11-16`; la fusión del PR #22 en `main` es `640f893`, con el mismo árbol de trabajo), según `git log -1 --oneline v0.7.0`; `git ls-remote --tags origin` la confirma.
+- Release de GitHub: la creó el usuario (dato del usuario, 16/11/2026).
+- Prueba desde npm: el usuario instaló y probó la 0.7.0 desde npm (dato del usuario, 16/11/2026). Los escenarios con el `.tgz` real, antes de publicar, están en `docs/auto/release-0.7.0-2026-11-16.md`.

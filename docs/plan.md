@@ -136,7 +136,7 @@ Detalle: [docs/plan/refinamiento/plan.md](plan/refinamiento/plan.md) (principio 
 
 **0.6.0:** cerrada el 13/11/2026 (puerta R.P6, revisada por el usuario con la fusión del PR #15; versión preparada en `docs/auto/release-0.6.0-2026-11-13.md`; **publicada el 14/11/2026**, `2026-11-14T23:00Z` en npm, registro en `docs/historial/plan-refinamiento-0.6.0.md`). Las tareas están en «Terminado» y su texto en `docs/historial/refinamiento/R-0.6.0.md` (índice: `docs/historial/plan-refinamiento-0.6.0.md`). Lo que faltaba de R.0, R.1, R.7, R.8, R.12, R.14 y R.15 pasó a la 0.7.0 (R.25 a R.32 y M.9); lo manual, a la M.20 (puntos 14 a 18).
 
-**0.7.0:** cerrada el 16/11/2026 (puerta R.P7, recorrida en la rama `auto/0.7.0-tanda3-2026-11-15` y revisada por el usuario con la fusión del PR #21; versión preparada en `docs/auto/release-0.7.0-2026-11-16.md`; **por publicar**: la publica el usuario, registro en `docs/historial/plan-refinamiento-0.7.0.md`). Las tareas están en «Terminado» y su texto en `docs/historial/refinamiento/R-0.7.0.md` (índice: `docs/historial/plan-refinamiento-0.7.0.md`). La R.34 abre la 0.8.0 (abajo, en el Grupo 4); lo manual, a la M.20 (puntos 19 a 21); los obsoletos «hasta la 1.0», a la M.28 (0.8.0).
+**0.7.0:** cerrada el 16/11/2026 (puerta R.P7, recorrida en la rama `auto/0.7.0-tanda3-2026-11-15` y revisada por el usuario con la fusión del PR #21; versión preparada en `docs/auto/release-0.7.0-2026-11-16.md`; **publicada el 16/11/2026**, `2026-11-17T02:31Z` en npm, registro en `docs/historial/plan-refinamiento-0.7.0.md`). Las tareas están en «Terminado» y su texto en `docs/historial/refinamiento/R-0.7.0.md` (índice: `docs/historial/plan-refinamiento-0.7.0.md`). La R.34 abre la 0.8.0 (abajo, en el Grupo 4); lo manual, a la M.20 (puntos 19 a 21); los obsoletos «hasta la 1.0», a la M.28 (0.8.0).
 
 ## Páginas de la documentación: una plantilla común (plan del 12/11/2026; decidido el 14/11/2026)
 
@@ -371,7 +371,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] R.24 Auditoría de «uso corto» (10/11/2026).
 - [x] R.P6 Puerta de la 0.6.0 (recorrida el 10/11/2026; revisada por el usuario con la fusión del PR #15 y cerrada el 13/11/2026; pendiente de comprobación manual en la M.20, puntos 14 a 18).
 
-**Refinamiento, v0.7.0** (`docs/historial/plan-refinamiento-0.7.0.md`, con el texto en `docs/historial/refinamiento/R-0.7.0.md`; puerta revisada por el usuario con la fusión del PR #21 y cerrada el 16/11/2026; por publicar). M.9, M.25 y M.27 están en «Mantenimiento» (arriba), con su estado. Lo manual, en la M.20 (puntos 19 a 21).
+**Refinamiento, v0.7.0** (`docs/historial/plan-refinamiento-0.7.0.md`, con el texto en `docs/historial/refinamiento/R-0.7.0.md`; puerta revisada por el usuario con la fusión del PR #21 y cerrada el 16/11/2026; publicada el 16/11/2026, `2026-11-17T02:31Z` en npm). M.9, M.25 y M.27 están en «Mantenimiento» (arriba), con su estado. Lo manual, en la M.20 (puntos 19 a 21).
 
 - [x] R.19 Card como superficie `mimiCard` (PD-1, opción B; 15/11/2026; los alias `mimi-card-*` se quitaron el 16/11/2026 por la política de rupturas).
 - [x] R.20 Table de directivas (`table`, `mimiTableState`) y Data Table sobre la base, con `expandMode` y `toggle` (PD-2, opción C; 15/11/2026).
