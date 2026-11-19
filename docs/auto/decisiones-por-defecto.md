@@ -186,7 +186,7 @@ Rama `auto/0.7.0-tanda3-2026-11-15`; detalle en `docs/auto/0.7.0-tanda3-2026-11-
 
 ## Decididas por defecto: tanda 1 de la 0.8.0 (16/11/2026)
 
-Rama `auto/0.8.0-tanda1-2026-11-16`; detalle en `docs/auto/0.8.0-tanda1-2026-11-16.md`. Pendientes de revisión del usuario.
+Rama `auto/0.8.0-tanda1-2026-11-16`; detalle en `docs/auto/0.8.0-tanda1-2026-11-16.md`. **Aceptadas por el usuario el 18/11/2026** (prompt de la sesión que termina la R.34): las tres de la M.28 quedan como están.
 
 - **M.28, `destructive-soft` en un paso** (la tarea lo dejaba por decidir: «con la política, en un paso y avisado»): en la 0.8.0 se quita el alias del anillo y `destructive-soft-bg` se renombra a `destructive-soft` a la vez. **RUPTURA** (el código con `ring-destructive-soft` compila con otro color; el CHANGELOG lo avisa y dice qué buscar). Alternativa: dos versiones (quitar el alias en la 0.8.0 y renombrar en la 0.9.0). Base: «Recomendación» (la de la tarea).
 - **M.28, `"style": "vivid"`** («decidir si la CLI lo corrige al leerlo o avisa»): `ng g mimi` lo cambia por `"mimi"` en silencio cuando reescribe `mimi.json` (ya lo reescribe en cada ejecución); `init` no lo toca. **RUPTURA** solo de nombre (la CLI no lee `style`). Alternativa: avisar y dejarlo. Base: «Más simple».
