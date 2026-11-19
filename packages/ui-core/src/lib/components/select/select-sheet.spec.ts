@@ -161,6 +161,8 @@ describe('Select en la hoja (R.34)', { timeout: 20_000 }, () => {
     await settle();
     expect(host.queries).toContain('mé');
     expect(options().map((o) => o.textContent?.trim())).toEqual(['México']);
+    // La cantidad de resultados se anuncia (a11y H2).
+    expect(sheet()!.querySelector('[role="status"]')!.textContent).toMatch(/1\b/);
     // Tab no cierra la hoja (el foco queda atrapado en ella).
     await press(input, 'Tab');
     expect(sheet()?.dataset['state']).toBe('open');

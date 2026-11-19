@@ -153,6 +153,13 @@ describe('Menús en la hoja (R.34)', () => {
     expect(root.className).toContain('[&[data-sheet-level]>:not([data-level-open])]:hidden!');
     expect(subTrigger.classList).toContain('hidden!');
     expect(document.activeElement?.textContent?.trim()).toBe('Por correo');
+    // El foco que pasa a la cabecera (Tab a «Atrás» o a la X) no cierra el nivel (a11y H4).
+    const level = document.activeElement as HTMLElement;
+    level.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: back() }));
+    back()!.focus();
+    await settle();
+    expect(title()).toBe('Invitar');
+    expect(back()).not.toBeNull();
     // «Atrás» vuelve: el título del menú, el anuncio y el foco en el ítem del submenú.
     back()!.click();
     await settle();

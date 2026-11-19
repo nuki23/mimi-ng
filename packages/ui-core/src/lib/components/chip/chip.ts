@@ -33,6 +33,8 @@ const CHIP_TONE = {
 const REMOVE_CLASSES = cn(
   'inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-current opacity-70 mimi-transition',
   'size-[var(--mimi-chip-remove-size,18px)] [&_svg]:size-3',
+  // Área de toque de 24 px (WCAG 2.5.8) sin cambiar el aspecto: un ::after centrado.
+  'relative after:absolute after:top-1/2 after:left-1/2 after:size-6 after:-translate-1/2',
   'hover:bg-[color:color-mix(in_oklab,var(--mimi-foreground)_12%,transparent)] hover:opacity-100 active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );

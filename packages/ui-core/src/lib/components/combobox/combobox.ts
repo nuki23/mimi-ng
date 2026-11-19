@@ -427,7 +427,8 @@ export class MimiComboboxOption {
             [value]="draft()"
             [attr.placeholder]="placeholder() || null"
             [attr.aria-label]="panelLabel() || null"
-            [attr.aria-describedby]="help() ? helpId : null"
+            [attr.aria-describedby]="sheetDescribedby()"
+            [attr.aria-invalid]="showInvalid() || null"
             (valueChange)="onText($event)"
             (keydown)="onSheetKeydown($event)"
           />
@@ -650,6 +651,11 @@ export class MimiCombobox<T = unknown>
   private readonly sheetField = viewChild<ElementRef<HTMLInputElement>>('sheetField');
   /** La presentación de esta apertura (se elige al abrir, R.34). */
   protected readonly presentationMode = signal<MimiResolvedPresentation>('popover');
+  /**
+   * La descripción del campo (la ayuda y el mensaje de error que le pone mimi-form-field), leída
+   * al abrir, para el buscador de la pantalla completa (a11y H7).
+   */
+  protected readonly sheetDescribedby = signal<string | null>(null);
   protected readonly sheetOpen = computed(
     () => this.open() && this.presentationMode() !== 'popover',
   );
@@ -854,6 +860,7 @@ export class MimiCombobox<T = unknown>
     this.panelLabel.set(
       this.ariaLabel() || field.labels?.[0]?.textContent?.trim() || this.placeholder(),
     );
+    this.sheetDescribedby.set(field.getAttribute('aria-describedby'));
     if (!this.rendered()) {
       this.presentationMode.set(
         mimiResolvePresentation(
@@ -918,7 +925,12 @@ export class MimiCombobox<T = unknown>
   /** Teclas del campo de la pantalla completa: Enter elige; Retroceso vacío quita el último chip. */
   protected onSheetKeydown(event: KeyboardEvent): void {
     if (event.isComposing || event.ctrlKey || event.metaKey || event.altKey) return;
-    if (event.key === 'Enter') {
+    if (event.key === 'Escape') {
+      // El combobox de aria del buscador (siempre abierto) se queda con Escape: no llega a la
+      // hoja. Cierra como la X (a11y H1).
+      event.preventDefault();
+      this.closeSheet();
+    } else if (event.key === 'Enter') {
       event.preventDefault();
       this.pickActive();
     } else if (

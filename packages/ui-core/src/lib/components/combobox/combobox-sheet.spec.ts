@@ -163,6 +163,27 @@ describe('Combobox a pantalla completa (R.34)', { timeout: 20_000 }, () => {
     expect(document.activeElement).toBe(search());
   });
 
+  it('Escape en el buscador la cierra y descarta lo escrito (a11y H1)', async () => {
+    narrow = true;
+    const { host, open, type, press, field } = await setup();
+    await open('single');
+    await type(search(), 'li');
+    await press(search(), 'Escape');
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(sheet()?.dataset['state'] ?? 'closed').not.toBe('open');
+    expect(field('single').value).toBe('');
+    expect(host.single()).toBeNull();
+  });
+
+  it('el buscador lleva aria-invalid y la descripción del campo (a11y H7)', async () => {
+    narrow = true;
+    const { open, field, settle } = await setup();
+    field('single').setAttribute('aria-describedby', 'mensaje-de-error');
+    await settle();
+    await open('single');
+    expect(search().getAttribute('aria-describedby')).toContain('mensaje-de-error');
+  });
+
   it('en escritorio, el panel de siempre; presentation="popover" lo mantiene en el teléfono', async () => {
     const { host, open, settle } = await setup();
     await open('single');

@@ -747,11 +747,22 @@ export class MimiMenuSub {
         event.stopPropagation();
       }
     };
+    // El foco que sale del nivel hacia la cabecera de la hoja («Atrás», la X) o las anclas de la
+    // trampa de foco no es salir del submenú: aria lo cerraría (a11y H4). Con eso, Tab llega a
+    // «Atrás» y tocarlo vuelve con el foco en el ítem del submenú.
+    const stopFocusOut = (event: Event) => {
+      const next = (event as FocusEvent).relatedTarget as Node | null;
+      if (!this.inSheet() || !this.levelOpen() || !next) return;
+      if (this.root?.element.contains(next)) return;
+      if (this.root?.element.closest('.mimi-sheet-pane')?.contains(next)) event.stopPropagation();
+    };
     host.addEventListener('mouseover', stopOver, true);
     host.addEventListener('mouseout', stopOut, true);
+    host.addEventListener('focusout', stopFocusOut, true);
     inject(DestroyRef).onDestroy(() => {
       host.removeEventListener('mouseover', stopOver, true);
       host.removeEventListener('mouseout', stopOut, true);
+      host.removeEventListener('focusout', stopFocusOut, true);
     });
   }
 
