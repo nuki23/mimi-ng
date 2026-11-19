@@ -99,6 +99,7 @@ const handled = new WeakSet<Event>();
             [menuId]="menuId"
             [label]="ariaLabel() ?? ''"
             [size]="sized.effective()"
+            sheet
             [class]="sheetPanelClasses()"
             (closeRequest)="close($event)"
           />

@@ -23,7 +23,12 @@ import {
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
-import { MIMI_OVERLAY_TEXT } from '@/components/ui/utils/overlay-config';
+import {
+  MIMI_OVERLAY_TEXT,
+  MIMI_SHEET_LEVELS,
+  type MimiSheetLevel,
+  type MimiSheetLevels,
+} from '@/components/ui/utils/overlay-config';
 
 /*
  * La hoja común de Mimi (R.34 y G4.2): un panel modal pegado a un borde de la pantalla (abajo, a
@@ -94,8 +99,12 @@ export class MimiSheetOutlet {
  * arrastre no la cierran solos: emiten `mimiSheetClose` y el componente decide (pone su `open` en
  * `false`), como hacen los paneles con el CDK.
  */
-@Directive({ selector: 'ng-template[mimiSheet]', exportAs: 'mimiSheet' })
-export class MimiSheetOverlay {
+@Directive({
+  selector: 'ng-template[mimiSheet]',
+  exportAs: 'mimiSheet',
+  providers: [{ provide: MIMI_SHEET_LEVELS, useExisting: MimiSheetOverlay }],
+})
+export class MimiSheetOverlay implements MimiSheetLevels {
   private readonly dialog = inject(Dialog);
   private readonly viewContainer = inject(ViewContainerRef);
   private readonly injector = inject(Injector);
@@ -148,6 +157,28 @@ export class MimiSheetOverlay {
   /** El contenedor del CDK (el elemento con `role="dialog"`) mientras está montada. */
   private readonly container = signal<HTMLElement | null>(null);
 
+  /** Niveles abiertos dentro de la hoja (submenús), el de arriba al final. */
+  readonly levels = signal<readonly MimiSheetLevel[]>([]);
+  /** El nivel de arriba, o null en el de la hoja. */
+  readonly level = computed(() => this.levels().at(-1) ?? null);
+  /** Título de la cabecera: el del nivel o el de la hoja. */
+  readonly headerTitle = computed(() => this.level()?.title ?? this.title() ?? '');
+  /** Lo que anuncia la región `aria-live` al cambiar de nivel (vacío hasta el primer cambio). */
+  readonly announcement = signal('');
+
+  push(level: MimiSheetLevel): void {
+    if (this.levels().includes(level)) return;
+    this.levels.update((levels) => [...levels, level]);
+    this.announcement.set(level.title);
+  }
+
+  remove(level: MimiSheetLevel): void {
+    const index = this.levels().indexOf(level);
+    if (index < 0) return;
+    this.levels.update((levels) => levels.slice(0, index));
+    this.announcement.set(this.headerTitle());
+  }
+
   private readonly sync = effect(() => {
     const open = this.open();
     untracked(() => (open ? this.show() : this.hide()));
@@ -181,7 +212,7 @@ export class MimiSheetOverlay {
 
   /** El nombre accesible del diálogo. */
   private labelledbyId(): string | null {
-    if (this.header() && this.title()) return this.titleId;
+    if (this.header() && this.headerTitle()) return this.titleId;
     return this.labelledby() || null;
   }
 
@@ -191,9 +222,11 @@ export class MimiSheetOverlay {
     this.closeRequest.emit(reason);
   }
 
-  /** La pide el marco («Atrás»). */
+  /** La pide el marco («Atrás»): sale del nivel de arriba o, sin niveles, avisa al componente. */
   requestBack(): void {
-    this.backRequest.emit();
+    const level = this.level();
+    if (level) level.back();
+    else this.backRequest.emit();
   }
 
   private show(): void {
@@ -247,6 +280,8 @@ export class MimiSheetOverlay {
       if (this.ref !== ref) return;
       this.ref = null;
       this.container.set(null);
+      this.levels.set([]);
+      this.announcement.set('');
       this.state.set('closed');
       this.detached.emit();
     });
@@ -314,7 +349,7 @@ const ICON_BUTTON_CLASSES = cn(
         [class]="headerClasses()"
         (pointerdown)="side() === 'full' ? null : onDragStart($event)"
       >
-        @if (host.back()) {
+        @if (host.back() || host.level()) {
           <button
             type="button"
             data-slot="back"
@@ -337,13 +372,13 @@ const ICON_BUTTON_CLASSES = cn(
             </svg>
           </button>
         }
-        @if (host.title()) {
+        @if (host.headerTitle()) {
           <h2
             data-slot="title"
             class="min-w-0 flex-1 truncate text-base leading-tight font-bold"
             [id]="host.titleId"
           >
-            {{ host.title() }}
+            {{ host.headerTitle() }}
           </h2>
         } @else {
           <span class="flex-1"></span>
@@ -398,6 +433,8 @@ const ICON_BUTTON_CLASSES = cn(
     <div data-slot="body" class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain">
       <ng-container [mimiSheetOutlet]="host.template" />
     </div>
+    <!-- El cambio de nivel (entrar en un submenú o volver), para los lectores de pantalla. -->
+    <span data-slot="announce" class="sr-only" aria-live="polite">{{ host.announcement() }}</span>
   `,
   styles: `
     @keyframes mimi-sheet-in-bottom {

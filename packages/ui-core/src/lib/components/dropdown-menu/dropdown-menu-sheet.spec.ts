@@ -116,7 +116,7 @@ describe('Menús en la hoja (R.34)', () => {
     expect(sheet()!.dataset['state']).toBe('open');
   });
 
-  it('un submenú en la hoja se abre en línea, dentro de la hoja (a11y H1)', async () => {
+  it('el panel de un submenú en la hoja va dentro de ella, no al lado (a11y H1)', async () => {
     narrow = true;
     const { el, settle } = await setup();
     el.querySelector<HTMLElement>('[data-test="trigger"]')!.click();
@@ -126,6 +126,43 @@ describe('Menús en la hoja (R.34)', () => {
     expect(panel.hasAttribute('data-in-sheet')).toBe(true);
     expect(panel.classList).toContain('static');
     expect(panel.classList).not.toContain('absolute');
+  });
+
+  it('un submenú en la hoja es un nivel aparte con «Atrás», con anuncio (R.34)', async () => {
+    narrow = true;
+    const { host, el, settle } = await setup();
+    el.querySelector<HTMLElement>('[data-test="trigger"]')!.click();
+    await settle();
+    const title = () => sheet()!.querySelector('[data-slot="title"]')!.textContent?.trim();
+    const back = () => sheet()!.querySelector<HTMLElement>('[data-slot="back"]');
+    const announce = () => sheet()!.querySelector('[data-slot="announce"]')!;
+    expect(back()).toBeNull();
+    expect(announce().getAttribute('aria-live')).toBe('polite');
+    const sub = sheet()!.querySelector<HTMLElement>('mimi-menu-sub')!;
+    const subTrigger = sub.querySelector<HTMLElement>('[role="menuitem"]')!;
+    subTrigger.click();
+    await settle();
+    // El nivel: «Atrás», el título del submenú, el anuncio y el foco en su primer ítem.
+    expect(back()).not.toBeNull();
+    expect(title()).toBe('Invitar');
+    expect(announce().textContent?.trim()).toBe('Invitar');
+    const root = sheet()!.querySelector<HTMLElement>('[role="menu"]')!;
+    expect(root.hasAttribute('data-sheet-level')).toBe(true);
+    expect(sub.hasAttribute('data-level-open')).toBe(true);
+    // Lo demás del nivel de arriba se esconde (y el ítem del submenú también).
+    expect(root.className).toContain('[&[data-sheet-level]>:not([data-level-open])]:hidden!');
+    expect(subTrigger.classList).toContain('hidden!');
+    expect(document.activeElement?.textContent?.trim()).toBe('Por correo');
+    // «Atrás» vuelve: el título del menú, el anuncio y el foco en el ítem del submenú.
+    back()!.click();
+    await settle();
+    expect(back()).toBeNull();
+    expect(title()).toBe('Acciones');
+    expect(announce().textContent?.trim()).toBe('Acciones');
+    expect(root.hasAttribute('data-sheet-level')).toBe(false);
+    expect(sub.hasAttribute('data-level-open')).toBe(false);
+    expect(document.activeElement).toBe(subTrigger);
+    expect(host.open()).toBe(true);
   });
 
   it('en escritorio sigue siendo popover; presentation="sheet" lo pide siempre', async () => {

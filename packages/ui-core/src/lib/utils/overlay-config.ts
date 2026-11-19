@@ -78,6 +78,28 @@ export function provideMimiOverlayText(text: Partial<MimiOverlayText>): Provider
   return { provide: MIMI_OVERLAY_TEXT, useValue: { ...MIMI_OVERLAY_TEXT_EN, ...text } };
 }
 
+/** Un nivel dentro de la hoja (un submenú): su título y cómo volver al de arriba. */
+export interface MimiSheetLevel {
+  title: string;
+  back: () => void;
+}
+
+/**
+ * Los niveles de la hoja (R.34): un submenú dentro de la hoja abre un nivel aparte, con «Atrás»
+ * y su título en la cabecera. Lo da la hoja (`utils/sheet`); aquí solo el token, sin CDK, para
+ * que el menú no traiga la hoja.
+ * @internal No forma parte de la API de Mimi.
+ */
+export interface MimiSheetLevels {
+  /** Entra en un nivel (queda arriba de la pila). */
+  push(level: MimiSheetLevel): void;
+  /** Sale de ese nivel (y de los que tenga encima). */
+  remove(level: MimiSheetLevel): void;
+}
+
+/** @internal No forma parte de la API de Mimi. */
+export const MIMI_SHEET_LEVELS = new InjectionToken<MimiSheetLevels>('MIMI_SHEET_LEVELS');
+
 /**
  * La presentación de verdad al abrir. La pedida gana; con `auto`, la global; con `auto` también,
  * la móvil del componente si la ventana es más angosta que el punto de corte (se mira **al

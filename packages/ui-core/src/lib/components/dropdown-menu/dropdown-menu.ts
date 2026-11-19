@@ -90,6 +90,7 @@ let nextId = 0;
           [labelledBy]="trigger()?.id"
           [initialFocus]="focusTarget"
           [size]="sized.effective()"
+          sheet
           [class]="sheetPanelClasses()"
           (closeRequest)="close($event)"
         />

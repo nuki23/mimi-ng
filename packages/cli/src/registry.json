@@ -62,7 +62,7 @@
       "peerDependencies": {
         "@angular/aria": "^22.2.4"
       },
-      "registryDependencies": ["utils/cn", "utils/overlay"]
+      "registryDependencies": ["utils/cn", "utils/overlay", "utils/overlay-config"]
     },
     "chip": {
       "type": "util",
