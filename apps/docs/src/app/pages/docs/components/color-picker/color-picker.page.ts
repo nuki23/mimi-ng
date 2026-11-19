@@ -13,6 +13,9 @@ import panelSource from './examples/color-picker-panel.example' with { loader: '
 import sizesSource from './examples/color-picker-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/color-picker-states.example' with { loader: 'text' };
+// @ts-expect-error
+import phoneSource from './examples/color-picker-phone.example' with { loader: 'text' };
+import { ColorPickerPhoneExample } from './examples/color-picker-phone.example';
 
 /** La página del Color Picker (tarea G2.12), con la plantilla de página (DP.2). */
 export const COLOR_PICKER_PAGE: DocPage = {
@@ -71,6 +74,14 @@ export const COLOR_PICKER_PAGE: DocPage = {
         component: ColorPickerPanelExample,
         source: panelSource as string,
       },
+      {
+        id: 'phone',
+        title: 'En el teléfono',
+        sentence:
+          'Debajo de 640 px `mimi-color-input` abre su panel en una hoja inferior; `presentation="sheet"` la pide aquí.',
+        component: ColorPickerPhoneExample,
+        source: phoneSource as string,
+      },
     ],
   },
   forms: 'color-picker',
@@ -86,6 +97,13 @@ export const COLOR_PICKER_PAGE: DocPage = {
   },
   api: {
     inputs: [
+      {
+        name: 'presentation',
+        type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
+        default: "'auto'",
+        description:
+          'Solo en `mimi-color-input`: cómo se abre. `auto`: hoja inferior debajo de 640 px.',
+      },
       {
         name: 'value',
         type: "string ('#4f46e5')",

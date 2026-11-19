@@ -37,7 +37,8 @@ describe('CommandPage', () => {
 
       // La demo (la paleta en la página), los tamaños y el diálogo con ⌘K.
       const previews = examples(fixture);
-      expect(previews.length).toBe(3);
+      // La demo, «Tamaños», el diálogo y «En el teléfono» (R.34).
+      expect(previews.length).toBe(4);
       expect(previews[1].code).toContain('size="lg"');
       expect(previews[1].example?.querySelectorAll('mimi-command').length).toBe(3);
       for (const { code } of previews) {

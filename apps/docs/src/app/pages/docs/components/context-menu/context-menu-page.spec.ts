@@ -27,8 +27,8 @@ describe('ContextMenuPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      // La demo (el ejemplo básico) y cinco ejemplos.
-      expect(previews.length).toBe(6);
+      // La demo (el ejemplo básico) y seis ejemplos, con «En el teléfono» (R.34).
+      expect(previews.length).toBe(7);
       // Tamaños: una zona por tamaño, cada una con su menú.
       expect(previews[1].code).toContain("['sm', 'md', 'lg']");
       expect(previews[1].example!.querySelectorAll('mimi-context-menu').length).toBe(3);

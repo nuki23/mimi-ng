@@ -158,14 +158,19 @@ let nextId = 0;
       </button>
       <ng-template mimiPopoverContent>
         @if (presets().length) {
-          <div
-            data-slot="presets"
-            class="flex w-[var(--mimi-date-presets-width,130px)] shrink-0 flex-col gap-0.5 border-e border-border p-2"
-          >
+          <div data-slot="presets" [class]="presetsClasses()">
             @for (preset of presets(); track preset.label) {
               <button
                 type="button"
-                [class]="isPreset(preset) ? presetOn : presetOff"
+                [class]="
+                  isPreset(preset)
+                    ? inSheet()
+                      ? sheetPresetOn
+                      : presetOn
+                    : inSheet()
+                      ? sheetPresetOff
+                      : presetOff
+                "
                 [attr.aria-pressed]="isPreset(preset)"
                 (click)="pickPreset(preset)"
               >
@@ -174,9 +179,11 @@ let nextId = 0;
             }
           </div>
         }
-        <div class="flex flex-col gap-2 p-[var(--mimi-date-padding,12px)]">
+        <!-- En la pantalla completa, el panel no lleva relleno (p-0): lo pone cada parte. -->
+        <div class="flex flex-col gap-2" [class]="inSheet() ? 'px-4 pt-3' : calendarPadding">
           <mimi-calendar
             mode="range"
+            [fill]="inSheet()"
             [size]="sized.effective()"
             [rangeStart]="shownStart()"
             [rangeEnd]="shownEnd()"
@@ -253,6 +260,18 @@ export class MimiDateRangePicker
   readonly touch = output<void>();
 
   private readonly trigger = viewChild.required<ElementRef<HTMLButtonElement>>('trigger');
+  private readonly popover = viewChild.required(MimiPopover);
+  /**
+   * Abierto a pantalla completa (el teléfono, R.34): el calendario se estira y los atajos van en
+   * una fila a lo ancho, encima (en una columna de 130px quedaban estrechos, con un hueco al lado).
+   */
+  protected readonly inSheet = computed(() => this.popover().presentationMode() !== 'popover');
+  protected readonly calendarPadding = 'p-[var(--mimi-date-padding,12px)]';
+  protected readonly presetsClasses = computed(() =>
+    this.inSheet()
+      ? 'flex w-full flex-row flex-wrap gap-1.5 border-b border-border px-4 pb-3'
+      : 'flex w-[var(--mimi-date-presets-width,130px)] shrink-0 flex-col gap-0.5 border-e border-border p-2',
+  );
   readonly fieldState = injectFieldState();
   get controlElement(): HTMLElement {
     return this.trigger().nativeElement;
@@ -268,6 +287,9 @@ export class MimiDateRangePicker
   protected readonly startPick = signal<MimiDate | null>(null);
   protected readonly presetOn = PRESET.on;
   protected readonly presetOff = PRESET.off;
+  /** En la fila de la pantalla completa, cada atajo con borde y 36px de alto (para el dedo). */
+  protected readonly sheetPresetOn = cn(PRESET.on, 'h-9 border border-border px-3');
+  protected readonly sheetPresetOff = cn(PRESET.off, 'h-9 border border-border px-3');
 
   protected readonly lang = computed(() => this.locale() || this.defaultLocale);
   protected readonly classes = computed(() => cn(MIMI_DATE_TRIGGER_CLASSES, this.userClass()));

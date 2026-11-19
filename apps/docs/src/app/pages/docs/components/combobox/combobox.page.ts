@@ -3,7 +3,7 @@ import { ComboboxAsyncExample } from './examples/combobox-async.example';
 import { ComboboxCityExample } from './examples/combobox-city.example';
 import { ComboboxCreateExample } from './examples/combobox-create.example';
 import { ComboboxCustomExample } from './examples/combobox-custom.example';
-import { ComboboxDeclarativeExample } from './examples/combobox-declarative.example';
+import { ComboboxPhoneExample } from './examples/combobox-phone.example';
 import { ComboboxMultipleExample } from './examples/combobox-multiple.example';
 import { ComboboxOptionsExample } from './examples/combobox-options.example';
 import { ComboboxSizesExample } from './examples/combobox-sizes.example';
@@ -19,7 +19,7 @@ import createSource from './examples/combobox-create.example' with { loader: 'te
 // @ts-expect-error
 import customSource from './examples/combobox-custom.example' with { loader: 'text' };
 // @ts-expect-error
-import declarativeSource from './examples/combobox-declarative.example' with { loader: 'text' };
+import phoneSource from './examples/combobox-phone.example' with { loader: 'text' };
 // @ts-expect-error
 import multipleSource from './examples/combobox-multiple.example' with { loader: 'text' };
 // @ts-expect-error
@@ -88,12 +88,12 @@ export const COMBOBOX_PAGE: DocPage = {
     ],
     advanced: [
       {
-        id: 'declarative',
-        title: 'Grupos y botón de limpiar',
+        id: 'phone',
+        title: 'En el teléfono',
         sentence:
-          'Opciones y grupos escritos en la plantilla, también dentro de un `@for`; `clearable` quita el valor desde el sitio del chevron.',
-        component: ComboboxDeclarativeExample,
-        source: declarativeSource as string,
+          'Debajo de 640 px se abre a pantalla completa con su buscador; `presentation="fullscreen"` lo pide aquí. Opciones y grupos van en la plantilla.',
+        component: ComboboxPhoneExample,
+        source: phoneSource as string,
       },
       {
         id: 'multiple',
@@ -159,6 +159,18 @@ export const COMBOBOX_PAGE: DocPage = {
   },
   api: {
     inputs: [
+      {
+        name: 'presentation',
+        type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
+        default: "'auto'",
+        description: 'Cómo se abre. `auto`: pantalla completa debajo de 640 px y panel desde ahí.',
+      },
+      {
+        name: 'sheetTitle',
+        type: 'string',
+        default: '—',
+        description: 'Título de la pantalla completa. Sin él, el nombre del campo.',
+      },
       {
         name: 'value',
         type: 'T | null · T[]',

@@ -10,6 +10,9 @@ import reportSource from './examples/date-range-report.example' with { loader: '
 import sizesSource from './examples/date-range-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/date-range-states.example' with { loader: 'text' };
+// @ts-expect-error
+import phoneSource from './examples/date-range-phone.example' with { loader: 'text' };
+import { DateRangePhoneExample } from './examples/date-range-phone.example';
 
 /** La página del Date Range (tarea G2.9b), con la plantilla de página (DP.2). */
 export const DATE_RANGE_PAGE: DocPage = {
@@ -60,6 +63,16 @@ export const DATE_RANGE_PAGE: DocPage = {
         source: statesSource as string,
       },
     ],
+    advanced: [
+      {
+        id: 'phone',
+        title: 'En el teléfono',
+        sentence:
+          'Debajo de 640 px se abre a pantalla completa: los atajos en una fila y un mes a lo ancho. `presentation="fullscreen"` lo pide aquí.',
+        component: DateRangePhoneExample,
+        source: phoneSource as string,
+      },
+    ],
   },
   forms: 'date-range',
   accessibility: {
@@ -74,6 +87,12 @@ export const DATE_RANGE_PAGE: DocPage = {
   },
   api: {
     inputs: [
+      {
+        name: 'presentation',
+        type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
+        default: "'auto'",
+        description: 'Cómo se abre. `auto`: pantalla completa debajo de 640 px y panel desde ahí.',
+      },
       {
         name: 'value',
         type: 'MimiDateRange | null ({ start, end })',

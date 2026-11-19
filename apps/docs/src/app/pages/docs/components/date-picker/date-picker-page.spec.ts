@@ -29,7 +29,8 @@ describe('DatePickerPage', () => {
       const previews = examples(fixture);
       // La demo y cuatro ejemplos: el vivo de los tres formularios se fue (repetía las pestañas de
       // «Formularios») y sus estados pasaron a «Estados»; «Tamaños» va primero.
-      expect(previews.length).toBe(5);
+      // Más «En el teléfono» (R.34).
+      expect(previews.length).toBe(6);
       expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-date-picker, mimi-calendar')).not.toBeNull();

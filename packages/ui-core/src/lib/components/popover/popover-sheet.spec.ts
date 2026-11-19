@@ -18,13 +18,17 @@ import { MimiPopoverImports } from './popover';
       <ng-template mimiPopoverContent><input data-test="email" /></ng-template>
     </mimi-popover>
     <mimi-date-picker data-test="date" aria-label="Entrega" />
-    <mimi-date-range data-test="range" aria-label="Viaje" />
+    <mimi-date-range data-test="range" aria-label="Viaje" [presets]="presets" />
     <mimi-color-input data-test="color" aria-label="Color" />
   `,
 })
 class Host {
   readonly presentation = signal<MimiOverlayPresentation>('auto');
   readonly open = signal(false);
+  readonly presets = [
+    { label: 'Hoy', range: { start: '2026-11-18', end: '2026-11-18' } },
+    { label: 'Esta semana', range: { start: '2026-11-16', end: '2026-11-22' } },
+  ];
 }
 
 describe('Popover y los selectores en la hoja (R.34)', () => {
@@ -107,6 +111,40 @@ describe('Popover y los selectores en la hoja (R.34)', () => {
     await settle();
     await open('[data-test="color"] [mimiPopoverTrigger]');
     expect(sheet()?.dataset['side']).toBe('bottom');
+  });
+
+  it('en la hoja, el calendario se estira a lo ancho y los atajos de Date Range van en una fila', async () => {
+    narrow = true;
+    const { settle, open } = await setup();
+    await open('[data-test="date"] [mimiPopoverTrigger]');
+    const calendar = sheet()!.querySelector<HTMLElement>('mimi-calendar')!;
+    expect(calendar.hasAttribute('data-fill')).toBe(true);
+    expect(calendar.classList).toContain('w-full');
+    expect(calendar.querySelector('[role="grid"]')!.className).toContain(
+      'grid-cols-[repeat(7,minmax(0,1fr))]',
+    );
+    sheet()!.querySelector<HTMLElement>('[data-slot="close"]')!.click();
+    await settle();
+    // Date Range a pantalla completa: los atajos, una fila a lo ancho encima del calendario.
+    await open('[data-test="range"] [mimiPopoverTrigger]');
+    const presets = sheet()!.querySelector<HTMLElement>('[data-slot="presets"]')!;
+    expect(presets.classList).toContain('w-full');
+    expect(presets.classList).toContain('flex-row');
+    expect(presets.classList).not.toContain('border-e');
+    // El panel de Date Range no tiene relleno: los atajos y el calendario llevan el suyo.
+    expect(presets.classList).toContain('px-4');
+    const rangeCalendar = sheet()!.querySelector('mimi-calendar')!;
+    expect(rangeCalendar.hasAttribute('data-fill')).toBe(true);
+    expect(rangeCalendar.parentElement!.classList).toContain('px-4');
+    sheet()!.querySelector<HTMLElement>('[data-slot="close"]')!.click();
+    await settle();
+    // En escritorio (popover), el calendario sigue con su ancho propio.
+    narrow = false;
+    await open('[data-test="date"] [mimiPopoverTrigger]');
+    const inPopover = document.querySelector<HTMLElement>(
+      '[data-mimi-overlay-panel] mimi-calendar',
+    )!;
+    expect(inPopover.hasAttribute('data-fill')).toBe(false);
   });
 
   it('en escritorio, y con mobileBreakpoint 0, los selectores siguen en popover', async () => {

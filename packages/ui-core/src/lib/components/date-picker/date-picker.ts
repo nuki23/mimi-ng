@@ -129,6 +129,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
       </button>
       <ng-template mimiPopoverContent>
         <mimi-calendar
+          [fill]="inSheet()"
           [size]="sized.effective()"
           [value]="calendarValue()"
           [min]="min() ?? null"
@@ -203,6 +204,9 @@ export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFi
   readonly touch = output<void>();
 
   private readonly trigger = viewChild.required<ElementRef<HTMLButtonElement>>('trigger');
+  private readonly popover = viewChild.required(MimiPopover);
+  /** Abierto en la hoja (el teléfono, R.34): el calendario se estira a lo ancho. */
+  protected readonly inSheet = computed(() => this.popover().presentationMode() !== 'popover');
   readonly fieldState = injectFieldState();
   get controlElement(): HTMLElement {
     return this.trigger().nativeElement;

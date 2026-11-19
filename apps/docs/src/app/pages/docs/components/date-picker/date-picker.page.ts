@@ -16,6 +16,9 @@ import localeSource from './examples/date-picker-locale.example' with { loader: 
 import sizesSource from './examples/date-picker-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/date-picker-states.example' with { loader: 'text' };
+// @ts-expect-error
+import phoneSource from './examples/date-picker-phone.example' with { loader: 'text' };
+import { DatePickerPhoneExample } from './examples/date-picker-phone.example';
 
 /** La página del Date Picker y del calendario (tarea G2.9a), con la plantilla de página (DP.2). */
 export const DATE_PICKER_PAGE: DocPage = {
@@ -93,6 +96,14 @@ export const DATE_PICKER_PAGE: DocPage = {
         component: DatePickerCalendarExample,
         source: calendarSource as string,
       },
+      {
+        id: 'phone',
+        title: 'En el teléfono',
+        sentence:
+          'Debajo de 640 px el calendario se abre en una hoja inferior, a lo ancho; `presentation="sheet"` la pide aquí.',
+        component: DatePickerPhoneExample,
+        source: phoneSource as string,
+      },
     ],
   },
   forms: 'date-picker',
@@ -113,6 +124,12 @@ export const DATE_PICKER_PAGE: DocPage = {
   },
   api: {
     inputs: [
+      {
+        name: 'presentation',
+        type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
+        default: "'auto'",
+        description: 'Cómo se abre. `auto`: hoja inferior debajo de 640 px y panel desde ahí.',
+      },
       {
         name: 'value',
         type: "MimiDate | null ('2026-09-30')",

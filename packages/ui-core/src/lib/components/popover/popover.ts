@@ -214,6 +214,11 @@ export class MimiPopover {
   private readonly overlayConfig = inject(MIMI_OVERLAY_CONFIG);
   /** La presentación de esta apertura (se elige al abrir). */
   protected readonly mode = signal<MimiResolvedPresentation>('popover');
+  /**
+   * Cómo se abrió la última vez (`popover`, `sheet` o `fullscreen`). Lo leen Date Picker y Date
+   * Range para estirar el calendario en la hoja.
+   */
+  readonly presentationMode = this.mode.asReadonly();
 
   protected readonly trigger = contentChild(MimiPopoverTrigger);
   protected readonly content = contentChild(MimiPopoverContent);

@@ -19,7 +19,8 @@ Lo que quedaba de la 0.1.x se quita en esta versión, sin obsoletos (política d
 
 ### Nuevo
 
-- **`presentation`** (`'auto' | 'popover' | 'sheet' | 'fullscreen'`) en Popover, Date Picker, Date Range, Color Picker (`mimi-color-input`), Dropdown Menu, Context Menu y `mimi-command-dialog`, y `sheetTitle` para el título de la hoja.
+- **`presentation`** (`'auto' | 'popover' | 'sheet' | 'fullscreen'`) en Popover, Select, Combobox, Date Picker, Date Range, Color Picker (`mimi-color-input`), Dropdown Menu, Context Menu y `mimi-command-dialog`, y `sheetTitle` para el título de la hoja. En la hoja, los submenús son un nivel aparte con «Atrás», el calendario ocupa el ancho y los atajos de Date Range van en una fila. Cada página tiene su ejemplo «En el teléfono».
+- **Calendar: `fill`**, para que ocupe todo el ancho que tenga (las columnas de los días se reparten el espacio). **Popover: `presentationMode`** (solo lectura), cómo se abrió.
 - **Sheet** (G4.2): un panel modal pegado a un lado de la pantalla (`side="left" | "right" | "bottom"`), flotante, con el radio de las tarjetas y, abajo, una barra de agarre; `size` (`sm`, `md`, `lg`), `[(open)]`, `disableClose`, y las piezas `mimiSheetTrigger`, `mimiSheetContent`, `mimiSheetHeader`, `mimiSheetTitle`, `mimiSheetDescription`, `mimiSheetBody`, `mimiSheetFooter` y `mimiSheetClose`. Se cierra con Escape, con un toque en el fondo, con la X o arrastrando hacia el borde; el foco queda dentro y vuelve al botón; con el teclado del móvil abierto, se achica a la parte visible. Tokens `--mimi-sheet-*`. `ng g mimi sheet`.
 - **La hoja común** (`utils/sheet`, R.34), la que usa Sheet y, en el teléfono, los paneles de los componentes; `provideMimiOverlay({ mobileBreakpoint, presentation })` y `provideMimiOverlayText` (`MIMI_OVERLAY_TEXT_ES`) en `utils/overlay-config`.
 

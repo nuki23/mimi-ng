@@ -29,7 +29,8 @@ describe('DateRangePage', () => {
       const previews = examples(fixture);
       // La demo, «Tamaños» y «Estados»: el vivo de los tres formularios se fue (repetía las
       // pestañas de «Formularios») y sus estados pasaron a «Estados».
-      expect(previews.length).toBe(3);
+      // Más «En el teléfono» (R.34).
+      expect(previews.length).toBe(4);
       expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-date-range button[aria-haspopup]')).not.toBeNull();
