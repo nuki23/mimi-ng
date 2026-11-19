@@ -207,8 +207,10 @@ export class MimiMenuPanel implements MimiMenuHost {
     const next = event.relatedTarget as Node | null;
     if (!next || this.element.contains(next) || next === this.focusExempt()) return;
     // Dentro de la hoja del teléfono (R.34), Tab va a la X o a las anclas de la trampa de foco del
-    // CDK (hermanas del contenedor, dentro de su panel): sigue en el diálogo, no cierra.
-    if (this.element.closest('.mimi-sheet-pane, [data-mimi-sheet]')?.contains(next)) return;
+    // CDK (hermanas del contenedor, dentro de su panel): sigue en el diálogo, no cierra. El panel
+    // (`.mimi-sheet-pane`) contiene las dos; el marco (`[data-mimi-sheet]`) no contiene las anclas
+    // (por eso Tab cerraba la hoja en Chrome: `closest` con los dos selectores daba el marco).
+    if (this.element.closest('.mimi-sheet-pane')?.contains(next)) return;
     this.closeRequest.emit(false);
   }
 

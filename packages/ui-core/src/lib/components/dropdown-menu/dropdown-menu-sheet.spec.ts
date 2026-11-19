@@ -99,6 +99,23 @@ describe('Menús en la hoja (R.34)', () => {
     expect(sheet()!.dataset['state']).toBe('open');
   });
 
+  it('Tab hacia el ancla de la trampa de foco del CDK (fuera del marco) tampoco cierra', async () => {
+    narrow = true;
+    const { host, el, settle } = await setup();
+    el.querySelector<HTMLElement>('[data-test="trigger"]')!.click();
+    await settle();
+    const item = sheet()!.querySelector<HTMLElement>('[role="menuitem"]')!;
+    const anchor = sheet()!
+      .closest('.mimi-sheet-pane')!
+      .querySelector<HTMLElement>('.cdk-focus-trap-anchor')!;
+    expect(anchor).not.toBeNull();
+    expect(sheet()!.contains(anchor)).toBe(false);
+    item.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: anchor }));
+    await settle();
+    expect(host.open()).toBe(true);
+    expect(sheet()!.dataset['state']).toBe('open');
+  });
+
   it('un submenú en la hoja se abre en línea, dentro de la hoja (a11y H1)', async () => {
     narrow = true;
     const { el, settle } = await setup();
