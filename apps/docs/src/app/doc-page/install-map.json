@@ -30,6 +30,8 @@
       "utils/field-state",
       "utils/field-styles",
       "utils/overlay",
+      "utils/overlay-config",
+      "utils/sheet",
       "utils/size"
     ],
     "packages": ["@angular/aria", "@angular/cdk", "@angular/forms"],
@@ -148,6 +150,8 @@
       "utils/field-state",
       "utils/field-styles",
       "utils/overlay",
+      "utils/overlay-config",
+      "utils/sheet",
       "utils/size"
     ],
     "packages": ["@angular/aria", "@angular/cdk", "@angular/forms"],
@@ -170,6 +174,8 @@
       "utils/field-state",
       "utils/field-styles",
       "utils/overlay",
+      "utils/overlay-config",
+      "utils/sheet",
       "utils/size"
     ],
     "packages": ["@angular/aria", "@angular/cdk", "@angular/forms"],

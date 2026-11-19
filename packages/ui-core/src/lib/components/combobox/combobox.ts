@@ -4,6 +4,7 @@ import { CdkConnectedOverlay, type ConnectedOverlayPositionChange } from '@angul
 import {
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   DestroyRef,
   Directive,
   ElementRef,
@@ -65,6 +66,13 @@ import {
   mimiPlacedSide,
   mimiWaitForExit,
 } from '@/components/ui/utils/overlay';
+import {
+  MIMI_OVERLAY_CONFIG,
+  type MimiOverlayPresentation,
+  type MimiResolvedPresentation,
+  mimiResolvePresentation,
+} from '@/components/ui/utils/overlay-config';
+import { MimiSheetOverlay } from '@/components/ui/utils/sheet';
 import { MIMI_COMBOBOX_TEXT } from './combobox-texts';
 
 /*
@@ -145,6 +153,20 @@ const OPTION_CLASSES = cn(
 const OPTION_MULTIPLE_CLASSES = cn(OPTION_CLASSES, 'gap-2.5');
 
 /**
+ * En la pantalla completa (R.34): el campo de búsqueda con la caja de los campos, la lista ocupa
+ * lo que quede y cada opción mide 44 px (objetivo táctil).
+ */
+const SHEET_SEARCH_CLASSES = cn(
+  'mx-4 mb-2 flex h-11 shrink-0 items-center px-3 font-sans text-sm text-foreground',
+  'rounded-[var(--mimi-combobox-radius,var(--mimi-radius,0.75rem))]',
+  fieldBoxStyles,
+);
+const SHEET_INPUT_CLASSES = cn(INPUT_BASE, 'h-full p-0');
+const SHEET_LIST_CLASSES = 'max-h-none min-h-0 flex-1 px-3 pb-3';
+const SHEET_OPTION_CLASSES = cn(OPTION_CLASSES, 'min-h-11');
+const SHEET_OPTION_MULTIPLE_CLASSES = cn(OPTION_MULTIPLE_CLASSES, 'min-h-11');
+
+/**
  * Ícono o texto al principio del campo (el pin del diseño):
  * `<svg mimiComboboxStart lucideMapPin />`.
  */
@@ -207,6 +229,7 @@ export class MimiComboboxOption {
     MimiOverlayFollow,
     MimiOptionList,
     MimiChip,
+    MimiSheetOverlay,
   ],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiCombobox }],
   template: `
@@ -260,7 +283,7 @@ export class MimiComboboxOption {
         [attr.aria-labelledby]="ariaLabelledby() || null"
         [attr.aria-describedby]="help() ? helpId : null"
         (valueChange)="onText($event)"
-        (expandedChange)="setOpen($event)"
+        (expandedChange)="onExpandedChange($event)"
         (keydown)="onKeydown($event)"
         (click)="setOpen(true)"
       />
@@ -376,6 +399,73 @@ export class MimiComboboxOption {
         </div>
       </ng-template>
     </ng-template>
+
+    <!--
+      En el teléfono (R.34): un diálogo a pantalla completa con su propio campo de búsqueda arriba
+      (con su combobox: el panel de aria del campo no entra), los chips del múltiple y la lista.
+    -->
+    <ng-template
+      mimiSheet
+      [mimiSheetOpen]="sheetOpen()"
+      [mimiSheetSide]="presentationMode() === 'sheet' ? 'bottom' : 'full'"
+      [mimiSheetTitle]="sheetTitle() || panelLabel()"
+      [mimiSheetSize]="sized.effective()"
+      [mimiSheetClass]="panelClass()"
+      (mimiSheetClose)="closeSheet()"
+      (mimiSheetDetach)="onSheetDetach()"
+    >
+      <div class="flex min-h-0 flex-1 flex-col">
+        <div [class]="sheetSearchClasses">
+          <input
+            #sheetField
+            #sheetCombobox="ngCombobox"
+            ngCombobox
+            type="text"
+            autocomplete="off"
+            [alwaysExpanded]="true"
+            [class]="sheetInputClasses"
+            [value]="draft()"
+            [attr.placeholder]="placeholder() || null"
+            [attr.aria-label]="panelLabel() || null"
+            [attr.aria-describedby]="help() ? helpId : null"
+            (valueChange)="onText($event)"
+            (keydown)="onSheetKeydown($event)"
+          />
+        </div>
+        @if (multiple() && chips().length) {
+          <div data-slot="sheet-chips" class="flex shrink-0 flex-wrap gap-1.5 px-4 pb-2">
+            @for (chip of chips(); track $index) {
+              <mimi-chip
+                [label]="chip.label"
+                [removable]="!disabled() && !readonly()"
+                (remove)="removeAt($index)"
+                >{{ chip.label }}</mimi-chip
+              >
+            }
+          </div>
+        }
+        <ng-template ngComboboxPopup [combobox]="sheetCombobox" popupType="listbox">
+          <mimi-option-list
+            [sections]="visibleSections()"
+            [selectedKeys]="selectedKeys()"
+            [query]="query()"
+            [loading]="loading()"
+            [loadingText]="texts.loading"
+            [emptyTitle]="emptyTitle()"
+            [emptyText]="query() ? texts.noResultsHint : ''"
+            [status]="status()"
+            [createLabel]="createLabel()"
+            [optionTemplate]="optionTemplate()?.templateRef ?? null"
+            [listId]="listId"
+            [label]="panelLabel()"
+            [listClass]="sheetListClasses"
+            [optionClass]="multiple() ? sheetOptionMultipleClasses : sheetOptionClasses"
+            [multi]="multiple()"
+            (pick)="pick($event)"
+          />
+        </ng-template>
+      </div>
+    </ng-template>
   `,
   styles: MIMI_OVERLAY_ANIMATION,
   host: {
@@ -387,6 +477,7 @@ export class MimiComboboxOption {
     '[attr.aria-labelledby]': 'null',
     // `align` es un atributo HTML antiguo: el navegador lo convierte en text-align (se heredaría).
     '[attr.align]': 'null',
+    '[attr.data-presentation]': 'open() ? presentationMode() : null',
     '(focusin)': 'focused.set(true)',
     '(focusout)': 'onFocusOut($event)',
   },
@@ -458,6 +549,13 @@ export class MimiCombobox<T = unknown>
   readonly side = input<MimiOverlaySide>('bottom');
   /** Alineación del panel con el campo (como Popover). */
   readonly align = input<MimiOverlayAlign>('start');
+  /**
+   * Cómo se abre (R.34): `auto` (por defecto) = panel desde 640 px y, por debajo, pantalla
+   * completa con su campo de búsqueda; `popover`, `sheet` o `fullscreen` lo fijan.
+   */
+  readonly presentation = input<MimiOverlayPresentation>('auto');
+  /** Título de la pantalla completa. Sin él, el nombre del campo. */
+  readonly sheetTitle = input<string>();
 
   /** Se emite cuando el foco sale del Combobox (campo y panel): marca el control como tocado. */
   readonly touch = output<void>();
@@ -541,6 +639,20 @@ export class MimiCombobox<T = unknown>
   protected readonly optionClasses = OPTION_CLASSES;
   protected readonly optionMultipleClasses = OPTION_MULTIPLE_CLASSES;
   protected readonly viewportMargin = MIMI_VIEWPORT_MARGIN;
+  protected readonly sheetSearchClasses = SHEET_SEARCH_CLASSES;
+  protected readonly sheetInputClasses = SHEET_INPUT_CLASSES;
+  protected readonly sheetListClasses = SHEET_LIST_CLASSES;
+  protected readonly sheetOptionClasses = SHEET_OPTION_CLASSES;
+  protected readonly sheetOptionMultipleClasses = SHEET_OPTION_MULTIPLE_CLASSES;
+  protected readonly sized = inject(MimiSized);
+  private readonly overlayConfig = inject(MIMI_OVERLAY_CONFIG);
+  private readonly document = inject(DOCUMENT);
+  private readonly sheetField = viewChild<ElementRef<HTMLInputElement>>('sheetField');
+  /** La presentación de esta apertura (se elige al abrir, R.34). */
+  protected readonly presentationMode = signal<MimiResolvedPresentation>('popover');
+  protected readonly sheetOpen = computed(
+    () => this.open() && this.presentationMode() !== 'popover',
+  );
   protected readonly positions = computed(() =>
     mimiConnectedPositions(this.side(), this.align(), OFFSET).slice(0, 6),
   );
@@ -742,12 +854,27 @@ export class MimiCombobox<T = unknown>
     this.panelLabel.set(
       this.ariaLabel() || field.labels?.[0]?.textContent?.trim() || this.placeholder(),
     );
+    if (!this.rendered()) {
+      this.presentationMode.set(
+        mimiResolvePresentation(
+          this.presentation(),
+          'fullscreen',
+          this.overlayConfig,
+          this.document.defaultView,
+        ),
+      );
+    }
     this.state.set('open');
+    // En la pantalla completa, la abre y la cierra `mimiSheet` (el foco va a su campo y vuelve).
+    if (this.presentationMode() !== 'popover') return;
     this.rendered.set(true);
   }
 
   private hide(): void {
-    if (!this.rendered()) return;
+    if (!this.rendered()) {
+      this.state.set('closed');
+      return;
+    }
     this.state.set('closed');
     const panel = this.panel()?.nativeElement;
     const closing = ++this.closing;
@@ -766,6 +893,44 @@ export class MimiCombobox<T = unknown>
   protected onDetach(): void {
     this.rendered.set(false);
     if (this.open()) this.open.set(false);
+  }
+
+  /**
+   * aria abre y cierra con el campo. Con la pantalla completa abierta, el foco pasa a ella y aria
+   * cierra («foco fuera»): eso no cuenta; se cierra con lo suyo (R.34).
+   */
+  protected onExpandedChange(open: boolean): void {
+    if (!open && this.sheetOpen()) return;
+    this.setOpen(open);
+  }
+
+  /** La X, Escape o el fondo: lo escrito sin elegir se descarta, como al salir del campo. */
+  protected closeSheet(): void {
+    this.commit();
+    this.setOpen(false);
+  }
+
+  /** La pantalla completa se fue (si la cerró el cdk, el Combobox también se cierra). */
+  protected onSheetDetach(): void {
+    if (this.open() && this.presentationMode() !== 'popover') this.closeSheet();
+  }
+
+  /** Teclas del campo de la pantalla completa: Enter elige; Retroceso vacío quita el último chip. */
+  protected onSheetKeydown(event: KeyboardEvent): void {
+    if (event.isComposing || event.ctrlKey || event.metaKey || event.altKey) return;
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.pickActive();
+    } else if (
+      event.key === 'Backspace' &&
+      this.multiple() &&
+      !this.readonly() &&
+      !this.draft() &&
+      this.chips().length
+    ) {
+      event.preventDefault();
+      this.removeAt(this.chips().length - 1);
+    }
   }
 
   /** Un clic fuera cierra; en el propio campo no (lo maneja el campo). */
@@ -846,7 +1011,9 @@ export class MimiCombobox<T = unknown>
     if (this.disabled()) return;
     const chip = this.chips()[index];
     if (!chip) return;
-    this.field().nativeElement.focus();
+    // En la pantalla completa, a su campo de búsqueda.
+    const sheetField = this.sheetOpen() ? this.sheetField()?.nativeElement : undefined;
+    (sheetField ?? this.field().nativeElement).focus();
     this.value.set(this.values().filter((value) => !this.matches(chip, value)));
     this.announce.removed(chip.label);
   }
@@ -940,6 +1107,8 @@ export class MimiCombobox<T = unknown>
 
   /** El foco salió del Combobox entero (campo y panel). */
   protected onFocusOut(event: FocusEvent): void {
+    // Al abrir la pantalla completa el foco pasa a ella: no es salir del Combobox.
+    if (this.sheetOpen()) return;
     const next = event.relatedTarget as Node | null;
     if (next && (this.host.contains(next) || this.panel()?.nativeElement.contains(next))) return;
     this.focused.set(false);

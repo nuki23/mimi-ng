@@ -1,4 +1,4 @@
-import { ComboboxWidget } from '@angular/aria/combobox';
+import { COMBOBOX_POPUP, type ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
 import {
   ChangeDetectionStrategy,
@@ -309,6 +309,31 @@ export class MimiListOutlet {
   });
 }
 
+/**
+ * Un popup de combobox que no hace nada: la lista de `ngComboboxWidget` lo pide por DI, y fuera de
+ * un combobox no hay ninguno.
+ */
+const NO_POPUP = {
+  _registerWidget: () => undefined,
+  _unregisterWidget: () => undefined,
+  _pattern: { onFocusin: () => undefined, onFocusout: () => undefined },
+} as unknown as ComboboxPopup;
+
+/**
+ * Uso interno (R.34): una `mimi-option-list` dentro de este elemento funciona sola, sin combobox
+ * (en la hoja del teléfono, la lista de Select sin buscador). Con `standalone` en la lista, ella
+ * recibe el foco y su teclado (flechas, Inicio, Fin, letras, Enter y Espacio eligen).
+ * @internal No forma parte de la API de Mimi.
+ */
+@Directive({
+  selector: '[mimiOptionListStandalone]',
+  providers: [{ provide: COMBOBOX_POPUP, useValue: NO_POPUP }],
+})
+export class MimiOptionListStandalone {}
+
+/** Pausa que reinicia la búsqueda por letra (la de aria): Espacio no elige mientras. */
+const TYPEAHEAD_DELAY = 500;
+
 /** Clave de la fila «Crear». No choca con las de las opciones (son números). */
 export const MIMI_LIST_CREATE_KEY = 'create';
 
@@ -349,7 +374,7 @@ const SKELETON_CLASSES =
       #listbox="ngListbox"
       focusMode="activedescendant"
       selectionMode="explicit"
-      tabindex="-1"
+      [tabindex]="standalone() ? 0 : -1"
       [multi]="multi()"
       [softDisabled]="false"
       [id]="listId()"
@@ -362,7 +387,7 @@ const SKELETON_CLASSES =
       (valueChange)="resync()"
       (click)="onClick($event)"
       (pointermove)="onPointerMove($event)"
-      (keydown)="keepFirst.set(false)"
+      (keydown)="onKeydown($event)"
     >
       @for (section of sections(); track section.id) {
         <div
@@ -542,10 +567,16 @@ export class MimiOptionList {
   /** Clases de la lista y de cada opción (literales, del componente que la usa). */
   readonly listClass = input('');
   readonly optionClass = input('');
-  /** Se eligió con el puntero una opción habilitada (o «Crear»). */
+  /**
+   * La lista recibe el foco y elige con Enter y Espacio (sin combobox: dentro de un
+   * `mimiOptionListStandalone`, R.34).
+   */
+  readonly standalone = input(false, { transform: booleanAttribute });
+  /** Se eligió una opción habilitada (o «Crear»): con el puntero o, en `standalone`, el teclado. */
   readonly pick = output<string>();
 
   private readonly listbox = viewChild.required<Listbox<string>>('listbox');
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
 
   protected readonly icon = ICON;
   protected readonly createKey = MIMI_LIST_CREATE_KEY;
@@ -631,6 +662,25 @@ export class MimiOptionList {
 
   private optionAt(event: Event): HTMLElement | null {
     return (event.target as Element | null)?.closest<HTMLElement>('[role="option"]') ?? null;
+  }
+
+  /** Última letra de la búsqueda por teclado: mientras dura, Espacio es parte del texto. */
+  private typedAt = -Infinity;
+
+  protected onKeydown(event: KeyboardEvent): void {
+    this.keepFirst.set(false);
+    if (!this.standalone() || event.altKey || event.ctrlKey || event.metaKey) return;
+    const { key } = event;
+    if (key === 'Enter' || (key === ' ' && event.timeStamp - this.typedAt > TYPEAHEAD_DELAY)) {
+      const active = this.activeKey();
+      const option =
+        active === null ? null : this.host.querySelector(`[data-key="${active}"][role="option"]`);
+      event.preventDefault();
+      if (active !== null && option?.getAttribute('aria-disabled') !== 'true')
+        this.pick.emit(active);
+    } else if (key.length === 1) {
+      this.typedAt = event.timeStamp;
+    }
   }
 
   /** Rodeo: el listbox no avisa qué opción se eligió. Solo cuentan las habilitadas. */
