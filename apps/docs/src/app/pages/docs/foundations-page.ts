@@ -32,6 +32,7 @@ export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> =
   slider: ['forms', 'cdk'],
   password: ['forms', 'cdk'],
   popover: ['cdk'],
+  sheet: ['cdk'],
   tooltip: ['cdk'],
   dialog: ['cdk'],
   confirm: ['cdk'],
@@ -343,11 +344,4 @@ export class FoundationsPage {
   ];
 
   protected readonly overlayImport = '@import "@angular/cdk/overlay-prebuilt.css";';
-
-  protected readonly compatibility = [
-    'Los atajos variant="default", "secondary" y "destructive" de Button y Badge (pasan a tone).',
-    'Los nombres de tokens de la 0.1.0 (paddingX, placeholderColor, radii.badge), con un aviso en desarrollo, y sus variables CSS (--mimi-btn-padding-x, --mimi-input-padding-x, --mimi-input-placeholder-color).',
-    'El alias destructive-soft del anillo: en la 1.0 pasa a ser el fondo suave, así que cambia ring-destructive-soft por ring-destructive-ring antes.',
-    '"vivid" como estilo en mimi.json (es "mimi").',
-  ];
 }

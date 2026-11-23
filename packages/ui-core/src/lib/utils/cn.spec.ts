@@ -78,10 +78,8 @@ describe('cn', () => {
     expect(cn('backdrop-blur-overlay', 'backdrop-blur-glass')).toBe('backdrop-blur-glass');
   });
 
-  it('ring-destructive-soft (alias de la 0.1.0) y ring-destructive-ring son el mismo grupo', () => {
-    // El código copiado de la 0.1.0 usa ring-destructive-soft; sigue siendo un color de anillo.
-    expect(cn('ring-destructive-soft', 'ring-destructive-ring')).toBe('ring-destructive-ring');
-    expect(cn('ring-3', 'ring-destructive-soft')).toBe('ring-3 ring-destructive-soft');
+  it('ring-destructive-ring y ring-ring-soft son colores de anillo, no el ancho', () => {
+    expect(cn('ring-3', 'ring-destructive-ring')).toBe('ring-3 ring-destructive-ring');
     expect(cn('ring-success-ring', 'ring-ring-soft')).toBe('ring-ring-soft');
   });
 
@@ -89,7 +87,7 @@ describe('cn', () => {
     expect(cn('bg-success', 'text-success-foreground', 'bg-success-soft')).toBe(
       'text-success-foreground bg-success-soft',
     );
-    expect(cn('bg-destructive-soft-bg', 'text-destructive-soft-foreground', 'bg-glass')).toBe(
+    expect(cn('bg-destructive-soft', 'text-destructive-soft-foreground', 'bg-glass')).toBe(
       'text-destructive-soft-foreground bg-glass',
     );
   });

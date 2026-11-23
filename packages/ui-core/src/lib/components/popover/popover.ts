@@ -36,6 +36,20 @@ import {
   mimiPlacedSide,
   mimiWaitForExit,
 } from '@/components/ui/utils/overlay';
+import {
+  MIMI_OVERLAY_CONFIG,
+  type MimiOverlayPresentation,
+  type MimiResolvedPresentation,
+  mimiResolvePresentation,
+} from '@/components/ui/utils/overlay-config';
+import { MimiSheetOverlay } from '@/components/ui/utils/sheet';
+
+/**
+ * En la hoja, el panel del popover no lleva su caja (borde, sombra, ancho): la pone la hoja. Lo
+ * demás de la clase (relleno, columnas) se conserva; dos columnas pasan a una (R.34).
+ */
+const SHEET_BODY_RESET =
+  'w-auto max-w-none flex-col rounded-none border-0 bg-transparent shadow-none';
 
 /*
  * Popover (docs/design/Mimi F2 Overlays.dc.html, «3 · Popover»): panel de 300px, padding 16px,
@@ -84,15 +98,32 @@ export class MimiPopoverOutlet {
 @Component({
   selector: 'mimi-popover',
   hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
-  imports: [CdkConnectedOverlay, MimiOverlayFollow, MimiPopoverOutlet],
+  imports: [CdkConnectedOverlay, MimiOverlayFollow, MimiPopoverOutlet, MimiSheetOverlay],
   template: `
     <ng-content />
+    <!-- En el teléfono (R.34): la hoja común, con el mismo contenido. -->
+    <ng-template
+      mimiSheet
+      [mimiSheetOpen]="mode() !== 'popover' && open()"
+      [mimiSheetSide]="mode() === 'fullscreen' ? 'full' : 'bottom'"
+      [mimiSheetTitle]="sheetTitle() || ariaLabel() || null"
+      [mimiSheetLabelledby]="titleId()"
+      [mimiSheetDescribedby]="descriptionId()"
+      [mimiSheetSize]="sized.effective()"
+      (mimiSheetClose)="close()"
+    >
+      <div data-mimi-popover-sheet-body [id]="panelId" [class]="sheetBodyClasses()">
+        @if (content(); as content) {
+          <ng-container [mimiPopoverOutlet]="content.templateRef" />
+        }
+      </div>
+    </ng-template>
     <ng-template
       cdkConnectedOverlay
       mimiOverlayFollow
       (mimiOverlayOutOfView)="close()"
       [cdkConnectedOverlayOrigin]="originElement()!"
-      [cdkConnectedOverlayOpen]="rendered()"
+      [cdkConnectedOverlayOpen]="rendered() && mode() === 'popover'"
       [cdkConnectedOverlayPositions]="positions()"
       [cdkConnectedOverlayViewportMargin]="viewportMargin"
       [cdkConnectedOverlayDisableClose]="true"
@@ -137,6 +168,7 @@ export class MimiPopoverOutlet {
     '[attr.class]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.data-state]': 'open() ? "open" : "closed"',
+    '[attr.data-presentation]': 'open() ? mode() : null',
     '[attr.data-side]': 'side()',
     '[attr.data-align]': 'align()',
     // `align` es un atributo HTML antiguo: el navegador lo convierte en text-align (se heredaría).
@@ -166,6 +198,27 @@ export class MimiPopover {
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   /** Clases del panel, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
+  /**
+   * Cómo se abre (R.34). `auto` (por defecto): popover, salvo que el componente que lo usa pida
+   * otra cosa en el teléfono (`mobilePresentation`). `sheet` o `fullscreen` lo piden siempre.
+   */
+  readonly presentation = input<MimiOverlayPresentation>('auto');
+  /**
+   * Lo que da `auto` por debajo del punto de corte. Popover solo es `popover`; Date Picker y
+   * Color Picker piden `sheet`, y Date Range, `fullscreen`.
+   */
+  readonly mobilePresentation = input<MimiResolvedPresentation>('popover');
+  /** Título visible de la hoja. Sin él, el `aria-label`. */
+  readonly sheetTitle = input<string>();
+
+  private readonly overlayConfig = inject(MIMI_OVERLAY_CONFIG);
+  /** La presentación de esta apertura (se elige al abrir). */
+  protected readonly mode = signal<MimiResolvedPresentation>('popover');
+  /**
+   * Cómo se abrió la última vez (`popover`, `sheet` o `fullscreen`). Lo leen Date Picker y Date
+   * Range para estirar el calendario en la hoja.
+   */
+  readonly presentationMode = this.mode.asReadonly();
 
   protected readonly trigger = contentChild(MimiPopoverTrigger);
   protected readonly content = contentChild(MimiPopoverContent);
@@ -203,6 +256,15 @@ export class MimiPopover {
     ),
   );
 
+  /** El contenido dentro de la hoja: el relleno y la separación del panel, sin su caja. */
+  protected readonly sheetBodyClasses = computed(() =>
+    cn(
+      'flex flex-col gap-3 p-[var(--mimi-popover-padding,16px)] pt-0 outline-none',
+      this.userClass(),
+      SHEET_BODY_RESET,
+    ),
+  );
+
   protected readonly arrowClasses = cn(
     'pointer-events-none absolute size-[var(--mimi-popover-arrow,10px)] rounded-tl-[2px] border-t border-l',
     'border-[color:var(--mimi-popover-border,var(--mimi-border))] bg-[color:var(--mimi-popover-bg,var(--mimi-popover))]',
@@ -234,6 +296,21 @@ export class MimiPopover {
 
   private show(): void {
     this.closing++;
+    if (!this.rendered()) {
+      this.mode.set(
+        mimiResolvePresentation(
+          this.presentation(),
+          this.mobilePresentation(),
+          this.overlayConfig,
+          this.document.defaultView,
+        ),
+      );
+    }
+    // En la hoja no hay panel conectado: la abre y la cierra `mimiSheet` (con su animación).
+    if (this.mode() !== 'popover') {
+      this.state.set('open');
+      return;
+    }
     this.placedSide.set(this.side());
     this.state.set('open');
     if (this.rendered()) {
@@ -245,6 +322,12 @@ export class MimiPopover {
   }
 
   private hide(): void {
+    if (this.mode() !== 'popover') {
+      // La hoja devuelve el foco a donde estaba al abrir (el trigger). `mode` se queda hasta la
+      // próxima apertura: la hoja lo lee durante su animación de salida.
+      this.state.set('closed');
+      return;
+    }
     if (!this.rendered()) return;
     this.state.set('closed');
     const panel = this.panel()?.nativeElement;

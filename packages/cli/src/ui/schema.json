@@ -136,6 +136,10 @@
             "label": "separator"
           },
           {
+            "value": "sheet",
+            "label": "sheet"
+          },
+          {
             "value": "skeleton",
             "label": "skeleton"
           },

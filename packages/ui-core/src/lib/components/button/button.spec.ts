@@ -1,17 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MimiButton } from './button';
-import type {
-  ButtonSize,
-  ButtonStyleVariant,
-  ButtonTone,
-  ButtonVariant,
-  ButtonVariantShortcut,
-} from './button.variants';
+import type { ButtonSize, ButtonTone, ButtonVariant } from './button.variants';
 import { buttonVariants } from './button.variants';
 
-// Código de la 0.1.x: `ButtonVariant` aceptaba los atajos. Tiene que seguir compilando (D1).
-const LEGACY_VARIANTS: ButtonVariant[] = ['default', 'secondary', 'destructive', 'outline'];
+// Los atajos de la 0.1.x se quitaron en la 0.8.0 (M.28): ya no son variantes.
+// @ts-expect-error `destructive` es ahora `tone="danger"`.
+const REMOVED_SHORTCUT: ButtonVariant = 'destructive';
 
 @Component({
   imports: [MimiButton],
@@ -141,7 +136,7 @@ describe('MimiButton', () => {
   });
 
   // Una clase representativa de cada variante con cada tono (button.variants.ts, TONE_CLASSES).
-  const EXPECTED: Record<ButtonStyleVariant, Record<ButtonTone, string>> = {
+  const EXPECTED: Record<ButtonVariant, Record<ButtonTone, string>> = {
     solid: {
       primary: 'bg-primary',
       secondary: 'bg-secondary',
@@ -156,7 +151,7 @@ describe('MimiButton', () => {
       success: 'bg-success-soft',
       warning: 'bg-warning-soft',
       info: 'bg-info-soft',
-      danger: 'bg-destructive-soft-bg',
+      danger: 'bg-destructive-soft',
     },
     outline: {
       primary: 'border-primary-border',
@@ -172,7 +167,7 @@ describe('MimiButton', () => {
       success: 'hover:not-disabled:not-aria-busy:bg-success-soft',
       warning: 'hover:not-disabled:not-aria-busy:bg-warning-soft',
       info: 'hover:not-disabled:not-aria-busy:bg-info-soft',
-      danger: 'hover:not-disabled:not-aria-busy:bg-destructive-soft-bg',
+      danger: 'hover:not-disabled:not-aria-busy:bg-destructive-soft',
     },
     link: {
       primary: 'text-primary',
@@ -183,7 +178,7 @@ describe('MimiButton', () => {
       danger: 'text-destructive-soft-foreground',
     },
   };
-  const COMBOS = (Object.keys(EXPECTED) as ButtonStyleVariant[]).flatMap((variant) =>
+  const COMBOS = (Object.keys(EXPECTED) as ButtonVariant[]).flatMap((variant) =>
     (Object.keys(EXPECTED[variant]) as ButtonTone[]).map(
       (tone) => [variant, tone, EXPECTED[variant][tone]] as const,
     ),
@@ -200,7 +195,7 @@ describe('MimiButton', () => {
     expect(button.classList).toContain(expected);
   });
 
-  it.each<[ButtonStyleVariant, ButtonTone]>([
+  it.each<[ButtonVariant, ButtonTone]>([
     ['solid', 'primary'],
     ['soft', 'primary'],
     ['outline', 'secondary'],
@@ -212,7 +207,7 @@ describe('MimiButton', () => {
     expect(button.dataset['tone']).toBe(tone);
   });
 
-  it('outline y ghost sin tone se ven como en la 0.1.0', async () => {
+  it('outline y ghost sin tone son neutros', async () => {
     const { host, button, update } = await setup();
     await update(() => host.variant.set('outline'));
     for (const cls of [
@@ -236,43 +231,13 @@ describe('MimiButton', () => {
     }
   });
 
-  it.each<[ButtonVariantShortcut, ButtonTone, string[]]>([
-    ['default', 'primary', ['bg-primary', 'shadow-primary', 'active:not-aria-busy:ring-ring-soft']],
-    ['secondary', 'secondary', ['bg-secondary', 'shadow-neutral']],
-    [
-      'destructive',
-      'danger',
-      ['bg-destructive', 'shadow-destructive', 'active:not-aria-busy:ring-destructive-ring'],
-    ],
-  ])('atajo de la 0.1.0: variant="%s" = solid + %s', async (shortcut, tone, classes) => {
-    const { host, button, update } = await setup();
-    await update(() => host.variant.set(shortcut));
-    expect(button.dataset['variant']).toBe('solid');
-    expect(button.dataset['tone']).toBe(tone);
-    for (const cls of classes) expect(button.classList).toContain(cls);
-  });
-
-  it('el tipo ButtonVariant de la 0.1.x (con atajos) sigue sirviendo para la entrada', async () => {
-    const { host, button, update } = await setup();
-    for (const variant of LEGACY_VARIANTS) {
-      await update(() => host.variant.set(variant));
-      expect(button.dataset['variant']).toBe(variant === 'outline' ? 'outline' : 'solid');
-    }
-  });
-
-  it('un atajo con tone: gana el atajo y avisa una sola vez en modo desarrollo', async () => {
+  it('los atajos de la 0.1.x ya no existen: un valor así no tiene clases de color (M.28)', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     const { host, button, update } = await setup();
-    await update(() => {
-      host.variant.set('destructive');
-      host.tone.set('success');
-    });
-    expect(button.dataset['tone']).toBe('danger');
-    expect(button.classList).toContain('bg-destructive');
-    expect(button.classList).not.toContain('bg-success');
-    await update(() => host.tone.set('info'));
-    expect(warn).toHaveBeenCalledTimes(1);
-    expect(warn.mock.calls[0][0]).toContain('variant="destructive"');
+    await update(() => host.variant.set(REMOVED_SHORTCUT));
+    expect(button.dataset['variant']).toBe('destructive');
+    expect(button.classList).not.toContain('bg-destructive');
+    expect(warn).not.toHaveBeenCalled();
     warn.mockRestore();
   });
 
@@ -290,9 +255,7 @@ describe('MimiButton', () => {
     const { host, button, update } = await setup();
     await update(() => host.variant.set('link'));
     expect(button.classList).toContain('px-1');
-    expect(button.classList).not.toContain(
-      'px-[var(--mimi-btn-px,var(--mimi-btn-padding-x,1rem))]',
-    );
+    expect(button.classList).not.toContain('px-[var(--mimi-btn-px-s,var(--mimi-btn-px,1rem))]');
   });
 
   it.each<[ButtonSize, string]>([

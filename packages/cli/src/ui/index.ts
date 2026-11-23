@@ -598,6 +598,8 @@ function updateMimiConfig(plan: Plan, report: FileReport): Rule {
         : { version: registry.version };
     }
     const next: MimiConfig = { ...plan.config, components };
+    // La 0.1.0 escribía "vivid": desde la 0.8.0 no es un sinónimo; se corrige al reescribir (M.28).
+    if (next.style === 'vivid') next.style = 'mimi';
     if (Object.keys(blocks).length > 0) {
       next.blocks = blocks;
       // Proyectos anteriores: la carpeta queda escrita la primera vez que se copia un Block

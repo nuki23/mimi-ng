@@ -27,8 +27,8 @@ describe('PopoverPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      // La demo (el ejemplo básico) y cinco ejemplos.
-      expect(previews.length).toBe(6);
+      // La demo (el ejemplo básico) y seis ejemplos, con «En el teléfono» (R.34).
+      expect(previews.length).toBe(7);
       expect(previews.some(({ code }) => code.includes('size="lg"'))).toBe(true);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-popover [mimiPopoverTrigger]')).not.toBeNull();

@@ -37,9 +37,7 @@ import { COMPONENT_TOKENS, type TokenComponent } from './component-tokens';
               </td>
               <td class="px-4 py-2.5 text-pretty">
                 {{ token.description }}
-                @if (token.deprecated) {
-                  Nombre de la 0.1.0: usa {{ token.deprecated }} (se quita en la 1.0).
-                } @else if (!token.preset) {
+                @if (!token.preset) {
                   Solo en CSS.
                 }
               </td>
@@ -66,7 +64,7 @@ export class CssVariables {
 
   /** Ejemplo con el primer color del componente (solo CSS), en claro y en oscuro. */
   protected readonly colorExample = computed(() => {
-    const color = this.tokens().find((t) => !t.preset && !t.deprecated);
+    const color = this.tokens().find((t) => !t.preset);
     if (!color) return null;
     return [
       '/* styles.css */',

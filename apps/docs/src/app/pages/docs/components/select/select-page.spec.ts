@@ -23,8 +23,9 @@ describe('SelectPage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      // La demo y seis ejemplos; los formularios van en las pestañas, sin ejemplos vivos.
-      expect(previews.length).toBe(7);
+      // La demo y siete ejemplos (con «En el teléfono», R.34); los formularios van en las
+      // pestañas, sin ejemplos vivos.
+      expect(previews.length).toBe(8);
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-select button[role="combobox"]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/select';");

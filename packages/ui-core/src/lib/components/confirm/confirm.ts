@@ -66,7 +66,7 @@ export type MimiConfirmFn = (options: MimiConfirmOptions) => Promise<boolean>;
 const ICON_CLASSES = {
   primary: 'bg-info-soft text-info-soft-foreground',
   danger:
-    'bg-[color:var(--mimi-confirm-icon-bg,var(--mimi-destructive-soft-bg))] text-[color:var(--mimi-confirm-icon-fg,var(--mimi-destructive-soft-foreground))]',
+    'bg-[color:var(--mimi-confirm-icon-bg,var(--mimi-destructive-soft))] text-[color:var(--mimi-confirm-icon-fg,var(--mimi-destructive-soft-foreground))]',
 } as const;
 
 /** Crea la plantilla del ícono. Hace lo mismo que NgTemplateOutlet, sin @angular/common. */

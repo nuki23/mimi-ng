@@ -228,7 +228,7 @@ describe('injectMimiToast', { timeout: 20_000 }, () => {
       ['success', 'success', 'bg-success-soft'],
       ['warning', 'warning', 'bg-warning-soft'],
       ['info', 'info', 'bg-info-soft'],
-      ['error', 'destructive', 'bg-destructive-soft-bg'],
+      ['error', 'destructive', 'bg-destructive-soft'],
     ] as const;
     for (const [method, token, soft] of TONES) {
       (toast as unknown as Record<string, (t: string, o?: object) => void>)[method]('Con tono');

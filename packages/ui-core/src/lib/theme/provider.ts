@@ -36,7 +36,6 @@ const kebab = (key: string): string => key.replace(/[A-Z]/g, (c) => `-${c.toLowe
 const RADII: Record<string, string> = {
   sm: 'radius-sm',
   card: 'radius-card',
-  badge: 'badge-radius',
 };
 
 /** Las sombras van a --mimi-shadow-*, salvo el glow: glowSuccess → --mimi-glow-success. */
@@ -104,33 +103,10 @@ const COMPONENT_PREFIX: Record<keyof MimiComponentTokens, string> = {
   tree: 'tree',
   sortable: 'sortable',
   command: 'command',
+  sheet: 'sheet',
   dataTable: 'table',
   loading: 'loading',
 };
-
-/** Nombres de la 0.1.0 que siguen funcionando hasta la 1.0 (spec 12): ruta → qué usar. */
-const DEPRECATED: readonly [path: readonly string[], use: string][] = [
-  [['components', 'button', 'paddingX'], 'components.button.px'],
-  [['components', 'input', 'paddingX'], 'components.input.px'],
-  [['components', 'input', 'placeholderColor'], 'la variable --mimi-input-placeholder en tu CSS'],
-  [['radii', 'badge'], 'components.badge.radius'],
-];
-const warnedDeprecated = new Set<string>();
-
-/** En modo desarrollo, avisa una sola vez por cada nombre viejo que use el preset. */
-function warnDeprecated(preset: MimiThemePreset): void {
-  if (!isDevMode()) return;
-  for (const [path, use] of DEPRECATED) {
-    const name = path.join('.');
-    let value: unknown = preset;
-    for (const key of path) value = (value as Record<string, unknown> | undefined)?.[key];
-    if (value === undefined || warnedDeprecated.has(name)) continue;
-    warnedDeprecated.add(name);
-    console.warn(
-      `[Mimi] Theme: ${name} es un nombre de la 0.1.0: usa ${use}. Sigue funcionando hasta la 1.0.`,
-    );
-  }
-}
 
 /** Caracteres que romperían el CSS o cerrarían la etiqueta <style>. */
 const UNSAFE_VALUE = /[;{}<]/;
@@ -216,7 +192,6 @@ export function applyMimiTheme(
 
 /** Registra un preset del tema. Opcional: sin él, se usa theme-base.css tal cual. */
 export function provideMimiTheme(preset: MimiThemePreset): EnvironmentProviders {
-  warnDeprecated(preset);
   return makeEnvironmentProviders([
     { provide: MIMI_THEME, useValue: preset },
     provideAppInitializer(() => applyMimiTheme(inject(DOCUMENT), inject(MIMI_THEME))),

@@ -23,6 +23,18 @@ import { MimiMenuItemsImports } from '@/components/ui/menu';
 import { MimiMenuPanel } from '@/components/ui/menu/menu';
 import { MimiSized } from '@/components/ui/utils/size';
 import {
+  MIMI_OVERLAY_CONFIG,
+  type MimiOverlayPresentation,
+  type MimiResolvedPresentation,
+  mimiResolvePresentation,
+} from '@/components/ui/utils/overlay-config';
+import { MimiSheetOverlay } from '@/components/ui/utils/sheet';
+import { cn } from '@/components/ui/utils/cn';
+
+/** En la hoja (R.34), el menú no lleva su caja: la pone la hoja. */
+const SHEET_PANEL_CLASSES =
+  'w-auto max-w-none rounded-none border-0 bg-transparent px-2 pt-0 pb-2 shadow-none [&_[role^=menuitem]]:min-h-11';
+import {
   MIMI_VIEWPORT_MARGIN,
   MimiOverlayFollow,
   type MimiOverlayAlign,
@@ -58,15 +70,38 @@ let nextId = 0;
 @Component({
   selector: 'mimi-dropdown-menu',
   hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
-  imports: [CdkConnectedOverlay, MimiOverlayFollow, MimiMenuPanel],
+  imports: [CdkConnectedOverlay, MimiOverlayFollow, MimiMenuPanel, MimiSheetOverlay],
   template: `
     <ng-content />
+    <!-- En el teléfono (R.34): el mismo menú, en la hoja inferior. -->
+    <ng-template
+      mimiSheet
+      [mimiSheetOpen]="mode() !== 'popover' && open()"
+      [mimiSheetSide]="mode() === 'fullscreen' ? 'full' : 'bottom'"
+      [mimiSheetTitle]="sheetTitle() || ariaLabel() || triggerText()"
+      [mimiSheetSize]="sized.effective()"
+      (mimiSheetClose)="close()"
+    >
+      @if (content(); as content) {
+        <mimi-menu-panel
+          [template]="content.templateRef"
+          [menuId]="menuId"
+          [label]="ariaLabel() ?? ''"
+          [labelledBy]="trigger()?.id"
+          [initialFocus]="focusTarget"
+          [size]="sized.effective()"
+          sheet
+          [class]="sheetPanelClasses()"
+          (closeRequest)="close($event)"
+        />
+      }
+    </ng-template>
     <ng-template
       cdkConnectedOverlay
       mimiOverlayFollow
       (mimiOverlayOutOfView)="close(false)"
       [cdkConnectedOverlayOrigin]="originElement()!"
-      [cdkConnectedOverlayOpen]="rendered()"
+      [cdkConnectedOverlayOpen]="rendered() && mode() === 'popover'"
       [cdkConnectedOverlayPositions]="positions()"
       [cdkConnectedOverlayViewportMargin]="viewportMargin"
       [cdkConnectedOverlayDisableClose]="true"
@@ -100,6 +135,7 @@ let nextId = 0;
     '[attr.class]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.data-state]': 'open() ? "open" : "closed"',
+    '[attr.data-presentation]': 'open() ? mode() : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -117,6 +153,18 @@ export class MimiDropdownMenu {
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   /** Clases del panel, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
+  /** Cómo se abre (R.34): `auto` = hoja inferior por debajo de 640 px. */
+  readonly presentation = input<MimiOverlayPresentation>('auto');
+  /** Título de la hoja. Sin él, el `aria-label` o el texto del trigger. */
+  readonly sheetTitle = input<string>();
+
+  private readonly overlayConfig = inject(MIMI_OVERLAY_CONFIG);
+  /** La presentación de esta apertura (se elige al abrir). */
+  protected readonly mode = signal<MimiResolvedPresentation>('popover');
+  protected readonly sheetPanelClasses = computed(() => cn(this.userClass(), SHEET_PANEL_CLASSES));
+  protected readonly triggerText = computed(
+    () => this.trigger()?.element.textContent?.trim() || null,
+  );
 
   protected readonly trigger = contentChild(MimiDropdownMenuTrigger);
   protected readonly content = contentChild(MimiDropdownMenuContent);
@@ -173,6 +221,21 @@ export class MimiDropdownMenu {
 
   private show(): void {
     this.closing++;
+    if (!this.rendered()) {
+      this.mode.set(
+        mimiResolvePresentation(
+          this.presentation(),
+          'sheet',
+          this.overlayConfig,
+          this.document.defaultView,
+        ),
+      );
+    }
+    // En la hoja, la abre y la cierra `mimiSheet`; el foco vuelve solo (cdk).
+    if (this.mode() !== 'popover') {
+      this.state.set('open');
+      return;
+    }
     this.placedSide.set(this.side());
     this.state.set('open');
     // Reabierto durante la animación de salida: el panel sigue montado.
@@ -181,6 +244,11 @@ export class MimiDropdownMenu {
   }
 
   private hide(): void {
+    if (this.mode() !== 'popover') {
+      this.state.set('closed');
+      this.refocus = true;
+      return;
+    }
     if (!this.rendered()) return;
     this.state.set('closed');
     const panel = this.panel()?.element;

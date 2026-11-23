@@ -465,26 +465,10 @@
     Compatibilidad y actualizaciones
   </h2>
   <p class="text-pretty">
-    Mimi está en 0.x: la API puede cambiar entre versiones menores hasta la 1.0. Funciona con
-    Angular 22 o superior y Tailwind CSS 4. Hasta la 1.0 siguen funcionando:
+    Mimi está en 0.x: mientras no llegue a la 1.0, la API puede cambiar entre versiones menores, y
+    lo que cambia cambia en esa versión, sin nombres viejos de transición. El CHANGELOG dice en cada
+    versión qué se rompe y cómo actualizar. Funciona con Angular 22 o superior y Tailwind CSS 4.
   </p>
-  <ul class="flex list-disc flex-col gap-1.5 pl-5 text-pretty">
-    @for (item of compatibility; track item) {
-      <li>{{ item }}</li>
-    }
-    <li>
-      Desde la 0.2.0,
-      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-variant</code> y
-      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">data-tone</code>
-      muestran los valores resueltos: si tienes CSS sobre
-      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-        >[data-variant="destructive"]</code
-      >, cámbialo a
-      <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]"
-        >[data-tone="danger"]</code
-      >.
-    </li>
-  </ul>
   <p class="text-pretty">
     Para actualizar un componente, primero actualiza
     <code class="rounded-[6px] bg-muted px-1.5 py-0.5 font-mono text-[13px]">@mimi-ng/cli</code> y

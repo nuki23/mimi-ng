@@ -180,7 +180,7 @@ const TONE_CLASSES = {
   },
   danger: {
     neutral: OUTLINE,
-    outline: `border border-destructive-border bg-destructive-soft-bg text-popover-foreground ${TONAL_SHADOW}`,
+    outline: `border border-destructive-border bg-destructive-soft text-popover-foreground ${TONAL_SHADOW}`,
     solid: 'bg-destructive text-destructive-foreground shadow-destructive-hover',
   },
 } as const satisfies Record<ToastTone, Record<MimiToastVariant, string>>;

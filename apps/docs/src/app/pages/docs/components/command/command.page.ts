@@ -12,6 +12,9 @@ import inlineSource from './examples/command-inline.example' with { loader: 'tex
 import sizesSource from './examples/command-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import appCommandsSource from './examples/app-commands' with { loader: 'text' };
+// @ts-expect-error
+import phoneSource from './examples/command-phone.example' with { loader: 'text' };
+import { CommandPhoneExample } from './examples/command-phone.example';
 
 /** La página de Command (G3.3), con la plantilla de página (DP). */
 export const COMMAND_PAGE: DocPage = {
@@ -85,6 +88,14 @@ export const COMMAND_PAGE: DocPage = {
           { name: 'app-commands.ts', code: appCommandsSource as string },
         ],
       },
+      {
+        id: 'phone',
+        title: 'En el teléfono',
+        sentence:
+          'Debajo de 640 px el diálogo ocupa la pantalla, con el buscador arriba; `presentation="fullscreen"` lo pide aquí.',
+        component: CommandPhoneExample,
+        source: phoneSource as string,
+      },
     ],
   },
   accessibility: {
@@ -108,6 +119,13 @@ export const COMMAND_PAGE: DocPage = {
         type: 'boolean (model)',
         default: 'false',
         description: 'Solo `mimi-command-dialog`. Abierta o cerrada; admite `[(open)]`.',
+      },
+      {
+        name: 'presentation',
+        type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
+        default: "'auto'",
+        description:
+          'Solo `mimi-command-dialog`. `auto`: pantalla completa debajo de 640 px y centrada desde ahí.',
       },
       {
         name: 'shortcut',

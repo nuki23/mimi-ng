@@ -2,6 +2,7 @@ import { Combobox, ComboboxPopup } from '@angular/aria/combobox';
 import {
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   Directive,
   type EmbeddedViewRef,
   InjectionToken,
@@ -14,6 +15,7 @@ import {
   forwardRef,
   inject,
   input,
+  linkedSignal,
   model,
   output,
   untracked,
@@ -32,6 +34,11 @@ import {
 } from '@/components/ui/option-list/option-list';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
+import {
+  MIMI_OVERLAY_CONFIG,
+  type MimiOverlayPresentation,
+  mimiResolvePresentation,
+} from '@/components/ui/utils/overlay-config';
 import { MIMI_COMMAND_TEXT } from './command-texts';
 
 /*
@@ -200,7 +207,7 @@ const ICON_TONE_CLASSES: Record<MimiCommandTone | 'none', string> = {
   warning:
     'bg-warning-soft text-warning-soft-foreground group-data-[active=true]/command-item:bg-warning group-data-[active=true]/command-item:text-warning-foreground',
   danger:
-    'bg-destructive-soft-bg text-destructive-soft-foreground group-data-[active=true]/command-item:bg-destructive group-data-[active=true]/command-item:text-destructive-foreground',
+    'bg-destructive-soft text-destructive-soft-foreground group-data-[active=true]/command-item:bg-destructive group-data-[active=true]/command-item:text-destructive-foreground',
 };
 
 /** Busca en el texto y en las `keywords`, sin tildes ni mayúsculas. */
@@ -462,6 +469,13 @@ const DIALOG_PANEL_CLASSES = cn(
 );
 
 /**
+ * A pantalla completa en el teléfono (R.34, decidido por el usuario el 15/11/2026): el buscador
+ * arriba y la lista hasta abajo, sin el hueco de arriba ni los bordes.
+ */
+const FULLSCREEN_PANEL_CLASSES =
+  'top-0 left-0 h-dvh max-h-dvh w-screen max-w-none translate-x-0 rounded-none border-0';
+
+/**
  * La paleta en un diálogo: `<mimi-command-dialog [(open)]="abierta" [items]="comandos"
  * (run)="ejecutar($event)" />`. ⌘K (Mac) o Ctrl+K la abren y la cierran (`shortcut=""` lo
  * apaga). Al ejecutar un comando, se cierra y emite `run`.
@@ -473,7 +487,7 @@ const DIALOG_PANEL_CLASSES = cn(
   providers: [{ provide: MIMI_COMMAND_HOST, useExisting: forwardRef(() => MimiCommandDialog) }],
   template: `
     <mimi-dialog
-      width="var(--mimi-command-width, 560px)"
+      [width]="fullscreen() ? '100vw' : 'var(--mimi-command-width, 560px)'"
       autoFocus="input"
       [(open)]="open"
       [class]="panelClasses()"
@@ -482,7 +496,7 @@ const DIALOG_PANEL_CLASSES = cn(
     >
       <ng-template mimiDialogContent>
         <mimi-command
-          class="max-h-[inherit] rounded-none border-0 shadow-none"
+          class="max-h-[inherit] flex-1 rounded-none border-0 shadow-none"
           [size]="sized.effective()"
           [items]="items()"
           [placeholder]="placeholder()"
@@ -500,6 +514,7 @@ const DIALOG_PANEL_CLASSES = cn(
     '[attr.class]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.data-state]': 'open() ? "open" : "closed"',
+    '[attr.data-presentation]': 'open() ? (fullscreen() ? "fullscreen" : "popover") : null',
     '(document:keydown)': 'onShortcut($event)',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -519,6 +534,30 @@ export class MimiCommandDialog<T = unknown> implements MimiCommandHost {
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   /** Clases del panel, mezcladas con `cn()`. */
   readonly userClass = input('', { alias: 'class' });
+  /**
+   * Cómo se abre (R.34): `auto` = a pantalla completa por debajo de 640 px y, si no, la ventana
+   * centrada de siempre (`popover`). `sheet` se trata como `fullscreen`.
+   */
+  readonly presentation = input<MimiOverlayPresentation>('auto');
+
+  private readonly overlayConfig = inject(MIMI_OVERLAY_CONFIG);
+  private readonly view = inject(DOCUMENT).defaultView;
+  /**
+   * Se elige al abrir y se conserva al cerrar: así la salida anima con la misma forma (revisor
+   * M3). No cambia con la paleta abierta.
+   */
+  protected readonly fullscreen = linkedSignal<boolean, boolean>({
+    source: () => this.open(),
+    computation: (open, previous) =>
+      open
+        ? mimiResolvePresentation(
+            this.presentation(),
+            'fullscreen',
+            this.overlayConfig,
+            this.view,
+          ) !== 'popover'
+        : (previous?.value ?? false),
+  });
 
   /** Se ejecutó un comando; el diálogo ya se está cerrando. */
   readonly run = output<MimiCommandItem<T>>();
@@ -528,7 +567,9 @@ export class MimiCommandDialog<T = unknown> implements MimiCommandHost {
   readonly iconTemplate = computed(() => this.icon()?.templateRef);
 
   protected readonly label = computed(() => this.ariaLabel() || this.texts.label);
-  protected readonly panelClasses = computed(() => cn(DIALOG_PANEL_CLASSES, this.userClass()));
+  protected readonly panelClasses = computed(() =>
+    cn(DIALOG_PANEL_CLASSES, this.userClass(), this.fullscreen() && FULLSCREEN_PANEL_CLASSES),
+  );
 
   protected onShortcut(event: KeyboardEvent): void {
     const key = this.shortcut().toLowerCase();

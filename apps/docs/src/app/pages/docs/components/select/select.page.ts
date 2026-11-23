@@ -24,6 +24,9 @@ import serverSource from './examples/select-server.example' with { loader: 'text
 import sizesSource from './examples/select-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import statesSource from './examples/select-states.example' with { loader: 'text' };
+// @ts-expect-error
+import phoneSource from './examples/select-phone.example' with { loader: 'text' };
+import { SelectPhoneExample } from './examples/select-phone.example';
 
 /** La página de Select (tarea G1.5), con la plantilla de página (DP.0, piloto). */
 export const SELECT_PAGE: DocPage = {
@@ -94,6 +97,14 @@ export const SELECT_PAGE: DocPage = {
         component: SelectOptionTemplateExample,
         source: optionTemplateSource as string,
       },
+      {
+        id: 'phone',
+        title: 'En el teléfono',
+        sentence:
+          'Debajo de 640 px se abre en una hoja inferior con la lista; `presentation="sheet"` la pide aquí y `"popover"` la evita.',
+        component: SelectPhoneExample,
+        source: phoneSource as string,
+      },
     ],
     custom: [
       {
@@ -135,6 +146,18 @@ export const SELECT_PAGE: DocPage = {
   },
   api: {
     inputs: [
+      {
+        name: 'presentation',
+        type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
+        default: "'auto'",
+        description: 'Cómo se abre. `auto`: hoja inferior debajo de 640 px y panel desde ahí.',
+      },
+      {
+        name: 'sheetTitle',
+        type: 'string',
+        default: '—',
+        description: 'Título de la hoja. Sin él, el nombre del campo.',
+      },
       {
         name: 'value',
         type: 'T | null (model)',

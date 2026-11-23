@@ -6,7 +6,6 @@
  * - `inherits`: el token del que toma su valor si no se define (cascada de la spec 6.2).
  * - `preset`: true si se puede definir con provideMimiTheme (components.<nombre>); los colores
  *   solo se cambian en el CSS, porque cambian entre claro y oscuro (spec 6.2).
- * - `deprecated`: nombre de la 0.1.0 que sigue funcionando hasta la 1.0 (spec 12).
  */
 export interface CssVariable {
   name: string;
@@ -14,7 +13,6 @@ export interface CssVariable {
   inherits?: string;
   preset: boolean;
   description: string;
-  deprecated?: string;
 }
 
 export type TokenComponent =
@@ -56,7 +54,8 @@ export type TokenComponent =
   | 'sortable'
   | 'command'
   | 'dataTable'
-  | 'loading';
+  | 'loading'
+  | 'sheet';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -99,6 +98,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   command: 'command',
   dataTable: 'table',
   loading: 'loading',
+  sheet: 'sheet',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -146,7 +146,7 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       name: '--mimi-badge-radius',
       default: '999px',
       preset: true,
-      description: 'Radio (el mismo que radii.badge de la 0.1.0). Los colores salen del tono.',
+      description: 'Radio. Los colores salen del tono.',
     },
   ],
   button: [
@@ -183,13 +183,6 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       default: '1rem',
       preset: true,
       description: 'Padding horizontal del tamaño default.',
-    },
-    {
-      name: '--mimi-btn-padding-x',
-      default: '1rem',
-      preset: true,
-      description: 'Padding horizontal.',
-      deprecated: '--mimi-btn-px',
     },
     {
       name: '--mimi-btn-gap',
@@ -417,13 +410,6 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       description: 'Padding horizontal.',
     },
     {
-      name: '--mimi-input-padding-x',
-      default: '0.75rem',
-      preset: true,
-      description: 'Padding horizontal.',
-      deprecated: '--mimi-input-px',
-    },
-    {
       name: '--mimi-input-font-size',
       default: '0.875rem',
       preset: true,
@@ -497,13 +483,6 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-muted-foreground',
       preset: false,
       description: 'Color del placeholder.',
-    },
-    {
-      name: '--mimi-input-placeholder-color',
-      default: 'muted-foreground',
-      preset: false,
-      description: 'Color del placeholder.',
-      deprecated: '--mimi-input-placeholder',
     },
   ],
   separator: [
@@ -763,8 +742,8 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
     },
     {
       name: '--mimi-menu-danger-hover',
-      default: 'destructive-soft-bg',
-      inherits: '--mimi-destructive-soft-bg',
+      default: 'destructive-soft',
+      inherits: '--mimi-destructive-soft',
       preset: false,
       description: 'Fondo del ítem con tone="danger" activo.',
     },
@@ -897,8 +876,8 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
     },
     {
       name: '--mimi-confirm-icon-bg',
-      default: 'destructive-soft-bg',
-      inherits: '--mimi-destructive-soft-bg',
+      default: 'destructive-soft',
+      inherits: '--mimi-destructive-soft',
       preset: false,
       description: 'Fondo del círculo del ícono, en el tono danger.',
     },
@@ -1932,6 +1911,75 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-primary-subtle',
       preset: false,
       description: 'Fondo del hueco donde caerá.',
+    },
+  ],
+  sheet: [
+    {
+      name: '--mimi-sheet-radius',
+      default: 'radius-card',
+      inherits: '--mimi-radius-card',
+      preset: true,
+      description: 'Radio de la hoja.',
+    },
+    {
+      name: '--mimi-sheet-inset',
+      default: '8px',
+      preset: true,
+      description: 'Separación de los bordes de la pantalla.',
+    },
+    {
+      name: '--mimi-sheet-max-h',
+      default: '85dvh',
+      preset: true,
+      description: 'Alto máximo de la hoja inferior.',
+    },
+    {
+      name: '--mimi-sheet-w',
+      default: '24rem',
+      preset: true,
+      description: 'Ancho de la hoja lateral (sm 20rem, lg 32rem).',
+    },
+    {
+      name: '--mimi-sheet-overlay-blur',
+      default: 'overlay-blur',
+      inherits: '--mimi-overlay-blur',
+      preset: true,
+      description: 'Desenfoque del fondo de detrás.',
+    },
+    {
+      name: '--mimi-sheet-bg',
+      default: 'popover',
+      inherits: '--mimi-popover',
+      preset: false,
+      description: 'Fondo de la hoja.',
+    },
+    {
+      name: '--mimi-sheet-border',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'Borde de la hoja.',
+    },
+    {
+      name: '--mimi-sheet-shadow',
+      default: 'shadow-popover',
+      inherits: '--mimi-shadow-popover',
+      preset: false,
+      description: 'Sombra de la hoja.',
+    },
+    {
+      name: '--mimi-sheet-handle',
+      default: 'muted-foreground',
+      inherits: '--mimi-muted-foreground',
+      preset: false,
+      description: 'La barra de agarre de la hoja inferior.',
+    },
+    {
+      name: '--mimi-sheet-overlay',
+      default: 'overlay',
+      inherits: '--mimi-overlay',
+      preset: false,
+      description: 'Fondo de detrás.',
     },
   ],
   loading: [

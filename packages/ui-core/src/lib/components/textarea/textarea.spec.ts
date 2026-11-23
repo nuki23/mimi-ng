@@ -92,7 +92,7 @@ describe('MimiTextarea', () => {
     for (const cls of [
       'border-[length:var(--mimi-input-border-width,1px)]',
       'text-[length:var(--mimi-input-font-size,0.875rem)]',
-      'placeholder:text-[color:var(--mimi-input-placeholder,var(--mimi-input-placeholder-color,var(--mimi-muted-foreground)))]',
+      'placeholder:text-[color:var(--mimi-input-placeholder,var(--mimi-muted-foreground))]',
       'focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
     ]) {
       expect(el.classList).not.toContain(cls);

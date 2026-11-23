@@ -100,6 +100,7 @@ export class App {}
 - **Progress**: `ng g mimi progress` · [documentación](https://ng.mimiworks.dev/docs/components/progress)
 - **Select**: `ng g mimi select` · [documentación](https://ng.mimiworks.dev/docs/components/select)
 - **Separator**: `ng g mimi separator` · [documentación](https://ng.mimiworks.dev/docs/components/separator)
+- **Sheet**: `ng g mimi sheet` · [documentación](https://ng.mimiworks.dev/docs/components/sheet)
 - **Skeleton**: `ng g mimi skeleton` · [documentación](https://ng.mimiworks.dev/docs/components/skeleton)
 - **Slider**: `ng g mimi slider` · [documentación](https://ng.mimiworks.dev/docs/components/slider)
 - **Sortable List**: `ng g mimi sortable-list` · [documentación](https://ng.mimiworks.dev/docs/components/sortable-list)

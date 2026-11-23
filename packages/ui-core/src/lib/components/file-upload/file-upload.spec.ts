@@ -276,7 +276,7 @@ describe('MimiFileUpload', () => {
     expect(root.querySelector('mimi-file-list')!.getAttribute('aria-label')).toBe('Archivos');
     const [photo, pdf] = items();
     expect(photo.querySelector('img')!.getAttribute('src')).toBe('blob:x');
-    expect(pdf.querySelector('[data-slot="icon"]')!.className).toContain('bg-destructive-soft-bg');
+    expect(pdf.querySelector('[data-slot="icon"]')!.className).toContain('bg-destructive-soft');
     expect(photo.querySelector('[data-slot="size"]')!.textContent?.trim()).toBe('2.4 MB');
     expect(photo.querySelector('mimi-progress')!.getAttribute('aria-label')).toBe(
       'Subiendo foto.png',

@@ -19,6 +19,9 @@ import formSource from './examples/popover-form.example' with { loader: 'text' }
 import positionsSource from './examples/popover-positions.example' with { loader: 'text' };
 // @ts-expect-error
 import sizesSource from './examples/popover-sizes.example' with { loader: 'text' };
+// @ts-expect-error
+import phoneSource from './examples/popover-phone.example' with { loader: 'text' };
+import { PopoverPhoneExample } from './examples/popover-phone.example';
 
 /** La página de Popover (tarea G1.1), con la plantilla de página. */
 export const POPOVER_PAGE: DocPage = {
@@ -91,6 +94,14 @@ export const POPOVER_PAGE: DocPage = {
         component: PopoverControlledExample,
         source: controlledSource as string,
       },
+      {
+        id: 'phone',
+        title: 'En el teléfono',
+        sentence:
+          'Popover no cambia en el teléfono: el contenido es tuyo. `presentation="sheet"` lo abre en una hoja inferior, con título y X.',
+        component: PopoverPhoneExample,
+        source: phoneSource as string,
+      },
     ],
     custom: [
       {
@@ -118,6 +129,19 @@ export const POPOVER_PAGE: DocPage = {
   },
   api: {
     inputs: [
+      {
+        name: 'presentation',
+        type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
+        default: "'auto'",
+        description:
+          'Cómo se abre. `auto` es popover también en el teléfono; `sheet` pide la hoja.',
+      },
+      {
+        name: 'sheetTitle',
+        type: 'string',
+        default: '—',
+        description: 'Título de la hoja. Sin él, el `aria-label`.',
+      },
       {
         name: 'open',
         type: 'boolean (model)',

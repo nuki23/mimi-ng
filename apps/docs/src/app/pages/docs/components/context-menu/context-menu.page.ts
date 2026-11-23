@@ -21,6 +21,9 @@ import submenuSource from './examples/context-menu-submenu.example' with { loade
 import tableSource from './examples/context-menu-table.example' with { loader: 'text' };
 // @ts-expect-error
 import fileActionsSource from './examples/file-actions-menu' with { loader: 'text' };
+// @ts-expect-error
+import phoneSource from './examples/context-menu-phone.example' with { loader: 'text' };
+import { ContextMenuPhoneExample } from './examples/context-menu-phone.example';
 
 /** La página de Context Menu (tarea G1.4), con la plantilla de página. */
 export const CONTEXT_MENU_PAGE: DocPage = {
@@ -96,6 +99,14 @@ export const CONTEXT_MENU_PAGE: DocPage = {
         source: checkboxSource as string,
       },
       {
+        id: 'phone',
+        title: 'En el teléfono',
+        sentence:
+          'Debajo de 640 px, al mantener pulsado, el menú sale en una hoja inferior y no en el punto; `presentation="sheet"` la pide aquí.',
+        component: ContextMenuPhoneExample,
+        source: phoneSource as string,
+      },
+      {
         id: 'table',
         title: 'Sobre una tabla',
         sentence:
@@ -127,6 +138,19 @@ export const CONTEXT_MENU_PAGE: DocPage = {
   },
   api: {
     inputs: [
+      {
+        name: 'presentation',
+        type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
+        default: "'auto'",
+        description:
+          'Cómo se abre. `auto`: hoja inferior debajo de 640 px y junto al punto desde ahí.',
+      },
+      {
+        name: 'sheetTitle',
+        type: 'string',
+        default: '—',
+        description: 'Título de la hoja. Sin él, el `aria-label` del menú.',
+      },
       {
         name: 'open',
         type: 'boolean (model)',

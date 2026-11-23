@@ -9,6 +9,7 @@ import {
   Injector,
   TemplateRef,
   ViewContainerRef,
+  type WritableSignal,
   afterNextRender,
   booleanAttribute,
   computed,
@@ -25,6 +26,14 @@ import {
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { MIMI_OVERLAY_ANIMATION, MIMI_VIEWPORT_MARGIN } from '@/components/ui/utils/overlay';
+import { MIMI_SHEET_LEVELS, type MimiSheetLevel } from '@/components/ui/utils/overlay-config';
+
+/**
+ * En la hoja (R.34), con un submenú abierto como nivel aparte: se esconde todo lo demás de ese
+ * nivel (el anfitrión del submenú abierto lleva `data-level-open`). `!`: los ítems tienen
+ * `display: contents` en línea.
+ */
+const SHEET_LEVEL_CLASSES = '[&[data-sheet-level]>:not([data-level-open])]:hidden!';
 
 /*
  * Piezas compartidas de Dropdown Menu y Context Menu (docs/design/Mimi F2 Overlays.dc.html, «5 ·
@@ -105,6 +114,8 @@ export const MIMI_MENU_PANEL_CLASSES =
       [attr.data-side]="side()"
       [attr.data-align]="align()"
       [attr.data-size]="size() ?? null"
+      [attr.data-in-sheet]="sheet() ? '' : null"
+      [attr.data-sheet-level]="sheet() && openLevels() ? '' : null"
       [attr.inert]="state() === 'closed' ? '' : null"
       (itemSelected)="onItemSelected($event)"
       (keydown)="onKeydown($event)"
@@ -139,8 +150,15 @@ export class MimiMenuPanel implements MimiMenuHost {
   /** El panel va en un overlay: el tamaño del disparador (`sm | md | lg`) llega por aquí. */
   readonly size = input<'sm' | 'md' | 'lg' | null>(null);
   readonly userClass = input('', { alias: 'class' });
+  /** El menú va en la hoja del teléfono (R.34): los submenús se abren como un nivel aparte. */
+  readonly sheet = input(false, { transform: booleanAttribute });
   /** Pide cerrar: `true` devuelve el foco (ítem elegido, Escape), `false` no (Tab). */
   readonly closeRequest = output<boolean>();
+
+  /** Los niveles de la hoja, si el menú está dentro de una. */
+  readonly levels = inject(MIMI_SHEET_LEVELS, { optional: true });
+  /** Submenús abiertos como nivel directamente debajo de este menú. */
+  readonly openLevels = signal(0);
 
   private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
   private readonly items = new Map<string, () => void>();
@@ -150,6 +168,7 @@ export class MimiMenuPanel implements MimiMenuHost {
       MIMI_MENU_PANEL_CLASSES,
       'w-[var(--mimi-menu-width,240px)] max-w-[calc(100vw_-_16px)]',
       this.userClass(),
+      this.sheet() && SHEET_LEVEL_CLASSES,
     ),
   );
 
@@ -206,6 +225,11 @@ export class MimiMenuPanel implements MimiMenuHost {
   protected onFocusOut(event: FocusEvent): void {
     const next = event.relatedTarget as Node | null;
     if (!next || this.element.contains(next) || next === this.focusExempt()) return;
+    // Dentro de la hoja del teléfono (R.34), Tab va a la X o a las anclas de la trampa de foco del
+    // CDK (hermanas del contenedor, dentro de su panel): sigue en el diálogo, no cierra. El panel
+    // (`.mimi-sheet-pane`) contiene las dos; el marco (`[data-mimi-sheet]`) no contiene las anclas
+    // (por eso Tab cerraba la hoja en Chrome: `closest` con los dos selectores daba el marco).
+    if (this.element.closest('.mimi-sheet-pane')?.contains(next)) return;
     this.closeRequest.emit(false);
   }
 
@@ -232,8 +256,8 @@ const NO_TONE = [
 
 const DANGER = [
   'text-[color:var(--mimi-menu-danger,var(--mimi-destructive-soft-foreground))]',
-  'not-aria-disabled:data-[active=true]:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft-bg))]',
-  'aria-disabled:focus-visible:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft-bg))]',
+  'not-aria-disabled:data-[active=true]:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft))]',
+  'aria-disabled:focus-visible:bg-[color:var(--mimi-menu-danger-hover,var(--mimi-destructive-soft))]',
 ];
 
 const MENU_ITEM_BASE = [
@@ -530,7 +554,8 @@ export class MimiMenuSubContent {
 /**
  * Submenú: un `mimi-menu-sub-trigger` y su `<ng-template mimiMenuSubContent>`. Se abre con el
  * puntero, con Enter, Espacio o →, y se cierra con ← o Escape (el foco vuelve a su ítem). Va a
- * 10px del ítem; si no cabe a la derecha, pasa a la izquierda.
+ * 10px del ítem; si no cabe a la derecha, pasa a la izquierda. En la hoja del teléfono (R.34), es
+ * un nivel aparte: ocupa la hoja, con «Atrás» y su título en la cabecera.
  */
 @Component({
   selector: 'mimi-menu-sub',
@@ -571,6 +596,8 @@ export class MimiMenuSubContent {
       [attr.aria-labelledby]="triggerId"
       [attr.data-state]="menu.visible() ? 'open' : 'closed'"
       [attr.data-side]="side()"
+      [attr.data-in-sheet]="inSheet() ? '' : null"
+      [attr.data-sheet-level]="inSheet() && openLevels() ? '' : null"
       [style.translate]="shiftY() ? '0 ' + -shiftY() + 'px' : null"
       [class]="panelClasses()"
     >
@@ -580,7 +607,7 @@ export class MimiMenuSubContent {
     </div>
   `,
   styles: MIMI_OVERLAY_ANIMATION,
-  host: { class: 'relative block' },
+  host: { class: 'relative block', '[attr.data-level-open]': 'levelOpen() ? "" : null' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MimiMenuSub {
@@ -590,7 +617,17 @@ export class MimiMenuSub {
   protected readonly trigger = contentChild(MimiMenuSubTrigger, { descendants: false });
   protected readonly content = contentChild(MimiMenuSubContent, { descendants: false });
   private readonly menu = viewChild(Menu);
+  private readonly item = viewChild(MenuItem);
   private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
+
+  /** El menú raíz (dice si va en la hoja) y el submenú que contiene a este, si hay. */
+  private readonly root = inject(MimiMenuPanel, { optional: true });
+  private readonly parentSub = inject(MimiMenuSub, { optional: true, skipSelf: true });
+  /** Submenús abiertos como nivel directamente debajo de este. */
+  readonly openLevels = signal(0);
+  /** Abierto como nivel de la hoja. */
+  protected readonly levelOpen = signal(false);
+  private level: MimiSheetLevel | null = null;
 
   protected readonly value = `mimi-menu-sub-${nextId++}`;
   protected readonly triggerId = `${this.value}-trigger`;
@@ -600,12 +637,18 @@ export class MimiMenuSub {
   protected readonly side = signal<'right' | 'left'>('right');
   /** Cuánto sube el panel para no salir por abajo de la pantalla. */
   protected readonly shiftY = signal(0);
+  /**
+   * Dentro de la hoja del teléfono (R.34): el submenú es un nivel aparte, que ocupa la hoja (al
+   * lado no cabe en 360 px y quedaba fuera de la pantalla).
+   */
+  protected readonly inSheet = computed(() => !!this.root?.sheet());
+  private readonly hostElement = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
 
   private readonly labelText = signal('');
   protected readonly searchTerm = computed(() => this.trigger()?.textValue() || this.labelText());
 
   protected readonly itemClasses = computed(() =>
-    cn(menuItemVariants(), this.trigger()?.userClass()),
+    cn(menuItemVariants(), this.trigger()?.userClass(), this.levelOpen() && 'hidden!'),
   );
   protected readonly panelClasses = computed(() =>
     cn(
@@ -613,14 +656,28 @@ export class MimiMenuSub {
       'absolute top-[-5px] z-10 w-[200px] cursor-default',
       'data-[side=right]:left-[calc(100%_+_10px)] data-[side=left]:right-[calc(100%_+_10px)]',
       this.userClass(),
+      this.inSheet() && [
+        'static z-auto m-0 w-auto border-0 bg-transparent p-0 shadow-none',
+        SHEET_LEVEL_CLASSES,
+      ],
     ),
   );
 
   constructor() {
     afterNextRender({
-      read: () =>
-        this.labelText.set(this.trigger()?.label()?.nativeElement.textContent?.trim() ?? ''),
+      read: () => {
+        this.labelText.set(this.trigger()?.label()?.nativeElement.textContent?.trim() ?? '');
+      },
     });
+    // En la hoja: abrir el submenú es entrar en un nivel; cerrarlo (Atrás, ←, Escape), salir.
+    const levelInjector = inject(Injector);
+    effect(() => {
+      // `expanded` del ítem, no `visible` del menú: este vale `true` un momento al crearse.
+      const open = this.inSheet() && this.item()?.expanded() === true;
+      untracked(() => (open ? this.enterLevel(levelInjector) : this.leaveLevel(levelInjector)));
+    });
+    inject(DestroyRef).onDestroy(() => this.leaveLevel(null));
+    this.blockHoverInSheet();
     // Al abrir: a la derecha; si no cabe, a la izquierda. Sube si sale por abajo.
     const injector = inject(Injector);
     effect(() => {
@@ -633,10 +690,86 @@ export class MimiMenuSub {
     });
   }
 
+  /** El menú o submenú que contiene a este (cuenta sus niveles abiertos). */
+  private parentLevels(): { openLevels: WritableSignal<number> } | null {
+    return this.parentSub ?? this.root;
+  }
+
+  private enterLevel(injector: Injector): void {
+    const levels = this.root?.levels;
+    if (this.level || !levels) return;
+    this.level = { title: this.searchTerm(), back: () => this.item()?.close() };
+    levels.push(this.level);
+    this.levelOpen.set(true);
+    this.parentLevels()?.openLevels.update((n) => n + 1);
+    // Con el dedo, aria abre sin mover el foco (y el ítem del submenú se esconde): al primero.
+    afterNextRender(
+      {
+        write: () => {
+          if (!this.panel().nativeElement.contains(this.hostElement.ownerDocument.activeElement)) {
+            this.item()?.open();
+          }
+        },
+      },
+      { injector },
+    );
+  }
+
+  private leaveLevel(injector: Injector | null): void {
+    const level = this.level;
+    if (!level) return;
+    this.level = null;
+    this.root?.levels?.remove(level);
+    this.levelOpen.set(false);
+    this.parentLevels()?.openLevels.update((n) => Math.max(0, n - 1));
+    if (!injector) return;
+    // El foco vuelve al ítem del submenú, que se vuelve a ver después de este render.
+    afterNextRender(
+      { write: () => this.item()?.element.focus({ preventScroll: true }) },
+      { injector },
+    );
+  }
+
+  /**
+   * En la hoja, el puntero no abre ni cierra el submenú al pasar (sí al tocar o hacer clic): aria
+   * lo abre al pasar por su ítem y lo cierra al salir del menú raíz (hacia «Atrás», por ejemplo).
+   * Se detienen esos eventos en la captura, antes de llegar a aria.
+   */
+  private blockHoverInSheet(): void {
+    const host = this.hostElement;
+    const stopOver = (event: Event) => {
+      if (this.inSheet() && this.item()?.element.contains(event.target as Node)) {
+        event.stopPropagation();
+      }
+    };
+    const stopOut = (event: Event) => {
+      if (this.inSheet() && this.panel().nativeElement.contains(event.target as Node)) {
+        event.stopPropagation();
+      }
+    };
+    // El foco que sale del nivel hacia la cabecera de la hoja («Atrás», la X) o las anclas de la
+    // trampa de foco no es salir del submenú: aria lo cerraría (a11y H4). Con eso, Tab llega a
+    // «Atrás» y tocarlo vuelve con el foco en el ítem del submenú.
+    const stopFocusOut = (event: Event) => {
+      const next = (event as FocusEvent).relatedTarget as Node | null;
+      if (!this.inSheet() || !this.levelOpen() || !next) return;
+      if (this.root?.element.contains(next)) return;
+      if (this.root?.element.closest('.mimi-sheet-pane')?.contains(next)) event.stopPropagation();
+    };
+    host.addEventListener('mouseover', stopOver, true);
+    host.addEventListener('mouseout', stopOut, true);
+    host.addEventListener('focusout', stopFocusOut, true);
+    inject(DestroyRef).onDestroy(() => {
+      host.removeEventListener('mouseover', stopOver, true);
+      host.removeEventListener('mouseout', stopOut, true);
+      host.removeEventListener('focusout', stopFocusOut, true);
+    });
+  }
+
   private place(): void {
     const panel = this.panel().nativeElement;
     const view = panel.ownerDocument.defaultView;
-    if (!view || panel.hidden) return;
+    if (!view || panel.hidden || this.inSheet()) return;
     const rect = panel.getBoundingClientRect();
     if (rect.width === 0) return;
     if (rect.right > view.innerWidth - MIMI_VIEWPORT_MARGIN) this.side.set('left');

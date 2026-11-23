@@ -29,7 +29,8 @@ describe('ColorPickerPage', () => {
       const previews = examples(fixture);
       // La demo (con disparador) y dos ejemplos: el vivo de los tres formularios se fue (repetía
       // las pestañas de «Formularios») y solo lectura pasó a «Estados». Más «Tamaños».
-      expect(previews.length).toBe(4);
+      // Más «En el teléfono» (R.34).
+      expect(previews.length).toBe(5);
       // M.27: `size` en el disparador, sin contenedor `mimiSize`.
       expect(previews.some(({ code }) => code.includes('<mimi-color-input size="lg"'))).toBe(true);
       const sizes = el.querySelectorAll<HTMLElement>(

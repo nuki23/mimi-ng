@@ -6,6 +6,7 @@ import {
   Injector,
   LOCALE_ID,
   afterNextRender,
+  booleanAttribute,
   computed,
   inject,
   input,
@@ -200,7 +201,7 @@ const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase() + text.s
       @case ('days') {
         <div
           role="grid"
-          class="grid grid-cols-[repeat(7,var(--mimi-cal-cell,var(--mimi-date-cell-size,36px)))] gap-y-0.5"
+          [class]="gridClasses()"
           [attr.aria-labelledby]="titleId"
           (keydown)="onGridKeydown($event)"
         >
@@ -247,7 +248,7 @@ const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase() + text.s
         </div>
       }
       @case ('months') {
-        <div class="grid w-[252px] grid-cols-3 gap-1.5">
+        <div [class]="pickGridClasses()">
           @for (month of months(); track month.date) {
             <button
               type="button"
@@ -262,7 +263,7 @@ const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase() + text.s
         </div>
       }
       @case ('years') {
-        <div class="grid w-[252px] grid-cols-3 gap-1.5">
+        <div [class]="pickGridClasses()">
           @for (year of years(); track year.year) {
             <button
               type="button"
@@ -298,6 +299,7 @@ const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase() + text.s
   host: {
     '[class]': 'classes()',
     '[attr.data-view]': 'view()',
+    '[attr.data-fill]': 'fill() ? "" : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -325,6 +327,11 @@ export class MimiCalendar {
   /** Primer día de la semana (1 = lunes … 7 = domingo). Por defecto, el del idioma. */
   readonly weekStart = input<number>();
   readonly userClass = input('', { alias: 'class' });
+  /**
+   * Ocupa todo el ancho que tenga: las columnas de los días se reparten el espacio (en la hoja
+   * del teléfono, R.34). Sin él, mide siete días.
+   */
+  readonly fill = input(false, { transform: booleanAttribute });
 
   /** Se eligió un día habilitado (con el puntero, Enter o Espacio). */
   readonly datePick = output<MimiDate>();
@@ -339,7 +346,21 @@ export class MimiCalendar {
   protected readonly titleId = `mimi-calendar-${nextId++}-title`;
 
   protected readonly classes = computed(() =>
-    cn('inline-flex flex-col gap-2 font-sans text-foreground', this.userClass()),
+    cn(
+      'inline-flex flex-col gap-2 font-sans text-foreground',
+      this.fill() && 'flex w-full',
+      this.userClass(),
+    ),
+  );
+  /** Los días: siete columnas del tamaño de la celda o, con `fill`, repartidas. */
+  protected readonly gridClasses = computed(() =>
+    this.fill()
+      ? 'grid w-full grid-cols-[repeat(7,minmax(0,1fr))] gap-y-0.5'
+      : 'grid grid-cols-[repeat(7,var(--mimi-cal-cell,var(--mimi-date-cell-size,36px)))] gap-y-0.5',
+  );
+  /** Meses y años: el ancho de siete días o, con `fill`, todo. */
+  protected readonly pickGridClasses = computed(() =>
+    this.fill() ? 'grid w-full grid-cols-3 gap-1.5' : 'grid w-[252px] grid-cols-3 gap-1.5',
   );
 
   private readonly lang = computed(() => this.locale() || this.defaultLocale);

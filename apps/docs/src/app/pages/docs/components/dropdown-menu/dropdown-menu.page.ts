@@ -23,6 +23,9 @@ import shortcutsSource from './examples/dropdown-menu-shortcuts.example' with { 
 import sizesSource from './examples/dropdown-menu-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import submenuSource from './examples/dropdown-menu-submenu.example' with { loader: 'text' };
+// @ts-expect-error
+import phoneSource from './examples/dropdown-menu-phone.example' with { loader: 'text' };
+import { DropdownMenuPhoneExample } from './examples/dropdown-menu-phone.example';
 
 /** La página de Dropdown Menu (tarea G1.3), con la plantilla de página. */
 export const DROPDOWN_MENU_PAGE: DocPage = {
@@ -105,6 +108,14 @@ export const DROPDOWN_MENU_PAGE: DocPage = {
         component: DropdownMenuSubmenuExample,
         source: submenuSource as string,
       },
+      {
+        id: 'phone',
+        title: 'En el teléfono',
+        sentence:
+          'Debajo de 640 px se abre en una hoja inferior y cada submenú es un nivel con «Atrás»; `presentation="sheet"` la pide aquí.',
+        component: DropdownMenuPhoneExample,
+        source: phoneSource as string,
+      },
     ],
   },
   accessibility: {
@@ -125,6 +136,18 @@ export const DROPDOWN_MENU_PAGE: DocPage = {
   },
   api: {
     inputs: [
+      {
+        name: 'presentation',
+        type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
+        default: "'auto'",
+        description: 'Cómo se abre. `auto`: hoja inferior debajo de 640 px y panel desde ahí.',
+      },
+      {
+        name: 'sheetTitle',
+        type: 'string',
+        default: '—',
+        description: 'Título de la hoja. Sin él, el `aria-label` o el texto del trigger.',
+      },
       {
         name: 'open',
         type: 'boolean (model)',

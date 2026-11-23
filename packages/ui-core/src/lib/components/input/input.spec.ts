@@ -70,7 +70,7 @@ describe('MimiInput', () => {
     );
     expect(el.classList).toContain('border-[color:var(--mimi-input-border,var(--mimi-input))]');
     expect(el.classList).toContain('bg-[color:var(--mimi-input-bg,var(--mimi-input-background))]');
-    expect(el.classList).toContain('px-[var(--mimi-input-px,var(--mimi-input-padding-x,0.75rem))]');
+    expect(el.classList).toContain('px-[var(--mimi-input-px,0.75rem)]');
     expect(el.classList).toContain('focus-visible:ring-ring-soft');
     expect(el.classList).toContain(
       'aria-invalid:border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
@@ -106,7 +106,7 @@ describe('MimiInput', () => {
     for (const cls of [
       'border-[length:var(--mimi-input-border-width,1px)]',
       'text-[length:var(--mimi-input-text,var(--mimi-input-font-size,0.875rem))]',
-      'placeholder:text-[color:var(--mimi-input-placeholder,var(--mimi-input-placeholder-color,var(--mimi-muted-foreground)))]',
+      'placeholder:text-[color:var(--mimi-input-placeholder,var(--mimi-muted-foreground))]',
       'focus-visible:ring-[length:var(--mimi-input-focus-ring-width,3px)]',
     ]) {
       expect(el.classList).not.toContain(cls);

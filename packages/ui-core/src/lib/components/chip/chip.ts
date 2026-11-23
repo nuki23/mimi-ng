@@ -27,12 +27,14 @@ const CHIP_BASE = cn(
 const CHIP_TONE = {
   default:
     'bg-[color:var(--mimi-chip-bg,var(--mimi-chip,var(--mimi-secondary)))] text-[color:var(--mimi-chip-fg,var(--mimi-chip-foreground,var(--mimi-secondary-foreground)))]',
-  invalid: 'bg-destructive-soft-bg text-destructive-soft-foreground',
+  invalid: 'bg-destructive-soft text-destructive-soft-foreground',
 } as const;
 
 const REMOVE_CLASSES = cn(
   'inline-flex shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-current opacity-70 mimi-transition',
   'size-[var(--mimi-chip-remove-size,18px)] [&_svg]:size-3',
+  // Área de toque de 24 px (WCAG 2.5.8) sin cambiar el aspecto: un ::after centrado.
+  'relative after:absolute after:top-1/2 after:left-1/2 after:size-6 after:-translate-1/2',
   'hover:bg-[color:color-mix(in_oklab,var(--mimi-foreground)_12%,transparent)] hover:opacity-100 active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );

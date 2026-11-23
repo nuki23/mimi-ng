@@ -57,11 +57,12 @@ describe('CssVariables', () => {
     expect(el.querySelector('app-code-block')).toBeNull();
   });
 
-  it('marca los nombres de la 0.1.0 con el que los reemplaza', async () => {
+  it('no lista los nombres de la 0.1.0 que quitó la 0.8.0 (M.28)', async () => {
     const el = await setup('button');
-    const row = Array.from(el.querySelectorAll('tbody tr')).find((tr) =>
-      tr.textContent?.includes('--mimi-btn-padding-x'),
-    )!;
-    expect(row.textContent).toContain('usa --mimi-btn-px (se quita en la 1.0)');
+    const names = Array.from(el.querySelectorAll('tbody tr td:first-child')).map((td) =>
+      td.textContent?.trim(),
+    );
+    expect(names).toContain('--mimi-btn-px');
+    expect(names.filter((n) => n?.startsWith('--mimi-btn-padding'))).toEqual([]);
   });
 });

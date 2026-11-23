@@ -19,6 +19,7 @@ import { MimiInput } from '@/components/ui/input';
 import { MimiPopover, MimiPopoverContent, MimiPopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
+import type { MimiOverlayPresentation } from '@/components/ui/utils/overlay-config';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import { fieldTriggerStyles } from '@/components/ui/utils/field-styles';
 import {
@@ -615,6 +616,9 @@ let nextInputId = 0;
       [blocked]="readonly()"
       [class]="panelClasses()"
       [(open)]="open"
+      [presentation]="presentation()"
+      mobilePresentation="sheet"
+      [sheetTitle]="ariaLabel() || ''"
       (openChange)="onOpenChange($event)"
       aria-label="{{ texts.pickColor }}"
     >
@@ -699,6 +703,8 @@ export class MimiColorInput implements FormValueControl<string>, MimiFieldContro
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
   readonly userClass = input('', { alias: 'class' });
   readonly panelClass = input('');
+  /** Cómo se abre el panel (R.34): `auto` = hoja inferior por debajo de 640 px. */
+  readonly presentation = input<MimiOverlayPresentation>('auto');
 
   readonly touch = output<void>();
 

@@ -55,6 +55,7 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   command: 'command',
   dataTable: 'data-table',
   loading: 'loading',
+  sheet: 'sheet',
 };
 
 /**
@@ -73,6 +74,10 @@ const GLOBALS = new Set([
   '--mimi-chip-foreground',
   '--mimi-popover-foreground',
   '--mimi-popover-arrow-offset',
+  // La parte visible de la pantalla (visualViewport) y lo que tapa el teclado: las escribe la hoja.
+  '--mimi-sheet-visible',
+  '--mimi-sheet-keyboard',
+  '--mimi-sheet-offset',
   '--mimi-tooltip-foreground',
   '--mimi-tooltip-arrow-offset',
   // Dirección de la entrada y la salida del Toast (arriba o abajo), la escribe el componente.
@@ -157,6 +162,8 @@ const SHARED_SOURCES: Partial<Record<TokenComponent, readonly string[]>> = {
   input: ['utils/field-styles.ts'],
   // Las celdas y encabezados de la Data Table son los de la capa base (R.20).
   dataTable: ['components/table/table.ts'],
+  // La hoja común (R.34): el Sheet público es una capa fina sobre ella.
+  sheet: ['utils/sheet.ts'],
 };
 
 /** Código del componente (sin pruebas). */
@@ -201,13 +208,4 @@ describe('Variables CSS de cada componente (component-tokens.ts)', () => {
       ).toEqual([]);
     });
   }
-
-  it('cada nombre de la 0.1.0 apunta a uno que existe en la lista', () => {
-    for (const tokens of Object.values(COMPONENT_TOKENS)) {
-      const names = tokens.map((t) => t.name);
-      for (const t of tokens.filter((t) => t.deprecated)) {
-        expect(names, t.name).toContain(t.deprecated);
-      }
-    }
-  });
 });

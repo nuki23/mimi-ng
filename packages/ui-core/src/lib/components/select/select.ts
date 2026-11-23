@@ -4,6 +4,7 @@ import { CdkConnectedOverlay, type ConnectedOverlayPositionChange } from '@angul
 import {
   ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   DestroyRef,
   Directive,
   ElementRef,
@@ -52,6 +53,7 @@ import {
   MimiOptgroup,
   MimiOptionItem,
   MimiOptionList,
+  MimiOptionListStandalone,
   type MimiCompareWith,
   type MimiListFilter,
   type MimiListOptionContext,
@@ -62,6 +64,13 @@ import {
   mimiFilterSections,
   mimiListSections,
 } from '@/components/ui/option-list/option-list';
+import {
+  MIMI_OVERLAY_CONFIG,
+  type MimiOverlayPresentation,
+  type MimiResolvedPresentation,
+  mimiResolvePresentation,
+} from '@/components/ui/utils/overlay-config';
+import { MimiSheetOutlet, MimiSheetOverlay } from '@/components/ui/utils/sheet';
 import { MIMI_SELECT_TEXT } from './select-texts';
 
 /*
@@ -236,6 +245,15 @@ const CHEVRON_WITH_CLEAR_CLASSES = cn(
 const PANEL_CLASSES =
   'w-full max-w-[calc(100vw_-_16px)] overflow-hidden rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))] border border-border bg-[color:var(--mimi-select-menu-bg,var(--mimi-popover))] font-sans text-sm text-popover-foreground shadow-[shadow:var(--mimi-select-menu-shadow,var(--mimi-shadow-popover))] outline-none';
 
+/** La barra del buscador; en la hoja, sin el borde de abajo y como un campo (R.34). */
+const SEARCH_BAR_CLASSES =
+  'flex h-10 shrink-0 items-center gap-2 border-b border-border px-3 text-muted-foreground';
+const SHEET_SEARCH_BAR_CLASSES =
+  'mx-3 mb-2 flex h-11 shrink-0 items-center gap-2 rounded-[var(--mimi-select-radius,var(--mimi-radius,0.75rem))] border border-[color:var(--mimi-select-border,var(--mimi-input-border,var(--mimi-input)))] px-3 text-muted-foreground focus-within:border-ring';
+/** En la hoja, la lista ocupa lo que quede y cada opción mide 44 px (objetivo táctil). */
+const SHEET_LIST_CLASSES = 'max-h-none min-h-0 flex-1 px-2 pb-2';
+const SHEET_OPTION_CLASSES = cn(OPTION_CLASSES, 'h-11');
+
 const SEARCH_INPUT_CLASSES =
   'h-full min-w-0 flex-1 border-0 bg-transparent font-sans text-sm text-foreground outline-none placeholder:text-muted-foreground';
 
@@ -265,7 +283,10 @@ const SEARCH_INPUT_CLASSES =
     CdkConnectedOverlay,
     MimiOverlayFollow,
     MimiOptionList,
+    MimiOptionListStandalone,
     MimiSelectOutlet,
+    MimiSheetOverlay,
+    MimiSheetOutlet,
   ],
   // mimi-form-field lo encuentra por este token para mostrar el mensaje de error.
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiSelect }],
@@ -298,7 +319,7 @@ const SEARCH_INPUT_CLASSES =
         [readonly]="readonly()"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
-        (expandedChange)="setOpen($event)"
+        (expandedChange)="onExpandedChange($event)"
         (keydown)="onTriggerKeydown($event)"
         (keyup)="onTriggerKeyup($event)"
       >
@@ -416,61 +437,7 @@ const SEARCH_INPUT_CLASSES =
             [attr.inert]="state() === 'closed' ? '' : null"
             (mousedown)="onPanelMousedown($event)"
           >
-            <div
-              class="flex h-10 items-center gap-2 border-b border-border px-3 text-muted-foreground"
-            >
-              <svg
-                aria-hidden="true"
-                class="size-[15px] shrink-0"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                [attr.viewBox]="icon.viewBox"
-              >
-                <path d="m21 21-4.34-4.34" />
-                <circle cx="11" cy="11" r="8" />
-              </svg>
-              <input
-                #searchInput
-                #searchBox="ngCombobox"
-                ngCombobox
-                type="text"
-                autocomplete="off"
-                [alwaysExpanded]="true"
-                [class]="searchInputClasses"
-                [value]="query()"
-                [attr.aria-label]="searchPlaceholder() || text.search"
-                [attr.placeholder]="searchPlaceholder() || text.search"
-                (valueChange)="onQuery($event)"
-                (keydown)="onSearchKeydown($event)"
-              />
-              @if (query() && !loading()) {
-                <span data-slot="count" class="shrink-0 font-mono text-[11px]">{{
-                  text.results(count())
-                }}</span>
-              }
-            </div>
-            <ng-template ngComboboxPopup [combobox]="searchBox">
-              <mimi-option-list
-                [sections]="visibleSections()"
-                [selectedKeys]="selectedKeys()"
-                [query]="query()"
-                [loading]="loading()"
-                [loadingText]="text.loading"
-                [emptyTitle]="text.noResults"
-                [emptyText]="query() ? text.noResultsFor(query()) : ''"
-                [status]="loading() ? text.loading : ''"
-                [optionTemplate]="listTemplate()"
-                [listId]="listId"
-                [label]="panelLabel()"
-                [labelledBy]="ariaLabelledby()"
-                [listClass]="listClasses"
-                [optionClass]="optionClasses"
-                (pick)="pick($event)"
-              />
-            </ng-template>
+            <ng-container [mimiSheetOutlet]="searchContent" />
           </div>
         } @else {
           <div
@@ -501,6 +468,103 @@ const SEARCH_INPUT_CLASSES =
         }
       </ng-template>
     </ng-template>
+
+    <!-- El buscador y su lista: en el panel y, en el teléfono, arriba en la hoja (R.34). -->
+    <ng-template #searchContent>
+      <div [class]="searchBarClasses()">
+        <svg
+          aria-hidden="true"
+          class="size-[15px] shrink-0"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          [attr.viewBox]="icon.viewBox"
+        >
+          <path d="m21 21-4.34-4.34" />
+          <circle cx="11" cy="11" r="8" />
+        </svg>
+        <input
+          #searchInput
+          #searchBox="ngCombobox"
+          ngCombobox
+          type="text"
+          autocomplete="off"
+          [alwaysExpanded]="true"
+          [class]="searchInputClasses"
+          [value]="query()"
+          [attr.aria-label]="searchPlaceholder() || text.search"
+          [attr.placeholder]="searchPlaceholder() || text.search"
+          (valueChange)="onQuery($event)"
+          (keydown)="onSearchKeydown($event)"
+        />
+        @if (query() && !loading()) {
+          <span data-slot="count" class="shrink-0 font-mono text-[11px]">{{
+            text.results(count())
+          }}</span>
+        }
+      </div>
+      <ng-template ngComboboxPopup [combobox]="searchBox">
+        <mimi-option-list
+          [sections]="visibleSections()"
+          [selectedKeys]="selectedKeys()"
+          [query]="query()"
+          [loading]="loading()"
+          [loadingText]="text.loading"
+          [emptyTitle]="text.noResults"
+          [emptyText]="query() ? text.noResultsFor(query()) : ''"
+          [status]="loading() ? text.loading : query() && count() ? text.results(count()) : ''"
+          [optionTemplate]="listTemplate()"
+          [listId]="listId"
+          [label]="panelLabel()"
+          [labelledBy]="ariaLabelledby()"
+          [listClass]="sheetOpen() ? sheetListClasses : listClasses"
+          [optionClass]="sheetOpen() ? sheetOptionClasses : optionClasses"
+          (pick)="pick($event)"
+        />
+      </ng-template>
+    </ng-template>
+
+    <!--
+      En el teléfono (R.34): un diálogo (la hoja) con la lista. El panel de aria no entra: sin
+      buscador, la lista va sola (recibe el foco y su teclado); con buscador, el buscador de arriba.
+    -->
+    <ng-template
+      mimiSheet
+      [mimiSheetOpen]="sheetOpen()"
+      [mimiSheetSide]="mode() === 'fullscreen' ? 'full' : 'bottom'"
+      [mimiSheetTitle]="sheetTitle() || panelLabel()"
+      [mimiSheetSize]="sized.effective()"
+      [mimiSheetClass]="panelClass()"
+      (mimiSheetClose)="close(false)"
+      (mimiSheetDetach)="onSheetDetach()"
+    >
+      @if (search()) {
+        <div data-slot="sheet-search" class="flex min-h-0 flex-1 flex-col">
+          <ng-container [mimiSheetOutlet]="searchContent" />
+        </div>
+      } @else {
+        <div mimiOptionListStandalone class="flex min-h-0 flex-1 flex-col">
+          <mimi-option-list
+            standalone
+            [sections]="visibleSections()"
+            [selectedKeys]="selectedKeys()"
+            [loading]="loading()"
+            [loadingText]="text.loading"
+            [emptyTitle]="text.noResults"
+            [status]="loading() ? text.loading : ''"
+            [optionTemplate]="listTemplate()"
+            [listId]="listId"
+            [label]="panelLabel()"
+            [labelledBy]="ariaLabelledby()"
+            [listClass]="sheetListClasses"
+            [optionClass]="sheetOptionClasses"
+            (pick)="pick($event)"
+          />
+        </div>
+      }
+    </ng-template>
   `,
   styles: MIMI_OVERLAY_ANIMATION,
   host: {
@@ -512,6 +576,7 @@ const SEARCH_INPUT_CLASSES =
     '[attr.aria-labelledby]': 'null',
     // `align` es un atributo HTML antiguo: el navegador lo convierte en text-align (se heredaría).
     '[attr.align]': 'null',
+    '[attr.data-presentation]': 'open() ? mode() : null',
     '(focusout)': 'onFocusOut($event)',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -607,6 +672,13 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   readonly align = input<MimiOverlayAlign>('start');
   /** El panel mide al menos lo que el disparador (más si una opción lo pide). Con `false`, lo que pida su contenido. */
   readonly matchWidth = input(true, { transform: booleanAttribute });
+  /**
+   * Cómo se abre (R.34): `auto` (por defecto) = panel desde 640 px y, por debajo, la hoja
+   * inferior; `popover`, `sheet` o `fullscreen` lo fijan.
+   */
+  readonly presentation = input<MimiOverlayPresentation>('auto');
+  /** Título de la hoja. Sin él, el nombre del campo. */
+  readonly sheetTitle = input<string>();
 
   /** Se emite cuando el foco sale del Select (disparador y panel): marca el control como tocado. */
   readonly touch = output<void>();
@@ -648,6 +720,18 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected readonly chevronClasses = CHEVRON_CLASSES;
   protected readonly chevronWithClearClasses = CHEVRON_WITH_CLEAR_CLASSES;
   protected readonly searchInputClasses = SEARCH_INPUT_CLASSES;
+  protected readonly sheetListClasses = SHEET_LIST_CLASSES;
+  protected readonly sheetOptionClasses = SHEET_OPTION_CLASSES;
+  protected readonly sized = inject(MimiSized);
+  private readonly overlayConfig = inject(MIMI_OVERLAY_CONFIG);
+  private readonly document = inject(DOCUMENT);
+  /** La presentación de esta apertura (se elige al abrir, R.34). */
+  protected readonly mode = signal<MimiResolvedPresentation>('popover');
+  /** La hoja está abierta. */
+  protected readonly sheetOpen = computed(() => this.open() && this.mode() !== 'popover');
+  protected readonly searchBarClasses = computed(() =>
+    this.sheetOpen() ? SHEET_SEARCH_BAR_CLASSES : SEARCH_BAR_CLASSES,
+  );
   protected readonly viewportMargin = MIMI_VIEWPORT_MARGIN;
   /** En el lado pedido (debajo, por defecto); si no cabe, en el opuesto. Con las tres
    *  alineaciones de cada lado (5.17a), sin pasar a los costados. */
@@ -783,6 +867,15 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
     this.open.set(open);
   }
 
+  /**
+   * aria abre y cierra con el disparador. Con la hoja abierta, el foco pasa a ella y aria cierra
+   * («foco fuera»): eso no cuenta; la hoja se cierra con lo suyo (R.34).
+   */
+  protected onExpandedChange(open: boolean): void {
+    if (!open && this.sheetOpen()) return;
+    this.setOpen(open);
+  }
+
   /** Cierra y, con `refocus`, devuelve el foco al disparador (al elegir o con Escape). */
   private close(refocus: boolean): void {
     if (refocus) this.refocus();
@@ -796,14 +889,29 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
     this.panelLabel.set(
       this.ariaLabel() || trigger.labels?.[0]?.textContent?.trim() || this.placeholder(),
     );
+    if (!this.rendered()) {
+      this.mode.set(
+        mimiResolvePresentation(
+          this.presentation(),
+          'sheet',
+          this.overlayConfig,
+          this.document.defaultView,
+        ),
+      );
+    }
     this.state.set('open');
+    // En la hoja, la abre y la cierra `mimiSheet`; el foco va adentro y vuelve solo (cdk).
+    if (this.mode() !== 'popover') return;
     this.rendered.set(true);
     // Safari no enfoca un botón al hacer clic: sin foco no habría teclado.
     if (!this.search()) this.refocus({ preventScroll: true });
   }
 
   private hide(): void {
-    if (!this.rendered()) return;
+    if (!this.rendered()) {
+      this.state.set('closed');
+      return;
+    }
     this.state.set('closed');
     const panel = this.panel()?.nativeElement;
     const closing = ++this.closing;
@@ -830,6 +938,19 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   protected onDetach(): void {
     this.unmount();
     if (this.open()) this.open.set(false);
+  }
+
+  /**
+   * La hoja se fue (después de su salida; el cdk ya devolvió el foco al disparador): la búsqueda
+   * vuelve a vacío, como al desmontar el panel. Con el dedo o el ratón, sin el anillo del foco.
+   */
+  protected onSheetDetach(): void {
+    if (this.query()) {
+      this.query.set('');
+      this.searchChange.emit('');
+    }
+    if (this.modality.mostRecentModality !== 'keyboard') this.focusVisible.set(false);
+    if (this.open() && this.mode() !== 'popover') this.open.set(false);
   }
 
   protected onPositionChange({ connectionPair }: ConnectedOverlayPositionChange): void {
@@ -903,8 +1024,9 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
       event.preventDefault();
       this.close(true);
     } else if (key === 'Tab') {
-      // El panel está fuera del orden del documento: el Tab sigue desde el disparador.
-      this.close(true);
+      // El panel está fuera del orden del documento: el Tab sigue desde el disparador. En la
+      // hoja no: el foco queda atrapado en ella (R.34).
+      if (!this.sheetOpen()) this.close(true);
     } else if (key === 'Enter') {
       event.preventDefault();
       this.pickActive();
@@ -929,6 +1051,8 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
 
   /** El foco salió del Select entero (disparador, limpiar y panel). */
   protected onFocusOut(event: FocusEvent): void {
+    // Al abrir la hoja el foco pasa a ella: el Select no se toca hasta que se va después.
+    if (this.sheetOpen()) return;
     const next = event.relatedTarget as Node | null;
     if (next && (this.host.contains(next) || this.panel()?.nativeElement.contains(next))) return;
     this.touch.emit();

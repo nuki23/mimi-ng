@@ -39,6 +39,9 @@ describe('MimiChip', () => {
     expect(button()!.getAttribute('type')).toBe('button');
     button()!.click();
     expect(host.removed).toBe(1);
+    // El área de toque mide 24 px (WCAG 2.5.8) con un pseudo-elemento, sin cambiar el aspecto.
+    expect(button()!.className).toContain('after:size-6');
+    expect(button()!.className).toContain('relative');
   });
 
   it('sin removable no hay botón; invalid pinta el tono de error; class gana', async () => {
@@ -49,7 +52,7 @@ describe('MimiChip', () => {
     host.extra.set('h-8');
     await fixture.whenStable();
     expect(button()).toBeNull();
-    expect(chip().className).toContain('bg-destructive-soft-bg');
+    expect(chip().className).toContain('bg-destructive-soft');
     expect(chip().className).toContain('h-8');
     expect(chip().className).not.toContain('h-[var(--mimi-chip-height');
   });

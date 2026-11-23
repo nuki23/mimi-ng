@@ -77,6 +77,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'Command', path: '/docs/components/command', status: 'ready' },
       { title: 'Table', path: '/docs/components/table', status: 'ready' },
       { title: 'Loading', path: '/docs/components/loading', status: 'ready' },
+      { title: 'Sheet', path: '/docs/components/sheet', status: 'ready' },
       { title: 'Data Table', path: '/docs/components/data-table', status: 'ready' },
     ],
   },

@@ -101,7 +101,7 @@ export class ThemePage {
     { name: 'secondary', class: 'bg-secondary' },
     { name: 'destructive', class: 'bg-destructive' },
     { name: 'destructive-ring', class: 'bg-destructive-ring' },
-    { name: 'destructive-soft-bg', class: 'bg-destructive-soft-bg' },
+    { name: 'destructive-soft', class: 'bg-destructive-soft' },
     { name: 'success', class: 'bg-success' },
     { name: 'success-soft', class: 'bg-success-soft' },
     { name: 'info', class: 'bg-info' },
