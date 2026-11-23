@@ -27,17 +27,19 @@ function remSources(dir: string): string[] {
     const full = remPath.join(dir, entry.name);
     if (entry.isDirectory()) return remSources(full);
     const source = entry.name.endsWith('.ts') && !entry.name.endsWith('.spec.ts');
-    return source || entry.name.endsWith('.css') ? [full] : [];
+    // También las plantillas .html de los Blocks (revisor de la tanda 2, H1: se habían quedado).
+    return source || entry.name.endsWith('.css') || entry.name.endsWith('.html') ? [full] : [];
   });
 }
 
 const REM_PATTERNS: [string, RegExp][] = [
   ['text-[Npx]', /\btext-\[\d+(?:\.\d+)?px\]/g],
   ['text-[length:…px…]', /\btext-\[length:[^\]\s]*\d(?:\.\d+)?px[^\]\s]*\]/g],
-  ['font-size en px', /font-size:\s*[^;]*\d(?:\.\d+)?px/g],
+  // Hasta el fin del valor (`;` en CSS; `]` o un espacio en una clase como `[--x:20px]`).
+  ['font-size en px', /font-size:\s*[^;\]\s]*\d(?:\.\d+)?px/g],
   [
     'token de texto del tema en px',
-    /--mimi-[a-z0-9-]*(?:text|font-size|title|desc|hint)[a-z0-9-]*:\s*[^;]*\d(?:\.\d+)?px/g,
+    /--mimi-[a-z0-9-]*(?:text|font-size|title|desc|hint)[a-z0-9-]*:\s*(?:var\([^;\]]*|[^;\]\s]*)\d(?:\.\d+)?px/g,
   ],
 ];
 
@@ -49,6 +51,7 @@ describe('Tamaños de texto en rem en toda la librería', () => {
     expect(rel).toContain('theme/theme-base.css');
     expect(rel).toContain('components/menu/menu.ts');
     expect(rel.some((f) => f.startsWith('blocks/'))).toBe(true);
+    expect(rel).toContain('blocks/login-01/login-01.html');
   });
 
   it.each(REM_PATTERNS)('sin %s', (_, pattern) => {
