@@ -144,6 +144,11 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
     changes:
       'Cabecera 44 / 52 / 60 px, relleno 12 / 16 / 20 px, título 13,5 / 14,5 / 16 px y contenido 13 / 13,5 / 15 px.',
   },
+  {
+    component: 'Stepper',
+    changes:
+      'Círculo 28 / 32 / 40 px, número 12 / 13 / 15 px, título 12,5 / 13 / 15 px y texto de debajo 11 / 11,5 / 13 px.',
+  },
 ];
 
 /** Cómo se pide un tamaño (los tres modos). */

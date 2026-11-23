@@ -67,6 +67,7 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'skeleton', name: 'Skeleton' },
   { id: 'slider', name: 'Slider' },
   { id: 'sortable-list', name: 'Sortable List' },
+  { id: 'stepper', name: 'Stepper' },
   { id: 'switch', name: 'Switch' },
   { id: 'table', name: 'Table' },
   { id: 'tabs', name: 'Tabs' },

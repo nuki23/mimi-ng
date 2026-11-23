@@ -17,6 +17,7 @@ import type { MimiSize } from '@/components/ui/utils/size';
       }
     </div>
   `,
+  host: { class: 'block w-full' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionSizesExample {

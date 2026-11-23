@@ -601,6 +601,14 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
     }
   });
 
+  it('stepper (G4.3): el preset genera --mimi-stepper-*', () => {
+    const css = mimiThemeToCss({
+      components: { stepper: { indicatorSize: '36px', fontSize: '0.875rem' } },
+    });
+    expect(css).toContain('--mimi-stepper-indicator-size: 36px;');
+    expect(css).toContain('--mimi-stepper-font-size: 0.875rem;');
+  });
+
   it('los nombres de la 0.1.0 ya no están en el tipo del preset (M.28, 0.8.0)', () => {
     const removed = {
       // @ts-expect-error radii.badge se quitó: components.badge.radius.

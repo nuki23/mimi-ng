@@ -156,6 +156,10 @@
             "label": "sortable-list"
           },
           {
+            "value": "stepper",
+            "label": "stepper"
+          },
+          {
             "value": "switch",
             "label": "switch"
           },

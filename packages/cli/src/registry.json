@@ -101,6 +101,15 @@
       "files": ["components/accordion/accordion.ts", "components/accordion/index.ts"],
       "registryDependencies": ["utils/cn", "utils/size"]
     },
+    "stepper": {
+      "type": "component",
+      "files": [
+        "components/stepper/stepper.ts",
+        "components/stepper/stepper-texts.ts",
+        "components/stepper/index.ts"
+      ],
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
+    },
     "avatar": {
       "type": "component",
       "files": [

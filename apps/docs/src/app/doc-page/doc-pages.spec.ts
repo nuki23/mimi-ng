@@ -56,6 +56,8 @@ import { SHEET_PAGE } from '../pages/docs/components/sheet/sheet.page';
 import { SheetPage } from '../pages/docs/components/sheet/sheet-page';
 import { ACCORDION_PAGE } from '../pages/docs/components/accordion/accordion.page';
 import { AccordionPage } from '../pages/docs/components/accordion/accordion-page';
+import { STEPPER_PAGE } from '../pages/docs/components/stepper/stepper.page';
+import { StepperPage } from '../pages/docs/components/stepper/stepper-page';
 import { LOADING_PAGE } from '../pages/docs/components/loading/loading.page';
 import { LoadingPage } from '../pages/docs/components/loading/loading-page';
 import { TREE_PAGE } from '../pages/docs/components/tree/tree.page';
@@ -141,6 +143,7 @@ const PAGES: Record<string, { page: DocPage; component: Type<unknown> }> = {
   loading: { page: LOADING_PAGE, component: LoadingPage },
   sheet: { page: SHEET_PAGE, component: SheetPage },
   accordion: { page: ACCORDION_PAGE, component: AccordionPage },
+  stepper: { page: STEPPER_PAGE, component: StepperPage },
   'context-menu': { page: CONTEXT_MENU_PAGE, component: ContextMenuPage },
   'dropdown-menu': { page: DROPDOWN_MENU_PAGE, component: DropdownMenuPage },
   popover: { page: POPOVER_PAGE, component: PopoverPage },

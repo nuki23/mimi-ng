@@ -23,6 +23,7 @@ import { MimiAccordionImports } from '@/components/ui/accordion';
       </mimi-accordion>
     </div>
   `,
+  host: { class: 'block w-full' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionStatesExample {}

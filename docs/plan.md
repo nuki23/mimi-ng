@@ -156,7 +156,7 @@ Movido de la 0.6.0 a la **0.8.0** (09/11/2026: la 0.6.0 y la 0.7.0 son el plan d
 - [x] R.34 (hecha el 19/11/2026 en la rama `auto/0.8.0-tanda1-2026-11-16`; informe `docs/auto/0.8.0-tanda1-2026-11-16.md`, secciones 3 a 6; lo manual —lectores de pantalla y teléfono real—, a la M.20) Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; Command a pantalla completa; corte 640 px) · v0.8.0 (la abre, con la G4.2; decidido por el usuario el 15/11/2026) · L · depende: M.9, R.16 · [docs/plan/grupo-4/R.34.md](plan/grupo-4/R.34.md)
 - [x] G4.1 (hecha el 22/11/2026 en la rama `auto/0.8.0-tanda2-2026-11-22`; informe `docs/auto/0.8.0-tanda2-2026-11-22.md`, sección 6) Accordion · v0.8.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
 - [x] G4.2 (hecha el 19/11/2026, con la R.34) Sheet/Drawer (se construye junto con la R.34, sobre la misma hoja; lados izquierda, derecha y abajo) · v0.8.0 · — · depende: G3.P, G1.6, R.34 · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [ ] G4.3 Stepper · v0.8.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+- [x] G4.3 (hecha el 22/11/2026 en la rama `auto/0.8.0-tanda2-2026-11-22`; informe `docs/auto/0.8.0-tanda2-2026-11-22.md`, sección 7) Stepper · v0.8.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 - [ ] B.8 `dashboard-01` · v0.8.0 · — · depende: B.1, G3.4, G4.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [ ] G4.P Puerta del Grupo 4 · v0.8.0 · — · depende: R.34, G4.1 a G4.3, B.8, M.28 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 

@@ -351,6 +351,11 @@
   --mimi-accordion-px: var(--mimi-accordion-trigger-px, 1rem);
   --mimi-accordion-text: var(--mimi-accordion-font-size, 0.90625rem);
   --mimi-accordion-content-text: 0.84375rem;
+  /* Stepper (G4.3): círculo del paso, su número, el título y el texto de debajo. */
+  --mimi-stepper-s: var(--mimi-stepper-indicator-size, 32px);
+  --mimi-stepper-number: 0.8125rem;
+  --mimi-stepper-text: var(--mimi-stepper-font-size, 0.8125rem);
+  --mimi-stepper-hint: 0.71875rem;
 }
 
 [data-size='sm'] {
@@ -423,6 +428,10 @@
   --mimi-accordion-px: 0.75rem;
   --mimi-accordion-text: 0.84375rem;
   --mimi-accordion-content-text: 0.8125rem;
+  --mimi-stepper-s: 28px;
+  --mimi-stepper-number: 0.75rem;
+  --mimi-stepper-text: 0.78125rem;
+  --mimi-stepper-hint: 0.6875rem;
 }
 
 [data-size='lg'] {
@@ -495,6 +504,10 @@
   --mimi-accordion-px: 1.25rem;
   --mimi-accordion-text: 1rem;
   --mimi-accordion-content-text: 0.9375rem;
+  --mimi-stepper-s: 40px;
+  --mimi-stepper-number: 0.9375rem;
+  --mimi-stepper-text: 0.9375rem;
+  --mimi-stepper-hint: 0.8125rem;
 }
 
 .dark {

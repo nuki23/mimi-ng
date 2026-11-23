@@ -56,7 +56,8 @@ export type TokenComponent =
   | 'dataTable'
   | 'loading'
   | 'sheet'
-  | 'accordion';
+  | 'accordion'
+  | 'stepper';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -101,6 +102,7 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   loading: 'loading',
   sheet: 'sheet',
   accordion: 'accordion',
+  stepper: 'stepper',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1982,6 +1984,34 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-overlay',
       preset: false,
       description: 'Fondo de detrás.',
+    },
+  ],
+  stepper: [
+    {
+      name: '--mimi-stepper-indicator-size',
+      default: '32px',
+      preset: true,
+      description: 'Diámetro del círculo del paso en md (sm 28px, lg 40px).',
+    },
+    {
+      name: '--mimi-stepper-font-size',
+      default: '0.8125rem',
+      preset: true,
+      description: 'Texto del título del paso en md (13 px; sm 12,5 px, lg 15 px).',
+    },
+    {
+      name: '--mimi-stepper-line',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'Línea entre dos pasos.',
+    },
+    {
+      name: '--mimi-stepper-line-done',
+      default: 'primary',
+      inherits: '--mimi-primary',
+      preset: false,
+      description: 'Línea después de un paso completado.',
     },
   ],
   accordion: [

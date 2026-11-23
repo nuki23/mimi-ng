@@ -57,6 +57,7 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   loading: 'loading',
   sheet: 'sheet',
   accordion: 'accordion',
+  stepper: 'stepper',
 };
 
 /**
@@ -144,6 +145,11 @@ const GLOBALS = new Set([
   '--mimi-accordion-px',
   '--mimi-accordion-text',
   '--mimi-accordion-content-text',
+  // Stepper (G4.3): la escala por tamaño.
+  '--mimi-stepper-s',
+  '--mimi-stepper-number',
+  '--mimi-stepper-text',
+  '--mimi-stepper-hint',
   // Input OTP y File Upload (M.27).
   '--mimi-otp-w',
   '--mimi-otp-h',

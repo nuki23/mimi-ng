@@ -160,6 +160,11 @@ export const DOCS_ROUTES: Routes = [
       import('./components/accordion/accordion-page').then((m) => m.AccordionPage),
   },
   {
+    path: 'components/stepper',
+    title: 'Stepper · Mimi',
+    loadComponent: () => import('./components/stepper/stepper-page').then((m) => m.StepperPage),
+  },
+  {
     path: 'components/loading',
     title: 'Loading · Mimi',
     loadComponent: () => import('./components/loading/loading-page').then((m) => m.LoadingPage),

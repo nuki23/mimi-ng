@@ -686,6 +686,18 @@ export interface MimiComponentTokens {
   loading?: MimiLoadingTokens;
   sheet?: MimiSheetTokens;
   accordion?: MimiAccordionTokens;
+  stepper?: MimiStepperTokens;
+}
+
+/**
+ * Stepper (G4.3). Los colores del círculo salen de los estados (primario, error, borde); la
+ * línea entre pasos va en el CSS (`--mimi-stepper-line`, `-line-done`). Valen para `md`.
+ */
+export interface MimiStepperTokens {
+  /** Diámetro del círculo del paso (32px; sm 28px, lg 40px). */
+  indicatorSize?: string;
+  /** Texto del título del paso (0.8125rem, 13 px). */
+  fontSize?: string;
 }
 
 /**
