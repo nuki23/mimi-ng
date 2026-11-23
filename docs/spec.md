@@ -41,18 +41,19 @@ Librería de componentes UI para **Angular 22** y **Tailwind CSS 4** que se dist
 
 ### Versiones
 
-| Herramienta            | Versión instalada | Requisito                                                                                    |
-| ---------------------- | ----------------- | -------------------------------------------------------------------------------------------- |
-| Node.js                | 24.18.0           | Angular 22 exige `^22.22.3 \|\| ^24.15.0 \|\| ^26.0.0`                                       |
-| pnpm                   | 12.5.1            | Fijada en `packageManager` del `package.json` raíz                                           |
-| Angular (framework)    | 22.2.4            | `@angular/core`, `common`, `compiler`, `compiler-cli`, `forms`, `platform-browser`, `router` |
-| Angular (herramientas) | 22.2.4            | `@angular/cli`, `@angular/build` (se versionan aparte del framework)                         |
-| Angular CDK y Aria     | 22.2.4            | `@angular/cdk`, `@angular/aria` (aria exige la misma versión exacta que cdk)                 |
-| TypeScript             | 6.0.3             | Angular 22 exige `>=6.0.0 <6.1.0`                                                            |
-| Tailwind CSS           | 4.3.3             | Con `@tailwindcss/postcss`                                                                   |
-| Vitest                 | 4.1.11            | Pruebas de docs y ui-core con `ng test` (con jsdom)                                          |
-| @lucide/angular        | 1.47.0            | Íconos del showcase (peer `@angular/core >=17`); en el `package.json` raíz                   |
-| shiki                  | 4.4.3             | Resaltado del showcase (con `@shikijs/langs` y `@shikijs/themes`); en el `package.json` raíz |
+| Herramienta            | Versión instalada | Requisito                                                                                                                                |
+| ---------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Node.js                | 24.18.0           | Angular 22 exige `^22.22.3 \|\| ^24.15.0 \|\| ^26.0.0`                                                                                   |
+| pnpm                   | 12.5.1            | Fijada en `packageManager` del `package.json` raíz                                                                                       |
+| Angular (framework)    | 22.2.4            | `@angular/core`, `common`, `compiler`, `compiler-cli`, `forms`, `platform-browser`, `router`                                             |
+| Angular (herramientas) | 22.2.4            | `@angular/cli`, `@angular/build` (se versionan aparte del framework)                                                                     |
+| Angular CDK y Aria     | 22.2.4            | `@angular/cdk`, `@angular/aria` (aria exige la misma versión exacta que cdk)                                                             |
+| TypeScript             | 6.0.3             | Angular 22 exige `>=6.0.0 <6.1.0`                                                                                                        |
+| Tailwind CSS           | 4.3.3             | Con `@tailwindcss/postcss`                                                                                                               |
+| Vitest                 | 4.1.11            | Pruebas de docs y ui-core con `ng test` (con jsdom)                                                                                      |
+| @lucide/angular        | 1.47.0            | Íconos del showcase (peer `@angular/core >=17`); en el `package.json` raíz                                                               |
+| shiki                  | 4.4.3             | Resaltado del showcase (con `@shikijs/langs` y `@shikijs/themes`); en el `package.json` raíz                                             |
+| @playwright/test       | 1.65.1            | Solo desarrollo (`devDependencies` de la raíz): pruebas de extremo a extremo del showcase y la CI; decidido por el usuario el 23/11/2026 |
 
 El showcase se despliega con wrangler 4 (`npx wrangler@4 deploy`, sin instalarlo como dependencia) y Node 24.18.0 (`.node-version`); ver sección 10, «Despliegue».
 

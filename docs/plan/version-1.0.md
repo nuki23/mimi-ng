@@ -34,7 +34,8 @@ Primero, porque la CI vigila todo lo demás.
 - [ ] **1.0-5** CI en GitHub Actions.
   - Depende de: M.12, M.17, M.18.
   - En cada PR y en cada push a `main`: `pnpm install --frozen-lockfile`, `pnpm build` (sin avisos de presupuesto), `pnpm test`, `pnpm format:check`, y Playwright contra el sitio compilado en **Chromium, Firefox y WebKit**, con los navegadores instalados por Playwright en la CI.
-  - **PENDIENTE DE DECIDIR (usuario): Playwright como devDependency.** Hoy no está en el repo (los guiones de las puertas usan un `playwright-core` instalado fuera, con el Chrome del sistema) ni en la spec. Opciones: (a) `@playwright/test` como devDependency de la raíz (corredor, informes y los tres navegadores; recomendación); (b) `playwright-core` con un corredor propio. Sin la decisión, la M.18 y la 1.0-5 se paran (A7).
+  - **Decidido por el usuario (23/11/2026): Playwright como devDependency.** `@playwright/test` (opción (a), la recomendada) **solo como `devDependency` de la raíz**: no entra en `packages/cli`, ni en el registro, ni en las peers de `ui-core` (comprobado con `npm pack --dry-run` de `packages/cli`: el mismo shasum, `22a84602…`, y los mismos 193 archivos antes y después de instalarlo). En la spec 2. Antes, los guiones de las puertas usaban un `playwright-core` instalado fuera, con el Chrome del sistema.
+  - **Pedido del usuario (23/11/2026):** además de los tres motores de escritorio, dos proyectos de móvil emulado (un Android en Chromium y un iPhone en WebKit), que usa la revisión móvil de la tanda 1.
   - Node 24.18.0 (el de `.node-version`); pnpm por `packageManager` (12.5.1).
   - Las capturas de un fallo, como artefacto de la ejecución (nunca en el repo, A10).
   - Lo que falle en Firefox o WebKit y no en Chromium: se arregla en la tanda, o se anota como fallo conocido con su tarea, sin desactivar la prueba en silencio.
@@ -59,6 +60,7 @@ Primero, porque la CI vigila todo lo demás.
 - [ ] **M.24** Data Table: `pr-3`, `pl-4` y `-ml-1.5` físicos (RTL), junto a la 1.0-8 (en `mantenimiento.md`).
 - [ ] **M.16** Auditoría de `readonly`, `aria-labelledby` y `aria-describedby` en todos los controles (en `mantenimiento.md`): puede añadir entradas, así que va con la API.
 - [ ] **M.21** Switch con `aria-describedby` (en `mantenimiento.md`).
+- [ ] **M.8** La CLI y los bloqueos de «todo o nada» (en `mantenimiento.md`): un Block que no se puede instalar no debe dejar sus dependencias copiadas a medias. **Decidido por el usuario (23/11/2026):** va en esta tanda, con la revisión de la API y la CLI (antes, en la 0.9.x).
 - [ ] **M.1** Confirm con acción asíncrona; **M.3** rodeos de aria 22.2; **M.6** Select con una letra estando cerrado; **M.14** los dos ejes del área de Color Picker (en `mantenimiento.md`): cambian o añaden API, así que entran antes de congelarla.
 
 ### Tanda 3: documentación y declaración de accesibilidad
@@ -87,7 +89,7 @@ Primero, porque la CI vigila todo lo demás.
   - Depende de: M.20 (o el bloque que el usuario haya hecho), 1.0-P9.
   - Cada hallazgo del usuario es una subtarea (1.0-12a, 1.0-12b…) con una prueba que falla antes, si se puede automatizar. Sin rupturas salvo un bloqueante, aprobado por el usuario.
   - Una 0.9.x por tanda de hallazgos (0.9.1, 0.9.2…), con su CHANGELOG.
-- También pueden salir en una 0.9.x, sin prisa y sin API nueva: **M.5** (NVDA, la hace el usuario con la M.20), **M.7**, **M.8**, **M.10**, **M.22**, **0.1.1-3** (en `mantenimiento.md`), **5.12** y **5.14** (en `plataforma.md`).
+- También pueden salir en una 0.9.x, sin prisa y sin API nueva: **M.5** (NVDA, la hace el usuario con la M.20), **M.7**, **M.10**, **M.22**, **0.1.1-3** (en `mantenimiento.md`), **5.12** y **5.14** (en `plataforma.md`).
 
 ## 0.9.9: revisión final del usuario
 

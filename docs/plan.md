@@ -95,7 +95,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Desde el 23/11/202
 - [ ] M.5 Pasada con NVDA por los componentes con overlays (la hace el usuario, con la M.20) · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.6 Select: saltar a una opción con una letra estando cerrado · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.7 Íconos de Lucide en los chunks del showcase · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.8 La CLI y los bloqueos de «todo o nada» · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.8 La CLI y los bloqueos de «todo o nada» (un Block que no se puede instalar no deja sus dependencias copiadas a medias; a la tanda 2, decidido por el usuario el 23/11/2026) · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.9 (cerrada el 16/11/2026 en la R.P7: `ng g mimi select` en proyectos reales con el `.tgz`) Migrar Select a las utilidades de lista del Combobox (lo que faltaba de la R.15) · v0.7.0 · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.10 Script `check-plan` (casillas del índice y del detalle, enlaces, IDs) · v0.9.x · — · depende: la reorganización del plan (PASO 4) · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.11 La CLI y `--overwrite` con la misma versión (era un error; corregido) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
