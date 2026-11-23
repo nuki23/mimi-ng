@@ -6,7 +6,7 @@
 
 Las abiertas. Las tomadas están en el historial: las del Grupo 2 («Decididas (03/11/2026)»), en `docs/historial/plan-grupo-2.md` desde el cierre del grupo (06/11/2026); las anteriores, en `docs/historial/decisiones.md`; las vigentes como regla, en la spec.
 
-- [ ] Versión de Mimi Effects y del Grupo 5: se decide en la G4.P.
+- [x] Versión de Mimi Effects y del Grupo 5: **decidido por el usuario el 23/11/2026**, después de la 1.0.0 (`docs/plan/version-1.0.md`).
 - [ ] Cambios de API que pueda exigir la revisión móvil (5.17, en `docs/historial/grupo-2/5.17.md`; la comprobación en teléfonos sigue en la M.20).
 
 ### Índice de lo que está «PENDIENTE DE DECIDIR»
@@ -15,7 +15,7 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
 
-Ninguna abierta.
+- Playwright como devDependency del repo, para la M.18 y la CI (1.0-5, `docs/plan/version-1.0.md`; abierta el 23/11/2026): `@playwright/test` (recomendación) o `playwright-core` con un corredor propio. Antes de la tanda 1 de la 0.9.0.
 
 **PD-9 la decidió el usuario el 14/11/2026** (opción (a)): `DocPage.tokens` acepta una lista de tablas (la primera, la del componente). Tags Input y Combobox muestran también la del chip; File Upload, la de Progress.
 

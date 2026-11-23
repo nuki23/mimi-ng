@@ -86,37 +86,37 @@ Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
 ## Mantenimiento
 
-Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Sin versión propia: salen en la siguiente versión que se publique.
+Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Desde el 23/11/2026, cada una abierta tiene su versión en el plan hasta la 1.0 ([docs/plan/version-1.0.md](plan/version-1.0.md), decidido por el usuario).
 
-- [ ] M.1 Confirm con acción asíncrona · sin versión · — · depende: G1.6, G1.7 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.1 Confirm con acción asíncrona · v0.9.0 (tanda 2) · — · depende: G1.6, G1.7 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.2 Alinear Angular en la 22.2.x · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.3 Revisar rodeos con aria 22.2 · sin versión · — · depende: M.2 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.3 Revisar rodeos con aria 22.2 · v0.9.0 (tanda 2) · — · depende: M.2 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.4 Aviso de la CLI con un cdk o aria anteriores a 22.2.4 (solo avisa) · v0.3.0 · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.5 Pasada con NVDA por los componentes con overlays · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.6 Select: saltar a una opción con una letra estando cerrado · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.7 Íconos de Lucide en los chunks del showcase · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.8 La CLI y los bloqueos de «todo o nada» · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.5 Pasada con NVDA por los componentes con overlays (la hace el usuario, con la M.20) · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.6 Select: saltar a una opción con una letra estando cerrado · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.7 Íconos de Lucide en los chunks del showcase · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.8 La CLI y los bloqueos de «todo o nada» · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.9 (cerrada el 16/11/2026 en la R.P7: `ng g mimi select` en proyectos reales con el `.tgz`) Migrar Select a las utilidades de lista del Combobox (lo que faltaba de la R.15) · v0.7.0 · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.10 Script `check-plan` (casillas del índice y del detalle, enlaces, IDs) · sin versión · — · depende: la reorganización del plan (PASO 4) · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.10 Script `check-plan` (casillas del índice y del detalle, enlaces, IDs) · v0.9.x · — · depende: la reorganización del plan (PASO 4) · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.11 La CLI y `--overwrite` con la misma versión (era un error; corregido) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.12 Pruebas deterministas con temporizadores y animaciones (Dialog, Toast, docs bajo carga; la parte de docs, hecha el 05/11/2026) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.12 Pruebas deterministas con temporizadores y animaciones (Dialog, Toast, docs bajo carga; la parte de docs, hecha el 05/11/2026; la necesita la CI) · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.13 Bajar `main` del showcase (rutas de docs diferidas y menú móvil al abrir; hecha el 06/11/2026: `main` 142,64 → 135,40 kB) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.14 Color Picker: exponer los dos ejes del área · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.15 Pruebas de accesibilidad con axe sobre las páginas del showcase (axe-core aprobado solo como devDependency del repo; después de la G2.P) · sin versión · — · depende: G2.P · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.16 Auditoría de `readonly`, `aria-labelledby` y `aria-describedby` en todos los controles · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.17 Pruebas de docs independientes del `localStorage` de Node 26 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.18 Guardar en el repo el script de medición a 360 px · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.14 Color Picker: exponer los dos ejes del área · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.15 Pruebas de accesibilidad con axe sobre las páginas del showcase (axe-core aprobado solo como devDependency del repo; en la CI) · v0.9.0 (tanda 1) · — · depende: G2.P · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.16 Auditoría de `readonly`, `aria-labelledby` y `aria-describedby` en todos los controles · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.17 Pruebas de docs independientes del `localStorage` de Node 26 · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.18 Guardar en el repo el script de medición a 360 px (y los guiones de Playwright que usará la CI) · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.19 Excluir `.mimi/` del escaneo de Tailwind (`init` la escribe; `ng g mimi` avisa) · sin versión (sale en la 0.4.0) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9; la release de GitHub y la prueba desde npm de la 0.3.0, hechas; y lo manual de los Blocks de la 0.4.0 cuando se hagan; la hace el usuario) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.21 Switch con una entrada `aria-describedby` (y quitar el rodeo de `settings-01`) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.22 Hash de `blocks.css` en el sitio · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9; la release de GitHub y la prueba desde npm de la 0.3.0, hechas; y lo manual de los Blocks de la 0.4.0 cuando se hagan; la hace el usuario; sus arreglos, la 1.0-12) · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.21 Switch con una entrada `aria-describedby` (y quitar el rodeo de `settings-01`) · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.22 Hash de `blocks.css` en el sitio · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.23 (hecha el 09/11/2026: las páginas de componentes cargan `components.css` con `@scope`; el CSS global bajó de 180 a 111 kB; ver `docs/auto/refinamiento-0.6.0-parte3-2026-11-09.md`) Por qué el CSS global del sitio crece con cada componente (y una hoja aparte por componente o grupo, como `blocks.css`) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.24 Data Table: la barra, el pie y el botón de orden siguen con `pr-3`, `pl-4` y `-ml-1.5` físicos (no RTL) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] M.24 Data Table: la barra, el pie y el botón de orden siguen con `pr-3`, `pl-4` y `-ml-1.5` físicos (no RTL) · v0.9.0 (tanda 2) · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.25 (hecha el 15/11/2026: 98,02 kB) Qué hace crecer `main` del sitio (137,83 kB, a 2,17 kB del aviso de 140) y bajarlo antes de añadir componentes (por ejemplo, `tailwind-merge` por `cn()` en la cabecera) · v0.7.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.26 (hecha el 14/11/2026) Quitar «provisional, sin diseño» y «plan, D6» del código y de las páginas (sin rediseño, 14/11/2026) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.27 (hecha el 15/11/2026, con `mimi-color-input`) `size` en Input OTP y File Upload (sin justificación para no tenerlo; visto en la R.26) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.28 (hecha el 16/11/2026; los escenarios del `.tgz`, en la G4.P) Quitar todo lo marcado «hasta la 1.0» (atajos de `variant` de la 0.1.x en Button y Badge, radio de Badge, `paddingX` y `placeholderColor` de Input en el tema, alias `destructive-soft`, `"vivid"`; absorbe 1.0-1 a 1.0-4), con una prueba que falla si queda algo marcado así; **RUPTURA** · v0.8.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 (mientras, se publica con npm) · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 
 ## Diseño
 
@@ -148,8 +148,8 @@ Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También e
 - [x] DP.3 (14/11/2026) Tanda 3, capas flotantes (7 páginas) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [x] DP.4 (14/11/2026) Tanda 4, datos y fechas (9 páginas) · sin versión · L · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [x] DP.5 (14/11/2026; las 39 páginas con la plantilla y la lista de pendientes quitada; queda PD-9 para el usuario) Tanda 5, simples (8 páginas; Button salió en el piloto) · sin versión · M · depende: DP.1 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
-- [ ] DP.6 Tanda 6, Blocks (`block-doc.ts`) y vitrina de la portada · sin versión · M · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
-- [ ] DP.P Puerta: prueba de estructura sin excepciones y Playwright de todas las páginas · sin versión · — · depende: DP.1 a DP.6 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.6 Tanda 6, Blocks (`block-doc.ts`) y vitrina de la portada · v0.9.0 (tanda 3) · M · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
+- [ ] DP.P Puerta: prueba de estructura sin excepciones y Playwright de todas las páginas · v0.9.0 (tanda 3) · — · depende: DP.1 a DP.6 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 
 ## Grupo 4 → v0.8.0: estructura
 
@@ -162,62 +162,74 @@ Movido de la 0.6.0 a la **0.8.0** (09/11/2026: la 0.6.0 y la 0.7.0 son el plan d
 - [x] B.8 (hecha el 22/11/2026 en la rama `auto/0.8.0-tanda2-2026-11-22`; informe `docs/auto/0.8.0-tanda2-2026-11-22.md`, sección 8) `dashboard-01` · v0.8.0 · — · depende: B.1, G3.4, G4.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
 - [~] G4.P (recorrida el 23/11/2026 en la rama `auto/0.8.0-puerta-2026-11-23`, a falta del usuario: publicación y lo manual; informe `docs/auto/0.8.0-puerta-2026-11-23.md`) Puerta del Grupo 4 · v0.8.0 · — · depende: R.34, G4.1 a G4.3, B.8, M.28 · [docs/plan/grupo-4.md](plan/grupo-4.md)
 
-## Mimi Effects (sin versión asignada)
+## Mimi Effects → después de la 1.0.0
 
-Detalle: [docs/plan/mimi-effects.md](plan/mimi-effects.md). La versión se decide en la G4.P.
+Detalle: [docs/plan/mimi-effects.md](plan/mimi-effects.md). **Decidido por el usuario el 23/11/2026** (la G4.P lo dejaba a su decisión): Mimi Effects pasa a **después de la 1.0.0**, en versiones menores de la 1.x (agregar componentes después de la 1.0 es compatible). Sin orden fijo.
 
-- [ ] E.1 Animated Theme Toggler · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.2 Terminal · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.3 Toggler y Terminal en el showcase · sin versión · — · depende: E.1, E.2 · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.4 Marquee · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.5 Bento Grid · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.6 Number Ticker · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.7 Border Beam / Shine Border · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.8 Magic Card · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.9 Blur Fade · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.10 Text Animate · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.11 Animated List · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.12 Confetti · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.13 Ripple · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.14 Fondos: Grid y Dot Pattern · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.15 Marcos Safari e iPhone · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.16 File Tree · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
-- [ ] E.17 Code Comparison · sin versión · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.1 Animated Theme Toggler · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.2 Terminal · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.3 Toggler y Terminal en el showcase · después de la 1.0.0 · — · depende: E.1, E.2 · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.4 Marquee · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.5 Bento Grid · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.6 Number Ticker · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.7 Border Beam / Shine Border · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.8 Magic Card · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.9 Blur Fade · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.10 Text Animate · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.11 Animated List · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.12 Confetti · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.13 Ripple · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.14 Fondos: Grid y Dot Pattern · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.15 Marcos Safari e iPhone · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.16 File Tree · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
+- [ ] E.17 Code Comparison · después de la 1.0.0 · — · depende: — · [docs/plan/mimi-effects.md](plan/mimi-effects.md)
 
-## Grupo 5: según lo que pidan los usuarios (sin versión asignada)
+## Grupo 5 → después de la 1.0.0 (según lo que pidan los usuarios)
 
-Detalle: [docs/plan/grupo-5.md](plan/grupo-5.md). Sin orden fijo ni versión.
+Detalle: [docs/plan/grupo-5.md](plan/grupo-5.md). **Decidido por el usuario el 23/11/2026**: el Grupo 5 pasa a **después de la 1.0.0**, en versiones menores de la 1.x. Sin orden fijo.
 
-- [ ] G5.1 Sidebar de dashboard · sin versión · — · depende: G4.2, G1.2 · [docs/plan/grupo-5.md](plan/grupo-5.md)
-- [ ] G5.2 Time Picker · sin versión · — · depende: G1.1 · [docs/plan/grupo-5.md](plan/grupo-5.md)
-- [ ] G5.3 Carousel · sin versión · — · depende: — · [docs/plan/grupo-5.md](plan/grupo-5.md)
-- [ ] G5.4 Image Preview · sin versión · — · depende: G1.6 · [docs/plan/grupo-5.md](plan/grupo-5.md)
-- [ ] G5.5 Timeline · sin versión · — · depende: — · [docs/plan/grupo-5.md](plan/grupo-5.md)
-- [ ] G5.6 Resizable · sin versión · — · depende: — · [docs/plan/grupo-5.md](plan/grupo-5.md)
-- [ ] G5.7 Hover Card · sin versión · — · depende: G1.1 · [docs/plan/grupo-5.md](plan/grupo-5.md)
-- [ ] G5.8 Rating · sin versión · — · depende: — · [docs/plan/grupo-5.md](plan/grupo-5.md)
+- [ ] G5.1 Sidebar de dashboard · después de la 1.0.0 · — · depende: G4.2, G1.2 · [docs/plan/grupo-5.md](plan/grupo-5.md)
+- [ ] G5.2 Time Picker · después de la 1.0.0 · — · depende: G1.1 · [docs/plan/grupo-5.md](plan/grupo-5.md)
+- [ ] G5.3 Carousel · después de la 1.0.0 · — · depende: — · [docs/plan/grupo-5.md](plan/grupo-5.md)
+- [ ] G5.4 Image Preview · después de la 1.0.0 · — · depende: G1.6 · [docs/plan/grupo-5.md](plan/grupo-5.md)
+- [ ] G5.5 Timeline · después de la 1.0.0 · — · depende: — · [docs/plan/grupo-5.md](plan/grupo-5.md)
+- [ ] G5.6 Resizable · después de la 1.0.0 · — · depende: — · [docs/plan/grupo-5.md](plan/grupo-5.md)
+- [ ] G5.7 Hover Card · después de la 1.0.0 · — · depende: G1.1 · [docs/plan/grupo-5.md](plan/grupo-5.md)
+- [ ] G5.8 Rating · después de la 1.0.0 · — · depende: — · [docs/plan/grupo-5.md](plan/grupo-5.md)
 
 ## Plataforma y experiencia
 
 Detalle: [docs/plan/plataforma.md](plan/plataforma.md). La 5.2 y la 5.17 están en el Grupo 2.
 
-- [ ] 5.1 Schematic `theme` · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.3 Comando `mimi` · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.4 `mimi update` · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.5 Página «Migrar desde PrimeNG / NG-ZORRO» · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.6 Documentación en español e inglés · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.8 Buscador ⌘K del showcase · sin versión · — · depende: G3.3 · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.9 Selector ES/EN en el header · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.10 Navegación superior del header · sin versión · — · depende: 5.2, 5.8 · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.12 GitHub Actions: pruebas de la CLI · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.13 Tabla de compatibilidad en la documentación · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.14 Prerender del showcase · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
-- [ ] 5.15 Badge interactivo · sin versión · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.1 Schematic `theme` · después de la 1.0.0 · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.3 Comando `mimi` · después de la 1.0.0 · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.4 `mimi update` · después de la 1.0.0 · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.5 Página «Migrar desde PrimeNG / NG-ZORRO» · v0.9.0 (tanda 3) · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.6 Documentación en español e inglés · después de la 1.0.0 · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.8 Buscador ⌘K del showcase · después de la 1.0.0 · — · depende: G3.3 · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.9 Selector ES/EN en el header · después de la 1.0.0 · — · depende: 5.6 · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.10 Navegación superior del header · después de la 1.0.0 · — · depende: 5.2, 5.8 · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.12 GitHub Actions: pruebas de la CLI en proyectos limpios por versión de Angular (la CI de cada PR es la 1.0-5) · v0.9.x · — · depende: 1.0-5 · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.13 Tabla de compatibilidad en la documentación · v0.9.0 (tanda 3) · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.14 Prerender del showcase · v0.9.x · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
+- [ ] 5.15 Badge interactivo · después de la 1.0.0 · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
 - [ ] 5.18 Migraciones automáticas con `ng update` (idea, sin detallar; anotada el 16/11/2026) · después de la 1.0 · — · depende: — · [docs/plan/plataforma.md](plan/plataforma.md)
 
-## Versión 1.0
+## Hasta la 1.0.0: 0.9.0, 0.9.x, 0.9.9 y 1.0.0
 
-Detalle: [docs/plan/version-1.0.md](plan/version-1.0.md). **Las cuatro pasan a la M.28 (v0.8.0)** desde el 16/11/2026: con la política de rupturas del usuario, antes de la 1.0 no se mantienen obsoletos. Después de la 1.0: la 5.18 (migraciones con `ng update`, en «Plataforma»).
+Detalle: [docs/plan/version-1.0.md](plan/version-1.0.md) (plan escrito el 23/11/2026 a partir del inventario de la puerta de la 0.8.0, `docs/auto/0.8.0-puerta-2026-11-23.md`, sección 4, con lo que decidió el usuario ese día). **0.9.0:** CI, axe, la revisión completa de la API con las últimas rupturas, las páginas que faltan y la declaración de accesibilidad, en cuatro tandas. **0.9.x:** los arreglos de la M.20 manual del usuario. **0.9.9:** la revisión final del usuario. **1.0.0:** el lanzamiento, cuando entra en vigor la política de compatibilidad (spec 12). Las 1.0-1 a 1.0-4 pasaron a la M.28 (v0.8.0); después de la 1.0, el Grupo 5, Mimi Effects y lo de plataforma marcado «después de la 1.0.0».
+
+- [ ] 1.0-5 CI en GitHub Actions: build, test, format:check y Playwright en Chromium, Firefox y WebKit en cada PR · v0.9.0 (tanda 1) · L · depende: M.12, M.17, M.18 · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-6 Revisión completa de la API pública (lo que queda fijo en la 1.0), con las últimas rupturas · v0.9.0 (tanda 2) · L · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-7 Nombres inconsistentes (`success` de Input OTP, `min`/`max` frente a `minDate`/`maxDate`, `mimi-date-range` y `MimiDateRangePicker`, `MIMI_DATE_PICKER_TEXT`); **RUPTURA** · v0.9.0 (tanda 2) · M · depende: 1.0-6 · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-8 Data Table: `density` y `size` · v0.9.0 (tanda 2) · S · depende: 1.0-6 · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-9 Página «Personalización» · v0.9.0 (tanda 3) · M · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-10 Página «Iconos» · v0.9.0 (tanda 3) · S · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-11 Declaración de accesibilidad (WCAG 2.2 AA: qué se probó, con qué y qué falta) · v0.9.0 (tanda 3; se completa en la 0.9.9 con la M.20) · M · depende: M.15 · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-P9 Puerta de la 0.9.0 · v0.9.0 (tanda 4) · M · depende: 1.0-5 a 1.0-11 y lo de la 0.9.0 en «Mantenimiento», «Plataforma» y «Páginas» · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-12 Arreglos de la M.20 (una subtarea por hallazgo del usuario; sin rupturas, salvo un bloqueante) · v0.9.x · ? · depende: M.20, 1.0-P9 · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-13 Revisión final del usuario y la 0.9.9 · v0.9.9 · M · depende: 1.0-12, M.20 · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [ ] 1.0-14 Lanzamiento de la 1.0.0 (entra en vigor la política de compatibilidad) · v1.0.0 · M · depende: 1.0-13 · [docs/plan/version-1.0.md](plan/version-1.0.md)
 
 - [x] 1.0-1 (→ M.28, hecha el 16/11/2026) Quitar alias `destructive-soft` y renombrar `destructive-soft-bg` · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
 - [x] 1.0-2 (→ M.28, hecha el 16/11/2026) Quitar los atajos de variante de Button y Badge · v0.8.0 (con la M.28) · — · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)

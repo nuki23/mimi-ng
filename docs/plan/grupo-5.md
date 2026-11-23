@@ -2,9 +2,9 @@
 
 [← Índice del plan](../plan.md)
 
-## Grupo 5: según lo que pidan los usuarios (sin versión asignada)
+## Grupo 5 → después de la 1.0.0 (según lo que pidan los usuarios)
 
-Prioridad según lo que pidan los usuarios. Sin orden fijo. Revisado en la G2.P: sigue sin versión (decidido por el usuario el 05/11/2026, opción (a)); la versión se decide en la G4.P. Dependencias de la spec 4 (tabla del Grupo 5).
+Prioridad según lo que pidan los usuarios. Sin orden fijo. Revisado en la G2.P: sigue sin versión (decidido por el usuario el 05/11/2026, opción (a)). **Decidido por el usuario el 23/11/2026** (la G4.P lo dejaba a su decisión): después de la 1.0.0, en versiones menores de la 1.x (ver `docs/plan/version-1.0.md`). Dependencias de la spec 4 (tabla del Grupo 5).
 
 - [ ] G5.1 Sidebar de dashboard. Diseño: `F5 Dashboard y Media`.
   - Depende de: G4.2 (Sheet, en móvil), G1.2 (Tooltip, hecha)

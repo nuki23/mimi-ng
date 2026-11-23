@@ -4,7 +4,7 @@
 
 ## Mantenimiento
 
-Pendientes sin grupo. No tienen versión propia: salen en la siguiente versión que se publique después de terminarlos.
+Pendientes sin grupo. **Desde el 23/11/2026, cada una abierta tiene versión** en el plan hasta la 1.0 (`docs/plan/version-1.0.md`, y en el índice): M.12, M.15, M.17 y M.18 en la 0.9.0 (tanda 1, con la CI); M.1, M.3, M.6, M.14, M.16, M.21 y M.24 en la 0.9.0 (tanda 2, antes de congelar la API); M.5, M.7, M.8, M.10, M.20, M.22 y la 0.1.1-3 en una 0.9.x.
 
 - [ ] M.1 Confirm con acción asíncrona (`onConfirm` que devuelve una promesa): «cargando» en Confirmar, sin cerrar hasta que termine y sin doble envío. El diseño no lo muestra (decidido en la G1.7). Trampas que encontró la revisión del plan:
   - **Doble clic en zoneless:** el `disabled` de `loading` llega en el render siguiente, no en el mismo evento; dos clics rápidos o Enter con autorrepetición llaman dos veces. Hace falta una marca `pending` que se revise antes de llamar.
