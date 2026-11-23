@@ -36,6 +36,15 @@ Lo que quedaba de la 0.1.x se quita en esta versión, sin obsoletos (política d
 - **En el teléfono, «Atrás» y la X de la hoja miden 40 px** (antes 30), en los paneles y en Sheet; en escritorio no cambian.
 - **La página ya no salta hacia atrás al cerrar un panel con el scroll.** Con un panel abierto (Select, Combobox, Date Picker, Date Range, Color Picker, Popover, Dropdown Menu, Context Menu), al hacer scroll hasta que el campo sale de la vista, el panel se cierra y el foco vuelve al campo **sin mover la página** (`preventScroll`). Antes, en Popover, Date Picker, Date Range y Color Picker la página volvía hasta el campo, y en Select y los menús el foco se perdía en `<body>`. Con Escape, al elegir o con un clic fuera, nada cambia. `MimiOverlayFollow` gana `mimiOverlayReturnFocus` (adónde vuelve el foco; por defecto, el origen).
 
+### Cómo actualizar desde la 0.7.0
+
+```sh
+npm i -D @mimi-ng/cli@0.8.0     # o: pnpm add -D @mimi-ng/cli@0.8.0
+npx ng g mimi <los componentes y Blocks que usas>
+```
+
+Antes, revisa las rupturas de arriba: `variant="destructive"` / `"secondary"` / `"default"` dejan de compilar (`tone="danger"`…), `ring-destructive-soft` compila pero con otro color (busca `destructive-soft`), los nombres de tokens de la 0.1.0 de tu preset, y las pruebas o el CSS que busquen tamaños de texto en px. La CLI dice «actualizado de 0.7.0 a 0.8.0» en lo que no modificaste y **bloquea** lo que sí, con su aviso y la copia de `.mimi/base/` para comparar; una página tuya modificada (un Block) tampoco se toca. **Efecto en cadena:** con tu Button modificado, `dashboard-01` no se agrega («necesita button 0.8.0») y tu Button viejo convive con el tema nuevo (la CLI te avisa: si usa un atajo de `variant` que se quitó, deja de compilar). Si agregas Sheet, la CLI pone `@import '@angular/cdk/overlay-prebuilt.css'` en tu CSS global (con `source(none)`, también: los `@source` ya estaban). En el teléfono, los paneles se abren en una hoja: si no lo quieres, `provideMimiOverlay({ mobileBreakpoint: 0 })`.
+
 ## 0.7.0 (16/11/2026): Card, Table, tableros y carga
 
 Antes de la 1.0, Mimi no mantiene obsoletos (política del 16/11/2026, [`docs/spec.md`](docs/spec.md), sección 12): lo que cambia, cambia en esta versión, y cada ruptura dice abajo cómo actualizar. Lo que sigue marcado «hasta la 1.0» desde la 0.2.0 (los atajos de `variant` de Button y Badge, `destructive-soft`, los nombres de tokens de la 0.1.0 y `"style": "vivid"`) **se quita en la 0.8.0**.
