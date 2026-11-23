@@ -18,6 +18,8 @@ export interface MimiColorPickerText {
   pickColor: string;
   /** Aviso del campo cuando el OKLCH escrito se recortó a sRGB. */
   clipped: string;
+  /** Descripción del disparador obligatorio de `mimi-color-input` (un `<button>` no admite `aria-required`). */
+  required: string;
 }
 
 export const MIMI_COLOR_PICKER_TEXT_EN: MimiColorPickerText = {
@@ -31,6 +33,7 @@ export const MIMI_COLOR_PICKER_TEXT_EN: MimiColorPickerText = {
   noRecent: 'The colors you choose will appear here.',
   pickColor: 'Choose color',
   clipped: 'Adjusted to the closest sRGB color.',
+  required: 'required',
 };
 
 export const MIMI_COLOR_PICKER_TEXT_ES: MimiColorPickerText = {
@@ -44,6 +47,7 @@ export const MIMI_COLOR_PICKER_TEXT_ES: MimiColorPickerText = {
   noRecent: 'Los colores que elijas aparecerán aquí.',
   pickColor: 'Elegir color',
   clipped: 'Ajustado al color sRGB más cercano.',
+  required: 'obligatorio',
 };
 
 export const MIMI_COLOR_PICKER_TEXT = new InjectionToken<MimiColorPickerText>(

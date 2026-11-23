@@ -13,6 +13,8 @@
     "test": "ng test docs --watch=false && ng test ui-core --watch=false && pnpm test:cli",
     "test:ui-core": "ng test ui-core --watch=false",
     "test:cli": "pnpm build:cli && vitest run --config packages/cli/vitest.config.mts",
+    "e2e": "playwright test",
+    "e2e:report": "playwright show-report tmp/e2e/report",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
@@ -41,6 +43,7 @@
     "@angular/compiler-cli": "22.2.4",
     "@playwright/test": "1.65.1",
     "@tailwindcss/postcss": "^4.1.12",
+    "axe-core": "4.14.1",
     "jsdom": "^28.0.0",
     "postcss": "^8.5.3",
     "prettier": "^3.9.8",

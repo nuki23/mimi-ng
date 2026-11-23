@@ -45,7 +45,8 @@ describe('SliderPage', () => {
       expect(
         el.querySelector('app-slider-range-example [role="slider"]')!.getAttribute('aria-label'),
       ).toBe('Precio por noche, Mínimo');
-      // La distancia mínima del ejemplo de edad: 30–33 no llega a 5 años y se ve el error.
+      // La distancia mínima del ejemplo de edad: 30–40 no llega a 15 años y se ve el error (con
+      // los pulgares separados: juntos, axe marca target-size, 2.5.8; M.15).
       expect(el.querySelector('app-slider-range-example mimi-slider[data-invalid]')).not.toBeNull();
       // Estados: deshabilitado, solo lectura y con error.
       const states = el.querySelectorAll('app-slider-states-example mimi-slider');

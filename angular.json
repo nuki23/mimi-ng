@@ -110,7 +110,8 @@
           "builder": "@angular/build:unit-test",
           "options": {
             "tsConfig": "apps/docs/tsconfig.spec.json",
-            "runnerConfig": "vitest-base.config.mts"
+            "runnerConfig": "vitest-base.config.mts",
+            "setupFiles": ["apps/docs/src/test-setup.ts"]
           }
         }
       }

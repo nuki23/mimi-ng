@@ -117,9 +117,8 @@ let nextId = 0;
         [disabled]="disabled()"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
-        [attr.aria-describedby]="valueId"
+        [attr.aria-describedby]="required() ? valueId + ' ' + requiredId : valueId"
         [attr.aria-invalid]="showInvalid() || null"
-        [attr.aria-required]="required() || null"
         [attr.aria-disabled]="readonly() || null"
         [attr.data-readonly]="readonly() ? '' : null"
         [attr.data-placeholder]="label() ? null : ''"
@@ -155,6 +154,11 @@ let nextId = 0;
             <span data-slot="days" class="shrink-0 text-xs text-muted-foreground">{{ days }}</span>
           }
         </span>
+        <!-- Un <button> no admite aria-required (axe, aria-allowed-attr; M.15): «obligatorio»
+             va en la descripción. Oculto: no forma parte del nombre. -->
+        @if (required()) {
+          <span [id]="requiredId" hidden>{{ texts.required }}</span>
+        }
       </button>
       <ng-template mimiPopoverContent>
         @if (presets().length) {
@@ -280,6 +284,7 @@ export class MimiDateRangePicker
   private readonly baseId = `mimi-date-range-${nextId++}`;
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly valueId = `${this.baseId}-value`;
+  protected readonly requiredId = `${this.baseId}-required`;
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly open = signal(false);

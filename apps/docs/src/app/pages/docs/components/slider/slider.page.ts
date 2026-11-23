@@ -74,7 +74,7 @@ export const SLIDER_PAGE: DocPage = {
         id: 'range',
         title: 'Rango y distancia mínima',
         sentence:
-          'La distancia mínima entre pulgares es un validador de tu formulario: el rango de edad la pide de 5 años y marca el error.',
+          'La distancia mínima entre pulgares es un validador de tu formulario: el rango de edad la pide de 15 años y marca el error.',
         component: SliderRangeExample,
         source: rangeSource as string,
       },

@@ -80,7 +80,9 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-Ninguna. (La 0.8.0 se publicó el 23/11/2026; registro en `docs/historial/plan-grupo-4.md`.)
+- 1.0-5 · `auto/0.9.0-tanda1-2026-11-23` · Claude Code (modo autónomo) · 23/11/2026 (a falta de ver la CI en verde en GitHub)
+
+(La 0.8.0 se publicó el 23/11/2026; registro en `docs/historial/plan-grupo-4.md`.)
 
 (DP.2 a DP.5, hechas el 14/11/2026; la siguiente del plan de páginas es DP.6, Blocks y portada, y la puerta DP.P.)
 
@@ -99,13 +101,13 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Desde el 23/11/202
 - [x] M.9 (cerrada el 16/11/2026 en la R.P7: `ng g mimi select` en proyectos reales con el `.tgz`) Migrar Select a las utilidades de lista del Combobox (lo que faltaba de la R.15) · v0.7.0 · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.10 Script `check-plan` (casillas del índice y del detalle, enlaces, IDs) · v0.9.x · — · depende: la reorganización del plan (PASO 4) · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.11 La CLI y `--overwrite` con la misma versión (era un error; corregido) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.12 Pruebas deterministas con temporizadores y animaciones (Dialog, Toast, docs bajo carga; la parte de docs, hecha el 05/11/2026; la necesita la CI) · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.12 (hecha el 23/11/2026: 20 de 20 corridas con la máquina cargada; queda anotado el arranque en frío de la CLI) Pruebas deterministas con temporizadores y animaciones (Dialog, Toast, docs bajo carga; la parte de docs, hecha el 05/11/2026; la necesita la CI) · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.13 Bajar `main` del showcase (rutas de docs diferidas y menú móvil al abrir; hecha el 06/11/2026: `main` 142,64 → 135,40 kB) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.14 Color Picker: exponer los dos ejes del área · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.15 Pruebas de accesibilidad con axe sobre las páginas del showcase (axe-core aprobado solo como devDependency del repo; en la CI) · v0.9.0 (tanda 1) · — · depende: G2.P · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.15 (hecha el 23/11/2026: 59 páginas en claro y oscuro y 9 paneles abiertos, sin violaciones; una regla desactivada con su motivo) Pruebas de accesibilidad con axe sobre las páginas del showcase (axe-core aprobado solo como devDependency del repo; en la CI) · v0.9.0 (tanda 1) · — · depende: G2.P · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.16 Auditoría de `readonly`, `aria-labelledby` y `aria-describedby` en todos los controles · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.17 Pruebas de docs independientes del `localStorage` de Node 26 · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.18 Guardar en el repo el script de medición a 360 px (y los guiones de Playwright que usará la CI) · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.17 (hecha el 23/11/2026: `apps/docs/src/test-setup.ts`; verde con Node 24.18.0 y 26.13.1) Pruebas de docs independientes del `localStorage` de Node 26 · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.18 (hecha el 23/11/2026: `apps/docs/e2e/`, con la auditoría a 360 px y los guiones de las puertas) Guardar en el repo el script de medición a 360 px (y los guiones de Playwright que usará la CI) · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.19 Excluir `.mimi/` del escaneo de Tailwind (`init` la escribe; `ng g mimi` avisa) · sin versión (sale en la 0.4.0) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.20 Comprobación manual del Grupo 2 (teléfonos reales y paneles altos, NVDA, Firefox, Safari, VoiceOver, decisiones por defecto antes de la 0.9.9; la release de GitHub y la prueba desde npm de la 0.3.0, hechas; y lo manual de los Blocks de la 0.4.0 cuando se hagan; la hace el usuario; sus arreglos, la 1.0-12) · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.21 Switch con una entrada `aria-describedby` (y quitar el rodeo de `settings-01`) · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
@@ -212,7 +214,7 @@ Detalle: [docs/plan/plataforma.md](plan/plataforma.md). La 5.2 y la 5.17 están 
 
 Detalle: [docs/plan/version-1.0.md](plan/version-1.0.md) (plan escrito el 23/11/2026 a partir del inventario de la puerta de la 0.8.0, `docs/auto/0.8.0-puerta-2026-11-23.md`, sección 4, con lo que decidió el usuario ese día). **0.9.0:** CI, axe, la revisión completa de la API con las últimas rupturas, las páginas que faltan y la declaración de accesibilidad, en cuatro tandas. **0.9.x:** los arreglos de la M.20 manual del usuario. **0.9.9:** la revisión final del usuario. **1.0.0:** el lanzamiento, cuando entra en vigor la política de compatibilidad (spec 12). Las 1.0-1 a 1.0-4 pasaron a la M.28 (v0.8.0); después de la 1.0, el Grupo 5, Mimi Effects y lo de plataforma marcado «después de la 1.0.0».
 
-- [ ] 1.0-5 CI en GitHub Actions: build, test, format:check y Playwright en Chromium, Firefox y WebKit en cada PR · v0.9.0 (tanda 1) · L · depende: M.12, M.17, M.18 · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [~] 1.0-5 CI en GitHub Actions: build, test, format:check y Playwright en Chromium, Firefox y WebKit (y dos teléfonos emulados) en cada PR · v0.9.0 (tanda 1) · L · depende: M.12, M.17, M.18 · [docs/plan/version-1.0.md](plan/version-1.0.md)
 - [ ] 1.0-6 Revisión completa de la API pública (lo que queda fijo en la 1.0), con las últimas rupturas · v0.9.0 (tanda 2) · L · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
 - [ ] 1.0-7 Nombres inconsistentes (`success` de Input OTP, `min`/`max` frente a `minDate`/`maxDate`, `mimi-date-range` y `MimiDateRangePicker`, `MIMI_DATE_PICKER_TEXT`); **RUPTURA** · v0.9.0 (tanda 2) · M · depende: 1.0-6 · [docs/plan/version-1.0.md](plan/version-1.0.md)
 - [ ] 1.0-8 Data Table: `density` y `size` · v0.9.0 (tanda 2) · S · depende: 1.0-6 · [docs/plan/version-1.0.md](plan/version-1.0.md)

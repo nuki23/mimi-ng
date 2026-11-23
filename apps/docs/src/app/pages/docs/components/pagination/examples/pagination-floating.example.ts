@@ -8,8 +8,14 @@ import { CLIENTS, STATUS_CLASSES } from './clients';
   template: `
     <!-- variant="floating" solo pone la sombra; la posición va en class. -->
     <div class="relative h-[330px] w-full overflow-hidden rounded-card border bg-card">
-      <!-- La tabla deja libre el espacio final para que la paginación no tape la última fila. -->
-      <div class="absolute inset-0 overflow-auto pb-[72px]">
+      <!-- La tabla deja libre el espacio final para que la paginación no tape la última fila.
+           Con scroll propio: tabindex y nombre, para recorrerla con el teclado. -->
+      <div
+        class="absolute inset-0 overflow-auto pb-[72px]"
+        tabindex="0"
+        role="region"
+        aria-label="Clientes"
+      >
         <table class="w-full text-left text-[13.5px]">
           <thead class="sticky top-0 bg-muted text-[12.5px] text-muted-foreground">
             <tr>

@@ -2,6 +2,19 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
+## Por publicar (0.9.0)
+
+Se completa en la puerta de la 0.9.0 (1.0-P9). Antes de la 1.0.0 las rupturas están permitidas, sin obsoletos (spec 12).
+
+### Rupturas (qué cambia en algo que ya tenías y qué hacer)
+
+- **`aria-required` ya no va en los disparadores que son un `<button>`** (Date Picker, Date Range, `mimi-color-input` y File Upload, y Form Field con un control de esos): ARIA no lo permite en `role="button"` (lo encontró axe). En su lugar, «obligatorio» va en el `aria-describedby` del botón. Lo que rompe: una prueba tuya que buscara `aria-required="true"` en esos botones. **Cómo actualizar:** comprueba el `aria-describedby` (el texto «required» u «obligatorio»), o el `required` de tu formulario.
+- **Textos nuevos `required`** en `MimiDatePickerText`, `MimiColorPickerText` y `MimiFileUploadText` («required» / «obligatorio» en `_ES`). Lo que rompe: un objeto tuyo con el tipo completo (`const t: MimiDatePickerText = { … }`) deja de compilar. **Cómo actualizar:** agrega `required` a ese objeto; con `provideMimi…Text({ … })` (que acepta una parte) no hace falta nada.
+
+### Cambios visibles (sin cambio de API)
+
+- **Calendar:** los días de otro mes ya no llevan opacidad encima de `text-muted-foreground` (se pueden elegir, así que su texto cumple 4,5:1; en oscuro daban 3,2:1). Se ven un poco más marcados.
+
 ## 0.8.0 (23/11/2026): Sheet, Accordion, Stepper, `dashboard-01` y paneles en el teléfono
 
 Lo que quedaba de la 0.1.x se quita en esta versión, sin obsoletos (política del 16/11/2026, [`docs/spec.md`](docs/spec.md), sección 12). La 0.9.0 será la última con rupturas libres (la revisión de la API antes de la 1.0.0); desde la 1.0.0, lo que se quite se marcará obsoleto y vivirá al menos una versión menor.

@@ -154,9 +154,8 @@ let nextId = 0;
       [disabled]="disabled()"
       [attr.aria-disabled]="readonly() ? 'true' : null"
       [attr.aria-labelledby]="labelledBy()"
-      [attr.aria-describedby]="hint() ? hintId : null"
+      [attr.aria-describedby]="describedBy()"
       [attr.aria-invalid]="showInvalid() || null"
-      [attr.aria-required]="required() || null"
       [attr.data-state]="over() ? 'over' : 'idle'"
       (click)="openPicker()"
       (dragenter)="onDragEnter($event)"
@@ -194,6 +193,11 @@ let nextId = 0;
           class="text-[length:var(--mimi-upload-hint,0.78125rem)] text-muted-foreground"
           >{{ hint() }}</span
         >
+      }
+      <!-- Un <button> no admite aria-required (axe, aria-allowed-attr; M.15): «obligatorio»
+           va en la descripción. Oculto: no forma parte del nombre. -->
+      @if (required()) {
+        <span [id]="requiredId" hidden>{{ texts.required }}</span>
       }
     </button>
     @if (ariaLabel()) {
@@ -287,6 +291,13 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
     [this.ariaLabelledby(), this.ariaLabel() ? this.labelId : null, this.headingId]
       .filter(Boolean)
       .join(' '),
+  );
+  protected readonly requiredId = `${this.baseId}-required`;
+  protected readonly describedBy = computed(
+    () =>
+      [this.hint() ? this.hintId : null, this.required() ? this.requiredId : null]
+        .filter(Boolean)
+        .join(' ') || null,
   );
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 

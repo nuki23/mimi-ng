@@ -348,7 +348,13 @@ describe('MimiFileUpload', () => {
     expect(zone('reactive').className).toContain(
       'border-[color:var(--mimi-input-error,var(--mimi-destructive))]',
     );
-    expect(zone('signal').getAttribute('aria-required')).toBe('true');
+    // M.15 (axe, aria-allowed-attr): un <button> no admite aria-required; va en la descripción.
+    const t = zone('signal');
+    expect(t.hasAttribute('aria-required')).toBe(false);
+    const described = (t.getAttribute('aria-describedby') ?? '').split(/\s+/);
+    expect(described.map((id) => document.getElementById(id)?.textContent?.trim())).toContain(
+      'obligatorio',
+    );
     await pick('signal', [file('b.txt', 'text/plain')]);
     expect(h.data().files.map((f) => f.name)).toEqual(['b.txt']);
     await pick('ng-model', [file('c.txt', 'text/plain')]);

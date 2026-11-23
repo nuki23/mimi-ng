@@ -28,6 +28,8 @@ export interface MimiDatePickerText {
   pickStart: string;
   /** Cuenta de días del rango: «7 días». */
   days: (count: number) => string;
+  /** Descripción del disparador de un campo obligatorio (un `<button>` no admite `aria-required`). */
+  required: string;
 }
 
 /** Textos predeterminados (inglés). */
@@ -43,6 +45,7 @@ export const MIMI_DATE_PICKER_TEXT_EN: MimiDatePickerText = {
   pickEnd: 'Choose the end date.',
   pickStart: 'Click a day to start a new period.',
   days: (count) => `${count} ${count === 1 ? 'day' : 'days'}`,
+  required: 'required',
 };
 
 /** Textos en español: `provideMimiDatePickerText(MIMI_DATE_PICKER_TEXT_ES)`. */
@@ -58,6 +61,7 @@ export const MIMI_DATE_PICKER_TEXT_ES: MimiDatePickerText = {
   pickEnd: 'Elige el día final.',
   pickStart: 'Haz clic en un día para empezar un periodo nuevo.',
   days: (count) => `${count} ${count === 1 ? 'día' : 'días'}`,
+  required: 'obligatorio',
 };
 
 /** Textos activos. Sin `provideMimiDatePickerText`, los predeterminados en inglés. */

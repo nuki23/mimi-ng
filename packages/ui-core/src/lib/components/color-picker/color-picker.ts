@@ -634,9 +634,8 @@ let nextInputId = 0;
         [attr.data-readonly]="readonly() ? '' : null"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
-        [attr.aria-describedby]="valueId"
+        [attr.aria-describedby]="required() ? valueId + ' ' + requiredId : valueId"
         [attr.aria-invalid]="showInvalid() || null"
-        [attr.aria-required]="required() || null"
       >
         <span
           aria-hidden="true"
@@ -650,6 +649,11 @@ let nextInputId = 0;
           [class.text-muted-foreground]="!value()"
           >{{ value() || placeholder() }}</span
         >
+        <!-- Un <button> no admite aria-required (axe, aria-allowed-attr; M.15): «obligatorio»
+             va en la descripción. Oculto: no forma parte del nombre. -->
+        @if (required()) {
+          <span [id]="requiredId" hidden>{{ texts.required }}</span>
+        }
       </button>
       <ng-template mimiPopoverContent>
         <mimi-color-picker
@@ -718,6 +722,7 @@ export class MimiColorInput implements FormValueControl<string>, MimiFieldContro
   private readonly baseId = `mimi-color-input-${nextInputId++}`;
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly valueId = `${this.baseId}-value`;
+  protected readonly requiredId = `${this.baseId}-required`;
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
   protected readonly open = signal(false);
   /** La muestra solo pinta un color válido. */

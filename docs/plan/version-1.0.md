@@ -28,10 +28,11 @@ Escrito el 23/11/2026 a partir del inventario de la puerta de la 0.8.0 (`docs/au
 
 Primero, porque la CI vigila todo lo demás.
 
-- [ ] **M.17** Pruebas de docs independientes del `localStorage` de Node 26 (en `mantenimiento.md`). Una CI no puede depender de la versión de Node de la máquina.
-- [ ] **M.12** Pruebas deterministas con temporizadores y animaciones (en `mantenimiento.md`), y las que caducan con la máquina cargada (`pages.spec.ts` de la CLI, `components-styles.spec.ts`): en la CI la máquina es más lenta y compartida.
-- [ ] **M.18** Los guiones de Playwright al repo (en `mantenimiento.md`): el de medición a 360 px y los que hoy viven fuera (scroll del Sheet, líneas del Stepper, estados de los Blocks, escenarios del navegador), en una carpeta de pruebas de extremo a extremo del showcase. Necesita la decisión sobre Playwright de la 1.0-5.
-- [ ] **1.0-5** CI en GitHub Actions.
+- [x] **M.17** (hecha el 23/11/2026) Pruebas de docs independientes del `localStorage` de Node 26 (en `mantenimiento.md`). Una CI no puede depender de la versión de Node de la máquina.
+- [x] **M.12** (hecha el 23/11/2026) Pruebas deterministas con temporizadores y animaciones (en `mantenimiento.md`), y las que caducan con la máquina cargada (`pages.spec.ts` de la CLI, `components-styles.spec.ts`): en la CI la máquina es más lenta y compartida.
+- [x] **M.18** (hecha el 23/11/2026) Los guiones de Playwright al repo (en `mantenimiento.md`): el de medición a 360 px y los que hoy viven fuera (scroll del Sheet, líneas del Stepper, estados de los Blocks, escenarios del navegador), en una carpeta de pruebas de extremo a extremo del showcase. Necesita la decisión sobre Playwright de la 1.0-5.
+- [~] **1.0-5** CI en GitHub Actions.
+  - Estado: rama `auto/0.9.0-tanda1-2026-11-23`, Claude Code (modo autónomo), desde el 23/11/2026. Hecho: `.github/workflows/ci.yml` y `apps/docs/e2e/` (informe `docs/auto/0.9.0-tanda1-2026-11-23.md`, puntos 3 y 4); falta verla en verde en GitHub.
   - Depende de: M.12, M.17, M.18.
   - En cada PR y en cada push a `main`: `pnpm install --frozen-lockfile`, `pnpm build` (sin avisos de presupuesto), `pnpm test`, `pnpm format:check`, y Playwright contra el sitio compilado en **Chromium, Firefox y WebKit**, con los navegadores instalados por Playwright en la CI.
   - **Decidido por el usuario (23/11/2026): Playwright como devDependency.** `@playwright/test` (opción (a), la recomendada) **solo como `devDependency` de la raíz**: no entra en `packages/cli`, ni en el registro, ni en las peers de `ui-core` (comprobado con `npm pack --dry-run` de `packages/cli`: el mismo shasum, `22a84602…`, y los mismos 193 archivos antes y después de instalarlo). En la spec 2. Antes, los guiones de las puertas usaban un `playwright-core` instalado fuera, con el Chrome del sistema.
@@ -41,7 +42,7 @@ Primero, porque la CI vigila todo lo demás.
   - Lo que falle en Firefox o WebKit y no en Chromium: se arregla en la tanda, o se anota como fallo conocido con su tarea, sin desactivar la prueba en silencio.
   - Criterios de hecho: el flujo pasa en un PR de prueba; un PR con un test roto queda en rojo; el tiempo total, medido (objetivo: menos de 15 minutos).
   - Trampa: el agente no puede cambiar la configuración del repositorio en GitHub (proteger `main`, exigir la CI): lo hace el usuario; el informe dice qué marcar.
-- [ ] **M.15** Pruebas de accesibilidad con axe (en `mantenimiento.md`; `axe-core` aprobado como devDependency del repo): todas las páginas del showcase, en claro y oscuro, con los paneles flotantes abiertos donde se pueda; en la CI desde el primer día. Las reglas que no apliquen se desactivan una por una con su motivo escrito.
+- [x] **M.15** (hecha el 23/11/2026) Pruebas de accesibilidad con axe (en `mantenimiento.md`; `axe-core` aprobado como devDependency del repo): todas las páginas del showcase, en claro y oscuro, con los paneles flotantes abiertos donde se pueda; en la CI desde el primer día. Las reglas que no apliquen se desactivan una por una con su motivo escrito.
 
 ### Tanda 2: la API que queda fija (últimas rupturas)
 

@@ -25,7 +25,10 @@ export function trimCode(code: string): string {
   selector: 'app-code-block',
   imports: [CopyButton],
   templateUrl: './code-block.html',
-  host: { class: 'block min-w-0' },
+  // `lang="bash"` en la plantilla de quien lo usa quedaría como el atributo `lang` de HTML (el
+  // idioma del contenido, que un lector de pantalla usa para elegir la voz): se quita y el
+  // lenguaje del código va en `data-lang` (axe, valid-lang; M.15).
+  host: { class: 'block min-w-0', '[attr.lang]': 'null', '[attr.data-lang]': 'lang()' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeBlock {

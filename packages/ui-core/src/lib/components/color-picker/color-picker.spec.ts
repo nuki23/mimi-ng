@@ -310,7 +310,13 @@ describe('MimiColorPicker', { timeout: 20_000 }, () => {
 
   it('disparador con Signal Forms y ngModel', async () => {
     const { h, fixture, host } = await setup();
-    expect(host('signal').querySelector('button')!.getAttribute('aria-required')).toBe('true');
+    // M.15 (axe, aria-allowed-attr): un <button> no admite aria-required; va en la descripción.
+    const t = host('signal').querySelector('button')!;
+    expect(t.hasAttribute('aria-required')).toBe(false);
+    const described = (t.getAttribute('aria-describedby') ?? '').split(/\s+/);
+    expect(described.map((id) => document.getElementById(id)?.textContent?.trim())).toContain(
+      'obligatorio',
+    );
     expect(host('ng-model').querySelector('button')!.textContent?.trim()).toBe('#ffffff');
     h.model.set('#000000');
     await settle(fixture);

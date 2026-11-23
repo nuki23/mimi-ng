@@ -7,10 +7,10 @@ import {
 } from '@angular/forms';
 import { MimiSlider, type MimiSliderValue } from '@/components/ui/slider';
 
-/** Del ejemplo, no de Mimi: el rango tiene que abarcar al menos 5 años. */
+/** Del ejemplo, no de Mimi: el rango tiene que abarcar al menos 15 años. */
 function minSpan(control: AbstractControl<MimiSliderValue>): ValidationErrors | null {
   const value = control.value;
-  return Array.isArray(value) && value[1] - value[0] < 5 ? { span: true } : null;
+  return Array.isArray(value) && value[1] - value[0] < 15 ? { span: true } : null;
 }
 
 @Component({
@@ -45,7 +45,7 @@ function minSpan(control: AbstractControl<MimiSliderValue>): ValidationErrors | 
         <mimi-slider aria-labelledby="ages" range [min]="18" [max]="80" [formControl]="ages" />
         @if (ages.invalid && ages.touched) {
           <span class="text-[13px] text-destructive-soft-foreground">
-            El rango debe abarcar al menos 5 años.
+            El rango debe abarcar al menos 15 años.
           </span>
         }
       </div>
@@ -56,7 +56,7 @@ function minSpan(control: AbstractControl<MimiSliderValue>): ValidationErrors | 
 export class SliderRangeExample {
   protected readonly price = signal<MimiSliderValue>([300, 700]);
   protected readonly money = (v: number) => `$${v}`;
-  protected readonly ages = new FormControl<MimiSliderValue>([30, 33], { validators: minSpan });
+  protected readonly ages = new FormControl<MimiSliderValue>([30, 40], { validators: minSpan });
 
   constructor() {
     this.ages.markAsTouched();

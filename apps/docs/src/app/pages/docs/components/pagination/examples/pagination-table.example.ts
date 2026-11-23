@@ -7,7 +7,12 @@ import { CLIENTS, STATUS_CLASSES } from './clients';
   imports: [MimiPagination],
   template: `
     <div class="flex w-full flex-col gap-3">
-      <div class="overflow-x-auto rounded-card border bg-card">
+      <div
+        class="overflow-x-auto rounded-card border bg-card"
+        tabindex="0"
+        role="region"
+        aria-label="Clientes"
+      >
         <table class="w-full text-left text-[13.5px]">
           <thead class="bg-muted text-[12.5px] text-muted-foreground">
             <tr>

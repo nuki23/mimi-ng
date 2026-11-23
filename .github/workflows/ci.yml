@@ -1,0 +1,97 @@
+# CI de Mimi (1.0-5, tanda 1 de la 0.9.0). En cada PR y en cada push a main:
+# formato, build (con los presupuestos), pruebas de docs, ui-core y la CLI, y Playwright contra
+# el sitio compilado en tres motores de escritorio y dos teléfonos emulados.
+# Sin secretos ni permisos de escritura: solo lee el repo y sube artefactos (las capturas y el
+# informe de Playwright de un fallo, nunca al repo; CLAUDE.md, A10).
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NG_CLI_ANALYTICS: 'false'
+  CI: 'true'
+
+jobs:
+  build:
+    name: Formato y build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sitio
+          path: dist/docs/browser
+          retention-days: 3
+
+  test:
+    name: Pruebas (docs, ui-core y CLI)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+
+  e2e:
+    name: Playwright (${{ matrix.project }})
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: chromium
+            browser: chromium
+          - project: firefox
+            browser: firefox
+          - project: webkit
+            browser: webkit
+          - project: android
+            browser: chromium
+          - project: iphone
+            browser: webkit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - uses: actions/download-artifact@v4
+        with:
+          name: sitio
+          path: dist/docs/browser
+      - run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - run: pnpm e2e --project=${{ matrix.project }}
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-${{ matrix.project }}
+          path: tmp/e2e
+          retention-days: 7

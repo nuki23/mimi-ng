@@ -87,7 +87,8 @@ const CELL = {
   ),
   outside: cn(
     CELL_BASE,
-    'text-muted-foreground opacity-55 hover:bg-[color:var(--mimi-date-cell-hover,var(--mimi-accent))]',
+    // Sin opacidad encima: se puede elegir, así que su texto cumple 4,5:1 (M.15).
+    'text-muted-foreground hover:bg-[color:var(--mimi-date-cell-hover,var(--mimi-accent))]',
   ),
   disabled: cn(
     CELL_BASE,

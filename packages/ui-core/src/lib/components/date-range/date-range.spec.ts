@@ -198,7 +198,13 @@ describe('MimiDateRangePicker', { timeout: 20_000 }, () => {
     h.control.setValue(null);
     await settle(fixture);
     expect(trigger('reactive').getAttribute('aria-invalid')).toBe('true');
-    expect(trigger('signal').getAttribute('aria-required')).toBe('true');
+    // M.15 (axe, aria-allowed-attr): un <button> no admite aria-required; va en la descripción.
+    const t = trigger('signal');
+    expect(t.hasAttribute('aria-required')).toBe(false);
+    const described = (t.getAttribute('aria-describedby') ?? '').split(/\s+/);
+    expect(described.map((id) => document.getElementById(id)?.textContent?.trim())).toContain(
+      'obligatorio',
+    );
     await open('signal');
     await click('2026-09-05');
     await click('2026-09-04');
