@@ -169,6 +169,11 @@ describe('MimiAccordion', () => {
     expect(other.defaultPrevented).toBe(false);
   });
 
+  it('title no queda como atributo del ítem (sin el tooltip del navegador sobre todo el ítem)', async () => {
+    const { items } = await setup();
+    for (const item of items()) expect(item.hasAttribute('title')).toBe(false);
+  });
+
   it('piezas de la cabecera: título rico, inicio y final dentro del botón', async () => {
     const { triggers } = await setup();
     const custom = triggers()[3];

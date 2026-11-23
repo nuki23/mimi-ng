@@ -217,6 +217,9 @@ export class MimiAccordionEnd {}
     </div>
   `,
   host: {
+    // `title` es una entrada: sin esto, el atributo quedaría en el anfitrión (y el navegador
+    // mostraría su tooltip sobre todo el ítem).
+    '[attr.title]': 'null',
     '[class]': 'classes()',
     '[attr.data-state]': 'state()',
     '[attr.data-disabled]': 'isDisabled() ? "" : null',
