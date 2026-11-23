@@ -201,6 +201,28 @@ describe('MimiStepper', () => {
     expect(triggers()[1].textContent!.replace(/\s+/g, ' ')).toContain('Paso 2 de 5: Envío, Actual');
   });
 
+  // 23/11/2026, error del usuario: las líneas salían desplazadas y cortadas. jsdom no maqueta: se
+  // miran las posiciones (la medida, ±2 px, la hace Playwright).
+  it('línea del borde de un círculo al del siguiente: el botón centrado en su columna', async () => {
+    const { host, el, stable } = await setup();
+    const item = () => el.querySelector<HTMLElement>('ol > li')!.className.split(/\s+/);
+    const line = () =>
+      el.querySelector<HTMLElement>('[data-slot="step-line"]')!.className.split(/\s+/);
+    expect(item()).toContain('sm:justify-center');
+    for (const cls of [
+      'top-[var(--mimi-stepper-s,32px)]',
+      'bottom-0',
+      'sm:start-[calc(50%_+_var(--mimi-stepper-s,32px)/2)]',
+      'sm:end-[calc(-50%_+_var(--mimi-stepper-s,32px)/2)]',
+    ]) {
+      expect(line(), cls).toContain(cls);
+    }
+    host.orientation.set('vertical');
+    await stable();
+    expect(line()).toContain('top-[var(--mimi-stepper-s,32px)]');
+    expect(line()).toContain('bottom-0');
+  });
+
   it('orientación: horizontal es vertical en el teléfono (sm:); vertical, siempre', async () => {
     const { host, el, stable } = await setup();
     const list = () => el.querySelector('ol')!.className;
