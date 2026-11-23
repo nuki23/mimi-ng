@@ -35,6 +35,17 @@ describe('StepperPage', () => {
         expect(code).toMatch(/export class Stepper\w+Example/);
       }
       expect(el.querySelector('h1')!.textContent!.trim()).toBe('Stepper');
+      // Revisión de accesibilidad (S1): ningún botón de los ejemplos se deshabilita con
+      // `disabled` (al llegar al primer o al último paso, el foco caía a <body>): aria-disabled.
+      const buttons = Array.from(
+        el.querySelectorAll<HTMLButtonElement>('[data-slot="example"] button[mimiBtn]'),
+      );
+      expect(buttons.length).toBeGreaterThan(0);
+      for (const button of buttons) expect(button.disabled, button.textContent!).toBe(false);
+      const back = buttons.filter((b) => b.textContent!.trim() === 'Atrás');
+      expect(back.length).toBe(3);
+      // Los dos lineales empiezan en el primer paso (el demo, en el tercero).
+      expect(back.filter((b) => b.getAttribute('aria-disabled') === 'true').length).toBe(2);
     },
     PAGE_EXAMPLES_TIMEOUT,
   );

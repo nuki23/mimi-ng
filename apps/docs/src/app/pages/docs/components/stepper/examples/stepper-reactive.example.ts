@@ -26,10 +26,18 @@ import { MimiStepperImports } from '@/components/ui/stepper';
         </mimi-step>
       </mimi-stepper>
       <div class="flex justify-end gap-2">
-        <button mimiBtn variant="outline" [disabled]="pasos.isFirst()" [mimiStepperPrev]="pasos">
+        <!-- aria-disabled y no disabled: el foco no se pierde al llegar al primer paso. -->
+        <button
+          mimiBtn
+          variant="outline"
+          [attr.aria-disabled]="pasos.isFirst() || null"
+          [mimiStepperPrev]="pasos"
+        >
           Atrás
         </button>
-        <button mimiBtn [disabled]="pasos.isLast()" [mimiStepperNext]="pasos">Siguiente</button>
+        <button mimiBtn [mimiStepperNext]="pasos">
+          {{ pasos.isLast() ? 'Finalizar' : 'Siguiente' }}
+        </button>
       </div>
     </div>
   `,

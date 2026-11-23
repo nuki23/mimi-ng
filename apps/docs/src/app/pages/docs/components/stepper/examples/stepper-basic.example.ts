@@ -23,7 +23,7 @@ import { MimiStepperImports } from '@/components/ui/stepper';
             mimiBtn
             variant="outline"
             size="sm"
-            [disabled]="pasos.isFirst()"
+            [attr.aria-disabled]="pasos.isFirst() || null"
             [mimiStepperPrev]="pasos"
           >
             Atrás

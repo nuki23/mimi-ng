@@ -113,6 +113,23 @@ describe('MimiStepper', () => {
     expect(states().slice(0, 2)).toEqual(['completed', 'current']);
   });
 
+  // Revisión de accesibilidad de la tanda 2 (S2): un lector de pantalla no sabía por qué no
+  // avanzaba; (S3): la coma del nombre va dentro del título (título y texto son bloques).
+  it('si no se puede dejar el paso: lo anuncia y el foco va al campo; la coma, en el título', async () => {
+    const { el, triggers, click, stable } = await setup();
+    await click('[data-test="next"]');
+    await stable();
+    await new Promise((r) => setTimeout(r));
+    expect(el.querySelector('[role="status"]')!.textContent!.trim()).toBe(
+      'Step 1 of 5: Datos has errors',
+    );
+    expect(document.activeElement).toBe(el.querySelector('[data-test="name"]'));
+    const title = triggers()[0].querySelector('[data-slot="step-title"]')!;
+    expect(title.querySelector('.sr-only')!.textContent).toBe(',');
+    const hint = triggers()[0].querySelector('[data-slot="step-hint"]')!;
+    expect(hint.textContent!.trim().startsWith(',')).toBe(false);
+  });
+
   it('lineal con Signal Forms: lo mismo con un campo de form()', async () => {
     const { host, states, click, stable } = await setup();
     host.reactive.setValue({ name: 'Ana' });

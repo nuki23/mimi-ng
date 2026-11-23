@@ -2,7 +2,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   Directive,
+  ElementRef,
+  Injector,
   type Signal,
+  afterNextRender,
   booleanAttribute,
   computed,
   contentChildren,
@@ -124,6 +127,8 @@ let nextId = 0;
 })
 export class MimiStep {
   private readonly stepper = inject(MimiStepper);
+  /** El anfitrión: el contenido del paso (el Stepper busca en él el campo inválido). */
+  readonly element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
 
   /** El nombre del paso, en la lista. */
   readonly title = input('');
@@ -252,9 +257,13 @@ export class MimiStep {
             </span>
             <span [class]="layout().text">
               <span class="sr-only">{{ text.step(i + 1, steps().length) }}: </span>
-              <span data-slot="step-title" [class]="titleClasses">{{ step.title() }}</span>
+              <!-- La coma, dentro del título: título y texto son bloques, y el nombre accesible
+                   pondría un espacio antes de ella (revisión de accesibilidad, S3). -->
+              <span data-slot="step-title" [class]="titleClasses"
+                >{{ step.title() }}<span class="sr-only">,</span></span
+              >
               <span data-slot="step-hint" [class]="hintClasses">
-                <span class="sr-only">, </span>{{ step.description() || stateText(i) }}
+                {{ step.description() || stateText(i) }}
                 @if (step.optional()) {
                   · {{ text.optional }}
                 }
@@ -302,6 +311,7 @@ export class MimiStepper {
 
   readonly steps = contentChildren(MimiStep);
   protected readonly text = inject(MIMI_STEPPER_TEXT);
+  private readonly injector = inject(Injector);
   protected readonly icon = ICON;
 
   protected readonly layout = computed(() => LAYOUT[this.orientation()]);
@@ -370,9 +380,8 @@ export class MimiStepper {
       for (let i = this.value(); i < index; i++) {
         const step = steps[i];
         if (step.optional() || step.valid()) continue;
-        step.touch();
-        step.attempted.set(true);
         if (i !== this.value()) this.value.set(i);
+        this.stop(step, i);
         return false;
       }
     }
@@ -385,12 +394,35 @@ export class MimiStepper {
     if (!this.isLast()) return this.goTo(this.value() + 1);
     const step = this.steps()[this.value()];
     if (step && !step.optional() && !step.valid()) {
-      step.touch();
-      step.attempted.set(true);
+      this.stop(step, this.value());
       return false;
     }
     this.finish.emit();
     return true;
+  }
+
+  /**
+   * No se puede dejar el paso: se marca tocado (se ven sus errores) y en error, se anuncia
+   * («Paso 1 de 3: Tú tiene errores») y el foco va al primer campo inválido del paso (o al
+   * primero que haya), para que se sepa por qué no avanzó (revisión de accesibilidad, S2).
+   */
+  private stop(step: MimiStep, index: number): void {
+    step.touch();
+    step.attempted.set(true);
+    const total = this.steps().length;
+    this.announcement.set(this.text.invalid(index + 1, total, step.title()));
+    afterNextRender(
+      () => {
+        const host = step.element;
+        const target =
+          host.querySelector<HTMLElement>('[aria-invalid="true"]') ??
+          host.querySelector<HTMLElement>(
+            'input, select, textarea, [tabindex]:not([tabindex="-1"])',
+          );
+        target?.focus();
+      },
+      { injector: this.injector },
+    );
   }
 
   /** Paso anterior. */

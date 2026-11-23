@@ -124,6 +124,8 @@ const STATUS: Record<Dashboard01Customer['status'], { label: string; tone: Badge
   'past-due': { label: 'Past due', tone: 'warning' },
 };
 
+let nextMenuId = 0;
+
 function initials(name: string): string {
   return name
     .split(/\s+/)
@@ -137,6 +139,10 @@ function initials(name: string): string {
  * El menú del dashboard: el mismo en el lateral (escritorio) y en el Sheet (teléfono). Un
  * componente y no un `<ng-template>` con `NgTemplateOutlet`: este se llevaba 1,25 kB al JS inicial
  * del sitio (spec 10, «Trampas de tamaño»).
+ *
+ * Los ítems son botones que cambian `active`, para que el Block funcione sin rutas. En tu app,
+ * cámbialos por enlaces (`<a routerLink="/clientes" routerLinkActive ariaCurrentWhenActive="page">`):
+ * así el lector los anuncia como enlaces y se pueden abrir en otra pestaña.
  */
 @Component({
   selector: 'nav[mimi-dashboard-01-menu]',
@@ -150,12 +156,16 @@ function initials(name: string): string {
       >
       <span class="font-semibold">{{ appName() }}</span>
     </div>
-    @for (group of nav(); track group.label) {
+    @for (group of nav(); track group.label; let g = $index) {
+      <!-- Los grupos no son encabezados (irían antes de la h1): nombran su lista. -->
       <div class="flex flex-col gap-1">
-        <h2 class="px-2 text-xs font-semibold tracking-[0.06em] text-muted-foreground uppercase">
+        <span
+          class="px-2 text-xs font-semibold tracking-[0.06em] text-muted-foreground uppercase"
+          [id]="uid + '-' + g"
+        >
           {{ group.label }}
-        </h2>
-        <ul class="flex flex-col gap-0.5">
+        </span>
+        <ul class="flex flex-col gap-0.5" [attr.aria-labelledby]="uid + '-' + g">
           @for (item of group.items; track item.id) {
             <li>
               <button
@@ -198,6 +208,8 @@ export class Dashboard01Menu {
   readonly user = input.required<{ name: string; role: string }>();
   readonly picked = output<string>();
   protected readonly initials = initials;
+  /** Prefijo de los ids de los grupos: hay dos menús (el lateral y el de la hoja). */
+  protected readonly uid = `dashboard-01-menu-${nextMenuId++}`;
 }
 
 /**
@@ -273,6 +285,8 @@ export class Dashboard01 {
   protected readonly classes = computed(() =>
     cn(
       'grid min-h-dvh w-full min-w-0 font-sans text-foreground md:grid-cols-[232px_minmax(0,1fr)]',
+      // Cargando, también se ve (no solo lo anuncia el lector): atenuado y con el cursor de espera.
+      'data-[state=loading]:opacity-60 data-[state=loading]:cursor-progress',
       this.userClass(),
     ),
   );

@@ -19,8 +19,7 @@ describe('dashboard-01', () => {
     const { el } = await setup();
     expect(el.querySelectorAll('h1').length).toBe(1);
     expect(el.querySelector('h1')!.textContent).toContain('Hi, Ana');
-    const aside = el.querySelector('aside')!;
-    expect(aside.getAttribute('aria-label')).toBe('Navigation');
+    const aside = el.querySelector<HTMLElement>('[data-slot="sidebar"]')!;
     const nav = aside.querySelector('nav')!;
     expect(nav.getAttribute('aria-label')).toBe('Main');
     const current = nav.querySelectorAll('[aria-current="page"]');
@@ -31,9 +30,36 @@ describe('dashboard-01', () => {
     expect(aside.className).toContain('md:flex');
   });
 
+  // Revisión de accesibilidad de la tanda 2: D1 (cargando también se ve), D2 (sin un aside con
+  // nombre alrededor del nav), D3 (los grupos del menú no son encabezados antes de la h1) y D4
+  // (sin header suelto, que sería el «banner» de la página).
+  it('landmarks y encabezados en orden; cargando también se ve', async () => {
+    const { fixture, el, stable } = await setup();
+    expect(el.querySelector('aside')).toBeNull();
+    expect(el.querySelectorAll('nav').length).toBe(1);
+    // Un header fuera de una sección sería el «banner»; los de las tarjetas van en su section.
+    for (const header of Array.from(el.querySelectorAll('header'))) {
+      expect(header.closest('section')).not.toBeNull();
+    }
+    const headings = Array.from(el.querySelectorAll('h1, h2'));
+    expect(headings[0].tagName).toBe('H1');
+    // Cada grupo del menú nombra su lista, con ids únicos.
+    const lists = Array.from(el.querySelectorAll<HTMLElement>('nav ul[aria-labelledby]'));
+    expect(lists.length).toBe(2);
+    expect(
+      el.querySelector(`[id="${lists[1].getAttribute('aria-labelledby')}"]`)!.textContent,
+    ).toContain('Team');
+    expect(el.className).toContain('data-[state=loading]:opacity-60');
+    fixture.componentRef.setInput('loading', true);
+    await stable();
+    expect(el.dataset['state']).toBe('loading');
+  });
+
   it('elegir en el menú cambia active (de dos vías)', async () => {
     const { el, block, stable } = await setup();
-    const items = el.querySelectorAll<HTMLButtonElement>('aside [data-slot="nav-item"]');
+    const items = el.querySelectorAll<HTMLButtonElement>(
+      '[data-slot="sidebar"] [data-slot="nav-item"]',
+    );
     items[1].click();
     await stable();
     expect(block.active()).toBe('customers');

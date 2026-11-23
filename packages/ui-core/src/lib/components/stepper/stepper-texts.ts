@@ -18,6 +18,8 @@ export interface MimiStepperText {
   step: (index: number, total: number) => string;
   /** Lo que se anuncia al cambiar de paso: «Paso 2 de 5: Envío». */
   announce: (index: number, total: number, title: string) => string;
+  /** Lo que se anuncia si no se puede dejar un paso: «Paso 1 de 3: Tú tiene errores». */
+  invalid: (index: number, total: number, title: string) => string;
 }
 
 /** Textos predeterminados (inglés). */
@@ -29,6 +31,7 @@ export const MIMI_STEPPER_TEXT_EN: MimiStepperText = {
   optional: 'Optional',
   step: (index, total) => `Step ${index} of ${total}`,
   announce: (index, total, title) => `Step ${index} of ${total}: ${title}`,
+  invalid: (index, total, title) => `Step ${index} of ${total}: ${title} has errors`,
 };
 
 /** Textos en español: `provideMimiStepperText(MIMI_STEPPER_TEXT_ES)`. */
@@ -40,6 +43,7 @@ export const MIMI_STEPPER_TEXT_ES: MimiStepperText = {
   optional: 'Opcional',
   step: (index, total) => `Paso ${index} de ${total}`,
   announce: (index, total, title) => `Paso ${index} de ${total}: ${title}`,
+  invalid: (index, total, title) => `Paso ${index} de ${total}: ${title} tiene errores`,
 };
 
 /** Textos activos. Sin `provideMimiStepperText`, los predeterminados en inglés. */

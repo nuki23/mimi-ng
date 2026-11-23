@@ -26,7 +26,12 @@ import { MimiStepperImports } from '@/components/ui/stepper';
         </mimi-step>
       </mimi-stepper>
       <div class="flex justify-end gap-2">
-        <button mimiBtn variant="outline" [disabled]="pasos.isFirst()" [mimiStepperPrev]="pasos">
+        <button
+          mimiBtn
+          variant="outline"
+          [attr.aria-disabled]="pasos.isFirst() || null"
+          [mimiStepperPrev]="pasos"
+        >
           Atrás
         </button>
         <button mimiBtn [mimiStepperNext]="pasos">

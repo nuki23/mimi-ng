@@ -1,6 +1,7 @@
-<!-- El menú (Dashboard01Menu, en dashboard-01.ts): en el lateral y, en el teléfono, en el Sheet. -->
-<aside
-  aria-label="Navigation"
+<!-- El menú (Dashboard01Menu, en dashboard-01.ts): en el lateral y, en el teléfono, en el Sheet.
+     El lateral es un div: el landmark es el nav de dentro (un aside con nombre lo repetía). -->
+<div
+  data-slot="sidebar"
   class="sticky top-0 hidden h-dvh flex-col gap-4 overflow-y-auto border-e border-border bg-card px-3 py-3.5 md:flex"
 >
   <nav
@@ -13,7 +14,7 @@
     [user]="user()"
     (picked)="go($event)"
   ></nav>
-</aside>
+</div>
 
 <div class="flex min-w-0 flex-col">
   <!-- En el teléfono: la barra con el botón del menú (un Sheet desde la izquierda). -->
@@ -62,13 +63,14 @@
     data-slot="content"
     class="mx-auto flex w-full max-w-[1080px] min-w-0 flex-col gap-5 px-4 pt-5 pb-8 md:px-8 md:pt-7 md:pb-10"
   >
-    <header class="flex flex-wrap items-end justify-between gap-3">
+    <!-- Un div, no un header: fuera de una sección, header sería el «banner» de la página. -->
+    <div class="flex flex-wrap items-end justify-between gap-3">
       <div class="flex flex-col gap-1">
         <h1 class="text-2xl font-bold tracking-[-0.02em]">Hi, {{ firstName() }}</h1>
         <p class="text-sm text-muted-foreground">Here’s how September is going.</p>
       </div>
       <button mimiBtn (click)="newCustomer.emit()">New customer</button>
-    </header>
+    </div>
 
     <ul aria-label="Key metrics" class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
       @for (stat of stats(); track stat.label) {
