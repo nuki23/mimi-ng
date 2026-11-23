@@ -1,6 +1,6 @@
 # R.34 Modo móvil de los paneles flotantes (hoja inferior y pantalla completa)
 
-[← Plan del Grupo 4](../grupo-4.md) · [← Índice del plan](../../plan.md)
+[← Plan del Grupo 4](../plan-grupo-4.md) · [← Índice del plan](../../plan.md)
 
 Movida aquí el 16/11/2026, al cerrar la puerta R.P7 de la 0.7.0 (`docs/auto/release-0.7.0-2026-11-16.md`, paso 2), desde `docs/plan/refinamiento/R-0.7.0.md` (hoy en `docs/historial/refinamiento/R-0.7.0.md`), donde estaba como referencia hasta escribir el plan de la 0.8.0. El texto sigue tal cual salvo cuatro cosas, que ya no valían tras la decisión del usuario del 15/11/2026: este encabezado; la nota «Esta tarea se queda en este archivo…» de la decisión; el final del punto 9 («Qué implica para la 0.8.0» y la propuesta de partir la 0.7.0, que hablaban de adelantar el Sheet a la 0.7.0), cambiado por una frase con lo decidido; y, en «Rupturas», el CHANGELOG de destino (el de la 0.8.0, no el de la 0.7.0). El texto original completo está en el historial.
 

@@ -7,7 +7,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 **Dónde está cada tarea (desde el 03/11/2026).** Este archivo es el **índice**: una línea por tarea pendiente, con su estado, versión, tamaño, dependencias y el enlace a su detalle, y «Terminado» con una línea por tarea hecha. El detalle está en `docs/plan/`:
 
 - Una tarea con la plantilla completa tiene su propio archivo, con el ID como nombre, en la carpeta de su grupo: así estaban `docs/plan/grupo-2/G2.1.md` y `docs/plan/grupo-2/5.17.md` (hoy en `docs/historial/grupo-2/`, con el grupo cerrado). Las hijas de una tarea paraguas van dentro del archivo de la madre (G2.4a y G2.4b en `G2.4.md`; 5.17a y 5.17b en `5.17.md`).
-- Las tareas de una línea van juntas en el archivo de su bloque: `mantenimiento.md`, `grupo-3-blocks.md`, `grupo-4.md`, `mimi-effects.md`, `grupo-5.md`, `plataforma.md` y `version-1.0.md`. Cuando una se detalla, se le crea su archivo propio con la misma regla (por ejemplo, `docs/plan/grupo-3/G3.1.md`) y se actualiza su enlace en el índice.
+- Las tareas de una línea van juntas en el archivo de su bloque: `mantenimiento.md`, `mimi-effects.md`, `grupo-5.md`, `plataforma.md` y `version-1.0.md`. Cuando una se detalla, se le crea su archivo propio con la misma regla (por ejemplo, `docs/plan/grupo-3/G3.1.md`) y se actualiza su enlace en el índice.
 - Las decisiones abiertas, las «Decididas» y el índice de lo que está «PENDIENTE DE DECIDIR» están en `docs/plan/decisiones.md`.
 - Para encontrar una tarea por su ID (por ejemplo, «plan, G1.5b»): el índice de este archivo, o `grep -rn "G2.7" docs/plan/`; si ya está hecha, en `docs/historial/`.
 
@@ -72,7 +72,7 @@ Este plan es la lista de trabajo. Lo que es verdad del producto (API, tokens, re
 
 Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proceso/release.md`. La puerta la recorre el comando `/cerrar-grupo`; las tareas, `/componente` y `/tarea`, con el protocolo de `CLAUDE.md`, «Forma de trabajar».
 
-**Historial:** `docs/historial/plan-fase-0-3.md`, `plan-0.1.x.md`, `plan-grupo-1.md` (incluye la Fase 4 y la publicación de la 0.2.0), `plan-grupo-2.md` (índice del Grupo 2, con la 5.2, la 5.17 y la publicación de la 0.3.0; el texto de cada tarea, en `docs/historial/grupo-2/`), `plan-blocks.md` (índice de los Blocks de la 0.4.0; el texto de cada tarea, en `docs/historial/blocks/`), `plan-grupo-3.md` (índice del Grupo 3 y de B.9 y B.11 de la 0.5.0; el texto, en `docs/historial/grupo-3/` y `docs/historial/blocks/B.11.md`), `plan-refinamiento-0.6.0.md` (índice del refinamiento de la 0.6.0; el texto, en `docs/historial/refinamiento/R-0.6.0.md`), `plan-refinamiento-0.7.0.md` (índice de la 0.7.0; el texto, en `docs/historial/refinamiento/R-0.7.0.md`), `plan-plataforma.md` y `decisiones.md`.
+**Historial:** `docs/historial/plan-fase-0-3.md`, `plan-0.1.x.md`, `plan-grupo-1.md` (incluye la Fase 4 y la publicación de la 0.2.0), `plan-grupo-2.md` (índice del Grupo 2, con la 5.2, la 5.17 y la publicación de la 0.3.0; el texto de cada tarea, en `docs/historial/grupo-2/`), `plan-blocks.md` (índice de los Blocks de la 0.4.0; el texto de cada tarea, en `docs/historial/blocks/`), `plan-grupo-3.md` (índice del Grupo 3 y de B.9 y B.11 de la 0.5.0; el texto, en `docs/historial/grupo-3/` y `docs/historial/blocks/B.11.md`), `plan-refinamiento-0.6.0.md` (índice del refinamiento de la 0.6.0; el texto, en `docs/historial/refinamiento/R-0.6.0.md`), `plan-refinamiento-0.7.0.md` (índice de la 0.7.0; el texto, en `docs/historial/refinamiento/R-0.7.0.md`), `plan-grupo-4.md` (el Grupo 4 de la 0.8.0; la R.34 y la B.8, en `docs/historial/grupo-4/`), `plan-plataforma.md` y `decisiones.md`.
 
 **Al cerrar un grupo** (desde el Grupo 2): los archivos de sus tareas pasan tal cual de `docs/plan/<grupo>/` a `docs/historial/<grupo>/` (con `git mv`, sin reescribirlos), y `docs/historial/plan-<grupo>.md` lleva el índice, el registro de la publicación y lo que se movió de otros lugares (por ejemplo, «Decididas» de `docs/plan/decisiones.md`). Lo manual que quede pendiente no se deja solo en el historial: va a una tarea abierta (por ejemplo, la M.20).
 
@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- G4.P · `auto/0.8.0-puerta-2026-11-23` · Claude Code (modo autónomo) · 23/11/2026 (a falta del usuario: publicación de la 0.8.0 y lo manual)
+Ninguna. (La 0.8.0 está preparada en `auto/release-0.8.0-2026-11-23`, a falta de que el usuario la publique.)
 
 (DP.2 a DP.5, hechas el 14/11/2026; la siguiente del plan de páginas es DP.6, Blocks y portada, y la puerta DP.P.)
 
@@ -151,16 +151,9 @@ Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También e
 - [ ] DP.6 Tanda 6, Blocks (`block-doc.ts`) y vitrina de la portada · v0.9.0 (tanda 3) · M · depende: DP.0 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 - [ ] DP.P Puerta: prueba de estructura sin excepciones y Playwright de todas las páginas · v0.9.0 (tanda 3) · — · depende: DP.1 a DP.6 · [docs-paginas/plan.md](plan/docs-paginas/plan.md)
 
-## Grupo 4 → v0.8.0: estructura
+## Grupo 4 → v0.8.0: estructura (cerrado)
 
-Movido de la 0.6.0 a la **0.8.0** (09/11/2026: la 0.6.0 y la 0.7.0 son el plan de refinamiento, arriba). **La abren la R.34 y el Sheet (G4.2), juntos** (decidido por el usuario el 15/11/2026, al dividir la 0.7.0). Detalle: [docs/plan/grupo-4.md](plan/grupo-4.md) (la R.34, en [docs/plan/grupo-4/R.34.md](plan/grupo-4/R.34.md); B.8, en [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)). También sale en la 0.8.0 la **M.28** (quitar lo marcado «hasta la 1.0», en «Mantenimiento»).
-
-- [x] R.34 (hecha el 19/11/2026 en la rama `auto/0.8.0-tanda1-2026-11-16`; informe `docs/auto/0.8.0-tanda1-2026-11-16.md`, secciones 3 a 6; lo manual —lectores de pantalla y teléfono real—, a la M.20) Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; Command a pantalla completa; corte 640 px) · v0.8.0 (la abre, con la G4.2; decidido por el usuario el 15/11/2026) · L · depende: M.9, R.16 · [docs/plan/grupo-4/R.34.md](plan/grupo-4/R.34.md)
-- [x] G4.1 (hecha el 22/11/2026 en la rama `auto/0.8.0-tanda2-2026-11-22`; informe `docs/auto/0.8.0-tanda2-2026-11-22.md`, sección 6) Accordion · v0.8.0 · — · depende: G3.P · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [x] G4.2 (hecha el 19/11/2026, con la R.34) Sheet/Drawer (se construye junto con la R.34, sobre la misma hoja; lados izquierda, derecha y abajo) · v0.8.0 · — · depende: G3.P, G1.6, R.34 · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [x] G4.3 (hecha el 22/11/2026 en la rama `auto/0.8.0-tanda2-2026-11-22`; informe `docs/auto/0.8.0-tanda2-2026-11-22.md`, sección 7) Stepper · v0.8.0 · — · depende: G3.P, 2.1, G2.10 · [docs/plan/grupo-4.md](plan/grupo-4.md)
-- [x] B.8 (hecha el 22/11/2026 en la rama `auto/0.8.0-tanda2-2026-11-22`; informe `docs/auto/0.8.0-tanda2-2026-11-22.md`, sección 8) `dashboard-01` · v0.8.0 · — · depende: B.1, G3.4, G4.2 · [docs/plan/grupo-3-blocks.md](plan/grupo-3-blocks.md)
-- [~] G4.P (recorrida el 23/11/2026 en la rama `auto/0.8.0-puerta-2026-11-23`, a falta del usuario: publicación y lo manual; informe `docs/auto/0.8.0-puerta-2026-11-23.md`) Puerta del Grupo 4 · v0.8.0 · — · depende: R.34, G4.1 a G4.3, B.8, M.28 · [docs/plan/grupo-4.md](plan/grupo-4.md)
+Cerrado el 23/11/2026 (puerta G4.P, recorrida en la rama `auto/0.8.0-puerta-2026-11-23` y revisada por el usuario con la fusión del PR #25; versión preparada en `docs/auto/release-0.8.0-2026-11-23.md`; **por publicar**, registro en `docs/historial/plan-grupo-4.md`). Las tareas están en «Terminado» y su texto en `docs/historial/plan-grupo-4.md` y `docs/historial/grupo-4/` (R.34 y B.8). La M.28 salió en la 0.8.0 (en «Mantenimiento»). Lo manual, a la M.20 (puntos 22 a 26); el plan hasta la 1.0, abajo.
 
 ## Mimi Effects → después de la 1.0.0
 
@@ -400,6 +393,15 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] R.32 Quitar el alias `default` de `size` (RUPTURA; 15/11/2026).
 - [x] R.33 Button en carga sigue siendo enfocable (RUPTURA; 15/11/2026).
 - [x] R.P7 Puerta de la 0.7.0 (recorrida el 16/11/2026; revisada por el usuario con la fusión del PR #21 y cerrada el 16/11/2026; pendiente de comprobación manual en la M.20, puntos 19 a 21).
+
+**Grupo 4, v0.8.0** (`docs/historial/plan-grupo-4.md`, con la R.34 y la B.8 en `docs/historial/grupo-4/`; puerta revisada por el usuario con la fusión del PR #25 y cerrada el 23/11/2026; por publicar). La M.28 está en «Mantenimiento» (arriba), con su estado. Lo manual, en la M.20 (puntos 22 a 26).
+
+- [x] R.34 Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; 19/11/2026).
+- [x] G4.2 Sheet/Drawer (lados izquierda, derecha y abajo, sobre la hoja de la R.34; 19/11/2026; el bloqueo de scroll sin barra ni salto, 23/11/2026).
+- [x] G4.1 Accordion (base propia, `region` automático; 22/11/2026).
+- [x] G4.3 Stepper (22/11/2026; las líneas de borde a borde, 23/11/2026).
+- [x] B.8 `dashboard-01` (con Table y Sheet; 22/11/2026).
+- [x] G4.P Puerta de la 0.8.0 (recorrida el 23/11/2026; revisada por el usuario con la fusión del PR #25 y cerrada el 23/11/2026; Mimi Effects y el Grupo 5, después de la 1.0.0; pendiente de comprobación manual en la M.20, puntos 22 a 26).
 
 **Tandas de diseño** (texto completo en la línea)
 
