@@ -698,7 +698,7 @@ export class MimiDialogTitle {
   readonly id = `mimi-dialog-title-${nextId++}`;
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
-    cn('text-[18px] leading-tight font-bold tracking-[-0.01em]', this.userClass()),
+    cn('text-[1.125rem] leading-tight font-bold tracking-[-0.01em]', this.userClass()),
   );
 
   constructor() {

@@ -97,7 +97,7 @@ const trim = (tag: string): string => tag.trim();
         (keydown)="onKeydown($event)"
       />
     </div>
-    <div class="flex items-start justify-between gap-3 text-[12.5px]">
+    <div class="flex items-start justify-between gap-3 text-[0.78125rem]">
       <span
         [id]="messageId"
         role="status"

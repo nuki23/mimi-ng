@@ -93,7 +93,7 @@ export class MimiMaskPrefix {
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
     cn(
-      'inline-flex shrink-0 items-center gap-1.5 -ms-1.5 px-2 text-[13px] font-semibold text-foreground',
+      'inline-flex shrink-0 items-center gap-1.5 -ms-1.5 px-2 text-[0.8125rem] font-semibold text-foreground',
       'h-[var(--mimi-mask-prefix-height,26px)] rounded-[var(--mimi-mask-prefix-radius,var(--mimi-radius-sm))] bg-[color:var(--mimi-mask-prefix-bg,var(--mimi-muted))]',
       this.userClass(),
     ),

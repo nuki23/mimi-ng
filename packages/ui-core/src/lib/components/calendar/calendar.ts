@@ -71,7 +71,7 @@ const TITLE_BUTTON_CLASSES = cn(
   buttonFocusStyles,
 );
 const CELL_BASE = cn(
-  'relative inline-flex size-[var(--mimi-cal-cell,var(--mimi-date-cell-size,36px))] cursor-pointer items-center justify-center text-[13.5px] tabular-nums select-none',
+  'relative inline-flex size-[var(--mimi-cal-cell,var(--mimi-date-cell-size,36px))] cursor-pointer items-center justify-center text-[0.84375rem] tabular-nums select-none',
   'rounded-[var(--mimi-date-cell-radius,var(--mimi-radius-sm))] mimi-transition active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );
@@ -287,7 +287,7 @@ const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase() + text.s
         <button
           type="button"
           data-slot="go-today"
-          class="h-7 cursor-pointer rounded-[var(--mimi-radius-sm)] border border-border bg-transparent px-2.5 text-[12.5px] font-medium text-foreground mimi-transition hover:bg-accent active:scale-(--mimi-press-scale)"
+          class="h-7 cursor-pointer rounded-[var(--mimi-radius-sm)] border border-border bg-transparent px-2.5 text-[0.78125rem] font-medium text-foreground mimi-transition hover:bg-accent active:scale-(--mimi-press-scale)"
           [class]="focusClasses"
           (click)="goToday()"
         >

@@ -30,7 +30,7 @@ describe('M.27: Input OTP y File Upload en la escala del tema', () => {
   it('Input OTP: casilla 40×46 / 46×54 / 52×62, texto 18 / 22 / 26 y hueco 6 / 8 / 10; md con sus tokens', () => {
     expect(at('otp-w')).toEqual(['40px', 'var(--mimi-otp-width, 46px)', '52px']);
     expect(at('otp-h')).toEqual(['46px', 'var(--mimi-otp-height, 54px)', '62px']);
-    expect(at('otp-text')).toEqual(['18px', 'var(--mimi-otp-font-size, 22px)', '26px']);
+    expect(at('otp-text')).toEqual(['1.125rem', 'var(--mimi-otp-font-size, 1.375rem)', '1.625rem']);
     expect(at('otp-gap-s')).toEqual(['6px', 'var(--mimi-otp-gap, 8px)', '10px']);
   });
 
@@ -39,8 +39,8 @@ describe('M.27: Input OTP y File Upload en la escala del tema', () => {
     expect(at('upload-p')).toEqual(['0.75rem', '1rem', '1.5rem']);
     expect(at('upload-icon-s')).toEqual(['36px', 'var(--mimi-upload-icon-size, 44px)', '52px']);
     expect(at('upload-svg')).toEqual(['18px', '22px', '26px']);
-    expect(at('upload-title')).toEqual(['13px', '0.875rem', '15px']);
-    expect(at('upload-hint')).toEqual(['12px', '12.5px', '13.5px']);
+    expect(at('upload-title')).toEqual(['0.8125rem', '0.875rem', '0.9375rem']);
+    expect(at('upload-hint')).toEqual(['0.75rem', '0.78125rem', '0.84375rem']);
   });
 });
 
@@ -90,7 +90,7 @@ describe('M.27: size en Input OTP, File Upload y mimi-color-input', () => {
     for (const cls of [
       'w-[var(--mimi-otp-w,var(--mimi-otp-width,46px))]',
       'h-[var(--mimi-otp-h,var(--mimi-otp-height,54px))]',
-      'text-[length:var(--mimi-otp-text,var(--mimi-otp-font-size,22px))]',
+      'text-[length:var(--mimi-otp-text,var(--mimi-otp-font-size,1.375rem))]',
     ]) {
       expect(box.classList).toContain(cls);
     }

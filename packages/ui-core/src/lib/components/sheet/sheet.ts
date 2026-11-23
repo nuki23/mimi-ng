@@ -186,7 +186,7 @@ export class MimiSheetDescription {
   readonly id = `mimi-sheet-description-${nextId++}`;
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
-    cn('text-[13px] text-muted-foreground', this.userClass()),
+    cn('text-[0.8125rem] text-muted-foreground', this.userClass()),
   );
 
   constructor() {

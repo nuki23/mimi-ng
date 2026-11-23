@@ -347,7 +347,7 @@ const ICON = {
 } as const;
 
 const GROUP_LABEL_CLASSES =
-  'px-2 pt-1.5 pb-1 text-[11px] font-semibold tracking-[.05em] text-muted-foreground uppercase';
+  'px-2 pt-1.5 pb-1 text-[0.6875rem] font-semibold tracking-[.05em] text-muted-foreground uppercase';
 const CREATE_CLASSES =
   'mt-[3px] border-t border-border text-primary data-[active=true]:bg-primary-subtle';
 /**
@@ -502,7 +502,7 @@ const SKELETON_CLASSES =
     </div>
     @if (loading()) {
       <div aria-hidden="true" data-slot="loading" class="flex flex-col gap-2 p-2">
-        <span class="flex items-center gap-2 px-1 py-0.5 text-[13px] text-muted-foreground">
+        <span class="flex items-center gap-2 px-1 py-0.5 text-[0.8125rem] text-muted-foreground">
           <svg
             class="size-3.5 shrink-0 animate-[mimi-spin_0.8s_linear_infinite]"
             fill="none"
@@ -543,7 +543,7 @@ const SKELETON_CLASSES =
         </svg>
         <span class="text-sm font-semibold">{{ emptyTitle() }}</span>
         @if (emptyText()) {
-          <span class="text-[13px] text-muted-foreground">{{ emptyText() }}</span>
+          <span class="text-[0.8125rem] text-muted-foreground">{{ emptyText() }}</span>
         }
       } @else {
         {{ status() }}

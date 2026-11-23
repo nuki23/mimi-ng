@@ -102,7 +102,7 @@ function normalizeName(value: string): string {
     >
       {{ text() }}
       @if (shortcut()) {
-        <span class="font-mono text-[11px] opacity-75">{{ shortcut() }}</span>
+        <span class="font-mono text-[0.6875rem] opacity-75">{{ shortcut() }}</span>
       }
       @if (arrow()) {
         <span aria-hidden="true" [attr.data-side]="side()" [class]="arrowClasses"></span>
@@ -130,7 +130,7 @@ export class MimiTooltipPanel {
     cn(
       'relative flex w-max max-w-[calc(100vw_-_16px)] items-center gap-2 px-[var(--mimi-tooltip-px,10px)] py-1.5',
       'rounded-[var(--mimi-tooltip-radius,8px)] bg-[color:var(--mimi-tooltip-bg,var(--mimi-tooltip))] text-[color:var(--mimi-tooltip-fg,var(--mimi-tooltip-foreground))]',
-      'text-[length:var(--mimi-tooltip-text,var(--mimi-tooltip-font-size,12.5px))] font-medium shadow-[shadow:var(--mimi-shadow-neutral)]',
+      'text-[length:var(--mimi-tooltip-text,var(--mimi-tooltip-font-size,0.78125rem))] font-medium shadow-[shadow:var(--mimi-shadow-neutral)]',
       // Puente invisible sobre la separación: el puntero pasa del trigger al tooltip sin salir.
       "before:absolute before:content-['']",
       'data-[side=top]:before:inset-x-0 data-[side=top]:before:top-full data-[side=top]:before:h-[10px]',

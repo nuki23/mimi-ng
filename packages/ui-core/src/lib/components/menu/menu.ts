@@ -278,7 +278,7 @@ const DANGER = [
 ];
 
 const MENU_ITEM_BASE = [
-  'relative flex h-[var(--mimi-menu-item-h,var(--mimi-menu-item-height,32px))] cursor-pointer items-center gap-2 px-2 text-[length:var(--mimi-menu-text,14px)] outline-none select-none',
+  'relative flex h-[var(--mimi-menu-item-h,var(--mimi-menu-item-height,32px))] cursor-pointer items-center gap-2 px-2 text-[length:var(--mimi-menu-text,0.875rem)] outline-none select-none',
   'rounded-[var(--mimi-menu-item-radius,var(--mimi-radius-sm))]',
   'transition-[background-color] duration-120 ease-[ease] active:scale-(--mimi-press-scale)',
   'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:active:scale-100',
@@ -306,7 +306,7 @@ const ICON_TONE = {
 };
 const LABEL = 'min-w-0 flex-1 truncate';
 const SHORTCUT =
-  'font-mono text-[11.5px] tracking-[.06em] text-[color:var(--mimi-menu-shortcut,var(--mimi-muted-foreground))]';
+  'font-mono text-[0.71875rem] tracking-[.06em] text-[color:var(--mimi-menu-shortcut,var(--mimi-muted-foreground))]';
 
 /** Registra el ítem en el menú raíz y devuelve el `value` interno de su `ngMenuItem` (único). */
 function registerMenuItem(select: () => void): string {
@@ -524,7 +524,7 @@ export class MimiMenuLabel {
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
     cn(
-      'block px-2 pt-1.5 pb-1 text-[11px] font-semibold tracking-[.05em] text-muted-foreground uppercase',
+      'block px-2 pt-1.5 pb-1 text-[0.6875rem] font-semibold tracking-[.05em] text-muted-foreground uppercase',
       this.userClass(),
     ),
   );

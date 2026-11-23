@@ -153,7 +153,7 @@ describe('injectMimiToast', { timeout: 20_000 }, () => {
     expect(slot(li, 'title')!.classList).toContain('font-semibold');
     expect(slot(li, 'description')!.classList).toContain('text-muted-foreground');
     const action = slot(li, 'action')!;
-    for (const cls of ['h-7', 'px-2.5', 'text-[12.5px]', 'font-semibold']) {
+    for (const cls of ['h-7', 'px-2.5', 'text-[0.78125rem]', 'font-semibold']) {
       expect(action.classList).toContain(cls);
     }
     const close = slot(li, 'close')!;

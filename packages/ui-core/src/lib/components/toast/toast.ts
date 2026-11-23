@@ -471,13 +471,13 @@ class MimiToastItem {
   );
   protected readonly descriptionClasses = computed(() =>
     this.solid()
-      ? 'text-[length:calc(var(--mimi-toast-desc,12.5px)_+_0.5px)] leading-[1.4]'
-      : 'text-[length:var(--mimi-toast-desc,12.5px)] text-muted-foreground',
+      ? 'text-[length:calc(var(--mimi-toast-desc,0.78125rem)_+_0.03125rem)] leading-[1.4]'
+      : 'text-[length:var(--mimi-toast-desc,0.78125rem)] text-muted-foreground',
   );
   /** Acción del diseño: 28px, 10px a los lados, radio sm, 12.5px/600. */
   protected readonly actionClasses = computed(() =>
     cn(
-      'h-7 shrink-0 rounded-[var(--mimi-radius-sm)] px-2.5 text-[12.5px] font-semibold',
+      'h-7 shrink-0 rounded-[var(--mimi-radius-sm)] px-2.5 text-[0.78125rem] font-semibold',
       // En el sólido (sin diseño), el mismo fondo translúcido que el círculo del ícono. Los hover,
       // con los mismos modificadores que los de Button (`not-aria-busy:`), para que cn() los cambie.
       this.solid() &&

@@ -178,7 +178,7 @@ describe('MimiDialog', { timeout: 20_000 }, () => {
       expect(panel()!.classList).toContain(cls);
     }
     expect(panel()!.dataset['state']).toBe('open');
-    expect(title.classList).toContain('text-[18px]');
+    expect(title.classList).toContain('text-[1.125rem]');
     const header = dialog.querySelector('mimi-dialog-header')!;
     expect(header.classList).toContain('px-[var(--mimi-dialog-padding,24px)]');
     expect(header.classList).toContain(

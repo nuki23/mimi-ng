@@ -36,7 +36,12 @@ describe('escala de tamaños en el tema ([data-size])', () => {
     expect(scaleVar(sm, 'size-height')).toContain('--mimi-control-height-sm');
     expect(scaleVar(md, 'size-height')).toContain('--mimi-control-height');
     expect(scaleVar(lg, 'size-height')).toContain('--mimi-control-height-lg');
-    expect([sm, md, lg].map((b) => scaleVar(b, 'size-text'))).toEqual(['13px', '0.875rem', '15px']);
+    // En rem (22/11/2026): 13 / 14 / 15 px con el tamaño de letra normal, y crecen con el suyo.
+    expect([sm, md, lg].map((b) => scaleVar(b, 'size-text'))).toEqual([
+      '0.8125rem',
+      '0.875rem',
+      '0.9375rem',
+    ]);
     expect([sm, md, lg].map((b) => scaleVar(b, 'size-px'))).toEqual(['0.75rem', '1rem', '1.5rem']);
   });
 
@@ -63,8 +68,8 @@ describe('escala de tamaños en el tema ([data-size])', () => {
     expect(at('toast-min-h')).toEqual(['48px', '68px', '84px']);
     expect(at('toast-py')).toEqual(['0.5rem', '0.75rem', '1rem']);
     expect(at('toast-pl')).toEqual(['0.75rem', '0.875rem', '1.125rem']);
-    expect(at('toast-title')).toEqual(['13px', '0.875rem', '15px']);
-    expect(at('toast-desc')).toEqual(['12px', '12.5px', '14px']);
+    expect(at('toast-title')).toEqual(['0.8125rem', '0.875rem', '0.9375rem']);
+    expect(at('toast-desc')).toEqual(['0.75rem', '0.78125rem', '0.875rem']);
     expect(at('toast-icon')).toEqual(['16px', '18px', '20px']);
     expect(at('toast-circle')).toEqual(['28px', '34px', '40px']);
     expect(at('toast-w')).toEqual(['288px', 'var(--mimi-toast-width, 340px)', '400px']);
@@ -74,7 +79,7 @@ describe('escala de tamaños en el tema ([data-size])', () => {
     const at = (name: string) => [sm, md, lg].map((b) => scaleVar(b, name));
     expect(at('tabs-h-u')).toEqual(['36px', 'var(--mimi-tabs-height, 44px)', '52px']);
     expect(at('tabs-h-p')).toEqual(['30px', '34px', '40px']);
-    expect(at('tabs-text-p')).toEqual(['12.5px', '13.5px', '15px']);
+    expect(at('tabs-text-p')).toEqual(['0.78125rem', '0.84375rem', '0.9375rem']);
     expect(at('toggle-h')).toEqual(['28px', 'var(--mimi-toggle-group-item-height, 32px)', '40px']);
     expect(at('toggle-px')).toEqual(['10px', 'var(--mimi-toggle-group-item-px, 12px)', '16px']);
     expect(at('badge-h')).toEqual(['18px', 'var(--mimi-badge-height, 22px)', '26px']);

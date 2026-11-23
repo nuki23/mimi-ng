@@ -181,7 +181,7 @@ let nextId = 0;
           </div>
           <span
             data-slot="level"
-            class="min-w-12 text-end text-[13px] font-semibold"
+            class="min-w-12 text-end text-[0.8125rem] font-semibold"
             [class]="levelClass()"
             >{{ levelText() }}</span
           >
@@ -190,7 +190,7 @@ let nextId = 0;
           <ul class="m-0 grid list-none grid-cols-2 gap-x-3 gap-y-1 p-0">
             @for (rule of ruleState(); track rule.label) {
               <li
-                class="flex items-center gap-1.5 text-[12.5px]"
+                class="flex items-center gap-1.5 text-[0.78125rem]"
                 [class]="rule.ok ? 'text-success-soft-foreground' : 'text-muted-foreground'"
                 [attr.data-state]="rule.ok ? 'met' : 'unmet'"
               >

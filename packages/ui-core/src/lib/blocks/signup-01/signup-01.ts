@@ -169,7 +169,7 @@ export class Signup01 {
   }
 
   protected readonly okClasses =
-    'flex items-center gap-1.5 text-[12.5px] text-success-soft-foreground empty:hidden';
+    'flex items-center gap-1.5 text-[0.78125rem] text-success-soft-foreground empty:hidden';
 
   protected readonly classes = computed(() =>
     cn('flex min-h-svh w-full bg-background text-foreground', this.userClass()),

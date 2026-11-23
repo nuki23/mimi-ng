@@ -24,7 +24,13 @@ export interface SizeScaleRow {
 export const SIZE_SCALE: readonly SizeScaleRow[] = [
   { variable: 'size-height', what: 'Alto de un control', sm: '2rem', md: '2.5rem', lg: '3rem' },
   { variable: 'size-px', what: 'Relleno horizontal', sm: '0.75rem', md: '1rem', lg: '1.5rem' },
-  { variable: 'size-text', what: 'Tamaño del texto', sm: '13px', md: '0.875rem', lg: '15px' },
+  {
+    variable: 'size-text',
+    what: 'Tamaño del texto',
+    sm: '0.8125rem',
+    md: '0.875rem',
+    lg: '0.9375rem',
+  },
   { variable: 'size-icon', what: 'Ícono', sm: '0.875rem', md: '1rem', lg: '1.125rem' },
   {
     variable: 'size-gap',

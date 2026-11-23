@@ -95,7 +95,7 @@ export class MimiFormField implements MimiFormFieldContext {
   readonly errorId = `${this.baseId}-error`;
   protected readonly descriptionId = `${this.baseId}-description`;
   protected readonly hintId = `${this.baseId}-hint`;
-  protected readonly helpClasses = 'text-[13px] text-muted-foreground';
+  protected readonly helpClasses = 'text-[0.8125rem] text-muted-foreground';
   /** id del control (el suyo o el que le asigna el form-field). */
   protected readonly controlId = signal<string | null>(null);
 

@@ -101,7 +101,7 @@ const ITEM_CLASSES = cn(
   'relative inline-flex min-w-[var(--mimi-toggle-group-icon-width,44px)] cursor-pointer items-center justify-center gap-1.5 border-0 bg-transparent whitespace-nowrap',
   'h-[var(--mimi-toggle-h,var(--mimi-toggle-group-item-height,32px))] px-[var(--mimi-toggle-px,var(--mimi-toggle-group-item-px,12px))]',
   'rounded-[var(--mimi-toggle-group-radius,var(--mimi-radius))]',
-  'text-[length:var(--mimi-toggle-group-font-size,13.5px)] font-medium text-[color:var(--mimi-toggle-group-fg,var(--mimi-muted-foreground))]',
+  'text-[length:var(--mimi-toggle-group-font-size,0.84375rem)] font-medium text-[color:var(--mimi-toggle-group-fg,var(--mimi-muted-foreground))]',
   '[&_svg]:size-4 [&_svg]:shrink-0',
   // Hover y clic, no en solo lectura (el grupo lleva data-readonly).
   'mimi-transition enabled:not-in-data-readonly:hover:text-[color:var(--mimi-toggle-group-active-fg,var(--mimi-foreground))]',

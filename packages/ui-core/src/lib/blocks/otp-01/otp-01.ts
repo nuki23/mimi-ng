@@ -117,7 +117,7 @@ export class Otp01 {
   });
   protected readonly messageClasses = computed(() =>
     cn(
-      'flex min-h-5 items-center gap-1.5 text-[13px]',
+      'flex min-h-5 items-center gap-1.5 text-[0.8125rem]',
       this.incomplete() || this.shownStatus() === 'error'
         ? 'text-destructive-soft-foreground'
         : this.shownStatus() === 'success'

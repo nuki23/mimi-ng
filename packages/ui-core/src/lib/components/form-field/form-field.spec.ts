@@ -152,7 +152,7 @@ describe('MimiFormField', () => {
       'flex',
       'items-center',
       'gap-1.5',
-      'text-[13px]',
+      'text-[0.8125rem]',
       'text-[color:var(--mimi-field-error,var(--mimi-destructive))]',
     ]) {
       expect(container.classList).toContain(cls);
