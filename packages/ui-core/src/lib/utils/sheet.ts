@@ -1,5 +1,5 @@
 import { Dialog, type DialogRef } from '@angular/cdk/dialog';
-import { createGlobalPositionStrategy } from '@angular/cdk/overlay';
+import { type ScrollStrategy, createGlobalPositionStrategy } from '@angular/cdk/overlay';
 import { InteractivityChecker } from '@angular/cdk/a11y';
 import {
   ChangeDetectionStrategy,
@@ -75,6 +75,65 @@ const BACKDROP_CLASSES = [
 /** El fondo mientras la hoja sale: transparente y sin recibir toques. */
 const BACKDROP_CLOSING = ['opacity-0!', 'pointer-events-none'];
 
+/** Hojas abiertas que bloquean el scroll de la página (una dentro de otra cuenta una vez). */
+let scrollLocks = 0;
+let savedScroll: { overflow: string; paddingRight: string; gap: string } | null = null;
+
+/**
+ * Bloquea el scroll de la página mientras la hoja está abierta (23/11/2026, error del usuario). La
+ * estrategia `block` del CDK deja la barra de scroll a la vista (`overflow-y: scroll`) y la hoja
+ * derecha quedaba separada del borde por su ancho. Aquí `html` pasa a `overflow: hidden` (sin
+ * barra, sin hueco; la posición de scroll se conserva) y gana un `padding-right` del ancho que
+ * tenía la barra, para que el contenido no salte de lado. Ese ancho queda en
+ * `--mimi-scrollbar-gap` (en `html`), por si algo fijo de tu página quiere compensarlo también.
+ * @internal No forma parte de la API de Mimi.
+ */
+export class MimiSheetScrollLock implements ScrollStrategy {
+  /** Esta hoja ya bloquea (el CDK puede llamar a `disable` y después a `detach`). */
+  private active = false;
+
+  constructor(private readonly document: Document) {}
+
+  attach(): void {}
+
+  enable(): void {
+    if (this.active) return;
+    this.active = true;
+    if (scrollLocks++ > 0) return;
+    const html = this.document.documentElement;
+    const view = this.document.defaultView;
+    // Sin maquetación (jsdom: clientWidth 0) no hay barra que medir.
+    const gap = view && html.clientWidth > 0 ? Math.max(0, view.innerWidth - html.clientWidth) : 0;
+    savedScroll = {
+      overflow: html.style.overflow,
+      paddingRight: html.style.paddingRight,
+      gap: html.style.getPropertyValue('--mimi-scrollbar-gap'),
+    };
+    if (gap > 0) {
+      const current = view ? parseFloat(view.getComputedStyle(html).paddingRight) || 0 : 0;
+      html.style.paddingRight = `${current + gap}px`;
+    }
+    html.style.setProperty('--mimi-scrollbar-gap', `${gap}px`);
+    html.style.overflow = 'hidden';
+  }
+
+  disable(): void {
+    if (!this.active) return;
+    this.active = false;
+    if (scrollLocks === 0 || --scrollLocks > 0 || !savedScroll) return;
+    const html = this.document.documentElement;
+    html.style.overflow = savedScroll.overflow;
+    html.style.paddingRight = savedScroll.paddingRight;
+    if (savedScroll.gap) html.style.setProperty('--mimi-scrollbar-gap', savedScroll.gap);
+    else html.style.removeProperty('--mimi-scrollbar-gap');
+    savedScroll = null;
+  }
+
+  detach(): void {
+    this.disable();
+  }
+}
+
 /**
  * Pinta una plantilla donde está (sin @angular/common, como las demás salidas de Mimi). La usan la
  * hoja y los componentes que pintan el mismo contenido en el popover y en la hoja.
@@ -106,6 +165,7 @@ export class MimiSheetOutlet {
 })
 export class MimiSheetOverlay implements MimiSheetLevels {
   private readonly dialog = inject(Dialog);
+  private readonly document = inject(DOCUMENT);
   private readonly viewContainer = inject(ViewContainerRef);
   private readonly injector = inject(Injector);
   readonly template = inject<TemplateRef<unknown>>(TemplateRef);
@@ -248,6 +308,7 @@ export class MimiSheetOverlay implements MimiSheetLevels {
       injector: this.injector,
       providers: [{ provide: MimiSheetOverlay, useValue: this }],
       positionStrategy: position,
+      scrollStrategy: new MimiSheetScrollLock(this.document),
       width: side === 'bottom' || side === 'full' ? '100%' : undefined,
       height: side === 'bottom' ? undefined : '100%',
       maxWidth: '100vw',

@@ -29,6 +29,7 @@ Lo que quedaba de la 0.1.x se quita en esta versión, sin obsoletos (política d
 
 ### Arreglos
 
+- **Con un Sheet (o un panel en la hoja del teléfono) abierto, la página queda quieta y sin barra de scroll.** Antes la barra seguía a la vista y la hoja derecha quedaba separada del borde por su ancho. Ahora `html` pasa a `overflow: hidden` mientras la hoja está abierta y gana un `padding-right` del ancho de la barra, así el contenido no salta; ese ancho queda en `--mimi-scrollbar-gap` por si algo fijo de tu página quiere compensarlo (`padding-right: var(--mimi-scrollbar-gap, 0px)`).
 - **En el teléfono, «Atrás» y la X de la hoja miden 40 px** (antes 30), en los paneles y en Sheet; en escritorio no cambian.
 - **Los textos crecen con el tamaño de letra del navegador**: todos los tamaños de texto de los componentes, los Blocks y el tema pasan de px a rem (13 px → `0.8125rem`…). Con el tamaño de letra normal se ven igual. Si en tu código comparabas una clase como `text-[13px]` de un componente (por ejemplo, en una prueba), ahora es `text-[0.8125rem]`; los tokens que pongas en tu preset no cambian.
 - **La opción activa con el teclado se distingue mejor** (Select, Combobox, Command, Dropdown Menu, Context Menu y sus submenús): además del fondo suave, un anillo interior de 2 px con el color del foco (`--mimi-ring`, al menos 3:1 frente al panel en claro y oscuro). Solo con el teclado: con el ratón, el hover sigue siendo el fondo de siempre. Si cambiabas la sombra de las opciones con `class`, la tuya gana (`cn()`).
