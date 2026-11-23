@@ -26,6 +26,7 @@ Lo que quedaba de la 0.1.x se quita en esta versión, sin obsoletos (política d
 
 ### Arreglos
 
+- **La opción activa con el teclado se distingue mejor** (Select, Combobox, Command, Dropdown Menu, Context Menu y sus submenús): además del fondo suave, un anillo interior de 2 px con el color del foco (`--mimi-ring`, al menos 3:1 frente al panel en claro y oscuro). Solo con el teclado: con el ratón, el hover sigue siendo el fondo de siempre. Si cambiabas la sombra de las opciones con `class`, la tuya gana (`cn()`).
 - **La página ya no salta hacia atrás al cerrar un panel con el scroll.** Con un panel abierto (Select, Combobox, Date Picker, Date Range, Color Picker, Popover, Dropdown Menu, Context Menu), al hacer scroll hasta que el campo sale de la vista, el panel se cierra y el foco vuelve al campo **sin mover la página** (`preventScroll`). Antes, en Popover, Date Picker, Date Range y Color Picker la página volvía hasta el campo, y en Select y los menús el foco se perdía en `<body>`. Con Escape, al elegir o con un clic fuera, nada cambia. `MimiOverlayFollow` gana `mimiOverlayReturnFocus` (adónde vuelve el foco; por defecto, el origen).
 
 ## 0.7.0 (16/11/2026): Card, Table, tableros y carga

@@ -264,4 +264,34 @@ describe('Contraste AA de los tokens (theme-base.css)', () => {
       15,
     );
   });
+
+  // La opción o el ítem activo con el teclado (22/11/2026, pedido del usuario): el fondo suave
+  // (`accent`) no llega a 3:1 frente al panel; el anillo interior (`ring`) sí, frente al panel y
+  // frente al fondo suave que rodea (WCAG 1.4.11 y 2.4.7). En claro y oscuro.
+  it('opción activa: el anillo del foco se distingue ≥ 3:1 del panel y del fondo suave', () => {
+    for (const [modeName, mode] of [
+      ['claro', contrastBlock(':root')],
+      ['oscuro', new Map([...contrastBlock(':root'), ...contrastBlock('.dark')])],
+    ] as const) {
+      const r = contrastResolver(mode);
+      const page = r.color('var(--mimi-background)');
+      const ratio = (a: string, b: string) => {
+        const [hi, lo] = [luminance(r.color(a), page), luminance(r.color(b), page)].sort(
+          (p, q) => q - p,
+        );
+        return (hi + 0.05) / (lo + 0.05);
+      };
+      const onPanel = ratio('var(--mimi-ring)', 'var(--mimi-popover)');
+      const onAccent = ratio('var(--mimi-ring)', 'var(--mimi-accent)');
+      expect(onPanel, `${modeName}: anillo/panel ${onPanel.toFixed(2)}:1`).toBeGreaterThanOrEqual(
+        3,
+      );
+      expect(
+        onAccent,
+        `${modeName}: anillo/fondo suave ${onAccent.toFixed(2)}:1`,
+      ).toBeGreaterThanOrEqual(3);
+      // El fondo suave solo, no: por eso hace falta el anillo.
+      expect(ratio('var(--mimi-accent)', 'var(--mimi-popover)')).toBeLessThan(3);
+    }
+  });
 });

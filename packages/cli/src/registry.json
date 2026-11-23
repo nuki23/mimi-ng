@@ -60,7 +60,8 @@
       "type": "util",
       "files": ["components/menu/menu.ts", "components/menu/index.ts"],
       "peerDependencies": {
-        "@angular/aria": "^22.2.4"
+        "@angular/aria": "^22.2.4",
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["utils/cn", "utils/overlay", "utils/overlay-config"]
     },
@@ -80,7 +81,8 @@
       "type": "util",
       "files": ["components/option-list/option-list.ts", "components/option-list/index.ts"],
       "peerDependencies": {
-        "@angular/aria": "^22.2.4"
+        "@angular/aria": "^22.2.4",
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["utils/cn"]
     },
