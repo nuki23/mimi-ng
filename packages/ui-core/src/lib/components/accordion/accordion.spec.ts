@@ -233,3 +233,57 @@ describe('MimiAccordion', () => {
     expect(item).not.toContain('border-t');
   });
 });
+
+@Component({
+  imports: [MimiAccordionImports],
+  template: `
+    <mimi-accordion [region]="region()">
+      @for (n of list(); track n) {
+        <mimi-accordion-item [title]="'Sección ' + n">Texto {{ n }}</mimi-accordion-item>
+      }
+    </mimi-accordion>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+class RegionHost {
+  readonly count = signal(4);
+  readonly list = () => Array.from({ length: this.count() }, (_, i) => i + 1);
+  readonly region = signal<boolean | 'auto'>('auto');
+}
+
+// Decidido por el usuario el 23/11/2026: región automática (la WAI-ARIA desaconseja la región
+// con muchos paneles): con hasta 6 ítems, sí; con más, no; forzable a true o false.
+describe('MimiAccordion: role="region" automático', () => {
+  afterEach(() => (document.body.innerHTML = ''));
+
+  it('auto: región con hasta 6 ítems y sin ella con 7; true y false lo fuerzan', async () => {
+    const fixture = TestBed.createComponent(RegionHost);
+    document.body.appendChild(fixture.nativeElement);
+    await fixture.whenStable();
+    const el = fixture.nativeElement as HTMLElement;
+    const host = fixture.componentInstance;
+    const panels = () =>
+      Array.from(el.querySelectorAll<HTMLElement>('[data-slot="accordion-panel"]'));
+    const roles = () => new Set(panels().map((p) => p.getAttribute('role')));
+    expect(panels().length).toBe(4);
+    expect(roles()).toEqual(new Set(['region']));
+    expect(panels()[0].getAttribute('aria-labelledby')).toBeTruthy();
+    host.count.set(6);
+    await fixture.whenStable();
+    expect(roles()).toEqual(new Set(['region']));
+    host.count.set(7);
+    await fixture.whenStable();
+    expect(roles()).toEqual(new Set([null]));
+    expect(panels()[0].hasAttribute('aria-labelledby')).toBe(false);
+    // El botón sigue apuntando a su panel (aria-controls) aunque no sea región.
+    const trigger = el.querySelector('[data-slot="accordion-trigger"]')!;
+    expect(trigger.getAttribute('aria-controls')).toBe(panels()[0].id);
+    host.region.set(true);
+    await fixture.whenStable();
+    expect(roles()).toEqual(new Set(['region']));
+    host.count.set(2);
+    host.region.set(false);
+    await fixture.whenStable();
+    expect(roles()).toEqual(new Set([null]));
+  });
+});

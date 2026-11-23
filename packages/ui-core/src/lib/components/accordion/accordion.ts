@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
   ElementRef,
   booleanAttribute,
@@ -9,6 +10,7 @@ import {
   input,
   model,
   numberAttribute,
+  signal,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
@@ -91,6 +93,32 @@ export class MimiAccordion {
   readonly indicator = input<MimiAccordionIndicator>('chevron');
   /** Nivel del encabezado de cada cabecera (`aria-level`), del 2 al 6; 3 por defecto. */
   readonly level = input(3, { transform: numberAttribute });
+  /**
+   * Cada panel como región (`role="region"` con `aria-labelledby`). `auto` (por defecto): solo con
+   * hasta 6 ítems, como recomienda la WAI-ARIA (con más, tantos landmarks estorban); `true` o
+   * `false` lo fuerzan (decidido por el usuario el 23/11/2026).
+   */
+  readonly region = input<boolean | 'auto', boolean | 'auto' | '' | 'true' | 'false'>('auto', {
+    transform: (value) => (value === 'auto' ? 'auto' : booleanAttribute(value)),
+  });
+
+  /** Los ítems de este acordeón (se registran ellos: también dentro de un `@for` o de un `div`). */
+  private readonly items = signal<readonly MimiAccordionItem[]>([]);
+  /** Los paneles son regiones (ver `region`). */
+  readonly useRegion = computed(() => {
+    const region = this.region();
+    return region === 'auto' ? this.items().length <= 6 : region;
+  });
+
+  /** @internal Lo usa `MimiAccordionItem` al crearse. */
+  register(item: MimiAccordionItem): void {
+    this.items.update((items) => [...items, item]);
+  }
+
+  /** @internal Lo usa `MimiAccordionItem` al destruirse. */
+  unregister(item: MimiAccordionItem): void {
+    this.items.update((items) => items.filter((i) => i !== item));
+  }
   readonly userClass = input('', { alias: 'class' });
 
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
@@ -201,11 +229,11 @@ export class MimiAccordionEnd {}
       </button>
     </div>
     <div
-      role="region"
       data-slot="accordion-panel"
       [id]="panelId"
       [class]="panelClasses"
-      [attr.aria-labelledby]="triggerId"
+      [attr.role]="accordion.useRegion() ? 'region' : null"
+      [attr.aria-labelledby]="accordion.useRegion() ? triggerId : null"
       [attr.data-state]="state()"
       [attr.inert]="open() ? null : ''"
     >
@@ -228,6 +256,11 @@ export class MimiAccordionEnd {}
 })
 export class MimiAccordionItem {
   protected readonly accordion = inject(MimiAccordion);
+
+  constructor() {
+    this.accordion.register(this);
+    inject(DestroyRef).onDestroy(() => this.accordion.unregister(this));
+  }
 
   private readonly ownId = `mimi-accordion-item-${nextId++}`;
   /** Su clave en el `value` del acordeón. Sin ella, una propia. */
