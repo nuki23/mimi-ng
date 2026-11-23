@@ -1,4 +1,5 @@
-# CI de Mimi (1.0-5, tanda 1 de la 0.9.0). En cada PR y en cada push a main:
+# CI de Mimi (1.0-5, tanda 1 de la 0.9.0). En cada PR, en cada push a main y en cada push a una
+# rama del modo autónomo (auto/…, CLAUDE.md, A1: así se ve la CI antes de abrir el PR):
 # formato, build (con los presupuestos), pruebas de docs, ui-core y la CLI, y Playwright contra
 # el sitio compilado en tres motores de escritorio y dos teléfonos emulados.
 # Sin secretos ni permisos de escritura: solo lee el repo y sube artefactos (las capturas y el
@@ -8,7 +9,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, 'auto/**']
 
 permissions:
   contents: read
