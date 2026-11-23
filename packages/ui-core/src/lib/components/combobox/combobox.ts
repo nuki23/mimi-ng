@@ -356,6 +356,7 @@ export class MimiComboboxOption {
       <ng-template
         cdkConnectedOverlay
         mimiOverlayFollow
+        [mimiOverlayReturnFocus]="field"
         (mimiOverlayOutOfView)="setOpen(false)"
         [cdkConnectedOverlayOrigin]="box"
         [cdkConnectedOverlayOpen]="rendered()"

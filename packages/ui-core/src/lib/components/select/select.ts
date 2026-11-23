@@ -409,6 +409,7 @@ const SEARCH_INPUT_CLASSES =
       <ng-template
         cdkConnectedOverlay
         mimiOverlayFollow
+        [mimiOverlayReturnFocus]="trigger"
         (mimiOverlayOutOfView)="setOpen(false)"
         [cdkConnectedOverlayOrigin]="box"
         [cdkConnectedOverlayOpen]="rendered()"

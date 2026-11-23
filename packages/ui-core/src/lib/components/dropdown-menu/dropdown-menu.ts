@@ -99,6 +99,7 @@ let nextId = 0;
     <ng-template
       cdkConnectedOverlay
       mimiOverlayFollow
+      [mimiOverlayReturnFocus]="trigger()?.element"
       (mimiOverlayOutOfView)="close(false)"
       [cdkConnectedOverlayOrigin]="originElement()!"
       [cdkConnectedOverlayOpen]="rendered() && mode() === 'popover'"

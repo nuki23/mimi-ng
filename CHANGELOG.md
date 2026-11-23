@@ -24,6 +24,10 @@ Lo que quedaba de la 0.1.x se quita en esta versión, sin obsoletos (política d
 - **Sheet** (G4.2): un panel modal pegado a un lado de la pantalla (`side="left" | "right" | "bottom"`), flotante, con el radio de las tarjetas y, abajo, una barra de agarre; `size` (`sm`, `md`, `lg`), `[(open)]`, `disableClose`, y las piezas `mimiSheetTrigger`, `mimiSheetContent`, `mimiSheetHeader`, `mimiSheetTitle`, `mimiSheetDescription`, `mimiSheetBody`, `mimiSheetFooter` y `mimiSheetClose`. Se cierra con Escape, con un toque en el fondo, con la X o arrastrando hacia el borde; el foco queda dentro y vuelve al botón; con el teclado del móvil abierto, se achica a la parte visible. Tokens `--mimi-sheet-*`. `ng g mimi sheet`.
 - **La hoja común** (`utils/sheet`, R.34), la que usa Sheet y, en el teléfono, los paneles de los componentes; `provideMimiOverlay({ mobileBreakpoint, presentation })` y `provideMimiOverlayText` (`MIMI_OVERLAY_TEXT_ES`) en `utils/overlay-config`.
 
+### Arreglos
+
+- **La página ya no salta hacia atrás al cerrar un panel con el scroll.** Con un panel abierto (Select, Combobox, Date Picker, Date Range, Color Picker, Popover, Dropdown Menu, Context Menu), al hacer scroll hasta que el campo sale de la vista, el panel se cierra y el foco vuelve al campo **sin mover la página** (`preventScroll`). Antes, en Popover, Date Picker, Date Range y Color Picker la página volvía hasta el campo, y en Select y los menús el foco se perdía en `<body>`. Con Escape, al elegir o con un clic fuera, nada cambia. `MimiOverlayFollow` gana `mimiOverlayReturnFocus` (adónde vuelve el foco; por defecto, el origen).
+
 ## 0.7.0 (16/11/2026): Card, Table, tableros y carga
 
 Antes de la 1.0, Mimi no mantiene obsoletos (política del 16/11/2026, [`docs/spec.md`](docs/spec.md), sección 12): lo que cambia, cambia en esta versión, y cada ruptura dice abajo cómo actualizar. Lo que sigue marcado «hasta la 1.0» desde la 0.2.0 (los atajos de `variant` de Button y Badge, `destructive-soft`, los nombres de tokens de la 0.1.0 y `"style": "vivid"`) **se quita en la 0.8.0**.

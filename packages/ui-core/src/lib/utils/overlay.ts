@@ -1,5 +1,5 @@
 import { CdkConnectedOverlay, type ConnectedPosition } from '@angular/cdk/overlay';
-import { DestroyRef, Directive, ElementRef, inject, output } from '@angular/core';
+import { DestroyRef, Directive, ElementRef, inject, input, output } from '@angular/core';
 
 /*
  * Posición, flecha, animación y seguimiento del scroll compartidos por los overlays de Mimi
@@ -209,10 +209,20 @@ export function mimiFollowScroll(
  * de cualquier contenedor (`mimiFollowScroll`) mientras está abierto, y emite
  * `(mimiOverlayOutOfView)` cuando el campo sale de la vista, para que el componente lo cierre.
  * Con un origen que es un punto (Context Menu abierto con el puntero), no hace nada.
+ *
+ * El foco (22/11/2026): si estaba dentro del panel, antes de avisar vuelve a
+ * `mimiOverlayReturnFocus` (el campo; si no se indica, el origen) **sin mover la página**
+ * (`preventScroll`). Devolverlo con un `focus()` normal hacía que el navegador volviera al campo
+ * con el scroll, y la página saltaba hacia atrás. Con Escape, al elegir o con clic fuera, el foco
+ * lo maneja cada componente, como siempre.
  */
 @Directive({ selector: '[cdkConnectedOverlay][mimiOverlayFollow]' })
 export class MimiOverlayFollow {
   private readonly connected = inject(CdkConnectedOverlay);
+  /** Adónde vuelve el foco si el panel se cierra por el scroll (por defecto, el origen). */
+  readonly returnFocus = input<HTMLElement | null | undefined>(undefined, {
+    alias: 'mimiOverlayReturnFocus',
+  });
   /** El campo salió de la vista: el componente cierra el panel. */
   readonly outOfView = output<void>({ alias: 'mimiOverlayOutOfView' });
 
@@ -225,7 +235,13 @@ export class MimiOverlayFollow {
         ? mimiFollowScroll(
             origin,
             () => this.connected.overlayRef?.updatePosition(),
-            () => this.outOfView.emit(),
+            () => {
+              mimiReturnFocusInPlace(
+                this.connected.overlayRef?.overlayElement,
+                this.returnFocus() ?? origin,
+              );
+              this.outOfView.emit();
+            },
           )
         : null;
     });
@@ -238,6 +254,23 @@ export class MimiOverlayFollow {
       detach.unsubscribe();
       stop?.();
     });
+  }
+}
+
+/**
+ * Si el foco está dentro de `panel` (o se perdió en el `body`), lo lleva a `target` sin hacer
+ * scroll. Lo usa `MimiOverlayFollow` al cerrar por el scroll: el campo ya está fuera de la vista y
+ * un `focus()` normal haría volver la página hasta él.
+ */
+export function mimiReturnFocusInPlace(
+  panel: HTMLElement | null | undefined,
+  target: HTMLElement | null | undefined,
+): void {
+  if (!target?.isConnected) return;
+  const active = target.ownerDocument.activeElement;
+  const lost = !active || active === target.ownerDocument.body;
+  if (lost || (panel && active instanceof Node && panel.contains(active))) {
+    target.focus({ preventScroll: true });
   }
 }
 

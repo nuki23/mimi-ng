@@ -121,6 +121,7 @@ export class MimiPopoverOutlet {
     <ng-template
       cdkConnectedOverlay
       mimiOverlayFollow
+      [mimiOverlayReturnFocus]="trigger()?.element"
       (mimiOverlayOutOfView)="close()"
       [cdkConnectedOverlayOrigin]="originElement()!"
       [cdkConnectedOverlayOpen]="rendered() && mode() === 'popover'"
