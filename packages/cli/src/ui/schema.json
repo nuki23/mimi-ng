@@ -200,6 +200,10 @@
             "label": "tree"
           },
           {
+            "value": "dashboard-01",
+            "label": "dashboard-01 (Block, página)"
+          },
+          {
             "value": "kanban-01",
             "label": "kanban-01 (Block, página)"
           },

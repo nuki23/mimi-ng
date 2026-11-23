@@ -95,6 +95,7 @@ export const DOCS_NAV: DocsNavSection[] = [
       { title: 'settings-01', path: '/docs/blocks/settings-01', status: 'ready' },
       { title: 'table-01', path: '/docs/blocks/table-01', status: 'ready' },
       { title: 'kanban-01', path: '/docs/blocks/kanban-01', status: 'ready' },
+      { title: 'dashboard-01', path: '/docs/blocks/dashboard-01', status: 'ready' },
       { title: 'pricing-01', path: '/docs/blocks/pricing-01', status: 'ready' },
     ],
   },

@@ -837,6 +837,25 @@
         "utils/busy",
         "utils/cn"
       ]
+    },
+    "dashboard-01": {
+      "type": "block",
+      "kind": "page",
+      "files": [
+        "blocks/dashboard-01/dashboard-01.ts",
+        "blocks/dashboard-01/dashboard-01.html",
+        "blocks/dashboard-01/index.ts"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "sheet",
+        "table",
+        "utils/busy",
+        "utils/cn"
+      ]
     }
   }
 }

@@ -311,6 +311,11 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./blocks/kanban-01-page').then((m) => m.Kanban01Page),
   },
   {
+    path: 'blocks/dashboard-01',
+    title: 'dashboard-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/dashboard-01-page').then((m) => m.Dashboard01Page),
+  },
+  {
     path: 'blocks/pricing-01',
     title: 'pricing-01 · Blocks · Mimi',
     loadComponent: () => import('./blocks/pricing-01-page').then((m) => m.Pricing01Page),

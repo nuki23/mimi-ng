@@ -120,6 +120,7 @@ describe('registro (B.11-a)', () => {
     for (const [name, item] of blocks) expect(['page', 'section'], name).toContain(item.kind);
     const pages = blocks.filter(([, item]) => item.kind === 'page').map(([name]) => name);
     expect(pages.sort()).toEqual([
+      'dashboard-01',
       'kanban-01',
       'login-01',
       'login-02',
@@ -147,6 +148,9 @@ describe('conversión de un Block en página (utils/pages)', () => {
     expect(defaultPageName('settings-01')).toBe('settings');
     // R.22: el tablero se genera en src/app/pages/kanban/ (KanbanPage).
     expect(defaultPageName('kanban-01')).toBe('kanban');
+    // B.8: el tablero de inicio se genera en src/app/pages/dashboard/ (DashboardPage).
+    expect(defaultPageName('dashboard-01')).toBe('dashboard');
+    expect(pageClassName('dashboard')).toBe('DashboardPage');
     expect(pageClassName('kanban')).toBe('KanbanPage');
     expect(pageClassName('login')).toBe('LoginPage');
     expect(pageClassName('admin-login')).toBe('AdminLoginPage');
