@@ -33,6 +33,7 @@ export class IntroductionPage {
 
 /** Los componentes que instala `ng g mimi` (nombre del registro → nombre visible). */
 export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = [
+  { id: 'accordion', name: 'Accordion' },
   { id: 'avatar', name: 'Avatar' },
   { id: 'badge', name: 'Badge' },
   { id: 'button', name: 'Button' },
@@ -66,6 +67,7 @@ export const INTRODUCTION_COMPONENTS: readonly { id: string; name: string }[] = 
   { id: 'skeleton', name: 'Skeleton' },
   { id: 'slider', name: 'Slider' },
   { id: 'sortable-list', name: 'Sortable List' },
+  { id: 'stepper', name: 'Stepper' },
   { id: 'switch', name: 'Switch' },
   { id: 'table', name: 'Table' },
   { id: 'tabs', name: 'Tabs' },

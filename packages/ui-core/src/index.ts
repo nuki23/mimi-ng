@@ -46,3 +46,5 @@ export * from './lib/components/date-picker';
 export * from './lib/components/date-range';
 export * from './lib/components/file-upload';
 export * from './lib/components/color-picker';
+export * from './lib/components/accordion';
+export * from './lib/components/stepper';

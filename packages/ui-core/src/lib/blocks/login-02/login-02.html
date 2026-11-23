@@ -17,7 +17,7 @@
     class="pointer-events-none absolute inset-x-7 bottom-7 hidden flex-col gap-3 rounded-card border border-glass-border bg-glass p-5 backdrop-blur-glass md:flex [@media(prefers-reduced-transparency:reduce)]:bg-card [@media(prefers-reduced-transparency:reduce)]:backdrop-blur-none"
   >
     <!-- Texto de relleno: pon aquí la cita de un cliente real (con su permiso), o quita el figure. -->
-    <blockquote class="text-[17px] leading-[1.45] font-semibold text-pretty">
+    <blockquote class="text-[1.0625rem] leading-[1.45] font-semibold text-pretty">
       Add a short quote from a customer here.
     </blockquote>
     <figcaption class="flex items-center gap-2.5">
@@ -27,8 +27,8 @@
         >
       </mimi-avatar>
       <span class="flex flex-col leading-[1.3]">
-        <span class="text-[13.5px] font-bold">Customer name</span>
-        <span class="text-[12.5px] text-muted-foreground">Role · Company</span>
+        <span class="text-[0.84375rem] font-bold">Customer name</span>
+        <span class="text-[0.78125rem] text-muted-foreground">Role · Company</span>
       </span>
     </figcaption>
   </figure>
@@ -54,11 +54,11 @@
       <div class="flex flex-col gap-1.5">
         <h1
           [id]="id + '-title'"
-          class="text-[26px] font-extrabold tracking-[-0.025em] md:text-[32px]"
+          class="text-[1.625rem] font-extrabold tracking-[-0.025em] md:text-[2rem]"
         >
           Welcome back
         </h1>
-        <p class="text-[14.5px] text-muted-foreground">Sign in with your work email.</p>
+        <p class="text-[0.90625rem] text-muted-foreground">Sign in with your work email.</p>
       </div>
 
       <mimi-form-field label="Email">
@@ -75,7 +75,7 @@
         <label [attr.for]="id + '-password'" class="text-sm font-medium">Password</label>
         <a
           [href]="forgotHref()"
-          class="absolute top-0 right-0 rounded-sm text-[13px] text-muted-foreground underline underline-offset-3 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+          class="absolute top-0 right-0 rounded-sm text-[0.8125rem] text-muted-foreground underline underline-offset-3 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           >Forgot it?</a
         >
         <input
@@ -120,7 +120,7 @@
       <button
         mimiBtn
         type="submit"
-        class="h-[calc(var(--mimi-btn-h,var(--mimi-control-height,2.5rem))+4px)] text-[15px] font-semibold"
+        class="h-[calc(var(--mimi-btn-h,var(--mimi-control-height,2.5rem))+4px)] text-[0.9375rem] font-semibold"
         [attr.aria-disabled]="loading() ? 'true' : null"
         [attr.aria-busy]="loading() ? 'true' : null"
       >

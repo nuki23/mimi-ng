@@ -61,10 +61,10 @@ const BAR_HEIGHT: Record<MimiProgressSize, string> = {
   lg: 'h-3',
 };
 const CIRCLE_CLASSES: Record<MimiProgressSize, string> = {
-  md: 'relative inline-grid shrink-0 place-items-center size-[var(--mimi-progress-circle-size,76px)] text-[16px]',
+  md: 'relative inline-grid shrink-0 place-items-center size-[var(--mimi-progress-circle-size,76px)] text-[1rem]',
   // 44px, trazo 4 y texto de 11px: el pequeño del diseño, sin token propio (spec 13).
-  sm: 'relative inline-grid shrink-0 place-items-center size-11 text-[11px]',
-  lg: 'relative inline-grid shrink-0 place-items-center size-24 text-[20px]',
+  sm: 'relative inline-grid shrink-0 place-items-center size-11 text-[0.6875rem]',
+  lg: 'relative inline-grid shrink-0 place-items-center size-24 text-[1.25rem]',
 };
 
 /** Barra determinada: el ancho anima 0,35 s con la curva del diseño. */

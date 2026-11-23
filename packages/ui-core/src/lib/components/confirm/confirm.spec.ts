@@ -123,10 +123,15 @@ describe('injectMimiConfirm', { timeout: 20_000 }, () => {
     for (const cls of ['text-base', 'leading-[1.3]', 'tracking-normal', 'font-bold']) {
       expect(title.classList).toContain(cls);
     }
-    expect(title.classList).not.toContain('text-[18px]');
+    expect(title.classList).not.toContain('text-[1.125rem]');
     expect(title.classList).not.toContain('leading-tight');
     const description = container()!.querySelector('p')!;
-    for (const cls of ['text-[13px]', 'leading-normal', 'text-pretty', 'text-muted-foreground']) {
+    for (const cls of [
+      'text-[0.8125rem]',
+      'leading-normal',
+      'text-pretty',
+      'text-muted-foreground',
+    ]) {
       expect(description.classList).toContain(cls);
     }
     expect(description.classList).not.toContain('text-sm');

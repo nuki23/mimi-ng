@@ -160,6 +160,19 @@ describe('MimiSheetOverlay (R.34)', () => {
     expect(host.backs()).toBe(1);
   });
 
+  // 22/11/2026, pedido del usuario: en el teléfono, «Atrás» y la X miden 40px (para el dedo); en
+  // escritorio, 30px como Dialog. jsdom no maqueta: se mira la clase; la medida, Playwright.
+  it('«Atrás» y la X: 30px en escritorio y 40px por debajo de 640px', async () => {
+    await setup();
+    host.back.set(true);
+    await openSheet();
+    for (const name of ['back', 'close']) {
+      const classes = slot(name)!.className.split(/\s+/);
+      expect(classes, name).toContain('size-[30px]');
+      expect(classes, name).toContain('max-sm:size-10');
+    }
+  });
+
   function drag(target: HTMLElement, from: number, to: number, ms: number): void {
     const init = (y: number, t: number) => ({
       clientX: 0,

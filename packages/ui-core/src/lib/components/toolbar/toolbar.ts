@@ -83,7 +83,7 @@ const ITEM_CLASSES = cn(
 );
 
 const COUNT_CLASSES =
-  'pointer-events-none absolute -top-[3px] -end-[3px] inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-[5px] text-[10.5px] font-bold text-primary-foreground shadow-[0_0_0_2px_var(--mimi-background)]';
+  'pointer-events-none absolute -top-[3px] -end-[3px] inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-primary px-[5px] text-[0.65625rem] font-bold text-primary-foreground shadow-[0_0_0_2px_var(--mimi-background)]';
 
 /**
  * Un botón de la toolbar: `<button mimiToolbarItem="negrita" kind="toggle" aria-label="Negrita">`.

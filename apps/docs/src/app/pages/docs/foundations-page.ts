@@ -11,6 +11,8 @@ export type FoundationPackage = 'forms' | 'cdk' | 'aria';
  * está aquí, la prueba falla.
  */
 export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> = {
+  accordion: [],
+  stepper: [],
   avatar: [],
   badge: [],
   button: [],
@@ -159,6 +161,12 @@ export const FOUNDATION_TEXTS = [
     provider: 'provideMimiTreeText',
     spanish: 'MIMI_TREE_TEXT_ES',
     file: 'tree/tree-texts',
+  },
+  {
+    component: 'Stepper',
+    provider: 'provideMimiStepperText',
+    spanish: 'MIMI_STEPPER_TEXT_ES',
+    file: 'stepper/stepper-texts',
   },
   {
     component: 'File Upload',

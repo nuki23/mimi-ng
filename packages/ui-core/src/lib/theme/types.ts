@@ -685,6 +685,34 @@ export interface MimiComponentTokens {
   dataTable?: MimiTableTokens;
   loading?: MimiLoadingTokens;
   sheet?: MimiSheetTokens;
+  accordion?: MimiAccordionTokens;
+  stepper?: MimiStepperTokens;
+}
+
+/**
+ * Stepper (G4.3). Los colores del círculo salen de los estados (primario, error, borde); la
+ * línea entre pasos va en el CSS (`--mimi-stepper-line`, `-line-done`). Valen para `md`.
+ */
+export interface MimiStepperTokens {
+  /** Diámetro del círculo del paso (32px; sm 28px, lg 40px). */
+  indicatorSize?: string;
+  /** Texto del título del paso (0.8125rem, 13 px). */
+  fontSize?: string;
+}
+
+/**
+ * Accordion (G4.1). Fondo, borde y hover de la cabecera van en el CSS (`--mimi-accordion-bg`,
+ * `-border`, `-hover`). Los de tamaño valen para `md`; `sm` y `lg` usan los de la escala.
+ */
+export interface MimiAccordionTokens {
+  /** Radio del contenedor (el de las tarjetas, `--mimi-radius-card`). */
+  radius?: string;
+  /** Alto mínimo de la cabecera (52px). */
+  triggerHeight?: string;
+  /** Relleno a los lados de la cabecera y del contenido (1rem). */
+  triggerPx?: string;
+  /** Texto de la cabecera (0.90625rem, 14,5 px). */
+  fontSize?: string;
 }
 
 /**

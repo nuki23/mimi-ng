@@ -1,3 +1,5 @@
+import { InputModalityDetector } from '@angular/cdk/a11y';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { COMBOBOX_POPUP, type ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
 import { Listbox, Option } from '@angular/aria/listbox';
 import {
@@ -345,9 +347,17 @@ const ICON = {
 } as const;
 
 const GROUP_LABEL_CLASSES =
-  'px-2 pt-1.5 pb-1 text-[11px] font-semibold tracking-[.05em] text-muted-foreground uppercase';
+  'px-2 pt-1.5 pb-1 text-[0.6875rem] font-semibold tracking-[.05em] text-muted-foreground uppercase';
 const CREATE_CLASSES =
   'mt-[3px] border-t border-border text-primary data-[active=true]:bg-primary-subtle';
+/**
+ * La opción activa con el teclado (22/11/2026): un anillo interior con el color del foco, además
+ * del fondo suave (que solo da 1,1:1 a 1,2:1 frente al panel; WCAG 1.4.11 y 2.4.7 piden 3:1). Solo
+ * cuando la lista se recorre con el teclado (`data-nav="keyboard"`): con el puntero, el hover
+ * sigue siendo solo el fondo.
+ */
+export const MIMI_ACTIVE_RING_CLASSES =
+  'in-data-[nav=keyboard]:data-[active=true]:shadow-[shadow:inset_0_0_0_2px_var(--mimi-ring)]';
 const BOX_CLASSES =
   'inline-flex size-4 shrink-0 items-center justify-center rounded-[var(--mimi-radius-sm)] border border-input text-primary-foreground [&_svg]:size-3';
 const BOX_CHECKED_CLASSES = cn(BOX_CLASSES, 'border-primary bg-primary');
@@ -383,6 +393,7 @@ const SKELETON_CLASSES =
       [attr.aria-label]="labelledBy() ? null : label() || null"
       [attr.aria-labelledby]="labelledBy() || null"
       [attr.aria-busy]="loading() || null"
+      [attr.data-nav]="nav()"
       [class]="listClasses()"
       (valueChange)="resync()"
       (click)="onClick($event)"
@@ -407,7 +418,7 @@ const SKELETON_CLASSES =
               [value]="row.key"
               [label]="row.option.label"
               [disabled]="!!row.option.disabled"
-              [class]="optionClass()"
+              [class]="optionClasses()"
               [attr.data-key]="row.key"
               [attr.data-state]="isSelected(row.key) ? 'checked' : 'unchecked'"
             >
@@ -491,7 +502,7 @@ const SKELETON_CLASSES =
     </div>
     @if (loading()) {
       <div aria-hidden="true" data-slot="loading" class="flex flex-col gap-2 p-2">
-        <span class="flex items-center gap-2 px-1 py-0.5 text-[13px] text-muted-foreground">
+        <span class="flex items-center gap-2 px-1 py-0.5 text-[0.8125rem] text-muted-foreground">
           <svg
             class="size-3.5 shrink-0 animate-[mimi-spin_0.8s_linear_infinite]"
             fill="none"
@@ -532,7 +543,7 @@ const SKELETON_CLASSES =
         </svg>
         <span class="text-sm font-semibold">{{ emptyTitle() }}</span>
         @if (emptyText()) {
-          <span class="text-[13px] text-muted-foreground">{{ emptyText() }}</span>
+          <span class="text-[0.8125rem] text-muted-foreground">{{ emptyText() }}</span>
         }
       } @else {
         {{ status() }}
@@ -581,7 +592,20 @@ export class MimiOptionList {
   protected readonly icon = ICON;
   protected readonly createKey = MIMI_LIST_CREATE_KEY;
   protected readonly groupLabelClasses = GROUP_LABEL_CLASSES;
-  protected readonly createClasses = computed(() => cn(this.optionClass(), CREATE_CLASSES));
+  protected readonly optionClasses = computed(() =>
+    cn(this.optionClass(), MIMI_ACTIVE_RING_CLASSES),
+  );
+  protected readonly createClasses = computed(() =>
+    cn(this.optionClass(), CREATE_CLASSES, MIMI_ACTIVE_RING_CLASSES),
+  );
+  private readonly modality = inject(InputModalityDetector);
+  /**
+   * Cómo se recorre la lista: con el teclado (la última interacción fue una tecla) o con el
+   * puntero (moverlo sobre una opción, un clic, un toque). Lo lee el anillo de la opción activa.
+   */
+  protected readonly nav = signal<'keyboard' | 'pointer'>(
+    this.modality.mostRecentModality === 'keyboard' ? 'keyboard' : 'pointer',
+  );
   protected readonly boxClasses = BOX_CLASSES;
   protected readonly boxCheckedClasses = BOX_CHECKED_CLASSES;
   protected readonly skeletonClasses = SKELETON_CLASSES;
@@ -622,6 +646,9 @@ export class MimiOptionList {
   protected readonly keepFirst = signal(false);
 
   constructor() {
+    this.modality.modalityDetected
+      .pipe(takeUntilDestroyed())
+      .subscribe((modality) => this.nav.set(modality === 'keyboard' ? 'keyboard' : 'pointer'));
     afterRenderEffect({
       read: () => {
         if (!this.keepFirst()) return;
@@ -696,6 +723,7 @@ export class MimiOptionList {
     const key = option?.dataset['key'];
     if (key === undefined || option?.dataset['active'] === 'true') return;
     if (option?.getAttribute('aria-disabled') === 'true') return;
+    this.nav.set('pointer');
     this.byPointer = true;
     this.keepFirst.set(false);
     this.listbox().gotoIndex(this.keys().indexOf(key));

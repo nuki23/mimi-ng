@@ -289,14 +289,14 @@ const UI = {
   ),
   expandCell: cn(CELL_CLASSES, 'sticky z-[1] box-border w-9 min-w-9 max-w-9 px-0'),
   actionsCell: cn(CELL_CLASSES, 'px-2 text-center'),
-  clearSelection: cn(ICON_BUTTON_CLASSES, 'h-[30px] px-2.5 text-[13px] font-medium'),
+  clearSelection: cn(ICON_BUTTON_CLASSES, 'h-[30px] px-2.5 text-[0.8125rem] font-medium'),
   clearSearch: cn(
     ICON_BUTTON_CLASSES,
     'absolute top-1/2 end-2 size-[22px] -translate-y-1/2 rounded-full bg-muted [&_svg]:size-3',
   ),
   sort: cn(
     ICON_BUTTON_CLASSES,
-    '-ml-1.5 h-7 gap-[5px] px-1.5 text-[12.5px] font-semibold in-data-[sorted]:text-foreground',
+    '-ml-1.5 h-7 gap-[5px] px-1.5 text-[0.78125rem] font-semibold in-data-[sorted]:text-foreground',
   ),
   filter: cn(
     ICON_BUTTON_CLASSES,
@@ -307,7 +307,7 @@ const UI = {
     'size-[26px] [&_svg]:size-[15px] [&_svg]:transition-transform [&_svg]:duration-250 aria-expanded:[&_svg]:rotate-90 rtl:[&_svg]:-scale-x-100',
   ),
   clearAll: cn(
-    'h-9 cursor-pointer rounded-[var(--mimi-radius)] border border-border bg-card px-3.5 text-[13.5px] font-medium shadow-[shadow:var(--mimi-shadow-neutral)] mimi-transition hover:bg-accent',
+    'h-9 cursor-pointer rounded-[var(--mimi-radius)] border border-border bg-card px-3.5 text-[0.84375rem] font-medium shadow-[shadow:var(--mimi-shadow-neutral)] mimi-transition hover:bg-accent',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   ),
   skeletonWide: cn(SKELETON_CLASSES, 'w-1/4'),
@@ -362,7 +362,7 @@ interface ColumnView<T> {
         @if (selectable() && selection().length) {
           <div data-slot="selection" class="flex min-w-0 flex-1 items-center gap-2.5">
             <span
-              class="inline-flex h-[26px] items-center rounded-full bg-primary-subtle px-2.5 text-[13px] font-bold text-primary"
+              class="inline-flex h-[26px] items-center rounded-full bg-primary-subtle px-2.5 text-[0.8125rem] font-bold text-primary"
               >{{ texts.selected(selection().length) }}</span
             >
             <button
@@ -404,7 +404,7 @@ interface ColumnView<T> {
               mimiInput
               type="search"
               data-slot="search"
-              class="h-9 pr-8 pl-8 text-[13.5px] [&::-webkit-search-cancel-button]:hidden"
+              class="h-9 pr-8 pl-8 text-[0.84375rem] [&::-webkit-search-cancel-button]:hidden"
               [value]="query()"
               [attr.placeholder]="searchPlaceholder() || texts.search"
               [attr.aria-label]="searchPlaceholder() || texts.search"
@@ -447,7 +447,7 @@ interface ColumnView<T> {
               <button
                 type="button"
                 data-slot="clear-filters"
-                class="h-[26px] cursor-pointer rounded-full px-2 text-[12.5px] font-medium text-muted-foreground underline underline-offset-[3px] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                class="h-[26px] cursor-pointer rounded-full px-2 text-[0.78125rem] font-medium text-muted-foreground underline underline-offset-[3px] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 (click)="clearFilters()"
               >
                 {{ texts.clearFilters }}
@@ -512,7 +512,7 @@ interface ColumnView<T> {
       (scroll)="onScroll($event)"
     >
       <table
-        class="w-full min-w-max border-separate border-spacing-0 text-[length:var(--mimi-table-font-size,13px)] tabular-nums group-data-[density=comfortable]/data-table:text-[length:var(--mimi-table-font-size-comfortable,14px)]"
+        class="w-full min-w-max border-separate border-spacing-0 text-[length:var(--mimi-table-font-size,0.8125rem)] tabular-nums group-data-[density=comfortable]/data-table:text-[length:var(--mimi-table-font-size-comfortable,0.875rem)]"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-busy]="loading() || null"
       >
@@ -761,12 +761,13 @@ interface ColumnView<T> {
                         }
                       </svg>
                     </span>
-                    <span class="text-[15px] font-bold">{{
+                    <span class="text-[0.9375rem] font-bold">{{
                       narrowed() ? texts.noResults : texts.empty
                     }}</span>
-                    <span class="max-w-[360px] text-[13.5px] text-pretty text-muted-foreground">{{
-                      narrowed() ? texts.noResultsHint : texts.emptyHint
-                    }}</span>
+                    <span
+                      class="max-w-[360px] text-[0.84375rem] text-pretty text-muted-foreground"
+                      >{{ narrowed() ? texts.noResultsHint : texts.emptyHint }}</span
+                    >
                     <span class="mt-2 flex gap-2 empty:hidden">
                       @if (narrowed()) {
                         <button
@@ -792,7 +793,7 @@ interface ColumnView<T> {
     @if (!loading() && count() > 0) {
       <div
         data-slot="footer"
-        class="flex flex-wrap items-center justify-between gap-3 border-t border-border py-3 pr-3 pl-4 text-[13px] text-muted-foreground tabular-nums"
+        class="flex flex-wrap items-center justify-between gap-3 border-t border-border py-3 pr-3 pl-4 text-[0.8125rem] text-muted-foreground tabular-nums"
       >
         <span data-slot="range">{{ rangeText() }}</span>
         <mimi-pagination

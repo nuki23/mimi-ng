@@ -58,7 +58,7 @@ export class MimiPaginationPageSize {
       // El chevron mira hacia arriba (el panel abre arriba) y mide 14px.
       '[&>svg:last-child]:size-3.5 [&>svg:last-child]:-scale-y-100',
       // Alto y texto de la escala del tema: `data-size` está en el anfitrión de Pagination.
-      'h-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))] text-[length:var(--mimi-size-text,13px)]',
+      'h-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))] text-[length:var(--mimi-size-text,0.8125rem)]',
     ].join(' '),
   );
 

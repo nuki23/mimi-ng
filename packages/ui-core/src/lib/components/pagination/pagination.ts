@@ -48,9 +48,9 @@ const paginationVariants = cva(
   {
     variants: {
       size: {
-        sm: 'gap-[4px] p-[3px] text-[length:var(--mimi-size-text,13px)]',
+        sm: 'gap-[4px] p-[3px] text-[length:var(--mimi-size-text,0.8125rem)]',
         md: 'gap-[6px] p-[4px] text-[length:var(--mimi-size-text,0.875rem)]',
-        lg: 'gap-[8px] p-[5px] text-[length:var(--mimi-size-text,15px)]',
+        lg: 'gap-[8px] p-[5px] text-[length:var(--mimi-size-text,0.9375rem)]',
       },
       // La flotante solo cambia la sombra; la posición se da con `class`.
       variant: {
@@ -325,7 +325,7 @@ export class MimiPagination {
   protected readonly placeholderClasses = computed(() =>
     cn(
       'inline-flex items-center gap-1 rounded-full pr-2 pl-2.5 font-semibold whitespace-nowrap tabular-nums',
-      'h-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))] text-[length:var(--mimi-size-text,13px)]',
+      'h-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))] text-[length:var(--mimi-size-text,0.8125rem)]',
     ),
   );
 

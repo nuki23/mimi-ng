@@ -24,7 +24,13 @@ export interface SizeScaleRow {
 export const SIZE_SCALE: readonly SizeScaleRow[] = [
   { variable: 'size-height', what: 'Alto de un control', sm: '2rem', md: '2.5rem', lg: '3rem' },
   { variable: 'size-px', what: 'Relleno horizontal', sm: '0.75rem', md: '1rem', lg: '1.5rem' },
-  { variable: 'size-text', what: 'Tamaño del texto', sm: '13px', md: '0.875rem', lg: '15px' },
+  {
+    variable: 'size-text',
+    what: 'Tamaño del texto',
+    sm: '0.8125rem',
+    md: '0.875rem',
+    lg: '0.9375rem',
+  },
   { variable: 'size-icon', what: 'Ícono', sm: '0.875rem', md: '1rem', lg: '1.125rem' },
   {
     variable: 'size-gap',
@@ -133,6 +139,16 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
       'Texto 11,5 / 12,5 / 13,5 px y relleno. Toma el tamaño del contenedor del disparador; `mimiTooltipSize` lo fija.',
   },
   { component: 'Popover', changes: 'Ancho 260 / 300 / 360 px.' },
+  {
+    component: 'Accordion',
+    changes:
+      'Cabecera 44 / 52 / 60 px, relleno 12 / 16 / 20 px, título 13,5 / 14,5 / 16 px y contenido 13 / 13,5 / 15 px.',
+  },
+  {
+    component: 'Stepper',
+    changes:
+      'Círculo 28 / 32 / 40 px, número 12 / 13 / 15 px, título 12,5 / 13 / 15 px y texto de debajo 11 / 11,5 / 13 px.',
+  },
 ];
 
 /** Cómo se pide un tamaño (los tres modos). */

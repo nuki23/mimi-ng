@@ -71,6 +71,7 @@ export class App {}
 
 ## Componentes
 
+- **Accordion**: `ng g mimi accordion` · [documentación](https://ng.mimiworks.dev/docs/components/accordion)
 - **Avatar**: `ng g mimi avatar` · [documentación](https://ng.mimiworks.dev/docs/components/avatar)
 - **Badge**: `ng g mimi badge` · [documentación](https://ng.mimiworks.dev/docs/components/badge)
 - **Button**: `ng g mimi button` · [documentación](https://ng.mimiworks.dev/docs/components/button)
@@ -104,6 +105,7 @@ export class App {}
 - **Skeleton**: `ng g mimi skeleton` · [documentación](https://ng.mimiworks.dev/docs/components/skeleton)
 - **Slider**: `ng g mimi slider` · [documentación](https://ng.mimiworks.dev/docs/components/slider)
 - **Sortable List**: `ng g mimi sortable-list` · [documentación](https://ng.mimiworks.dev/docs/components/sortable-list)
+- **Stepper**: `ng g mimi stepper` · [documentación](https://ng.mimiworks.dev/docs/components/stepper)
 - **Switch**: `ng g mimi switch` · [documentación](https://ng.mimiworks.dev/docs/components/switch)
 - **Table**: `ng g mimi table` · [documentación](https://ng.mimiworks.dev/docs/components/table)
 - **Tabs**: `ng g mimi tabs` · [documentación](https://ng.mimiworks.dev/docs/components/tabs)
@@ -119,11 +121,12 @@ export class App {}
 
 Pantallas y secciones (inicio de sesión, registro, ajustes, precios…) hechas con los componentes de Mimi. Se agregan con el mismo comando, por ejemplo `ng g mimi` seguido del nombre del Block, y los componentes que usan van a la carpeta de siempre.
 
-- **Las páginas** (`kanban-01`, `login-01`, `login-02`, `otp-01`, `settings-01`, `signup-01`, `table-01`) se generan como una página tuya: `ng g mimi login-01` crea `src/app/pages/login/` (`aliases.pages` en `mimi.json`) con `login.ts`, `login.html` y `login.routes.ts`, y la clase `LoginPage`. Al terminar te da la línea para `app.routes.ts` (la CLI no toca tus rutas). Otro nombre: `--name admin-login`. Si la carpeta ya existe, no la toca y te pide otro nombre.
+- **Las páginas** (`dashboard-01`, `kanban-01`, `login-01`, `login-02`, `otp-01`, `settings-01`, `signup-01`, `table-01`) se generan como una página tuya: `ng g mimi login-01` crea `src/app/pages/login/` (`aliases.pages` en `mimi.json`) con `login.ts`, `login.html` y `login.routes.ts`, y la clase `LoginPage`. Al terminar te da la línea para `app.routes.ts` (la CLI no toca tus rutas). Otro nombre: `--name admin-login`. Si la carpeta ya existe, no la toca y te pide otro nombre.
 - **Las secciones** (`pricing-01`) se copian a `src/app/blocks/<nombre>` (`aliases.blocks`): ponlas dentro de una de tus páginas.
 
 El Block es tuyo; si lo modificas, `ng g mimi` no lo vuelve a tocar al actualizar (te avisa y `--overwrite` lo reemplaza entero). Mimi lo sigue por su nombre (`login-01`) aunque le pongas otro. Si instalaste una pantalla con la 0.4.0, sigue en `src/app/blocks/` y se actualiza ahí.
 
+- **dashboard-01** (página: inicio de una aplicación con menú lateral —un Sheet en el teléfono—, métricas, ingresos, clientes recientes y actividad): `ng g mimi dashboard-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/dashboard-01)
 - **kanban-01** (página: tablero con tres columnas y tarjetas que se mueven con el puntero, el dedo y el teclado): `ng g mimi kanban-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/kanban-01)
 - **login-01** (página: inicio de sesión centrado, con Google y GitHub): `ng g mimi login-01` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-01)
 - **login-02** (página: inicio de sesión en dos columnas, con imagen y testimonio): `ng g mimi login-02` · [documentación](https://ng.mimiworks.dev/docs/blocks/login-02)

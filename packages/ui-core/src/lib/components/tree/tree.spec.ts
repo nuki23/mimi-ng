@@ -422,7 +422,7 @@ describe('MimiTree', () => {
     const single = tree('single') as HTMLElement;
     expect(single.className).toContain('p-[var(--mimi-tree-padding,6px)]');
     expect(single.className).toContain(
-      'text-[length:var(--mimi-tree-text,var(--mimi-tree-font-size,13.5px))]',
+      'text-[length:var(--mimi-tree-text,var(--mimi-tree-font-size,0.84375rem))]',
     );
     expect(single.className).toContain('bg-[color:var(--mimi-tree-bg,var(--mimi-card))]');
     host.extra.set('p-0 bg-muted');

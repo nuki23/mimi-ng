@@ -14,7 +14,8 @@ Hecho y cerrado (puerta G3.P, revisada por el usuario; versión 0.5.0 preparada 
 
 ## Block con el Grupo 4 → v0.8.0 (era la 0.6.0; movido el 09/11/2026, ver `docs/plan/refinamiento/plan.md`)
 
-- [ ] B.8 `dashboard-01` (usa Data Table; barra lateral y cajón en móvil). Diseño: `Block dashboard-01`.
+- [x] B.8 `dashboard-01` (hecha el 22/11/2026 en la rama `auto/0.8.0-tanda2-2026-11-22`; informe `docs/auto/0.8.0-tanda2-2026-11-22.md`, sección 8; usa Table —la capa base— y no la Data Table: cinco filas sin ordenar ni filtrar) (barra lateral y cajón en móvil). Diseño: `Block dashboard-01`.
+  - **Decidido por defecto (22/11/2026), pendiente de revisión del usuario:** Table en vez de Data Table, y el lateral como `div` con el menú en un componente interno. Ver `docs/auto/decisiones-por-defecto.md`.
   - Depende de: B.1, G3.4, G4.2 (Sheet: el botón «Abrir menú» del diseño en móvil) · Bloquea: G4.P
   - Ajuste del 05/11/2026 (pendiente de revisión del usuario): la barra lateral (`aside` de 232px) se escribe dentro del Block, como la dibuja el diseño, sin la Sidebar de dashboard del Grupo 5 (G5.1, sin versión). Alternativa: v0.5.0, con la barra inferior del diseño como única navegación móvil y sin «Abrir menú» (spec 4, «Blocks»).
   - **Hallazgo del 06/11/2026** (al detallar la 0.4.0): según la lista «Componentes» de `Mimi F6 Blocks.dc.html`, `dashboard-01` usa además **Number Ticker** (Mimi Effects, E.6, sin versión) en las cuatro estadísticas y **Timeline** (Grupo 5, G5.5, sin versión) en la actividad reciente. Ninguno estará publicado en la 0.6.0. Decidido por el usuario (07/11/2026: adopta la recomendación; era PENDIENTE DE DECIDIR) (B.8-a, al detallar la B.8): (a) números estáticos y la actividad como una lista escrita dentro del Block; (b) esperar a E.6 y G5.5. Recomendación: (a), como con la barra lateral; el sitio muestra cómo cambiarlos cuando existan.

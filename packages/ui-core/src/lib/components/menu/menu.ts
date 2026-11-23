@@ -1,3 +1,5 @@
+import { InputModalityDetector } from '@angular/cdk/a11y';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Menu, MenuItem } from '@angular/aria/menu';
 import {
   ChangeDetectionStrategy,
@@ -117,6 +119,8 @@ export const MIMI_MENU_PANEL_CLASSES =
       [attr.data-in-sheet]="sheet() ? '' : null"
       [attr.data-sheet-level]="sheet() && openLevels() ? '' : null"
       [attr.inert]="state() === 'closed' ? '' : null"
+      [attr.data-nav]="nav()"
+      (pointermove)="nav.set('pointer')"
       (itemSelected)="onItemSelected($event)"
       (keydown)="onKeydown($event)"
       (focusout)="onFocusOut($event)"
@@ -163,6 +167,16 @@ export class MimiMenuPanel implements MimiMenuHost {
   private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
   private readonly items = new Map<string, () => void>();
 
+  private readonly modality = inject(InputModalityDetector);
+  /**
+   * Cómo se recorre el menú (y sus submenús, que van dentro): con el teclado o con el puntero. Con
+   * el puntero, aria enfoca el ítem al pasar; si antes se usó el teclado, `focus-visible` seguiría
+   * activo y el anillo saldría con el ratón: el anillo pide además `data-nav="keyboard"`.
+   */
+  protected readonly nav = signal<'keyboard' | 'pointer'>(
+    this.modality.mostRecentModality === 'keyboard' ? 'keyboard' : 'pointer',
+  );
+
   protected readonly classes = computed(() =>
     cn(
       MIMI_MENU_PANEL_CLASSES,
@@ -178,6 +192,9 @@ export class MimiMenuPanel implements MimiMenuHost {
   }
 
   constructor() {
+    this.modality.modalityDetected
+      .pipe(takeUntilDestroyed())
+      .subscribe((modality) => this.nav.set(modality === 'keyboard' ? 'keyboard' : 'pointer'));
     this.focusItem();
   }
 
@@ -261,10 +278,15 @@ const DANGER = [
 ];
 
 const MENU_ITEM_BASE = [
-  'relative flex h-[var(--mimi-menu-item-h,var(--mimi-menu-item-height,32px))] cursor-pointer items-center gap-2 px-2 text-[length:var(--mimi-menu-text,14px)] outline-none select-none',
+  'relative flex h-[var(--mimi-menu-item-h,var(--mimi-menu-item-height,32px))] cursor-pointer items-center gap-2 px-2 text-[length:var(--mimi-menu-text,0.875rem)] outline-none select-none',
   'rounded-[var(--mimi-menu-item-radius,var(--mimi-radius-sm))]',
   'transition-[background-color] duration-120 ease-[ease] active:scale-(--mimi-press-scale)',
   'aria-disabled:cursor-not-allowed aria-disabled:opacity-[var(--mimi-disabled-opacity,0.5)] aria-disabled:active:scale-100',
+  // El ítem con el foco de teclado (22/11/2026): un anillo interior con el color del foco, además
+  // del fondo suave (1,1:1 a 1,2:1 frente al panel; WCAG 1.4.11 y 2.4.7 piden 3:1). Los ítems
+  // reciben el foco (foco itinerante): `focus-visible`, y `data-nav="keyboard"` del panel para que
+  // no salga al pasar el ratón después de usar el teclado.
+  'in-data-[nav=keyboard]:focus-visible:shadow-[shadow:inset_0_0_0_2px_var(--mimi-ring)]',
 ];
 
 /**
@@ -284,7 +306,7 @@ const ICON_TONE = {
 };
 const LABEL = 'min-w-0 flex-1 truncate';
 const SHORTCUT =
-  'font-mono text-[11.5px] tracking-[.06em] text-[color:var(--mimi-menu-shortcut,var(--mimi-muted-foreground))]';
+  'font-mono text-[0.71875rem] tracking-[.06em] text-[color:var(--mimi-menu-shortcut,var(--mimi-muted-foreground))]';
 
 /** Registra el ítem en el menú raíz y devuelve el `value` interno de su `ngMenuItem` (único). */
 function registerMenuItem(select: () => void): string {
@@ -502,7 +524,7 @@ export class MimiMenuLabel {
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
     cn(
-      'block px-2 pt-1.5 pb-1 text-[11px] font-semibold tracking-[.05em] text-muted-foreground uppercase',
+      'block px-2 pt-1.5 pb-1 text-[0.6875rem] font-semibold tracking-[.05em] text-muted-foreground uppercase',
       this.userClass(),
     ),
   );

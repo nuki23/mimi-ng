@@ -109,6 +109,7 @@ const handled = new WeakSet<Event>();
     <ng-template
       cdkConnectedOverlay
       mimiOverlayFollow
+      [mimiOverlayReturnFocus]="returnFocusTarget()"
       (mimiOverlayOutOfView)="close(false)"
       [cdkConnectedOverlayOrigin]="origin()!"
       [cdkConnectedOverlayOpen]="rendered() && mode() === 'popover'"
@@ -357,12 +358,15 @@ export class MimiContextMenu {
 
   /** El elemento que tenía el foco antes de abrir o, si ya no está, el trigger (si es enfocable). */
   private restoreFocus(): void {
+    this.returnFocusTarget()?.focus();
+  }
+
+  /** Adónde vuelve el foco al cerrar (también al cerrar por el scroll, sin mover la página). */
+  protected returnFocusTarget(): HTMLElement | undefined {
     const previous = this.previousFocus;
-    const target =
-      previous?.isConnected && previous !== this.document.body
-        ? previous
-        : this.activeTrigger()?.element;
-    target?.focus();
+    return previous?.isConnected && previous !== this.document.body
+      ? previous
+      : this.activeTrigger()?.element;
   }
 
   protected onDetach(): void {

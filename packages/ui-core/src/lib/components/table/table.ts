@@ -40,7 +40,7 @@ export const MIMI_TABLE_CELL = cn(
 /** Celda de encabezado. @internal */
 export const MIMI_TABLE_HEAD = cn(
   'h-[var(--mimi-table-head-h,var(--mimi-table-head-height,38px))] border-b border-border px-[var(--mimi-table-cell-px,10px)] text-start whitespace-nowrap',
-  'bg-[color:var(--mimi-table-head-bg,var(--mimi-muted))] text-[12.5px] font-semibold text-muted-foreground',
+  'bg-[color:var(--mimi-table-head-bg,var(--mimi-muted))] text-[0.78125rem] font-semibold text-muted-foreground',
 );
 
 /** Botón de orden del encabezado (el de la Data Table). @internal */
@@ -48,7 +48,7 @@ export const MIMI_TABLE_SORT_BUTTON = cn(
   'inline-flex shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] border-0 bg-transparent text-muted-foreground',
   'mimi-transition hover:bg-accent hover:text-foreground',
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
-  '-ms-1.5 h-7 gap-[5px] px-1.5 text-[12.5px] font-semibold in-data-[sorted]:text-foreground',
+  '-ms-1.5 h-7 gap-[5px] px-1.5 text-[0.78125rem] font-semibold in-data-[sorted]:text-foreground',
 );
 
 /** Trazos de Lucide (ISC) de los íconos de orden. @internal */
@@ -68,7 +68,7 @@ export class MimiTable {
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
     cn(
-      'w-full border-separate border-spacing-0 font-sans text-[length:var(--mimi-table-font-size,13px)] text-card-foreground tabular-nums',
+      'w-full border-separate border-spacing-0 font-sans text-[length:var(--mimi-table-font-size,0.8125rem)] text-card-foreground tabular-nums',
       this.userClass(),
     ),
   );

@@ -191,7 +191,7 @@ let nextId = 0;
         <span
           [id]="hintId"
           data-slot="hint"
-          class="text-[length:var(--mimi-upload-hint,12.5px)] text-muted-foreground"
+          class="text-[length:var(--mimi-upload-hint,0.78125rem)] text-muted-foreground"
           >{{ hint() }}</span
         >
       }

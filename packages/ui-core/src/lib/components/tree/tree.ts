@@ -289,7 +289,7 @@ const fold = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toL
               <span class="min-w-0 flex-1 truncate">{{ row.node.label }}</span>
               @if (row.node.meta) {
                 <span
-                  class="font-mono text-[11px] text-muted-foreground in-data-[selected]:text-current"
+                  class="font-mono text-[0.6875rem] text-muted-foreground in-data-[selected]:text-current"
                   >{{ row.node.meta }}</span
                 >
               }
@@ -299,7 +299,7 @@ const fold = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toL
           <div
             aria-hidden="true"
             [attr.data-slot]="row.kind === 'loading' ? 'loading' : 'error'"
-            class="flex h-7 items-center gap-2 pe-2 text-[12.5px] text-muted-foreground"
+            class="flex h-7 items-center gap-2 pe-2 text-[0.78125rem] text-muted-foreground"
             [class.text-destructive-soft-foreground]="row.kind === 'error'"
             [style.padding-inline-start]="statusIndent(row.level)"
           >
@@ -366,7 +366,7 @@ export class MimiTree<T = unknown> implements FormValueControl<string | null | s
 
   protected readonly classes = computed(() =>
     cn(
-      'flex flex-col rounded-card border border-border bg-[color:var(--mimi-tree-bg,var(--mimi-card))] p-[var(--mimi-tree-padding,6px)] text-[length:var(--mimi-tree-text,var(--mimi-tree-font-size,13.5px))] text-card-foreground shadow-neutral',
+      'flex flex-col rounded-card border border-border bg-[color:var(--mimi-tree-bg,var(--mimi-card))] p-[var(--mimi-tree-padding,6px)] text-[length:var(--mimi-tree-text,var(--mimi-tree-font-size,0.84375rem))] text-card-foreground shadow-neutral',
       // Deshabilitado entero: la misma opacidad que los demás controles (field-styles, 12/11/2026).
       'data-disabled:opacity-[var(--mimi-disabled-opacity,0.5)]',
       this.userClass(),

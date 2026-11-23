@@ -41,7 +41,7 @@ import {
  * en la fila. Es un campo de escribir: no se hunde.
  */
 const BOX_BASE =
-  'relative flex min-w-0 shrink items-center justify-center border-[length:var(--mimi-input-border-width,1px)] font-semibold tabular-nums text-foreground mimi-transition w-[var(--mimi-otp-w,var(--mimi-otp-width,46px))] h-[var(--mimi-otp-h,var(--mimi-otp-height,54px))] rounded-[var(--mimi-otp-radius,var(--mimi-radius,0.75rem))] text-[length:var(--mimi-otp-text,var(--mimi-otp-font-size,22px))] bg-[color:var(--mimi-otp-bg,var(--mimi-input-bg,var(--mimi-input-background)))] group-data-[readonly]/otp:bg-[color:var(--mimi-input-readonly)]';
+  'relative flex min-w-0 shrink items-center justify-center border-[length:var(--mimi-input-border-width,1px)] font-semibold tabular-nums text-foreground mimi-transition w-[var(--mimi-otp-w,var(--mimi-otp-width,46px))] h-[var(--mimi-otp-h,var(--mimi-otp-height,54px))] rounded-[var(--mimi-otp-radius,var(--mimi-radius,0.75rem))] text-[length:var(--mimi-otp-text,var(--mimi-otp-font-size,1.375rem))] bg-[color:var(--mimi-otp-bg,var(--mimi-input-bg,var(--mimi-input-background)))] group-data-[readonly]/otp:bg-[color:var(--mimi-input-readonly)]';
 /**
  * Borde y anillo de cada casilla según el estado (elegidos en TypeScript: menos CSS global). El
  * error es el de todos los campos: borde rojo siempre y el halo de error solo con el foco.

@@ -154,6 +154,17 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./components/sheet/sheet-page').then((m) => m.SheetPage),
   },
   {
+    path: 'components/accordion',
+    title: 'Accordion · Mimi',
+    loadComponent: () =>
+      import('./components/accordion/accordion-page').then((m) => m.AccordionPage),
+  },
+  {
+    path: 'components/stepper',
+    title: 'Stepper · Mimi',
+    loadComponent: () => import('./components/stepper/stepper-page').then((m) => m.StepperPage),
+  },
+  {
     path: 'components/loading',
     title: 'Loading · Mimi',
     loadComponent: () => import('./components/loading/loading-page').then((m) => m.LoadingPage),
@@ -298,6 +309,11 @@ export const DOCS_ROUTES: Routes = [
     path: 'blocks/kanban-01',
     title: 'kanban-01 · Blocks · Mimi',
     loadComponent: () => import('./blocks/kanban-01-page').then((m) => m.Kanban01Page),
+  },
+  {
+    path: 'blocks/dashboard-01',
+    title: 'dashboard-01 · Blocks · Mimi',
+    loadComponent: () => import('./blocks/dashboard-01-page').then((m) => m.Dashboard01Page),
   },
   {
     path: 'blocks/pricing-01',

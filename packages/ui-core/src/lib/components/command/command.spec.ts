@@ -228,7 +228,7 @@ describe('MimiCommand', { timeout: 20_000 }, () => {
       'h-[var(--mimi-command-input-h,var(--mimi-command-input-height,52px))]',
     );
     expect(inline.querySelector('input')!.className).toContain(
-      'text-[length:var(--mimi-command-text,var(--mimi-command-input-font-size,15px))]',
+      'text-[length:var(--mimi-command-text,var(--mimi-command-input-font-size,0.9375rem))]',
     );
     expect(inline.querySelector('[role="listbox"]')!.className).toContain(
       'max-h-[var(--mimi-command-list-height,332px)]',

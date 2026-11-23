@@ -315,9 +315,12 @@ export class MimiSheetOverlay implements MimiSheetLevels {
 const FOCUSABLE =
   'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-/** La X y «Atrás» de la cabecera (30px, como Dialog y el diseño). */
+/**
+ * La X y «Atrás» de la cabecera: 30px, como Dialog y el diseño; en el teléfono (menos de 640px,
+ * el corte de la hoja), 40px, para el dedo (22/11/2026, pedido del usuario). El ícono no cambia.
+ */
 const ICON_BUTTON_CLASSES = cn(
-  'inline-flex size-[30px] shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] bg-transparent text-muted-foreground',
+  'inline-flex size-[30px] max-sm:size-10 shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] bg-transparent text-muted-foreground',
   'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );

@@ -15,4 +15,7 @@
    login-01 salía con el borde del input dentro (revisión con Playwright, 12/11/2026). Aquí no
    hay menú ni cabecera del sitio, así que repetir utilidades del CSS global no las pisa. */
 @source '../../../packages/ui-core/src/lib/components';
+/* Y las utilidades con clases (la hoja común, `utils/sheet.ts`): sin ellas, una clase de otro
+   componente que coincide (`size-[30px]`) llega sin su variante (`max-sm:size-10`) y la pisa. */
+@source '../../../packages/ui-core/src/lib/utils/sheet.ts';
 @source not '../../../packages/ui-core/src/**/*.spec.ts';

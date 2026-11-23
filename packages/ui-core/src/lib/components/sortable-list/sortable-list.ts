@@ -407,7 +407,7 @@ export class MimiSortableList<T = unknown> {
   );
 
   protected readonly emptyClasses =
-    'flex min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))] items-center justify-center rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border-2 border-dashed border-border text-[12.5px] text-muted-foreground';
+    'flex min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))] items-center justify-center rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border-2 border-dashed border-border text-[0.78125rem] text-muted-foreground';
 
   /** @internal Para el grupo: lo que hay ahora, y volver a eso (Escape). */
   snapshot(): T[] {

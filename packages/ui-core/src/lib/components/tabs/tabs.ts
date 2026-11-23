@@ -276,7 +276,7 @@ const tabVariants = cva(
         underline:
           'h-[var(--mimi-tabs-h-u,var(--mimi-tabs-height,44px))] gap-2 text-[length:var(--mimi-size-text,0.875rem)]',
         // 34px sin token (el token de alto es el de la subrayada; spec 13).
-        pill: 'h-[var(--mimi-tabs-h-p,34px)] gap-1.5 rounded-[var(--mimi-radius)] text-[length:var(--mimi-tabs-text-p,13.5px)] [&_svg]:size-[15px] [&_svg]:shrink-0',
+        pill: 'h-[var(--mimi-tabs-h-p,34px)] gap-1.5 rounded-[var(--mimi-radius)] text-[length:var(--mimi-tabs-text-p,0.84375rem)] [&_svg]:size-[15px] [&_svg]:shrink-0',
       },
       // En vertical, el texto al inicio, como una navegación lateral.
       orientation: { horizontal: '', vertical: 'justify-start px-3 text-start' },
@@ -286,7 +286,7 @@ const tabVariants = cva(
 );
 
 const COUNT_CLASSES =
-  'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-primary-subtle px-1.5 text-[11px] font-bold text-primary';
+  'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-primary-subtle px-1.5 text-[0.6875rem] font-bold text-primary';
 
 /**
  * Pestañas:

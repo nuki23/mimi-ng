@@ -1,0 +1,184 @@
+<!-- El menú (Dashboard01Menu, en dashboard-01.ts): en el lateral y, en el teléfono, en el Sheet.
+     El lateral es un div: el landmark es el nav de dentro (un aside con nombre lo repetía). -->
+<div
+  data-slot="sidebar"
+  class="sticky top-0 hidden h-dvh flex-col gap-4 overflow-y-auto border-e border-border bg-card px-3 py-3.5 md:flex"
+>
+  <nav
+    mimi-dashboard-01-menu
+    aria-label="Main"
+    class="flex flex-1 flex-col gap-4"
+    [appName]="appName()"
+    [nav]="nav()"
+    [active]="active()"
+    [user]="user()"
+    (picked)="go($event)"
+  ></nav>
+</div>
+
+<div class="flex min-w-0 flex-col">
+  <!-- En el teléfono: la barra con el botón del menú (un Sheet desde la izquierda). -->
+  <div
+    class="sticky top-0 z-10 flex items-center gap-2 border-b border-border bg-background/95 px-4 py-2.5 backdrop-blur md:hidden"
+  >
+    <mimi-sheet side="left" size="sm" aria-label="Menu" [(open)]="menuOpen">
+      <!-- size="md": el Sheet es sm (su ancho) y, sin él, el botón lo heredaría (32 px). -->
+      <button
+        mimiBtn
+        variant="ghost"
+        size="md"
+        class="w-10 px-0"
+        mimiSheetTrigger
+        aria-label="Open menu"
+      >
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        >
+          <path d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+      <ng-template mimiSheetContent>
+        <nav
+          mimi-dashboard-01-menu
+          aria-label="Main"
+          class="flex min-h-full flex-col gap-4 p-3"
+          [appName]="appName()"
+          [nav]="nav()"
+          [active]="active()"
+          [user]="user()"
+          (picked)="go($event)"
+        ></nav>
+      </ng-template>
+    </mimi-sheet>
+    <span class="font-semibold">{{ appName() }}</span>
+  </div>
+
+  <!-- Un div, no la región principal: esa la pone el layout de tu app (una por página). -->
+  <div
+    data-slot="content"
+    class="mx-auto flex w-full max-w-[1080px] min-w-0 flex-col gap-5 px-4 pt-5 pb-8 md:px-8 md:pt-7 md:pb-10"
+  >
+    <!-- Un div, no un header: fuera de una sección, header sería el «banner» de la página. -->
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div class="flex flex-col gap-1">
+        <h1 class="text-2xl font-bold tracking-[-0.02em]">Hi, {{ firstName() }}</h1>
+        <p class="text-sm text-muted-foreground">Here’s how September is going.</p>
+      </div>
+      <button mimiBtn (click)="newCustomer.emit()">New customer</button>
+    </div>
+
+    <ul aria-label="Key metrics" class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      @for (stat of stats(); track stat.label) {
+        <li mimiCard data-slot="stat" class="flex flex-col gap-1 p-4">
+          <span class="text-sm text-muted-foreground">{{ stat.label }}</span>
+          <span class="text-2xl font-bold tracking-[-0.02em] tabular-nums">{{ stat.value }}</span>
+          <span
+            class="text-xs font-medium"
+            [class.text-success-soft-foreground]="stat.tone === 'success'"
+            [class.text-warning-soft-foreground]="stat.tone === 'warning'"
+            [class.text-destructive-soft-foreground]="stat.tone === 'danger'"
+            >{{ stat.change }}</span
+          >
+        </li>
+      }
+    </ul>
+
+    <div class="grid grid-cols-1 gap-3 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+      <section mimiCard aria-labelledby="dashboard-01-revenue">
+        <header mimiCardHeader>
+          <h2 mimiCardTitle id="dashboard-01-revenue">Revenue by month</h2>
+          <p mimiCardDescription>2026 · thousands of {{ currency() }}</p>
+        </header>
+        <div mimiCardContent>
+          <!-- Las barras son decorativas; la lista de debajo da los valores a los lectores. -->
+          <div aria-hidden="true" data-slot="chart" class="flex h-40 items-end gap-1.5 sm:gap-2.5">
+            @for (month of revenue(); track month.month; let last = $last) {
+              <div class="flex h-full min-w-0 flex-1 flex-col items-center justify-end gap-1.5">
+                <div
+                  class="w-full rounded-t-[var(--mimi-radius-sm)]"
+                  [class.bg-primary]="last"
+                  [class.bg-primary-subtle]="!last"
+                  [style.height.%]="(month.value / maxRevenue()) * 100"
+                ></div>
+                <span class="text-xs text-muted-foreground">{{ month.month }}</span>
+              </div>
+            }
+          </div>
+          <ul class="sr-only">
+            @for (month of revenue(); track month.month) {
+              <li>{{ month.month }}: {{ month.value }}</li>
+            }
+          </ul>
+        </div>
+      </section>
+
+      <section mimiCard aria-labelledby="dashboard-01-activity">
+        <header mimiCardHeader>
+          <h2 mimiCardTitle id="dashboard-01-activity">Recent activity</h2>
+        </header>
+        <ol mimiCardContent class="flex flex-col gap-3">
+          @for (item of activity(); track item.id) {
+            <li class="flex items-start gap-3 text-sm">
+              <span
+                aria-hidden="true"
+                class="mt-1.5 size-2 shrink-0 rounded-full bg-primary"
+              ></span>
+              <span class="min-w-0 flex-1">
+                <span class="font-semibold">{{ item.who }}</span> {{ item.what }}
+              </span>
+              <span class="shrink-0 text-xs text-muted-foreground">{{ item.when }}</span>
+            </li>
+          } @empty {
+            <li class="text-sm text-muted-foreground">No activity yet.</li>
+          }
+        </ol>
+      </section>
+    </div>
+
+    <section mimiCard aria-labelledby="dashboard-01-customers" class="min-w-0">
+      <header mimiCardHeader class="flex-row items-center justify-between">
+        <h2 mimiCardTitle id="dashboard-01-customers">Recent customers</h2>
+        <button mimiBtn variant="outline" size="sm" (click)="viewAllCustomers.emit()">
+          View all
+        </button>
+      </header>
+      <div class="overflow-x-auto">
+        <table mimiTable aria-labelledby="dashboard-01-customers">
+          <thead mimiThead>
+            <tr>
+              <th mimiTh>Customer</th>
+              <th mimiTh class="max-sm:hidden">Plan</th>
+              <th mimiTh>Status</th>
+              <th mimiTh align="end">MRR</th>
+            </tr>
+          </thead>
+          <tbody mimiTbody>
+            @for (customer of customers(); track customer.id) {
+              <tr mimiTr>
+                <td mimiTd class="font-medium">{{ customer.name }}</td>
+                <td mimiTd class="max-sm:hidden">{{ customer.plan }}</td>
+                <td mimiTd>
+                  <span mimiBadge variant="soft" [tone]="status[customer.status].tone">{{
+                    status[customer.status].label
+                  }}</span>
+                </td>
+                <td mimiTd align="end" class="tabular-nums">{{ money(customer.mrr) }}</td>
+              </tr>
+            } @empty {
+              <tr mimiTr>
+                <td mimiTd colspan="4" class="py-8 text-center text-muted-foreground">
+                  No customers yet. Add your first one with «New customer».
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</div>

@@ -113,6 +113,19 @@ describe('Select en la hoja (R.34)', { timeout: 20_000 }, () => {
     expect(host.plain()).toBe('ES');
   });
 
+  // Decidido por defecto el 19/11/2026 y aceptado por el usuario el 22/11/2026: con la hoja
+  // abierta, el disparador queda con aria-expanded="false" y sin aria-controls (el popup de aria
+  // no se monta en la hoja; el diálogo modal oculta el resto de la página).
+  it('con la hoja abierta, el disparador queda con aria-expanded="false" y sin aria-controls', async () => {
+    narrow = true;
+    const { open, trigger } = await setup();
+    await open('plain');
+    expect(sheet()).not.toBeNull();
+    expect(trigger('plain').getAttribute('aria-expanded')).toBe('false');
+    expect(trigger('plain').hasAttribute('aria-controls')).toBe(false);
+    expect(trigger('plain').getAttribute('aria-haspopup')).toBeTruthy();
+  });
+
   it('el teclado de la lista en la hoja: ↓ mueve y Enter elige; la deshabilitada se salta', async () => {
     narrow = true;
     const { host, open, press, settle } = await setup();

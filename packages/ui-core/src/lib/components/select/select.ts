@@ -148,7 +148,7 @@ export class MimiSelectHighlight extends MimiHighlight {}
  *
  * ```html
  * <ng-template mimiSelectOption let-option let-query="query" let-trigger="trigger">
- *   <span class="font-mono text-[11px]">{{ option.value }}</span>
+ *   <span class="font-mono text-[0.6875rem]">{{ option.value }}</span>
  *   <mimi-select-highlight [text]="option.label" [query]="query" />
  * </ng-template>
  * ```
@@ -409,6 +409,7 @@ const SEARCH_INPUT_CLASSES =
       <ng-template
         cdkConnectedOverlay
         mimiOverlayFollow
+        [mimiOverlayReturnFocus]="trigger"
         (mimiOverlayOutOfView)="setOpen(false)"
         [cdkConnectedOverlayOrigin]="box"
         [cdkConnectedOverlayOpen]="rendered()"
@@ -500,7 +501,7 @@ const SEARCH_INPUT_CLASSES =
           (keydown)="onSearchKeydown($event)"
         />
         @if (query() && !loading()) {
-          <span data-slot="count" class="shrink-0 font-mono text-[11px]">{{
+          <span data-slot="count" class="shrink-0 font-mono text-[0.6875rem]">{{
             text.results(count())
           }}</span>
         }

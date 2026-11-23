@@ -100,7 +100,7 @@ class MimiConfirmIcon {
           {{ options.title }}
         </h2>
         @if (options.description) {
-          <p mimiDialogDescription class="text-[13px] leading-normal text-pretty">
+          <p mimiDialogDescription class="text-[0.8125rem] leading-normal text-pretty">
             {{ options.description }}
           </p>
         }

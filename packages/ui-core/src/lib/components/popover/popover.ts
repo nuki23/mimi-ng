@@ -121,6 +121,7 @@ export class MimiPopoverOutlet {
     <ng-template
       cdkConnectedOverlay
       mimiOverlayFollow
+      [mimiOverlayReturnFocus]="trigger()?.element"
       (mimiOverlayOutOfView)="close()"
       [cdkConnectedOverlayOrigin]="originElement()!"
       [cdkConnectedOverlayOpen]="rendered() && mode() === 'popover'"
@@ -452,7 +453,7 @@ export class MimiPopoverTitle {
   readonly id = `mimi-popover-title-${nextId++}`;
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
-    cn('text-[15px] leading-tight font-bold', this.userClass()),
+    cn('text-[0.9375rem] leading-tight font-bold', this.userClass()),
   );
 
   constructor() {
@@ -474,7 +475,7 @@ export class MimiPopoverDescription {
   readonly id = `mimi-popover-description-${nextId++}`;
   readonly userClass = input('', { alias: 'class' });
   protected readonly classes = computed(() =>
-    cn('text-[13px] text-muted-foreground', this.userClass()),
+    cn('text-[0.8125rem] text-muted-foreground', this.userClass()),
   );
 
   constructor() {

@@ -75,7 +75,7 @@ const SWATCH = {
   ),
 } as const;
 const FORMAT_ITEM =
-  'h-7 flex-1 cursor-pointer rounded-[calc(var(--mimi-radius-sm)-2px)] border-0 text-[11.5px] font-semibold mimi-transition';
+  'h-7 flex-1 cursor-pointer rounded-[calc(var(--mimi-radius-sm)-2px)] border-0 text-[0.71875rem] font-semibold mimi-transition';
 const FORMAT = {
   on: cn(FORMAT_ITEM, 'bg-background text-foreground shadow-sm', buttonFocusStyles),
   off: cn(
@@ -84,7 +84,8 @@ const FORMAT = {
     buttonFocusStyles,
   ),
 } as const;
-const SECTION_TITLE = 'text-[11px] font-semibold tracking-[.06em] text-muted-foreground uppercase';
+const SECTION_TITLE =
+  'text-[0.6875rem] font-semibold tracking-[.06em] text-muted-foreground uppercase';
 
 const toHsv = (hex: string): MimiHsv | null => {
   const rgb = mimiHexToRgb(hex);

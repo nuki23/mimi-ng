@@ -55,7 +55,9 @@ export type TokenComponent =
   | 'command'
   | 'dataTable'
   | 'loading'
-  | 'sheet';
+  | 'sheet'
+  | 'accordion'
+  | 'stepper';
 
 /** Prefijo de cada componente, el mismo que COMPONENT_PREFIX de ui-core. */
 export const TOKEN_PREFIX: Record<TokenComponent, string> = {
@@ -99,6 +101,8 @@ export const TOKEN_PREFIX: Record<TokenComponent, string> = {
   dataTable: 'table',
   loading: 'loading',
   sheet: 'sheet',
+  accordion: 'accordion',
+  stepper: 'stepper',
 };
 
 export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
@@ -1980,6 +1984,83 @@ export const COMPONENT_TOKENS: Record<TokenComponent, CssVariable[]> = {
       inherits: '--mimi-overlay',
       preset: false,
       description: 'Fondo de detrás.',
+    },
+  ],
+  stepper: [
+    {
+      name: '--mimi-stepper-indicator-size',
+      default: '32px',
+      preset: true,
+      description: 'Diámetro del círculo del paso en md (sm 28px, lg 40px).',
+    },
+    {
+      name: '--mimi-stepper-font-size',
+      default: '0.8125rem',
+      preset: true,
+      description: 'Texto del título del paso en md (13 px; sm 12,5 px, lg 15 px).',
+    },
+    {
+      name: '--mimi-stepper-line',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'Línea entre dos pasos.',
+    },
+    {
+      name: '--mimi-stepper-line-done',
+      default: 'primary',
+      inherits: '--mimi-primary',
+      preset: false,
+      description: 'Línea después de un paso completado.',
+    },
+  ],
+  accordion: [
+    {
+      name: '--mimi-accordion-radius',
+      default: 'radius-card',
+      inherits: '--mimi-radius-card',
+      preset: true,
+      description: 'Radio del contenedor.',
+    },
+    {
+      name: '--mimi-accordion-trigger-height',
+      default: '52px',
+      preset: true,
+      description: 'Alto mínimo de la cabecera en md (sm 44px, lg 60px).',
+    },
+    {
+      name: '--mimi-accordion-trigger-px',
+      default: '1rem',
+      preset: true,
+      description:
+        'Relleno a los lados de la cabecera y del contenido en md (sm 0.75rem, lg 1.25rem).',
+    },
+    {
+      name: '--mimi-accordion-font-size',
+      default: '0.90625rem',
+      preset: true,
+      description: 'Texto de la cabecera en md (14,5 px; sm 13,5 px, lg 16 px).',
+    },
+    {
+      name: '--mimi-accordion-bg',
+      default: 'card',
+      inherits: '--mimi-card',
+      preset: false,
+      description: 'Fondo del acordeón.',
+    },
+    {
+      name: '--mimi-accordion-border',
+      default: 'border',
+      inherits: '--mimi-border',
+      preset: false,
+      description: 'Borde del contenedor y separación entre ítems.',
+    },
+    {
+      name: '--mimi-accordion-hover',
+      default: 'accent',
+      inherits: '--mimi-accent',
+      preset: false,
+      description: 'Fondo de la cabecera con el puntero encima.',
     },
   ],
   loading: [

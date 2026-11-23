@@ -36,6 +36,10 @@ export const BLOCK_PREVIEWS: Record<string, BlockPreview> = {
       loading: { loading: true },
     },
   },
+  'dashboard-01': {
+    load: () => import('@/blocks/dashboard-01').then((m) => m.Dashboard01),
+    states: { empty: { customers: [], activity: [] }, loading: { loading: true } },
+  },
   'table-01': {
     load: () => import('@/blocks/table-01').then((m) => m.Table01),
     states: { selected: { selection: [2, 8] }, loading: { loading: true } },

@@ -174,16 +174,16 @@ const SEARCH_CLASSES =
   'flex h-[var(--mimi-command-input-h,var(--mimi-command-input-height,52px))] shrink-0 items-center gap-2.5 border-b border-border pr-3.5 pl-4';
 
 const INPUT_CLASSES =
-  'h-full min-w-0 flex-1 bg-transparent text-[length:var(--mimi-command-text,var(--mimi-command-input-font-size,15px))] text-foreground outline-none placeholder:text-muted-foreground';
+  'h-full min-w-0 flex-1 bg-transparent text-[length:var(--mimi-command-text,var(--mimi-command-input-font-size,0.9375rem))] text-foreground outline-none placeholder:text-muted-foreground';
 
 const KBD_CLASSES =
-  'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-[5px] border border-border bg-background px-[5px] font-mono text-[11px] text-muted-foreground';
+  'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-[5px] border border-border bg-background px-[5px] font-mono text-[0.6875rem] text-muted-foreground';
 
 const ESC_CLASSES =
-  'inline-flex h-[22px] shrink-0 items-center rounded-[5px] border border-border bg-background px-[7px] font-mono text-[11px] text-muted-foreground';
+  'inline-flex h-[22px] shrink-0 items-center rounded-[5px] border border-border bg-background px-[7px] font-mono text-[0.6875rem] text-muted-foreground';
 
 const FOOTER_KBD_CLASSES =
-  'inline-flex h-[18px] items-center rounded-[4px] border border-border px-[5px] font-mono text-[10.5px]';
+  'inline-flex h-[18px] items-center rounded-[4px] border border-border px-[5px] font-mono text-[0.65625rem]';
 
 const LIST_CLASSES = 'max-h-[var(--mimi-command-list-height,332px)] p-1.5';
 
@@ -311,8 +311,8 @@ const toOption = (item: MimiCommandItem): MimiListOption<MimiCommandItem> => ({
             }
           </svg>
         </span>
-        <span class="text-[15px] font-bold">{{ texts.noResults(query().trim()) }}</span>
-        <span class="text-[13px] text-muted-foreground">{{ texts.noResultsHint }}</span>
+        <span class="text-[0.9375rem] font-bold">{{ texts.noResults(query().trim()) }}</span>
+        <span class="text-[0.8125rem] text-muted-foreground">{{ texts.noResultsHint }}</span>
         <span class="mt-1 empty:hidden"><ng-content select="[mimiCommandEmpty]" /></span>
       </div>
     }

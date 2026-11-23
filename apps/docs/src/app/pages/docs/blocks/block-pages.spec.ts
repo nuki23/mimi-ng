@@ -12,6 +12,7 @@ import { Pricing01Page } from './pricing-01-page';
 import { Settings01Page } from './settings-01-page';
 import { Table01Page } from './table-01-page';
 import { Kanban01Page } from './kanban-01-page';
+import { Dashboard01Page } from './dashboard-01-page';
 import { Signup01Page } from './signup-01-page';
 
 interface Case {
@@ -84,6 +85,13 @@ const CASES: Case[] = [
     kind: 'page',
     page: Kanban01Page,
     components: ['sortable-list', 'avatar', 'badge', 'button'],
+    states: ['empty', 'loading'],
+  },
+  {
+    name: 'dashboard-01',
+    kind: 'page',
+    page: Dashboard01Page,
+    components: ['card', 'table', 'sheet', 'avatar', 'badge', 'button'],
     states: ['empty', 'loading'],
   },
   {

@@ -60,7 +60,8 @@
       "type": "util",
       "files": ["components/menu/menu.ts", "components/menu/index.ts"],
       "peerDependencies": {
-        "@angular/aria": "^22.2.4"
+        "@angular/aria": "^22.2.4",
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["utils/cn", "utils/overlay", "utils/overlay-config"]
     },
@@ -80,7 +81,8 @@
       "type": "util",
       "files": ["components/option-list/option-list.ts", "components/option-list/index.ts"],
       "peerDependencies": {
-        "@angular/aria": "^22.2.4"
+        "@angular/aria": "^22.2.4",
+        "@angular/cdk": "^22.2.4"
       },
       "registryDependencies": ["utils/cn"]
     },
@@ -93,6 +95,20 @@
         "theme/neutral.ts",
         "theme/index.ts"
       ]
+    },
+    "accordion": {
+      "type": "component",
+      "files": ["components/accordion/accordion.ts", "components/accordion/index.ts"],
+      "registryDependencies": ["utils/cn", "utils/size"]
+    },
+    "stepper": {
+      "type": "component",
+      "files": [
+        "components/stepper/stepper.ts",
+        "components/stepper/stepper-texts.ts",
+        "components/stepper/index.ts"
+      ],
+      "registryDependencies": ["utils/cn", "utils/control-styles", "utils/size"]
     },
     "avatar": {
       "type": "component",
@@ -818,6 +834,25 @@
         "badge",
         "button",
         "sortable-list",
+        "utils/busy",
+        "utils/cn"
+      ]
+    },
+    "dashboard-01": {
+      "type": "block",
+      "kind": "page",
+      "files": [
+        "blocks/dashboard-01/dashboard-01.ts",
+        "blocks/dashboard-01/dashboard-01.html",
+        "blocks/dashboard-01/index.ts"
+      ],
+      "registryDependencies": [
+        "avatar",
+        "badge",
+        "button",
+        "card",
+        "sheet",
+        "table",
         "utils/busy",
         "utils/cn"
       ]
