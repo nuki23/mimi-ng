@@ -1,6 +1,8 @@
 # Plan: Blocks y Grupo 3
 
-[← Índice del plan](../plan.md)
+[← Plan del Grupo 4](../plan-grupo-4.md) · [← Índice del plan](../../plan.md)
+
+Movido aquí el 23/11/2026, al cerrar la puerta G4.P, desde `docs/plan/grupo-3-blocks.md` (la B.8 era la última tarea abierta de ese archivo; el resto ya era historia). El texto sigue tal cual.
 
 División decidida por el usuario el 05/11/2026 en la G2.P (opción (b)), con un ajuste por dependencias (spec 4, «Blocks»): la v0.4.0 son los Blocks que solo usan componentes ya publicados; la v0.5.0, el Grupo 3 y `table-01`; `dashboard-01` va con el Grupo 4 en la v0.6.0 (`docs/plan/grupo-4.md`). Antes (03/11/2026) salían todos en la v0.4.0, junto con el Grupo 3.
 

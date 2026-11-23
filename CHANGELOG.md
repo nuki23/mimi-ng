@@ -2,9 +2,9 @@
 
 Todos los cambios de `@mimi-ng/cli` y de los componentes que copia. Mimi usa [versionado semántico](https://semver.org/lang/es/): mientras sea `0.x`, la API puede cambiar entre versiones menores (ver [`docs/spec.md`](docs/spec.md), sección 12).
 
-## 0.8.0 (por publicar)
+## 0.8.0 (23/11/2026): Sheet, Accordion, Stepper, `dashboard-01` y paneles en el teléfono
 
-Lo que quedaba de la 0.1.x se quita en esta versión, sin obsoletos (política del 16/11/2026, [`docs/spec.md`](docs/spec.md), sección 12).
+Lo que quedaba de la 0.1.x se quita en esta versión, sin obsoletos (política del 16/11/2026, [`docs/spec.md`](docs/spec.md), sección 12). La 0.9.0 será la última con rupturas libres (la revisión de la API antes de la 1.0.0); desde la 1.0.0, lo que se quite se marcará obsoleto y vivirá al menos una versión menor.
 
 ### Rupturas (qué cambia en algo que ya tenías y qué hacer)
 

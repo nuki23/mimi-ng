@@ -4,7 +4,7 @@
 
 ## Plataforma y experiencia
 
-Las tareas que eran la Fase 5. Conservan sus números porque el código y la spec los citan. La 5.2 y la 5.17 (con 5.17a y 5.17b) están en el Grupo 2; la 5.7 y la 5.11, en «Terminado».
+Las tareas que eran la Fase 5. Conservan sus números porque el código y la spec los citan. La 5.2 y la 5.17 (con 5.17a y 5.17b) están en el Grupo 2; la 5.7 y la 5.11, en «Terminado». **Versiones (23/11/2026, plan hasta la 1.0, `docs/plan/version-1.0.md`):** 5.5 y 5.13 en la 0.9.0 (tanda 3); 5.12 y 5.14 en una 0.9.x; el resto, después de la 1.0.0.
 
 - [ ] 5.1 Schematic `theme` (preguntas + opciones `--palette`, `--radius`).
 - [ ] 5.3 Comando `mimi` (`pnpm mimi add button`, `mimi list`, `mimi theme`). Al hacerlo: volver a agregar la pestaña de pnpm en `InstallCommand` (hoy muestra `ng g mimi` y la forma larga) y actualizar la prueba de comandos prohibidos (`apps/docs/src/app/commands.spec.ts`) para permitir los que ya existan.
