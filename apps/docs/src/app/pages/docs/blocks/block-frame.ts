@@ -42,12 +42,16 @@ export const MOBILE_WIDTH = 375;
         <button mimiToggleGroupItem="dark">Oscuro</button>
       </mimi-toggle-group>
       @if (states().length > 0) {
-        <mimi-toggle-group aria-label="Estado del Block" [(value)]="state">
-          <button mimiToggleGroupItem="">Normal</button>
-          @for (option of states(); track option.id) {
-            <button [mimiToggleGroupItem]="option.id">{{ option.label }}</button>
-          }
-        </mimi-toggle-group>
+        <!-- Con su ancho propio (w-max) y, si no cabe, con scroll horizontal: en 360 px, un
+             estado largo se salía de su botón (revisor de la puerta de la 0.8.0, H1). -->
+        <div data-slot="states" class="max-w-full overflow-x-auto">
+          <mimi-toggle-group aria-label="Estado del Block" class="w-max" [(value)]="state">
+            <button mimiToggleGroupItem="">Normal</button>
+            @for (option of states(); track option.id) {
+              <button [mimiToggleGroupItem]="option.id">{{ option.label }}</button>
+            }
+          </mimi-toggle-group>
+        </div>
       }
       <a
         class="ms-auto text-sm font-medium text-primary underline-offset-4 hover:underline"

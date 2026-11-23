@@ -45,6 +45,19 @@ describe('BlockFrame', () => {
     expect(iframe.getAttribute('src')).toBe('/preview/blocks/login-01?state=loading');
   });
 
+  // Revisor de la puerta de la 0.8.0 (H1): en 360 px, un estado largo se salía de su botón.
+  // jsdom no maqueta: se mira que el grupo tenga su ancho propio dentro de un contenedor con
+  // scroll horizontal (la medida la hace Playwright).
+  it('el selector de estados no se encoge: ancho propio y scroll si no cabe', () => {
+    const { el } = create([{ id: 'empty', label: 'Sin clientes ni actividad' }]);
+    const group = el.querySelector<HTMLElement>('[aria-label="Estado del Block"]')!;
+    expect(group.classList).toContain('w-max');
+    const box = group.parentElement!;
+    expect(box.dataset['slot']).toBe('states');
+    expect(box.classList).toContain('overflow-x-auto');
+    expect(box.classList).toContain('max-w-full');
+  });
+
   it('sin estados no muestra su selector', () => {
     const { el } = create([]);
     expect(el.querySelector('[aria-label="Estado del Block"]')).toBeNull();
