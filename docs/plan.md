@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-Ninguna. (La 0.8.0 está preparada en `auto/release-0.8.0-2026-11-23`, a falta de que el usuario la publique.)
+Ninguna. (La 0.8.0 se publicó el 23/11/2026; registro en `docs/historial/plan-grupo-4.md`.)
 
 (DP.2 a DP.5, hechas el 14/11/2026; la siguiente del plan de páginas es DP.6, Blocks y portada, y la puerta DP.P.)
 
@@ -153,7 +153,7 @@ Detalle: [docs/plan/docs-paginas/plan.md](plan/docs-paginas/plan.md). También e
 
 ## Grupo 4 → v0.8.0: estructura (cerrado)
 
-Cerrado el 23/11/2026 (puerta G4.P, recorrida en la rama `auto/0.8.0-puerta-2026-11-23` y revisada por el usuario con la fusión del PR #25; versión preparada en `docs/auto/release-0.8.0-2026-11-23.md`; **por publicar**, registro en `docs/historial/plan-grupo-4.md`). Las tareas están en «Terminado» y su texto en `docs/historial/plan-grupo-4.md` y `docs/historial/grupo-4/` (R.34 y B.8). La M.28 salió en la 0.8.0 (en «Mantenimiento»). Lo manual, a la M.20 (puntos 22 a 26); el plan hasta la 1.0, abajo.
+Cerrado el 23/11/2026 (puerta G4.P, recorrida en la rama `auto/0.8.0-puerta-2026-11-23` y revisada por el usuario con la fusión del PR #25; versión preparada en `docs/auto/release-0.8.0-2026-11-23.md`; **publicada el 23/11/2026**, `2026-11-23T21:44Z` en npm, registro en `docs/historial/plan-grupo-4.md`). Las tareas están en «Terminado» y su texto en `docs/historial/plan-grupo-4.md` y `docs/historial/grupo-4/` (R.34 y B.8). La M.28 salió en la 0.8.0 (en «Mantenimiento»). Lo manual, a la M.20 (puntos 22 a 26); el plan hasta la 1.0, abajo.
 
 ## Mimi Effects → después de la 1.0.0
 
@@ -394,7 +394,7 @@ Una línea por tarea. La fecha es la del «Hecho» del plan cuando la tenía y, 
 - [x] R.33 Button en carga sigue siendo enfocable (RUPTURA; 15/11/2026).
 - [x] R.P7 Puerta de la 0.7.0 (recorrida el 16/11/2026; revisada por el usuario con la fusión del PR #21 y cerrada el 16/11/2026; pendiente de comprobación manual en la M.20, puntos 19 a 21).
 
-**Grupo 4, v0.8.0** (`docs/historial/plan-grupo-4.md`, con la R.34 y la B.8 en `docs/historial/grupo-4/`; puerta revisada por el usuario con la fusión del PR #25 y cerrada el 23/11/2026; por publicar). La M.28 está en «Mantenimiento» (arriba), con su estado. Lo manual, en la M.20 (puntos 22 a 26).
+**Grupo 4, v0.8.0** (`docs/historial/plan-grupo-4.md`, con la R.34 y la B.8 en `docs/historial/grupo-4/`; puerta revisada por el usuario con la fusión del PR #25 y cerrada el 23/11/2026; publicada el 23/11/2026). La M.28 está en «Mantenimiento» (arriba), con su estado. Lo manual, en la M.20 (puntos 22 a 26).
 
 - [x] R.34 Modo móvil de los paneles flotantes (hoja inferior y pantalla completa, `presentation`, `utils/sheet.ts`; 19/11/2026).
 - [x] G4.2 Sheet/Drawer (lados izquierda, derecha y abajo, sobre la hoja de la R.34; 19/11/2026; el bloqueo de scroll sin barra ni salto, 23/11/2026).
