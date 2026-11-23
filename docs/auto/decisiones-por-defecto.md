@@ -195,7 +195,7 @@ Rama `auto/0.8.0-tanda1-2026-11-16`; detalle en `docs/auto/0.8.0-tanda1-2026-11-
 
 ## Decididas por defecto: tanda 2 de la 0.8.0 (22/11/2026)
 
-Rama `auto/0.8.0-tanda2-2026-11-22`; detalle en `docs/auto/0.8.0-tanda2-2026-11-22.md`. Pendientes de revisión del usuario. Ninguna es RUPTURA (componentes nuevos).
+Rama `auto/0.8.0-tanda2-2026-11-22`; detalle en `docs/auto/0.8.0-tanda2-2026-11-22.md`. **Aceptadas por el usuario el 23/11/2026** (prompt de la puerta de la 0.8.0, rama `auto/0.8.0-puerta-2026-11-23`), tokens de Accordion y Stepper incluidos. Ninguna es RUPTURA (componentes nuevos). Ese día el usuario decidió además: el paso a rem y el anillo de la opción activa van a «Rupturas» del CHANGELOG, y Accordion lleva `region` automático (región solo con hasta 6 ítems, forzable a `true` o `false`).
 
 - **G4.1, base de Accordion** (spec 4: «`@angular/aria/accordion`, a confirmar»): **base propia**. El de aria usa foco itinerante (`focusMode = 'roving'`): una sola cabecera en el orden de Tab, y la APG pide que estén todas. Botón nativo, `aria-expanded`, `aria-controls`, región con `aria-labelledby`, ↑/↓/Inicio/Fin propios. Alternativa: aria, aceptando el foco itinerante. Base: «Más simple y coherente con la spec» (la APG manda en la spec 4).
 - **G4.1, tokens de Accordion** (no había tabla en la spec 13): `--mimi-accordion-bg` / `-border` / `-hover` (colores, en el CSS) y `-radius` / `-trigger-height` / `-trigger-px` / `-font-size` (preset); `md` con los valores del diseño (52 px, 16 px, 14,5 / 13,5 px) y `sm` / `lg` con el paso de las escalas (44 / 60 px, 12 / 20 px, 13,5 / 16 px y 13 / 15 px). Alternativa: sin tamaños. Base: «Más simple» (el usuario pidió `sm`/`md`/`lg`).

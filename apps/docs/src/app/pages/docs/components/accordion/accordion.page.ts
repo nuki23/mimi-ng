@@ -116,7 +116,7 @@ export const ACCORDION_PAGE: DocPage = {
   accessibility: {
     points: [
       'Cada cabecera es un `button` dentro de un encabezado (`role="heading"`, `aria-level` 3 o el de `level`).',
-      'El botón lleva `aria-expanded` y `aria-controls`; el panel es una región con `aria-labelledby`.',
+      'El botón lleva `aria-expanded` y `aria-controls`; con hasta 6 ítems, el panel es una región con `aria-labelledby`.',
       'Enter y Espacio abren o cierran; ↑ y ↓ pasan de cabecera, con vuelta; Inicio y Fin van a la primera y la última.',
       'Todas las cabeceras están en el orden de Tab. Un panel cerrado queda `inert`: no recibe el foco.',
       'Deshabilitado: `aria-disabled`, sigue enfocable y no abre.',
@@ -155,6 +155,13 @@ export const ACCORDION_PAGE: DocPage = {
         type: 'number',
         default: '3',
         description: 'Nivel del encabezado de cada cabecera (`aria-level`), del 2 al 6.',
+      },
+      {
+        name: 'region',
+        type: "boolean | 'auto'",
+        default: "'auto'",
+        description:
+          'Paneles como región: `auto`, solo con hasta 6 ítems (WAI-ARIA); `true` o `false` lo fuerzan.',
       },
       {
         name: 'disabled',

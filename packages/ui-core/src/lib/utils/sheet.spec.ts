@@ -100,6 +100,33 @@ describe('MimiSheetOverlay (R.34)', () => {
     expect(frame()!.querySelector('[data-test="list"]')).not.toBeNull();
   });
 
+  // 23/11/2026, error del usuario: con la hoja abierta, la barra de scroll de la página seguía a
+  // la vista (la estrategia `block` del CDK) y la hoja derecha quedaba separada del borde. jsdom
+  // no maqueta: se simula una barra de 15 px (clientWidth = innerWidth - 15).
+  it('bloquea el scroll de la página sin barra ni salto, y lo devuelve al cerrar', async () => {
+    const html = document.documentElement;
+    const clientWidth = vi
+      .spyOn(html, 'clientWidth', 'get')
+      .mockReturnValue(window.innerWidth - 15);
+    try {
+      await setup();
+      await openSheet();
+      expect(html.style.overflow).toBe('hidden');
+      expect(html.classList.contains('cdk-global-scrollblock')).toBe(false);
+      // El ancho de la barra pasa a relleno: el contenido no salta.
+      expect(html.style.paddingRight).toBe('15px');
+      expect(html.style.getPropertyValue('--mimi-scrollbar-gap')).toBe('15px');
+      host.open.set(false);
+      await settle();
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      expect(html.style.overflow).toBe('');
+      expect(html.style.paddingRight).toBe('');
+      expect(html.style.getPropertyValue('--mimi-scrollbar-gap')).toBe('');
+    } finally {
+      clientWidth.mockRestore();
+    }
+  });
+
   it('enfoca lo primero del contenido (no la X) y devuelve el foco al cerrar', async () => {
     await setup();
     const trigger = await openSheet();

@@ -58,18 +58,23 @@ const ICON = {
 const LAYOUT = {
   horizontal: {
     list: 'flex flex-col sm:grid sm:auto-cols-fr sm:grid-flow-col',
-    item: 'relative flex pb-5 last:pb-0 sm:pb-0',
+    // Desde 640 px, el botón va centrado en su columna (el círculo, en el centro de la columna) y
+    // la línea va del borde de un círculo al del siguiente (23/11/2026, error del usuario: el
+    // botón quedaba al inicio de la columna y la línea salía desplazada y cortada).
+    item: 'relative flex pb-5 last:pb-0 sm:justify-center sm:pb-0',
     button:
       'flex items-start gap-3.5 text-start sm:flex-col sm:items-center sm:gap-2 sm:text-center',
     text: 'flex flex-col gap-0.5 pt-[calc((var(--mimi-stepper-s,32px)_-_1.25rem)/2)] sm:pt-0',
-    line: 'absolute start-[calc(var(--mimi-stepper-s,32px)/2_-_1px)] top-[calc(var(--mimi-stepper-s,32px)_+_4px)] bottom-1 w-0.5 sm:start-[calc(50%_+_var(--mimi-stepper-s,32px)/2_+_8px)] sm:end-[calc(-50%_+_var(--mimi-stepper-s,32px)/2_+_8px)] sm:top-[calc(var(--mimi-stepper-s,32px)/2_-_1px)] sm:bottom-auto sm:h-0.5 sm:w-auto',
+    line: 'absolute start-[calc(var(--mimi-stepper-s,32px)/2_-_1px)] top-[var(--mimi-stepper-s,32px)] bottom-0 w-0.5 sm:start-[calc(50%_+_var(--mimi-stepper-s,32px)/2)] sm:end-[calc(-50%_+_var(--mimi-stepper-s,32px)/2)] sm:top-[calc(var(--mimi-stepper-s,32px)/2_-_1px)] sm:bottom-auto sm:h-0.5 sm:w-auto',
   },
   vertical: {
     list: 'flex flex-col',
     item: 'relative flex pb-5 last:pb-0',
     button: 'flex items-start gap-3.5 text-start',
     text: 'flex flex-col gap-0.5 pt-[calc((var(--mimi-stepper-s,32px)_-_1.25rem)/2)]',
-    line: 'absolute start-[calc(var(--mimi-stepper-s,32px)/2_-_1px)] top-[calc(var(--mimi-stepper-s,32px)_+_4px)] bottom-1 w-0.5',
+    // Del borde de abajo del círculo al de arriba del siguiente (el siguiente empieza en el borde
+    // de abajo de este ítem).
+    line: 'absolute start-[calc(var(--mimi-stepper-s,32px)/2_-_1px)] top-[var(--mimi-stepper-s,32px)] bottom-0 w-0.5',
   },
 } as const;
 
