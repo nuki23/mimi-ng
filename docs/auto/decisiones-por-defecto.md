@@ -193,6 +193,14 @@ Rama `auto/0.8.0-tanda1-2026-11-16`; detalle en `docs/auto/0.8.0-tanda1-2026-11-
 - **R.34, `aria-expanded` del disparador de Select y Combobox con la hoja abierta** (19/11/2026; **aceptada por el usuario el 22/11/2026**, prompt de la tanda 2, rama `auto/0.8.0-tanda2-2026-11-22`): queda en `false` y sin `aria-controls` (el punto 5 de la tarea pedía conservarlos). El `ngCombobox` de `@angular/aria` los pone según su popup, que en la hoja no se monta; forzarlos pelearía con su enlace al anfitrión. El diálogo modal oculta el disparador con `aria-hidden` mientras la hoja está abierta, así que un lector no lo lee. Alternativa: dar a aria un popup vacío mientras la hoja está abierta y apuntar `aria-controls` a la lista de la hoja. Base: «Más simple» (hallazgo H1 del revisor).
 - **M.28, tipos de Button y Badge:** `ButtonVariant` / `BadgeVariant` quedan como la lista de variantes y se quitan `ButtonStyleVariant` / `BadgeStyleVariant` (sin alias: con la política); `resolveButtonStyle` / `resolveBadgeStyle` pasan a `resolveButtonTone` / `resolveBadgeTone` (ya no hay atajo que resolver). **RUPTURA** para quien los importaba. Alternativa: conservar `ButtonStyleVariant` y quitar `ButtonVariant`. Base: «Más simple» (el nombre corto para el tipo de la entrada).
 
+## Decididas por defecto: tanda 2 de la 0.8.0 (22/11/2026)
+
+Rama `auto/0.8.0-tanda2-2026-11-22`; detalle en `docs/auto/0.8.0-tanda2-2026-11-22.md`. Pendientes de revisión del usuario. Ninguna es RUPTURA (componentes nuevos).
+
+- **G4.1, base de Accordion** (spec 4: «`@angular/aria/accordion`, a confirmar»): **base propia**. El de aria usa foco itinerante (`focusMode = 'roving'`): una sola cabecera en el orden de Tab, y la APG pide que estén todas. Botón nativo, `aria-expanded`, `aria-controls`, región con `aria-labelledby`, ↑/↓/Inicio/Fin propios. Alternativa: aria, aceptando el foco itinerante. Base: «Más simple y coherente con la spec» (la APG manda en la spec 4).
+- **G4.1, tokens de Accordion** (no había tabla en la spec 13): `--mimi-accordion-bg` / `-border` / `-hover` (colores, en el CSS) y `-radius` / `-trigger-height` / `-trigger-px` / `-font-size` (preset); `md` con los valores del diseño (52 px, 16 px, 14,5 / 13,5 px) y `sm` / `lg` con el paso de las escalas (44 / 60 px, 12 / 20 px, 13,5 / 16 px y 13 / 15 px). Alternativa: sin tamaños. Base: «Más simple» (el usuario pidió `sm`/`md`/`lg`).
+- **G4.1, `value` de Accordion:** una sola entrada `value: string | string[] | null` (la lista con `multiple`), como Tree. Alternativa: `value` y `values` separados. Base: «Más simple».
+
 ## Decididas por el usuario: rupturas y obsoletos (16/11/2026)
 
 - **Antes de la 1.0.0:** las rupturas están permitidas y **no se mantienen obsoletos** (sin alias ni exports `@deprecated` de transición); cada ruptura va al CHANGELOG con cómo actualizar.

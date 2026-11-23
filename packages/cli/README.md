@@ -71,6 +71,7 @@ export class App {}
 
 ## Componentes
 
+- **Accordion**: `ng g mimi accordion` · [documentación](https://ng.mimiworks.dev/docs/components/accordion)
 - **Avatar**: `ng g mimi avatar` · [documentación](https://ng.mimiworks.dev/docs/components/avatar)
 - **Badge**: `ng g mimi badge` · [documentación](https://ng.mimiworks.dev/docs/components/badge)
 - **Button**: `ng g mimi button` · [documentación](https://ng.mimiworks.dev/docs/components/button)

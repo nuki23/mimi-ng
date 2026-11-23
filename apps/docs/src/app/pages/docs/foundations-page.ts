@@ -11,6 +11,7 @@ export type FoundationPackage = 'forms' | 'cdk' | 'aria';
  * está aquí, la prueba falla.
  */
 export const FOUNDATION_PACKAGES: Record<string, readonly FoundationPackage[]> = {
+  accordion: [],
   avatar: [],
   badge: [],
   button: [],

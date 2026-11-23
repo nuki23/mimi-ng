@@ -6,8 +6,9 @@
 
 Componentes de la spec 4 (tabla del Grupo 4) y el Block `dashboard-01` (B.8, en `docs/plan/grupo-3-blocks.md`). Era la v0.5.0 hasta la división de los Blocks (decidida por el usuario el 05/11/2026 en la G2.P), y la v0.6.0 hasta el plan de refinamiento (09/11/2026: la 0.6.0 y la 0.7.0 son `docs/plan/refinamiento/`; el Grupo 4 pasa a la **0.8.0**, sin cambios de contenido).
 
-- [ ] G4.1 Accordion. Diseño: `F5 Estructura`.
+- [x] G4.1 Accordion (hecha el 22/11/2026 en la rama `auto/0.8.0-tanda2-2026-11-22`; informe `docs/auto/0.8.0-tanda2-2026-11-22.md`, sección 6; lo manual —lectores de pantalla—, a la M.20). Diseño: `F5 Estructura`.
   - Depende de: G3.P (spec 4: `@angular/aria/accordion`, a confirmar)
+  - **Decidido por defecto (22/11/2026), pendiente de revisión del usuario:** base propia, no `@angular/aria/accordion` (su foco itinerante deja una sola cabecera en el orden de Tab; la APG pide todas); los tokens de Accordion (no había tabla: los de `md` del diseño, `sm`/`lg` con el paso de las escalas). Ver `docs/auto/decisiones-por-defecto.md` y la spec 4 y 13.
 - [x] G4.2 (hecha el 19/11/2026, con la R.34) Sheet/Drawer, flotante como el de shadcn (separado de los bordes, radio de tarjeta y barra de agarre en la versión inferior). Diseño: `F5 Estructura`.
   - **Decidido por el usuario (15/11/2026):** se construye **junto con la R.34** (modo móvil de los paneles, [`grupo-4/R.34.md`](grupo-4/R.34.md)), sobre la misma hoja común (`utils/sheet.ts`), con lados `left`, `right` y `bottom`; las dos abren la 0.8.0.
   - Depende de: G3.P, G1.6 (Dialog, hecha), R.34 · Bloquea: G5.1, B.8

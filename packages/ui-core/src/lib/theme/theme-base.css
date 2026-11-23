@@ -346,6 +346,11 @@
   /* Card (R.19): el relleno de las piezas y el hueco entre dos seguidas. */
   --mimi-card-p: var(--mimi-card-padding, 1.5rem);
   --mimi-card-gap-s: var(--mimi-card-gap, 1rem);
+  /* Accordion (G4.1): alto de la cabecera, relleno, texto de la cabecera y del contenido. */
+  --mimi-accordion-h: var(--mimi-accordion-trigger-height, 52px);
+  --mimi-accordion-px: var(--mimi-accordion-trigger-px, 1rem);
+  --mimi-accordion-text: var(--mimi-accordion-font-size, 0.90625rem);
+  --mimi-accordion-content-text: 0.84375rem;
 }
 
 [data-size='sm'] {
@@ -414,6 +419,10 @@
   --mimi-upload-hint: 0.75rem;
   --mimi-card-p: 1rem;
   --mimi-card-gap-s: 0.75rem;
+  --mimi-accordion-h: 44px;
+  --mimi-accordion-px: 0.75rem;
+  --mimi-accordion-text: 0.84375rem;
+  --mimi-accordion-content-text: 0.8125rem;
 }
 
 [data-size='lg'] {
@@ -482,6 +491,10 @@
   --mimi-upload-hint: 0.84375rem;
   --mimi-card-p: 2rem;
   --mimi-card-gap-s: 1.25rem;
+  --mimi-accordion-h: 60px;
+  --mimi-accordion-px: 1.25rem;
+  --mimi-accordion-text: 1rem;
+  --mimi-accordion-content-text: 0.9375rem;
 }
 
 .dark {

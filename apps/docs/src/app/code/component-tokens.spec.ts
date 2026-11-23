@@ -56,6 +56,7 @@ const FOLDER: Record<TokenComponent, string | readonly string[]> = {
   dataTable: 'data-table',
   loading: 'loading',
   sheet: 'sheet',
+  accordion: 'accordion',
 };
 
 /**
@@ -138,6 +139,11 @@ const GLOBALS = new Set([
   // Card (R.19).
   '--mimi-card-p',
   '--mimi-card-gap-s',
+  // Accordion (G4.1): la escala por tamaño.
+  '--mimi-accordion-h',
+  '--mimi-accordion-px',
+  '--mimi-accordion-text',
+  '--mimi-accordion-content-text',
   // Input OTP y File Upload (M.27).
   '--mimi-otp-w',
   '--mimi-otp-h',

@@ -1,4 +1,5 @@
 {
+  "accordion": { "items": ["utils/size"], "packages": [], "css": [] },
   "avatar": { "items": ["utils/size"], "packages": [], "css": [] },
   "badge": { "items": ["utils/size"], "packages": [], "css": [] },
   "button": { "items": ["utils/size"], "packages": [], "css": [] },

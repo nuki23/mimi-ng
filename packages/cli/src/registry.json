@@ -96,6 +96,11 @@
         "theme/index.ts"
       ]
     },
+    "accordion": {
+      "type": "component",
+      "files": ["components/accordion/accordion.ts", "components/accordion/index.ts"],
+      "registryDependencies": ["utils/cn", "utils/size"]
+    },
     "avatar": {
       "type": "component",
       "files": [

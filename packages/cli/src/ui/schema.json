@@ -20,6 +20,10 @@
         "multiselect": true,
         "items": [
           {
+            "value": "accordion",
+            "label": "accordion"
+          },
+          {
             "value": "avatar",
             "label": "avatar"
           },

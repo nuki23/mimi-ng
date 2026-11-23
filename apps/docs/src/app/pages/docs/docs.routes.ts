@@ -154,6 +154,12 @@ export const DOCS_ROUTES: Routes = [
     loadComponent: () => import('./components/sheet/sheet-page').then((m) => m.SheetPage),
   },
   {
+    path: 'components/accordion',
+    title: 'Accordion · Mimi',
+    loadComponent: () =>
+      import('./components/accordion/accordion-page').then((m) => m.AccordionPage),
+  },
+  {
     path: 'components/loading',
     title: 'Loading · Mimi',
     loadComponent: () => import('./components/loading/loading-page').then((m) => m.LoadingPage),

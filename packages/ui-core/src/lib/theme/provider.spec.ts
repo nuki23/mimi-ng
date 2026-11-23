@@ -580,6 +580,27 @@ describe('mimiThemeToCss: tokens de componente (T.0b)', () => {
     }
   });
 
+  it('accordion (G4.1): el preset genera --mimi-accordion-*', () => {
+    const css = mimiThemeToCss({
+      components: {
+        accordion: {
+          radius: '8px',
+          triggerHeight: '48px',
+          triggerPx: '12px',
+          fontSize: '1rem',
+        },
+      },
+    });
+    for (const line of [
+      '--mimi-accordion-radius: 8px;',
+      '--mimi-accordion-trigger-height: 48px;',
+      '--mimi-accordion-trigger-px: 12px;',
+      '--mimi-accordion-font-size: 1rem;',
+    ]) {
+      expect(css).toContain(line);
+    }
+  });
+
   it('los nombres de la 0.1.0 ya no están en el tipo del preset (M.28, 0.8.0)', () => {
     const removed = {
       // @ts-expect-error radii.badge se quitó: components.badge.radius.

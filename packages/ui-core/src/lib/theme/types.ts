@@ -685,6 +685,22 @@ export interface MimiComponentTokens {
   dataTable?: MimiTableTokens;
   loading?: MimiLoadingTokens;
   sheet?: MimiSheetTokens;
+  accordion?: MimiAccordionTokens;
+}
+
+/**
+ * Accordion (G4.1). Fondo, borde y hover de la cabecera van en el CSS (`--mimi-accordion-bg`,
+ * `-border`, `-hover`). Los de tamaño valen para `md`; `sm` y `lg` usan los de la escala.
+ */
+export interface MimiAccordionTokens {
+  /** Radio del contenedor (el de las tarjetas, `--mimi-radius-card`). */
+  radius?: string;
+  /** Alto mínimo de la cabecera (52px). */
+  triggerHeight?: string;
+  /** Relleno a los lados de la cabecera y del contenido (1rem). */
+  triggerPx?: string;
+  /** Texto de la cabecera (0.90625rem, 14,5 px). */
+  fontSize?: string;
 }
 
 /**

@@ -139,6 +139,11 @@ export const SIZE_COMPONENTS: readonly SizeComponentRow[] = [
       'Texto 11,5 / 12,5 / 13,5 px y relleno. Toma el tamaño del contenedor del disparador; `mimiTooltipSize` lo fija.',
   },
   { component: 'Popover', changes: 'Ancho 260 / 300 / 360 px.' },
+  {
+    component: 'Accordion',
+    changes:
+      'Cabecera 44 / 52 / 60 px, relleno 12 / 16 / 20 px, título 13,5 / 14,5 / 16 px y contenido 13 / 13,5 / 15 px.',
+  },
 ];
 
 /** Cómo se pide un tamaño (los tres modos). */
