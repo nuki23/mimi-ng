@@ -15,6 +15,9 @@
 @source './app/pages/docs/components';
 @source './app/doc-page';
 @source '../../../packages/ui-core/src/lib/components';
+/* Las utilidades con clases (la hoja común, `utils/sheet.ts`, 22/11/2026): esta hoja va después
+   de la global; si trae `size-[30px]` (de Dialog) sin el `max-sm:size-10` de la hoja, lo pisa. */
+@source '../../../packages/ui-core/src/lib/utils/sheet.ts';
 @source not '../../../packages/ui-core/src/**/*.spec.ts';
 @source not './app/**/*.spec.ts';
 
