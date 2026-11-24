@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { type MimiTableMobile, provideMimiTable } from '@/components/ui/table';
+import { provideMimiOverlay } from '@/components/ui/utils/overlay-config';
 import { MimiDataTableImports, type MimiTableColumn, type MimiTableSort } from './data-table';
 import { MIMI_DATA_TABLE_TEXT_ES, provideMimiDataTableText } from './data-table-texts';
 
@@ -64,10 +65,10 @@ class Host {
   readonly query = signal('');
 }
 
-function fakeMedia(phone: boolean) {
+function fakeMedia(phone: boolean | ((query: string) => boolean)) {
   const original = window.matchMedia;
   window.matchMedia = ((query: string) => ({
-    matches: phone && query.includes('max-width'),
+    matches: typeof phone === 'function' ? phone(query) : phone && query.includes('max-width'),
     media: query,
     addEventListener: () => undefined,
     removeEventListener: () => undefined,
@@ -75,7 +76,7 @@ function fakeMedia(phone: boolean) {
   return () => (window.matchMedia = original);
 }
 
-async function setup(phone: boolean, providers: unknown[] = []) {
+async function setup(phone: boolean | ((query: string) => boolean), providers: unknown[] = []) {
   const restore = fakeMedia(phone);
   TestBed.configureTestingModule({
     providers: [provideMimiDataTableText(MIMI_DATA_TABLE_TEXT_ES), ...(providers as never[])],
@@ -116,6 +117,18 @@ describe('Data Table en el teléfono (mobile)', { timeout: 20_000 }, () => {
     expect(t.host().hasAttribute('data-mobile')).toBe(false);
     expect(t.el.querySelector('[data-slot="refine"]')).toBeNull();
     expect(t.el.querySelector('[data-slot="search"]')).not.toBeNull();
+  });
+
+  it('con un corte de paneles mayor (768) y la ventana a 700 px: la hoja sí, stack no (revisor)', async () => {
+    // A 700 px: por debajo de 768 (los paneles) y por encima de 640 (las clases max-sm: de stack).
+    const t = await setup(
+      (q) => q.includes('767.98'),
+      [provideMimiOverlay({ mobileBreakpoint: 768 })],
+    );
+    restore = t.restore;
+    expect(t.el.querySelector('[data-slot="refine"]')).not.toBeNull();
+    expect(t.table().hasAttribute('role')).toBe(false);
+    expect(t.table().querySelector('thead [data-slot="sort"]')).not.toBeNull();
   });
 
   it('«Seleccionar todo» de la barra conserva el foco al cambiar a la barra de selección (accesibilidad, H1)', async () => {

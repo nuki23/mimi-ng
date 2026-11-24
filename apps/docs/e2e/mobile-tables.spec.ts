@@ -101,3 +101,24 @@ test('Data Table: tarjetas con casilla y acciones; buscar, filtrar y ordenar en 
   await expect(refine).toBeFocused();
   await expect(table.locator('[data-slot="refine-count"]')).toHaveText('1');
 });
+
+test('Data Table: la barra cabe en la tabla, también con la casilla de selección (revisor)', async ({
+  page,
+}) => {
+  await openDoc(page, '/docs/components/data-table');
+  const out = await page.locator('mimi-data-table').evaluateAll((tables) =>
+    tables
+      .map((table, i) => {
+        const bar = table.querySelector<HTMLElement>('[data-slot="toolbar"]');
+        const refine = table.querySelector('[data-slot="refine"]');
+        if (!bar || !refine) return null;
+        const overflow = bar.scrollWidth - bar.clientWidth;
+        const past = refine.getBoundingClientRect().right - table.getBoundingClientRect().right;
+        return overflow > 1 || past > 1
+          ? `tabla ${i}: barra +${overflow}px, botón +${past}px`
+          : null;
+      })
+      .filter(Boolean),
+  );
+  expect(out).toEqual([]);
+});

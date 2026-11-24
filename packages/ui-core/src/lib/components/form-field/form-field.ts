@@ -154,11 +154,15 @@ export class MimiFormField implements MimiFormFieldContext {
       // Un <button> no admite aria-required (axe, aria-allowed-attr; M.15): en su lugar, el texto
       // «obligatorio» va en su descripción.
       const isButton = element.tagName === 'BUTTON' || element.getAttribute('role') === 'button';
+      // Si el control ya dice «obligatorio» (su propio `required`), no se repite.
+      const ownRequired = !!element
+        .querySelector('[data-slot="required-text"]')
+        ?.textContent?.trim();
       // La descripción y la ayuda, antes del error; cada id una sola vez.
       const wanted = [
         this.description() ? this.descriptionId : null,
         this.hint() ? this.hintId : null,
-        this.required() && isButton ? this.requiredId : null,
+        this.required() && isButton && !ownRequired ? this.requiredId : null,
         this.errorId,
       ].filter((id): id is string => !!id);
       // Los ids de la descripción y la ayuda que ya no existen se quitan (no quedan colgando).

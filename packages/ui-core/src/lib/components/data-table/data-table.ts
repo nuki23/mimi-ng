@@ -327,11 +327,11 @@ const UI = {
   ),
   /** Teléfono: el botón de la barra que abre la hoja, su contador y las opciones de orden. */
   refine: cn(
-    'inline-flex h-11 min-w-0 shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap rounded-[var(--mimi-radius)] border border-border bg-card px-3.5 text-[0.875rem] font-medium shadow-[shadow:var(--mimi-shadow-neutral)] mimi-transition hover:bg-accent [&_svg]:size-4 [&_svg]:shrink-0',
+    'inline-flex h-11 min-w-0 shrink cursor-pointer items-center gap-2 whitespace-nowrap rounded-[var(--mimi-radius)] border border-border bg-card px-3.5 text-[0.875rem] font-medium shadow-[shadow:var(--mimi-shadow-neutral)] mimi-transition hover:bg-accent [&_svg]:size-4 [&_svg]:shrink-0',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   ),
   refineCount:
-    'inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-primary-foreground',
+    'inline-flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-primary-foreground',
   option: cn(
     'inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-[var(--mimi-radius)] border border-border bg-card px-3.5 text-[0.875rem] font-medium mimi-transition hover:bg-accent [&_svg]:size-[14px]',
     'aria-pressed:border-primary aria-pressed:bg-primary-subtle aria-pressed:text-primary',
@@ -465,7 +465,9 @@ interface ColumnView<T> {
                   <path [attr.d]="d" />
                 }
               </svg>
-              {{ texts.refine }}
+              <!-- Encoge y recorta su texto si no cabe (con la casilla al lado, en un contenedor
+                   angosto se salía de la tabla; revisor de la 0.9.0). -->
+              <span class="min-w-0 truncate">{{ texts.refine }}</span>
               @if (refineCount()) {
                 <!-- La cifra, para la vista; para el lector, con su contexto («, 1 activo»). -->
                 <span data-slot="refine-count" aria-hidden="true" [class]="ui.refineCount">{{
@@ -1096,7 +1098,11 @@ export class MimiDataTable<T = any> {
   );
   /** Más angosta que el corte de los paneles (`provideMimiOverlay`, 640 px por defecto). */
   protected readonly phone = signal(false);
-  protected readonly stacked = computed(() => this.phone() && this.mode() === 'stack');
+  /** Por debajo de 640 px (el corte de las clases `max-sm:` de `stack`). */
+  private readonly narrow = signal(false);
+  protected readonly stacked = computed(
+    () => this.phone() && this.narrow() && this.mode() === 'stack',
+  );
   protected readonly refineOpen = signal(false);
   protected readonly stack = MIMI_TABLE_STACK;
   protected readonly noSizes: readonly number[] = [];
@@ -1161,7 +1167,16 @@ export class MimiDataTable<T = any> {
       if (!event.matches) this.refineOpen.set(false);
     };
     media.addEventListener('change', onChange);
-    inject(DestroyRef).onDestroy(() => media.removeEventListener('change', onChange));
+    // `stack` pinta con clases `max-sm:` (640 px, las de Table): se activa solo por debajo de
+    // ese corte, aunque `provideMimiOverlay` suba el de los paneles (revisor de la 0.9.0).
+    const narrow = view.matchMedia('(max-width: 639.98px)');
+    this.narrow.set(narrow.matches);
+    const onNarrow = (event: MediaQueryListEvent) => this.narrow.set(event.matches);
+    narrow.addEventListener('change', onNarrow);
+    inject(DestroyRef).onDestroy(() => {
+      media.removeEventListener('change', onChange);
+      narrow.removeEventListener('change', onNarrow);
+    });
   })();
 
   private readonly baseId = `mimi-data-table-${nextId++}`;

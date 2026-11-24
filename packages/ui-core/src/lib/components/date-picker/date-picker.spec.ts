@@ -128,7 +128,10 @@ describe('MimiDatePicker', { timeout: 20_000 }, () => {
       'not-disabled:not-data-[readonly]:active:scale-(--mimi-press-scale)',
     );
     // El valor describe al botón (con aria-label, el lector lo lee igual).
-    const described = document.getElementById(button.getAttribute('aria-describedby')!);
+    // El primer id es el valor; el segundo, «obligatorio» (vacío si no lo es).
+    const described = document.getElementById(
+      button.getAttribute('aria-describedby')!.split(' ')[0],
+    );
     expect(described?.textContent?.trim()).toBe('Elige una fecha');
     expect(host('english').querySelector('button')!.textContent?.trim()).toBe('Sep 30, 2026');
   });

@@ -196,9 +196,10 @@ let nextId = 0;
       }
       <!-- Un <button> no admite aria-required (axe, aria-allowed-attr; M.15): «obligatorio»
            va en la descripción. Oculto: no forma parte del nombre. -->
-      @if (required()) {
-        <span [id]="requiredId" hidden>{{ texts.required }}</span>
-      }
+      <!-- Siempre presente (vacío si no es obligatorio): ver Date Picker (revisor de la 0.9.0). -->
+      <span [id]="requiredId" data-slot="required-text" hidden>{{
+        required() ? texts.required : ''
+      }}</span>
     </button>
     @if (ariaLabel()) {
       <span [id]="labelId" hidden>{{ ariaLabel() }}</span>
@@ -293,11 +294,9 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
       .join(' '),
   );
   protected readonly requiredId = `${this.baseId}-required`;
-  protected readonly describedBy = computed(
-    () =>
-      [this.hint() ? this.hintId : null, this.required() ? this.requiredId : null]
-        .filter(Boolean)
-        .join(' ') || null,
+  protected readonly describedBy = computed(() =>
+    // Sin depender de required() (el texto va vacío si no hace falta): ver Date Picker.
+    [this.hint() ? this.hintId : null, this.requiredId].filter(Boolean).join(' '),
   );
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 

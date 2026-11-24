@@ -634,7 +634,7 @@ let nextInputId = 0;
         [attr.data-readonly]="readonly() ? '' : null"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
-        [attr.aria-describedby]="required() ? valueId + ' ' + requiredId : valueId"
+        [attr.aria-describedby]="valueId + ' ' + requiredId"
         [attr.aria-invalid]="showInvalid() || null"
       >
         <span
@@ -651,9 +651,10 @@ let nextInputId = 0;
         >
         <!-- Un <button> no admite aria-required (axe, aria-allowed-attr; M.15): «obligatorio»
              va en la descripción. Oculto: no forma parte del nombre. -->
-        @if (required()) {
-          <span [id]="requiredId" hidden>{{ texts.required }}</span>
-        }
+        <!-- Siempre presente (vacío si no es obligatorio): ver Date Picker (revisor de la 0.9.0). -->
+        <span [id]="requiredId" data-slot="required-text" hidden>{{
+          required() ? texts.required : ''
+        }}</span>
       </button>
       <ng-template mimiPopoverContent>
         <mimi-color-picker

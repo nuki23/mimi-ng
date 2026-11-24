@@ -128,7 +128,10 @@ describe('MimiDateRangePicker', { timeout: 20_000 }, () => {
       '5 días',
     );
     // La descripción del botón separa la fecha de los días.
-    const description = document.getElementById(trigger('plain').getAttribute('aria-describedby')!);
+    // El primer id es el valor; el segundo, «obligatorio» (vacío si no lo es).
+    const description = document.getElementById(
+      trigger('plain').getAttribute('aria-describedby')!.split(' ')[0],
+    );
     expect(description!.textContent?.replace(/\s+/g, ' ').trim()).toBe(
       '14 sept 2026 – 18 sept 2026, 5 días',
     );

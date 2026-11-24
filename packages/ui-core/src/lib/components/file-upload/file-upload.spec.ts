@@ -152,9 +152,10 @@ describe('MimiFileUpload', () => {
     const z = zone('plain');
     expect(z.getAttribute('type')).toBe('button');
     expect(z.hasAttribute('aria-label')).toBe(false);
-    expect(document.getElementById(z.getAttribute('aria-describedby')!)?.textContent).toBe(
-      'PNG, JPG o PDF · hasta 10 MB',
-    );
+    // El primer id es la pista; el segundo, «obligatorio» (vacío si no lo es).
+    expect(
+      document.getElementById(z.getAttribute('aria-describedby')!.split(' ')[0])?.textContent,
+    ).toBe('PNG, JPG o PDF · hasta 10 MB');
     expect(z.textContent).toContain('Arrastra archivos o haz clic');
     expect(z.className).toContain('border-dashed');
     expect(z.className).toContain(
