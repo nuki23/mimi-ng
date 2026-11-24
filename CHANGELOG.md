@@ -13,6 +13,8 @@ Se completa en la puerta de la 0.9.0 (1.0-P9). Antes de la 1.0.0 las rupturas es
 
 ### Cambios visibles (sin cambio de API)
 
+- **Date Range en el teléfono:** se abre en la hoja inferior, como Date Picker (antes, a pantalla completa), con los atajos en una fila que se desliza de lado y la ayuda encima del calendario. **Si prefieres lo de antes:** `presentation="fullscreen"`.
+- **Calendar en modo rango** (el de Date Range): lleva el mismo pie que en una fecha («Hoy» e «Ir a hoy»).
 - **Calendar:** los días de otro mes ya no llevan opacidad encima de `text-muted-foreground` (se pueden elegir, así que su texto cumple 4,5:1; en oscuro daban 3,2:1). Se ven un poco más marcados.
 
 ## 0.8.0 (23/11/2026): Sheet, Accordion, Stepper, `dashboard-01` y paneles en el teléfono

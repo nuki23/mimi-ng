@@ -280,22 +280,21 @@ const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase() + text.s
       }
     }
 
-    @if (mode() === 'single') {
-      <div class="flex items-center justify-between border-t border-border pt-2">
-        <span class="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <span aria-hidden="true" class="size-1 rounded-full bg-current"></span>{{ texts.today }}
-        </span>
-        <button
-          type="button"
-          data-slot="go-today"
-          class="h-7 cursor-pointer rounded-[var(--mimi-radius-sm)] border border-border bg-transparent px-2.5 text-[0.78125rem] font-medium text-foreground mimi-transition hover:bg-accent active:scale-(--mimi-press-scale)"
-          [class]="focusClasses"
-          (click)="goToday()"
-        >
-          {{ texts.goToday }}
-        </button>
-      </div>
-    }
+    <!-- El pie, en los dos modos (desde el 23/11/2026: Date Picker y Date Range, el mismo pie). -->
+    <div data-slot="footer" class="flex items-center justify-between border-t border-border pt-2">
+      <span class="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <span aria-hidden="true" class="size-1 rounded-full bg-current"></span>{{ texts.today }}
+      </span>
+      <button
+        type="button"
+        data-slot="go-today"
+        class="h-7 cursor-pointer rounded-[var(--mimi-radius-sm)] border border-border bg-transparent px-2.5 text-[0.78125rem] font-medium text-foreground mimi-transition hover:bg-accent active:scale-(--mimi-press-scale)"
+        [class]="focusClasses"
+        (click)="goToday()"
+      >
+        {{ texts.goToday }}
+      </button>
+    </div>
   `,
   host: {
     '[class]': 'classes()',

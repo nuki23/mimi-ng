@@ -7,12 +7,12 @@ import { type MimiDateRangePreset, MimiDateRangePicker } from '@/components/ui/d
   imports: [MimiDateRangePicker],
   template: `
     <div class="flex w-full max-w-sm flex-col gap-1.5">
-      <!-- Debajo de 640 px es lo de siempre; presentation="fullscreen" lo pide también aquí. -->
+      <!-- Debajo de 640 px es lo de siempre; presentation="sheet" lo pide también aquí. -->
       <!-- Los atajos van en una fila encima del calendario. -->
       <mimi-date-range
         aria-label="Fechas del viaje"
         locale="es"
-        presentation="fullscreen"
+        presentation="sheet"
         placeholder="Elige el periodo"
         [presets]="presets"
         [(value)]="trip"

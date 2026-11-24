@@ -68,7 +68,7 @@ export const DATE_RANGE_PAGE: DocPage = {
         id: 'phone',
         title: 'En el teléfono',
         sentence:
-          'Debajo de 640 px se abre a pantalla completa: los atajos en una fila y un mes a lo ancho. `presentation="fullscreen"` lo pide aquí.',
+          'Debajo de 640 px, hoja inferior como Date Picker: atajos en una fila deslizable y un mes a lo ancho. `presentation="sheet"` lo pide aquí.',
         component: DateRangePhoneExample,
         source: phoneSource as string,
       },
@@ -91,7 +91,7 @@ export const DATE_RANGE_PAGE: DocPage = {
         name: 'presentation',
         type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
         default: "'auto'",
-        description: 'Cómo se abre. `auto`: pantalla completa debajo de 640 px y panel desde ahí.',
+        description: 'Cómo se abre. `auto`: hoja inferior debajo de 640 px y panel desde ahí.',
       },
       {
         name: 'value',

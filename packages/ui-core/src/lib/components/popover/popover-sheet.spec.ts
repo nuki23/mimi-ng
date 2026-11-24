@@ -97,7 +97,7 @@ describe('Popover y los selectores en la hoja (R.34)', () => {
     expect(document.querySelector('[data-mimi-overlay-panel]')).not.toBeNull();
   });
 
-  it('auto en el teléfono: Date Picker y Color Picker en hoja inferior; Date Range, a pantalla completa', async () => {
+  it('auto en el teléfono: Date Picker, Date Range y Color Picker en hoja inferior', async () => {
     narrow = true;
     const { settle, open } = await setup();
     await open('[data-test="date"] [mimiPopoverTrigger]');
@@ -106,7 +106,9 @@ describe('Popover y los selectores en la hoja (R.34)', () => {
     sheet()!.querySelector<HTMLElement>('[data-slot="close"]')!.click();
     await settle();
     await open('[data-test="range"] [mimiPopoverTrigger]');
-    expect(sheet()?.dataset['side']).toBe('full');
+    // La misma presentación que Date Picker (23/11/2026; hasta la 0.8.0, pantalla completa).
+    expect(sheet()?.dataset['side']).toBe('bottom');
+    expect(sheet()!.querySelector('[data-slot="title"]')!.textContent?.trim()).toBe('Viaje');
     sheet()!.querySelector<HTMLElement>('[data-slot="close"]')!.click();
     await settle();
     await open('[data-test="color"] [mimiPopoverTrigger]');
@@ -125,17 +127,22 @@ describe('Popover y los selectores en la hoja (R.34)', () => {
     );
     sheet()!.querySelector<HTMLElement>('[data-slot="close"]')!.click();
     await settle();
-    // Date Range a pantalla completa: los atajos, una fila a lo ancho encima del calendario.
+    // Date Range en la hoja: los atajos, una sola fila que se desliza de lado, encima del
+    // calendario; el mismo pie que Date Picker.
     await open('[data-test="range"] [mimiPopoverTrigger]');
     const presets = sheet()!.querySelector<HTMLElement>('[data-slot="presets"]')!;
     expect(presets.classList).toContain('w-full');
     expect(presets.classList).toContain('flex-row');
+    expect(presets.classList).toContain('flex-nowrap');
+    expect(presets.classList).toContain('overflow-x-auto');
     expect(presets.classList).not.toContain('border-e');
+    expect(sheet()!.querySelector('[data-slot="go-today"]')).not.toBeNull();
     // El panel de Date Range no tiene relleno: los atajos y el calendario llevan el suyo.
-    expect(presets.classList).toContain('px-4');
+    // El mismo relleno que el panel de Date Picker (--mimi-date-padding).
+    expect(presets.classList).toContain('px-[var(--mimi-date-padding,12px)]');
     const rangeCalendar = sheet()!.querySelector('mimi-calendar')!;
     expect(rangeCalendar.hasAttribute('data-fill')).toBe(true);
-    expect(rangeCalendar.parentElement!.classList).toContain('px-4');
+    expect(rangeCalendar.parentElement!.classList).toContain('px-[var(--mimi-date-padding,12px)]');
     sheet()!.querySelector<HTMLElement>('[data-slot="close"]')!.click();
     await settle();
     // En escritorio (popover), el calendario sigue con su ancho propio.
