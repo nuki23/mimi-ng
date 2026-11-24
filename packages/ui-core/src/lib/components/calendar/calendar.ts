@@ -61,7 +61,7 @@ const ICON = {
 } as const;
 
 const NAV_CLASSES = cn(
-  'inline-flex size-[var(--mimi-cal-nav,30px)] shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] border border-border bg-transparent text-foreground [&_svg]:size-4',
+  'relative mimi-touch inline-flex size-[var(--mimi-cal-nav,30px)] shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] border border-border bg-transparent text-foreground [&_svg]:size-4',
   'mimi-transition hover:bg-accent active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
 );

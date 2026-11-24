@@ -858,6 +858,34 @@
   transition: var(--mimi-transition);
 }
 
+/*
+ * Área táctil de 44 px con el dedo (M.31, tanda 1 de la 0.9.0): con un puntero grueso
+ * (`pointer: coarse`: teléfonos y tabletas), un `::after` invisible y centrado agranda la zona
+ * que se puede tocar hasta 44 × 44 (WCAG 2.5.5 y las guías de Apple y Android) sin cambiar el
+ * aspecto. El elemento tiene que estar posicionado (`relative`, `absolute`…). Con ratón, nada.
+ */
+@utility mimi-touch {
+  @media (pointer: coarse) {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: max(100%, 2.75rem);
+      height: max(100%, 2.75rem);
+      translate: -50% -50%;
+    }
+  }
+}
+
+/* Con el dedo, los controles de tamaño `md` (Button, Input, Select, los disparadores de fecha y
+   color…) miden 44 px en vez de 40 (M.31). `sm` y `lg` no cambian. */
+@media (pointer: coarse) {
+  :root {
+    --mimi-control-height: 2.75rem;
+  }
+}
+
 @layer base {
   /* Tailwind 4 usa currentColor como color de borde por defecto */
   *,

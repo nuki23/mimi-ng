@@ -216,6 +216,9 @@ Rama `auto/0.9.0-tanda1-2026-11-23`; detalle en `docs/auto/0.9.0-tanda1-2026-11-
 - **M.15, colores de Shiki del sitio** (comentarios en oscuro 3,1:1; rojo, gris, verde y naranja en claro de 3,2 a 4,4:1): `colorReplacements` con los de la paleta actual de GitHub. Solo el sitio. Base: «Más simple» (sin cambiar de tema).
 - **M.15, ejemplo de rango de Slider:** los pulgares estaban a 3 años (30–33): juntos, cada uno de 20 px no deja el espacio de 24 px del 2.5.8 (`target-size`). El ejemplo pasa a 30–40 con un mínimo de 15 años (sigue mostrando el error). El tamaño del pulgar no cambia aquí: lo revisa la parte B (objetivos táctiles). Base: «Más simple».
 - **1.0-5, sin reintentos en la CI** (la tarea no lo decía): una prueba inestable tiene que verse. Base: «Más simple».
+- **M.29, Date Range en la hoja inferior** (el usuario aceptaba la misma presentación o la misma estructura): la misma presentación que Date Picker, porque cabe a 360 × 780. Alternativa: pantalla completa con la estructura de la hoja. Base: «Más simple». Cambio visible, en el CHANGELOG.
+- **M.30, el corte de Data Table** (JS) es el de `provideMimiOverlay` (`mobileBreakpoint`, 640 px) y el de Table, el de CSS (`max-sm:`, 640 px): Table no tiene lógica y Data Table cambia su plantilla. Alternativa: los dos por JS. Base: «Más simple».
+- **M.31, cómo llegar a 44 px con el dedo:** el token que ya existe (`--mimi-control-height` a 44 px con `pointer: coarse`) para los `md`, y un `::after` invisible (`mimi-touch`) para los pequeños, en vez de agrandar cada control. Alternativas: dejar 40 px y solo `mimi-touch` en todo (los campos de texto no tienen `::after`); un token nuevo por componente. Base: «Más simple y coherente con el tema» (CLAUDE.md: no inventar tokens). Cambio visible en teléfonos y tabletas, en el CHANGELOG.
 
 ## Decididas por el usuario: rupturas y obsoletos (16/11/2026)
 

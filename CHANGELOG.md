@@ -20,6 +20,7 @@ Se completa en la puerta de la 0.9.0 (1.0-P9). Antes de la 1.0.0 las rupturas es
 
 ### Cambios visibles (sin cambio de API)
 
+- **Con el dedo (teléfonos y tabletas, `pointer: coarse`), los controles `md` miden 44 px** en vez de 40 (`--mimi-control-height`), y los pequeños (Checkbox, Switch, Slider, Pagination, Tabs, Toolbar, Toggle Group, las X y los botones de los campos…) tienen un área táctil de 44 × 44 sin cambiar su aspecto (la utilidad nueva `mimi-touch` del tema). Con ratón, nada cambia. **Si no lo quieres:** define `--mimi-control-height: 2.5rem` dentro de `@media (pointer: coarse) { :root { … } }` en tu CSS. El tema copiado (`theme-base.css`) lo trae al actualizar con `ng g mimi`.
 - **Date Range en el teléfono:** se abre en la hoja inferior, como Date Picker (antes, a pantalla completa), con los atajos en una fila que se desliza de lado y la ayuda encima del calendario. **Si prefieres lo de antes:** `presentation="fullscreen"`.
 - **Calendar en modo rango** (el de Date Range): lleva el mismo pie que en una fecha («Hoy» e «Ir a hoy»).
 - **Calendar:** los días de otro mes ya no llevan opacidad encima de `text-muted-foreground` (se pueden elegir, así que su texto cumple 4,5:1; en oscuro daban 3,2:1). Se ven un poco más marcados.

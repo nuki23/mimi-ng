@@ -69,7 +69,7 @@ const BOX_CLASSES = cn(
 );
 
 const TOGGLE_CLASSES = cn(
-  'inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 mimi-transition',
+  'relative mimi-touch inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 mimi-transition',
   fieldButtonHoverStyles,
   'size-[var(--mimi-password-toggle-size,32px)] rounded-[var(--mimi-password-toggle-radius,var(--mimi-radius-sm))]',
   '[&_svg]:size-4 [&_svg]:shrink-0',

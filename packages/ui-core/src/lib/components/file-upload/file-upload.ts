@@ -599,7 +599,7 @@ const ITEM = {
       variant="ghost"
       size="icon"
       data-slot="remove"
-      class="size-[30px] text-muted-foreground hover:bg-destructive-soft hover:text-destructive-soft-foreground [&_svg]:size-4"
+      class="relative mimi-touch size-[30px] text-muted-foreground hover:bg-destructive-soft hover:text-destructive-soft-foreground [&_svg]:size-4"
       [attr.aria-label]="texts.remove(fileName())"
       (click)="onRemove()"
     >

@@ -311,7 +311,7 @@ const UI = {
   ),
   sort: cn(
     ICON_BUTTON_CLASSES,
-    '-ml-1.5 h-7 gap-[5px] px-1.5 text-[0.78125rem] font-semibold in-data-[sorted]:text-foreground',
+    'relative mimi-touch -ml-1.5 h-7 gap-[5px] px-1.5 text-[0.78125rem] font-semibold in-data-[sorted]:text-foreground',
   ),
   filter: cn(
     ICON_BUTTON_CLASSES,
@@ -319,7 +319,7 @@ const UI = {
   ),
   expand: cn(
     ICON_BUTTON_CLASSES,
-    'size-[26px] [&_svg]:size-[15px] [&_svg]:transition-transform [&_svg]:duration-250 aria-expanded:[&_svg]:rotate-90 rtl:[&_svg]:-scale-x-100',
+    'relative mimi-touch size-[26px] [&_svg]:size-[15px] [&_svg]:transition-transform [&_svg]:duration-250 aria-expanded:[&_svg]:rotate-90 rtl:[&_svg]:-scale-x-100',
   ),
   clearAll: cn(
     'h-9 cursor-pointer rounded-[var(--mimi-radius)] border border-border bg-card px-3.5 text-[0.84375rem] font-medium shadow-[shadow:var(--mimi-shadow-neutral)] mimi-transition hover:bg-accent',

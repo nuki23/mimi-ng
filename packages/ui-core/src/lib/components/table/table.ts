@@ -49,7 +49,7 @@ export const MIMI_TABLE_HEAD = cn(
 
 /** Botón de orden del encabezado (el de la Data Table). @internal */
 export const MIMI_TABLE_SORT_BUTTON = cn(
-  'inline-flex shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] border-0 bg-transparent text-muted-foreground',
+  'relative mimi-touch inline-flex shrink-0 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] border-0 bg-transparent text-muted-foreground',
   'mimi-transition hover:bg-accent hover:text-foreground',
   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   '-ms-1.5 h-7 gap-[5px] px-1.5 text-[0.78125rem] font-semibold in-data-[sorted]:text-foreground',

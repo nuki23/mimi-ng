@@ -58,7 +58,7 @@ const INPUT_CLASSES =
   'h-full min-w-0 flex-1 border-0 bg-transparent p-0 text-center text-sm font-medium tabular-nums text-foreground outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed';
 
 const BUTTON_CLASSES = cn(
-  'inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 mimi-transition',
+  'relative mimi-touch inline-flex shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 mimi-transition',
   fieldButtonHoverStyles,
   'size-[var(--mimi-number-button-size,30px)] rounded-[var(--mimi-number-button-radius,var(--mimi-radius-sm))]',
   '[&_svg]:size-[15px] [&_svg]:shrink-0',
