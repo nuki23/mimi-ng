@@ -92,7 +92,7 @@ const OFFSET = 2;
 let nextId = 0;
 
 const CLEAR_CLASSES = cn(
-  'relative mimi-touch z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
+  'relative mimi-touch-y z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
   // Al hacer clic se hunde la caja entera (field-styles, profundidad B), no la X aparte.
   'mimi-transition hover:bg-accent hover:text-foreground',
   buttonFocusStyles,

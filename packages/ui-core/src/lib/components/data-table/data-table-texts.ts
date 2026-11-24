@@ -47,6 +47,10 @@ export interface MimiDataTableText {
   /** En esa hoja: el sentido del orden de la columna elegida (para el lector). */
   ascending: string;
   descending: string;
+  /** Contexto del número del botón de la hoja, para el lector: «1 activo». */
+  active: (count: number) => string;
+  /** Dentro de la hoja, el recuento que se anuncia al buscar o filtrar: «4 resultados». */
+  results: (count: number) => string;
 }
 
 /** Textos predeterminados (inglés). */
@@ -77,6 +81,8 @@ export const MIMI_DATA_TABLE_TEXT_EN: MimiDataTableText = {
   showResults: (count) => (count === 1 ? 'Show 1 result' : `Show ${count} results`),
   ascending: 'ascending',
   descending: 'descending',
+  active: (count) => `${count} active`,
+  results: (count) => (count === 1 ? '1 result' : `${count} results`),
 };
 
 /** Textos en español: `provideMimiDataTableText(MIMI_DATA_TABLE_TEXT_ES)`. */
@@ -107,6 +113,8 @@ export const MIMI_DATA_TABLE_TEXT_ES: MimiDataTableText = {
   showResults: (count) => (count === 1 ? 'Ver 1 resultado' : `Ver ${count} resultados`),
   ascending: 'ascendente',
   descending: 'descendente',
+  active: (count) => (count === 1 ? '1 activo' : `${count} activos`),
+  results: (count) => (count === 1 ? '1 resultado' : `${count} resultados`),
 };
 
 /** Textos activos. Sin `provideMimiDataTableText`, los predeterminados en inglés. */

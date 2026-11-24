@@ -115,7 +115,7 @@ describe('MimiDateRangePicker', { timeout: 20_000 }, () => {
     await open('plain');
     expect(panel()!.getAttribute('aria-label')).toBe('Elegir periodo');
     expect(document.activeElement).toBe(cell('2026-09-15'));
-    expect(help().textContent?.trim()).toBe('Haz clic en un día para empezar un periodo nuevo.');
+    expect(help().textContent?.trim()).toBe('Elige un día para empezar un periodo nuevo.');
     await click('2026-09-14');
     expect(h.range()).toBeNull();
     expect(help().textContent?.trim()).toBe('Elige el día final.');

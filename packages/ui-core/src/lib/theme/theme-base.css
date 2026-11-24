@@ -878,6 +878,23 @@
   }
 }
 
+/* Igual que `mimi-touch`, pero solo crece en alto: para los botones pegados a un campo (los − y
+   + de Number Input, la X de Select y Combobox), que con 44 px de ancho taparían el borde del
+   campo y le quitarían sus toques (revisión de accesibilidad de la tanda 1 de la 0.9.0). */
+@utility mimi-touch-y {
+  @media (pointer: coarse) {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: max(100%, 2.75rem);
+      translate: 0 -50%;
+    }
+  }
+}
+
 /* Con el dedo, los controles de tamaño `md` (Button, Input, Select, los disparadores de fecha y
    color…) miden 44 px en vez de 40 (M.31). `sm` y `lg` no cambian. */
 @media (pointer: coarse) {

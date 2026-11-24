@@ -22,7 +22,8 @@ test.describe('con ratón', () => {
   });
 });
 
-const CASES: { page: string; selector: string }[] = [
+/** `y`: solo crece en alto (`mimi-touch-y`), para no tapar el campo de al lado. */
+const CASES: { page: string; selector: string; axis?: 'y' }[] = [
   { page: 'button', selector: 'button[mimiBtn]' },
   { page: 'input', selector: 'input[mimiInput]' },
   { page: 'checkbox', selector: '[role="checkbox"]' },
@@ -32,7 +33,7 @@ const CASES: { page: string; selector: string }[] = [
   { page: 'toggle-group', selector: '[mimiToggleGroupItem]' },
   { page: 'tabs', selector: '[role="tab"]' },
   { page: 'toolbar', selector: '[mimiToolbarItem]' },
-  { page: 'number-input', selector: '[data-slot="increment"]' },
+  { page: 'number-input', selector: '[data-slot="increment"]', axis: 'y' },
   { page: 'password', selector: '[data-slot="toggle"]' },
   { page: 'tags-input', selector: '[data-slot="remove"], mimi-chip button' },
   // El disparador entero (la caja con borde); el `combobox` de aria va dentro, sin el borde.
@@ -49,7 +50,7 @@ for (const c of CASES) {
     const demo = page.locator('[data-slot="doc-page"] [data-slot="example"]').first();
     const target = demo.locator(c.selector).first();
     await target.scrollIntoViewIfNeeded();
-    const size = await target.evaluate((el) => {
+    const size = await target.evaluate((el, axis) => {
       const r = el.getBoundingClientRect();
       let w = r.width;
       let h = r.height;
@@ -58,8 +59,37 @@ for (const c of CASES) {
         w = Math.max(w, parseFloat(after.width) || 0);
         h = Math.max(h, parseFloat(after.height) || 0);
       }
-      return Math.round(Math.min(w, h));
-    });
+      return Math.round(axis === 'y' ? h : Math.min(w, h));
+    }, c.axis);
     expect(size).toBeGreaterThanOrEqual(44);
+  });
+}
+
+// Revisión de accesibilidad (H2 y H3): el área agrandada no capta toques del campo de al lado.
+for (const c of [
+  { page: 'number-input', button: '[data-slot="increment"]', field: 'input' },
+  { page: 'select', button: '[data-slot="clear"]', field: '[role="combobox"]' },
+]) {
+  test(`el área táctil no tapa el campo: ${c.page}`, async ({ page, isMobile }) => {
+    test.skip(!isMobile, 'solo en los teléfonos');
+    await openDoc(page, `/docs/components/${c.page}`);
+    const button = page.locator(`[data-slot="example"] ${c.button}`).first();
+    await button.scrollIntoViewIfNeeded();
+    const hit = await button.evaluate((el, field) => {
+      const host = el.closest('mimi-number-input, mimi-select')!;
+      const input = host.querySelector(field)!;
+      const b = el.getBoundingClientRect();
+      // Un píxel del campo, pegado al botón (por el lado del campo).
+      const x = b.left - 2;
+      const y = b.top + b.height / 2;
+      const target = document.elementFromPoint(x, y);
+      return {
+        inField:
+          !!target &&
+          (target === input || input.contains(target) || !el.contains(target)) &&
+          target !== el,
+      };
+    }, c.field);
+    expect(hit.inField).toBe(true);
   });
 }

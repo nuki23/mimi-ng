@@ -100,7 +100,9 @@ async function setup(phone: boolean, providers: unknown[] = []) {
   };
 }
 
-describe('Data Table en el teléfono (mobile)', () => {
+// 20 s por prueba, como las demás suites que pintan la Data Table entera (M.12): aislada tarda
+// menos de 1 s, pero con la máquina cargada pasó de los 5 s de Vitest.
+describe('Data Table en el teléfono (mobile)', { timeout: 20_000 }, () => {
   let restore: () => void = () => undefined;
   afterEach(() => {
     restore();
@@ -114,6 +116,32 @@ describe('Data Table en el teléfono (mobile)', () => {
     expect(t.host().hasAttribute('data-mobile')).toBe(false);
     expect(t.el.querySelector('[data-slot="refine"]')).toBeNull();
     expect(t.el.querySelector('[data-slot="search"]')).not.toBeNull();
+  });
+
+  it('«Seleccionar todo» de la barra conserva el foco al cambiar a la barra de selección (accesibilidad, H1)', async () => {
+    const t = await setup(true);
+    restore = t.restore;
+    const box = () => t.el.querySelector<HTMLElement>('[data-slot="select-all"] [role="checkbox"]');
+    box()!.focus();
+    box()!.click();
+    await t.settle();
+    expect(t.fixture.componentInstance.selection().length).toBe(2);
+    expect(box()).not.toBeNull();
+    expect(document.activeElement).toBe(box());
+  });
+
+  it('el botón de la hoja dice qué cuenta y que abre un diálogo (accesibilidad, H7)', async () => {
+    const t = await setup(true);
+    restore = t.restore;
+    t.fixture.componentInstance.query.set('Acme');
+    await t.settle();
+    const refine = t.el.querySelector<HTMLButtonElement>('[data-slot="refine"]')!;
+    expect(refine.getAttribute('aria-haspopup')).toBe('dialog');
+    expect(refine.getAttribute('aria-expanded')).toBe('false');
+    expect(refine.querySelector('[data-slot="refine-count"]')!.getAttribute('aria-hidden')).toBe(
+      'true',
+    );
+    expect(refine.textContent).toContain('1 activo');
   });
 
   it('stack: tarjetas con «etiqueta: valor», tabla para el lector y selección y acciones dentro', async () => {

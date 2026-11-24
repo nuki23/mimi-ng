@@ -402,6 +402,19 @@ interface ColumnView<T> {
 
     @if (toolbar()) {
       <div data-slot="toolbar" [class]="toolbarClasses">
+        <!-- En «stack», «Seleccionar todo» vive en la barra, fuera de lo que cambia al elegir:
+             así conserva el foco cuando la barra pasa a la de selección (accesibilidad, H1). -->
+        @if (stacked() && selectable()) {
+          <span data-slot="select-all" class="flex size-11 shrink-0 items-center justify-center">
+            <mimi-checkbox
+              [aria-label]="texts.selectAll"
+              [checked]="pageState() === 'all'"
+              [indeterminate]="pageState() === 'some'"
+              [disabled]="!pageIds().length"
+              (checkedChange)="togglePage($event)"
+            />
+          </span>
+        }
         @if (selectable() && selection().length) {
           <div data-slot="selection" class="flex min-w-0 flex-1 items-center gap-2.5">
             <span
@@ -431,23 +444,11 @@ interface ColumnView<T> {
           <!-- En el teléfono: la búsqueda, los filtros y el orden van en una hoja (abajo); en
                «stack», «Seleccionar todo» pasa aquí desde el encabezado (oculto a la vista). -->
           <div data-slot="mobile-bar" class="flex min-w-0 flex-1 items-center gap-2">
-            @if (stacked() && selectable()) {
-              <span
-                data-slot="select-all"
-                class="flex size-11 shrink-0 items-center justify-center"
-              >
-                <mimi-checkbox
-                  [aria-label]="texts.selectAll"
-                  [checked]="pageState() === 'all'"
-                  [indeterminate]="pageState() === 'some'"
-                  [disabled]="!pageIds().length"
-                  (checkedChange)="togglePage($event)"
-                />
-              </span>
-            }
             <button
               type="button"
               data-slot="refine"
+              aria-haspopup="dialog"
+              [attr.aria-expanded]="refineOpen()"
               [class]="ui.refine"
               (click)="refineOpen.set(true)"
             >
@@ -466,7 +467,11 @@ interface ColumnView<T> {
               </svg>
               {{ texts.refine }}
               @if (refineCount()) {
-                <span data-slot="refine-count" [class]="ui.refineCount">{{ refineCount() }}</span>
+                <!-- La cifra, para la vista; para el lector, con su contexto («, 1 activo»). -->
+                <span data-slot="refine-count" aria-hidden="true" [class]="ui.refineCount">{{
+                  refineCount()
+                }}</span>
+                <span class="sr-only">, {{ texts.active(refineCount()) }}</span>
               }
             </button>
           </div>
@@ -944,6 +949,11 @@ interface ColumnView<T> {
             <h2 mimiSheetTitle>{{ texts.refine }}</h2>
           </header>
           <div mimiSheetBody data-slot="refine-sheet" class="gap-5">
+            <!-- El recuento, dentro del diálogo modal: el de la tabla queda fuera y VoiceOver no
+                 lo lee con la hoja abierta (accesibilidad, H8). -->
+            <span role="status" class="sr-only">{{
+              narrowed() ? texts.results(count()) : ''
+            }}</span>
             <input
               mimiInput
               type="search"
