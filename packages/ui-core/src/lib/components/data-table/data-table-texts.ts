@@ -38,6 +38,15 @@ export interface MimiDataTableText {
   noResultsHint: string;
   /** Rango del pie: «1–10 of 48». */
   range: (from: number, to: number, total: number) => string;
+  /** En el teléfono: el botón que abre la hoja con la búsqueda, los filtros y el orden. */
+  refine: string;
+  /** En esa hoja: el grupo del orden. */
+  sortBy: string;
+  /** En esa hoja: el botón que la cierra y muestra las filas. */
+  showResults: (count: number) => string;
+  /** En esa hoja: el sentido del orden de la columna elegida (para el lector). */
+  ascending: string;
+  descending: string;
 }
 
 /** Textos predeterminados (inglés). */
@@ -63,6 +72,11 @@ export const MIMI_DATA_TABLE_TEXT_EN: MimiDataTableText = {
   noResults: 'No results',
   noResultsHint: 'Try another search or clear the filters.',
   range: (from, to, total) => `${from}–${to} of ${total}`,
+  refine: 'Search and filter',
+  sortBy: 'Sort by',
+  showResults: (count) => (count === 1 ? 'Show 1 result' : `Show ${count} results`),
+  ascending: 'ascending',
+  descending: 'descending',
 };
 
 /** Textos en español: `provideMimiDataTableText(MIMI_DATA_TABLE_TEXT_ES)`. */
@@ -88,6 +102,11 @@ export const MIMI_DATA_TABLE_TEXT_ES: MimiDataTableText = {
   noResults: 'Sin resultados',
   noResultsHint: 'Prueba con otra búsqueda o limpia los filtros.',
   range: (from, to, total) => `${from}–${to} de ${total}`,
+  refine: 'Buscar y filtrar',
+  sortBy: 'Ordenar por',
+  showResults: (count) => (count === 1 ? 'Ver 1 resultado' : `Ver ${count} resultados`),
+  ascending: 'ascendente',
+  descending: 'descendente',
 };
 
 /** Textos activos. Sin `provideMimiDataTableText`, los predeterminados en inglés. */

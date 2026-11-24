@@ -51,7 +51,10 @@ describe('TablePage (R.20)', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      expect(previews.length).toBe(4);
+      expect(previews.length).toBe(5);
+      // «En el teléfono»: una tabla con scroll (por defecto) y otra en stack.
+      const phone = [...el.querySelectorAll('app-table-phone-example table')];
+      expect(phone.map((t) => t.getAttribute('data-mobile'))).toEqual(['scroll', 'stack']);
       for (const { example, code } of previews) {
         expect(example?.querySelector('table[mimiTable]')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/table';");

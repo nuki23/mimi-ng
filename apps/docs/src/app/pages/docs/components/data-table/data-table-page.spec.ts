@@ -37,8 +37,10 @@ describe('DataTablePage', () => {
       const el = fixture.nativeElement as HTMLElement;
 
       const previews = examples(fixture);
-      // La demo, tamaños, estados y tres casos avanzados.
-      expect(previews.length).toBe(6);
+      // La demo, tamaños, estados y cuatro casos avanzados (con «En el teléfono»).
+      expect(previews.length).toBe(7);
+      const phone = el.querySelector('app-data-table-phone-example mimi-data-table')!;
+      expect(phone).not.toBeNull();
       for (const { example, code } of previews) {
         expect(example?.querySelector('mimi-data-table table')).not.toBeNull();
         expect(code).toContain("from '@/components/ui/data-table';");

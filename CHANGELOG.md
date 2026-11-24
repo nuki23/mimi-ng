@@ -11,6 +11,13 @@ Se completa en la puerta de la 0.9.0 (1.0-P9). Antes de la 1.0.0 las rupturas es
 - **`aria-required` ya no va en los disparadores que son un `<button>`** (Date Picker, Date Range, `mimi-color-input` y File Upload, y Form Field con un control de esos): ARIA no lo permite en `role="button"` (lo encontró axe). En su lugar, «obligatorio» va en el `aria-describedby` del botón. Lo que rompe: una prueba tuya que buscara `aria-required="true"` en esos botones. **Cómo actualizar:** comprueba el `aria-describedby` (el texto «required» u «obligatorio»), o el `required` de tu formulario.
 - **Textos nuevos `required`** en `MimiDatePickerText`, `MimiColorPickerText` y `MimiFileUploadText` («required» / «obligatorio» en `_ES`). Lo que rompe: un objeto tuyo con el tipo completo (`const t: MimiDatePickerText = { … }`) deja de compilar. **Cómo actualizar:** agrega `required` a ese objeto; con `provideMimi…Text({ … })` (que acepta una parte) no hace falta nada.
 
+- **Textos nuevos en `MimiDataTableText`** (`refine`, `sortBy`, `showResults`, `ascending`, `descending`, los de la hoja del teléfono). Lo que rompe: un objeto tuyo con el tipo completo deja de compilar. **Cómo actualizar:** agrégalos, o usa `provideMimiDataTableText({ … })`, que acepta una parte.
+- **Data Table en el teléfono** (por debajo de 640 px) se ve distinta por defecto: cada fila es una tarjeta (`mobile="stack"`), y la búsqueda, los filtros y el orden van en una hoja. Lo que rompe: tus pruebas de Playwright o Cypress con una ventana angosta (no ven el campo de búsqueda ni los botones del encabezado). **Cómo actualizar:** `mobile="scroll"` en la tabla, o `provideMimiTable({ dataTable: 'scroll' })` para toda la app (la búsqueda sigue en la hoja en el teléfono). `ng g mimi data-table` agrega ahora `sheet`.
+
+### Nuevo
+
+- **Table y Data Table en el teléfono:** `mobile` (`'stack' | 'scroll'`) en `<table mimiTable>` (por defecto `scroll`: scroll lateral con la primera columna fija) y en `mimi-data-table` (por defecto `stack`: cada fila, una tarjeta con «etiqueta: valor», que sigue siendo una tabla para el lector); `provideMimiTable({ table, dataTable })` para toda la app; `label` en `mimiTd`. En Data Table, en el teléfono, «Buscar y filtrar» abre una hoja con la búsqueda, el orden y los filtros, y la paginación se compacta.
+
 ### Cambios visibles (sin cambio de API)
 
 - **Date Range en el teléfono:** se abre en la hoja inferior, como Date Picker (antes, a pantalla completa), con los atajos en una fila que se desliza de lado y la ayuda encima del calendario. **Si prefieres lo de antes:** `presentation="fullscreen"`.

@@ -1,6 +1,8 @@
+import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
   ElementRef,
   type EmbeddedViewRef,
@@ -31,16 +33,29 @@ import {
 import { MimiInput } from '@/components/ui/input';
 import { MimiPagination } from '@/components/ui/pagination';
 import {
+  MimiSheet,
+  MimiSheetBody,
+  MimiSheetClose,
+  MimiSheetContent,
+  MimiSheetFooter,
+  MimiSheetHeader,
+  MimiSheetTitle,
+} from '@/components/ui/sheet';
+import {
   MIMI_DEFAULT_ROW_ID,
   MIMI_TABLE_CELL,
   MIMI_TABLE_HEAD,
+  MIMI_TABLE_CONFIG,
+  MIMI_TABLE_STACK,
   type MimiTableFilters,
+  type MimiTableMobile,
   type MimiTableSort,
   mimiFilterSortRows,
   mimiNextSort,
 } from '@/components/ui/table';
 import { MimiToggleGroup, MimiToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/components/ui/utils/cn';
+import { MIMI_OVERLAY_CONFIG } from '@/components/ui/utils/overlay-config';
 import { MimiSized } from '@/components/ui/utils/size';
 import { MIMI_DATA_TABLE_TEXT } from './data-table-texts';
 
@@ -310,6 +325,27 @@ const UI = {
     'h-9 cursor-pointer rounded-[var(--mimi-radius)] border border-border bg-card px-3.5 text-[0.84375rem] font-medium shadow-[shadow:var(--mimi-shadow-neutral)] mimi-transition hover:bg-accent',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
   ),
+  /** Teléfono: el botón de la barra que abre la hoja, su contador y las opciones de orden. */
+  refine: cn(
+    'inline-flex h-11 min-w-0 shrink-0 cursor-pointer items-center gap-2 whitespace-nowrap rounded-[var(--mimi-radius)] border border-border bg-card px-3.5 text-[0.875rem] font-medium shadow-[shadow:var(--mimi-shadow-neutral)] mimi-transition hover:bg-accent [&_svg]:size-4 [&_svg]:shrink-0',
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+  ),
+  refineCount:
+    'inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-semibold text-primary-foreground',
+  option: cn(
+    'inline-flex h-11 cursor-pointer items-center gap-1.5 rounded-[var(--mimi-radius)] border border-border bg-card px-3.5 text-[0.875rem] font-medium mimi-transition hover:bg-accent [&_svg]:size-[14px]',
+    'aria-pressed:border-primary aria-pressed:bg-primary-subtle aria-pressed:text-primary',
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+  ),
+  showResults: cn(
+    'h-11 flex-1 cursor-pointer rounded-[var(--mimi-radius)] border-0 bg-primary px-4 text-[0.875rem] font-semibold text-primary-foreground mimi-transition hover:opacity-90',
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+  ),
+  /** El detalle de una fila en «stack»: pegado debajo de su tarjeta. */
+  detailRowStacked: cn(
+    MIMI_TABLE_STACK.row,
+    'max-sm:-mt-2 max-sm:rounded-t-none max-sm:border-t-0',
+  ),
   skeletonWide: cn(SKELETON_CLASSES, 'w-1/4'),
   skeletonShort: cn(SKELETON_CLASSES, 'w-1/6'),
   skeletonMid: cn(SKELETON_CLASSES, 'w-1/5'),
@@ -350,6 +386,13 @@ interface ColumnView<T> {
     MimiInput,
     MimiMenuCheckboxItem,
     MimiPagination,
+    MimiSheet,
+    MimiSheetBody,
+    MimiSheetClose,
+    MimiSheetContent,
+    MimiSheetFooter,
+    MimiSheetHeader,
+    MimiSheetTitle,
     MimiTableOutlet,
     MimiToggleGroup,
     MimiToggleGroupItem,
@@ -383,6 +426,49 @@ interface ColumnView<T> {
                 />
               </span>
             }
+          </div>
+        } @else if (phone()) {
+          <!-- En el teléfono: la búsqueda, los filtros y el orden van en una hoja (abajo); en
+               «stack», «Seleccionar todo» pasa aquí desde el encabezado (oculto a la vista). -->
+          <div data-slot="mobile-bar" class="flex min-w-0 flex-1 items-center gap-2">
+            @if (stacked() && selectable()) {
+              <span
+                data-slot="select-all"
+                class="flex size-11 shrink-0 items-center justify-center"
+              >
+                <mimi-checkbox
+                  [aria-label]="texts.selectAll"
+                  [checked]="pageState() === 'all'"
+                  [indeterminate]="pageState() === 'some'"
+                  [disabled]="!pageIds().length"
+                  (checkedChange)="togglePage($event)"
+                />
+              </span>
+            }
+            <button
+              type="button"
+              data-slot="refine"
+              [class]="ui.refine"
+              (click)="refineOpen.set(true)"
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                @for (d of icon.filter; track d) {
+                  <path [attr.d]="d" />
+                }
+              </svg>
+              {{ texts.refine }}
+              @if (refineCount()) {
+                <span data-slot="refine-count" [class]="ui.refineCount">{{ refineCount() }}</span>
+              }
+            </button>
           </div>
         } @else {
           <div class="relative w-[280px] max-w-full">
@@ -511,33 +597,50 @@ interface ColumnView<T> {
       [attr.aria-label]="ariaLabel() || null"
       (scroll)="onScroll($event)"
     >
+      <!-- En «stack» (teléfono), la tabla sigue siendo una tabla para el lector: roles explícitos
+           (al cambiar el display, algunos navegadores le quitan la semántica) y el encabezado,
+           oculto a la vista, sin nada que se pueda enfocar. -->
       <table
-        class="w-full min-w-max border-separate border-spacing-0 text-[length:var(--mimi-table-font-size,0.8125rem)] tabular-nums group-data-[density=comfortable]/data-table:text-[length:var(--mimi-table-font-size-comfortable,0.875rem)]"
+        [class]="tableClasses()"
+        [attr.role]="stacked() ? 'table' : null"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-busy]="loading() || null"
       >
-        <thead>
-          <tr>
+        <thead [class]="stacked() ? stack.head : ''" [attr.role]="stacked() ? 'rowgroup' : null">
+          <tr [attr.role]="stacked() ? 'row' : null">
             @if (selectable()) {
-              <th scope="col" data-slot="select" [class]="ui.selectHead">
+              <th
+                scope="col"
+                data-slot="select"
+                [class]="ui.selectHead"
+                [attr.role]="stacked() ? 'columnheader' : null"
+              >
                 <span class="sr-only">{{ texts.select }}</span>
-                <mimi-checkbox
-                  [aria-label]="texts.selectAll"
-                  [checked]="pageState() === 'all'"
-                  [indeterminate]="pageState() === 'some'"
-                  [disabled]="!pageIds().length"
-                  (checkedChange)="togglePage($event)"
-                />
+                @if (!stacked()) {
+                  <mimi-checkbox
+                    [aria-label]="texts.selectAll"
+                    [checked]="pageState() === 'all'"
+                    [indeterminate]="pageState() === 'some'"
+                    [disabled]="!pageIds().length"
+                    (checkedChange)="togglePage($event)"
+                  />
+                }
               </th>
             }
             @if (detail()) {
-              <th scope="col" [class]="ui.expandHead" [style.inset-inline-start]="expandLeft()">
+              <th
+                scope="col"
+                [class]="ui.expandHead"
+                [style.inset-inline-start]="expandLeft()"
+                [attr.role]="stacked() ? 'columnheader' : null"
+              >
                 <span class="sr-only">{{ texts.details }}</span>
               </th>
             }
             @for (col of columnViews(); track col.column.id) {
               <th
                 scope="col"
+                [attr.role]="stacked() ? 'columnheader' : null"
                 [class]="col.headClass"
                 [style.inset-inline-start]="col.left"
                 [style.width]="col.column.width ?? null"
@@ -555,7 +658,7 @@ interface ColumnView<T> {
                       : 'flex items-center gap-0.5'
                   "
                 >
-                  @if (col.column.sortable) {
+                  @if (col.column.sortable && !stacked()) {
                     <button
                       type="button"
                       data-slot="sort"
@@ -581,7 +684,7 @@ interface ColumnView<T> {
                   } @else {
                     {{ col.column.header }}
                   }
-                  @if (col.column.filterOptions?.length) {
+                  @if (col.column.filterOptions?.length && !stacked()) {
                     <mimi-dropdown-menu>
                       <button
                         type="button"
@@ -626,17 +729,25 @@ interface ColumnView<T> {
               </th>
             }
             @if (actions()) {
-              <th scope="col" [class]="ui.actionsHead">
+              <th
+                scope="col"
+                [class]="ui.actionsHead"
+                [attr.role]="stacked() ? 'columnheader' : null"
+              >
                 <span class="sr-only">{{ texts.actions }}</span>
               </th>
             }
           </tr>
         </thead>
-        <tbody>
+        <tbody [class]="stacked() ? stack.body : ''" [attr.role]="stacked() ? 'rowgroup' : null">
           @if (loading()) {
             @for (n of skeletonRows(); track n) {
-              <tr aria-hidden="true" data-slot="skeleton">
-                <td [class]="cellClasses" [attr.colspan]="colCount()">
+              <tr aria-hidden="true" data-slot="skeleton" [attr.role]="stacked() ? 'row' : null">
+                <td
+                  [class]="cellClasses"
+                  [attr.colspan]="colCount()"
+                  [attr.role]="stacked() ? 'cell' : null"
+                >
                   <span class="flex items-center gap-6">
                     <span [class]="ui.skeletonWide"></span>
                     <span [class]="ui.skeletonShort"></span>
@@ -647,9 +758,13 @@ interface ColumnView<T> {
             }
           } @else {
             @for (row of pageRows(); track rowId()(row)) {
-              <tr class="group/row" [attr.data-selected]="isSelected(row) ? '' : null">
+              <tr
+                [class]="rowClasses()"
+                [attr.role]="stacked() ? 'row' : null"
+                [attr.data-selected]="isSelected(row) ? '' : null"
+              >
                 @if (selectable()) {
-                  <td [class]="ui.selectCell">
+                  <td [class]="selectCellClasses()" [attr.role]="stacked() ? 'cell' : null">
                     <mimi-checkbox
                       [aria-label]="texts.selectRow(rowLabel(row))"
                       [checked]="isSelected(row)"
@@ -658,7 +773,11 @@ interface ColumnView<T> {
                   </td>
                 }
                 @if (detail()) {
-                  <td [class]="ui.expandCell" [style.inset-inline-start]="expandLeft()">
+                  <td
+                    [class]="expandCellClasses()"
+                    [style.inset-inline-start]="stacked() ? null : expandLeft()"
+                    [attr.role]="stacked() ? 'cell' : null"
+                  >
                     <button
                       type="button"
                       data-slot="expand"
@@ -686,6 +805,8 @@ interface ColumnView<T> {
                 @for (col of columnViews(); track col.column.id) {
                   <td
                     [class]="col.cellClass"
+                    [attr.role]="stacked() ? 'cell' : null"
+                    [attr.data-label]="stacked() ? col.column.header : null"
                     [style.inset-inline-start]="col.left"
                     [style.min-width]="col.left !== null ? col.column.width : null"
                     [style.max-width]="col.left !== null ? col.column.width : null"
@@ -703,7 +824,7 @@ interface ColumnView<T> {
                   </td>
                 }
                 @if (actions(); as actions) {
-                  <td [class]="ui.actionsCell">
+                  <td [class]="actionsCellClasses()" [attr.role]="stacked() ? 'cell' : null">
                     <ng-container
                       [mimiTableOutlet]="actions.templateRef"
                       [mimiTableOutletItem]="row"
@@ -717,10 +838,16 @@ interface ColumnView<T> {
               </tr>
               @if (detail(); as detail) {
                 @if (isExpanded(row)) {
-                  <tr data-slot="detail">
+                  <!-- En «stack», pegado debajo de la tarjeta de su fila. -->
+                  <tr
+                    data-slot="detail"
+                    [class]="stacked() ? ui.detailRowStacked : ''"
+                    [attr.role]="stacked() ? 'row' : null"
+                  >
                     <td
-                      class="border-b border-border bg-[color:var(--mimi-table-expanded-bg,var(--mimi-muted))] p-0"
+                      class="border-b border-border bg-[color:var(--mimi-table-expanded-bg,var(--mimi-muted))] p-0 max-sm:in-data-[mobile=stack]:block max-sm:in-data-[mobile=stack]:border-0"
                       [attr.colspan]="colCount()"
+                      [attr.role]="stacked() ? 'cell' : null"
                     >
                       <div class="sticky start-0 w-fit max-w-full px-5 py-4" [id]="detailId(row)">
                         <ng-container
@@ -737,8 +864,12 @@ interface ColumnView<T> {
                 }
               }
             } @empty {
-              <tr>
-                <td class="border-b border-border p-0" [attr.colspan]="colCount()">
+              <tr [attr.role]="stacked() ? 'row' : null">
+                <td
+                  class="border-b border-border p-0"
+                  [attr.colspan]="colCount()"
+                  [attr.role]="stacked() ? 'cell' : null"
+                >
                   <div
                     data-slot="empty"
                     class="sticky start-0 flex w-full max-w-[760px] flex-col items-center gap-2 px-6 py-14 text-center"
@@ -796,13 +927,101 @@ interface ColumnView<T> {
         class="flex flex-wrap items-center justify-between gap-3 border-t border-border py-3 pr-3 pl-4 text-[0.8125rem] text-muted-foreground tabular-nums"
       >
         <span data-slot="range">{{ rangeText() }}</span>
+        <!-- En el teléfono, compacta: sin «filas por página». -->
         <mimi-pagination
           [total]="count()"
-          [pageSizeOptions]="pageSizeOptions()"
+          [pageSizeOptions]="phone() ? noSizes : pageSizeOptions()"
           [(page)]="page"
           [(pageSize)]="pageSize"
         />
       </div>
+    }
+
+    @if (phone()) {
+      <mimi-sheet side="bottom" [aria-label]="texts.refine" [(open)]="refineOpen">
+        <ng-template mimiSheetContent>
+          <header mimiSheetHeader>
+            <h2 mimiSheetTitle>{{ texts.refine }}</h2>
+          </header>
+          <div mimiSheetBody data-slot="refine-sheet" class="gap-5">
+            <input
+              mimiInput
+              type="search"
+              data-slot="sheet-search"
+              [value]="query()"
+              [attr.placeholder]="searchPlaceholder() || texts.search"
+              [attr.aria-label]="searchPlaceholder() || texts.search"
+              (input)="setQuery($any($event.target).value)"
+            />
+            @if (sortableColumns().length) {
+              <fieldset data-slot="sort-group" class="m-0 min-w-0 border-0 p-0">
+                <legend class="mb-2 text-sm font-semibold">{{ texts.sortBy }}</legend>
+                <div class="flex flex-wrap gap-2">
+                  @for (column of sortableColumns(); track column.id) {
+                    <button
+                      type="button"
+                      data-slot="sort-option"
+                      [class]="ui.option"
+                      [attr.aria-pressed]="sort()?.column === column.id"
+                      (click)="toggleSort(column.id)"
+                    >
+                      {{ column.header }}
+                      <svg
+                        aria-hidden="true"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      >
+                        @for (d of sortIcon(sortOf(column.id)); track d) {
+                          <path [attr.d]="d" />
+                        }
+                      </svg>
+                      @if (sort()?.column === column.id) {
+                        <span class="sr-only">{{
+                          sort()?.direction === 'asc' ? texts.ascending : texts.descending
+                        }}</span>
+                      }
+                    </button>
+                  }
+                </div>
+              </fieldset>
+            }
+            @for (column of filterColumns(); track column.id) {
+              <fieldset data-slot="filter-group" class="m-0 min-w-0 border-0 p-0">
+                <legend class="mb-1 text-sm font-semibold">{{ column.header }}</legend>
+                @for (option of column.filterOptions; track $index) {
+                  <label class="flex min-h-11 cursor-pointer items-center gap-3 text-sm">
+                    <mimi-checkbox
+                      [aria-label]="option.label"
+                      [checked]="isFiltered(column.id, option.value)"
+                      (checkedChange)="toggleFilter(column.id, option.value)"
+                    />
+                    <span aria-hidden="true">{{ option.label }}</span>
+                  </label>
+                }
+              </fieldset>
+            }
+          </div>
+          <footer mimiSheetFooter>
+            @if (narrowed()) {
+              <button
+                type="button"
+                data-slot="sheet-clear"
+                [class]="ui.clearAll"
+                (click)="clearAll()"
+              >
+                {{ texts.clearFilters }}
+              </button>
+            }
+            <button type="button" data-slot="show-results" mimiSheetClose [class]="ui.showResults">
+              {{ texts.showResults(count()) }}
+            </button>
+          </footer>
+        </ng-template>
+      </mimi-sheet>
     }
   `,
   host: {
@@ -811,6 +1030,7 @@ interface ColumnView<T> {
     '[attr.data-density]': 'density()',
     '[attr.data-scrolled]': 'scrolled() ? "" : null',
     '[attr.data-loading]': 'loading() ? "" : null',
+    '[attr.data-mobile]': 'phone() ? mode() : null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -853,6 +1073,23 @@ export class MimiDataTable<T = any> {
   readonly page = model(1);
   readonly pageSize = model(10);
   readonly density = model<MimiTableDensity>('compact');
+  /**
+   * Cómo se ve en el teléfono (por debajo del corte de los paneles, 640 px): `stack` (cada fila,
+   * una tarjeta) o `scroll` (scroll lateral con la primera columna fija). Sin valor, el de
+   * `provideMimiTable` (`stack`). En los dos, la búsqueda, los filtros y el orden van en una hoja.
+   */
+  readonly mobile = input<MimiTableMobile | undefined>(undefined);
+
+  private readonly tableConfig = inject(MIMI_TABLE_CONFIG);
+  protected readonly mode = computed<MimiTableMobile>(
+    () => this.mobile() ?? this.tableConfig.dataTable,
+  );
+  /** Más angosta que el corte de los paneles (`provideMimiOverlay`, 640 px por defecto). */
+  protected readonly phone = signal(false);
+  protected readonly stacked = computed(() => this.phone() && this.mode() === 'stack');
+  protected readonly refineOpen = signal(false);
+  protected readonly stack = MIMI_TABLE_STACK;
+  protected readonly noSizes: readonly number[] = [];
 
   private readonly cells = contentChildren(MimiTableCell);
   protected readonly detail = contentChild(MimiTableDetail);
@@ -864,6 +1101,58 @@ export class MimiDataTable<T = any> {
   protected readonly toolbarClasses = TOOLBAR_CLASSES;
   protected readonly cellClasses = CELL_CLASSES;
   protected readonly classes = computed(() => cn(HOST_CLASSES, this.userClass()));
+
+  protected readonly tableClasses = computed(() =>
+    cn(
+      'w-full min-w-max border-separate border-spacing-0 text-[length:var(--mimi-table-font-size,0.8125rem)] tabular-nums group-data-[density=comfortable]/data-table:text-[length:var(--mimi-table-font-size-comfortable,0.875rem)]',
+      this.stacked() && cn(MIMI_TABLE_STACK.table, 'max-sm:min-w-0 max-sm:p-3'),
+    ),
+  );
+  /**
+   * En «stack», la fila envuelve: la casilla y la flecha de detalle comparten la primera línea de
+   * la tarjeta (`basis-auto`) y cada dato ocupa una línea entera (`basis-full`).
+   */
+  protected readonly rowClasses = computed(() =>
+    cn('group/row', this.stacked() && cn(MIMI_TABLE_STACK.row, 'max-sm:flex-row max-sm:flex-wrap')),
+  );
+  /** En «stack», las celdas fijas dejan de serlo y pierden su ancho de columna. */
+  private readonly unstick =
+    'max-sm:static max-sm:w-auto max-sm:min-w-0 max-sm:max-w-none max-sm:basis-auto max-sm:pt-2.5';
+  protected readonly selectCellClasses = computed(() =>
+    this.stacked() ? cn(UI.selectCell, MIMI_TABLE_STACK.cell, this.unstick) : UI.selectCell,
+  );
+  protected readonly expandCellClasses = computed(() =>
+    this.stacked() ? cn(UI.expandCell, MIMI_TABLE_STACK.cell, this.unstick) : UI.expandCell,
+  );
+  protected readonly actionsCellClasses = computed(() =>
+    this.stacked()
+      ? cn(
+          UI.actionsCell,
+          MIMI_TABLE_STACK.cell,
+          'max-sm:basis-full max-sm:[&:not([data-label])]:justify-end',
+        )
+      : UI.actionsCell,
+  );
+  protected readonly sortableColumns = computed(() => this.columns().filter((c) => c.sortable));
+  protected readonly filterColumns = computed(() =>
+    this.columns().filter((c) => c.filterOptions?.length),
+  );
+  /** Lo que acota las filas (búsqueda y filtros): el contador del botón de la hoja. */
+  protected readonly refineCount = computed(() => (this.query() ? 1 : 0) + this.chips().length);
+
+  private readonly watchPhone = (() => {
+    const view = inject(DOCUMENT).defaultView;
+    const breakpoint = inject(MIMI_OVERLAY_CONFIG).mobileBreakpoint;
+    if (!breakpoint || breakpoint <= 0 || typeof view?.matchMedia !== 'function') return;
+    const media = view.matchMedia(`(max-width: ${breakpoint - 0.02}px)`);
+    this.phone.set(media.matches);
+    const onChange = (event: MediaQueryListEvent) => {
+      this.phone.set(event.matches);
+      if (!event.matches) this.refineOpen.set(false);
+    };
+    media.addEventListener('change', onChange);
+    inject(DestroyRef).onDestroy(() => media.removeEventListener('change', onChange));
+  })();
 
   private readonly baseId = `mimi-data-table-${nextId++}`;
   protected readonly scrolled = signal(false);
@@ -881,11 +1170,18 @@ export class MimiDataTable<T = any> {
     if (this.selectable()) offsets.push('44px');
     if (this.detail()) offsets.push('36px');
     const columns = this.columns();
-    const lastSticky = columns.reduce((last, col, i) => (col.sticky && col.width ? i : last), -1);
+    const stacked = this.stacked();
+    let lastSticky = columns.reduce((last, col, i) => (col.sticky && col.width ? i : last), -1);
+    // En el teléfono con «scroll», la primera columna de datos queda fija aunque no lo pidas
+    // (no necesita `width`: es la última fija y nadie se coloca detrás de ella).
+    const autoSticky = this.phone() && !stacked && lastSticky === -1 && columns.length > 1;
+    if (autoSticky) lastSticky = 0;
     return columns.map((column, i) => {
-      const sticky = !!column.sticky && !!column.width && i <= lastSticky;
+      const sticky =
+        !stacked &&
+        ((!!column.sticky && !!column.width && i <= lastSticky) || (autoSticky && i === 0));
       const left = sticky ? (offsets.length ? `calc(${offsets.join(' + ')})` : '0px') : null;
-      if (sticky) offsets.push(column.width!);
+      if (sticky && column.width) offsets.push(column.width);
       const edge = sticky && i === lastSticky;
       const extra = cn(edge && EDGE_CLASSES, column.align === 'end' && 'text-end');
       return {
@@ -893,7 +1189,12 @@ export class MimiDataTable<T = any> {
         left,
         edge,
         headClass: cn(HEAD_CLASSES, sticky && 'sticky z-[2]', extra),
-        cellClass: cn(CELL_CLASSES, sticky && 'sticky z-[1]', extra),
+        cellClass: cn(
+          CELL_CLASSES,
+          sticky && 'sticky z-[1]',
+          extra,
+          stacked && cn(MIMI_TABLE_STACK.cell, 'max-sm:basis-full max-sm:text-end'),
+        ),
         sort: !column.sortable
           ? null
           : sort?.column === column.id
@@ -1056,6 +1357,13 @@ export class MimiDataTable<T = any> {
       : sort === 'descending'
         ? ICON.sortDesc
         : ICON.sortNone;
+  }
+
+  /** El orden de una columna, como en `columnViews` (para la hoja del teléfono). */
+  protected sortOf(column: string): ColumnView<T>['sort'] {
+    const sort = this.sort();
+    if (sort?.column !== column) return 'none';
+    return sort.direction === 'asc' ? 'ascending' : 'descending';
   }
 
   protected isSelected(row: T): boolean {

@@ -13,6 +13,9 @@ import expandSource from './examples/table-expand.example' with { loader: 'text'
 import sizesSource from './examples/table-sizes.example' with { loader: 'text' };
 // @ts-expect-error
 import stateSource from './examples/table-state.example' with { loader: 'text' };
+import { TablePhoneExample } from './examples/table-phone.example';
+// @ts-expect-error
+import phoneSource from './examples/table-phone.example' with { loader: 'text' };
 
 /** La página de Table (R.20, PD-2 opción C), con la plantilla de página. */
 export const TABLE_PAGE: DocPage = {
@@ -77,6 +80,14 @@ export const TABLE_PAGE: DocPage = {
         component: TableStateExample,
         source: stateSource as string,
       },
+      {
+        id: 'phone',
+        title: 'En el teléfono',
+        sentence:
+          'Debajo de 640 px: `scroll` (por defecto) desliza la tabla con la primera columna fija; `mobile="stack"` muestra cada fila como tarjeta.',
+        component: TablePhoneExample,
+        source: phoneSource as string,
+      },
     ],
   },
   accessibility: {
@@ -86,6 +97,7 @@ export const TABLE_PAGE: DocPage = {
       'Con `[sort]`, el texto del encabezado va en un botón y la columna lleva `aria-sort`.',
       '`mimiRowToggle` pone `aria-expanded` y, con `controls`, `aria-controls` al detalle. El nombre del botón es tuyo.',
       'Las casillas de selección necesitan su nombre: «Elegir a Ana».',
+      'En el teléfono, con `scroll`, dale al contenedor `tabindex="0"`, `role="region"` y un nombre; con `stack`, sigue siendo una tabla (roles explícitos y encabezados ocultos a la vista).',
     ],
   },
   api: {
@@ -95,6 +107,19 @@ export const TABLE_PAGE: DocPage = {
         type: "'sm' | 'md' | 'lg'",
         default: "'md' (o el del contenedor con mimiSize)",
         description: 'Alto de las filas y de la cabecera.',
+      },
+      {
+        name: 'mobile (en la tabla)',
+        type: "'scroll' | 'stack'",
+        default: "'scroll' (o el de provideMimiTable)",
+        description:
+          'Debajo de 640 px: scroll lateral con la primera columna fija, o cada fila como tarjeta.',
+      },
+      {
+        name: 'label (en mimiTd)',
+        type: 'string',
+        default: 'el texto del th',
+        description: 'La etiqueta de la celda en la tarjeta de `stack`.',
       },
       {
         name: 'sort (en mimiTh)',

@@ -80,7 +80,6 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- M.30 · `auto/0.9.0-tanda1-2026-11-23` · Claude Code (modo autónomo) · 23/11/2026
 - M.31 · `auto/0.9.0-tanda1-2026-11-23` · Claude Code (modo autónomo) · 23/11/2026
 
 (La 0.8.0 se publicó el 23/11/2026; registro en `docs/historial/plan-grupo-4.md`.)
@@ -120,7 +119,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Desde el 23/11/202
 - [x] M.27 (hecha el 15/11/2026, con `mimi-color-input`) `size` en Input OTP y File Upload (sin justificación para no tenerlo; visto en la R.26) · sin versión · S · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.28 (hecha el 16/11/2026; los escenarios del `.tgz`, en la G4.P) Quitar todo lo marcado «hasta la 1.0» (atajos de `variant` de la 0.1.x en Button y Badge, radio de Badge, `paddingX` y `placeholderColor` de Input en el tema, alias `destructive-soft`, `"vivid"`; absorbe 1.0-1 a 1.0-4), con una prueba que falla si queda algo marcado así; **RUPTURA** · v0.8.0 · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.29 (hecha el 23/11/2026) Date Picker y Date Range de la misma familia en el teléfono (pedido del usuario, tanda 1 de la 0.9.0, punto 5) · v0.9.0 (tanda 1) · S · depende: R.34 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [~] M.30 Table y Data Table en el teléfono: `stack` y `scroll`, la hoja de búsqueda y la paginación compacta (pedido del usuario, punto 6) · v0.9.0 (tanda 1) · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.30 (hecha el 23/11/2026) Table y Data Table en el teléfono: `stack` y `scroll`, la hoja de búsqueda y la paginación compacta (pedido del usuario, punto 6) · v0.9.0 (tanda 1) · M · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.31 Auditoría a 360 px de todos los componentes y Blocks, y adaptar los que fallen (pedido del usuario, punto 7) · v0.9.0 (tanda 1) · M · depende: M.18 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] 0.1.1-3 `pnpm publish` da 404 con pnpm 12 (mientras, se publica con npm) · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 

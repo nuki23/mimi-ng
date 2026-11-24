@@ -1,9 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   Directive,
+  ElementRef,
   TemplateRef,
   ViewContainerRef,
+  afterRenderEffect,
   booleanAttribute,
   computed,
   effect,
@@ -13,6 +16,7 @@ import {
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
+import { MIMI_TABLE_CONFIG, type MimiTableMobile } from './table-config';
 import type { MimiTableRow, MimiTableSortHandle } from './table-state';
 
 /*
@@ -58,20 +62,141 @@ export const MIMI_TABLE_SORT_ICON = {
   desc: ['M12 5v14', 'm19 12-7 7-7-7'],
 } as const;
 
-/** `<table mimiTable>`: ancho, bordes separados (para las celdas fijas) y el texto de la tabla. */
+/**
+ * Clases del modo `stack` en el teléfono (`max-sm:`, por debajo de 640 px): cada fila es una
+ * tarjeta y cada celda, «etiqueta: valor» (la etiqueta sale de `data-label` con un `::before`
+ * cuyo texto alternativo es vacío, `content: attr(data-label) / ""`: el lector de pantalla no la
+ * repite, porque ya anuncia el encabezado de la columna). Las usa también Data Table. @internal
+ */
+export const MIMI_TABLE_STACK = {
+  table: 'max-sm:block',
+  head: 'max-sm:sr-only',
+  body: 'max-sm:flex max-sm:flex-col max-sm:gap-2',
+  row: 'max-sm:flex max-sm:flex-col max-sm:overflow-hidden max-sm:rounded-card max-sm:border max-sm:border-border max-sm:bg-[color:var(--mimi-table-bg,var(--mimi-card))]',
+  cell: cn(
+    'max-sm:flex max-sm:h-auto max-sm:min-h-10 max-sm:items-center max-sm:justify-between max-sm:gap-3 max-sm:border-0 max-sm:px-3 max-sm:py-1.5 max-sm:text-end',
+    'max-sm:first:pt-2.5 max-sm:last:pb-2.5',
+    "max-sm:before:me-auto max-sm:before:shrink-0 max-sm:before:text-start max-sm:before:font-medium max-sm:before:text-muted-foreground max-sm:before:content-[attr(data-label)_/_'']",
+    'max-sm:[&:not([data-label])]:justify-start max-sm:[&:not([data-label])]:before:hidden',
+  ),
+} as const;
+
+/** Clases del modo `scroll` en el teléfono: sin cortes de línea y la primera columna fija. @internal */
+export const MIMI_TABLE_SCROLL_CELL =
+  'max-sm:whitespace-nowrap max-sm:first:sticky max-sm:first:start-0 max-sm:first:z-[1]';
+
+/**
+ * `<table mimiTable>`: ancho, bordes separados (para las celdas fijas) y el texto de la tabla.
+ * `mobile` (`'scroll' | 'stack'`) dice cómo se ve en el teléfono; por defecto, el de
+ * `provideMimiTable` (`scroll`). Con `scroll`, envuélvela en un contenedor con `overflow-x-auto`.
+ */
 @Directive({
   selector: 'table[mimiTable]',
   hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
-  host: { '[class]': 'classes()' },
+  host: {
+    '[class]': 'classes()',
+    '[attr.data-mobile]': 'mode()',
+    '[attr.role]': 'stack() ? "table" : null',
+  },
 })
 export class MimiTable {
   readonly userClass = input('', { alias: 'class' });
+  /** Cómo se ve en el teléfono (por debajo de 640 px). Sin valor, el de `provideMimiTable`. */
+  readonly mobile = input<MimiTableMobile | undefined>(undefined);
+
+  private readonly config = inject(MIMI_TABLE_CONFIG);
+  private readonly host = inject<ElementRef<HTMLTableElement>>(ElementRef).nativeElement;
+  readonly mode = computed<MimiTableMobile>(() => this.mobile() ?? this.config.table);
+  readonly stack = computed(() => this.mode() === 'stack');
+
   protected readonly classes = computed(() =>
     cn(
       'w-full border-separate border-spacing-0 font-sans text-[length:var(--mimi-table-font-size,0.8125rem)] text-card-foreground tabular-nums',
+      this.stack() && MIMI_TABLE_STACK.table,
       this.userClass(),
     ),
   );
+
+  constructor() {
+    // En `stack`, cada celda lleva el texto del encabezado de su columna en `data-label`; un
+    // MutationObserver vuelve a etiquetar cuando cambian las filas (las pinta tu `@for`).
+    let observer: MutationObserver | null = null;
+    afterRenderEffect(() => {
+      const stack = this.stack();
+      observer?.disconnect();
+      observer = null;
+      if (!stack) mimiClearStackRoles(this.host);
+      if (!stack || typeof MutationObserver === 'undefined') return;
+      mimiLabelCells(this.host);
+      observer = new MutationObserver(() => mimiLabelCells(this.host));
+      observer.observe(this.host, { childList: true, subtree: true, characterData: true });
+    });
+    inject(DestroyRef).onDestroy(() => observer?.disconnect());
+  }
+}
+
+/**
+ * Pone en cada celda de datos el texto del encabezado de su columna (`data-label`), salvo en las
+ * que traen el suyo (`mimiTd label`) y en las que ocupan varias columnas. @internal
+ */
+export function mimiLabelCells(table: HTMLTableElement): void {
+  // Los roles de tabla, también en las filas y celdas sin directiva (la fila del encabezado suele
+  // ser un `<tr>` sin `mimiTr`): marcados con `data-mimi-role` para quitarlos al salir de `stack`.
+  for (const row of Array.from(table.rows)) {
+    mimiSetRole(row, 'row');
+    for (const cell of Array.from(row.cells)) {
+      const header = cell.tagName === 'TH';
+      const inHead = row.parentElement?.tagName === 'THEAD';
+      mimiSetRole(
+        cell,
+        header
+          ? inHead || cell.getAttribute('scope') !== 'row'
+            ? 'columnheader'
+            : 'rowheader'
+          : 'cell',
+      );
+    }
+  }
+  const head = table.tHead?.rows[0];
+  if (!head) return;
+  const labels: string[] = [];
+  for (const th of Array.from(head.cells)) {
+    const text = th.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+    for (let i = 0; i < th.colSpan; i++) labels.push(text);
+  }
+  for (const body of Array.from(table.tBodies)) {
+    for (const row of Array.from(body.rows)) {
+      let column = 0;
+      for (const cell of Array.from(row.cells)) {
+        if (!cell.hasAttribute('data-label-own')) {
+          const label = cell.colSpan === 1 ? labels[column] : '';
+          if (label) {
+            if (cell.getAttribute('data-label') !== label) cell.setAttribute('data-label', label);
+          } else if (cell.hasAttribute('data-label')) {
+            cell.removeAttribute('data-label');
+          }
+        }
+        column += cell.colSpan;
+      }
+    }
+  }
+}
+
+function mimiSetRole(el: Element, role: string): void {
+  if (el.hasAttribute('role')) return;
+  el.setAttribute('role', role);
+  el.setAttribute('data-mimi-role', '');
+}
+
+/** Quita los roles que puso `mimiLabelCells` y las etiquetas automáticas. @internal */
+export function mimiClearStackRoles(table: HTMLTableElement): void {
+  for (const el of Array.from(table.querySelectorAll('[data-mimi-role]'))) {
+    el.removeAttribute('role');
+    el.removeAttribute('data-mimi-role');
+  }
+  for (const el of Array.from(table.querySelectorAll('[data-label]:not([data-label-own])'))) {
+    el.removeAttribute('data-label');
+  }
 }
 
 /** `<caption mimiCaption>`: el título visible de la tabla (su nombre accesible). */
@@ -86,16 +211,35 @@ export class MimiCaption {
   );
 }
 
-/** `<thead mimiThead>` (sin estilos propios: los lleva cada `th`; sirve de marca y para `class`). */
-@Directive({ selector: 'thead[mimiThead]', host: { '[class]': 'userClass()' } })
+/**
+ * `<thead mimiThead>` (sin estilos propios: los lleva cada `th`; sirve de marca y para `class`). En
+ * `stack`, oculto a la vista y presente para el lector de pantalla.
+ */
+@Directive({
+  selector: 'thead[mimiThead]',
+  host: { '[class]': 'classes()', '[attr.role]': 'stack() ? "rowgroup" : null' },
+})
 export class MimiThead {
   readonly userClass = input('', { alias: 'class' });
+  private readonly table = inject(MimiTable, { optional: true });
+  protected readonly stack = computed(() => this.table?.stack() ?? false);
+  protected readonly classes = computed(() =>
+    cn(this.stack() && MIMI_TABLE_STACK.head, this.userClass()),
+  );
 }
 
 /** `<tbody mimiTbody>` (como `mimiThead`). */
-@Directive({ selector: 'tbody[mimiTbody]', host: { '[class]': 'userClass()' } })
+@Directive({
+  selector: 'tbody[mimiTbody]',
+  host: { '[class]': 'classes()', '[attr.role]': 'stack() ? "rowgroup" : null' },
+})
 export class MimiTbody {
   readonly userClass = input('', { alias: 'class' });
+  private readonly table = inject(MimiTable, { optional: true });
+  protected readonly stack = computed(() => this.table?.stack() ?? false);
+  protected readonly classes = computed(() =>
+    cn(this.stack() && MIMI_TABLE_STACK.body, this.userClass()),
+  );
 }
 
 /** `<tr mimiTr [selected]>`: el hover y el fondo de elegida de sus celdas (`data-selected`). */
@@ -104,21 +248,45 @@ export class MimiTbody {
   host: {
     '[class]': 'classes()',
     '[attr.data-selected]': 'selected() ? "" : null',
+    '[attr.role]': 'stack() ? "row" : null',
   },
 })
 export class MimiTr {
   readonly selected = input(false, { transform: booleanAttribute });
   readonly userClass = input('', { alias: 'class' });
-  protected readonly classes = computed(() => cn('group/row', this.userClass()));
+  private readonly table = inject(MimiTable, { optional: true });
+  protected readonly stack = computed(() => this.table?.stack() ?? false);
+  protected readonly classes = computed(() =>
+    cn('group/row', this.stack() && MIMI_TABLE_STACK.row, this.userClass()),
+  );
 }
 
-/** `<td mimiTd>`: alto de fila, borde, relleno y fondo; `align="end"` para cifras. */
-@Directive({ selector: 'td[mimiTd]', host: { '[class]': 'classes()' } })
+/**
+ * `<td mimiTd>`: alto de fila, borde, relleno y fondo; `align="end"` para cifras. `label`: la
+ * etiqueta de la celda en la tarjeta del teléfono (`stack`); sin ella, el encabezado de su columna.
+ */
+@Directive({
+  selector: 'td[mimiTd]',
+  host: {
+    '[class]': 'classes()',
+    '[attr.role]': 'stack() ? "cell" : null',
+    '[attr.data-label]': 'label() || null',
+    '[attr.data-label-own]': 'label() ? "" : null',
+  },
+})
 export class MimiTd {
   readonly align = input<'start' | 'end'>('start');
+  readonly label = input<string>();
   readonly userClass = input('', { alias: 'class' });
+  private readonly table = inject(MimiTable, { optional: true });
+  protected readonly stack = computed(() => this.table?.stack() ?? false);
   protected readonly classes = computed(() =>
-    cn(MIMI_TABLE_CELL, this.align() === 'end' && 'text-end', this.userClass()),
+    cn(
+      MIMI_TABLE_CELL,
+      this.align() === 'end' && 'text-end',
+      this.table && (this.stack() ? MIMI_TABLE_STACK.cell : MIMI_TABLE_SCROLL_CELL),
+      this.userClass(),
+    ),
   );
 }
 
@@ -177,6 +345,7 @@ export class MimiThOutlet {
     '[attr.scope]': 'scope()',
     '[attr.aria-sort]': 'ariaSort()',
     '[attr.data-sorted]': 'sort()?.direction() ? "" : null',
+    '[attr.role]': 'role()',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -185,6 +354,12 @@ export class MimiTh {
   readonly scope = input<'col' | 'row' | 'colgroup' | 'rowgroup'>('col');
   readonly align = input<'start' | 'end'>('start');
   readonly userClass = input('', { alias: 'class' });
+
+  private readonly table = inject(MimiTable, { optional: true });
+  private readonly stack = computed(() => this.table?.stack() ?? false);
+  protected readonly role = computed(() =>
+    this.stack() ? (this.scope() === 'row' ? 'rowheader' : 'columnheader') : null,
+  );
 
   protected readonly sortButton = MIMI_TABLE_SORT_BUTTON;
   protected readonly ariaSort = computed(() => {
@@ -199,7 +374,14 @@ export class MimiTh {
     return MIMI_TABLE_SORT_ICON[direction ?? 'none'];
   });
   protected readonly classes = computed(() =>
-    cn(MIMI_TABLE_HEAD, this.align() === 'end' && 'text-end', this.userClass()),
+    cn(
+      MIMI_TABLE_HEAD,
+      this.align() === 'end' && 'text-end',
+      // Un `th scope="row"` en `stack` se pinta como una celda más de la tarjeta.
+      this.stack() && this.scope() === 'row' && MIMI_TABLE_STACK.cell,
+      this.table && !this.stack() && MIMI_TABLE_SCROLL_CELL,
+      this.userClass(),
+    ),
   );
 }
 
