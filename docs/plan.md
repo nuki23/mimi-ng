@@ -80,7 +80,7 @@ Los comandos del punto 9 (y los 4 escenarios del punto 5) están en `docs/proces
 
 Formato de cada fila: `- ID · rama · quién · desde (DD/MM/AAAA)`.
 
-- 1.0-5 · `auto/0.9.0-tanda1-2026-11-23` · Claude Code (modo autónomo) · 23/11/2026 (a falta de ver la CI en verde en GitHub)
+Ninguna.
 
 (La 0.8.0 se publicó el 23/11/2026; registro en `docs/historial/plan-grupo-4.md`.)
 
@@ -214,7 +214,7 @@ Detalle: [docs/plan/plataforma.md](plan/plataforma.md). La 5.2 y la 5.17 están 
 
 Detalle: [docs/plan/version-1.0.md](plan/version-1.0.md) (plan escrito el 23/11/2026 a partir del inventario de la puerta de la 0.8.0, `docs/auto/0.8.0-puerta-2026-11-23.md`, sección 4, con lo que decidió el usuario ese día). **0.9.0:** CI, axe, la revisión completa de la API con las últimas rupturas, las páginas que faltan y la declaración de accesibilidad, en cuatro tandas. **0.9.x:** los arreglos de la M.20 manual del usuario. **0.9.9:** la revisión final del usuario. **1.0.0:** el lanzamiento, cuando entra en vigor la política de compatibilidad (spec 12). Las 1.0-1 a 1.0-4 pasaron a la M.28 (v0.8.0); después de la 1.0, el Grupo 5, Mimi Effects y lo de plataforma marcado «después de la 1.0.0».
 
-- [~] 1.0-5 CI en GitHub Actions: build, test, format:check y Playwright en Chromium, Firefox y WebKit (y dos teléfonos emulados) en cada PR · v0.9.0 (tanda 1) · L · depende: M.12, M.17, M.18 · [docs/plan/version-1.0.md](plan/version-1.0.md)
+- [x] 1.0-5 (hecha el 23/11/2026: verde en GitHub en 6 min 56 s; rojo con una prueba rota) CI en GitHub Actions: build, test, format:check y Playwright en Chromium, Firefox y WebKit (y dos teléfonos emulados) en cada PR · v0.9.0 (tanda 1) · L · depende: M.12, M.17, M.18 · [docs/plan/version-1.0.md](plan/version-1.0.md)
 - [ ] 1.0-6 Revisión completa de la API pública (lo que queda fijo en la 1.0), con las últimas rupturas · v0.9.0 (tanda 2) · L · depende: — · [docs/plan/version-1.0.md](plan/version-1.0.md)
 - [ ] 1.0-7 Nombres inconsistentes (`success` de Input OTP, `min`/`max` frente a `minDate`/`maxDate`, `mimi-date-range` y `MimiDateRangePicker`, `MIMI_DATE_PICKER_TEXT`); **RUPTURA** · v0.9.0 (tanda 2) · M · depende: 1.0-6 · [docs/plan/version-1.0.md](plan/version-1.0.md)
 - [ ] 1.0-8 Data Table: `density` y `size` · v0.9.0 (tanda 2) · S · depende: 1.0-6 · [docs/plan/version-1.0.md](plan/version-1.0.md)
