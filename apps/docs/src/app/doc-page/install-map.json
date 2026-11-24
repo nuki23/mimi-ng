@@ -64,6 +64,7 @@
       "option-list",
       "pagination",
       "select",
+      "sheet",
       "table",
       "toggle-group",
       "utils/field-state",
