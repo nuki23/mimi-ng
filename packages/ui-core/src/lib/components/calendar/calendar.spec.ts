@@ -154,6 +154,10 @@ describe('MimiCalendar', { timeout: 20_000 }, () => {
     expect(weekend.getAttribute('aria-label')).toBe('26 de septiembre de 2026, no disponible');
     expect(weekend.classList).toContain('line-through');
     expect(cell('2026-08-31').hasAttribute('data-outside')).toBe(true);
+    // Un día de otro mes se puede elegir: su texto cumple 4,5:1 (text-muted-foreground, sin
+    // opacidad encima; con opacity-55 daba 3,2:1 en oscuro; axe, color-contrast; M.15).
+    expect(cell('2026-08-31').classList).toContain('text-muted-foreground');
+    expect([...cell('2026-08-31').classList].some((c) => c.startsWith('opacity-'))).toBe(false);
     expect(cell('2026-09-01').getAttribute('tabindex')).toBe('-1');
   });
 
@@ -271,7 +275,8 @@ describe('MimiCalendar', { timeout: 20_000 }, () => {
     expect(cell('2026-09-18').parentElement!.className).toContain('rounded-e-');
     expect(cell('2026-09-20').parentElement!.className).not.toContain('--mimi-date-range');
     expect(host.querySelector('button[data-slot="title"]')).toBeNull();
-    expect(host.querySelector('[data-slot="go-today"]')).toBeNull();
+    // El mismo pie que en una fecha (Date Picker y Date Range de la misma familia; 23/11/2026).
+    expect(host.querySelector('[data-slot="go-today"]')).not.toBeNull();
     cell('2026-09-22').click();
     await settle(fixture);
     expect(h.picks).toEqual(['2026-09-22']);

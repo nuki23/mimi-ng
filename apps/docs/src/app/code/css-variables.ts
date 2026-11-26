@@ -17,7 +17,12 @@ import { COMPONENT_TOKENS, type TokenComponent } from './component-tokens';
       >), salvo las de «Solo en CSS». Si no las defines, se usa la de «Hereda de» y, al final, el
       valor por defecto.
     </p>
-    <div class="overflow-x-auto rounded-card border">
+    <div
+      class="overflow-x-auto rounded-card border"
+      tabindex="0"
+      role="region"
+      aria-label="Variables CSS"
+    >
       <table class="w-full text-left text-sm">
         <thead class="bg-muted text-muted-foreground">
           <tr>

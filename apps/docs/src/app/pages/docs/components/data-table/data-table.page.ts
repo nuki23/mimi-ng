@@ -5,6 +5,9 @@ import { DataTableSelectionExample } from './examples/data-table-selection.examp
 import { DataTableServerExample } from './examples/data-table-server.example';
 import { DataTableSizesExample } from './examples/data-table-sizes.example';
 import { DataTableStatesExample } from './examples/data-table-states.example';
+import { DataTablePhoneExample } from './examples/data-table-phone.example';
+// @ts-expect-error
+import phoneSource from './examples/data-table-phone.example' with { loader: 'text' };
 // El código de cada ejemplo se importa también como texto: la pestaña Código muestra el
 // archivo real. TypeScript todavía no tipa los import attributes (spec, sección 10).
 // @ts-expect-error
@@ -136,6 +139,18 @@ export const DATA_TABLE_PAGE: DocPage = {
           customersFile,
         ],
       },
+      {
+        id: 'phone',
+        title: 'En el teléfono',
+        sentence:
+          'Debajo de 640 px, cada fila es una tarjeta con casilla y acciones; buscar, filtrar y ordenar van en una hoja.',
+        component: DataTablePhoneExample,
+        source: phoneSource as string,
+        files: [
+          { name: 'data-table-phone.example.ts', code: phoneSource as string },
+          customersFile,
+        ],
+      },
     ],
   },
   accessibility: {
@@ -145,7 +160,7 @@ export const DATA_TABLE_PAGE: DocPage = {
       'La columna ordenada lleva `aria-sort`; la flecha de detalle, `aria-expanded` y `aria-controls`.',
       'Cada casilla se llama «Seleccionar …» con el valor de la primera columna; la del encabezado marca la página, con estado parcial.',
       'Las filas elegidas, el rango al buscar o filtrar y «Cargando…» se anuncian en una región de estado; al cargar, la tabla lleva `aria-busy`.',
-      'Dale nombre con `aria-label`; los botones de solo ícono de tus plantillas también lo necesitan.',
+      'Dale nombre con `aria-label`; los botones de solo ícono de tus plantillas también lo necesitan. En el teléfono, la tarjeta sigue siendo una tabla (roles explícitos y encabezados ocultos a la vista).',
     ],
     more: [
       'La fila elegida lleva `data-selected` (para tu CSS), no `aria-selected`: la tabla no es un `grid` y el estado lo anuncia su casilla, que está marcada.',
@@ -183,6 +198,13 @@ export const DATA_TABLE_PAGE: DocPage = {
         type: 'boolean',
         default: 'true',
         description: 'Barra con búsqueda, chips de filtro y densidad.',
+      },
+      {
+        name: 'mobile',
+        type: "'stack' | 'scroll'",
+        default: "'stack' (o el de provideMimiTable)",
+        description:
+          'Debajo de 640 px: cada fila como tarjeta, o scroll lateral con la primera columna fija.',
       },
       {
         name: 'loading',

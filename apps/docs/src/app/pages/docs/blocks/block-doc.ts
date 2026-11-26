@@ -192,7 +192,12 @@ export interface BlockApiRow {
       <h2 id="api" class="mt-7 border-b pb-2.5 text-2xl font-bold tracking-[-0.02em]">API</h2>
       @for (table of tables(); track table.title) {
         @if (table.rows.length > 0) {
-          <div class="overflow-x-auto rounded-card border">
+          <div
+            class="overflow-x-auto rounded-card border"
+            tabindex="0"
+            role="region"
+            [attr.aria-label]="table.title"
+          >
             <table class="w-full text-left text-sm">
               <thead class="bg-muted text-muted-foreground">
                 <tr>

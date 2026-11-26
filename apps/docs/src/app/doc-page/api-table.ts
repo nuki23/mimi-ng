@@ -14,6 +14,14 @@ interface Column {
   muted?: boolean;
 }
 
+/** Nombre de la región con scroll de cada tabla (los títulos de la plantilla). */
+const REGION_LABELS: Record<Kind, string> = {
+  inputs: 'Entradas',
+  outputs: 'Salidas',
+  parts: 'Piezas',
+  service: 'Servicio',
+};
+
 /** Las columnas fijas de cada tabla (regla 10 de la plantilla). */
 const COLUMNS: Record<Kind, Column[]> = {
   inputs: [
@@ -44,7 +52,13 @@ const COLUMNS: Record<Kind, Column[]> = {
   selector: 'app-api-table',
   imports: [DocText],
   template: `
-    <div class="overflow-x-auto rounded-card border">
+    <!-- Con scroll lateral en el teléfono: foco y nombre para recorrerla con el teclado (M.15). -->
+    <div
+      class="overflow-x-auto rounded-card border"
+      tabindex="0"
+      role="region"
+      [attr.aria-label]="regionLabel()"
+    >
       <table class="w-full text-left text-sm" [attr.data-kind]="kind()">
         <thead class="bg-muted text-muted-foreground">
           <tr>
@@ -84,6 +98,7 @@ export class ApiTable {
   readonly rows = input.required<readonly Row[]>();
 
   protected readonly columns = computed(() => COLUMNS[this.kind()]);
+  protected readonly regionLabel = computed(() => REGION_LABELS[this.kind()]);
 
   protected cell(row: Row, key: Key): string {
     return (row as Partial<Record<Key, string>>)[key] ?? '';

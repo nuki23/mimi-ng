@@ -115,7 +115,7 @@ describe('MimiDateRangePicker', { timeout: 20_000 }, () => {
     await open('plain');
     expect(panel()!.getAttribute('aria-label')).toBe('Elegir periodo');
     expect(document.activeElement).toBe(cell('2026-09-15'));
-    expect(help().textContent?.trim()).toBe('Haz clic en un día para empezar un periodo nuevo.');
+    expect(help().textContent?.trim()).toBe('Elige un día para empezar un periodo nuevo.');
     await click('2026-09-14');
     expect(h.range()).toBeNull();
     expect(help().textContent?.trim()).toBe('Elige el día final.');
@@ -128,7 +128,10 @@ describe('MimiDateRangePicker', { timeout: 20_000 }, () => {
       '5 días',
     );
     // La descripción del botón separa la fecha de los días.
-    const description = document.getElementById(trigger('plain').getAttribute('aria-describedby')!);
+    // El primer id es el valor; el segundo, «obligatorio» (vacío si no lo es).
+    const description = document.getElementById(
+      trigger('plain').getAttribute('aria-describedby')!.split(' ')[0],
+    );
     expect(description!.textContent?.replace(/\s+/g, ' ').trim()).toBe(
       '14 sept 2026 – 18 sept 2026, 5 días',
     );
@@ -198,7 +201,13 @@ describe('MimiDateRangePicker', { timeout: 20_000 }, () => {
     h.control.setValue(null);
     await settle(fixture);
     expect(trigger('reactive').getAttribute('aria-invalid')).toBe('true');
-    expect(trigger('signal').getAttribute('aria-required')).toBe('true');
+    // M.15 (axe, aria-allowed-attr): un <button> no admite aria-required; va en la descripción.
+    const t = trigger('signal');
+    expect(t.hasAttribute('aria-required')).toBe(false);
+    const described = (t.getAttribute('aria-describedby') ?? '').split(/\s+/);
+    expect(described.map((id) => document.getElementById(id)?.textContent?.trim())).toContain(
+      'obligatorio',
+    );
     await open('signal');
     await click('2026-09-05');
     await click('2026-09-04');

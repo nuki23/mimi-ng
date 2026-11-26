@@ -28,6 +28,8 @@ export interface MimiFileUploadText {
   rejected: (name: string, reason: string) => string;
   done: (name: string) => string;
   failed: (name: string, error: string) => string;
+  /** Descripción de la zona de un campo obligatorio (un `<button>` no admite `aria-required`). */
+  required: string;
 }
 
 export const MIMI_FILE_UPLOAD_TEXT_EN: MimiFileUploadText = {
@@ -47,6 +49,7 @@ export const MIMI_FILE_UPLOAD_TEXT_EN: MimiFileUploadText = {
   rejected: (name, reason) => `${name} not added: ${reason}`,
   done: (name) => `${name} uploaded`,
   failed: (name, error) => `${name} failed: ${error}`,
+  required: 'required',
 };
 
 export const MIMI_FILE_UPLOAD_TEXT_ES: MimiFileUploadText = {
@@ -68,6 +71,7 @@ export const MIMI_FILE_UPLOAD_TEXT_ES: MimiFileUploadText = {
   rejected: (name, reason) => `${name} no se agregó: ${reason}`,
   done: (name) => `${name} subido`,
   failed: (name, error) => `${name} con error: ${error}`,
+  required: 'obligatorio',
 };
 
 export const MIMI_FILE_UPLOAD_TEXT = new InjectionToken<MimiFileUploadText>(

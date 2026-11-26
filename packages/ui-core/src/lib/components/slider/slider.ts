@@ -47,7 +47,7 @@ export type MimiSliderShowValue = 'auto' | 'always' | 'never';
 export type MimiSliderValue = number | [number, number] | null;
 
 const THUMB_BASE = cn(
-  'absolute top-1/2 box-border -translate-y-1/2 cursor-grab rounded-full border-2',
+  'absolute top-1/2 box-border -translate-y-1/2 cursor-grab rounded-full border-2 mimi-touch',
   'size-[var(--mimi-slider-thumb-s,var(--mimi-slider-thumb-size,20px))] bg-[color:var(--mimi-slider-thumb,var(--mimi-thumb,var(--mimi-background)))]',
   'shadow-[shadow:var(--mimi-slider-thumb-shadow,var(--mimi-shadow-neutral))]',
   '[transition:box-shadow_.2s_ease,scale_.15s_cubic-bezier(.2,.8,.2,1)] motion-reduce:transition-none',

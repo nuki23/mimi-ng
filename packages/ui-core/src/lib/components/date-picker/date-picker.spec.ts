@@ -128,7 +128,10 @@ describe('MimiDatePicker', { timeout: 20_000 }, () => {
       'not-disabled:not-data-[readonly]:active:scale-(--mimi-press-scale)',
     );
     // El valor describe al botón (con aria-label, el lector lo lee igual).
-    const described = document.getElementById(button.getAttribute('aria-describedby')!);
+    // El primer id es el valor; el segundo, «obligatorio» (vacío si no lo es).
+    const described = document.getElementById(
+      button.getAttribute('aria-describedby')!.split(' ')[0],
+    );
     expect(described?.textContent?.trim()).toBe('Elige una fecha');
     expect(host('english').querySelector('button')!.textContent?.trim()).toBe('Sep 30, 2026');
   });
@@ -232,7 +235,13 @@ describe('MimiDatePicker', { timeout: 20_000 }, () => {
 
   it('Signal Forms y ngModel', async () => {
     const { h, fixture, trigger, cell, open } = await setup();
-    expect(trigger('signal').getAttribute('aria-required')).toBe('true');
+    // M.15 (axe, aria-allowed-attr): un <button> no admite aria-required; va en la descripción.
+    const t = trigger('signal');
+    expect(t.hasAttribute('aria-required')).toBe(false);
+    const described = (t.getAttribute('aria-describedby') ?? '').split(/\s+/);
+    expect(described.map((id) => document.getElementById(id)?.textContent?.trim())).toContain(
+      'obligatorio',
+    );
     await open('signal');
     cell('2026-09-18').click();
     await settle(fixture);

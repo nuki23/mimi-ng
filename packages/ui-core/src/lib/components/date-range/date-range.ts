@@ -103,7 +103,7 @@ let nextId = 0;
       [(open)]="open"
       [blocked]="readonly()"
       [presentation]="presentation()"
-      mobilePresentation="fullscreen"
+      mobilePresentation="sheet"
       [sheetTitle]="ariaLabel() || ''"
       (openChange)="onOpenChange($event)"
       aria-label="{{ texts.pickRange }}"
@@ -117,9 +117,8 @@ let nextId = 0;
         [disabled]="disabled()"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
-        [attr.aria-describedby]="valueId"
+        [attr.aria-describedby]="valueId + ' ' + requiredId"
         [attr.aria-invalid]="showInvalid() || null"
-        [attr.aria-required]="required() || null"
         [attr.aria-disabled]="readonly() || null"
         [attr.data-readonly]="readonly() ? '' : null"
         [attr.data-placeholder]="label() ? null : ''"
@@ -155,6 +154,12 @@ let nextId = 0;
             <span data-slot="days" class="shrink-0 text-xs text-muted-foreground">{{ days }}</span>
           }
         </span>
+        <!-- Un <button> no admite aria-required (axe, aria-allowed-attr; M.15): «obligatorio»
+             va en la descripción. Oculto: no forma parte del nombre. -->
+        <!-- Siempre presente (vacío si no es obligatorio): ver Date Picker (revisor de la 0.9.0). -->
+        <span [id]="requiredId" data-slot="required-text" hidden>{{
+          required() ? texts.required : ''
+        }}</span>
       </button>
       <ng-template mimiPopoverContent>
         @if (presets().length) {
@@ -180,7 +185,13 @@ let nextId = 0;
           </div>
         }
         <!-- En la pantalla completa, el panel no lleva relleno (p-0): lo pone cada parte. -->
-        <div class="flex flex-col gap-2" [class]="inSheet() ? 'px-4 pt-3' : calendarPadding">
+        <!-- En la hoja, el mismo relleno que Date Picker: el calendario queda igual de ancho. -->
+        <div class="flex flex-col gap-2" [class]="inSheet() ? sheetPadding : calendarPadding">
+          <!-- La ayuda, encima del calendario: el pie («Hoy», «Ir a hoy») cierra el panel, como
+               en Date Picker. -->
+          <span data-slot="help" class="text-xs text-muted-foreground" aria-live="polite">{{
+            startPick() ? texts.pickEnd : texts.pickStart
+          }}</span>
           <mimi-calendar
             mode="range"
             [fill]="inSheet()"
@@ -194,9 +205,6 @@ let nextId = 0;
             [weekStart]="weekStart()"
             (datePick)="pickDay($event)"
           />
-          <span data-slot="help" class="text-xs text-muted-foreground" aria-live="polite">{{
-            startPick() ? texts.pickEnd : texts.pickStart
-          }}</span>
         </div>
       </ng-template>
     </mimi-popover>
@@ -267,9 +275,13 @@ export class MimiDateRangePicker
    */
   protected readonly inSheet = computed(() => this.popover().presentationMode() !== 'popover');
   protected readonly calendarPadding = 'p-[var(--mimi-date-padding,12px)]';
+  protected readonly sheetPadding =
+    'px-[var(--mimi-date-padding,12px)] pt-3 pb-[var(--mimi-date-padding,12px)]';
   protected readonly presetsClasses = computed(() =>
     this.inSheet()
-      ? 'flex w-full flex-row flex-wrap gap-1.5 border-b border-border px-4 pb-3'
+      ? // En la hoja, una sola fila que se desliza de lado (el alto es del calendario; antes, con
+        // flex-wrap, los atajos ocupaban dos o tres filas). Sin borde: la hoja ya separa.
+        'flex w-full shrink-0 flex-row flex-nowrap gap-1.5 overflow-x-auto overscroll-x-contain px-[var(--mimi-date-padding,12px)] pb-1 [scrollbar-width:none]'
       : 'flex w-[var(--mimi-date-presets-width,130px)] shrink-0 flex-col gap-0.5 border-e border-border p-2',
   );
   readonly fieldState = injectFieldState();
@@ -280,6 +292,7 @@ export class MimiDateRangePicker
   private readonly baseId = `mimi-date-range-${nextId++}`;
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly valueId = `${this.baseId}-value`;
+  protected readonly requiredId = `${this.baseId}-required`;
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly open = signal(false);
@@ -288,8 +301,8 @@ export class MimiDateRangePicker
   protected readonly presetOn = PRESET.on;
   protected readonly presetOff = PRESET.off;
   /** En la fila de la pantalla completa, cada atajo con borde y 36px de alto (para el dedo). */
-  protected readonly sheetPresetOn = cn(PRESET.on, 'h-9 border border-border px-3');
-  protected readonly sheetPresetOff = cn(PRESET.off, 'h-9 border border-border px-3');
+  protected readonly sheetPresetOn = cn(PRESET.on, 'h-9 shrink-0 border border-border px-3');
+  protected readonly sheetPresetOff = cn(PRESET.off, 'h-9 shrink-0 border border-border px-3');
 
   protected readonly lang = computed(() => this.locale() || this.defaultLocale);
   protected readonly classes = computed(() => cn(MIMI_DATE_TRIGGER_CLASSES, this.userClass()));

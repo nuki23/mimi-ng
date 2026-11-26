@@ -64,7 +64,7 @@ const paginationVariants = cva(
 
 // La escala vive en el tema (`[data-size]` en el anfitrión): alto del botón e ícono (16/18/20 px).
 const ARROW_CLASSES =
-  'size-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))] rounded-full [&_svg]:size-[calc(var(--mimi-size-icon,0.875rem)_+_0.125rem)]';
+  'relative mimi-touch size-[var(--mimi-pagination-item-size,var(--mimi-size-height,2rem))] rounded-full [&_svg]:size-[calc(var(--mimi-size-icon,0.875rem)_+_0.125rem)]';
 // 0,9 (la escala pequeña del tema); deshabilitado, sin escala (también con Espacio).
 const ARROW_PRESS = 'active:scale-(--mimi-press-scale-sm) aria-disabled:active:scale-100';
 

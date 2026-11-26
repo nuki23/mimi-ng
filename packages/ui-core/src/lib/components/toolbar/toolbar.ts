@@ -61,7 +61,7 @@ const toolbarVariants = cva(
 );
 
 const ITEM_CLASSES = cn(
-  'relative inline-flex size-[var(--mimi-toolbar-item-s,var(--mimi-toolbar-item-size,40px))] shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-foreground',
+  'relative mimi-touch inline-flex size-[var(--mimi-toolbar-item-s,var(--mimi-toolbar-item-size,40px))] shrink-0 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent p-0 text-foreground',
   '[&_svg]:size-[var(--mimi-toolbar-icon,18px)] [&_svg]:shrink-0',
   // Las transiciones del diseño; con movimiento reducido, solo los colores.
   '[transition:background-color_.2s_ease,color_.2s_ease,box-shadow_.35s_cubic-bezier(.2,.8,.2,1),scale_.15s_cubic-bezier(.2,.8,.2,1)]',

@@ -36,6 +36,20 @@ export class HighlighterService {
       lang,
       themes: { light: 'github-light', dark: 'github-dark' },
       defaultColor: false,
+      // Contraste de 4,5:1 sobre el fondo del código (bg-muted; axe, color-contrast; M.15). En
+      // oscuro (#26252D), los comentarios de github-dark (#6A737D) daban 3,14:1 → #959DA5, 5,5:1.
+      // En claro (#F5F4FA), cuatro colores de github-light no llegaban: rojo #D73A49 (4,18:1),
+      // gris #6A737D (4,4:1), verde #22863A (4,23:1) y naranja #E36209 (3,2:1); se cambian por
+      // los de la paleta actual de GitHub: #B31D28, #57606A, #116329 y #953800 (5,8 a 6,8:1).
+      colorReplacements: {
+        'github-dark': { '#6a737d': '#959da5' },
+        'github-light': {
+          '#d73a49': '#b31d28',
+          '#6a737d': '#57606a',
+          '#22863a': '#116329',
+          '#e36209': '#953800',
+        },
+      },
       // Solo los <span>: el <pre> es nuestro y usa el fondo del tema de Mimi (bg-muted).
       structure: 'inline',
     });

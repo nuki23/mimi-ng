@@ -1,9 +1,32 @@
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 import { CodeBlock } from './code-block';
 import { HighlighterService } from './highlighter.service';
 
+@Component({
+  imports: [CodeBlock],
+  template: `<app-code-block code="ng add @mimi-ng/cli" lang="bash" />`,
+})
+class StaticLangHost {}
+
 describe('CodeBlock', () => {
+  it('la entrada lang no queda como atributo lang de HTML (axe, valid-lang; M.15)', async () => {
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: HighlighterService,
+          useValue: { highlight: () => new Promise(() => undefined) },
+        },
+      ],
+    });
+    const fixture = TestBed.createComponent(StaticLangHost);
+    await fixture.whenStable();
+    const host = (fixture.nativeElement as HTMLElement).querySelector('app-code-block')!;
+    expect(host.hasAttribute('lang')).toBe(false);
+    expect(host.getAttribute('data-lang')).toBe('bash');
+  });
+
   it('muestra el código sin colores mientras Shiki no terminó de cargar', async () => {
     TestBed.configureTestingModule({
       providers: [

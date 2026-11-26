@@ -14,7 +14,14 @@ Informes del modo autónomo: `docs/auto/0.8.0-tanda1-2026-11-16.md`, `docs/auto/
 
 ## Publicación de la 0.8.0 (registro)
 
-Vacío hasta que el usuario publique (`docs/proceso/release.md`).
+La hizo el usuario (`docs/proceso/release.md`). Los datos los obtuvo Claude el 23/11/2026 de npm y de git (no de lo que dijo el usuario):
+
+- `@mimi-ng/cli@0.8.0` publicada en npm el `2026-11-23T21:44:17.549Z` (UTC; las 16:44 del 23/11/2026 en Colombia, UTC−5), según `npm view @mimi-ng/cli dist-tags time --json`.
+- `dist-tags`: `{ latest: '0.8.0' }`. Versiones: 0.1.0, 0.1.1, 0.2.0, 0.3.0, 0.4.0, 0.5.0, 0.6.0, 0.7.0 y 0.8.0.
+- Paquete publicado: 193 archivos, 1 375 244 bytes sin empaquetar, shasum `22a846025c4400cf94b31fe71d9e2119d3f3dd1f` (`npm view @mimi-ng/cli@0.8.0 dist`): el mismo shasum y los mismos 193 archivos que el `npm pack` de la preparación (`docs/auto/release-0.8.0-2026-11-23.md`).
+- Etiqueta anotada `v0.8.0` (objeto `b6164a5`) sobre `34d356a` (`Merge pull request #26 from nuki23/auto/release-0.8.0-2026-11-23`, la fusión en `main`; el último commit de la rama es `14f01a5`), según `git log -1 --oneline v0.8.0`; `git ls-remote --tags origin` la confirma.
+- Release de GitHub: la creó el usuario (dato del usuario, 23/11/2026).
+- Prueba desde npm: el usuario instaló y probó la 0.8.0 desde npm (dato del usuario, 23/11/2026). Los escenarios con el `.tgz` real, antes de publicar, están en `docs/auto/release-0.8.0-2026-11-23.md`.
 
 ## Grupo 4 → v0.8.0: estructura
 

@@ -98,9 +98,8 @@ const toDate = (value: unknown): MimiDate | undefined =>
         [disabled]="disabled()"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
-        [attr.aria-describedby]="valueId"
+        [attr.aria-describedby]="valueId + ' ' + requiredId"
         [attr.aria-invalid]="showInvalid() || null"
-        [attr.aria-required]="required() || null"
         [attr.aria-disabled]="readonly() || null"
         [attr.data-readonly]="readonly() ? '' : null"
         [attr.data-placeholder]="label() ? null : ''"
@@ -126,6 +125,14 @@ const toDate = (value: unknown): MimiDate | undefined =>
           [id]="valueId"
           >{{ label() || placeholder() }}</span
         >
+        <!-- Un <button> no admite aria-required (axe, aria-allowed-attr; M.15): «obligatorio»
+             va en la descripción. Oculto: no forma parte del nombre. -->
+        <!-- Siempre en el DOM y siempre en el aria-describedby (vacío si no es obligatorio): si
+             el atributo cambiara con required(), Angular lo reescribiría entero y borraría los
+             ids que agrega Form Field (la ayuda, el error; revisor de la 0.9.0). -->
+        <span [id]="requiredId" data-slot="required-text" hidden>{{
+          required() ? texts.required : ''
+        }}</span>
       </button>
       <ng-template mimiPopoverContent>
         <mimi-calendar
@@ -215,6 +222,7 @@ export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFi
   private readonly baseId = `mimi-date-picker-${nextId++}`;
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly valueId = `${this.baseId}-value`;
+  protected readonly requiredId = `${this.baseId}-required`;
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly open = signal(false);

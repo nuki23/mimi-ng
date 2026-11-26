@@ -265,9 +265,11 @@
         "dropdown-menu",
         "input",
         "pagination",
+        "sheet",
         "table",
         "toggle-group",
         "utils/cn",
+        "utils/overlay-config",
         "utils/size"
       ]
     },
@@ -295,6 +297,7 @@
       "type": "component",
       "files": [
         "components/table/table.ts",
+        "components/table/table-config.ts",
         "components/table/table-state.ts",
         "components/table/index.ts"
       ],

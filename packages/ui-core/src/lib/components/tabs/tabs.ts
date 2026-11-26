@@ -262,7 +262,7 @@ const indicatorVariants = cva(
 
 const tabVariants = cva(
   [
-    'relative z-1 inline-flex min-w-0 cursor-pointer items-center justify-center border-0 bg-transparent whitespace-nowrap',
+    'relative mimi-touch z-1 inline-flex min-w-0 cursor-pointer items-center justify-center border-0 bg-transparent whitespace-nowrap',
     'font-medium text-[color:var(--mimi-tabs-fg,var(--mimi-muted-foreground))] mimi-transition',
     'aria-selected:font-semibold aria-selected:text-[color:var(--mimi-tabs-active-fg,var(--mimi-foreground))]',
     'not-aria-disabled:hover:text-[color:var(--mimi-tabs-active-fg,var(--mimi-foreground))] not-aria-disabled:active:scale-(--mimi-press-scale)',

@@ -235,7 +235,7 @@ const HOST_CLASSES =
   'pointer-events-none fixed inset-auto z-[2147483647] m-0 h-auto w-[min(var(--mimi-toast-w,var(--mimi-toast-width,340px)),calc(100vw_-_2*var(--mimi-toast-offset,16px)))] overflow-visible border-0 bg-transparent p-0 text-popover-foreground';
 
 const CLOSE_CLASSES = cn(
-  'absolute top-2 right-2 inline-flex size-6 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] bg-transparent',
+  'mimi-touch absolute top-2 right-2 inline-flex size-6 cursor-pointer items-center justify-center rounded-[var(--mimi-radius-sm)] bg-transparent',
   'mimi-transition active:scale-(--mimi-press-scale-sm) [&_svg]:size-3.5',
   buttonFocusStyles,
 );

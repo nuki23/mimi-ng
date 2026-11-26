@@ -226,7 +226,7 @@ const BUTTON_CLASSES =
   'flex h-full min-w-0 flex-1 cursor-pointer items-center gap-2 bg-transparent text-left outline-none after:absolute after:inset-0 disabled:cursor-not-allowed';
 
 const CLEAR_CLASSES = cn(
-  'pointer-events-auto relative z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
+  'pointer-events-auto relative mimi-touch-y z-10 inline-flex size-6 shrink-0 cursor-pointer items-center justify-center rounded-full bg-muted text-muted-foreground',
   'mimi-transition hover:bg-accent hover:text-foreground active:scale-(--mimi-press-scale-sm)',
   buttonFocusStyles,
   // La X solo se ve con el ratón encima, el foco que llegó por teclado o el panel abierto; en

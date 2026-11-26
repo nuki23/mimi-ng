@@ -53,6 +53,11 @@ let nextId = 0;
     @if (hint()) {
       <p data-slot="hint" [id]="hintId" [class]="helpClasses">{{ hint() }}</p>
     }
+    @if (required()) {
+      <!-- Para los controles que son un <button> (Date Picker, Color Picker…), que no admiten
+           aria-required (axe, aria-allowed-attr; M.15): «obligatorio» va en su descripción. -->
+      <span data-slot="required-text" [id]="requiredId" hidden>{{ requiredText() }}</span>
+    }
     @if (!ownError()) {
       <mimi-form-error />
     }
@@ -95,6 +100,10 @@ export class MimiFormField implements MimiFormFieldContext {
   readonly errorId = `${this.baseId}-error`;
   protected readonly descriptionId = `${this.baseId}-description`;
   protected readonly hintId = `${this.baseId}-hint`;
+  protected readonly requiredId = `${this.baseId}-required`;
+  protected readonly requiredText = computed(() =>
+    mimiErrorText({ kind: 'required', params: {} }, this.messages),
+  );
   protected readonly helpClasses = 'text-[0.8125rem] text-muted-foreground';
   /** id del control (el suyo o el que le asigna el form-field). */
   protected readonly controlId = signal<string | null>(null);
@@ -142,20 +151,28 @@ export class MimiFormField implements MimiFormFieldContext {
       const describedBy = (element.getAttribute('aria-describedby') ?? '')
         .split(/\s+/)
         .filter(Boolean);
+      // Un <button> no admite aria-required (axe, aria-allowed-attr; M.15): en su lugar, el texto
+      // «obligatorio» va en su descripción.
+      const isButton = element.tagName === 'BUTTON' || element.getAttribute('role') === 'button';
+      // Si el control ya dice «obligatorio» (su propio `required`), no se repite.
+      const ownRequired = !!element
+        .querySelector('[data-slot="required-text"]')
+        ?.textContent?.trim();
       // La descripción y la ayuda, antes del error; cada id una sola vez.
       const wanted = [
         this.description() ? this.descriptionId : null,
         this.hint() ? this.hintId : null,
+        this.required() && isButton && !ownRequired ? this.requiredId : null,
         this.errorId,
       ].filter((id): id is string => !!id);
       // Los ids de la descripción y la ayuda que ya no existen se quitan (no quedan colgando).
-      const ours = [this.descriptionId, this.hintId];
+      const ours = [this.descriptionId, this.hintId, this.requiredId];
       const kept = describedBy.filter((id) => !ours.includes(id) || wanted.includes(id));
       const missing = wanted.filter((id) => !kept.includes(id));
       if (missing.length || kept.length !== describedBy.length) {
         element.setAttribute('aria-describedby', [...kept, ...missing].join(' '));
       }
-      if (this.required() && !element.hasAttribute('aria-required')) {
+      if (this.required() && !isButton && !element.hasAttribute('aria-required')) {
         element.setAttribute('aria-required', 'true');
       }
     });

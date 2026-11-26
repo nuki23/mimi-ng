@@ -154,9 +154,8 @@ let nextId = 0;
       [disabled]="disabled()"
       [attr.aria-disabled]="readonly() ? 'true' : null"
       [attr.aria-labelledby]="labelledBy()"
-      [attr.aria-describedby]="hint() ? hintId : null"
+      [attr.aria-describedby]="describedBy()"
       [attr.aria-invalid]="showInvalid() || null"
-      [attr.aria-required]="required() || null"
       [attr.data-state]="over() ? 'over' : 'idle'"
       (click)="openPicker()"
       (dragenter)="onDragEnter($event)"
@@ -195,6 +194,12 @@ let nextId = 0;
           >{{ hint() }}</span
         >
       }
+      <!-- Un <button> no admite aria-required (axe, aria-allowed-attr; M.15): «obligatorio»
+           va en la descripción. Oculto: no forma parte del nombre. -->
+      <!-- Siempre presente (vacío si no es obligatorio): ver Date Picker (revisor de la 0.9.0). -->
+      <span [id]="requiredId" data-slot="required-text" hidden>{{
+        required() ? texts.required : ''
+      }}</span>
     </button>
     @if (ariaLabel()) {
       <span [id]="labelId" hidden>{{ ariaLabel() }}</span>
@@ -287,6 +292,11 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
     [this.ariaLabelledby(), this.ariaLabel() ? this.labelId : null, this.headingId]
       .filter(Boolean)
       .join(' '),
+  );
+  protected readonly requiredId = `${this.baseId}-required`;
+  protected readonly describedBy = computed(() =>
+    // Sin depender de required() (el texto va vacío si no hace falta): ver Date Picker.
+    [this.hint() ? this.hintId : null, this.requiredId].filter(Boolean).join(' '),
   );
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
@@ -588,7 +598,7 @@ const ITEM = {
       variant="ghost"
       size="icon"
       data-slot="remove"
-      class="size-[30px] text-muted-foreground hover:bg-destructive-soft hover:text-destructive-soft-foreground [&_svg]:size-4"
+      class="relative mimi-touch size-[30px] text-muted-foreground hover:bg-destructive-soft hover:text-destructive-soft-foreground [&_svg]:size-4"
       [attr.aria-label]="texts.remove(fileName())"
       (click)="onRemove()"
     >

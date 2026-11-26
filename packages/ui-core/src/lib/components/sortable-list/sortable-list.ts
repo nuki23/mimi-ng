@@ -447,7 +447,7 @@ export class MimiSortableList<T = unknown> {
     'box-border min-h-[var(--mimi-sortable-item-h,var(--mimi-sortable-item-height,56px))] list-none rounded-[var(--mimi-sortable-radius,var(--mimi-radius))] border-2 border-dashed border-[color:var(--mimi-sortable-drop,var(--mimi-ring))] bg-[color:var(--mimi-sortable-drop-bg,var(--mimi-primary-subtle))]';
 
   protected readonly handleClasses = cn(
-    'inline-flex h-9 w-7 shrink-0 cursor-grab touch-none items-center justify-center rounded-sm border-0 bg-transparent p-0 text-muted-foreground',
+    'relative mimi-touch inline-flex h-9 w-7 shrink-0 cursor-grab touch-none items-center justify-center rounded-sm border-0 bg-transparent p-0 text-muted-foreground',
     'mimi-transition hover:bg-[color:var(--mimi-sortable-handle-hover,var(--mimi-accent))] hover:text-foreground',
     'aria-pressed:bg-[color:var(--mimi-sortable-handle-hover,var(--mimi-accent))] aria-pressed:text-foreground data-[dragging]:bg-[color:var(--mimi-sortable-handle-hover,var(--mimi-accent))] data-[dragging]:text-foreground',
     'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
