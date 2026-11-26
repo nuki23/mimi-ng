@@ -44,10 +44,13 @@ Lo que dejan (resultados, capturas y trazas de un fallo, el informe y la auditor
 
 ## La CI
 
-`.github/workflows/ci.yml`, en cada PR y en cada push a `main`:
+`.github/workflows/ci.yml`, en cada PR, en cada push a `main` y en cada push a una rama `auto/…` **sin PR abierto** (una sola corrida por commit; tanda 2 de la 0.9.0):
 
+0. **¿Corre la CI?**: en un push a `auto/…`, busca un PR abierto de esa rama (`gh pr list`, con permiso de solo lectura); si lo hay, el resto no corre (lo corre el evento del PR). Los trabajos de esos push llevan « · rama» en el nombre, para que un trabajo saltado no tenga el nombre de un check que exige `main`. Al abrir el PR, el evento del PR vuelve a correr el último commit (una vez).
 1. **Formato y build**: `pnpm install --frozen-lockfile`, `pnpm format:check`, `pnpm build` (con los presupuestos de `check-initial-js.mjs`); sube el sitio como artefacto.
 2. **Pruebas**: `pnpm test` (docs, ui-core y la CLI), en paralelo con el build.
 3. **Playwright**: un trabajo por proyecto, con el sitio del paso 1 y su navegador instalado por Playwright. Si falla, el artefacto `playwright-<proyecto>` trae el informe, las capturas y las trazas.
 
-Lo que hace el usuario en GitHub (el agente no puede): en **Settings → Branches**, una regla para `main` que exija los checks «Formato y build», «Pruebas (docs, ui-core y CLI)» y los cinco «Playwright (…)» antes de fusionar.
+Lo que hace el usuario en GitHub (el agente no puede): en **Settings → Branches**, una regla para `main` que exija los checks «Formato y build», «Pruebas (docs, ui-core y CLI)» y los cinco «Playwright (…)» antes de fusionar (hecho por el usuario el 26/11/2026). **No se cambian esos nombres** sin avisar al usuario: la regla dejaría de reconocerlos.
+
+Las acciones van en sus versiones con Node 24 (`actions/checkout@v6`, `actions/setup-node@v6`, `pnpm/action-setup@v6`, `actions/upload-artifact@v7`, `actions/download-artifact@v7`): con las v4, GitHub avisaba en cada trabajo que Node 20 está obsoleto.

@@ -12,16 +12,11 @@ const AXE_SOURCE = readFileSync(join(process.cwd(), 'node_modules/axe-core/axe.m
 /**
  * Reglas desactivadas, cada una con su motivo (M.15: «una por una, con su motivo escrito»).
  */
-export const DISABLED_RULES: Record<string, string> = {
-  // Regla experimental de axe (etiqueta `experimental`) para el criterio 2.5.3, «Etiqueta en el
-  // nombre». Marca los disparadores cuyo texto visible es el valor elegido y no su etiqueta: Date
-  // Picker («30 sept 2026», con el nombre «Entrega»), Date Range y Color Picker
-  // (`mimi-color-input`), y la zona de File Upload, cuyo nombre es su título y la pista va como
-  // descripción. El 2.5.3 habla de la etiqueta: el valor no lo es (la etiqueta visible está
-  // fuera, en el Form Field, y es la que forma el nombre). Revisado el 23/11/2026 (M.15).
-  'label-content-name-mismatch':
-    'experimental; el texto visible de esos disparadores es el valor, no la etiqueta (2.5.3)',
-};
+// Ninguna. `label-content-name-mismatch` (2.5.3, experimental en axe) estuvo desactivada en la
+// tanda 1 de la 0.9.0; el usuario la volvió a activar el 26/11/2026 y los disparadores de Date
+// Picker, Date Range y Color Picker y la zona de File Upload llevan ahora el texto visible en su
+// nombre. Una excepción nueva va aquí, una por una, con su motivo.
+export const DISABLED_RULES: Record<string, string> = {};
 
 export interface AxeViolation {
   id: string;

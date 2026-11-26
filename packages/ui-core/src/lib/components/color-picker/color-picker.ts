@@ -632,9 +632,8 @@ let nextInputId = 0;
         [disabled]="disabled()"
         [attr.aria-disabled]="readonly() || null"
         [attr.data-readonly]="readonly() ? '' : null"
-        [attr.aria-label]="ariaLabel() || null"
-        [attr.aria-labelledby]="ariaLabelledby() || null"
-        [attr.aria-describedby]="valueId + ' ' + requiredId"
+        [attr.aria-labelledby]="labelledBy()"
+        [attr.aria-describedby]="valueDescriptionId + ' ' + requiredId"
         [attr.aria-invalid]="showInvalid() || null"
       >
         <span
@@ -670,6 +669,9 @@ let nextInputId = 0;
         />
       </ng-template>
     </mimi-popover>
+    <!-- WCAG 2.5.3: el nombre lleva la etiqueta y el texto visible (ver Date Picker). -->
+    <span [id]="nameId" hidden>{{ ariaLabel() }}</span>
+    <span [id]="valueDescriptionId" hidden>{{ labelledBy() ? '' : value() || placeholder() }}</span>
   `,
   host: {
     class: 'block w-full min-w-0',
@@ -723,6 +725,13 @@ export class MimiColorInput implements FormValueControl<string>, MimiFieldContro
   private readonly baseId = `mimi-color-input-${nextInputId++}`;
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly valueId = `${this.baseId}-value`;
+  protected readonly nameId = `${this.baseId}-name`;
+  protected readonly valueDescriptionId = `${this.baseId}-value-description`;
+  /** La etiqueta (la del usuario, o `aria-label` en un texto oculto) y el valor visible. */
+  protected readonly labelledBy = computed(() => {
+    const label = this.ariaLabelledby() || (this.ariaLabel() ? this.nameId : '');
+    return label ? `${label} ${this.valueId}` : null;
+  });
   protected readonly requiredId = `${this.baseId}-required`;
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
   protected readonly open = signal(false);

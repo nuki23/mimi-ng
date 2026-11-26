@@ -37,12 +37,14 @@ describe('DatePickerPage', () => {
         expect(code).toContain("from '@/components/ui/");
         expect(code).toMatch(/export class DatePicker\w+Example/);
       }
-      // Cada botón tiene nombre: aria-label o una etiqueta.
+      // Cada botón tiene nombre: una etiqueta propia (aria-labelledby, con el valor visible; WCAG
+      // 2.5.3) o un <label for>.
       for (const button of Array.from(
         el.querySelectorAll<HTMLButtonElement>('mimi-date-picker button[aria-haspopup]'),
       )) {
+        const own = button.getAttribute('aria-labelledby')?.split(' ')[0];
         const named =
-          button.getAttribute('aria-label') ||
+          (own && document.getElementById(own)?.textContent?.trim()) ||
           (button.id && el.querySelector(`label[for="${button.id}"]`));
         expect(named, button.outerHTML).toBeTruthy();
       }

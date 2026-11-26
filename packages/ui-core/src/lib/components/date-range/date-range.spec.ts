@@ -127,14 +127,22 @@ describe('MimiDateRangePicker', { timeout: 20_000 }, () => {
     expect(trigger('plain').querySelector('[data-slot="days"]')!.textContent?.trim()).toBe(
       '5 días',
     );
-    // La descripción del botón separa la fecha de los días.
-    // El primer id es el valor; el segundo, «obligatorio» (vacío si no lo es).
-    const description = document.getElementById(
-      trigger('plain').getAttribute('aria-describedby')!.split(' ')[0],
+    // WCAG 2.5.3 (axe, label-content-name-mismatch): el nombre es la etiqueta y el texto visible,
+    // con la coma entre la fecha y los días; la descripción no lo repite.
+    const texts = (attr: string | null) =>
+      (attr ?? '')
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((id) => document.getElementById(id)?.textContent?.replace(/\s+/g, ' ').trim() ?? '')
+        .filter(Boolean)
+        .join(' ');
+    expect(trigger('plain').hasAttribute('aria-label')).toBe(false);
+    expect(texts(trigger('plain').getAttribute('aria-labelledby'))).toBe(
+      'Periodo del informe 14 sept 2026 – 18 sept 2026, 5 días',
     );
-    expect(description!.textContent?.replace(/\s+/g, ' ').trim()).toBe(
-      '14 sept 2026 – 18 sept 2026, 5 días',
-    );
+    expect(texts(trigger('plain').getAttribute('aria-describedby'))).toBe('');
+    // Un espacio de verdad antes de la coma (axe arma el texto visible con el de los nodos).
+    expect(trigger('plain').textContent).toContain('2026, 5 días');
   });
 
   it('si el segundo es anterior al inicio, se intercambian; un tercero empieza otro', async () => {

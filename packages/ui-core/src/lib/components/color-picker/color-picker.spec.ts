@@ -291,7 +291,15 @@ describe('MimiColorPicker', { timeout: 20_000 }, () => {
     });
     const { h, fixture, host } = await setup();
     const trigger = host('input').querySelector<HTMLButtonElement>('button')!;
-    expect(trigger.getAttribute('aria-label')).toBe('Color de marca');
+    // WCAG 2.5.3 (axe, label-content-name-mismatch): la etiqueta y el valor visible en el nombre.
+    expect(trigger.hasAttribute('aria-label')).toBe(false);
+    expect(
+      trigger
+        .getAttribute('aria-labelledby')!
+        .split(' ')
+        .map((id) => document.getElementById(id)!.textContent!.trim())
+        .join(' '),
+    ).toBe('Color de marca #22c55e');
     expect(trigger.getAttribute('aria-haspopup')).toBe('dialog');
     expect(trigger.textContent?.trim()).toBe('#22c55e');
     expect(

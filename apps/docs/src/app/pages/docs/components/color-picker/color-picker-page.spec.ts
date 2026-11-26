@@ -49,8 +49,10 @@ describe('ColorPickerPage', () => {
       for (const button of Array.from(
         el.querySelectorAll<HTMLButtonElement>('mimi-color-input button'),
       )) {
+        // Una etiqueta propia (aria-labelledby, con el valor visible; WCAG 2.5.3) o un <label for>.
+        const own = button.getAttribute('aria-labelledby')?.split(' ')[0];
         const named =
-          button.getAttribute('aria-label') ||
+          (own && document.getElementById(own)?.textContent?.trim()) ||
           (button.id && el.querySelector(`label[for="${button.id}"]`));
         expect(named, button.outerHTML).toBeTruthy();
       }

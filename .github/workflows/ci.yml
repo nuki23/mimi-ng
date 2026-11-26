@@ -4,6 +4,12 @@
 # el sitio compilado en tres motores de escritorio y dos teléfonos emulados.
 # Sin secretos ni permisos de escritura: solo lee el repo y sube artefactos (las capturas y el
 # informe de Playwright de un fallo, nunca al repo; CLAUDE.md, A10).
+#
+# Una sola corrida por commit (tanda 2 de la 0.9.0, pedido del usuario): un push a una rama
+# auto/… que ya tiene un PR abierto no corre nada (lo corre el evento del PR). Antes de abrir el
+# PR, el push sí corre todo. Los trabajos de esos push llevan « · rama» en el nombre, para que
+# los que se saltan no se confundan con los checks que exige main, que son los del PR (y los de
+# main): «Formato y build», «Pruebas (docs, ui-core y CLI)» y «Playwright (<proyecto>)».
 name: CI
 
 on:
@@ -23,34 +29,64 @@ env:
   CI: 'true'
 
 jobs:
+  gate:
+    name: ¿Corre la CI?
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+    outputs:
+      run: ${{ steps.check.outputs.run }}
+    steps:
+      - id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" != "push" ] || [ "$GITHUB_REF" = "refs/heads/main" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          open=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$BRANCH" --state open --json number --jq length)
+          if [ "$open" = "0" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::La rama $BRANCH tiene un PR abierto: la CI corre en el evento del PR."
+          fi
+
   build:
-    name: Formato y build
+    name: Formato y build${{ github.event_name == 'push' && github.ref != 'refs/heads/main' && ' · rama' || '' }}
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm format:check
       - run: pnpm build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: sitio
           path: dist/docs/browser
           retention-days: 3
 
   test:
-    name: Pruebas (docs, ui-core y CLI)
+    name: Pruebas (docs, ui-core y CLI)${{ github.event_name == 'push' && github.ref != 'refs/heads/main' && ' · rama' || '' }}
+    needs: gate
+    if: needs.gate.outputs.run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
           cache: pnpm
@@ -58,7 +94,7 @@ jobs:
       - run: pnpm test
 
   e2e:
-    name: Playwright (${{ matrix.project }})
+    name: Playwright (${{ matrix.project }})${{ github.event_name == 'push' && github.ref != 'refs/heads/main' && ' · rama' || '' }}
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -77,21 +113,21 @@ jobs:
           - project: iphone
             browser: webkit
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: sitio
           path: dist/docs/browser
       - run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
       - run: pnpm e2e --project=${{ matrix.project }}
       - if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: playwright-${{ matrix.project }}
           path: tmp/e2e

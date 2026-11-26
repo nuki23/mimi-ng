@@ -114,7 +114,6 @@ describe('MimiDatePicker', { timeout: 20_000 }, () => {
     const button = trigger('plain');
     expect(button.getAttribute('aria-haspopup')).toBe('dialog');
     expect(button.getAttribute('aria-expanded')).toBe('false');
-    expect(button.getAttribute('aria-label')).toBe('Fecha de entrega');
     expect(button.textContent?.trim()).toBe('Elige una fecha');
     expect(button.hasAttribute('data-placeholder')).toBe(true);
     expect(button.classList).toContain(
@@ -127,13 +126,27 @@ describe('MimiDatePicker', { timeout: 20_000 }, () => {
     expect(button.classList).toContain(
       'not-disabled:not-data-[readonly]:active:scale-(--mimi-press-scale)',
     );
-    // El valor describe al botón (con aria-label, el lector lo lee igual).
-    // El primer id es el valor; el segundo, «obligatorio» (vacío si no lo es).
-    const described = document.getElementById(
-      button.getAttribute('aria-describedby')!.split(' ')[0],
-    );
-    expect(described?.textContent?.trim()).toBe('Elige una fecha');
     expect(host('english').querySelector('button')!.textContent?.trim()).toBe('Sep 30, 2026');
+  });
+
+  it('WCAG 2.5.3: el nombre lleva la etiqueta y el texto visible (axe, label-content-name-mismatch)', async () => {
+    const { h, fixture, trigger } = await setup();
+    const texts = (attr: string | null) =>
+      (attr ?? '')
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+        .filter(Boolean)
+        .join(' ');
+    const button = trigger('plain');
+    // Con aria-label: la etiqueta (oculta) y el valor visible, por aria-labelledby.
+    expect(button.hasAttribute('aria-label')).toBe(false);
+    expect(texts(button.getAttribute('aria-labelledby'))).toBe('Fecha de entrega Elige una fecha');
+    // El valor ya está en el nombre: no se repite en la descripción.
+    expect(texts(button.getAttribute('aria-describedby'))).toBe('');
+    h.date.set('2026-09-22');
+    await settle(fixture);
+    expect(texts(button.getAttribute('aria-labelledby'))).toBe('Fecha de entrega 22 sept 2026');
   });
 
   it('abre un diálogo «Elegir fecha» con el foco en hoy; elegir cierra y devuelve el foco', async () => {

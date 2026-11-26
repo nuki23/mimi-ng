@@ -154,7 +154,7 @@ let nextId = 0;
       [disabled]="disabled()"
       [attr.aria-disabled]="readonly() ? 'true' : null"
       [attr.aria-labelledby]="labelledBy()"
-      [attr.aria-describedby]="describedBy()"
+      [attr.aria-describedby]="describedBy"
       [attr.aria-invalid]="showInvalid() || null"
       [attr.data-state]="over() ? 'over' : 'idle'"
       (click)="openPicker()"
@@ -187,7 +187,9 @@ let nextId = 0;
         }}</span
       >
       @if (hint()) {
-        <span
+        <!-- &ngsp;: un espacio de verdad entre el título y la pista (el flex no lo pinta). Sin él,
+             el texto visible que lee axe junta las dos palabras (label-content-name-mismatch). -->
+        &ngsp;<span
           [id]="hintId"
           data-slot="hint"
           class="text-[length:var(--mimi-upload-hint,0.78125rem)] text-muted-foreground"
@@ -287,17 +289,23 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   protected readonly hintId = `${this.baseId}-hint`;
   protected readonly headingId = `${this.baseId}-heading`;
   protected readonly labelId = `${this.baseId}-label`;
-  /** El nombre accesible contiene siempre el texto visible del título (WCAG 2.5.3). */
+  /**
+   * El nombre accesible contiene todo el texto visible de la zona, el título y la pista (WCAG
+   * 2.5.3; axe, label-content-name-mismatch): quien la activa por voz dice lo que ve.
+   */
   protected readonly labelledBy = computed(() =>
-    [this.ariaLabelledby(), this.ariaLabel() ? this.labelId : null, this.headingId]
+    [
+      this.ariaLabelledby(),
+      this.ariaLabel() ? this.labelId : null,
+      this.headingId,
+      this.hint() ? this.hintId : null,
+    ]
       .filter(Boolean)
       .join(' '),
   );
   protected readonly requiredId = `${this.baseId}-required`;
-  protected readonly describedBy = computed(() =>
-    // Sin depender de required() (el texto va vacío si no hace falta): ver Date Picker.
-    [this.hint() ? this.hintId : null, this.requiredId].filter(Boolean).join(' '),
-  );
+  /** Solo «obligatorio» (vacío si no lo es): la pista ya está en el nombre. */
+  protected readonly describedBy = this.requiredId;
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly over = signal(false);

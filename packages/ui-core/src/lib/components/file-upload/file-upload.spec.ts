@@ -152,10 +152,8 @@ describe('MimiFileUpload', () => {
     const z = zone('plain');
     expect(z.getAttribute('type')).toBe('button');
     expect(z.hasAttribute('aria-label')).toBe(false);
-    // El primer id es la pista; el segundo, «obligatorio» (vacío si no lo es).
-    expect(
-      document.getElementById(z.getAttribute('aria-describedby')!.split(' ')[0])?.textContent,
-    ).toBe('PNG, JPG o PDF · hasta 10 MB');
+    // La pista va en el nombre (WCAG 2.5.3, abajo); la descripción solo dice «obligatorio».
+    expect(z.getAttribute('aria-describedby')).toMatch(/-required$/);
     expect(z.textContent).toContain('Arrastra archivos o haz clic');
     expect(z.className).toContain('border-dashed');
     expect(z.className).toContain(
@@ -167,7 +165,7 @@ describe('MimiFileUpload', () => {
     expect(host('single').querySelector('input')!.multiple).toBe(false);
   });
 
-  it('el nombre accesible contiene el título visible (WCAG 2.5.3), también con aria-label', async () => {
+  it('el nombre accesible contiene el título y la pista visibles (WCAG 2.5.3), también con aria-label', async () => {
     const { fixture, zone, host, drag } = await setup();
     const name = (id: string) =>
       zone(id)
@@ -176,9 +174,12 @@ describe('MimiFileUpload', () => {
         .map((ref) => document.getElementById(ref)!.textContent!.trim())
         .join(', ');
     const visible = (id: string) =>
-      zone(id).querySelector('[data-slot="title"]')!.textContent!.trim();
-    expect(name('plain')).toBe('Arrastra archivos o haz clic');
-    expect(name('plain')).toContain(visible('plain'));
+      [...zone(id).querySelectorAll('[data-slot="title"], [data-slot="hint"]')]
+        .map((el) => el.textContent!.trim())
+        .join(', ');
+    // axe (label-content-name-mismatch) pide todo el texto visible, también la pista.
+    expect(name('plain')).toBe('Arrastra archivos o haz clic, PNG, JPG o PDF · hasta 10 MB');
+    expect(name('plain')).toBe(visible('plain'));
     // aria-label va delante del título, no lo reemplaza; ni el host ni la zona lo llevan.
     expect(name('single')).toBe('Avatar, Arrastra archivos o haz clic');
     expect(zone('single').hasAttribute('aria-label')).toBe(false);
@@ -191,7 +192,10 @@ describe('MimiFileUpload', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(name('plain')).toBe(visible('plain'));
-    expect(name('plain')).toBe('Suelta para subir 1 archivo');
+    expect(name('plain')).toBe('Suelta para subir 1 archivo, PNG, JPG o PDF · hasta 10 MB');
+    // Un espacio de verdad entre el título y la pista: axe arma el texto visible con el texto de
+    // los nodos y, sin él, lee «archivoPNG» (label-content-name-mismatch).
+    expect(zone('plain').textContent).toContain('archivo PNG');
   });
 
   it('clic (y Enter o Espacio, que dan clic en un <button>) abre el selector', async () => {
