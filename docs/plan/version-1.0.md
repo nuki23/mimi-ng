@@ -63,7 +63,7 @@ Primero, porque la CI vigila todo lo demás.
 - [x] **M.16** (hecha el 26/11/2026) Auditoría de `readonly`, `aria-labelledby` y `aria-describedby` en todos los controles (en `mantenimiento.md`): puede añadir entradas, así que va con la API.
 - [x] **M.21** (hecha el 26/11/2026) Switch con `aria-describedby` (en `mantenimiento.md`).
 - [x] **M.8** (hecha el 26/11/2026) La CLI y los bloqueos de «todo o nada» (en `mantenimiento.md`): un Block que no se puede instalar no debe dejar sus dependencias copiadas a medias. **Decidido por el usuario (23/11/2026):** va en esta tanda, con la revisión de la API y la CLI (antes, en la 0.9.x).
-- [ ] **M.1** Confirm con acción asíncrona; **M.3** rodeos de aria 22.2; **M.6** Select con una letra estando cerrado; **M.14** los dos ejes del área de Color Picker (en `mantenimiento.md`): cambian o añaden API, así que entran antes de congelarla.
+- [x] (hechas el 26/11/2026) **M.1** Confirm con acción asíncrona; **M.3** rodeos de aria 22.2; **M.6** Select con una letra estando cerrado; **M.14** los dos ejes del área de Color Picker (en `mantenimiento.md`): cambian o añaden API, así que entran antes de congelarla.
 
 ### Tanda 3: documentación y declaración de accesibilidad
 

@@ -179,7 +179,7 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 | `MimiColorPicker` | `mimi-color-picker` | `size`, `[(value)]`, `swatches`, `[(recent)]`, `showRecent`, `format`, comunes: disabled, readonly, invalid, touched, dirty, class                                                                                                           | `touch` |
 | `MimiColorInput`  | `mimi-color-input`  | `size`, `[(value)]`, `swatches`, `[(recent)]`, `showRecent`, `format`, `placeholder`, `panelClass`, `presentation`, `sheetTitle` ✔C9, comunes: disabled, readonly, invalid, touched, dirty, required, id, aria-label, aria-labelledby, class | `touch` |
 
-- **Textos** `MimiColorPickerText`: area, areaValue, hue, format, value, palette, recent, noRecent, pickColor, clipped, required.
+- **Textos** `MimiColorPickerText`: area, saturation, brightness (M.14; antes `areaValue`), hue, format, value, palette, recent, noRecent, pickColor, clipped, required.
 - **Variables propias** (`--mimi-…`): color-picker-area-height, color-picker-area-radius, color-picker-bg, color-picker-hue-height, color-picker-padding, color-picker-radius, color-picker-shadow, color-picker-swatch-border, color-picker-swatch-gap, color-picker-thumb-border, color-picker-thumb-shadow, color-picker-width.
 - **Exports** (`index.ts`): `MIMI_COLOR_PICKER_TEXT`, `MIMI_COLOR_PICKER_TEXT_EN`, `MIMI_COLOR_PICKER_TEXT_ES`, `MimiColorFormat`, `MimiColorInput`, `MimiColorPicker`, `MimiColorPickerImports`, `MimiColorPickerText`, `MimiHsv`, `MimiRgb`, `mimiFormatOklch`, `mimiHexToRgb`, `mimiHsvToRgb`, `mimiNormalizeHex`, `mimiOklchToRgb`, `mimiParseColor`, `mimiRgbToHex`, `mimiRgbToHsv`, `mimiRgbToOklch`, `provideMimiColorPickerText`.
 

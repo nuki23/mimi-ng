@@ -73,10 +73,13 @@ describe('readonly en los controles que faltaban (R.12)', () => {
 
   it('Color Picker: el área no cambia el color y el campo hex es de solo lectura', async () => {
     const { fixture, host, q } = await setup();
-    const area = q('picker').querySelector<HTMLElement>('[data-slot="area"]')!;
-    expect(area.getAttribute('aria-readonly')).toBe('true');
-    area.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
-    await fixture.whenStable();
+    // M.14: el área son dos sliders, saturación y brillo; los dos de solo lectura.
+    for (const slot of ['saturation', 'brightness']) {
+      const axis = q('picker').querySelector<HTMLElement>(`[data-slot="${slot}"]`)!;
+      expect(axis.getAttribute('aria-readonly'), slot).toBe('true');
+      axis.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+      await fixture.whenStable();
+    }
     expect(host.color()).toBe('#336699');
     expect(q('picker').querySelector<HTMLInputElement>('input')!.readOnly).toBe(true);
   });

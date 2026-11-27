@@ -3,14 +3,19 @@ import {
   Component,
   DestroyRef,
   Directive,
+  ElementRef,
+  ErrorHandler,
   Injector,
   TemplateRef,
   ViewContainerRef,
+  afterNextRender,
   assertInInjectionContext,
   effect,
   inject,
   input,
+  signal,
   untracked,
+  viewChild,
 } from '@angular/core';
 import { MimiButton } from '@/components/ui/button';
 import {
@@ -58,6 +63,13 @@ export interface MimiConfirmOptions {
   size?: MimiSize;
   /** Clases del panel, mezcladas con `cn()` (gana la del usuario). */
   class?: string;
+  /**
+   * La acción que confirma (M.1), si es asíncrona: con ella, Confirmar muestra «cargando» y el
+   * diálogo espera a que termine (sin cerrar con Escape ni con `closeAll()`, y sin doble envío).
+   * Si termina bien, `confirm()` responde `true`; si falla, el error va al `ErrorHandler`, el
+   * diálogo sigue abierto y el foco vuelve a Confirmar (se puede reintentar o cancelar).
+   */
+  onConfirm?: () => unknown;
 }
 
 /** La función que devuelve `injectMimiConfirm()`. */
@@ -114,6 +126,7 @@ class MimiConfirmIcon {
         variant="outline"
         data-slot="cancel"
         class="h-9 px-3.5"
+        [disabled]="busy()"
         (click)="ref.close(false)"
       >
         {{ options.cancelText ?? text.cancel }}
@@ -121,10 +134,12 @@ class MimiConfirmIcon {
       <button
         mimiBtn
         type="button"
+        #confirmButton
         [tone]="tone"
+        [loading]="busy()"
         data-slot="confirm"
         class="h-9 px-3.5"
-        (click)="ref.close(true)"
+        (click)="confirm()"
       >
         {{ options.confirmText ?? text.confirm }}
       </button>
@@ -137,6 +152,50 @@ class MimiConfirmContent {
   protected readonly options = inject<MimiConfirmOptions>(MIMI_DIALOG_DATA);
   protected readonly ref = inject<MimiDialogRef<boolean>>(MimiDialogRef);
   protected readonly text = inject(MIMI_CONFIRM_TEXT);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private readonly errors = inject(ErrorHandler);
+  private readonly injector = inject(Injector);
+  // `read`: el botón es un componente (`mimiBtn`); sin esto, la referencia sería la instancia.
+  private readonly confirmButton = viewChild.required('confirmButton', {
+    read: ElementRef<HTMLButtonElement>,
+  });
+
+  /** La acción de `onConfirm` está corriendo (M.1). */
+  protected readonly busy = signal(false);
+  /** Marca síncrona: el `disabled` llega en el render siguiente y dos clics seguidos llegarían. */
+  private pending = false;
+
+  protected async confirm(): Promise<void> {
+    const action = this.options.onConfirm;
+    if (!action) {
+      this.ref.close(true);
+      return;
+    }
+    if (this.pending) return;
+    this.pending = true;
+    // El foco espera en el contenedor del diálogo (enfocable con tabindex="-1", del CDK): al
+    // deshabilitar Cancelar no cae a body. El contenedor dice que está ocupado (aria-busy).
+    const container = this.host.closest<HTMLElement>('.cdk-dialog-container');
+    container?.focus();
+    container?.setAttribute('aria-busy', 'true');
+    this.busy.set(true);
+    this.ref.disableClose.set(true);
+    try {
+      await action();
+      this.ref.disableClose.set(false);
+      this.ref.close(true);
+    } catch (error) {
+      this.errors.handleError(error);
+      this.pending = false;
+      this.busy.set(false);
+      this.ref.disableClose.set(false);
+      container?.removeAttribute('aria-busy');
+      // Después del render que quita el «cargando», el foco vuelve a Confirmar.
+      afterNextRender(() => this.confirmButton().nativeElement.focus(), {
+        injector: this.injector,
+      });
+    }
+  }
 
   protected readonly tone = this.options.tone ?? 'primary';
   protected readonly iconClasses = cn(

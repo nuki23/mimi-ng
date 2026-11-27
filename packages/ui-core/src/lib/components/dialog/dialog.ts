@@ -125,6 +125,12 @@ export class MimiDialogRef<R = unknown> {
   readonly descriptionId = signal<string | null>(null);
   /** Uso interno: «closed» mientras dura la animación de salida. */
   readonly state = signal<'open' | 'closed'>('open');
+  /**
+   * Con el diálogo abierto, `true` bloquea Escape, el clic en el fondo y `closeAll()` (M.1: lo
+   * usa Confirm mientras corre su acción). Se lee en el momento del evento, no al abrir. `close()`
+   * sigue cerrando: es el contenido el que decide. Una navegación también cierra (la del CDK).
+   */
+  readonly disableClose = signal(false);
 
   private cdkRef: DialogRef<R> | null = null;
   private pendingResult: R | undefined;
@@ -488,9 +494,9 @@ export class MimiDialogService {
     return ref;
   }
 
-  /** Cierra todos los diálogos abiertos. */
+  /** Cierra todos los diálogos abiertos, menos los bloqueados con `ref.disableClose` (M.1). */
   closeAll(): void {
-    for (const ref of [...this.refs]) ref.close();
+    for (const ref of [...this.refs]) if (!ref.disableClose()) ref.close();
   }
 
   /**
@@ -540,12 +546,12 @@ export class MimiDialogService {
     const closeOnBackdropClick = !config.disableClose && (config.closeOnBackdropClick ?? true);
     cdkRef.keydownEvents.subscribe((event) => {
       if (event.key !== 'Escape' || event.altKey || event.ctrlKey || event.metaKey) return;
-      if (!closeOnEscape) return;
+      if (!closeOnEscape || ref.disableClose()) return;
       event.preventDefault();
       ref.close();
     });
     cdkRef.backdropClick.subscribe(() => {
-      if (closeOnBackdropClick) ref.close();
+      if (closeOnBackdropClick && !ref.disableClose()) ref.close();
     });
 
     // También cuando lo cierra el CDK por su cuenta (una navegación, o al destruirse).

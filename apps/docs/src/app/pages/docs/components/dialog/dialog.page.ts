@@ -338,6 +338,12 @@ export const DIALOG_PAGE: DocPage = {
         description: 'El resultado como señal: `undefined` hasta que se cierra con un resultado.',
       },
       {
+        name: 'MimiDialogRef.disableClose',
+        type: 'WritableSignal<boolean>',
+        description:
+          'En `true`, ni Escape, ni el fondo, ni `closeAll()` cierran; `close()` sí. Se lee en el momento.',
+      },
+      {
         name: 'MIMI_DIALOG_DATA',
         type: 'InjectionToken<D>',
         description:

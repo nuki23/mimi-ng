@@ -88,7 +88,7 @@ export const COLOR_PICKER_PAGE: DocPage = {
   accessibility: {
     points: [
       'Nombra el disparador con un `<label for>`, `aria-label` o `aria-labelledby`.',
-      'El área es un `slider`: ← y → cambian la saturación y ↑ y ↓ el brillo, de a 2 %; se lee «Saturación 80 %, brillo 90 %».',
+      'El área es un grupo con dos `slider`, saturación y brillo: cada uno con su valor y las flechas, de a 2 %.',
       'Tono: flechas de a 3°, Re Pág y Av Pág de a 30°, Inicio y Fin.',
       'El formato es un grupo de radio con flechas. El campo se confirma con Enter o al salir; si no se entiende, queda inválido.',
       'Paleta y recientes: una parada de Tab cada uno y flechas entre las muestras, que llevan `aria-pressed`.',

@@ -187,6 +187,13 @@ export const CONFIRM_PAGE: DocPage = {
         default: "''",
         description: 'Clases del panel, mezcladas con `cn()`: tus clases ganan, también el ancho.',
       },
+      {
+        name: 'onConfirm',
+        type: '() => unknown',
+        default: '—',
+        description:
+          'Acción asíncrona: Confirmar carga hasta que termine. Si falla, el diálogo sigue abierto.',
+      },
     ],
     dataAttributes: ['data-tone'],
     service: [

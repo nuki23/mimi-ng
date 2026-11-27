@@ -42,6 +42,10 @@ const ALLOWED: Record<string, { count: number; why: string }> = {
     count: 1,
     why: 'Disparadores con aspecto de campo (Date Picker, Date Range, Color Picker): el foco es el borde y el halo ring con focus-visible, como Input.',
   },
+  'components/color-picker/color-picker.ts': {
+    count: 2,
+    why: 'Los dos sliders del área (M.14) la cubren sin verse: el foco es el contorno del área con has-[:focus-visible], como el de un botón.',
+  },
   'components/file-upload/file-upload.ts': {
     count: 1,
     why: 'La zona es un campo: el foco es el borde y el halo ring con focus-visible (antes, el contorno de botón).',

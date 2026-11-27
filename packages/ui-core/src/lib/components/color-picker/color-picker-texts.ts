@@ -7,7 +7,9 @@ import { InjectionToken, type Provider } from '@angular/core';
 
 export interface MimiColorPickerText {
   area: string;
-  areaValue: (saturation: number, brightness: number) => string;
+  /** Los dos sliders del área (M.14): uno por eje. */
+  saturation: string;
+  brightness: string;
   hue: string;
   format: string;
   value: string;
@@ -24,7 +26,8 @@ export interface MimiColorPickerText {
 
 export const MIMI_COLOR_PICKER_TEXT_EN: MimiColorPickerText = {
   area: 'Saturation and brightness',
-  areaValue: (s, v) => `Saturation ${s}%, brightness ${v}%`,
+  saturation: 'Saturation',
+  brightness: 'Brightness',
   hue: 'Hue',
   format: 'Format',
   value: 'Color value',
@@ -38,7 +41,8 @@ export const MIMI_COLOR_PICKER_TEXT_EN: MimiColorPickerText = {
 
 export const MIMI_COLOR_PICKER_TEXT_ES: MimiColorPickerText = {
   area: 'Saturación y brillo',
-  areaValue: (s, v) => `Saturación ${s}%, brillo ${v}%`,
+  saturation: 'Saturación',
+  brightness: 'Brillo',
   hue: 'Tono',
   format: 'Formato',
   value: 'Valor del color',

@@ -591,15 +591,60 @@ describe('MimiSelect', { timeout: 20_000 }, () => {
     expect(document.activeElement).toBe(searchInput());
   });
 
-  it('alarma (pendiente): con el panel cerrado, una letra no abre ni elige', async () => {
-    // Si falla, aria ya atiende las letras con el panel cerrado: se puede quitar el pendiente
-    // de la spec 4 («Base técnica») y de la tabla del Select.
-    const { h, trigger, press } = await setup();
+  /** Una tecla con su `timeStamp` (ms), sin reloj real: la búsqueda por letra se corta a los 500. */
+  const pressAt = async (
+    fixture: { whenStable(): Promise<unknown> },
+    target: Element,
+    k: string,
+    at: number,
+    init: KeyboardEventInit = {},
+  ) => {
+    const event = new KeyboardEvent('keydown', {
+      key: k,
+      bubbles: true,
+      cancelable: true,
+      ...init,
+    });
+    Object.defineProperty(event, 'timeStamp', { value: at });
+    target.dispatchEvent(event);
+    await settle(fixture);
+  };
+
+  it('M.6: con el panel cerrado, una letra elige la opción que empieza así, sin abrir (como <select>)', async () => {
+    // aria no atiende las letras con el panel cerrado (la lista no existe): lo hace Mimi.
+    const { fixture, h, trigger } = await setup();
     const btn = trigger('plain');
     btn.focus();
-    await press(btn, 'c');
+    await pressAt(fixture, btn, 'c', 10_000);
     expect(btn.getAttribute('aria-expanded')).toBe('false');
-    expect(h.country()).toBeNull();
+    expect(h.country()).toBe('CL');
+    // La misma letra otra vez pasa a la siguiente que empieza igual (y vuelve a empezar).
+    await pressAt(fixture, btn, 'c', 10_100);
+    expect(h.country()).toBe('CO');
+    await pressAt(fixture, btn, 'c', 10_200);
+    expect(h.country()).toBe('CL');
+    // Pasada la pausa, otra búsqueda. Sin tildes ni mayúsculas: «M» es México.
+    await pressAt(fixture, btn, 'M', 11_000);
+    expect(h.country()).toBe('MX');
+    // La deshabilitada no se elige (Perú): el valor no cambia.
+    await pressAt(fixture, btn, 'p', 12_000);
+    expect(h.country()).toBe('MX');
+    // Con modificadores, nada.
+    await pressAt(fixture, btn, 'u', 13_000, { ctrlKey: true });
+    expect(h.country()).toBe('MX');
+    expect(btn.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  it('M.6: varias letras seguidas buscan el prefijo («br» es Brasil)', async () => {
+    const { fixture, h, trigger } = await setup();
+    const btn = trigger('plain');
+    btn.focus();
+    await pressAt(fixture, btn, 'u', 10_000);
+    expect(h.country()).toBe('UY');
+    // Dos letras distintas seguidas (sin pausa): el prefijo entero, desde el principio.
+    await pressAt(fixture, btn, 'b', 11_000);
+    await pressAt(fixture, btn, 'r', 11_100);
+    expect(h.country()).toBe('BR');
   });
 
   it('objetos con compareWith, plantilla propia y un valor que no está en las opciones', async () => {

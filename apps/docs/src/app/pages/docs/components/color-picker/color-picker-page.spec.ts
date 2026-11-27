@@ -43,9 +43,9 @@ describe('ColorPickerPage', () => {
         expect(code).toMatch(/export class ColorPicker\w+Example/);
       }
       // Textos en español y cada disparador con nombre.
-      expect(
-        el.querySelector('mimi-color-picker [role="slider"]')!.getAttribute('aria-label'),
-      ).toBe('Saturación y brillo');
+      expect(el.querySelector('mimi-color-picker [role="group"]')!.getAttribute('aria-label')).toBe(
+        'Saturación y brillo',
+      );
       for (const button of Array.from(
         el.querySelectorAll<HTMLButtonElement>('mimi-color-input button'),
       )) {

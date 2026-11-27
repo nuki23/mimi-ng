@@ -124,15 +124,29 @@ describe('MimiColorPicker', { timeout: 20_000 }, () => {
     document.querySelectorAll('.cdk-overlay-container').forEach((el) => el.replaceChildren());
   });
 
-  it('el área y el tono son sliders con nombre, valor y texto', async () => {
+  it('el área es un grupo con dos sliders, saturación y brillo (M.14), y el tono otro slider', async () => {
     const { slot } = await setup();
     const area = slot('panel', 'area');
-    expect(area.getAttribute('role')).toBe('slider');
+    expect(area.getAttribute('role')).toBe('group');
     expect(area.getAttribute('aria-label')).toBe('Saturación y brillo');
-    expect(area.getAttribute('aria-valuetext')).toBe('Saturación 69%, brillo 90%');
-    expect(area.getAttribute('aria-valuenow')).toBe('69');
-    expect(area.getAttribute('tabindex')).toBe('0');
+    expect(area.hasAttribute('tabindex')).toBe(false);
     expect(area.className).toContain('touch-none');
+    // Cada eje, su slider: nombre, mínimo, máximo, valor y orientación (APG, «Slider»).
+    const saturation = slot('panel', 'saturation');
+    const brightness = slot('panel', 'brightness');
+    for (const [axis, name, now, orientation] of [
+      [saturation, 'Saturación', '69', 'horizontal'],
+      [brightness, 'Brillo', '90', 'vertical'],
+    ] as const) {
+      expect(axis.getAttribute('role')).toBe('slider');
+      expect(axis.getAttribute('aria-label')).toBe(name);
+      expect(axis.getAttribute('aria-valuemin')).toBe('0');
+      expect(axis.getAttribute('aria-valuemax')).toBe('100');
+      expect(axis.getAttribute('aria-valuenow')).toBe(now);
+      expect(axis.getAttribute('aria-valuetext')).toBe(`${now} %`);
+      expect(axis.getAttribute('aria-orientation')).toBe(orientation);
+      expect(axis.getAttribute('tabindex')).toBe('0');
+    }
     const hue = slot('panel', 'hue');
     expect(hue.getAttribute('aria-label')).toBe('Tono');
     expect(hue.getAttribute('aria-valuemax')).toBe('360');
@@ -143,13 +157,27 @@ describe('MimiColorPicker', { timeout: 20_000 }, () => {
     expect((slot('panel', 'value') as HTMLInputElement).value).toBe('#4f46e5');
   });
 
-  it('teclado: ← → saturación y ↑ ↓ brillo de a 2 %; el tono de a 3° y Re Pág de a 30°', async () => {
+  it('teclado: cada eje con las cuatro flechas de a 2 %, Re/Av Pág de a 10 e Inicio/Fin; el tono de a 3°', async () => {
     const { h, slot, press } = await setup();
-    const area = slot('panel', 'area');
-    await press(area, 'ArrowRight');
-    expect(area.getAttribute('aria-valuetext')).toBe('Saturación 71%, brillo 90%');
-    await press(area, 'ArrowDown');
-    expect(area.getAttribute('aria-valuetext')).toBe('Saturación 71%, brillo 88%');
+    const saturation = slot('panel', 'saturation');
+    const brightness = slot('panel', 'brightness');
+    await press(saturation, 'ArrowRight');
+    expect(saturation.getAttribute('aria-valuenow')).toBe('71');
+    await press(saturation, 'ArrowDown');
+    expect(saturation.getAttribute('aria-valuenow')).toBe('69');
+    // La flecha del otro eje no lo toca: cada slider tiene su valor.
+    expect(brightness.getAttribute('aria-valuenow')).toBe('90');
+    await press(brightness, 'ArrowDown');
+    expect(brightness.getAttribute('aria-valuenow')).toBe('88');
+    await press(brightness, 'PageUp');
+    expect(brightness.getAttribute('aria-valuenow')).toBe('98');
+    await press(brightness, 'End');
+    expect(brightness.getAttribute('aria-valuenow')).toBe('100');
+    await press(saturation, 'Home');
+    expect(saturation.getAttribute('aria-valuenow')).toBe('0');
+    await press(saturation, 'End');
+    expect(saturation.getAttribute('aria-valuenow')).toBe('100');
+    expect(brightness.getAttribute('aria-valuenow')).toBe('100');
     const before = h.color();
     const hue = slot('panel', 'hue');
     await press(hue, 'ArrowRight');
@@ -174,9 +202,11 @@ describe('MimiColorPicker', { timeout: 20_000 }, () => {
       );
     pointer('pointerdown', 200, 0);
     await settle(fixture);
-    expect(document.activeElement).toBe(area);
+    // El puntero mueve los dos ejes a la vez; el foco va al slider de saturación (M.14).
+    expect(document.activeElement).toBe(slot('panel', 'saturation'));
     expect(area.setPointerCapture).toHaveBeenCalled();
-    expect(area.getAttribute('aria-valuetext')).toBe('Saturación 100%, brillo 100%');
+    expect(slot('panel', 'saturation').getAttribute('aria-valuenow')).toBe('100');
+    expect(slot('panel', 'brightness').getAttribute('aria-valuenow')).toBe('100');
     pointer('pointermove', 0, 100);
     pointer('pointerup', 0, 100);
     await settle(fixture);
@@ -261,8 +291,10 @@ describe('MimiColorPicker', { timeout: 20_000 }, () => {
     await settle(fixture);
     expect(host('panel').classList).toContain('w-64');
     expect(host('panel').hasAttribute('data-disabled')).toBe(true);
-    expect(slot('panel', 'area').getAttribute('tabindex')).toBe('-1');
-    await press(slot('panel', 'area'), 'ArrowRight');
+    expect(slot('panel', 'saturation').getAttribute('tabindex')).toBe('-1');
+    expect(slot('panel', 'brightness').getAttribute('tabindex')).toBe('-1');
+    await press(slot('panel', 'saturation'), 'ArrowRight');
+    await press(slot('panel', 'brightness'), 'ArrowUp');
     expect(h.color()).toBe('#4f46e5');
   });
 

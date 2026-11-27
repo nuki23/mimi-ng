@@ -1,4 +1,4 @@
-import { Component, TemplateRef, viewChild } from '@angular/core';
+import { Component, ErrorHandler, TemplateRef, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MimiDialogService, MimiDialogTitle } from '@/components/ui/dialog';
 import { type MimiConfirmOptions, injectMimiConfirm } from './confirm';
@@ -324,6 +324,75 @@ describe('injectMimiConfirm', { timeout: 20_000 }, () => {
     fixture.destroy();
     await settle(fixture);
     expect(answers).toEqual([false]);
+    expect(container()).toBeNull();
+  });
+
+  it('M.1: onConfirm asíncrono: «cargando» en Confirmar, sin cerrar ni doble envío, y cierra al terminar', async () => {
+    const { fixture, ask, button, container, escape } = await setup();
+    let finish!: () => void;
+    let calls = 0;
+    const answers = await ask({
+      title: '¿Publicar?',
+      onConfirm: () => {
+        calls++;
+        return new Promise<void>((resolve) => (finish = resolve));
+      },
+    });
+    const confirm = button('confirm');
+    confirm.focus();
+    // Dos clics seguidos (el disabled llega en el render siguiente): la acción corre una vez.
+    confirm.click();
+    confirm.click();
+    await settle(fixture);
+    expect(calls).toBe(1);
+    expect(button('confirm').getAttribute('aria-busy')).toBe('true');
+    expect(button('cancel').disabled).toBe(true);
+    // El foco no cae a body: queda en el diálogo, que dice que está ocupado.
+    expect(document.activeElement).toBe(container());
+    expect(container()!.getAttribute('aria-busy')).toBe('true');
+    // Escape no cierra mientras tanto.
+    await escape();
+    expect(container()).not.toBeNull();
+    expect(answers).toEqual([]);
+    finish();
+    await settle(fixture);
+    expect(answers).toEqual([true]);
+    expect(container()).toBeNull();
+  });
+
+  it('M.1: si onConfirm falla, el diálogo sigue abierto, vuelve el foco a Confirmar y Cancelar responde false', async () => {
+    const { fixture, ask, button, container } = await setup();
+    const errors: unknown[] = [];
+    TestBed.inject(ErrorHandler).handleError = (error: unknown) => errors.push(error);
+    const answers = await ask({
+      title: '¿Publicar?',
+      onConfirm: () => Promise.reject(new Error('sin red')),
+    });
+    button('confirm').focus();
+    button('confirm').click();
+    await settle(fixture);
+    expect(container()).not.toBeNull();
+    expect(errors.map((e) => String(e))).toEqual(['Error: sin red']);
+    expect(button('confirm').hasAttribute('aria-busy')).toBe(false);
+    expect(button('cancel').disabled).toBe(false);
+    expect(document.activeElement).toBe(button('confirm'));
+    button('cancel').click();
+    await settle(fixture);
+    expect(answers).toEqual([false]);
+  });
+
+  it('M.1: MimiDialogRef.disableClose bloquea Escape, el fondo y closeAll() en el momento', async () => {
+    const { fixture, container, escape } = await setup();
+    const service = TestBed.inject(MimiDialogService);
+    const ref = service.open(DialogContent);
+    await settle(fixture);
+    ref.disableClose.set(true);
+    await escape();
+    service.closeAll();
+    await settle(fixture);
+    expect(container()).not.toBeNull();
+    ref.disableClose.set(false);
+    await escape();
     expect(container()).toBeNull();
   });
 

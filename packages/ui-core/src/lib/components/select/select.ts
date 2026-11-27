@@ -63,6 +63,7 @@ import {
   mimiDeclaredOptions,
   mimiFilterSections,
   mimiListSections,
+  mimiNormalizeText,
 } from '@/components/ui/option-list/option-list';
 import {
   MIMI_OVERLAY_CONFIG,
@@ -977,6 +978,36 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
     return !!key;
   }
 
+  /** Lo escrito con el panel cerrado (M.6), que se reinicia tras `TYPEAHEAD_DELAY`. */
+  private typed = '';
+
+  /**
+   * M.6, búsqueda por letra con el panel cerrado (como el `<select>` nativo): varias letras
+   * seguidas buscan ese comienzo desde el principio de la lista; la misma letra repetida pasa a la
+   * siguiente opción que empieza así, y vuelve a empezar. Sin tildes ni mayúsculas
+   * (`mimiNormalizeText`); las deshabilitadas no se eligen.
+   */
+  private typeToSelect(key: string, at: number): void {
+    this.typed = at - this.typedAt > TYPEAHEAD_DELAY ? key : this.typed + key;
+    this.typedAt = at;
+    const text = mimiNormalizeText(this.typed);
+    const rows = this.rows().filter((row) => !row.option.disabled);
+    const starts = (row: (typeof rows)[number]) =>
+      mimiNormalizeText(row.option.label).startsWith(text);
+    const repeated = [...text].every((char) => char === text[0]);
+    let found: (typeof rows)[number] | undefined;
+    if (repeated) {
+      // La misma letra: la siguiente que empieza con ella, después de la elegida.
+      const letter = text[0];
+      const matching = rows.filter((row) => mimiNormalizeText(row.option.label).startsWith(letter));
+      const current = matching.findIndex((row) => row.key === this.selectedKey());
+      found = matching[(current + 1) % Math.max(matching.length, 1)];
+    } else {
+      found = rows.find(starts);
+    }
+    if (found) this.value.set(found.option.value as T);
+  }
+
   /** Quita el valor (botón de limpiar). */
   protected clear(): void {
     this.value.set(null);
@@ -1001,6 +1032,13 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
       if (key === 'ArrowUp' || (key === 'ArrowDown' && altKey)) {
         event.preventDefault();
         this.setOpen(true);
+        return;
+      }
+      // M.6: una letra con el panel cerrado elige sin abrir, como el <select> nativo (aria no lo
+      // hace: con el panel cerrado no hay lista). Espacio sigue abriendo (lo atiende aria antes).
+      if (key.length === 1 && key !== ' ' && !altKey) {
+        event.preventDefault();
+        this.typeToSelect(key, event.timeStamp);
       }
       return;
     }

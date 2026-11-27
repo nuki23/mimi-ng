@@ -111,27 +111,52 @@ let nextId = 0;
   imports: [MimiInput],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiColorPicker }],
   template: `
+    <!-- M.14: el área es un grupo con dos sliders, uno por eje (la APG no tiene un patrón de dos
+         dimensiones): cada uno con su valor, su nombre y las cuatro flechas. El puntero mueve los
+         dos a la vez. Los sliders cubren el área sin verse; el foco se ve en el área. -->
     <div
       #area
-      role="slider"
+      role="group"
       data-slot="area"
-      class="relative h-[var(--mimi-color-picker-area-height,150px)] cursor-crosshair touch-none rounded-[var(--mimi-color-picker-area-radius,var(--mimi-radius-sm))]"
-      [class]="sliderFocus"
+      class="relative h-[var(--mimi-color-picker-area-height,150px)] cursor-crosshair touch-none rounded-[var(--mimi-color-picker-area-radius,var(--mimi-radius-sm))] has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring"
       [style.background]="areaBackground()"
-      [attr.tabindex]="disabled() ? -1 : 0"
       [attr.aria-label]="texts.area"
-      [attr.aria-valuemin]="0"
-      [attr.aria-valuemax]="100"
-      [attr.aria-valuenow]="saturation()"
-      [attr.aria-valuetext]="texts.areaValue(saturation(), brightness())"
-      [attr.aria-disabled]="disabled() || null"
-      [attr.aria-readonly]="readonly() || null"
       (pointerdown)="onAreaPointer($event, true)"
       (pointermove)="onAreaPointer($event, false)"
       (pointerup)="endDrag($event)"
-      (keydown)="onAreaKeydown($event)"
       (focusout)="rememberRecent()"
     >
+      <span
+        #saturationSlider
+        role="slider"
+        data-slot="saturation"
+        class="absolute inset-0 outline-none"
+        aria-orientation="horizontal"
+        [attr.tabindex]="disabled() ? -1 : 0"
+        [attr.aria-label]="texts.saturation"
+        [attr.aria-valuemin]="0"
+        [attr.aria-valuemax]="100"
+        [attr.aria-valuenow]="saturation()"
+        [attr.aria-valuetext]="saturation() + ' %'"
+        [attr.aria-disabled]="disabled() || null"
+        [attr.aria-readonly]="readonly() || null"
+        (keydown)="onAxisKeydown($event, 's')"
+      ></span>
+      <span
+        role="slider"
+        data-slot="brightness"
+        class="absolute inset-0 outline-none"
+        aria-orientation="vertical"
+        [attr.tabindex]="disabled() ? -1 : 0"
+        [attr.aria-label]="texts.brightness"
+        [attr.aria-valuemin]="0"
+        [attr.aria-valuemax]="100"
+        [attr.aria-valuenow]="brightness()"
+        [attr.aria-valuetext]="brightness() + ' %'"
+        [attr.aria-disabled]="disabled() || null"
+        [attr.aria-readonly]="readonly() || null"
+        (keydown)="onAxisKeydown($event, 'v')"
+      ></span>
       <span
         aria-hidden="true"
         data-slot="area-thumb"
@@ -318,10 +343,13 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
   readonly touch = output<void>();
 
   private readonly area = viewChild.required<ElementRef<HTMLElement>>('area');
+  /** El primer control enfocable del área (M.14): recibe el foco del formulario y del puntero. */
+  private readonly saturationSlider =
+    viewChild.required<ElementRef<HTMLElement>>('saturationSlider');
   private readonly hueBar = viewChild.required<ElementRef<HTMLElement>>('hueBar');
   readonly fieldState = injectFieldState();
   get controlElement(): HTMLElement {
-    return this.area().nativeElement;
+    return this.saturationSlider().nativeElement;
   }
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
@@ -414,7 +442,7 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
   }
 
   focus(options?: FocusOptions): void {
-    this.area().nativeElement.focus(options);
+    this.saturationSlider().nativeElement.focus(options);
   }
 
   protected isCurrent(color: string): boolean {
@@ -465,8 +493,11 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
   protected onAreaPointer(event: PointerEvent, start: boolean): void {
     if (this.disabled() || this.readonly()) return;
     const element = this.area().nativeElement;
-    if (start) this.startDrag(event, element);
-    else if (this.dragging !== element) return;
+    if (start) {
+      this.startDrag(event, element);
+      // El foco va a un control del área, no al grupo (que no es enfocable; M.14).
+      this.saturationSlider().nativeElement.focus();
+    } else if (this.dragging !== element) return;
     const { x, y } = this.ratio(event, element);
     this.setHsv({ h: this.hsv().h, s: x, v: 1 - y });
   }
@@ -479,22 +510,27 @@ export class MimiColorPicker implements FormValueControl<string>, MimiFieldContr
     this.setHsv({ ...this.hsv(), h: this.ratio(event, element).x * 360 });
   }
 
-  /** ← → saturación, ↑ ↓ brillo, de a 2 % (el diseño); Inicio/Fin, saturación 0 y 100 %. */
-  protected onAreaKeydown(event: KeyboardEvent): void {
-    const { s, v, h } = this.hsv();
+  /**
+   * Un eje del área (M.14, slider de la APG): → y ↑ suben, ← y ↓ bajan, de a 2 % (el paso del
+   * diseño); Re Pág/Av Pág de a 10 %; Inicio/Fin, 0 y 100 %.
+   */
+  protected onAxisKeydown(event: KeyboardEvent, axis: 's' | 'v'): void {
+    const current = this.hsv()[axis];
     const step = 0.02;
-    const keys: Record<string, MimiHsv> = {
-      ArrowLeft: { h, s: Math.max(0, s - step), v },
-      ArrowRight: { h, s: Math.min(1, s + step), v },
-      ArrowDown: { h, s, v: Math.max(0, v - step) },
-      ArrowUp: { h, s, v: Math.min(1, v + step) },
-      Home: { h, s: 0, v },
-      End: { h, s: 1, v },
+    const values: Record<string, number> = {
+      ArrowLeft: current - step,
+      ArrowDown: current - step,
+      ArrowRight: current + step,
+      ArrowUp: current + step,
+      PageDown: current - 0.1,
+      PageUp: current + 0.1,
+      Home: 0,
+      End: 1,
     };
-    const next = keys[event.key];
-    if (!next) return;
+    const next = values[event.key];
+    if (next === undefined) return;
     event.preventDefault();
-    this.setHsv(next);
+    this.setHsv({ ...this.hsv(), [axis]: Math.min(1, Math.max(0, next)) });
   }
 
   /** Flechas de a 3° (el diseño); Re Pág/Av Pág de a 30°; Inicio/Fin, 0° y 360°. */

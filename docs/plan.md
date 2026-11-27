@@ -90,12 +90,12 @@ Ninguna.
 
 Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Desde el 23/11/2026, cada una abierta tiene su versión en el plan hasta la 1.0 ([docs/plan/version-1.0.md](plan/version-1.0.md), decidido por el usuario).
 
-- [ ] M.1 Confirm con acción asíncrona · v0.9.0 (tanda 2) · — · depende: G1.6, G1.7 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.1 Confirm con acción asíncrona (hecha el 26/11/2026) · v0.9.0 (tanda 2) · — · depende: G1.6, G1.7 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.2 Alinear Angular en la 22.2.x · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.3 Revisar rodeos con aria 22.2 (hecha el 26/11/2026: ninguno deja de hacer falta) · v0.9.0 (tanda 2) · — · depende: M.2 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.4 Aviso de la CLI con un cdk o aria anteriores a 22.2.4 (solo avisa) · v0.3.0 · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.5 Pasada con NVDA por los componentes con overlays (la hace el usuario, con la M.20) · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.6 Select: saltar a una opción con una letra estando cerrado · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.6 (hecha el 26/11/2026; pendiente de comprobación manual con NVDA) Select: saltar a una opción con una letra estando cerrado · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [ ] M.7 Íconos de Lucide en los chunks del showcase · v0.9.x · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.8 La CLI y los bloqueos de «todo o nada» (hecha el 26/11/2026; un Block que no se puede instalar no deja sus dependencias copiadas a medias; a la tanda 2, decidido por el usuario el 23/11/2026) · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.9 (cerrada el 16/11/2026 en la R.P7: `ng g mimi select` en proyectos reales con el `.tgz`) Migrar Select a las utilidades de lista del Combobox (lo que faltaba de la R.15) · v0.7.0 · — · depende: G2.8 · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
@@ -103,7 +103,7 @@ Detalle: [docs/plan/mantenimiento.md](plan/mantenimiento.md). Desde el 23/11/202
 - [x] M.11 La CLI y `--overwrite` con la misma versión (era un error; corregido) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.12 (hecha el 23/11/2026: 20 de 20 corridas con la máquina cargada; queda anotado el arranque en frío de la CLI) Pruebas deterministas con temporizadores y animaciones (Dialog, Toast, docs bajo carga; la parte de docs, hecha el 05/11/2026; la necesita la CI) · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.13 Bajar `main` del showcase (rutas de docs diferidas y menú móvil al abrir; hecha el 06/11/2026: `main` 142,64 → 135,40 kB) · sin versión · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
-- [ ] M.14 Color Picker: exponer los dos ejes del área · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
+- [x] M.14 (hecha el 26/11/2026; pendiente de comprobación manual con NVDA) Color Picker: exponer los dos ejes del área · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.15 (hecha el 23/11/2026: 59 páginas en claro y oscuro y 9 paneles abiertos, sin violaciones; una regla desactivada con su motivo) Pruebas de accesibilidad con axe sobre las páginas del showcase (axe-core aprobado solo como devDependency del repo; en la CI) · v0.9.0 (tanda 1) · — · depende: G2.P · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.16 (hecha el 26/11/2026) Auditoría de `readonly`, `aria-labelledby` y `aria-describedby` en todos los controles · v0.9.0 (tanda 2) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
 - [x] M.17 (hecha el 23/11/2026: `apps/docs/src/test-setup.ts`; verde con Node 24.18.0 y 26.13.1) Pruebas de docs independientes del `localStorage` de Node 26 · v0.9.0 (tanda 1) · — · depende: — · [docs/plan/mantenimiento.md](plan/mantenimiento.md)
