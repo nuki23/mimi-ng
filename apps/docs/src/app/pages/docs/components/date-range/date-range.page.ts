@@ -34,7 +34,7 @@ export const DATE_RANGE_PAGE: DocPage = {
       '',
       '@Component({',
       '  imports: [MimiDateRangePicker],',
-      '  template: `<mimi-date-range aria-label="Periodo" [(value)]="period" />`,',
+      '  template: `<mimi-date-range-picker aria-label="Periodo" [(value)]="period" />`,',
       '})',
       'export class ReportComponent {',
       "  period = signal<MimiDateRange | null>({ start: '2026-09-24', end: '2026-09-30' });",
@@ -92,6 +92,13 @@ export const DATE_RANGE_PAGE: DocPage = {
         type: "'auto' | 'popover' | 'sheet' | 'fullscreen'",
         default: "'auto'",
         description: 'Cómo se abre. `auto`: hoja inferior debajo de 640 px y panel desde ahí.',
+      },
+      {
+        name: 'sheetTitle',
+        type: 'string',
+        default: '—',
+        description:
+          'Título de la hoja. Por defecto, el `aria-label` o el texto del `<label for>`.',
       },
       {
         name: 'value',
@@ -192,8 +199,8 @@ export const DATE_RANGE_PAGE: DocPage = {
   },
   texts: [
     {
-      constant: 'MIMI_DATE_PICKER_TEXT_ES',
-      provider: 'provideMimiDatePickerText',
+      constant: 'MIMI_CALENDAR_TEXT_ES',
+      provider: 'provideMimiCalendarText',
       path: 'calendar/calendar-texts',
       note: 'los del calendario, el Date Picker y el Date Range',
     },

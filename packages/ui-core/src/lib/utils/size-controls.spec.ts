@@ -50,7 +50,7 @@ import { MimiSizeScope, type MimiSize } from './size';
       <mimi-input-mask data-test="mask" mask="00" aria-label="e" />
       <mimi-tags-input data-test="tags" aria-label="f" />
       <mimi-date-picker data-test="date" aria-label="g" />
-      <mimi-date-range data-test="range" aria-label="h" />
+      <mimi-date-range-picker data-test="range" aria-label="h" />
       <mimi-color-picker data-test="color" aria-label="i" />
       <textarea mimiTextarea data-test="textarea" aria-label="j"></textarea>
       <mimi-switch data-test="switch">Modo avión</mimi-switch>

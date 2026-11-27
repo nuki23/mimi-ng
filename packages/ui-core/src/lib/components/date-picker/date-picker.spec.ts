@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormField, disabled, form, required } from '@angular/forms/signals';
-import { MIMI_DATE_PICKER_TEXT_ES, provideMimiDatePickerText } from '@/components/ui/calendar';
+import { MIMI_CALENDAR_TEXT_ES, provideMimiCalendarText } from '@/components/ui/calendar';
 import { MIMI_TODAY, type MimiDate, mimiWeekday } from '@/components/ui/calendar/dates';
 import { MimiFormField } from '@/components/ui/form-field';
 import { MimiDatePicker } from './date-picker';
@@ -17,7 +17,7 @@ import { MimiDatePicker } from './date-picker';
       locale="es"
       [(value)]="date"
       [isDateDisabled]="weekend"
-      [min]="min()"
+      [minDate]="min()"
       [disabled]="off()"
       [class]="extra()"
       [panelClass]="panelExtra()"
@@ -31,6 +31,7 @@ import { MimiDatePicker } from './date-picker';
       data-test="signal"
       aria-label="Signal"
       locale="es"
+      minDate="2026-09-10"
       [formField]="signalForm.date"
     />
     <mimi-date-picker
@@ -85,7 +86,7 @@ describe('MimiDatePicker', { timeout: 20_000 }, () => {
   async function setup() {
     TestBed.configureTestingModule({
       providers: [
-        provideMimiDatePickerText(MIMI_DATE_PICKER_TEXT_ES),
+        provideMimiCalendarText(MIMI_CALENDAR_TEXT_ES),
         { provide: MIMI_TODAY, useValue: () => '2026-09-15' },
       ],
     });
@@ -256,6 +257,8 @@ describe('MimiDatePicker', { timeout: 20_000 }, () => {
       'obligatorio',
     );
     await open('signal');
+    // api-1.0, C2: con [formField], [minDate] se puede enlazar (con [min] daba NG8022).
+    expect(cell('2026-09-09').getAttribute('aria-disabled')).toBe('true');
     cell('2026-09-18').click();
     await settle(fixture);
     expect(h.data().date).toBe('2026-09-18');

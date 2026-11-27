@@ -3,9 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { MimiAvatar } from '@/components/ui/avatar';
 import { MimiButton } from '@/components/ui/button';
 import { MimiInput } from '@/components/ui/input';
-import type { AvatarSize } from '@/components/ui/avatar';
-import type { ButtonSize } from '@/components/ui/button';
-import type { InputSize } from '@/components/ui/input';
+import type { MimiAvatarSize } from '@/components/ui/avatar';
+import type { MimiButtonSize } from '@/components/ui/button';
+import type { MimiInputSize } from '@/components/ui/input';
 import { MimiSizeScope, type MimiSize, injectMimiSize } from './size';
 import * as sizeModule from './size';
 
@@ -18,11 +18,11 @@ const oldInject = () => injectMimiSize(signal<MimiSize>('md'), 'MimiButton');
 
 // R.32: `default` (el nombre viejo de `md`) ya no es un tamaño. Si vuelve, esto no compila.
 // @ts-expect-error `default` se quitó en la 0.7.0.
-const OLD_BUTTON: ButtonSize = 'default';
+const OLD_BUTTON: MimiButtonSize = 'default';
 // @ts-expect-error `default` se quitó en la 0.7.0.
-const OLD_INPUT: InputSize = 'default';
+const OLD_INPUT: MimiInputSize = 'default';
 // @ts-expect-error `default` se quitó en la 0.7.0.
-const OLD_AVATAR: AvatarSize = 'default';
+const OLD_AVATAR: MimiAvatarSize = 'default';
 // @ts-expect-error `default` se quitó en la 0.7.0.
 const OLD_SCALE: MimiSize = 'default';
 void [OLD_BUTTON, OLD_INPUT, OLD_AVATAR, OLD_SCALE];

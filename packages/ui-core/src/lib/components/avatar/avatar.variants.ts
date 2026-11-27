@@ -9,7 +9,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 const SIZE_SCALE =
   'size-[var(--mimi-avatar-s,var(--mimi-avatar-size,2.5rem))] text-[length:var(--mimi-avatar-text,0.875rem)]';
 
-export const avatarVariants = cva(
+export const mimiAvatarVariants = cva(
   'relative inline-flex shrink-0 overflow-hidden rounded-[var(--mimi-avatar-radius,calc(infinity*1px))] bg-muted select-none',
   {
     variants: {
@@ -24,7 +24,7 @@ export const avatarVariants = cva(
   },
 );
 
-export type AvatarSize = NonNullable<VariantProps<typeof avatarVariants>['size']>;
+export type MimiAvatarSize = NonNullable<VariantProps<typeof mimiAvatarVariants>['size']>;
 
 /** Estado de la imagen: sin imagen, cargando, cargada o con error. */
-export type AvatarStatus = 'idle' | 'loading' | 'loaded' | 'error';
+export type MimiAvatarStatus = 'idle' | 'loading' | 'loaded' | 'error';

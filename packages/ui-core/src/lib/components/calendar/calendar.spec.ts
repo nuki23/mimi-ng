@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MimiCalendar } from './calendar';
-import { MIMI_DATE_PICKER_TEXT_ES, provideMimiDatePickerText } from './calendar-texts';
+import { MIMI_CALENDAR_TEXT_ES, provideMimiCalendarText } from './calendar-texts';
 import {
   MIMI_TODAY,
   type MimiDate,
@@ -22,8 +22,8 @@ import {
     <mimi-calendar
       [(value)]="value"
       [locale]="locale()"
-      [min]="min()"
-      [max]="max()"
+      [minDate]="min()"
+      [maxDate]="max()"
       [isDateDisabled]="weekend"
       [mode]="mode()"
       [rangeStart]="start()"
@@ -96,7 +96,7 @@ describe('MimiCalendar', { timeout: 20_000 }, () => {
   async function setup() {
     TestBed.configureTestingModule({
       providers: [
-        provideMimiDatePickerText(MIMI_DATE_PICKER_TEXT_ES),
+        provideMimiCalendarText(MIMI_CALENDAR_TEXT_ES),
         { provide: MIMI_TODAY, useValue: () => '2026-09-15' },
       ],
     });

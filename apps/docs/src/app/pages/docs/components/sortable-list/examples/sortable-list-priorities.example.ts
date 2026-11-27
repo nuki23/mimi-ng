@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { MimiBadge, type BadgeTone } from '@/components/ui/badge';
+import { MimiBadge, type MimiBadgeTone } from '@/components/ui/badge';
 import { MimiSortableListImports, type MimiSortableReorder } from '@/components/ui/sortable-list';
 
 interface Task {
@@ -7,7 +7,7 @@ interface Task {
   title: string;
   meta: string;
   tag: string;
-  tone?: BadgeTone;
+  tone?: MimiBadgeTone;
 }
 
 @Component({

@@ -83,7 +83,7 @@ El inventario se escribió **antes de cambiar nada**, con cada inconsistencia ma
 
 ## 4. Inventario
 
-Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `utils` y `theme`). «Comunes» son las entradas de la convención; `[(x)]` es un `model()`; `*`, obligatoria. Las plantillas y directivas sin entradas ni salidas pueden no tener fila: están en «Exports». «Variables propias» son las `--mimi-<componente>-*` que lee el componente (las del tema, en la spec 6).
+Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `utils` y `theme`). «Comunes» son las entradas de la convención (desde la M.16, también `aria-describedby` en Checkbox, Switch, Select, Combobox, Date Picker, Date Range, `mimi-color-input`, File Upload, Number Input, Slider, Tags Input, Toggle Group y Tree, aunque su fila no lo repita; la tabla completa, en la spec 8); `[(x)]` es un `model()`; `*`, obligatoria. Las plantillas y directivas sin entradas ni salidas pueden no tener fila: están en «Exports». «Variables propias» son las `--mimi-<componente>-*` que lee el componente (las del tema, en la spec 6).
 
 ### accordion
 
@@ -107,7 +107,7 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 | `MimiAvatarFallback` | `mimi-avatar-fallback` | `label`, comunes: class                                  | —       |
 
 - **Variables propias** (`--mimi-…`): avatar-bg, avatar-fg, avatar-radius, avatar-s, avatar-size, avatar-text.
-- **Exports** (`index.ts`): `AvatarSize` ⚠C4, `AvatarStatus` ⚠C4, `MimiAvatar`, `MimiAvatarFallback`, `MimiAvatarImage`, `MimiAvatarImports`, `avatarVariants` ⚠C5.
+- **Exports** (`index.ts`): `MimiAvatar`, `MimiAvatarFallback`, `MimiAvatarImage`, `MimiAvatarImports`, `MimiAvatarSize` ✔C4, `MimiAvatarStatus` ✔C4, `mimiAvatarVariants` ✔C5.
 
 ### badge
 
@@ -116,7 +116,7 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 | `MimiBadge` | `span[mimiBadge]` | `size`, `variant`, `tone`, comunes: class | —       |
 
 - **Variables propias** (`--mimi-…`): badge-font-size, badge-font-weight, badge-h, badge-height, badge-px, badge-px-s, badge-radius.
-- **Exports** (`index.ts`): `BadgeTone` ⚠C4, `BadgeVariant` ⚠C4, `MimiBadge`, `badgeVariants` ⚠C5, `resolveBadgeTone` ⚠C5.
+- **Exports** (`index.ts`): `MimiBadge`, `MimiBadgeTone` ✔C4, `MimiBadgeVariant` ✔C4, `mimiBadgeVariants` ✔C5, `mimiResolveBadgeTone` ✔C5.
 
 ### button
 
@@ -125,17 +125,17 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 | `MimiButton` | `button[mimiBtn], a[mimiBtn]` | `variant`, `tone`, `size`, `loading`, comunes: disabled, class | —       |
 
 - **Variables propias** (`--mimi-…`) ⚠P5: btn-border-width, btn-focus-ring-width, btn-font-size, btn-font-weight, btn-gap, btn-gap-s, btn-h, btn-height, btn-letter-spacing, btn-press-scale, btn-px, btn-px-s, btn-radius, btn-text.
-- **Exports** (`index.ts`): `ButtonSize` ⚠C4, `ButtonTone` ⚠C4, `ButtonVariant` ⚠C4, `MimiButton`, `buttonVariants` ⚠C5, `resolveButtonTone` ⚠C5.
+- **Exports** (`index.ts`): `MimiButton`, `MimiButtonSize` ✔C4, `MimiButtonTone` ✔C4, `MimiButtonVariant` ✔C4, `mimiButtonVariants` ✔C5, `mimiResolveButtonTone` ✔C5.
 
 ### calendar
 
-| Pieza          | Selector        | Entradas                                                                                                                                     | Salidas        |
-| -------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
-| `MimiCalendar` | `mimi-calendar` | `size`, `[(value)]`, `mode`, `rangeStart`, `rangeEnd`, `min` ⚠C2, `max` ⚠C2, `isDateDisabled`, `locale`, `weekStart`, `fill`, comunes: class | `datePick` ⚠P3 |
+| Pieza          | Selector        | Entradas                                                                                                                                             | Salidas        |
+| -------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| `MimiCalendar` | `mimi-calendar` | `size`, `[(value)]`, `mode`, `rangeStart`, `rangeEnd`, `minDate` ✔C2, `maxDate` ✔C2, `isDateDisabled`, `locale`, `weekStart`, `fill`, comunes: class | `datePick` ⚠P3 |
 
-- **Textos** `MimiDatePickerText` ⚠C3: pickDate, pickRange, previous, next, changeView, today, goToday, unavailable, pickEnd, pickStart, days, required.
+- **Textos** `MimiCalendarText` ✔C3 (de Calendar, Date Picker y Date Range): pickDate, pickRange, previous, next, changeView, today, goToday, unavailable, pickEnd, pickStart, days, required.
 - **Variables propias** (`--mimi-…`) ⚠P5: cal-cell, cal-nav, date-cell-hover, date-cell-radius, date-cell-size, date-range, date-selected-bg, date-selected-fg, date-today-ring.
-- **Exports** (`index.ts`): `MIMI_DATE_PICKER_TEXT` ⚠C3, `MIMI_DATE_PICKER_TEXT_EN` ⚠C3, `MIMI_DATE_PICKER_TEXT_ES` ⚠C3, `MIMI_TODAY`, `MimiCalendar`, `MimiCalendarView`, `MimiDate`, `MimiDatePickerText` ⚠C3, `MimiDateRange`, `fromMimiDate`, `mimiAddDays`, `mimiAddMonths`, `mimiClampDate`, `mimiDaysBetween`, `mimiFormatDate`, `mimiIsDate`, `mimiStartOfMonth`, `mimiWeekStart`, `mimiWeekday`, `provideMimiDatePickerText` ⚠C3, `toMimiDate`.
+- **Exports** (`index.ts`): `MIMI_CALENDAR_TEXT` ✔C3, `MIMI_CALENDAR_TEXT_EN` ✔C3, `MIMI_CALENDAR_TEXT_ES` ✔C3, `MIMI_TODAY`, `MimiCalendar`, `MimiCalendarText` ✔C3, `MimiCalendarView`, `MimiDate`, `MimiDateRange`, `fromMimiDate`, `mimiAddDays`, `mimiAddMonths`, `mimiClampDate`, `mimiDaysBetween`, `mimiFormatDate`, `mimiIsDate`, `mimiStartOfMonth`, `mimiWeekStart`, `mimiWeekday`, `provideMimiCalendarText` ✔C3, `toMimiDate`.
 
 ### card
 
@@ -158,7 +158,8 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 | `MimiCheckbox` | `mimi-checkbox` | `size`, `[(checked)]`, `[(indeterminate)]`, comunes: disabled, readonly, invalid, touched, dirty, required, id, aria-label, aria-labelledby, class | `touch` |
 
 - **Variables propias** (`--mimi-…`): checkbox-border, checkbox-check, checkbox-checked-bg, checkbox-radius, checkbox-s, checkbox-size.
-- **Exports** (`index.ts`): `MIMI_CHECKBOX_BOX_STYLES` ⚠C8, `MimiCheckbox`.
+- **Exports** (`index.ts`): `MimiCheckbox`.
+- Fuera del índice (✔C8, en `checkbox.ts`): MIMI_CHECKBOX_BOX_STYLES.
 
 ### chip
 
@@ -168,14 +169,15 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 
 - **Textos** `MimiChipText`: remove, added, removed.
 - **Variables propias** (`--mimi-…`): chip-bg, chip-fg, chip-font-size, chip-foreground, chip-h, chip-height, chip-radius, chip-remove-size, chip-text.
-- **Exports** (`index.ts`): `MIMI_CHIP_TEXT`, `MIMI_CHIP_TEXT_EN`, `MIMI_CHIP_TEXT_ES`, `MimiChip`, `MimiChipText`, `injectMimiChipAnnouncer` ⚠C8, `provideMimiChipText`.
+- **Exports** (`index.ts`): `MIMI_CHIP_TEXT`, `MIMI_CHIP_TEXT_EN`, `MIMI_CHIP_TEXT_ES`, `MimiChip`, `MimiChipText`, `provideMimiChipText`.
+- Fuera del índice (✔C8, en `chip.ts`): injectMimiChipAnnouncer.
 
 ### color-picker
 
-| Pieza             | Selector            | Entradas                                                                                                                                                                                                                       | Salidas |
-| ----------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `MimiColorPicker` | `mimi-color-picker` | `size`, `[(value)]`, `swatches`, `[(recent)]`, `showRecent`, `format`, comunes: disabled, readonly, invalid, touched, dirty, class                                                                                             | `touch` |
-| `MimiColorInput`  | `mimi-color-input`  | `size`, `[(value)]`, `swatches`, `[(recent)]`, `showRecent`, `format`, `placeholder`, `panelClass`, `presentation` ⚠C9, comunes: disabled, readonly, invalid, touched, dirty, required, id, aria-label, aria-labelledby, class | `touch` |
+| Pieza             | Selector            | Entradas                                                                                                                                                                                                                                     | Salidas |
+| ----------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `MimiColorPicker` | `mimi-color-picker` | `size`, `[(value)]`, `swatches`, `[(recent)]`, `showRecent`, `format`, comunes: disabled, readonly, invalid, touched, dirty, class                                                                                                           | `touch` |
+| `MimiColorInput`  | `mimi-color-input`  | `size`, `[(value)]`, `swatches`, `[(recent)]`, `showRecent`, `format`, `placeholder`, `panelClass`, `presentation`, `sheetTitle` ✔C9, comunes: disabled, readonly, invalid, touched, dirty, required, id, aria-label, aria-labelledby, class | `touch` |
 
 - **Textos** `MimiColorPickerText`: area, areaValue, hue, format, value, palette, recent, noRecent, pickColor, clipped, required.
 - **Variables propias** (`--mimi-…`): color-picker-area-height, color-picker-area-radius, color-picker-bg, color-picker-hue-height, color-picker-padding, color-picker-radius, color-picker-shadow, color-picker-swatch-border, color-picker-swatch-gap, color-picker-thumb-border, color-picker-thumb-shadow, color-picker-width.
@@ -195,12 +197,12 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 
 ### command
 
-| Pieza               | Selector                       | Entradas                                                                                               | Salidas |
-| ------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------ | ------- |
-| `MimiCommandIcon`   | `ng-template[mimiCommandIcon]` | —                                                                                                      | —       |
-| `MimiCommandEmpty`  | `[mimiCommandEmpty]`           | —                                                                                                      | —       |
-| `MimiCommand`       | `mimi-command`                 | `size`, `items`, `[(query)]`, `placeholder`, comunes: aria-label, class                                | `run`   |
-| `MimiCommandDialog` | `mimi-command-dialog`          | `size`, `[(open)]`, `items`, `placeholder`, `shortcut`, `presentation` ⚠C9, comunes: aria-label, class | `run`   |
+| Pieza               | Selector                       | Entradas                                                                                                                                         | Salidas |
+| ------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `MimiCommandIcon`   | `ng-template[mimiCommandIcon]` | —                                                                                                                                                | —       |
+| `MimiCommandEmpty`  | `[mimiCommandEmpty]`           | —                                                                                                                                                | —       |
+| `MimiCommand`       | `mimi-command`                 | `size`, `items`, `[(query)]`, `placeholder`, comunes: aria-label, class                                                                          | `run`   |
+| `MimiCommandDialog` | `mimi-command-dialog`          | `size`, `[(open)]`, `items`, `placeholder`, `shortcut`, `presentation` (sin hoja: en el teléfono, pantalla completa), comunes: aria-label, class | `run`   |
 
 - **Textos** `MimiCommandText`: placeholder, label, navigate, run, results, noResults, noResultsHint.
 - **Variables propias** (`--mimi-…`): command-active, command-icon-size, command-input-font-size, command-input-h, command-input-height, command-item-h, command-item-height, command-item-radius, command-list-height, command-text, command-top, command-width.
@@ -239,18 +241,18 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 
 ### date-picker
 
-| Pieza            | Selector           | Entradas                                                                                                                                                                                                                                              | Salidas |
-| ---------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `MimiDatePicker` | `mimi-date-picker` | `size`, `[(value)]`, `min` ⚠C2, `max` ⚠C2, `isDateDisabled`, `locale`, `weekStart`, `format`, `placeholder`, `panelClass`, `presentation` ⚠C9, comunes: disabled, readonly, invalid, touched, dirty, required, id, aria-label, aria-labelledby, class | `touch` |
+| Pieza            | Selector           | Entradas                                                                                                                                                                                                                                                                    | Salidas |
+| ---------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `MimiDatePicker` | `mimi-date-picker` | `size`, `[(value)]`, `minDate` ✔C2, `maxDate` ✔C2, `isDateDisabled`, `locale`, `weekStart`, `format`, `placeholder`, `panelClass`, `presentation`, `sheetTitle` ✔C9, comunes: disabled, readonly, invalid, touched, dirty, required, id, aria-label, aria-labelledby, class | `touch` |
 
 - **Variables propias** (`--mimi-…`) ⚠P5: date-menu-bg, date-menu-shadow, date-padding.
 - **Exports** (`index.ts`): `MimiDatePicker`.
 
 ### date-range
 
-| Pieza                 | Selector              | Entradas                                                                                                                                                                                                                                                         | Salidas |
-| --------------------- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `MimiDateRangePicker` | `mimi-date-range` ⚠C1 | `size`, `[(value)]`, `minDate`, `maxDate`, `isDateDisabled`, `presets`, `locale`, `weekStart`, `format`, `placeholder`, `panelClass`, `presentation` ⚠C9, comunes: disabled, readonly, invalid, touched, dirty, required, id, aria-label, aria-labelledby, class | `touch` |
+| Pieza                 | Selector                     | Entradas                                                                                                                                                                                                                                                                       | Salidas |
+| --------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `MimiDateRangePicker` | `mimi-date-range-picker` ✔C1 | `size`, `[(value)]`, `minDate`, `maxDate`, `isDateDisabled`, `presets`, `locale`, `weekStart`, `format`, `placeholder`, `panelClass`, `presentation`, `sheetTitle` ✔C9, comunes: disabled, readonly, invalid, touched, dirty, required, id, aria-label, aria-labelledby, class | `touch` |
 
 - **Variables propias** (`--mimi-…`) ⚠P5: date-padding, date-presets-width.
 - **Exports** (`index.ts`): `MimiDateRangePicker`, `MimiDateRangePreset`.
@@ -304,7 +306,8 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 | `MimiFormField` | `mimi-form-field` | `label`, `errors`, `description`, `hint`, comunes: required, class | —       |
 
 - **Variables propias** (`--mimi-…`): field-error, field-gap, field-label-size, field-label-weight.
-- **Exports** (`index.ts`): `MIMI_ERROR_MESSAGES`, `MIMI_ERROR_MESSAGES_EN`, `MIMI_ERROR_MESSAGES_ES`, `MIMI_FORM_FIELD_CONTEXT` ⚠C8, `MimiErrorMessage`, `MimiErrorMessages`, `MimiFormError`, `MimiFormField`, `MimiFormFieldContext` ⚠C8, `MimiFormFieldImports`, `mimiErrorText`, `provideMimiErrorMessages`, `withMessage`.
+- **Exports** (`index.ts`): `MIMI_ERROR_MESSAGES`, `MIMI_ERROR_MESSAGES_EN`, `MIMI_ERROR_MESSAGES_ES`, `MimiErrorMessage`, `MimiErrorMessages`, `MimiFormError`, `MimiFormField`, `MimiFormFieldImports`, `mimiErrorText`, `provideMimiErrorMessages`, `withMessage`.
+- Fuera del índice (✔C8, en `form-error.ts`): MIMI_FORM_FIELD_CONTEXT, MimiFormFieldContext.
 
 ### input
 
@@ -313,7 +316,7 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 | `MimiInput` | `input[mimiInput]` | `size`, `showError`, comunes: class | —       |
 
 - **Variables propias** (`--mimi-…`): input-background, input-bg, input-border, input-border-focus, input-border-width, input-disabled-opacity, input-error, input-fg, input-focus-ring-width, input-font-size, input-h, input-height, input-placeholder, input-px, input-radius, input-text.
-- **Exports** (`index.ts`): `InputSize` ⚠C4, `MimiInput`, `inputVariants` ⚠C5.
+- **Exports** (`index.ts`): `MimiInput`, `MimiInputSize` ✔C4, `mimiInputVariants` ✔C5.
 
 ### input-mask
 
@@ -347,7 +350,7 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 
 - **Textos** `MimiLoadingText`: loading, done.
 - **Variables propias** (`--mimi-…`): loading-bg, loading-blur, loading-fg, loading-panel-bg, loading-shadow, loading-spinner, loading-z.
-- **Exports** (`index.ts`): `MIMI_LOADING_CONFIG` ⚠C6, `MIMI_LOADING_TEXT`, `MIMI_LOADING_TEXT_EN`, `MIMI_LOADING_TEXT_ES`, `MimiBlock`, `MimiLoadingOptions`, `MimiLoadingRef`, `MimiLoadingService`, `MimiLoadingText`, `injectMimiLoading`, `provideMimiLoading`, `provideMimiLoadingText`.
+- **Exports** (`index.ts`): `MIMI_LOADING_CONFIG`, `MIMI_LOADING_CONFIG_DEFAULT` ✔C6, `MimiLoadingConfig` ✔C6, `MIMI_LOADING_TEXT`, `MIMI_LOADING_TEXT_EN`, `MIMI_LOADING_TEXT_ES`, `MimiBlock`, `MimiLoadingOptions`, `MimiLoadingRef`, `MimiLoadingService`, `MimiLoadingText`, `injectMimiLoading`, `provideMimiLoading`, `provideMimiLoadingText`.
 
 ### menu
 
@@ -449,7 +452,7 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 | `MimiSeparator` | `mimi-separator` | `orientation`, `decorative`, comunes: class | —       |
 
 - **Variables propias** (`--mimi-…`): separator-color, separator-size.
-- **Exports** (`index.ts`): `MimiSeparator`, `SeparatorOrientation` ⚠C4, `separatorVariants` ⚠C5.
+- **Exports** (`index.ts`): `MimiSeparator`, `MimiSeparatorOrientation` ✔C4, `mimiSeparatorVariants` ✔C5.
 
 ### sheet
 
@@ -524,20 +527,20 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 
 ### table
 
-| Pieza              | Selector                | Entradas                                 | Salidas |
-| ------------------ | ----------------------- | ---------------------------------------- | ------- |
-| `MimiTable`        | `table[mimiTable]`      | `size`, `mobile`, comunes: class         | —       |
-| `MimiCaption`      | `caption[mimiCaption]`  | comunes: class                           | —       |
-| `MimiThead`        | `thead[mimiThead]`      | comunes: class                           | —       |
-| `MimiTbody`        | `tbody[mimiTbody]`      | comunes: class                           | —       |
-| `MimiTr`           | `tr[mimiTr]`            | `selected`, comunes: class               | —       |
-| `MimiTd`           | `td[mimiTd]`            | `align`, `label`, comunes: class         | —       |
-| `MimiThOutlet` ⚠C8 | `[mimiThOutlet]`        | `mimiThOutlet`*                          | —       |
-| `MimiTh`           | `th[mimiTh]`            | `sort`, `scope`, `align`, comunes: class | —       |
-| `MimiRowToggle`    | `button[mimiRowToggle]` | `row`*, `controls`                       | —       |
+| Pieza           | Selector                | Entradas                                 | Salidas |
+| --------------- | ----------------------- | ---------------------------------------- | ------- |
+| `MimiTable`     | `table[mimiTable]`      | `size`, `mobile`, comunes: class         | —       |
+| `MimiCaption`   | `caption[mimiCaption]`  | comunes: class                           | —       |
+| `MimiThead`     | `thead[mimiThead]`      | comunes: class                           | —       |
+| `MimiTbody`     | `tbody[mimiTbody]`      | comunes: class                           | —       |
+| `MimiTr`        | `tr[mimiTr]`            | `selected`, comunes: class               | —       |
+| `MimiTd`        | `td[mimiTd]`            | `align`, `label`, comunes: class         | —       |
+| `MimiTh`        | `th[mimiTh]`            | `sort`, `scope`, `align`, comunes: class | —       |
+| `MimiRowToggle` | `button[mimiRowToggle]` | `row`*, `controls`                       | —       |
 
 - **Variables propias** (`--mimi-…`): table-bg, table-cell-px, table-font-size, table-head-bg, table-head-h, table-head-height, table-row-h, table-row-height, table-row-hover, table-row-selected.
-- **Exports** (`index.ts`): `MIMI_DEFAULT_ROW_ID` ⚠C8, `MIMI_TABLE_CELL` ⚠C8, `MIMI_TABLE_CELL_BG` ⚠C8, `MIMI_TABLE_CONFIG`, `MIMI_TABLE_CONFIG_DEFAULT`, `MIMI_TABLE_HEAD` ⚠C8, `MIMI_TABLE_SCROLL_CELL` ⚠C8, `MIMI_TABLE_SORT_BUTTON` ⚠C8, `MIMI_TABLE_SORT_ICON` ⚠C8, `MIMI_TABLE_STACK` ⚠C8, `MimiCaption`, `MimiRowColumn`, `MimiRowToggle`, `MimiTable`, `MimiTableConfig`, `MimiTableFilters`, `MimiTableImports`, `MimiTableMobile`, `MimiTableRow`, `MimiTableSort`, `MimiTableSortHandle`, `MimiTableState`, `MimiTableStateColumn`, `MimiTableStateOptions`, `MimiTbody`, `MimiTd`, `MimiTh`, `MimiThOutlet` ⚠C8, `MimiThead`, `MimiTr`, `mimiClearStackRoles` ⚠C8, `mimiCompareValues`, `mimiFilterSortRows`, `mimiLabelCells` ⚠C8, `mimiNextSort`, `mimiTableState`, `provideMimiTable`.
+- **Exports** (`index.ts`): `MIMI_TABLE_CONFIG`, `MIMI_TABLE_CONFIG_DEFAULT`, `MimiCaption`, `MimiRowColumn`, `MimiRowToggle`, `MimiTable`, `MimiTableConfig`, `MimiTableFilters`, `MimiTableImports`, `MimiTableMobile`, `MimiTableRow`, `MimiTableSort`, `MimiTableSortHandle`, `MimiTableState`, `MimiTableStateColumn`, `MimiTableStateOptions`, `MimiTbody`, `MimiTd`, `MimiTh`, `MimiThead`, `MimiTr`, `mimiCompareValues`, `mimiFilterSortRows`, `mimiNextSort`, `mimiTableState`, `provideMimiTable`.
+- Fuera del índice (✔C8, en `table.ts` y `table-state.ts`; los usa Data Table): MIMI_TABLE_CELL, MIMI_TABLE_CELL_BG, MIMI_TABLE_HEAD, MIMI_TABLE_SCROLL_CELL, MIMI_TABLE_SORT_BUTTON, MIMI_TABLE_SORT_ICON, MIMI_TABLE_STACK, MimiThOutlet (la usa la plantilla de `MimiTh`), mimiLabelCells, mimiClearStackRoles y MIMI_DEFAULT_ROW_ID.
 
 ### tabs
 
@@ -568,13 +571,13 @@ Por componente (la carpeta de `packages/ui-core/src/lib/components/`, más `util
 | `MimiTextarea` | `textarea[mimiTextarea]` | `size`, `showError`, comunes: class | —       |
 
 - **Variables propias** (`--mimi-…`): textarea-bg, textarea-border, textarea-line-height, textarea-min-height, textarea-py, textarea-radius.
-- **Exports** (`index.ts`): `MimiTextarea`, `textareaVariants` ⚠C5.
+- **Exports** (`index.ts`): `MimiTextarea`, `mimiTextareaVariants` ✔C5.
 
 ### toast
 
 - **Textos** `MimiToastText`: region, close.
 - **Variables propias** (`--mimi-…`): toast-bg, toast-border, toast-circle, toast-desc, toast-enter, toast-icon, toast-min-h, toast-offset, toast-pl, toast-py, toast-radius, toast-shadow, toast-stack-gap, toast-title, toast-w, toast-width.
-- **Exports** (`index.ts`): `MIMI_TOAST_CONFIG`, `MIMI_TOAST_DEFAULTS` ⚠C6, `MIMI_TOAST_TEXT`, `MIMI_TOAST_TEXT_EN`, `MIMI_TOAST_TEXT_ES`, `MimiToastAction`, `MimiToastConfig`, `MimiToastFn`, `MimiToastMessage`, `MimiToastOptions`, `MimiToastPosition`, `MimiToastPromiseMessages`, `MimiToastText`, `MimiToastVariant`, `injectMimiToast`, `provideMimiToast`, `provideMimiToastText`.
+- **Exports** (`index.ts`): `MIMI_TOAST_CONFIG`, `MIMI_TOAST_CONFIG_DEFAULT` ✔C6, `MIMI_TOAST_TEXT`, `MIMI_TOAST_TEXT_EN`, `MIMI_TOAST_TEXT_ES`, `MimiToastAction`, `MimiToastConfig`, `MimiToastFn`, `MimiToastMessage`, `MimiToastOptions`, `MimiToastPosition`, `MimiToastPromiseMessages`, `MimiToastText`, `MimiToastVariant`, `injectMimiToast`, `provideMimiToast`, `provideMimiToastText`.
 
 ### toggle-group
 

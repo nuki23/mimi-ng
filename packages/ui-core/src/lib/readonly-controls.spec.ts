@@ -39,7 +39,7 @@ import { MimiSwitch } from '@/components/ui/switch';
       [readonly]="ro()"
     />
     <mimi-date-picker data-test="date" aria-label="d" [(value)]="date" [readonly]="ro()" />
-    <mimi-date-range data-test="range" aria-label="r" [readonly]="ro()" />
+    <mimi-date-range-picker data-test="range" aria-label="r" [readonly]="ro()" />
   `,
 })
 class Host {

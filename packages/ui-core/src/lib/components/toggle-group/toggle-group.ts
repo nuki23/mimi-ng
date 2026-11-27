@@ -219,6 +219,8 @@ export class MimiToggleGroupItem implements FocusableOption {
     '[attr.role]': 'multiple() ? "group" : "radiogroup"',
     '[attr.aria-label]': 'ariaLabel() || null',
     '[attr.aria-labelledby]': 'ariaLabelledby() || null',
+    // El grupo es el anfitrión: aquí van los ids del usuario (M.16); Form Field suma los suyos.
+    '[attr.aria-describedby]': 'ariaDescribedby() || null',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     // aria-readonly vale en el radiogrupo (simple), no en el grupo de interruptores (múltiple).
     '[attr.aria-readonly]': 'readonly() && !multiple() ? "true" : null',
@@ -258,6 +260,8 @@ export class MimiToggleGroup<T = unknown> implements FormValueControl<T | null |
   /** Nombre accesible (obligatorio, o `aria-labelledby`). */
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el grupo (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   /** Clases del grupo, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
 

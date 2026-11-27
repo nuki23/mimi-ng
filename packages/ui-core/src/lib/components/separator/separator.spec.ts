@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MimiSeparator } from './separator';
-import type { SeparatorOrientation } from './separator.variants';
+import type { MimiSeparatorOrientation } from './separator.variants';
 
 @Component({
   imports: [MimiSeparator],
@@ -17,7 +17,7 @@ import type { SeparatorOrientation } from './separator.variants';
   `,
 })
 class Host {
-  readonly orientation = signal<SeparatorOrientation>('horizontal');
+  readonly orientation = signal<MimiSeparatorOrientation>('horizontal');
   readonly decorative = signal(true);
   readonly extra = signal('');
 }

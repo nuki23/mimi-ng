@@ -13,11 +13,11 @@ import {
 import { cn } from '@/components/ui/utils/cn';
 import { injectMimiSize } from '@/components/ui/utils/size';
 import {
-  type ButtonSize,
-  type ButtonTone,
-  type ButtonVariant,
-  buttonVariants,
-  resolveButtonTone,
+  type MimiButtonSize,
+  type MimiButtonTone,
+  type MimiButtonVariant,
+  mimiButtonVariants,
+  mimiResolveButtonTone,
 } from './button.variants';
 
 /**
@@ -78,10 +78,10 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MimiButton {
-  readonly variant = input<ButtonVariant>('solid');
-  readonly tone = input<ButtonTone>();
+  readonly variant = input<MimiButtonVariant>('solid');
+  readonly tone = input<MimiButtonTone>();
   /** `sm | md | lg | icon`. Sin `size`, el del contenedor `mimiSize` o `md`. */
-  readonly size = input<ButtonSize>();
+  readonly size = input<MimiButtonSize>();
   /** El tamaño de verdad: el propio, el del contenedor o `md` (`icon` no se hereda). */
   protected readonly sizeResolved = (() => {
     const inherited = injectMimiSize(
@@ -90,9 +90,9 @@ export class MimiButton {
         return size === 'icon' ? undefined : size;
       }),
     );
-    return computed<ButtonSize>(() => (this.size() === 'icon' ? 'icon' : inherited()));
+    return computed<MimiButtonSize>(() => (this.size() === 'icon' ? 'icon' : inherited()));
   })();
-  protected readonly ownSize = computed<ButtonSize | null>(() => this.size() ?? null);
+  protected readonly ownSize = computed<MimiButtonSize | null>(() => this.size() ?? null);
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly loading = input(false, { transform: booleanAttribute });
   readonly userClass = input('', { alias: 'class' });
@@ -102,11 +102,13 @@ export class MimiButton {
 
   protected readonly isDisabled = computed(() => this.disabled() || this.loading());
 
-  protected readonly toneResolved = computed(() => resolveButtonTone(this.variant(), this.tone()));
+  protected readonly toneResolved = computed(() =>
+    mimiResolveButtonTone(this.variant(), this.tone()),
+  );
 
   protected readonly classes = computed(() =>
     cn(
-      buttonVariants({
+      mimiButtonVariants({
         variant: this.variant(),
         tone: this.toneResolved(),
         size: this.sizeResolved(),

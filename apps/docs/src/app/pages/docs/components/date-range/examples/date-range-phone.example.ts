@@ -9,7 +9,7 @@ import { type MimiDateRangePreset, MimiDateRangePicker } from '@/components/ui/d
     <div class="flex w-full max-w-sm flex-col gap-1.5">
       <!-- Debajo de 640 px es lo de siempre; presentation="sheet" lo pide también aquí. -->
       <!-- Los atajos van en una fila encima del calendario. -->
-      <mimi-date-range
+      <mimi-date-range-picker
         aria-label="Fechas del viaje"
         locale="es"
         presentation="sheet"

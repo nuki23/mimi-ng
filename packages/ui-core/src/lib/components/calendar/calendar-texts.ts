@@ -6,7 +6,7 @@ import { InjectionToken, type Provider } from '@angular/core';
  * días no van aquí: salen de `Intl.DateTimeFormat` con el idioma.
  */
 
-export interface MimiDatePickerText {
+export interface MimiCalendarText {
   /** Nombre del panel del Date Picker. */
   pickDate: string;
   /** Nombre del panel del Date Range. */
@@ -33,7 +33,7 @@ export interface MimiDatePickerText {
 }
 
 /** Textos predeterminados (inglés). */
-export const MIMI_DATE_PICKER_TEXT_EN: MimiDatePickerText = {
+export const MIMI_CALENDAR_TEXT_EN: MimiCalendarText = {
   pickDate: 'Choose date',
   pickRange: 'Choose period',
   previous: 'Previous',
@@ -48,8 +48,8 @@ export const MIMI_DATE_PICKER_TEXT_EN: MimiDatePickerText = {
   required: 'required',
 };
 
-/** Textos en español: `provideMimiDatePickerText(MIMI_DATE_PICKER_TEXT_ES)`. */
-export const MIMI_DATE_PICKER_TEXT_ES: MimiDatePickerText = {
+/** Textos en español: `provideMimiCalendarText(MIMI_CALENDAR_TEXT_ES)`. */
+export const MIMI_CALENDAR_TEXT_ES: MimiCalendarText = {
   pickDate: 'Elegir fecha',
   pickRange: 'Elegir periodo',
   previous: 'Anterior',
@@ -65,13 +65,13 @@ export const MIMI_DATE_PICKER_TEXT_ES: MimiDatePickerText = {
   required: 'obligatorio',
 };
 
-/** Textos activos. Sin `provideMimiDatePickerText`, los predeterminados en inglés. */
-export const MIMI_DATE_PICKER_TEXT = new InjectionToken<MimiDatePickerText>(
-  'MIMI_DATE_PICKER_TEXT',
-  { providedIn: 'root', factory: () => MIMI_DATE_PICKER_TEXT_EN },
-);
+/** Textos activos. Sin `provideMimiCalendarText`, los predeterminados en inglés. */
+export const MIMI_CALENDAR_TEXT = new InjectionToken<MimiCalendarText>('MIMI_CALENDAR_TEXT', {
+  providedIn: 'root',
+  factory: () => MIMI_CALENDAR_TEXT_EN,
+});
 
 /** Cambia los textos del calendario, el Date Picker y el Date Range. Lo que no definas sigue en inglés. */
-export function provideMimiDatePickerText(text: Partial<MimiDatePickerText>): Provider {
-  return { provide: MIMI_DATE_PICKER_TEXT, useValue: { ...MIMI_DATE_PICKER_TEXT_EN, ...text } };
+export function provideMimiCalendarText(text: Partial<MimiCalendarText>): Provider {
+  return { provide: MIMI_CALENDAR_TEXT, useValue: { ...MIMI_CALENDAR_TEXT_EN, ...text } };
 }

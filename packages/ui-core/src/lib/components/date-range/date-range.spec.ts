@@ -2,14 +2,14 @@ import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormField, form, required } from '@angular/forms/signals';
-import { MIMI_DATE_PICKER_TEXT_ES, provideMimiDatePickerText } from '@/components/ui/calendar';
+import { MIMI_CALENDAR_TEXT_ES, provideMimiCalendarText } from '@/components/ui/calendar';
 import { MIMI_TODAY, type MimiDate, type MimiDateRange } from '@/components/ui/calendar/dates';
 import { type MimiDateRangePreset, MimiDateRangePicker } from './date-range';
 
 @Component({
   imports: [MimiDateRangePicker, FormField, ReactiveFormsModule, FormsModule],
   template: `
-    <mimi-date-range
+    <mimi-date-range-picker
       data-test="plain"
       aria-label="Periodo del informe"
       placeholder="Elige un periodo"
@@ -20,9 +20,25 @@ import { type MimiDateRangePreset, MimiDateRangePicker } from './date-range';
       [class]="extra()"
       (touch)="touches = touches + 1"
     />
-    <mimi-date-range data-test="reactive" aria-label="R" locale="es" [formControl]="control" />
-    <mimi-date-range data-test="signal" aria-label="S" locale="es" [formField]="signalForm.range" />
-    <mimi-date-range data-test="ng-model" aria-label="M" locale="es" name="r" [(ngModel)]="model" />
+    <mimi-date-range-picker
+      data-test="reactive"
+      aria-label="R"
+      locale="es"
+      [formControl]="control"
+    />
+    <mimi-date-range-picker
+      data-test="signal"
+      aria-label="S"
+      locale="es"
+      [formField]="signalForm.range"
+    />
+    <mimi-date-range-picker
+      data-test="ng-model"
+      aria-label="M"
+      locale="es"
+      name="r"
+      [(ngModel)]="model"
+    />
   `,
 })
 class Host {
@@ -63,7 +79,7 @@ describe('MimiDateRangePicker', { timeout: 20_000 }, () => {
   async function setup() {
     TestBed.configureTestingModule({
       providers: [
-        provideMimiDatePickerText(MIMI_DATE_PICKER_TEXT_ES),
+        provideMimiCalendarText(MIMI_CALENDAR_TEXT_ES),
         { provide: MIMI_TODAY, useValue: () => '2026-09-15' },
       ],
     });
@@ -71,7 +87,7 @@ describe('MimiDateRangePicker', { timeout: 20_000 }, () => {
     await settle(fixture);
     const root = fixture.nativeElement as HTMLElement;
     const host = (id: string) =>
-      root.querySelector<HTMLElement>(`mimi-date-range[data-test="${id}"]`)!;
+      root.querySelector<HTMLElement>(`mimi-date-range-picker[data-test="${id}"]`)!;
     const trigger = (id: string) => host(id).querySelector<HTMLButtonElement>('button')!;
     const panel = () => document.querySelector<HTMLElement>('[data-mimi-overlay-panel]');
     const cell = (date: MimiDate) => panel()!.querySelector<HTMLElement>(`[data-date="${date}"]`)!;

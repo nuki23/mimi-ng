@@ -7,9 +7,9 @@ import { MimiDateRangePicker } from '@/components/ui/date-range';
   imports: [MimiDateRangePicker],
   template: `
     <div class="flex w-80 max-w-full flex-col gap-3">
-      <mimi-date-range size="sm" aria-label="Viaje (sm)" locale="es" [value]="trip" />
-      <mimi-date-range aria-label="Viaje (md)" locale="es" [value]="trip" />
-      <mimi-date-range size="lg" aria-label="Viaje (lg)" locale="es" [value]="trip" />
+      <mimi-date-range-picker size="sm" aria-label="Viaje (sm)" locale="es" [value]="trip" />
+      <mimi-date-range-picker aria-label="Viaje (md)" locale="es" [value]="trip" />
+      <mimi-date-range-picker size="lg" aria-label="Viaje (lg)" locale="es" [value]="trip" />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

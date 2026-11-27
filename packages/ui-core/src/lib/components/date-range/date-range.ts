@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { MimiCalendar } from '@/components/ui/calendar/calendar';
-import { MIMI_DATE_PICKER_TEXT } from '@/components/ui/calendar/calendar-texts';
+import { MIMI_CALENDAR_TEXT } from '@/components/ui/calendar/calendar-texts';
 import {
   type MimiDate,
   type MimiDateRange,
@@ -84,14 +84,14 @@ let nextId = 0;
  * Date Range:
  *
  * ```html
- * <mimi-date-range aria-label="Periodo" [(value)]="periodo" [maxDate]="hoy" [presets]="atajos" />
+ * <mimi-date-range-picker aria-label="Periodo" [(value)]="periodo" [maxDate]="hoy" [presets]="atajos" />
  * ```
  *
  * `value` es `{ start, end }` con fechas ISO (`MimiDateRange`), o `null`. Implementa
  * `FormValueControl`. `class` va al disparador y `panelClass` al panel.
  */
 @Component({
-  selector: 'mimi-date-range',
+  selector: 'mimi-date-range-picker',
   hostDirectives: [{ directive: MimiSized, inputs: ['size'] }],
   imports: [MimiPopover, MimiPopoverTrigger, MimiPopoverContent, MimiCalendar],
   providers: [{ provide: MIMI_FIELD_CONTROL, useExisting: MimiDateRangePicker }],
@@ -104,7 +104,7 @@ let nextId = 0;
       [blocked]="readonly()"
       [presentation]="presentation()"
       mobilePresentation="sheet"
-      [sheetTitle]="ariaLabel() || ''"
+      [sheetTitle]="sheetLabel(trigger)"
       (openChange)="onOpenChange($event)"
       aria-label="{{ texts.pickRange }}"
     >
@@ -116,7 +116,7 @@ let nextId = 0;
         [class]="classes()"
         [disabled]="disabled()"
         [attr.aria-labelledby]="labelledBy()"
-        [attr.aria-describedby]="valueDescriptionId + ' ' + requiredId"
+        [attr.aria-describedby]="userDescribedby() + valueDescriptionId + ' ' + requiredId"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.aria-disabled]="readonly() || null"
         [attr.data-readonly]="readonly() ? '' : null"
@@ -199,8 +199,8 @@ let nextId = 0;
             [size]="sized.effective()"
             [rangeStart]="shownStart()"
             [rangeEnd]="shownEnd()"
-            [min]="minDate() ?? null"
-            [max]="maxDate() ?? null"
+            [minDate]="minDate() ?? null"
+            [maxDate]="maxDate() ?? null"
             [isDateDisabled]="isDateDisabled()"
             [locale]="lang()"
             [weekStart]="weekStart()"
@@ -221,6 +221,7 @@ let nextId = 0;
     '[attr.id]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
     '[attr.data-state]': 'open() ? "open" : "closed"',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
@@ -231,7 +232,7 @@ export class MimiDateRangePicker
   implements FormValueControl<MimiDateRange | null>, MimiFieldControl
 {
   private readonly defaultLocale = inject(LOCALE_ID);
-  protected readonly texts = inject(MIMI_DATE_PICKER_TEXT);
+  protected readonly texts = inject(MIMI_CALENDAR_TEXT);
   /** El panel va en un overlay, fuera del anfitrión: el calendario recibe el tamaño. */
   protected readonly sized = inject(MimiSized);
 
@@ -265,10 +266,14 @@ export class MimiDateRangePicker
   readonly id = input<string>();
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   readonly userClass = input('', { alias: 'class' });
   readonly panelClass = input('');
   /** Cómo se abre (R.34): `auto` = pantalla completa por debajo de 640 px (un mes debajo del otro). */
   readonly presentation = input<MimiOverlayPresentation>('auto');
+  /** Título de la hoja en el teléfono. Por defecto, el `aria-label` o el `<label for>` (C9). */
+  readonly sheetTitle = input<string>();
 
   /** Se cerró el panel: marca el control como tocado. */
   readonly touch = output<void>();
@@ -299,6 +304,10 @@ export class MimiDateRangePicker
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly valueId = `${this.baseId}-value`;
   protected readonly nameId = `${this.baseId}-name`;
+  /** Los ids del usuario, delante de los propios (M.16), con su espacio. */
+  protected readonly userDescribedby = computed(() =>
+    this.ariaDescribedby() ? `${this.ariaDescribedby()} ` : '',
+  );
   protected readonly valueDescriptionId = `${this.baseId}-value-description`;
   /** La etiqueta (la del usuario, o `aria-label` en un texto oculto) y el valor visible. */
   protected readonly labelledBy = computed(() => {
@@ -346,6 +355,11 @@ export class MimiDateRangePicker
   protected isPreset(preset: MimiDateRangePreset): boolean {
     const range = this.range();
     return !!range && range.start === preset.range.start && range.end === preset.range.end;
+  }
+
+  /** El título de la hoja: `sheetTitle`, el `aria-label` o el texto del `<label for>`. */
+  protected sheetLabel(trigger: HTMLButtonElement): string {
+    return this.sheetTitle() || this.ariaLabel() || trigger.labels?.[0]?.textContent?.trim() || '';
   }
 
   focus(options?: FocusOptions): void {

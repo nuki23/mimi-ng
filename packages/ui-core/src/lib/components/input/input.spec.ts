@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { FormField, email, form, required } from '@angular/forms/signals';
 import { MimiInput } from './input';
-import type { InputSize } from './input.variants';
+import type { MimiInputSize } from './input.variants';
 
 @Component({
   imports: [MimiInput, FormsModule, ReactiveFormsModule, FormField],
@@ -23,7 +23,7 @@ import type { InputSize } from './input.variants';
   `,
 })
 class Host {
-  readonly size = signal<InputSize>('md');
+  readonly size = signal<MimiInputSize>('md');
   readonly showError = signal<boolean | undefined>(undefined);
   readonly reactiveShowError = signal<boolean | undefined>(undefined);
   readonly extra = signal('');
@@ -78,7 +78,7 @@ describe('MimiInput', () => {
     expect(el.hasAttribute('aria-invalid')).toBe(false);
   });
 
-  it.each<[InputSize, string]>([
+  it.each<[MimiInputSize, string]>([
     // La escala vive en el tema (`[data-size]`): todos los tamaños llevan las mismas clases.
     ['sm', 'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))]'],
     ['lg', 'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))]'],

@@ -6,7 +6,7 @@ import {
   input,
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
-import { type SeparatorOrientation, separatorVariants } from './separator.variants';
+import { type MimiSeparatorOrientation, mimiSeparatorVariants } from './separator.variants';
 
 /**
  * Línea divisoria: `<mimi-separator />` o `<mimi-separator orientation="vertical" />`.
@@ -27,12 +27,12 @@ import { type SeparatorOrientation, separatorVariants } from './separator.varian
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MimiSeparator {
-  readonly orientation = input<SeparatorOrientation>('horizontal');
+  readonly orientation = input<MimiSeparatorOrientation>('horizontal');
   /** Solo visual (por defecto). En `false`, los lectores de pantalla la anuncian. */
   readonly decorative = input(true, { transform: booleanAttribute });
   readonly userClass = input('', { alias: 'class' });
 
   protected readonly classes = computed(() =>
-    cn(separatorVariants({ orientation: this.orientation() }), this.userClass()),
+    cn(mimiSeparatorVariants({ orientation: this.orientation() }), this.userClass()),
   );
 }

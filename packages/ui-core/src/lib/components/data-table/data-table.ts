@@ -42,17 +42,16 @@ import {
   MimiSheetTitle,
 } from '@/components/ui/sheet';
 import {
-  MIMI_DEFAULT_ROW_ID,
-  MIMI_TABLE_CELL,
-  MIMI_TABLE_HEAD,
   MIMI_TABLE_CONFIG,
-  MIMI_TABLE_STACK,
   type MimiTableFilters,
   type MimiTableMobile,
   type MimiTableSort,
   mimiFilterSortRows,
   mimiNextSort,
 } from '@/components/ui/table';
+// Piezas internas de Table (api-1.0, C8): del archivo, no del índice.
+import { MIMI_TABLE_CELL, MIMI_TABLE_HEAD, MIMI_TABLE_STACK } from '@/components/ui/table/table';
+import { MIMI_DEFAULT_ROW_ID } from '@/components/ui/table/table-state';
 import { MimiToggleGroup, MimiToggleGroupItem } from '@/components/ui/toggle-group';
 import { cn } from '@/components/ui/utils/cn';
 import { MIMI_OVERLAY_CONFIG } from '@/components/ui/utils/overlay-config';
@@ -258,7 +257,7 @@ const HOST_CLASSES = cn(
 );
 
 const TOOLBAR_CLASSES =
-  'flex min-h-[var(--mimi-table-toolbar-height,56px)] flex-wrap items-center gap-2.5 border-b border-border py-2.5 pr-3 pl-4';
+  'flex min-h-[var(--mimi-table-toolbar-height,56px)] flex-wrap items-center gap-2.5 border-b border-border py-2.5 ps-4 pe-3';
 
 /** Celda y encabezado: los de la capa base (`mimiTd`, `mimiTh`; R.20), más la densidad. */
 const CELL_CLASSES = cn(
@@ -311,7 +310,7 @@ const UI = {
   ),
   sort: cn(
     ICON_BUTTON_CLASSES,
-    'relative mimi-touch -ml-1.5 h-7 gap-[5px] px-1.5 text-[0.78125rem] font-semibold in-data-[sorted]:text-foreground',
+    'relative mimi-touch -ms-1.5 h-7 gap-[5px] px-1.5 text-[0.78125rem] font-semibold in-data-[sorted]:text-foreground',
   ),
   filter: cn(
     ICON_BUTTON_CLASSES,
@@ -931,7 +930,7 @@ interface ColumnView<T> {
     @if (!loading() && count() > 0) {
       <div
         data-slot="footer"
-        class="flex flex-wrap items-center justify-between gap-3 border-t border-border py-3 pr-3 pl-4 text-[0.8125rem] text-muted-foreground tabular-nums"
+        class="flex flex-wrap items-center justify-between gap-3 border-t border-border py-3 ps-4 pe-3 text-[0.8125rem] text-muted-foreground tabular-nums"
       >
         <span data-slot="range">{{ rangeText() }}</span>
         <!-- En el teléfono, compacta: sin «filas por página». -->

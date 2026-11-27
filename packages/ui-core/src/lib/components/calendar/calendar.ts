@@ -18,7 +18,7 @@ import {
 import { cn } from '@/components/ui/utils/cn';
 import { buttonFocusStyles } from '@/components/ui/utils/control-styles';
 import { MimiSized } from '@/components/ui/utils/size';
-import { MIMI_DATE_PICKER_TEXT } from './calendar-texts';
+import { MIMI_CALENDAR_TEXT } from './calendar-texts';
 import {
   MIMI_TODAY,
   type MimiDate,
@@ -127,7 +127,7 @@ const capitalize = (text: string) => text.charAt(0).toLocaleUpperCase() + text.s
  * Calendario de un mes, con vistas de meses y años:
  *
  * ```html
- * <mimi-calendar [(value)]="fecha" [min]="hoy" [isDateDisabled]="esFinDeSemana" />
+ * <mimi-calendar [(value)]="fecha" [minDate]="hoy" [isDateDisabled]="esFinDeSemana" />
  * ```
  *
  * `value` es una fecha ISO (`'2026-09-30'`, tipo `MimiDate`). Con `mode="range"` pinta el periodo
@@ -309,7 +309,7 @@ export class MimiCalendar {
   private readonly dir = inject(Directionality, { optional: true });
   private readonly defaultLocale = inject(LOCALE_ID);
   private readonly todayFn = inject(MIMI_TODAY);
-  protected readonly texts = inject(MIMI_DATE_PICKER_TEXT);
+  protected readonly texts = inject(MIMI_CALENDAR_TEXT);
 
   /** La fecha elegida (`'2026-09-30'`), o `null`. Con `[(value)]`. */
   readonly value = model<MimiDate | null>(null);
@@ -317,9 +317,12 @@ export class MimiCalendar {
   readonly mode = input<'single' | 'range'>('single');
   readonly rangeStart = input<MimiDate | null>(null);
   readonly rangeEnd = input<MimiDate | null>(null);
-  /** Primera y última fecha que se pueden elegir (incluidas). */
-  readonly min = input<MimiDate | null>(null);
-  readonly max = input<MimiDate | null>(null);
+  /**
+   * Primera y última fecha que se pueden elegir (incluidas). `minDate`/`maxDate` en toda la
+   * familia de fechas (Calendar, Date Picker y Date Range; api-1.0, C2).
+   */
+  readonly minDate = input<MimiDate | null>(null);
+  readonly maxDate = input<MimiDate | null>(null);
   /** Fechas que no se pueden elegir (por ejemplo, los fines de semana). */
   readonly isDateDisabled = input<((date: MimiDate) => boolean) | null>(null);
   /** Idioma (nombres y primer día de la semana). Por defecto, `LOCALE_ID`. */
@@ -405,8 +408,8 @@ export class MimiCalendar {
 
   /** `true` si la fecha no se puede elegir. */
   isDisabled(date: MimiDate): boolean {
-    const min = this.min();
-    const max = this.max();
+    const min = this.minDate();
+    const max = this.maxDate();
     return (!!min && date < min) || (!!max && date > max) || !!this.isDateDisabled()?.(date);
   }
 

@@ -15,7 +15,9 @@ Una línea por pregunta, con la tarea donde está escrita completa (opciones y r
 
 **(a) Compartidas: se deciden antes de empezar el grupo o la primera tarea que las usa.**
 
-Ninguna abierta. (Playwright como devDependency del repo, para la M.18 y la CI: **decidido por el usuario el 23/11/2026**, `@playwright/test` solo como `devDependency` de la raíz; queda en la 1.0-5, `docs/plan/version-1.0.md`, y en la spec 2.)
+- [ ] **P1 a P6 de la revisión de la API** (26/11/2026, tanda 2 de la 0.9.0; opciones y recomendación en `docs/spec/api-1.0.md`, sección 3): P1 `density` y `size` de Data Table (la 1.0-8); P2 `success` de Input OTP; P3 los nombres de eventos fuera de la regla (`datePick`, los participios); P4 `size` propio de Pagination y Progress; P5 las variables con abreviatura (`--mimi-btn-*`…); P6 `mimiButtonVariants` frente a `buttonVariants` (aplicada la regla; se puede volver). Antes de la 1.0: después son rupturas.
+
+Ninguna otra abierta. (Playwright como devDependency del repo, para la M.18 y la CI: **decidido por el usuario el 23/11/2026**, `@playwright/test` solo como `devDependency` de la raíz; queda en la 1.0-5, `docs/plan/version-1.0.md`, y en la spec 2.)
 
 **PD-9 la decidió el usuario el 14/11/2026** (opción (a)): `DocPage.tokens` acepta una lista de tablas (la primera, la del componente). Tags Input y Combobox muestran también la del chip; File Upload, la de Progress.
 

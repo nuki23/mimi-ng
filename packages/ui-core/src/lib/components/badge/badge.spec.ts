@@ -1,11 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MimiBadge } from './badge';
-import type { BadgeTone, BadgeVariant } from './badge.variants';
+import type { MimiBadgeTone, MimiBadgeVariant } from './badge.variants';
 
 // Los atajos de la 0.1.x se quitaron en la 0.8.0 (M.28): ya no son variantes.
 // @ts-expect-error `destructive` es ahora `tone="danger"`.
-const REMOVED_SHORTCUT: BadgeVariant = 'destructive';
+const REMOVED_SHORTCUT: MimiBadgeVariant = 'destructive';
 
 @Component({
   imports: [MimiBadge],
@@ -17,8 +17,8 @@ const REMOVED_SHORTCUT: BadgeVariant = 'destructive';
   `,
 })
 class Host {
-  readonly variant = signal<BadgeVariant>('solid');
-  readonly tone = signal<BadgeTone | undefined>(undefined);
+  readonly variant = signal<MimiBadgeVariant>('solid');
+  readonly tone = signal<MimiBadgeTone | undefined>(undefined);
   readonly extra = signal('');
 }
 
@@ -56,7 +56,7 @@ describe('MimiBadge', () => {
   });
 
   // Una clase representativa de cada variante con cada tono (badge.variants.ts, TONE_CLASSES).
-  const EXPECTED: Record<BadgeVariant, Record<BadgeTone, string>> = {
+  const EXPECTED: Record<MimiBadgeVariant, Record<MimiBadgeTone, string>> = {
     solid: {
       primary: 'bg-primary',
       secondary: 'bg-secondary',
@@ -82,8 +82,8 @@ describe('MimiBadge', () => {
       danger: 'before:bg-destructive',
     },
   };
-  const COMBOS = (Object.keys(EXPECTED) as BadgeVariant[]).flatMap((variant) =>
-    (Object.keys(EXPECTED[variant]) as BadgeTone[]).map(
+  const COMBOS = (Object.keys(EXPECTED) as MimiBadgeVariant[]).flatMap((variant) =>
+    (Object.keys(EXPECTED[variant]) as MimiBadgeTone[]).map(
       (tone) => [variant, tone, EXPECTED[variant][tone]] as const,
     ),
   );

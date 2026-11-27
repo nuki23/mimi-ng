@@ -105,6 +105,13 @@ export const COLOR_PICKER_PAGE: DocPage = {
           'Solo en `mimi-color-input`: cómo se abre. `auto`: hoja inferior debajo de 640 px.',
       },
       {
+        name: 'sheetTitle',
+        type: 'string',
+        default: '—',
+        description:
+          'Solo en `mimi-color-input`: título de la hoja. Por defecto, el `aria-label` o el `<label for>`.',
+      },
+      {
         name: 'value',
         type: "string ('#4f46e5')",
         default: "''",

@@ -9,7 +9,7 @@ import {
   model,
   output,
 } from '@angular/core';
-import { MimiBadge, type BadgeTone } from '@/components/ui/badge';
+import { MimiBadge, type MimiBadgeTone } from '@/components/ui/badge';
 import { MimiButton } from '@/components/ui/button';
 import { MimiCheckbox } from '@/components/ui/checkbox';
 import {
@@ -37,7 +37,7 @@ export interface Table01Customer {
 }
 
 /** Cuenta de cada estado en el resumen y en las píldoras de la lista móvil. */
-const STATUSES: { id: Table01Status; label: string; plural: string; tone: BadgeTone }[] = [
+const STATUSES: { id: Table01Status; label: string; plural: string; tone: MimiBadgeTone }[] = [
   { id: 'active', label: 'Active', plural: 'Active', tone: 'success' },
   { id: 'trial', label: 'Trial', plural: 'Trial', tone: 'info' },
   { id: 'past-due', label: 'Past due', plural: 'Past due', tone: 'warning' },
@@ -158,7 +158,7 @@ export class Table01 {
   }
 
   /** El punto de color de cada estado (clases literales para Tailwind). */
-  protected dotClass(tone: BadgeTone): string {
+  protected dotClass(tone: MimiBadgeTone): string {
     return (
       {
         success: 'bg-success',
@@ -167,7 +167,7 @@ export class Table01 {
         danger: 'bg-destructive',
         primary: 'bg-primary',
         secondary: 'bg-secondary',
-      } satisfies Record<BadgeTone, string>
+      } satisfies Record<MimiBadgeTone, string>
     )[tone];
   }
 

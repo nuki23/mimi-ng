@@ -2,10 +2,10 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { buttonFocusStyles, controlDisabledStyles } from '@/components/ui/utils/control-styles';
 
 /** Cómo se ve el botón (spec 4, «Variante y tono»). El color va en `tone`. */
-export type ButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost' | 'link';
+export type MimiButtonVariant = 'solid' | 'soft' | 'outline' | 'ghost' | 'link';
 
 /** De qué color es. `danger` usa los tokens `destructive`. */
-export type ButtonTone = 'primary' | 'secondary' | 'success' | 'warning' | 'info' | 'danger';
+export type MimiButtonTone = 'primary' | 'secondary' | 'success' | 'warning' | 'info' | 'danger';
 
 /**
  * Colores de cada tono en cada variante: una fila por tono, una entrada por variante. Todas las
@@ -73,7 +73,7 @@ const TONE_CLASSES = {
       'bg-transparent text-destructive-soft-foreground hover:not-disabled:not-aria-busy:bg-destructive-soft',
     link: 'bg-transparent text-destructive-soft-foreground',
   },
-} as const satisfies Record<ButtonTone, Record<ButtonVariant, string>>;
+} as const satisfies Record<MimiButtonTone, Record<MimiButtonVariant, string>>;
 
 /**
  * Clases de mimiBtn (docs/design/Mimi Componentes.dc.html, sección 1). Todas literales para
@@ -85,7 +85,7 @@ const TONE_CLASSES = {
 const SIZE_SCALE =
   'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))] gap-[var(--mimi-btn-gap-s,var(--mimi-btn-gap,0.5rem))] px-[var(--mimi-btn-px-s,var(--mimi-btn-px,1rem))] text-[length:var(--mimi-btn-text,var(--mimi-btn-font-size,0.875rem))]';
 
-export const buttonVariants = cva(
+export const mimiButtonVariants = cva(
   [
     'relative inline-flex shrink-0 cursor-pointer items-center justify-center whitespace-nowrap select-none',
     'rounded-[var(--mimi-btn-radius,var(--mimi-radius,0.75rem))]',
@@ -134,8 +134,8 @@ export const buttonVariants = cva(
       // Los colores: una combinación por cada tono y variante de TONE_CLASSES.
       ...Object.entries(TONE_CLASSES).flatMap(([tone, byVariant]) =>
         Object.entries(byVariant).map(([variant, cls]) => ({
-          tone: tone as ButtonTone,
-          variant: variant as ButtonVariant,
+          tone: tone as MimiButtonTone,
+          variant: variant as MimiButtonVariant,
           class: cls,
         })),
       ),
@@ -146,11 +146,11 @@ export const buttonVariants = cva(
   },
 );
 
-type ButtonVariantProps = VariantProps<typeof buttonVariants>;
-export type ButtonSize = NonNullable<ButtonVariantProps['size']>;
+type ButtonVariantProps = VariantProps<typeof mimiButtonVariants>;
+export type MimiButtonSize = NonNullable<ButtonVariantProps['size']>;
 
 /** Sin `tone`, cada variante usa su tono natural: outline y ghost son neutros (secondary). */
-const NATURAL_TONE: Record<ButtonVariant, ButtonTone> = {
+const NATURAL_TONE: Record<MimiButtonVariant, MimiButtonTone> = {
   solid: 'primary',
   soft: 'primary',
   outline: 'secondary',
@@ -159,9 +159,9 @@ const NATURAL_TONE: Record<ButtonVariant, ButtonTone> = {
 };
 
 /** El tono de verdad: el que se pasó o el natural de la variante. */
-export function resolveButtonTone(
-  variant: ButtonVariant,
-  tone: ButtonTone | undefined,
-): ButtonTone {
+export function mimiResolveButtonTone(
+  variant: MimiButtonVariant,
+  tone: MimiButtonTone | undefined,
+): MimiButtonTone {
   return tone ?? NATURAL_TONE[variant];
 }

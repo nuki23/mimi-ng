@@ -24,7 +24,7 @@ import {
   viewChildren,
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
-import { MIMI_CHECKBOX_BOX_STYLES } from '@/components/ui/checkbox';
+import { MIMI_CHECKBOX_BOX_STYLES } from '@/components/ui/checkbox/checkbox';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
 import { MIMI_TREE_TEXT } from './tree-texts';
@@ -169,6 +169,7 @@ const fold = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toL
       role="tree"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabelledby() || null"
+      [attr.aria-describedby]="ariaDescribedby() || null"
       [attr.aria-disabled]="disabled() || null"
       [attr.aria-busy]="busy() || null"
       class="flex flex-col gap-px outline-none"
@@ -322,6 +323,7 @@ const fold = (text: string) => text.normalize('NFD').replace(/[̀-ͯ]/g, '').toL
     // aria-* van al elemento con role="tree".
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -339,6 +341,8 @@ export class MimiTree<T = unknown> implements FormValueControl<string | null | s
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   readonly userClass = input('', { alias: 'class' });
 
   /** Se emite cuando el foco sale del árbol: marca el control como tocado. */

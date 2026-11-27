@@ -619,7 +619,7 @@ let nextInputId = 0;
       [(open)]="open"
       [presentation]="presentation()"
       mobilePresentation="sheet"
-      [sheetTitle]="ariaLabel() || ''"
+      [sheetTitle]="sheetLabel(trigger)"
       (openChange)="onOpenChange($event)"
       aria-label="{{ texts.pickColor }}"
     >
@@ -633,7 +633,7 @@ let nextInputId = 0;
         [attr.aria-disabled]="readonly() || null"
         [attr.data-readonly]="readonly() ? '' : null"
         [attr.aria-labelledby]="labelledBy()"
-        [attr.aria-describedby]="valueDescriptionId + ' ' + requiredId"
+        [attr.aria-describedby]="userDescribedby() + valueDescriptionId + ' ' + requiredId"
         [attr.aria-invalid]="showInvalid() || null"
       >
         <span
@@ -679,6 +679,7 @@ let nextInputId = 0;
     '[attr.id]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
     '[attr.data-state]': 'open() ? "open" : "closed"',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
@@ -709,10 +710,14 @@ export class MimiColorInput implements FormValueControl<string>, MimiFieldContro
   readonly id = input<string>();
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   readonly userClass = input('', { alias: 'class' });
   readonly panelClass = input('');
   /** Cómo se abre el panel (R.34): `auto` = hoja inferior por debajo de 640 px. */
   readonly presentation = input<MimiOverlayPresentation>('auto');
+  /** Título de la hoja en el teléfono. Por defecto, el `aria-label` o el `<label for>` (C9). */
+  readonly sheetTitle = input<string>();
 
   readonly touch = output<void>();
 
@@ -726,6 +731,10 @@ export class MimiColorInput implements FormValueControl<string>, MimiFieldContro
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly valueId = `${this.baseId}-value`;
   protected readonly nameId = `${this.baseId}-name`;
+  /** Los ids del usuario, delante de los propios (M.16), con su espacio. */
+  protected readonly userDescribedby = computed(() =>
+    this.ariaDescribedby() ? `${this.ariaDescribedby()} ` : '',
+  );
   protected readonly valueDescriptionId = `${this.baseId}-value-description`;
   /** La etiqueta (la del usuario, o `aria-label` en un texto oculto) y el valor visible. */
   protected readonly labelledBy = computed(() => {
@@ -744,6 +753,11 @@ export class MimiColorInput implements FormValueControl<string>, MimiFieldContro
       this.panelClass(),
     ),
   );
+
+  /** El título de la hoja: `sheetTitle`, el `aria-label` o el texto del `<label for>`. */
+  protected sheetLabel(trigger: HTMLButtonElement): string {
+    return this.sheetTitle() || this.ariaLabel() || trigger.labels?.[0]?.textContent?.trim() || '';
+  }
 
   focus(options?: FocusOptions): void {
     this.trigger().nativeElement.focus(options);

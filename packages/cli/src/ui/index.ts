@@ -84,6 +84,10 @@ interface Plan {
    * se quedan y se actualizan donde están, como en la 0.4.0 (B.11-g).
    */
   legacyPages: string[];
+  /** Lo que pidió el usuario (`ng g mimi a b`), sin repetidos (M.8: las raíces del todo o nada). */
+  requested: string[];
+  /** Lo que ya declara package.json (dependencias de todo tipo). */
+  installed: Record<string, string>;
   config: MimiConfig;
   /** Ítems a copiar: los pedidos y sus registryDependencies, sin repetir. */
   items: string[];
@@ -133,6 +137,7 @@ export function ui(options: UiOptions): Rule {
       writeTemplates({
         items: [...plan.items, ...plan.implicit],
         implicit: plan.implicit,
+        roots: plan.requested,
         componentsDir: plan.componentsDir,
         blocksDir: plan.blocksDir,
         pages: plan.pages,
@@ -141,18 +146,75 @@ export function ui(options: UiOptions): Rule {
         report,
       }),
       updateMimiConfig(plan, report),
-      updateGlobalCss(plan),
-      addFolderSources(plan),
-      ...Object.entries(plan.newPackages).map(([name, version]) =>
+      // M.8: los @import, los @source y los paquetes, solo de lo que se escribió (antes se
+      // calculaban antes de decidir los bloqueos: un Confirm bloqueado agregaba el cdk).
+      updateGlobalCss(plan, report),
+      addFolderSources(plan, report),
+      addPackages(plan, report),
+      summary(plan, report),
+    ]);
+  };
+}
+
+/**
+ * Los ítems que quedan en el proyecto después de escribir: todos menos los que no estaban y no se
+ * agregaron (bloqueados). Uno bloqueado que ya estaba sigue ahí, con sus paquetes y su CSS.
+ */
+function keptItems(plan: Plan, report: FileReport): string[] {
+  const dropped = new Set(report.blocked.filter((b) => !b.installed).map((b) => b.item));
+  return plan.items.filter((item) => !dropped.has(item));
+}
+
+/**
+ * Agrega a package.json los paquetes de lo que se escribió (M.8). Corre después de
+ * writeTemplates, y deja en `plan.newPackages` lo que agregó, para el resumen.
+ */
+function addPackages(plan: Plan, report: FileReport): Rule {
+  return (tree) => {
+    const needed = packagesFor(tree, keptItems(plan, report), plan.installed);
+    plan.newPackages = needed;
+    return chain(
+      Object.entries(needed).map(([name, version]) =>
         addDependency(name, version, {
           type: DependencyType.Default,
           existing: ExistingBehavior.Skip,
           install: InstallBehavior.Auto,
         }),
       ),
-      summary(plan, report),
-    ]);
+    );
   };
+}
+
+/** Los paquetes que piden los ítems y que el proyecto no tiene (con sus rangos). */
+function packagesFor(
+  tree: Tree,
+  items: string[],
+  installed: Record<string, string>,
+): Record<string, string> {
+  const angularRange = installed['@angular/core'];
+  const newPackages: Record<string, string> = {};
+  for (const item of items) {
+    for (const [name, version] of Object.entries(registry.items[item].dependencies ?? {})) {
+      if (!installed[name]) newPackages[name] = version;
+    }
+    // peerDependencies: solo si el proyecto no las tiene. Las de Angular, con el rango de
+    // @angular/core del proyecto, para que no queden desalineadas.
+    for (const [name, version] of Object.entries(registry.items[item].peerDependencies ?? {})) {
+      if (installed[name]) continue;
+      newPackages[name] =
+        name === '@angular/aria'
+          ? ariaVersion(tree, installed, version)
+          : name.startsWith('@angular/') && angularRange
+            ? angularRange
+            : version;
+    }
+  }
+  // aria necesita el cdk (bidi, a11y, platform). Un ítem que solo importa aria (Tabs) no declara
+  // el cdk como peer; sin otro ítem que lo traiga, va con la misma versión que aria.
+  if (newPackages['@angular/aria'] && !installed['@angular/cdk'] && !newPackages['@angular/cdk']) {
+    newPackages['@angular/cdk'] = newPackages['@angular/aria'];
+  }
+  return newPackages;
 }
 
 // ── Verificaciones (sin escribir) ─────────────────────────────────────────────────────
@@ -191,29 +253,8 @@ function inspect(tree: Tree, options: UiOptions): Plan {
 
   const pkg = readJson<PackageJson>(tree, 'package.json');
   const installed = allDependencies(pkg);
-  const angularRange = installed['@angular/core'];
-  const newPackages: Record<string, string> = {};
-  for (const item of items) {
-    for (const [name, version] of Object.entries(registry.items[item].dependencies ?? {})) {
-      if (!installed[name]) newPackages[name] = version;
-    }
-    // peerDependencies: solo si el proyecto no las tiene. Las de Angular, con el rango de
-    // @angular/core del proyecto, para que no queden desalineadas.
-    for (const [name, version] of Object.entries(registry.items[item].peerDependencies ?? {})) {
-      if (installed[name]) continue;
-      newPackages[name] =
-        name === '@angular/aria'
-          ? ariaVersion(tree, installed, version)
-          : name.startsWith('@angular/') && angularRange
-            ? angularRange
-            : version;
-    }
-  }
-  // aria necesita el cdk (bidi, a11y, platform). Un ítem que solo importa aria (Tabs) no declara
-  // el cdk como peer; sin otro ítem que lo traiga, va con la misma versión que aria.
-  if (newPackages['@angular/aria'] && !installed['@angular/cdk'] && !newPackages['@angular/cdk']) {
-    newPackages['@angular/cdk'] = newPackages['@angular/aria'];
-  }
+  // Lo que pedirían todos los ítems; addPackages lo recalcula con lo que de verdad se escribió.
+  const newPackages = packagesFor(tree, items, installed);
 
   const implicit = [...new Set(INIT_ITEMS.flatMap((item) => resolveItems(item)))].filter(
     (item) => !items.includes(item),
@@ -233,8 +274,10 @@ function inspect(tree: Tree, options: UiOptions): Plan {
     pages,
     legacyPages,
     config,
+    requested,
     items,
     implicit,
+    installed,
     newPackages,
     outdated,
     updatable,
@@ -625,10 +668,10 @@ function updateMimiConfig(plan: Plan, report: FileReport): Rule {
  * del de Tailwind): los `@import` tienen que ir antes que cualquier otra regla, y así quedan
  * junto a los de Mimi. Si no se encuentra el archivo, se explica cómo agregarlos a mano.
  */
-function updateGlobalCss(plan: Plan): Rule {
+function updateGlobalCss(plan: Plan, report: FileReport): Rule {
   return (tree, context) => {
     const imports = [
-      ...new Set(plan.items.flatMap((item) => registry.items[item].cssImports ?? [])),
+      ...new Set(keptItems(plan, report).flatMap((item) => registry.items[item].cssImports ?? [])),
     ];
     if (imports.length === 0) return;
     const cssPath = plan.config.tailwind?.css;
@@ -655,13 +698,17 @@ function updateGlobalCss(plan: Plan): Rule {
  * la de las páginas (B.11-i), y la pantalla queda sin sus estilos. Si se copia un Block o se
  * genera una página, se agrega el `@source` de su carpeta (una vez).
  */
-function addFolderSources(plan: Plan): Rule {
+function addFolderSources(plan: Plan, report: FileReport): Rule {
   return (tree, context) => {
+    const kept = keptItems(plan, report);
     const dirs: string[] = [];
-    if (plan.items.some((item) => registry.items[item].type === 'block' && !plan.pages[item])) {
+    if (kept.some((item) => registry.items[item].type === 'block' && !plan.pages[item])) {
       dirs.push(plan.blocksDir);
     }
-    for (const page of Object.values(plan.pages)) {
+    const pages = Object.entries(plan.pages)
+      .filter(([item]) => kept.includes(item))
+      .map(([, page]) => page);
+    for (const page of pages) {
       const dir = `${page.dir}/`.startsWith(`${plan.pagesDir}/`) ? plan.pagesDir : page.dir;
       if (!dirs.includes(dir)) dirs.push(dir);
     }

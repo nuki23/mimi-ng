@@ -15,7 +15,7 @@ import { MimiDatePicker } from '@/components/ui/date-picker';
         id="delivery"
         locale="es"
         placeholder="Elige un día"
-        [min]="today"
+        [minDate]="today"
         [isDateDisabled]="weekend"
         [(value)]="date"
       />

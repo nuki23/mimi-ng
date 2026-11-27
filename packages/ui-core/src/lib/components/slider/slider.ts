@@ -130,6 +130,7 @@ const FILL = {
         [attr.tabindex]="disabled() ? -1 : 0"
         [attr.aria-label]="thumb.label"
         [attr.aria-labelledby]="range() ? null : ariaLabelledby() || null"
+        [attr.aria-describedby]="ariaDescribedby() || null"
         [attr.aria-valuemin]="thumb.min"
         [attr.aria-valuemax]="thumb.max"
         [attr.aria-valuenow]="thumb.value"
@@ -165,6 +166,7 @@ const FILL = {
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
     '[attr.role]': 'range() ? "group" : null',
     '(pointerdown)': 'onPointerDown($event)',
     '(pointermove)': 'onPointerMove($event)',
@@ -207,6 +209,8 @@ export class MimiSlider implements FormValueControl<MimiSliderValue>, MimiFieldC
   readonly required = input(false, { transform: booleanAttribute });
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   /** Clases del contenedor, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
 

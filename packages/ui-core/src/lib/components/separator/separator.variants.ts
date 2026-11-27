@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
  * Tailwind las detecte. Línea de 1px con el color --mimi-border. La vertical toma el alto de su
  * fila flex (align-self: stretch), como en el diseño.
  */
-export const separatorVariants = cva(
+export const mimiSeparatorVariants = cva(
   'shrink-0 bg-[color:var(--mimi-separator-color,var(--mimi-border))]',
   {
     variants: {
@@ -18,6 +18,6 @@ export const separatorVariants = cva(
   },
 );
 
-export type SeparatorOrientation = NonNullable<
-  VariantProps<typeof separatorVariants>['orientation']
+export type MimiSeparatorOrientation = NonNullable<
+  VariantProps<typeof mimiSeparatorVariants>['orientation']
 >;

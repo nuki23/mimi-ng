@@ -28,7 +28,7 @@ export const DATE_PICKER_PAGE: DocPage = {
     id: 'demo',
     title: '',
     sentence:
-      'Desde hoy y sin fines de semana, con `[min]` e `[isDateDisabled]`. El valor es una fecha ISO.',
+      'Desde hoy y sin fines de semana, con `[minDate]` e `[isDateDisabled]`. El valor es una fecha ISO.',
     component: DatePickerDeliveryExample,
     source: deliverySource as string,
   },
@@ -131,17 +131,24 @@ export const DATE_PICKER_PAGE: DocPage = {
         description: 'Cómo se abre. `auto`: hoja inferior debajo de 640 px y panel desde ahí.',
       },
       {
+        name: 'sheetTitle',
+        type: 'string',
+        default: '—',
+        description:
+          'Título de la hoja. Por defecto, el `aria-label` o el texto del `<label for>`.',
+      },
+      {
         name: 'value',
         type: "MimiDate | null ('2026-09-30')",
         default: 'null',
         description: 'La fecha elegida, como cadena ISO sin hora. Con `[(value)]` o un formulario.',
       },
       {
-        name: 'min, max',
+        name: 'minDate, maxDate',
         type: 'MimiDate',
         default: '—',
         description:
-          'Primera y última fecha elegibles. Con `[formField]` no se enlazan: usa `isDateDisabled` y valida en el esquema.',
+          'Primera y última fecha elegibles. Se enlazan también con `[formField]`; la validación va en el esquema.',
       },
       {
         name: 'isDateDisabled',
@@ -230,8 +237,8 @@ export const DATE_PICKER_PAGE: DocPage = {
   },
   texts: [
     {
-      constant: 'MIMI_DATE_PICKER_TEXT_ES',
-      provider: 'provideMimiDatePickerText',
+      constant: 'MIMI_CALENDAR_TEXT_ES',
+      provider: 'provideMimiCalendarText',
       path: 'calendar/calendar-texts',
       note: 'los del calendario, el Date Picker y el Date Range',
     },

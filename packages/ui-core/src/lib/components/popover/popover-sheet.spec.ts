@@ -18,8 +18,13 @@ import { MimiPopoverImports } from './popover';
       <ng-template mimiPopoverContent><input data-test="email" /></ng-template>
     </mimi-popover>
     <mimi-date-picker data-test="date" aria-label="Entrega" />
-    <mimi-date-range data-test="range" aria-label="Viaje" [presets]="presets" />
+    <mimi-date-range-picker data-test="range" aria-label="Viaje" [presets]="presets" />
     <mimi-color-input data-test="color" aria-label="Color" />
+    <label for="due">Vencimiento</label>
+    <mimi-date-picker data-test="labelled" id="due" />
+    <mimi-date-range-picker data-test="titled" aria-label="Viaje" sheetTitle="Fechas del viaje" />
+    <label for="brand">Marca</label>
+    <mimi-color-input data-test="color-labelled" id="brand" />
   `,
 })
 class Host {
@@ -95,6 +100,24 @@ describe('Popover y los selectores en la hoja (R.34)', () => {
     await open('[data-test="popover"]');
     expect(sheet()).toBeNull();
     expect(document.querySelector('[data-mimi-overlay-panel]')).not.toBeNull();
+  });
+
+  it('el título de la hoja: sheetTitle, o el aria-label, o el <label for> (api-1.0, C9)', async () => {
+    narrow = true;
+    const { settle, open } = await setup();
+    const title = () => sheet()!.querySelector('[data-slot="title"]')!.textContent?.trim();
+    const close = async () => {
+      sheet()!.querySelector<HTMLElement>('[data-slot="close"]')!.click();
+      await settle();
+    };
+    await open('[data-test="labelled"] [mimiPopoverTrigger]');
+    expect(title()).toBe('Vencimiento');
+    await close();
+    await open('[data-test="titled"] [mimiPopoverTrigger]');
+    expect(title()).toBe('Fechas del viaje');
+    await close();
+    await open('[data-test="color-labelled"] [mimiPopoverTrigger]');
+    expect(title()).toBe('Marca');
   });
 
   it('auto en el teléfono: Date Picker, Date Range y Color Picker en hoja inferior', async () => {

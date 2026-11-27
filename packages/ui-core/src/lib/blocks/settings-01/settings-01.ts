@@ -3,7 +3,6 @@ import {
   Component,
   DOCUMENT,
   DestroyRef,
-  ElementRef,
   LOCALE_ID,
   afterEveryRender,
   booleanAttribute,
@@ -306,22 +305,10 @@ export class Settings01 {
         this.model.set(value);
       });
     });
-    // La descripción de cada interruptor, en su botón (Switch no tiene entrada para
-    // aria-describedby; el diseño solo ponía aria-label). Después de cada render: el panel de una
-    // sección se crea al mostrarse (contenido diferido de Tabs), sin una señal que avise.
-    const host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
-    afterEveryRender({
-      write: () => {
-        this.focusPending();
-        for (const sw of Array.from(host.querySelectorAll('mimi-switch[data-describedby]'))) {
-          const button = sw.querySelector('[role="switch"]');
-          const id = sw.getAttribute('data-describedby');
-          if (button && id && button.getAttribute('aria-describedby') !== id) {
-            button.setAttribute('aria-describedby', id);
-          }
-        }
-      },
-    });
+    // El foco pendiente (M3) después de cada render: el panel de una sección se crea al mostrarse
+    // (contenido diferido de Tabs), sin una señal que avise. La descripción de cada interruptor
+    // va con la entrada aria-describedby de Switch (M.21; antes, se ponía aquí a mano).
+    afterEveryRender({ write: () => this.focusPending() });
     const window = inject(DOCUMENT).defaultView;
     const media = window?.matchMedia?.(SIDE_NAV_QUERY) ?? null;
     if (media) {

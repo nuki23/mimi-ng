@@ -225,6 +225,46 @@ describe('ng g mimi <block> (B.1)', () => {
     expect(warnings()).toHaveLength(2);
   });
 
+  it('M.8: un Block que no se puede agregar no deja sus piezas a medias (dashboard-01 con el Button modificado)', async () => {
+    // El escenario 3 de la 0.8.0 (docs/auto/release-0.8.0-2026-11-23.md): con dashboard-01
+    // bloqueado por el Button modificado, la CLI copiaba Avatar, Badge, Card, Sheet y Table.
+    const { run, tree, warnings } = await initialized();
+    const withButton = await run('mimi', { components: ['button'] }, tree);
+    makeOld(withButton, { block: false, button: true, modified: ['button/button.ts'] });
+    const before = {
+      pkg: withButton.readContent('/package.json'),
+      css: withButton.readContent('/projects/app/src/styles.css'),
+      files: snapshot(withButton),
+    };
+    const result = await run('mimi', { components: ['dashboard-01'] }, withButton);
+
+    // Ni el Block, ni sus componentes nuevos, ni sus utilidades nuevas. (mimi.json se reescribe
+    // con su salto de línea final: makeOld lo dejó sin él; su contenido no cambia.)
+    const withoutConfig = (files: Record<string, string>) =>
+      Object.fromEntries(Object.entries(files).filter(([file]) => file !== '/mimi.json'));
+    expect(withoutConfig(snapshot(result))).toEqual(withoutConfig(before.files));
+    expect(json(result, '/mimi.json')).toEqual(json(withButton, '/mimi.json'));
+    expect(result.readContent('/package.json')).toBe(before.pkg);
+    expect(result.readContent('/projects/app/src/styles.css')).toBe(before.css);
+    expect(json(result, '/mimi.json').blocks).toBeUndefined();
+    const messages = warnings();
+    expect(messages).toContain(
+      `dashboard-01 no se agregó: necesita button ${VERSION}, que no se actualizó (ver el ` +
+        'aviso de button).',
+    );
+    for (const item of ['avatar', 'badge', 'card', 'sheet', 'table']) {
+      expect(messages).toContain(
+        `${item} no se agregó: solo lo necesita dashboard-01, que no se escribió (ver el aviso de ` +
+          'dashboard-01). Así no quedan copiadas a medias las piezas de dashboard-01.',
+      );
+    }
+
+    // Lo que el usuario pide aparte sí se agrega, aunque el Block no.
+    const withAvatar = await run('mimi', { components: ['dashboard-01', 'avatar'] }, withButton);
+    expect(withAvatar.exists(`/${UI}/avatar/avatar.ts`)).toBe(true);
+    expect(withAvatar.exists(`/${UI}/table/table.ts`)).toBe(false);
+  }, 20_000);
+
   it('--overwrite reemplaza el Block modificado y avisa que reemplazó la pantalla', async () => {
     const { run, tree, warnings } = await initialized();
     const installed = await run('mimi', { components: [TEST_BLOCK] }, tree);

@@ -8,7 +8,7 @@ import {
   output,
 } from '@angular/core';
 import { MimiAvatar, MimiAvatarFallback } from '@/components/ui/avatar';
-import { MimiBadge, type BadgeTone } from '@/components/ui/badge';
+import { MimiBadge, type MimiBadgeTone } from '@/components/ui/badge';
 import { MimiButton } from '@/components/ui/button';
 import { type MimiSortableMove, MimiSortableListImports } from '@/components/ui/sortable-list';
 import { restoreFocusAfterBusy } from '@/components/ui/utils/busy';
@@ -20,7 +20,7 @@ export interface Kanban01Card {
   id: string | number;
   title: string;
   /** Etiqueta (un Badge suave con su tono). */
-  tag?: { label: string; tone?: BadgeTone };
+  tag?: { label: string; tone?: MimiBadgeTone };
   /** Responsable (un Avatar con sus iniciales). */
   assignee?: { name: string };
 }

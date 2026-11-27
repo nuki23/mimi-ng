@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MimiAvatarImports } from './avatar';
-import type { AvatarSize } from './avatar.variants';
+import type { MimiAvatarSize } from './avatar.variants';
 
 @Component({
   imports: [MimiAvatarImports],
@@ -23,7 +23,7 @@ import type { AvatarSize } from './avatar.variants';
   `,
 })
 class Host {
-  readonly size = signal<AvatarSize>('md');
+  readonly size = signal<MimiAvatarSize>('md');
   readonly src = signal<string | null>('/avatars/avatar-1.svg');
   readonly extra = signal('');
   readonly imgExtra = signal('');
@@ -51,7 +51,7 @@ describe('MimiAvatar', () => {
     return { root, host: fixture.componentInstance, avatar, img, fallback, update, fire };
   }
 
-  it.each<[AvatarSize, string, string]>([
+  it.each<[MimiAvatarSize, string, string]>([
     // La escala vive en el tema (`[data-size]`): los tres tamaños llevan las mismas clases.
     [
       'sm',

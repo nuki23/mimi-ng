@@ -25,7 +25,8 @@ export interface MimiToastConfig {
   size: MimiSize;
 }
 
-export const MIMI_TOAST_DEFAULTS: MimiToastConfig = {
+/** Los valores predeterminados (`MIMI_<X>_CONFIG_DEFAULT`, como Overlay y Table; api-1.0, C6). */
+export const MIMI_TOAST_CONFIG_DEFAULT: MimiToastConfig = {
   position: 'bottom-right',
   duration: 6000,
   hotkey: 'F8',
@@ -35,7 +36,7 @@ export const MIMI_TOAST_DEFAULTS: MimiToastConfig = {
 /** Opciones activas. Sin `provideMimiToast`, las predeterminadas. */
 export const MIMI_TOAST_CONFIG = new InjectionToken<MimiToastConfig>('MIMI_TOAST_CONFIG', {
   providedIn: 'root',
-  factory: () => MIMI_TOAST_DEFAULTS,
+  factory: () => MIMI_TOAST_CONFIG_DEFAULT,
 });
 
 /**
@@ -48,5 +49,5 @@ export const MIMI_TOAST_CONFIG = new InjectionToken<MimiToastConfig>('MIMI_TOAST
  * Va en `app.config.ts`: los toasts viven en la raíz de la aplicación.
  */
 export function provideMimiToast(config: Partial<MimiToastConfig>): Provider {
-  return { provide: MIMI_TOAST_CONFIG, useValue: { ...MIMI_TOAST_DEFAULTS, ...config } };
+  return { provide: MIMI_TOAST_CONFIG, useValue: { ...MIMI_TOAST_CONFIG_DEFAULT, ...config } };
 }

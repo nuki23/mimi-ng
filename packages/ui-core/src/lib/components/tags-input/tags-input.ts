@@ -12,7 +12,8 @@ import {
   viewChild,
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
-import { MimiChip, injectMimiChipAnnouncer } from '@/components/ui/chip';
+import { MimiChip } from '@/components/ui/chip';
+import { injectMimiChipAnnouncer } from '@/components/ui/chip/chip';
 import { cn } from '@/components/ui/utils/cn';
 import { fieldBoxStyles } from '@/components/ui/utils/field-styles';
 import { MimiSized } from '@/components/ui/utils/size';
@@ -122,6 +123,7 @@ const trim = (tag: string): string => tag.trim();
     '[attr.data-state]': 'tags().length ? "filled" : "empty"',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
     '[attr.id]': 'null',
     '(focusout)': 'onFocusOut($event)',
   },
@@ -162,6 +164,8 @@ export class MimiTagsInput implements FormValueControl<string[]>, MimiFieldContr
   readonly id = input<string>();
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   /** Clases de la caja, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
 
@@ -214,8 +218,11 @@ export class MimiTagsInput implements FormValueControl<string[]>, MimiFieldContr
         ? 'text-warning-soft-foreground'
         : 'text-muted-foreground',
   );
+  /** Los ids del usuario delante de los propios (M.16). */
   protected readonly describedBy = computed(() =>
-    this.limit() !== undefined ? `${this.messageId} ${this.countId}` : this.messageId,
+    [this.ariaDescribedby(), this.messageId, this.limit() !== undefined ? this.countId : null]
+      .filter(Boolean)
+      .join(' '),
   );
 
   protected readonly boxClasses = computed(() => cn(BOX_CLASSES, this.userClass()));

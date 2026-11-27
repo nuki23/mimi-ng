@@ -176,7 +176,7 @@
             </span>
             <mimi-switch
               [id]="id + '-' + row.key"
-              [attr.data-describedby]="id + '-' + row.key + '-desc'"
+              [aria-describedby]="id + '-' + row.key + '-desc'"
               [formField]="field(row.key)"
             />
           </div>
@@ -228,7 +228,7 @@
               </span>
               <mimi-switch
                 [id]="id + '-' + row.key"
-                [attr.data-describedby]="id + '-' + row.key + '-desc'"
+                [aria-describedby]="id + '-' + row.key + '-desc'"
                 [formField]="field(row.key)"
               />
             </div>
@@ -254,7 +254,7 @@
           </div>
           <mimi-switch
             [id]="id + '-twoFactor'"
-            [attr.data-describedby]="id + '-twoFactor-desc'"
+            [aria-describedby]="id + '-twoFactor-desc'"
             [formField]="settings.twoFactor"
           />
         </div>

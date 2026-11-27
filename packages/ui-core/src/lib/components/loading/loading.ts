@@ -45,22 +45,29 @@ export interface MimiLoadingRef {
   update(message: string): void;
 }
 
-/** Valores por defecto de toda la app: `provideMimiLoading({ delay: 300 })`. */
-export const MIMI_LOADING_CONFIG = new InjectionToken<
-  Required<Pick<MimiLoadingOptions, 'delay' | 'minDuration' | 'size'>>
->('MIMI_LOADING_CONFIG', {
+/**
+ * Valores por defecto de toda la app (la forma de la configuración global, api-1.0, C6:
+ * `Mimi<X>Config`, `MIMI_<X>_CONFIG_DEFAULT`, `MIMI_<X>_CONFIG` y `provideMimi<X>(parte)`).
+ */
+export type MimiLoadingConfig = Required<
+  Pick<MimiLoadingOptions, 'delay' | 'minDuration' | 'size'>
+>;
+
+export const MIMI_LOADING_CONFIG_DEFAULT: MimiLoadingConfig = {
+  delay: 200,
+  minDuration: 400,
+  size: 'md',
+};
+
+/** Valores activos. Sin `provideMimiLoading`, los predeterminados. */
+export const MIMI_LOADING_CONFIG = new InjectionToken<MimiLoadingConfig>('MIMI_LOADING_CONFIG', {
   providedIn: 'root',
-  factory: () => ({ delay: 200, minDuration: 400, size: 'md' }),
+  factory: () => MIMI_LOADING_CONFIG_DEFAULT,
 });
 
-/** Cambia los valores por defecto de la carga. */
-export function provideMimiLoading(
-  config: Pick<MimiLoadingOptions, 'delay' | 'minDuration' | 'size'>,
-): Provider {
-  return {
-    provide: MIMI_LOADING_CONFIG,
-    useValue: { delay: 200, minDuration: 400, size: 'md', ...config },
-  };
+/** Cambia los valores por defecto de la carga: `provideMimiLoading({ delay: 300 })`. */
+export function provideMimiLoading(config: Partial<MimiLoadingConfig>): Provider {
+  return { provide: MIMI_LOADING_CONFIG, useValue: { ...MIMI_LOADING_CONFIG_DEFAULT, ...config } };
 }
 
 /**

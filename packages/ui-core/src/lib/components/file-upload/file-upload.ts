@@ -154,7 +154,7 @@ let nextId = 0;
       [disabled]="disabled()"
       [attr.aria-disabled]="readonly() ? 'true' : null"
       [attr.aria-labelledby]="labelledBy()"
-      [attr.aria-describedby]="describedBy"
+      [attr.aria-describedby]="describedBy()"
       [attr.aria-invalid]="showInvalid() || null"
       [attr.data-state]="over() ? 'over' : 'idle'"
       (click)="openPicker()"
@@ -222,6 +222,7 @@ let nextId = 0;
     '[attr.id]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
     '[attr.data-readonly]': 'readonly() ? "" : null',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
@@ -270,6 +271,8 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   /** Ids de etiquetas propias; van delante del título en el nombre accesible. */
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   readonly userClass = input('', { alias: 'class' });
 
   /** Archivos que no se agregaron, con el motivo. */
@@ -304,8 +307,10 @@ export class MimiFileUpload implements FormValueControl<File[]>, MimiFieldContro
       .join(' '),
   );
   protected readonly requiredId = `${this.baseId}-required`;
-  /** Solo «obligatorio» (vacío si no lo es): la pista ya está en el nombre. */
-  protected readonly describedBy = this.requiredId;
+  /** Los ids del usuario (M.16) y «obligatorio» (vacío si no lo es): la pista ya está en el nombre. */
+  protected readonly describedBy = computed(() =>
+    [this.ariaDescribedby(), this.requiredId].filter(Boolean).join(' '),
+  );
   readonly showInvalid = computed(() => this.invalid() && (this.touched() || this.dirty()));
 
   protected readonly over = signal(false);

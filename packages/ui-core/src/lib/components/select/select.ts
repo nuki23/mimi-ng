@@ -319,6 +319,7 @@ const SEARCH_INPUT_CLASSES =
         [readonly]="readonly()"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
+        [attr.aria-describedby]="ariaDescribedby() || null"
         (expandedChange)="onExpandedChange($event)"
         (keydown)="onTriggerKeydown($event)"
         (keyup)="onTriggerKeyup($event)"
@@ -575,6 +576,7 @@ const SEARCH_INPUT_CLASSES =
     '[attr.id]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
     // `align` es un atributo HTML antiguo: el navegador lo convierte en text-align (se heredaría).
     '[attr.align]': 'null',
     '[attr.data-presentation]': 'open() ? mode() : null',
@@ -663,6 +665,8 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
   readonly id = input<string>();
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   /** Clases del disparador, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
   /** Clases del panel. */

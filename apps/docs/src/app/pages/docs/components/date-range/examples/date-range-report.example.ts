@@ -33,7 +33,7 @@ function presets(today: string): MimiDateRangePreset[] {
         Periodo del informe
         <span class="font-normal text-muted-foreground">· sin fechas futuras</span>
       </label>
-      <mimi-date-range
+      <mimi-date-range-picker
         id="report"
         locale="es"
         placeholder="Elige un periodo"

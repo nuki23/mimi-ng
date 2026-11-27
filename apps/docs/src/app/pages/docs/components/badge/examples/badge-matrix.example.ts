@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MimiBadge } from '@/components/ui/badge';
-import type { BadgeTone, BadgeVariant } from '@/components/ui/badge';
+import type { MimiBadgeTone, MimiBadgeVariant } from '@/components/ui/badge';
 
 @Component({
   selector: 'app-badge-matrix-example',
@@ -24,8 +24,8 @@ import type { BadgeTone, BadgeVariant } from '@/components/ui/badge';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BadgeMatrixExample {
-  protected readonly variants: BadgeVariant[] = ['solid', 'soft', 'outline'];
-  protected readonly tones: BadgeTone[] = [
+  protected readonly variants: MimiBadgeVariant[] = ['solid', 'soft', 'outline'];
+  protected readonly tones: MimiBadgeTone[] = [
     'primary',
     'secondary',
     'success',

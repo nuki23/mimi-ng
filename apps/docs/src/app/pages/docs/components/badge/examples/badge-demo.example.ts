@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MimiBadge } from '@/components/ui/badge';
-import type { BadgeTone } from '@/components/ui/badge';
+import type { MimiBadgeTone } from '@/components/ui/badge';
 
 @Component({
   selector: 'app-badge-demo-example',
@@ -18,7 +18,7 @@ import type { BadgeTone } from '@/components/ui/badge';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BadgeDemoExample {
-  protected readonly orders: { id: number; status: string; tone: BadgeTone }[] = [
+  protected readonly orders: { id: number; status: string; tone: MimiBadgeTone }[] = [
     { id: 1042, status: 'Entregado', tone: 'success' },
     { id: 1043, status: 'En camino', tone: 'info' },
     { id: 1044, status: 'Pago pendiente', tone: 'warning' },

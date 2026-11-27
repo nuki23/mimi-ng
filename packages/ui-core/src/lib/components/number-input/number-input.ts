@@ -126,6 +126,7 @@ const REPEAT_EVERY = 80;
       [attr.placeholder]="placeholder() || null"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabelledby() || null"
+      [attr.aria-describedby]="ariaDescribedby() || null"
       [attr.aria-valuenow]="shown()"
       [attr.aria-valuemin]="min() ?? null"
       [attr.aria-valuemax]="max() ?? null"
@@ -172,6 +173,7 @@ const REPEAT_EVERY = 80;
     // El nombre va al input de dentro: en el anfitrión no lo lee nadie.
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
     '[attr.id]': 'null',
     '(focusout)': 'onFocusOut($event)',
   },
@@ -210,6 +212,8 @@ export class MimiNumberInput implements FormValueControl<number | null>, MimiFie
   readonly id = input<string>();
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   /** Clases de la caja, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
 

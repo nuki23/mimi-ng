@@ -12,7 +12,7 @@ import { fieldNativeStyles } from '@/components/ui/utils/field-styles';
  * no ve cambios. Con una fila mide lo mismo que Input y Button: alto mínimo = alto del control,
  * interlineado de 20px y padding vertical (alto − interlineado − 2 bordes) / 2.
  */
-export const textareaVariants = cva([
+export const mimiTextareaVariants = cva([
   'block w-full min-w-0 rounded-[var(--mimi-textarea-radius,var(--mimi-input-radius,var(--mimi-radius,0.75rem)))]',
   'border-[length:var(--mimi-input-border-width,1px)] border-[color:var(--mimi-textarea-border,var(--mimi-input-border,var(--mimi-input)))] bg-[color:var(--mimi-textarea-bg,var(--mimi-input-bg,var(--mimi-input-background)))]',
   'min-h-[var(--mimi-textarea-min-height,var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem))))]',

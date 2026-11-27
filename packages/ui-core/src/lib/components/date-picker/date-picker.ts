@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { MimiCalendar } from '@/components/ui/calendar/calendar';
-import { MIMI_DATE_PICKER_TEXT } from '@/components/ui/calendar/calendar-texts';
+import { MIMI_CALENDAR_TEXT } from '@/components/ui/calendar/calendar-texts';
 import { type MimiDate, mimiFormatDate, mimiIsDate } from '@/components/ui/calendar/dates';
 import { MimiPopover, MimiPopoverContent, MimiPopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/components/ui/utils/cn';
@@ -85,7 +85,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
       [blocked]="readonly()"
       [presentation]="presentation()"
       mobilePresentation="sheet"
-      [sheetTitle]="ariaLabel() || ''"
+      [sheetTitle]="sheetLabel(trigger)"
       (openChange)="onOpenChange($event)"
       aria-label="{{ texts.pickDate }}"
     >
@@ -97,7 +97,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
         [class]="classes()"
         [disabled]="disabled()"
         [attr.aria-labelledby]="labelledBy()"
-        [attr.aria-describedby]="valueDescriptionId + ' ' + requiredId"
+        [attr.aria-describedby]="userDescribedby() + valueDescriptionId + ' ' + requiredId"
         [attr.aria-invalid]="showInvalid() || null"
         [attr.aria-disabled]="readonly() || null"
         [attr.data-readonly]="readonly() ? '' : null"
@@ -138,8 +138,8 @@ const toDate = (value: unknown): MimiDate | undefined =>
           [fill]="inSheet()"
           [size]="sized.effective()"
           [value]="calendarValue()"
-          [min]="min() ?? null"
-          [max]="max() ?? null"
+          [minDate]="minDate() ?? null"
+          [maxDate]="maxDate() ?? null"
           [isDateDisabled]="isDateDisabled()"
           [locale]="lang()"
           [weekStart]="weekStart()"
@@ -159,6 +159,7 @@ const toDate = (value: unknown): MimiDate | undefined =>
     '[attr.id]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
     '[attr.data-state]': 'open() ? "open" : "closed"',
     '[attr.data-invalid]': 'showInvalid() ? "" : null',
     '[attr.data-disabled]': 'disabled() ? "" : null',
@@ -167,19 +168,20 @@ const toDate = (value: unknown): MimiDate | undefined =>
 })
 export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFieldControl {
   private readonly defaultLocale = inject(LOCALE_ID);
-  protected readonly texts = inject(MIMI_DATE_PICKER_TEXT);
+  protected readonly texts = inject(MIMI_CALENDAR_TEXT);
   /** El panel va en un overlay, fuera del anfitrión: el calendario recibe el tamaño. */
   protected readonly sized = inject(MimiSized);
 
   /** La fecha elegida (`'2026-09-30'`), o `null`. Con `[(value)]` o un formulario. */
   readonly value = model<MimiDate | null>(null);
   /**
-   * Primera y última fecha que se pueden elegir (incluidas). Tienen el tipo del valor (lo exige
-   * `FormValueControl`). Con `[formField]`, Signal Forms no deja enlazarlas (NG8022): los límites
-   * van en `isDateDisabled` y la validación, en el esquema (spec 8).
+   * Primera y última fecha que se pueden elegir (incluidas). `minDate`/`maxDate` y no `min`/`max`
+   * (api-1.0, C2): el mismo nombre en Calendar y Date Range, y con `[formField]` se pueden
+   * enlazar (Signal Forms no deja enlazar `[min]`/`[max]` en un control de formulario, NG8022).
+   * La validación de los límites sigue en el esquema del formulario (spec 8).
    */
-  readonly min = input<MimiDate | undefined, unknown>(undefined, { transform: toDate });
-  readonly max = input<MimiDate | undefined, unknown>(undefined, { transform: toDate });
+  readonly minDate = input<MimiDate | undefined, unknown>(undefined, { transform: toDate });
+  readonly maxDate = input<MimiDate | undefined, unknown>(undefined, { transform: toDate });
   /** Fechas que no se pueden elegir (por ejemplo, los fines de semana). */
   readonly isDateDisabled = input<((date: MimiDate) => boolean) | null>(null);
   /** Idioma (nombres, formato y primer día de la semana). Por defecto, `LOCALE_ID`. */
@@ -204,12 +206,16 @@ export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFi
   readonly id = input<string>();
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   /** Clases del disparador, mezcladas con `cn()`. */
   readonly userClass = input('', { alias: 'class' });
   /** Clases del panel. */
   readonly panelClass = input('');
   /** Cómo se abre el calendario (R.34): `auto` = hoja inferior por debajo de 640 px. */
   readonly presentation = input<MimiOverlayPresentation>('auto');
+  /** Título de la hoja en el teléfono. Por defecto, el `aria-label` o el `<label for>` (C9). */
+  readonly sheetTitle = input<string>();
 
   /** Se cerró el panel: marca el control como tocado. */
   readonly touch = output<void>();
@@ -227,6 +233,10 @@ export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFi
   protected readonly controlId = computed(() => this.id() || this.baseId);
   protected readonly valueId = `${this.baseId}-value`;
   protected readonly nameId = `${this.baseId}-name`;
+  /** Los ids del usuario, delante de los propios (M.16), con su espacio. */
+  protected readonly userDescribedby = computed(() =>
+    this.ariaDescribedby() ? `${this.ariaDescribedby()} ` : '',
+  );
   protected readonly valueDescriptionId = `${this.baseId}-value-description`;
   /** La etiqueta (la del usuario, o `aria-label` en un texto oculto) y el valor visible. */
   protected readonly labelledBy = computed(() => {
@@ -254,6 +264,11 @@ export class MimiDatePicker implements FormValueControl<MimiDate | null>, MimiFi
     const value = this.calendarValue();
     return value ? mimiFormatDate(value, this.lang(), this.format()) : '';
   });
+
+  /** El título de la hoja: `sheetTitle`, el `aria-label` o el texto del `<label for>`. */
+  protected sheetLabel(trigger: HTMLButtonElement): string {
+    return this.sheetTitle() || this.ariaLabel() || trigger.labels?.[0]?.textContent?.trim() || '';
+  }
 
   /** Enfoca el disparador. Lo usa Signal Forms para llevar el foco al campo con error. */
   focus(options?: FocusOptions): void {

@@ -2,10 +2,10 @@ import { Directive, computed, input } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { MimiSized } from '@/components/ui/utils/size';
 import {
-  type BadgeTone,
-  type BadgeVariant,
-  badgeVariants,
-  resolveBadgeTone,
+  type MimiBadgeTone,
+  type MimiBadgeVariant,
+  mimiBadgeVariants,
+  mimiResolveBadgeTone,
 } from './badge.variants';
 
 /**
@@ -26,13 +26,15 @@ import {
   },
 })
 export class MimiBadge {
-  readonly variant = input<BadgeVariant>('solid');
-  readonly tone = input<BadgeTone>();
+  readonly variant = input<MimiBadgeVariant>('solid');
+  readonly tone = input<MimiBadgeTone>();
   readonly userClass = input('', { alias: 'class' });
 
-  protected readonly toneResolved = computed(() => resolveBadgeTone(this.variant(), this.tone()));
+  protected readonly toneResolved = computed(() =>
+    mimiResolveBadgeTone(this.variant(), this.tone()),
+  );
 
   protected readonly classes = computed(() =>
-    cn(badgeVariants({ variant: this.variant(), tone: this.toneResolved() }), this.userClass()),
+    cn(mimiBadgeVariants({ variant: this.variant(), tone: this.toneResolved() }), this.userClass()),
   );
 }

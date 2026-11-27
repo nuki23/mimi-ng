@@ -1,12 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MimiButton } from './button';
-import type { ButtonSize, ButtonTone, ButtonVariant } from './button.variants';
-import { buttonVariants } from './button.variants';
+import type { MimiButtonSize, MimiButtonTone, MimiButtonVariant } from './button.variants';
+import { mimiButtonVariants } from './button.variants';
 
 // Los atajos de la 0.1.x se quitaron en la 0.8.0 (M.28): ya no son variantes.
 // @ts-expect-error `destructive` es ahora `tone="danger"`.
-const REMOVED_SHORTCUT: ButtonVariant = 'destructive';
+const REMOVED_SHORTCUT: MimiButtonVariant = 'destructive';
 
 @Component({
   imports: [MimiButton],
@@ -35,9 +35,9 @@ const REMOVED_SHORTCUT: ButtonVariant = 'destructive';
   `,
 })
 class Host {
-  readonly variant = signal<ButtonVariant>('solid');
-  readonly tone = signal<ButtonTone | undefined>(undefined);
-  readonly size = signal<ButtonSize>('md');
+  readonly variant = signal<MimiButtonVariant>('solid');
+  readonly tone = signal<MimiButtonTone | undefined>(undefined);
+  readonly size = signal<MimiButtonSize>('md');
   readonly disabled = signal(false);
   readonly loading = signal(false);
   readonly extra = signal('');
@@ -136,7 +136,7 @@ describe('MimiButton', () => {
   });
 
   // Una clase representativa de cada variante con cada tono (button.variants.ts, TONE_CLASSES).
-  const EXPECTED: Record<ButtonVariant, Record<ButtonTone, string>> = {
+  const EXPECTED: Record<MimiButtonVariant, Record<MimiButtonTone, string>> = {
     solid: {
       primary: 'bg-primary',
       secondary: 'bg-secondary',
@@ -178,8 +178,8 @@ describe('MimiButton', () => {
       danger: 'text-destructive-soft-foreground',
     },
   };
-  const COMBOS = (Object.keys(EXPECTED) as ButtonVariant[]).flatMap((variant) =>
-    (Object.keys(EXPECTED[variant]) as ButtonTone[]).map(
+  const COMBOS = (Object.keys(EXPECTED) as MimiButtonVariant[]).flatMap((variant) =>
+    (Object.keys(EXPECTED[variant]) as MimiButtonTone[]).map(
       (tone) => [variant, tone, EXPECTED[variant][tone]] as const,
     ),
   );
@@ -195,7 +195,7 @@ describe('MimiButton', () => {
     expect(button.classList).toContain(expected);
   });
 
-  it.each<[ButtonVariant, ButtonTone]>([
+  it.each<[MimiButtonVariant, MimiButtonTone]>([
     ['solid', 'primary'],
     ['soft', 'primary'],
     ['outline', 'secondary'],
@@ -258,7 +258,7 @@ describe('MimiButton', () => {
     expect(button.classList).not.toContain('px-[var(--mimi-btn-px-s,var(--mimi-btn-px,1rem))]');
   });
 
-  it.each<[ButtonSize, string]>([
+  it.each<[MimiButtonSize, string]>([
     // La escala vive en el tema (`[data-size]`): los tres tamaños de texto llevan las mismas clases.
     ['sm', 'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]'],
     ['md', 'h-[var(--mimi-btn-h,var(--mimi-btn-height,var(--mimi-control-height,2.5rem)))]'],
@@ -382,7 +382,7 @@ describe('MimiButton', () => {
         'info',
         'danger',
       ] as const) {
-        const classes = buttonVariants({ variant, tone, size: 'md' }).split(/\s+/);
+        const classes = mimiButtonVariants({ variant, tone, size: 'md' }).split(/\s+/);
         const pointer = classes.filter((c) => /^(hover|active):/.test(c));
         expect(pointer.filter((c) => !c.includes(':not-aria-busy:'))).toEqual([]);
       }

@@ -6,7 +6,7 @@ import {
   injectFieldState,
 } from '@/components/ui/utils/field-state';
 import { injectMimiSize } from '@/components/ui/utils/size';
-import { type InputSize, inputVariants } from './input.variants';
+import { type MimiInputSize, mimiInputVariants } from './input.variants';
 
 /**
  * Campo de texto de Mimi sobre el `<input>` nativo: funciona con `[formField]`,
@@ -31,7 +31,7 @@ import { type InputSize, inputVariants } from './input.variants';
 })
 export class MimiInput implements MimiFieldControl {
   /** `sm | md | lg`. Sin `size`, el del contenedor `mimiSize` o `md`. */
-  readonly size = input<InputSize>();
+  readonly size = input<MimiInputSize>();
   protected readonly sizeResolved = injectMimiSize(this.size);
   protected readonly ownSize = computed(() => this.size() ?? null);
   /**
@@ -52,6 +52,6 @@ export class MimiInput implements MimiFieldControl {
   readonly showInvalid = computed(() => this.showError() ?? this.fieldState.showError());
 
   protected readonly classes = computed(() =>
-    cn(inputVariants({ size: this.sizeResolved() }), this.userClass()),
+    cn(mimiInputVariants({ size: this.sizeResolved() }), this.userClass()),
   );
 }

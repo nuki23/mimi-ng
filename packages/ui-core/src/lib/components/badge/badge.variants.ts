@@ -4,10 +4,10 @@ import { cva } from 'class-variance-authority';
  * Cómo se ve el badge (spec 4, «Variante y tono»). El color va en `tone`. Sin ghost ni link: el
  * diseño no los tiene.
  */
-export type BadgeVariant = 'solid' | 'soft' | 'outline';
+export type MimiBadgeVariant = 'solid' | 'soft' | 'outline';
 
 /** De qué color es. `danger` usa los tokens `destructive`. */
-export type BadgeTone = 'primary' | 'secondary' | 'success' | 'warning' | 'info' | 'danger';
+export type MimiBadgeTone = 'primary' | 'secondary' | 'success' | 'warning' | 'info' | 'danger';
 
 /** Punto decorativo de outline (un ::before vacío: no lo leen los lectores de pantalla). */
 const DOT = "gap-1.5 before:size-1.5 before:shrink-0 before:rounded-full before:content-['']";
@@ -49,14 +49,14 @@ const TONE_CLASSES = {
     soft: 'border-transparent bg-destructive-soft text-destructive-soft-foreground',
     outline: `border-border bg-transparent text-foreground ${DOT} before:bg-destructive`,
   },
-} as const satisfies Record<BadgeTone, Record<BadgeVariant, string>>;
+} as const satisfies Record<MimiBadgeTone, Record<MimiBadgeVariant, string>>;
 
 /**
  * Clases de mimiBadge (docs/design/Mimi Componentes.dc.html, sección 5). Literales para que
  * Tailwind las detecte. 22px de alto, 10px de padding, 12px y peso 600, radio
  * --mimi-badge-radius. Los íconos van a 12px (no están en el diseño; decidido en la tarea 2.4).
  */
-export const badgeVariants = cva(
+export const mimiBadgeVariants = cva(
   [
     'inline-flex h-[var(--mimi-badge-h,var(--mimi-badge-height,22px))] shrink-0 items-center gap-1 rounded-badge border px-[var(--mimi-badge-px-s,var(--mimi-badge-px,0.625rem))]',
     'font-sans text-[length:var(--mimi-badge-font-size,0.75rem)] leading-none font-[weight:var(--mimi-badge-font-weight,600)] whitespace-nowrap',
@@ -69,8 +69,8 @@ export const badgeVariants = cva(
     },
     compoundVariants: Object.entries(TONE_CLASSES).flatMap(([tone, byVariant]) =>
       Object.entries(byVariant).map(([variant, cls]) => ({
-        tone: tone as BadgeTone,
-        variant: variant as BadgeVariant,
+        tone: tone as MimiBadgeTone,
+        variant: variant as MimiBadgeVariant,
         class: cls,
       })),
     ),
@@ -79,13 +79,16 @@ export const badgeVariants = cva(
 );
 
 /** Sin `tone`, cada variante usa su tono natural: outline es neutro (secondary). */
-const NATURAL_TONE: Record<BadgeVariant, BadgeTone> = {
+const NATURAL_TONE: Record<MimiBadgeVariant, MimiBadgeTone> = {
   solid: 'primary',
   soft: 'primary',
   outline: 'secondary',
 };
 
 /** El tono de verdad: el que se pasó o el natural de la variante. */
-export function resolveBadgeTone(variant: BadgeVariant, tone: BadgeTone | undefined): BadgeTone {
+export function mimiResolveBadgeTone(
+  variant: MimiBadgeVariant,
+  tone: MimiBadgeTone | undefined,
+): MimiBadgeTone {
   return tone ?? NATURAL_TONE[variant];
 }

@@ -28,7 +28,8 @@ import {
   viewChild,
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
-import { MimiChip, injectMimiChipAnnouncer } from '@/components/ui/chip';
+import { MimiChip } from '@/components/ui/chip';
+import { injectMimiChipAnnouncer } from '@/components/ui/chip/chip';
 import {
   MIMI_LIST_CREATE_KEY,
   type MimiListFilter,
@@ -281,7 +282,9 @@ export class MimiComboboxOption {
         [readonly]="readonly()"
         [attr.aria-label]="ariaLabel() || null"
         [attr.aria-labelledby]="ariaLabelledby() || null"
-        [attr.aria-describedby]="help() ? helpId : null"
+        [attr.aria-describedby]="
+          [ariaDescribedby(), help() ? helpId : null].join(' ').trim() || null
+        "
         (valueChange)="onText($event)"
         (expandedChange)="onExpandedChange($event)"
         (keydown)="onKeydown($event)"
@@ -477,6 +480,7 @@ export class MimiComboboxOption {
     '[attr.id]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
     // `align` es un atributo HTML antiguo: el navegador lo convierte en text-align (se heredaría).
     '[attr.align]': 'null',
     '[attr.data-presentation]': 'open() ? presentationMode() : null',
@@ -543,6 +547,8 @@ export class MimiCombobox<T = unknown>
   readonly id = input<string>();
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   /** Clases de la caja del campo, mezcladas con `cn()` (gana la del usuario). */
   readonly userClass = input('', { alias: 'class' });
   /** Clases del panel. */

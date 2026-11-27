@@ -7,11 +7,11 @@ import { MimiDateRangePicker } from '@/components/ui/date-range';
   imports: [MimiDateRangePicker],
   template: `
     <div class="grid w-full max-w-2xl gap-4 sm:grid-cols-2">
-      <mimi-date-range aria-label="Deshabilitado" locale="es" [value]="trip" disabled />
+      <mimi-date-range-picker aria-label="Deshabilitado" locale="es" [value]="trip" disabled />
       <!-- Solo lectura: se lee y se enfoca, pero no abre el calendario. -->
-      <mimi-date-range aria-label="Solo lectura" locale="es" [value]="trip" readonly />
+      <mimi-date-range-picker aria-label="Solo lectura" locale="es" [value]="trip" readonly />
       <!-- Con un formulario, invalid y touched los pasa Angular (ver «Formularios»). -->
-      <mimi-date-range
+      <mimi-date-range-picker
         aria-label="Con error"
         locale="es"
         placeholder="Elige un periodo"

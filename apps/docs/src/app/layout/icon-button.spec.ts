@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { buttonVariants } from '@/components/ui/button/button.variants';
+import { mimiButtonVariants } from '@/components/ui/button/button.variants';
 import { cn } from '@/components/ui/utils/cn';
 import { SITE_ICON_BUTTON_CLASSES } from './icon-button';
 import { MobileNav } from './mobile-nav';
@@ -24,7 +24,7 @@ describe('SiteIconButton (M.25)', () => {
 
   it('tiene las mismas clases que mimiBtn fantasma de ícono con las de la cabecera', () => {
     const expected = cn(
-      buttonVariants({ variant: 'ghost', tone: 'secondary', size: 'icon' }),
+      mimiButtonVariants({ variant: 'ghost', tone: 'secondary', size: 'icon' }),
       HEADER_EXTRAS,
     );
     expect(SITE_ICON_BUTTON_CLASSES).toBe(expected);

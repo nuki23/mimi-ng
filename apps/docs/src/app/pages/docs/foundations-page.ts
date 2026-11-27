@@ -134,8 +134,8 @@ export const FOUNDATION_TEXTS = [
   },
   {
     component: 'Calendario, Date Picker y Date Range',
-    provider: 'provideMimiDatePickerText',
-    spanish: 'MIMI_DATE_PICKER_TEXT_ES',
+    provider: 'provideMimiCalendarText',
+    spanish: 'MIMI_CALENDAR_TEXT_ES',
     file: 'calendar/calendar-texts',
   },
   {

@@ -70,6 +70,11 @@ export interface BlockedItem {
   files: string[];
   /** El ítem bloqueado del que depende. */
   dependency?: string;
+  /**
+   * M.8: un ítem que no estaba y que solo pedía `neededBy` (lo que pidió el usuario), que quedó
+   * bloqueado: no se agrega, para no dejar copiadas a medias las piezas de algo que no se escribe.
+   */
+  neededBy?: string;
   /** Ya estaba en el proyecto (se habría actualizado) o se habría agregado. */
   installed: boolean;
   /** La versión en que se queda (la más vieja de sus archivos), si estaba instalado. */
@@ -194,6 +199,12 @@ export function writeTemplates(options: {
   overwrite: boolean;
   version: string;
   report: FileReport;
+  /**
+   * Lo que pidió el usuario (M.8, todo o nada también al agregar). Si todos los que piden un ítem
+   * que no estaba en el proyecto quedan bloqueados, ese ítem tampoco se agrega. Sin `roots`, cada
+   * ítem se decide solo (init, y las pruebas que lo llaman directo).
+   */
+  roots?: readonly string[];
 }): Rule {
   const items = [...new Set(options.items)];
   const implicit = new Set(options.implicit ?? []);
@@ -302,6 +313,19 @@ export function writeTemplates(options: {
           });
         }
       }
+      // M.8: lo que no estaba y solo pide algo bloqueado no se agrega (un Block bloqueado no deja
+      // sus componentes, sus utilidades ni sus paquetes copiados a medias). Lo que ya estaba se
+      // sigue actualizando: es del proyecto, no solo del Block.
+      const roots = options.roots ?? [];
+      const open = roots.filter((root) => !blocked.has(root));
+      for (const item of roots.length > 0 ? items : []) {
+        if (blocked.has(item) || implicit.has(item)) continue;
+        if (states.get(item)!.some((s) => s.state !== 'new')) continue;
+        if (open.some((root) => resolveItems(root).includes(item))) continue;
+        const neededBy = roots.find((root) => resolveItems(root).includes(item));
+        if (neededBy)
+          blocked.set(item, { item, files: [], neededBy, installed: false, from: null });
+      }
     }
 
     const writeBase = (file: string, content: string) => {
@@ -315,9 +339,12 @@ export function writeTemplates(options: {
       }
     };
 
+    // En el informe, primero lo bloqueado por un cambio o una dependencia y, al final, lo que no
+    // se agregó porque solo lo pedía algo bloqueado (M.8): el aviso principal va primero.
+    const held = [...blocked.values()].filter((b) => b.neededBy);
     for (const item of items) {
       if (blocked.has(item)) {
-        options.report.blocked.push(blocked.get(item)!);
+        if (!blocked.get(item)!.neededBy) options.report.blocked.push(blocked.get(item)!);
         continue;
       }
       for (const { file, state, from } of states.get(item)!) {
@@ -364,6 +391,8 @@ export function writeTemplates(options: {
       }
     }
 
+    options.report.blocked.push(...held);
+
     if (manifestChanged) {
       const sorted = Object.fromEntries(Object.entries(manifest.files).sort());
       const text = `${JSON.stringify({ files: sorted }, null, 2)}\n`;
@@ -387,7 +416,13 @@ export function blockedMessages(
   pages: Pages = {},
 ): string[] {
   const path = (file: string) => targetPathOf(file, componentsDir, blocksDir, pages);
-  return report.blocked.map(({ item, files, dependency, installed }) => {
+  return report.blocked.map(({ item, files, dependency, neededBy, installed }) => {
+    if (neededBy) {
+      return (
+        `${item} no se agregó: solo lo necesita ${neededBy}, que no se escribió (ver el aviso de ` +
+        `${neededBy}). Así no quedan copiadas a medias las piezas de ${neededBy}.`
+      );
+    }
     if (dependency) {
       const needs = `necesita ${dependency} ${version}, que no se actualizó (ver el aviso de ${dependency}).`;
       return installed

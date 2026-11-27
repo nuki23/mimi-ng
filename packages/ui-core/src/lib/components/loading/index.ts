@@ -1,6 +1,8 @@
 // Solo la API pública: MimiLoadingOverlay, MimiLoadingGate y mimiMakeInert son internos.
 export {
   MIMI_LOADING_CONFIG,
+  MIMI_LOADING_CONFIG_DEFAULT,
+  type MimiLoadingConfig,
   MimiLoadingService,
   type MimiLoadingOptions,
   type MimiLoadingRef,

@@ -46,22 +46,23 @@ Primero, porque la CI vigila todo lo demás.
 
 ### Tanda 2: la API que queda fija (últimas rupturas)
 
-- [ ] **1.0-6** Revisión completa de la API pública.
+- [x] **1.0-6** Revisión completa de la API pública.
+  - **Hecha el 26/11/2026** (rama `auto/0.9.0-tanda2-2026-11-26`, informe punto 2): `docs/spec/api-1.0.md` (la convención, los cambios C1 a C9, lo pendiente de decidir P1 a P6 y el inventario, escrito antes de cambiar nada con cada inconsistencia marcada); `packages/ui-core/src/lib/api-1.0.spec.ts` compara los exports de cada `index.ts` con el documento. **PENDIENTE DE DECIDIR (usuario):** P1 a P6, cada una con su recomendación.
   - Recorrido de los 45 componentes y 9 Blocks, `utils` y el tema: entradas, salidas, `model()`, tipos y funciones exportados, `Mimi*Text`, tokens del tema y variables `--mimi-*`, selectores y atributos `data-*`.
   - Entrega: `docs/spec/api-1.0.md`, la lista de lo que queda fijo en la 1.0, componente por componente, y la lista de cambios (cada uno con su motivo).
   - Criterios: nombres coherentes entre componentes parecidos (`tone`, `size`, `disabled`, `readonly`, textos, `min`/`max`); nada interno exportado sin querer (como el `MimiSelectList` de la 0.7.0); cada tipo público con nombre `Mimi*` o del componente; una prueba que compare los exports del `index.ts` de cada componente con la lista de `api-1.0.md`, para que nada entre ni salga sin pasar por la lista.
   - Las decisiones de nombres que no sean obvias van al usuario en una tabla (opción y recomendación), como en el refinamiento; en modo autónomo, A3.
-- [ ] **1.0-7** Nombres inconsistentes (de `docs/auto/decisiones-por-defecto.md`, «Para la revisión de la 0.9.9»; se adelantan a la 0.9.0 porque son rupturas). **RUPTURA.**
+- [x] **1.0-7** (hecha el 26/11/2026: C1 a C6, C8 y C9 de `api-1.0.md`, cada una en el CHANGELOG «Por publicar» con su «Cómo actualizar»; C7 se anuló al revisar el inventario; `success` de Input OTP queda como P2, pendiente de decidir) Nombres inconsistentes (de `docs/auto/decisiones-por-defecto.md`, «Para la revisión de la 0.9.9»; se adelantan a la 0.9.0 porque son rupturas). **RUPTURA.**
   - Depende de: 1.0-6.
   - `success` de Input OTP frente a `tone`; `min`/`max` (Date Picker) frente a `minDate`/`maxDate` (Date Range); el selector `mimi-date-range` y la clase `MimiDateRangePicker`; `MIMI_DATE_PICKER_TEXT`, que vive en `calendar/`; y lo que encuentre la 1.0-6.
   - Cada una, con su «Cómo actualizar» en el CHANGELOG y una prueba.
-- [ ] **1.0-8** Data Table: `density` y `size`.
+- [ ] **1.0-8** Data Table: `density` y `size`. **PENDIENTE DE DECIDIR (usuario)** (26/11/2026, P1 de `api-1.0.md`): por el prompt de la tanda 2 («si algo es de gusto y no hay una opción claramente mejor, márcalo pendiente»), no se adoptó la recomendación del plan; la nueva recomendación es dejar los dos (`density` es un `model()` que cambia quien mira la tabla; `size`, el desarrollador).
   - Depende de: 1.0-6.
   - Se solapan (decidido conservar los dos el 10/11/2026, «si molesta, se resuelve en la 0.9.9»). Unir en `size` (y `density` desaparece, **RUPTURA**) o documentar los dos ejes con lo que hace cada uno. Recomendación: unir en `size`, como el resto de los componentes; decide el usuario (o A3).
-- [ ] **M.24** Data Table: `pr-3`, `pl-4` y `-ml-1.5` físicos (RTL), junto a la 1.0-8 (en `mantenimiento.md`).
-- [ ] **M.16** Auditoría de `readonly`, `aria-labelledby` y `aria-describedby` en todos los controles (en `mantenimiento.md`): puede añadir entradas, así que va con la API.
-- [ ] **M.21** Switch con `aria-describedby` (en `mantenimiento.md`).
-- [ ] **M.8** La CLI y los bloqueos de «todo o nada» (en `mantenimiento.md`): un Block que no se puede instalar no debe dejar sus dependencias copiadas a medias. **Decidido por el usuario (23/11/2026):** va en esta tanda, con la revisión de la API y la CLI (antes, en la 0.9.x).
+- [x] **M.24** (hecha el 26/11/2026) Data Table: `pr-3`, `pl-4` y `-ml-1.5` físicos (RTL), junto a la 1.0-8 (en `mantenimiento.md`).
+- [x] **M.16** (hecha el 26/11/2026) Auditoría de `readonly`, `aria-labelledby` y `aria-describedby` en todos los controles (en `mantenimiento.md`): puede añadir entradas, así que va con la API.
+- [x] **M.21** (hecha el 26/11/2026) Switch con `aria-describedby` (en `mantenimiento.md`).
+- [x] **M.8** (hecha el 26/11/2026) La CLI y los bloqueos de «todo o nada» (en `mantenimiento.md`): un Block que no se puede instalar no debe dejar sus dependencias copiadas a medias. **Decidido por el usuario (23/11/2026):** va en esta tanda, con la revisión de la API y la CLI (antes, en la 0.9.x).
 - [ ] **M.1** Confirm con acción asíncrona; **M.3** rodeos de aria 22.2; **M.6** Select con una letra estando cerrado; **M.14** los dos ejes del área de Color Picker (en `mantenimiento.md`): cambian o añaden API, así que entran antes de congelarla.
 
 ### Tanda 3: documentación y declaración de accesibilidad

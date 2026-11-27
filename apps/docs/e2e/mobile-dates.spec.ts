@@ -42,7 +42,11 @@ async function openSheet(page: Page, path: string, trigger: string) {
 test('Date Picker y Date Range: la misma hoja, cabecera, calendario y pie', async ({ page }) => {
   const date = await openSheet(page, '/docs/components/date-picker', 'mimi-date-picker button');
   await page.keyboard.press('Escape');
-  const range = await openSheet(page, '/docs/components/date-range', 'mimi-date-range button');
+  const range = await openSheet(
+    page,
+    '/docs/components/date-range',
+    'mimi-date-range-picker button',
+  );
 
   for (const s of [date, range]) {
     expect(s.side).toBe('bottom');

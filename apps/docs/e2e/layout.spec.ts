@@ -99,3 +99,29 @@ test('Blocks: a 360 px, cada estado del selector cabe en su botón', async ({ pa
     expect(overflow, name).toEqual([]);
   }
 });
+
+test('Data Table en RTL: la barra y el pie con el relleno del inicio a la derecha (M.24)', async ({
+  page,
+}, info) => {
+  test.skip(isPhone(info.project.name), 'la barra y el pie de escritorio');
+  await openDoc(page, '/docs/components/data-table');
+  const pad = () =>
+    page
+      .locator('mimi-data-table')
+      .first()
+      .evaluate((table) =>
+        ['toolbar', 'footer'].map((slot) => {
+          const style = getComputedStyle(table.querySelector(`[data-slot="${slot}"]`)!);
+          return { slot, left: style.paddingLeft, right: style.paddingRight };
+        }),
+      );
+  expect(await pad()).toEqual([
+    { slot: 'toolbar', left: '16px', right: '12px' },
+    { slot: 'footer', left: '16px', right: '12px' },
+  ]);
+  await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+  await expect.poll(pad).toEqual([
+    { slot: 'toolbar', left: '12px', right: '16px' },
+    { slot: 'footer', left: '12px', right: '16px' },
+  ]);
+});

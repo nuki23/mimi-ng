@@ -994,10 +994,18 @@ describe('ng g mimi: todo o nada por componente', () => {
 
     for (const file of CONFIRM) expect(result.exists(`/${UI}/${file}`), file).toBe(false);
     expect(json(result, '/mimi.json').components.confirm).toBeUndefined();
-    // Dialog no depende de button: se agrega.
-    expect(result.readContent(`/${UI}/dialog/dialog.ts`)).toBe(templateOf('dialog/dialog.ts'));
+    // M.8 (todo o nada también al agregar): Dialog no depende de button, pero solo lo pedía
+    // Confirm, que no se agrega; tampoco el cdk ni el @import del overlay (spec 5, antes «Límites
+    // conocidos de la 0.2.0»).
+    expect(result.exists(`/${UI}/dialog/dialog.ts`)).toBe(false);
+    expect(result.readContent('/package.json')).toBe(installed.readContent('/package.json'));
+    expect(result.readContent('/projects/app/src/styles.css')).not.toContain('@angular/cdk');
     expect(warnings()).toContain(
       `confirm no se agregó: necesita button ${registry.version}, que no se actualizó (ver el aviso de button).`,
+    );
+    expect(warnings()).toContain(
+      'dialog no se agregó: solo lo necesita confirm, que no se escribió (ver el aviso de ' +
+        'confirm). Así no quedan copiadas a medias las piezas de confirm.',
     );
   });
 

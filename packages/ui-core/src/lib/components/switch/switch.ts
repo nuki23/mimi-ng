@@ -52,6 +52,7 @@ let nextId = 0;
       [attr.aria-readonly]="readonly() || null"
       [attr.aria-label]="ariaLabel() || null"
       [attr.aria-labelledby]="ariaLabelledby() || null"
+      [attr.aria-describedby]="ariaDescribedby() || null"
       [attr.data-state]="state()"
       (click)="toggle()"
       (blur)="touch.emit()"
@@ -72,6 +73,7 @@ let nextId = 0;
     '[attr.id]': 'null',
     '[attr.aria-label]': 'null',
     '[attr.aria-labelledby]': 'null',
+    '[attr.aria-describedby]': 'null',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -90,6 +92,8 @@ export class MimiSwitch implements FormCheckboxControl, MimiFieldControl {
   readonly id = input<string>();
   readonly ariaLabel = input<string>(undefined, { alias: 'aria-label' });
   readonly ariaLabelledby = input<string>(undefined, { alias: 'aria-labelledby' });
+  /** Ids de textos que describen el control: se suman a los propios y a los de Form Field (M.16). */
+  readonly ariaDescribedby = input<string>(undefined, { alias: 'aria-describedby' });
   readonly userClass = input('', { alias: 'class' });
 
   /** Se emite al perder el foco: marca el control como tocado. */

@@ -15,7 +15,7 @@ import { fieldNativeStyles } from '@/components/ui/utils/field-styles';
 const SIZE_SCALE =
   'h-[var(--mimi-input-h,var(--mimi-input-height,var(--mimi-control-height,2.5rem)))] text-[length:var(--mimi-input-text,var(--mimi-input-font-size,0.875rem))]';
 
-export const inputVariants = cva(
+export const mimiInputVariants = cva(
   [
     'w-full min-w-0 rounded-[var(--mimi-input-radius,var(--mimi-radius,0.75rem))]',
     'border-[length:var(--mimi-input-border-width,1px)] border-[color:var(--mimi-input-border,var(--mimi-input))] bg-[color:var(--mimi-input-bg,var(--mimi-input-background))]',
@@ -44,4 +44,4 @@ export const inputVariants = cva(
   },
 );
 
-export type InputSize = NonNullable<VariantProps<typeof inputVariants>['size']>;
+export type MimiInputSize = NonNullable<VariantProps<typeof mimiInputVariants>['size']>;

@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { cn } from '@/components/ui/utils/cn';
 import { injectMimiSize } from '@/components/ui/utils/size';
-import { type AvatarSize, type AvatarStatus, avatarVariants } from './avatar.variants';
+import { type MimiAvatarSize, type MimiAvatarStatus, mimiAvatarVariants } from './avatar.variants';
 
 /**
  * Contenedor del avatar. Guarda el estado de la imagen para que la imagen y el fallback sepan
@@ -39,16 +39,16 @@ import { type AvatarSize, type AvatarStatus, avatarVariants } from './avatar.var
 })
 export class MimiAvatar {
   /** `sm | md | lg`. Sin `size`, el del contenedor `mimiSize` o `md`. */
-  readonly size = input<AvatarSize>();
+  readonly size = input<MimiAvatarSize>();
   protected readonly sizeResolved = injectMimiSize(this.size);
   protected readonly ownSize = computed(() => this.size() ?? null);
   readonly userClass = input('', { alias: 'class' });
 
   /** Estado de la imagen. Lo escribe `img[mimiAvatarImage]`; sin imagen queda en `idle`. */
-  readonly status = signal<AvatarStatus>('idle');
+  readonly status = signal<MimiAvatarStatus>('idle');
 
   protected readonly classes = computed(() =>
-    cn(avatarVariants({ size: this.sizeResolved() }), this.userClass()),
+    cn(mimiAvatarVariants({ size: this.sizeResolved() }), this.userClass()),
   );
 }
 

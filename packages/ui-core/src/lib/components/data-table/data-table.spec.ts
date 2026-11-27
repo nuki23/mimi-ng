@@ -332,6 +332,25 @@ describe('MimiDataTable', { timeout: 20_000 }, () => {
     expect(table.querySelector('[data-test="status"]')!.textContent).toBe('active·1·comfortable');
   });
 
+  it('M.24: la barra, el pie y el botón de orden con propiedades lógicas (RTL)', async () => {
+    const { table } = await setup();
+    const classes = (selector: string) => table.querySelector(selector)!.className.split(/\s+/);
+    const physical = /^-?(pl|pr|ml|mr)-/;
+    for (const selector of [
+      '[data-slot="toolbar"]',
+      '[data-slot="footer"]',
+      '[data-slot="sort"]',
+    ]) {
+      expect(
+        classes(selector).filter((c) => physical.test(c)),
+        selector,
+      ).toEqual([]);
+    }
+    expect(classes('[data-slot="toolbar"]')).toEqual(expect.arrayContaining(['ps-4', 'pe-3']));
+    expect(classes('[data-slot="footer"]')).toEqual(expect.arrayContaining(['ps-4', 'pe-3']));
+    expect(classes('[data-slot="sort"]')).toContain('-ms-1.5');
+  });
+
   it('columnas fijas: la casilla, el expandir y la primera columna con su left', async () => {
     const { table } = await setup();
     const cells = table.querySelector('tbody tr')!.querySelectorAll<HTMLElement>('td');

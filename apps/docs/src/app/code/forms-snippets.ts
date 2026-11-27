@@ -256,7 +256,7 @@ export const FORMS_SPECS: Record<string, FormsSpec> = {
     type: '{ start: string; end: string } | null',
     imports: ['MimiDateRangePicker'],
     path: 'date-range',
-    markup: '<mimi-date-range locale="es" placeholder="Elige un periodo" {{attrs}} />',
+    markup: '<mimi-date-range-picker locale="es" placeholder="Elige un periodo" {{attrs}} />',
     message: 'Elige un periodo.',
   },
   'color-picker': {

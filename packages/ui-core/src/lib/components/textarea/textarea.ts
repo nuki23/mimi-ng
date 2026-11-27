@@ -6,7 +6,7 @@ import {
   type MimiFieldControl,
   injectFieldState,
 } from '@/components/ui/utils/field-state';
-import { textareaVariants } from './textarea.variants';
+import { mimiTextareaVariants } from './textarea.variants';
 
 /**
  * Campo de varias líneas de Mimi sobre el `<textarea>` nativo: funciona con `[formField]`,
@@ -44,5 +44,5 @@ export class MimiTextarea implements MimiFieldControl {
   /** Error visible: el formulario o `showError` a mano. */
   readonly showInvalid = computed(() => this.showError() ?? this.fieldState.showError());
 
-  protected readonly classes = computed(() => cn(textareaVariants(), this.userClass()));
+  protected readonly classes = computed(() => cn(mimiTextareaVariants(), this.userClass()));
 }

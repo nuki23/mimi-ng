@@ -186,7 +186,7 @@ Hola</textarea>
                       />
                     }
                     @case ('range') {
-                      <mimi-date-range
+                      <mimi-date-range-picker
                         aria-label="Fechas"
                         [disabled]="d"
                         [readonly]="r"
@@ -317,7 +317,11 @@ Hola</textarea>
           <mimi-option value="quito">Quito</mimi-option>
         </mimi-combobox>
         <mimi-date-picker aria-label="Fecha (scroll)" data-test="scroll-date" class="w-44" />
-        <mimi-date-range aria-label="Fechas (scroll)" data-test="scroll-range" class="w-56" />
+        <mimi-date-range-picker
+          aria-label="Fechas (scroll)"
+          data-test="scroll-range"
+          class="w-56"
+        />
         <mimi-color-input aria-label="Color (scroll)" data-test="scroll-color" class="w-44" />
       </div>
       <div class="flex flex-wrap items-start gap-3">

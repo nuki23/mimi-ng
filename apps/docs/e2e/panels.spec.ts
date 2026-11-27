@@ -28,7 +28,7 @@ const CASES: Case[] = [
   },
   {
     page: 'date-range',
-    trigger: 'mimi-date-range button',
+    trigger: 'mimi-date-range-picker button',
     panel: 'mimi-calendar',
     phone: 'bottom',
   },

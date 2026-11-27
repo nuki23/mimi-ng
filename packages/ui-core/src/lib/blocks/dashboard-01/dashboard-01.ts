@@ -11,7 +11,7 @@ import {
   signal,
 } from '@angular/core';
 import { MimiAvatar, MimiAvatarFallback } from '@/components/ui/avatar';
-import { MimiBadge, type BadgeTone } from '@/components/ui/badge';
+import { MimiBadge, type MimiBadgeTone } from '@/components/ui/badge';
 import { MimiButton } from '@/components/ui/button';
 import { MimiCardImports } from '@/components/ui/card';
 import { MimiSheetImports } from '@/components/ui/sheet';
@@ -25,7 +25,7 @@ export interface Dashboard01NavItem {
   /** Un número al lado (por ejemplo, facturas pendientes). */
   count?: number;
   /** Tono del número: `warning` para lo que pide atención. */
-  tone?: BadgeTone;
+  tone?: MimiBadgeTone;
 }
 
 export interface Dashboard01NavGroup {
@@ -118,7 +118,7 @@ export const DASHBOARD_01_ACTIVITY: Dashboard01Activity[] = [
   { id: 4, who: 'Taller Motor', what: 'added 3 users', when: 'Mon' },
 ];
 
-const STATUS: Record<Dashboard01Customer['status'], { label: string; tone: BadgeTone }> = {
+const STATUS: Record<Dashboard01Customer['status'], { label: string; tone: MimiBadgeTone }> = {
   active: { label: 'Active', tone: 'success' },
   trial: { label: 'Trial', tone: 'info' },
   'past-due': { label: 'Past due', tone: 'warning' },

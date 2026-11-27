@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MimiButton } from '@/components/ui/button';
-import type { ButtonTone, ButtonVariant } from '@/components/ui/button';
+import type { MimiButtonTone, MimiButtonVariant } from '@/components/ui/button';
 
 @Component({
   selector: 'app-button-matrix-example',
@@ -24,8 +24,8 @@ import type { ButtonTone, ButtonVariant } from '@/components/ui/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonMatrixExample {
-  protected readonly variants: ButtonVariant[] = ['solid', 'soft', 'outline', 'ghost', 'link'];
-  protected readonly tones: ButtonTone[] = [
+  protected readonly variants: MimiButtonVariant[] = ['solid', 'soft', 'outline', 'ghost', 'link'];
+  protected readonly tones: MimiButtonTone[] = [
     'primary',
     'secondary',
     'success',
