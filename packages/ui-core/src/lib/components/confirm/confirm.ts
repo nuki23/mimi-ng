@@ -17,6 +17,7 @@ import {
   untracked,
   viewChild,
 } from '@angular/core';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MimiButton } from '@/components/ui/button';
 import {
   MIMI_DIALOG_DATA,
@@ -152,7 +153,7 @@ class MimiConfirmContent {
   protected readonly options = inject<MimiConfirmOptions>(MIMI_DIALOG_DATA);
   protected readonly ref = inject<MimiDialogRef<boolean>>(MimiDialogRef);
   protected readonly text = inject(MIMI_CONFIRM_TEXT);
-  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private readonly announcer = inject(LiveAnnouncer);
   private readonly errors = inject(ErrorHandler);
   private readonly injector = inject(Injector);
   // `read`: el botón es un componente (`mimiBtn`); sin esto, la referencia sería la instancia.
@@ -173,11 +174,10 @@ class MimiConfirmContent {
     }
     if (this.pending) return;
     this.pending = true;
-    // El foco espera en el contenedor del diálogo (enfocable con tabindex="-1", del CDK): al
-    // deshabilitar Cancelar no cae a body. El contenedor dice que está ocupado (aria-busy).
-    const container = this.host.closest<HTMLElement>('.cdk-dialog-container');
-    container?.focus();
-    container?.setAttribute('aria-busy', 'true');
+    // El foco se queda en Confirmar: con `loading` sigue enfocable (no es `disabled`) y lleva
+    // aria-busy. Solo se deshabilita Cancelar, que no tiene el foco. Y se anuncia la carga
+    // (el spinner es decorativo): accesibilidad, H3.
+    void this.announcer.announce(this.text.working, 'polite');
     this.busy.set(true);
     this.ref.disableClose.set(true);
     try {
@@ -189,7 +189,6 @@ class MimiConfirmContent {
       this.pending = false;
       this.busy.set(false);
       this.ref.disableClose.set(false);
-      container?.removeAttribute('aria-busy');
       // Después del render que quita el «cargando», el foco vuelve a Confirmar.
       afterNextRender(() => this.confirmButton().nativeElement.focus(), {
         injector: this.injector,

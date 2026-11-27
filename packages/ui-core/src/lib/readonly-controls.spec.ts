@@ -101,6 +101,18 @@ describe('readonly en los controles (R.12)', () => {
     expect(document.querySelector('[role="listbox"]')).toBeNull();
   });
 
+  it('Select: con solo lectura, una letra no cambia el valor (M.6; accesibilidad, H1)', async () => {
+    const { fixture, host, q } = await setup();
+    const trigger = q('select').querySelector<HTMLElement>('[aria-haspopup]')!;
+    trigger.focus();
+    trigger.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'd', bubbles: true, cancelable: true }),
+    );
+    await fixture.whenStable();
+    expect(host.sel()).toBe('a');
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
   it('Date Picker y Date Range: el panel no se abre', async () => {
     const { q, tick } = await setup();
     for (const t of ['date', 'range']) {

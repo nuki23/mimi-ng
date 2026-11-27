@@ -1,4 +1,5 @@
 import { Component, ErrorHandler, TemplateRef, viewChild } from '@angular/core';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { TestBed } from '@angular/core/testing';
 import { MimiDialogService, MimiDialogTitle } from '@/components/ui/dialog';
 import { type MimiConfirmOptions, injectMimiConfirm } from './confirm';
@@ -329,6 +330,11 @@ describe('injectMimiConfirm', { timeout: 20_000 }, () => {
 
   it('M.1: onConfirm asíncrono: «cargando» en Confirmar, sin cerrar ni doble envío, y cierra al terminar', async () => {
     const { fixture, ask, button, container, escape } = await setup();
+    const announced: string[] = [];
+    TestBed.inject(LiveAnnouncer).announce = (message: string) => {
+      announced.push(message);
+      return Promise.resolve();
+    };
     let finish!: () => void;
     let calls = 0;
     const answers = await ask({
@@ -347,9 +353,12 @@ describe('injectMimiConfirm', { timeout: 20_000 }, () => {
     expect(calls).toBe(1);
     expect(button('confirm').getAttribute('aria-busy')).toBe('true');
     expect(button('cancel').disabled).toBe(true);
-    // El foco no cae a body: queda en el diálogo, que dice que está ocupado.
-    expect(document.activeElement).toBe(container());
-    expect(container()!.getAttribute('aria-busy')).toBe('true');
+    // El foco se queda en Confirmar (sigue enfocable: loading no es disabled), que dice que está
+    // ocupado, y se anuncia «cargando» (accesibilidad, H3: mover el foco al diálogo repetía el
+    // título y no decía nada de la carga).
+    expect(document.activeElement).toBe(button('confirm'));
+    expect(container()!.hasAttribute('aria-busy')).toBe(false);
+    expect(announced).toContain('Working…');
     // Escape no cierra mientras tanto.
     await escape();
     expect(container()).not.toBeNull();

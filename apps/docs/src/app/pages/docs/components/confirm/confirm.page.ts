@@ -192,7 +192,7 @@ export const CONFIRM_PAGE: DocPage = {
         type: '() => unknown',
         default: '—',
         description:
-          'Acción asíncrona: Confirmar carga hasta que termine. Si falla, el diálogo sigue abierto.',
+          'Acción asíncrona: Confirmar carga hasta que termine. Si falla, sigue abierto: avisa del error con un Toast.',
       },
     ],
     dataAttributes: ['data-tone'],

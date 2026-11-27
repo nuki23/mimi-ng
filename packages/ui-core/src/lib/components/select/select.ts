@@ -988,6 +988,8 @@ export class MimiSelect<T = unknown> implements FormValueControl<T | null>, Mimi
    * (`mimiNormalizeText`); las deshabilitadas no se eligen.
    */
   private typeToSelect(key: string, at: number): void {
+    // Solo lectura: el valor no cambia (como el botón de limpiar y abrir; accesibilidad, H1).
+    if (this.readonly()) return;
     this.typed = at - this.typedAt > TYPEAHEAD_DELAY ? key : this.typed + key;
     this.typedAt = at;
     const text = mimiNormalizeText(this.typed);

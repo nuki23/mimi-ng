@@ -11,18 +11,22 @@ export interface MimiConfirmText {
   confirm: string;
   /** Botón que cancela. */
   cancel: string;
+  /** Se anuncia mientras corre la acción de `onConfirm` (M.1). */
+  working: string;
 }
 
 /** Textos predeterminados (inglés). */
 export const MIMI_CONFIRM_TEXT_EN: MimiConfirmText = {
   confirm: 'Confirm',
   cancel: 'Cancel',
+  working: 'Working…',
 };
 
 /** Textos en español: `provideMimiConfirmText(MIMI_CONFIRM_TEXT_ES)`. */
 export const MIMI_CONFIRM_TEXT_ES: MimiConfirmText = {
   confirm: 'Confirmar',
   cancel: 'Cancelar',
+  working: 'Procesando…',
 };
 
 /** Textos activos. Sin `provideMimiConfirmText`, los predeterminados en inglés. */
