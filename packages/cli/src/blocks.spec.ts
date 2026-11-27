@@ -265,6 +265,42 @@ describe('ng g mimi <block> (B.1)', () => {
     expect(withAvatar.exists(`/${UI}/table/table.ts`)).toBe(false);
   }, 20_000);
 
+  it('M.8 (revisor, H1): una dependencia nueva de un componente que sí se actualiza se agrega aunque el Block quede bloqueado', async () => {
+    // Data Table de una versión anterior, sin Sheet (Sheet es dependencia nueva de Data Table) y
+    // Badge modificado: table-01 queda bloqueado, Data Table se actualiza y necesita Sheet.
+    const { run, tree, warnings } = await initialized();
+    const withTable = await run('mimi', { components: ['data-table', 'badge'] }, tree);
+    const manifest = json(withTable, '/.mimi/manifest.json');
+    for (const file of Object.keys(manifest.files)) {
+      if (!file.startsWith('sheet/')) continue;
+      withTable.delete(`/${UI}/${file}`);
+      withTable.delete(`/.mimi/base/${file}`);
+      delete manifest.files[file];
+    }
+    const old = (file: string, extra = '') => {
+      const content = `// ${file} de la ${OLD}\n${extra}`;
+      withTable.overwrite(`/${UI}/${file}`, content);
+      withTable.overwrite(`/.mimi/base/${file}`, `// ${file} de la ${OLD}\n`);
+      manifest.files[file] = OLD;
+    };
+    old('data-table/data-table.ts');
+    old('badge/badge.ts', '// cambio propio\n');
+    withTable.overwrite('/.mimi/manifest.json', JSON.stringify(manifest, null, 2));
+    const config = json(withTable, '/mimi.json');
+    delete config.components.sheet;
+    config.components['data-table'].version = OLD;
+    config.components.badge.version = OLD;
+    withTable.overwrite('/mimi.json', JSON.stringify(config, null, 2));
+
+    const result = await run('mimi', { components: ['table-01'] }, withTable);
+    expect(result.readContent(`/${UI}/data-table/data-table.ts`)).toContain(
+      '@/components/ui/sheet',
+    );
+    expect(result.exists(`/${UI}/sheet/sheet.ts`)).toBe(true);
+    expect(warnings().some((w) => w.startsWith('sheet no se agregó'))).toBe(false);
+    expect(warnings().some((w) => w.startsWith('table-01 no se agregó'))).toBe(true);
+  }, 20_000);
+
   it('--overwrite reemplaza el Block modificado y avisa que reemplazó la pantalla', async () => {
     const { run, tree, warnings } = await initialized();
     const installed = await run('mimi', { components: [TEST_BLOCK] }, tree);

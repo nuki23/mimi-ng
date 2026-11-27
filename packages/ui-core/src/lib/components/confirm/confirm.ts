@@ -156,6 +156,7 @@ class MimiConfirmContent {
   private readonly announcer = inject(LiveAnnouncer);
   private readonly errors = inject(ErrorHandler);
   private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
   // `read`: el botón es un componente (`mimiBtn`); sin esto, la referencia sería la instancia.
   private readonly confirmButton = viewChild.required('confirmButton', {
     read: ElementRef<HTMLButtonElement>,
@@ -189,6 +190,9 @@ class MimiConfirmContent {
       this.pending = false;
       this.busy.set(false);
       this.ref.disableClose.set(false);
+      // Si el diálogo ya se cerró (una navegación, el componente que preguntó se destruyó), no
+      // queda nada que enfocar: afterNextRender con un injector destruido daría NG0911 (revisor).
+      if (this.destroyRef.destroyed) return;
       // Después del render que quita el «cargando», el foco vuelve a Confirmar.
       afterNextRender(() => this.confirmButton().nativeElement.focus(), {
         injector: this.injector,

@@ -390,6 +390,26 @@ describe('injectMimiConfirm', { timeout: 20_000 }, () => {
     expect(answers).toEqual([false]);
   });
 
+  it('M.1 (revisor, M3): si el diálogo ya no está cuando la acción falla, no hay error', async () => {
+    const { fixture, ask, button } = await setup();
+    const errors: unknown[] = [];
+    TestBed.inject(ErrorHandler).handleError = (error: unknown) => errors.push(error);
+    let fail!: (error: Error) => void;
+    const answers = await ask({
+      title: '¿Publicar?',
+      onConfirm: () => new Promise<void>((_, reject) => (fail = reject)),
+    });
+    button('confirm').click();
+    await settle(fixture);
+    // El componente que preguntó se destruye (como una navegación): el diálogo se cierra.
+    fixture.destroy();
+    await settle(fixture);
+    fail(new Error('sin red'));
+    await settle(fixture);
+    expect(answers).toEqual([false]);
+    expect(errors.map((e) => String(e))).toEqual(['Error: sin red']);
+  });
+
   it('M.1: MimiDialogRef.disableClose bloquea Escape, el fondo y closeAll() en el momento', async () => {
     const { fixture, container, escape } = await setup();
     const service = TestBed.inject(MimiDialogService);

@@ -317,11 +317,18 @@ export function writeTemplates(options: {
       // sus componentes, sus utilidades ni sus paquetes copiados a medias). Lo que ya estaba se
       // sigue actualizando: es del proyecto, no solo del Block.
       const roots = options.roots ?? [];
-      const open = roots.filter((root) => !blocked.has(root));
+      // Lo que sí se escribe: las raíces no bloqueadas y lo que ya estaba y no está bloqueado (se
+      // actualiza). Todo lo que necesite alguno de ellos se agrega, aunque también lo pida algo
+      // bloqueado (revisor, H1: Data Table actualizado necesita Sheet, nuevo en la 0.9.0).
+      const installedItem = (item: string) => states.get(item)!.some((s) => s.state !== 'new');
+      const kept = [
+        ...roots.filter((root) => !blocked.has(root)),
+        ...items.filter((item) => !blocked.has(item) && installedItem(item)),
+      ];
+      const needed = new Set(kept.flatMap((item) => resolveItems(item)));
       for (const item of roots.length > 0 ? items : []) {
         if (blocked.has(item) || implicit.has(item)) continue;
-        if (states.get(item)!.some((s) => s.state !== 'new')) continue;
-        if (open.some((root) => resolveItems(root).includes(item))) continue;
+        if (installedItem(item) || needed.has(item)) continue;
         const neededBy = roots.find((root) => resolveItems(root).includes(item));
         if (neededBy)
           blocked.set(item, { item, files: [], neededBy, installed: false, from: null });
